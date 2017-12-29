@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Parcellize brain surface &mdash; visbrain 0.3.7 documentation</title>
+  <title>Parcellize brain surface &mdash; visbrain 0.3.8 documentation</title>
   
 
   
@@ -39,10 +39,10 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.3.7 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.8 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
         <link rel="next" title="Open the colorbar editor" href="../colorbar/00_open_editor.html"/>
-        <link rel="prev" title="Add vectors" href="14_add_vectors.html"/> 
+        <link rel="prev" title="Add vectors" href="11_add_vectors.html"/> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.7
+                0.3.8
               </div>
             
           
@@ -105,7 +105,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#brain-examples">Brain Examples</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="00_brain_control.html">Brain control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="01_cross_sections_and_volume.html">Cross-sections and volume control</a></li>
-<li class="toctree-l3"><a class="reference internal" href="02_add_brain_template.html">Add a brain template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_brain_using_vertices.html">Define a brain template using vertices and faces</a></li>
 <li class="toctree-l3"><a class="reference internal" href="03_sources.html">Add deep sources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="04_connectivity.html">Connect deep sources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="05_region_of_interest.html">Add Region of interest (ROI)</a></li>
@@ -114,10 +114,7 @@
 <li class="toctree-l3"><a class="reference internal" href="08_screenshot.html">Screenshot example</a></li>
 <li class="toctree-l3"><a class="reference internal" href="09_add_multiple_objects.html">Add multiple objects to the scene</a></li>
 <li class="toctree-l3"><a class="reference internal" href="10_add_nifti_volume.html">Add Nifti volume</a></li>
-<li class="toctree-l3"><a class="reference internal" href="11_convert_mesh_data.html">Convert mesh data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="12_colorbar_control.html">Colorbar control</a></li>
-<li class="toctree-l3"><a class="reference internal" href="13_load_gui_config.html">Load Graphical User Interface configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="14_add_vectors.html">Add vectors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11_add_vectors.html">Add vectors</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Parcellize brain surface</a></li>
 </ul>
 </li>
@@ -183,7 +180,7 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../../_sources/auto_examples/brain/15_parcellize.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/auto_examples/brain/12_parcellize.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -197,7 +194,7 @@
            <div itemprop="articleBody">
             
   <div class="section" id="parcellize-brain-surface">
-<span id="sphx-glr-auto-examples-brain-15-parcellize-py"></span><h1>Parcellize brain surface<a class="headerlink" href="#parcellize-brain-surface" title="Permalink to this headline">¶</a></h1>
+<span id="sphx-glr-auto-examples-brain-12-parcellize-py"></span><h1>Parcellize brain surface<a class="headerlink" href="#parcellize-brain-surface" title="Permalink to this headline">¶</a></h1>
 <p>Parcellize the brain surface using .annot files. This example use Nibabel to
 read the .annot file.</p>
 <p>See <a class="reference external" href="https://surfer.nmr.mgh.harvard.edu/fswiki/CorticalParcellation">https://surfer.nmr.mgh.harvard.edu/fswiki/CorticalParcellation</a> for files
@@ -207,19 +204,15 @@ used in this example.</p>
 
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <a href="../../brainAPI.html#visbrain.Brain" title="View documentation for visbrain.Brain"><span class="n">Brain</span></a>
 <span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../objects.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span><span class="p">,</span> <span class="n">path_to_visbrain_data</span>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span>
 
 
 <span class="n">file1</span> <span class="o">=</span> <span class="s1">&#39;lh.aparc.a2009s.annot&#39;</span>
 <span class="n">file2</span> <span class="o">=</span> <span class="s1">&#39;rh.aparc.annot&#39;</span>
 
 <span class="c1"># Download files if needed :</span>
-<span class="n">download_file</span><span class="p">(</span><span class="n">file1</span><span class="p">)</span>
-<span class="n">download_file</span><span class="p">(</span><span class="n">file2</span><span class="p">)</span>
-
-<span class="c1"># Get the path to the files :</span>
-<span class="n">path_to_file1</span> <span class="o">=</span> <span class="n">path_to_visbrain_data</span><span class="p">(</span><span class="n">file1</span><span class="p">)</span>
-<span class="n">path_to_file2</span> <span class="o">=</span> <span class="n">path_to_visbrain_data</span><span class="p">(</span><span class="n">file2</span><span class="p">)</span>
+<span class="n">path_to_file1</span> <span class="o">=</span> <span class="n">download_file</span><span class="p">(</span><span class="n">file1</span><span class="p">)</span>
+<span class="n">path_to_file2</span> <span class="o">=</span> <span class="n">download_file</span><span class="p">(</span><span class="n">file2</span><span class="p">)</span>
 
 <span class="c1"># Define a brain object :</span>
 <span class="n">b_obj</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;inflated&#39;</span><span class="p">,</span> <span class="n">hemisphere</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
@@ -259,9 +252,9 @@ used in this example.</p>
 <p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
 <div class="sphx-glr-footer docutils container">
 <div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../../_downloads/15_parcellize.py" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">15_parcellize.py</span></code></a></div>
+<a class="reference download internal" href="../../_downloads/12_parcellize.py" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">12_parcellize.py</span></code></a></div>
 <div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../../_downloads/15_parcellize.ipynb" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">15_parcellize.ipynb</span></code></a></div>
+<a class="reference download internal" href="../../_downloads/12_parcellize.ipynb" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">12_parcellize.ipynb</span></code></a></div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
 </div>
@@ -279,7 +272,7 @@ used in this example.</p>
         <a href="../colorbar/00_open_editor.html" class="btn btn-neutral float-right" title="Open the colorbar editor" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="14_add_vectors.html" class="btn btn-neutral" title="Add vectors" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="11_add_vectors.html" class="btn btn-neutral" title="Add vectors" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -310,7 +303,7 @@ used in this example.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.3.7',
+            VERSION:'0.3.8',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

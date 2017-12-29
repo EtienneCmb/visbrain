@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Source object &mdash; visbrain 0.3.7 documentation</title>
+  <title>Source object &mdash; visbrain 0.3.8 documentation</title>
   
 
   
@@ -39,9 +39,9 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.3.7 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.8 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
-        <link rel="next" title="Display conjunction map" href="../pysurfer/conjunction_map.html"/>
+        <link rel="next" title="Volume object" href="ex_volume_obj.html"/>
         <link rel="prev" title="Region Of Interest (ROI) object" href="ex_roi_object.html"/> 
 
   
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.7
+                0.3.8
               </div>
             
           
@@ -108,9 +108,11 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#objects-examples">Objects examples</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="ex_brain_obj.html">Brain object</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ex_connectivity_obj.html">Connectivity object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ex_cross_section_obj.html">Cross-section object</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ex_im_tf_spec_obj.html">Image, time-frequency map and spectrogram objects</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ex_roi_object.html">Region Of Interest (ROI) object</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Source object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ex_volume_obj.html">Volume object</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#pysurfer-examples">Pysurfer Examples</a></li>
@@ -207,14 +209,13 @@ Talairach atlas</li>
 
 <span class="kn">from</span> <span class="nn">vispy.geometry</span> <span class="kn">import</span> <span class="n">create_sphere</span>
 
-<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../objects.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">,</span> <span class="n">SceneObj</span><span class="p">,</span> <span class="n">ColorbarObj</span>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span><span class="p">,</span> <span class="n">path_to_visbrain_data</span>
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../objects.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">,</span> <a href="../../objects.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a><span class="p">,</span> <a href="../../objects.html#visbrain.objects.ColorbarObj" title="View documentation for visbrain.objects.ColorbarObj"><span class="n">ColorbarObj</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Load the xyz coordinates and corresponding subject name</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">)</span>
-<span class="n">mat</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.load.html#numpy.load" title="View documentation for numpy.load"><span class="n">np</span><span class="o">.</span><span class="n">load</span></a><span class="p">(</span><span class="n">path_to_visbrain_data</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">))</span>
+<span class="n">mat</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.load.html#numpy.load" title="View documentation for numpy.load"><span class="n">np</span><span class="o">.</span><span class="n">load</span></a><span class="p">(</span><span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">))</span>
 <span class="n">xyz</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;xyz&#39;</span><span class="p">]</span>
 <span class="n">n_sources</span> <span class="o">=</span> <span class="n">xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">text</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;S&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_sources</span><span class="p">)]</span>
@@ -226,7 +227,7 @@ Talairach atlas</li>
                  <span class="n">scale_factor</span><span class="o">=</span><span class="mi">180</span>  <span class="c1"># ~distance to the camera</span>
                  <span class="p">)</span>
 <span class="n">CBAR_STATE</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">cbtxtsz</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">txtsz</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">width</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span> <span class="n">rect</span><span class="o">=</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">))</span>
-<span class="n">sc</span> <span class="o">=</span> <span class="n">SceneObj</span><span class="p">(</span><span class="n">camera_state</span><span class="o">=</span><span class="n">CAM_STATE</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1200</span><span class="p">,</span> <span class="mi">1000</span><span class="p">))</span>
+<span class="n">sc</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a><span class="p">(</span><span class="n">camera_state</span><span class="o">=</span><span class="n">CAM_STATE</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1200</span><span class="p">,</span> <span class="mi">1000</span><span class="p">))</span>
 
 <span class="sd">&quot;&quot;&quot;Create the most basic source object</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -281,7 +282,7 @@ Talairach atlas</li>
 <span class="n">s_obj_data</span><span class="o">.</span><span class="n">color_sources</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;plasma&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">vmin</span><span class="o">=-</span><span class="mf">8.</span><span class="p">,</span>
                          <span class="n">vmax</span><span class="o">=</span><span class="mf">8.</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">s_obj_data</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Color sources using data&#39;</span><span class="p">)</span>
-<span class="n">cb_data</span> <span class="o">=</span> <span class="n">ColorbarObj</span><span class="p">(</span><span class="n">s_obj_data</span><span class="p">,</span> <span class="n">cblabel</span><span class="o">=</span><span class="s1">&#39;Random data&#39;</span><span class="p">,</span> <span class="n">border</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="n">cb_data</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.ColorbarObj" title="View documentation for visbrain.objects.ColorbarObj"><span class="n">ColorbarObj</span></a><span class="p">(</span><span class="n">s_obj_data</span><span class="p">,</span> <span class="n">cblabel</span><span class="o">=</span><span class="s1">&#39;Random data&#39;</span><span class="p">,</span> <span class="n">border</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
                       <span class="o">**</span><span class="n">CBAR_STATE</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">cb_data</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">width_max</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
 
@@ -350,7 +351,7 @@ Talairach atlas</li>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../pysurfer/conjunction_map.html" class="btn btn-neutral float-right" title="Display conjunction map" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="ex_volume_obj.html" class="btn btn-neutral float-right" title="Volume object" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="ex_roi_object.html" class="btn btn-neutral" title="Region Of Interest (ROI) object" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -384,7 +385,7 @@ Talairach atlas</li>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.3.7',
+            VERSION:'0.3.8',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

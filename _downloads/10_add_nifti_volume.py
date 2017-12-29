@@ -17,42 +17,33 @@ from __future__ import print_function
 import numpy as np
 
 from visbrain import Brain
-from visbrain.io import read_nifti, download_file, path_to_visbrain_data
+from visbrain.objects import VolumeObj, CrossSecObj, SourceObj
+from visbrain.io import download_file
 
-# Define four sources sources :
+"""Download two NIFTI files
+"""
+path_1 = download_file('GG-853-GM-0.7mm.nii.gz')
+path_2 = download_file('GG-853-WM-0.7mm.nii.gz')
+
+"""Define four sources sources and a Source object
+"""
 s_xyz = np.array([[29.9, -37.3, -19.3],
                   [-5.33, 14.00, 20.00],
                   [25.99, 14.00, 34.66],
                   [0., -1.99, 10.66]])
+s_obj = SourceObj('MySources', s_xyz)
 
-# Define a Brain instance :
-vb = Brain(s_xyz=s_xyz)
-
-# Print the list of volumes available :
-print('Volumes available by default : ', vb.volume_list())
-
+"""Define a volume object and a cross-section object
 """
-Load the Nifti file. The read_nifti function load the data and the
-transformation to convert data into the MNI space :
+vol_obj = VolumeObj(path_1)
+cross_sec_obj = CrossSecObj(path_2)
+
+"""Localize a source in the cross-section object
 """
-nifti1 = 'GG-853-GM-0.7mm.nii.gz'
-download_file(nifti1)
-data1, header1, tf1 = read_nifti(path_to_visbrain_data(nifti1))
-# print(header1)
+cross_sec_obj.localize_source(s_xyz[2, :])
 
-# Add the volume to the GUI :
-vb.add_volume('Volume1', data1, transform=tf1)
-print('Add Volume1 to the list of volumes : ', vb.volume_list())
-
-# You can add multiple volumes :
-nifti2 = 'GG-853-WM-0.7mm.nii.gz'
-download_file(nifti2)
-data2, header2, tf2 = read_nifti(path_to_visbrain_data(nifti2))
-vb.add_volume('Volume2', data2, transform=tf2)
-print('Add Volume2 to the list of volumes : ', vb.volume_list())
-
-# Set the cross-section to be centered on the last source :
-vb.cross_sections_control(pos=s_xyz[3, :], volume='Volume2', cmap='gist_stern',
-                          split_view=True)
-
+"""Define a Brain instance and pass the source, volume and cross-section
+object
+"""
+vb = Brain(source_obj=s_obj, vol_obj=vol_obj, cross_sec_obj=cross_sec_obj)
 vb.show()

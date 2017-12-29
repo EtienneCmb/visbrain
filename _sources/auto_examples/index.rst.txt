@@ -25,7 +25,7 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Control the brain such as the choice of the template to use, the hemisphere to display and tran...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Control the brain i.e the brain template to use, the transparency and the hemisphere.">
 
 .. only:: html
 
@@ -45,7 +45,7 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Control the cross-section panel and the volume. This script use a custom nifti volume downloada...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Control the cross-section panel and the volume using a Nifti file. The nibabel package should a...">
 
 .. only:: html
 
@@ -65,13 +65,13 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Add a new brain template to the interface.">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to define a custom brain template using your own vertices and faces...">
 
 .. only:: html
 
-    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_02_add_brain_template_thumb.png
+    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_02_brain_using_vertices_thumb.png
 
-        :ref:`sphx_glr_auto_examples_brain_02_add_brain_template.py`
+        :ref:`sphx_glr_auto_examples_brain_02_brain_using_vertices.py`
 
 .. raw:: html
 
@@ -81,7 +81,7 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 .. toctree::
    :hidden:
 
-   /auto_examples/brain/02_add_brain_template
+   /auto_examples/brain/02_brain_using_vertices
 
 .. raw:: html
 
@@ -245,73 +245,13 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to convert mesh data to be compatible with visbrain.">
-
-.. only:: html
-
-    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_11_convert_mesh_data_thumb.png
-
-        :ref:`sphx_glr_auto_examples_brain_11_convert_mesh_data.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/brain/11_convert_mesh_data
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Control the colorbar of selected objects. The colormap of three objects can actually be control...">
-
-.. only:: html
-
-    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_12_colorbar_control_thumb.png
-
-        :ref:`sphx_glr_auto_examples_brain_12_colorbar_control.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/brain/12_colorbar_control
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Load a Graphical User Interface configuration file and retrieve previous session.">
-
-.. only:: html
-
-    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_13_load_gui_config_thumb.png
-
-        :ref:`sphx_glr_auto_examples_brain_13_load_gui_config.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/brain/13_load_gui_config
-
-.. raw:: html
-
     <div class="sphx-glr-thumbcontainer" tooltip="Add vectors to the scene. This example demonstrate the two methods to defined vectors :">
 
 .. only:: html
 
-    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_14_add_vectors_thumb.png
+    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_11_add_vectors_thumb.png
 
-        :ref:`sphx_glr_auto_examples_brain_14_add_vectors.py`
+        :ref:`sphx_glr_auto_examples_brain_11_add_vectors.py`
 
 .. raw:: html
 
@@ -321,7 +261,7 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 .. toctree::
    :hidden:
 
-   /auto_examples/brain/14_add_vectors
+   /auto_examples/brain/11_add_vectors
 
 .. raw:: html
 
@@ -329,9 +269,9 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 
 .. only:: html
 
-    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_15_parcellize_thumb.png
+    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_12_parcellize_thumb.png
 
-        :ref:`sphx_glr_auto_examples_brain_15_parcellize.py`
+        :ref:`sphx_glr_auto_examples_brain_12_parcellize.py`
 
 .. raw:: html
 
@@ -341,7 +281,7 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 .. toctree::
    :hidden:
 
-   /auto_examples/brain/15_parcellize
+   /auto_examples/brain/12_parcellize
 .. raw:: html
 
     <div style='clear:both'></div>
@@ -447,7 +387,7 @@ Examples demonstrating figure layout.
 Objects examples
 ----------------
 
-Examples demonstrating how to objects.
+Examples demonstrating how to use objects.
 
 
 .. raw:: html
@@ -472,7 +412,7 @@ Examples demonstrating how to objects.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Futur title ">
+    <div class="sphx-glr-thumbcontainer" tooltip="Illustration of the main functionalities and inputs of the connctivity object.">
 
 .. only:: html
 
@@ -489,6 +429,26 @@ Examples demonstrating how to objects.
    :hidden:
 
    /auto_examples/objects/ex_connectivity_obj
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Illustration and main functionalities and inputs of the cross-section object.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_cross_section_obj_thumb.png
+
+        :ref:`sphx_glr_auto_examples_objects_ex_cross_section_obj.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/objects/ex_cross_section_obj
 
 .. raw:: html
 
@@ -549,6 +509,26 @@ Examples demonstrating how to objects.
    :hidden:
 
    /auto_examples/objects/ex_source_obj
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Illustration of the main functionalities and inputs of the volume object.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_volume_obj_thumb.png
+
+        :ref:`sphx_glr_auto_examples_objects_ex_volume_obj.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/objects/ex_volume_obj
 .. raw:: html
 
     <div style='clear:both'></div>

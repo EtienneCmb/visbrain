@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>visbrain.objects.visbrain_obj &mdash; visbrain 0.3.7 documentation</title>
+  <title>visbrain.objects.visbrain_obj &mdash; visbrain 0.3.8 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="visbrain 0.3.7 documentation" href="../../../index.html"/>
+    <link rel="top" title="visbrain 0.3.8 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.7
+                0.3.8
               </div>
             
           
@@ -239,20 +239,22 @@
         <span class="sd">&quot;&quot;&quot;Return the object name.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
 
-    <span class="k">def</span> <span class="nf">_get_parent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bgcolor</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">show</span><span class="p">,</span> <span class="n">obj</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_get_parent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bgcolor</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">show</span><span class="p">,</span> <span class="n">obj</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the object parent for preview and screenshot.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;_get_camera&#39;</span><span class="p">):</span>
             <span class="n">camera</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">_get_camera</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">camera</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_camera</span><span class="p">()</span>
         <span class="n">canvas</span> <span class="o">=</span> <span class="n">VisbrainCanvas</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span>
-                                <span class="n">bgcolor</span><span class="o">=</span><span class="n">color2vb</span><span class="p">(</span><span class="n">bgcolor</span><span class="p">),</span> <span class="n">camera</span><span class="o">=</span><span class="n">camera</span><span class="p">)</span>
+                                <span class="n">bgcolor</span><span class="o">=</span><span class="n">color2vb</span><span class="p">(</span><span class="n">bgcolor</span><span class="p">),</span> <span class="n">camera</span><span class="o">=</span><span class="n">camera</span><span class="p">,</span>
+                                <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_csize</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">size</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">scene</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">scene</span>
         <span class="k">return</span> <span class="n">canvas</span>
 
 <div class="viewcode-block" id="VisbrainObject.preview"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.VisbrainObject.preview">[docs]</a>    <span class="k">def</span> <span class="nf">preview</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                <span class="n">obj</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                <span class="n">obj</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Previsualize the result.</span>
 
 <span class="sd">        Parameters</span>
@@ -266,9 +268,11 @@
 <span class="sd">        obj : VisbrainObj | None</span>
 <span class="sd">            Pass a Visbrain object if you want to use the camera of an other</span>
 <span class="sd">            object.</span>
+<span class="sd">        kwargs : dict | {}</span>
+<span class="sd">            Optional arguments are passed to the VisbrainCanvas class.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">parent_bck</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="o">.</span><span class="n">parent</span>
-        <span class="n">canvas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_parent</span><span class="p">(</span><span class="n">bgcolor</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">show</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+        <span class="n">canvas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_parent</span><span class="p">(</span><span class="n">bgcolor</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">show</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">xyz</span><span class="p">:</span>
             <span class="n">vispy</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">visuals</span><span class="o">.</span><span class="n">XYZAxis</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">canvas</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">scene</span><span class="p">)</span>
         <span class="c1"># view.camera = camera</span>
@@ -281,9 +285,9 @@
         <span class="sd">&quot;&quot;&quot;Tree description.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="o">.</span><span class="n">describe_tree</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="VisbrainObject.screenshot"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.VisbrainObject.screenshot">[docs]</a>    <span class="k">def</span> <span class="nf">screenshot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">saveas</span><span class="p">,</span> <span class="n">print_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mf">300.</span><span class="p">,</span>
-                   <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;centimeter&#39;</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">autocrop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                   <span class="n">bgcolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">obj</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+<div class="viewcode-block" id="VisbrainObject.screenshot"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.VisbrainObject.screenshot">[docs]</a>    <span class="k">def</span> <span class="nf">screenshot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">saveas</span><span class="p">,</span> <span class="n">print_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mf">300.</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;centimeter&#39;</span><span class="p">,</span>
+                   <span class="n">factor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">autocrop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                   <span class="n">transparent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">obj</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Take a screeshot of the scene.</span>
 
 <span class="sd">        By default, the rendered canvas will have the size of your screen.</span>
@@ -331,13 +335,15 @@
 <span class="sd">        obj : VisbrainObj | None</span>
 <span class="sd">            Pass a Visbrain object if you want to use the camera of an other</span>
 <span class="sd">            object for the sceen rendering.</span>
+<span class="sd">        kwargs : dict | {}</span>
+<span class="sd">            Optional arguments are passed to the VisbrainCanvas class.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">print_size</span><span class="o">=</span><span class="n">print_size</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="n">factor</span><span class="p">,</span>
-                      <span class="n">autocrop</span><span class="o">=</span><span class="n">autocrop</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="n">unit</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="n">region</span><span class="p">,</span>
-                      <span class="n">bgcolor</span><span class="o">=</span><span class="n">bgcolor</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="n">transparent</span><span class="p">)</span>
-        <span class="n">canvas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_parent</span><span class="p">(</span><span class="n">bgcolor</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+        <span class="n">kw</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">print_size</span><span class="o">=</span><span class="n">print_size</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="n">factor</span><span class="p">,</span>
+                  <span class="n">autocrop</span><span class="o">=</span><span class="n">autocrop</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="n">unit</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="n">region</span><span class="p">,</span>
+                  <span class="n">bgcolor</span><span class="o">=</span><span class="n">bgcolor</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="n">transparent</span><span class="p">)</span>
+        <span class="n">canvas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_parent</span><span class="p">(</span><span class="n">bgcolor</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">write_fig_canvas</span><span class="p">(</span><span class="n">saveas</span><span class="p">,</span> <span class="n">canvas</span><span class="o">.</span><span class="n">canvas</span><span class="p">,</span>
-                         <span class="n">widget</span><span class="o">=</span><span class="n">canvas</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">central_widget</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                         <span class="n">widget</span><span class="o">=</span><span class="n">canvas</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">central_widget</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="kc">None</span></div>
 
     <span class="c1"># ----------- PARENT -----------</span>
@@ -351,6 +357,17 @@
     <span class="k">def</span> <span class="nf">parent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set parent value.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="c1"># ----------- TRANSFORM -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the transform value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="o">.</span><span class="n">transform</span>
+
+    <span class="nd">@transform</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set transform value.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="c1"># ----------- NAME -----------</span>
     <span class="nd">@property</span>
@@ -555,7 +572,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.3.7',
+            VERSION:'0.3.8',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>visbrain.objects.brain_obj &mdash; visbrain 0.3.7 documentation</title>
+  <title>visbrain.objects.brain_obj &mdash; visbrain 0.3.8 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="visbrain 0.3.7 documentation" href="../../../index.html"/>
+    <link rel="top" title="visbrain 0.3.8 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.7
+                0.3.8
               </div>
             
           
@@ -173,9 +173,12 @@
 <span class="kn">from</span> <span class="nn">.visbrain_obj</span> <span class="k">import</span> <span class="n">VisbrainObject</span>
 <span class="kn">from</span> <span class="nn">._projection</span> <span class="k">import</span> <span class="n">_project_sources_data</span>
 <span class="kn">from</span> <span class="nn">..visuals</span> <span class="k">import</span> <span class="n">BrainMesh</span>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">get_data_path</span><span class="p">,</span> <span class="n">mesh_edges</span><span class="p">,</span> <span class="n">smoothing_matrix</span><span class="p">,</span>
-                     <span class="n">array2colormap</span><span class="p">,</span> <span class="n">rotate_turntable</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">download_file</span><span class="p">,</span> <span class="n">is_nibabel_installed</span><span class="p">,</span> <span class="n">is_pandas_installed</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">mesh_edges</span><span class="p">,</span> <span class="n">smoothing_matrix</span><span class="p">,</span> <span class="n">array2colormap</span><span class="p">,</span>
+                     <span class="n">rotate_turntable</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="p">(</span><span class="n">download_file</span><span class="p">,</span> <span class="n">is_nibabel_installed</span><span class="p">,</span> <span class="n">is_pandas_installed</span><span class="p">,</span>
+                  <span class="n">get_data_path</span><span class="p">,</span> <span class="n">get_files_in_data</span><span class="p">,</span> <span class="n">add_brain_template</span><span class="p">,</span>
+                  <span class="n">remove_brain_template</span><span class="p">,</span> <span class="n">path_to_tmp</span><span class="p">,</span> <span class="n">get_files_in_folders</span><span class="p">,</span>
+                  <span class="n">path_to_visbrain_data</span><span class="p">)</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
 
@@ -232,15 +235,15 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">faces</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">normals</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">lr_index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hemisphere</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                 <span class="n">invert_normals</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_scale</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+                 <span class="n">sulcus</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">invert_normals</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_scale</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
         <span class="c1"># Init Visbrain object base class :</span>
         <span class="n">VisbrainObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
         <span class="c1"># Load brain template :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span> <span class="o">=</span> <span class="n">_scale</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="n">normals</span><span class="p">,</span> <span class="n">lr_index</span><span class="p">,</span> <span class="n">hemisphere</span><span class="p">,</span>
-                      <span class="n">invert_normals</span><span class="p">)</span>
+                      <span class="n">invert_normals</span><span class="p">,</span> <span class="n">sulcus</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">translucent</span> <span class="o">=</span> <span class="n">translucent</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_data_color</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_data_mask</span> <span class="o">=</span> <span class="p">[]</span>
@@ -250,17 +253,31 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
 <div class="viewcode-block" id="BrainObj.set_data"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.BrainObj.set_data">[docs]</a>    <span class="k">def</span> <span class="nf">set_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">faces</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">normals</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">lr_index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hemisphere</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">invert_normals</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                 <span class="n">lr_index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hemisphere</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">invert_normals</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">sulcus</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Load a brain template.&quot;&quot;&quot;</span>
         <span class="c1"># _______________________ DEFAULT _______________________</span>
         <span class="n">b_download</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_downloadable_templates</span><span class="p">()</span>
-        <span class="n">b_installed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_installed_templates</span><span class="p">()</span>
+        <span class="n">b_installed</span> <span class="o">=</span> <span class="n">get_files_in_data</span><span class="p">(</span><span class="s1">&#39;templates&#39;</span><span class="p">)</span>
         <span class="c1"># Need to download the brain template :</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="ow">in</span> <span class="n">b_download</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">b_installed</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_add_downloadable_templates</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_installed_templates</span><span class="p">():</span>  <span class="c1"># predefined</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>  <span class="c1"># predefined</span>
             <span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="n">normals</span><span class="p">,</span>
              <span class="n">lr_index</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_brain_template</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="c1"># Sulcus :</span>
+        <span class="k">if</span> <span class="n">sulcus</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">b_download</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Sulcus only available for inflated, white and &quot;</span>
+                             <span class="s2">&quot;sphere templates&quot;</span><span class="p">)</span>
+                <span class="n">sulcus</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">to_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_template_path</span><span class="p">()</span>
+                <span class="n">sulcus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;sulcus.npy&#39;</span><span class="p">,</span> <span class="n">to_path</span><span class="o">=</span><span class="n">to_path</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sulcus</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">sulcus</span><span class="p">)</span> <span class="o">==</span> <span class="n">vertices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sulcus</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># _______________________ CHECKING _______________________</span>
         <span class="k">assert</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">)])</span>
@@ -270,7 +287,7 @@
         <span class="k">assert</span> <span class="n">hemisphere</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="s1">&#39;right&#39;</span><span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_define_mesh</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="n">normals</span><span class="p">,</span> <span class="n">lr_index</span><span class="p">,</span> <span class="n">hemisphere</span><span class="p">,</span>
-                          <span class="n">invert_normals</span><span class="p">)</span></div>
+                          <span class="n">invert_normals</span><span class="p">,</span> <span class="n">sulcus</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Clean brain object.&quot;&quot;&quot;</span>
@@ -281,26 +298,53 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_data_mask</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Brain object </span><span class="si">%s</span><span class="s2"> cleaned.&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmpfile</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Save the brain template (if not already saved).&quot;&quot;&quot;</span>
+        <span class="n">save_as</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.npz&#39;</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">_vertices</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">_faces</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">_normals</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">_lr_index</span>
+        <span class="n">add_brain_template</span><span class="p">(</span><span class="n">save_as</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">normals</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">lr_index</span><span class="o">=</span><span class="n">l</span><span class="p">,</span>
+                           <span class="n">tmpfile</span><span class="o">=</span><span class="n">tmpfile</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Remove a brain template.&quot;&quot;&quot;</span>
+        <span class="n">remove_brain_template</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.npz&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the list of all installed templates.&quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_in_path</span><span class="p">()</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="n">get_files_in_folders</span><span class="p">(</span><span class="o">*</span><span class="n">path</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">file</span><span class="p">)</span>
+        <span class="n">download</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_downloadable_templates</span><span class="p">()</span>
+        <span class="n">all_</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">files</span> <span class="o">+</span> <span class="n">download</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">all_</span><span class="p">)</span>
+
     <span class="k">def</span> <span class="nf">_define_mesh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="n">normals</span><span class="p">,</span> <span class="n">lr_index</span><span class="p">,</span> <span class="n">hemisphere</span><span class="p">,</span>
-                     <span class="n">invert_normals</span><span class="p">):</span>
+                     <span class="n">invert_normals</span><span class="p">,</span> <span class="n">sulcus</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Define brain mesh.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;mesh&#39;</span><span class="p">):</span>
             <span class="c1"># Mesh brain :</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span> <span class="o">=</span> <span class="n">BrainMesh</span><span class="p">(</span><span class="n">vertices</span><span class="o">=</span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="o">=</span><span class="n">faces</span><span class="p">,</span>
                                   <span class="n">normals</span><span class="o">=</span><span class="n">normals</span><span class="p">,</span> <span class="n">lr_index</span><span class="o">=</span><span class="n">lr_index</span><span class="p">,</span>
                                   <span class="n">hemisphere</span><span class="o">=</span><span class="n">hemisphere</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="p">,</span>
-                                  <span class="n">invert_normals</span><span class="o">=</span><span class="n">invert_normals</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Mesh&#39;</span><span class="p">)</span>
+                                  <span class="n">invert_normals</span><span class="o">=</span><span class="n">invert_normals</span><span class="p">,</span> <span class="n">sulcus</span><span class="o">=</span><span class="n">sulcus</span><span class="p">,</span>
+                                  <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Mesh&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">vertices</span><span class="o">=</span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="o">=</span><span class="n">faces</span><span class="p">,</span> <span class="n">normals</span><span class="o">=</span><span class="n">normals</span><span class="p">,</span>
                                <span class="n">lr_index</span><span class="o">=</span><span class="n">lr_index</span><span class="p">,</span> <span class="n">hemisphere</span><span class="o">=</span><span class="n">hemisphere</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_load_brain_template</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Load the brain template.</span>
+    <span class="k">def</span> <span class="nf">_search_in_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Specify where to find brain templates.&quot;&quot;&quot;</span>
+        <span class="n">_vb_path</span> <span class="o">=</span> <span class="n">path_to_visbrain_data</span><span class="p">(</span><span class="n">folder</span><span class="o">=</span><span class="s1">&#39;templates&#39;</span><span class="p">)</span>
+        <span class="n">_data_path</span> <span class="o">=</span> <span class="n">get_data_path</span><span class="p">(</span><span class="n">folder</span><span class="o">=</span><span class="s1">&#39;templates&#39;</span><span class="p">)</span>
+        <span class="n">_tmp_path</span> <span class="o">=</span> <span class="n">path_to_tmp</span><span class="p">(</span><span class="n">folder</span><span class="o">=</span><span class="s1">&#39;templates&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_vb_path</span><span class="p">,</span> <span class="n">_data_path</span><span class="p">,</span> <span class="n">_tmp_path</span>
 
-<span class="sd">        If path is None, use the default visbrain/data folder.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_template_path</span><span class="p">(),</span> <span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.npz&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_load_brain_template</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Load the brain template.&quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_in_path</span><span class="p">()</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">get_files_in_folders</span><span class="p">(</span><span class="o">*</span><span class="n">path</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.npz&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">arch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span> <span class="o">=</span> <span class="n">arch</span><span class="p">[</span><span class="s1">&#39;vertices&#39;</span><span class="p">],</span> <span class="n">arch</span><span class="p">[</span><span class="s1">&#39;faces&#39;</span><span class="p">]</span>
         <span class="n">normals</span> <span class="o">=</span> <span class="n">arch</span><span class="p">[</span><span class="s1">&#39;normals&#39;</span><span class="p">]</span>
@@ -321,8 +365,9 @@
         <span class="sd">&quot;&quot;&quot;Get all available brain templates (e.g defaults and downloadable.&quot;&quot;&quot;</span>
         <span class="n">b_def</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_default_templates</span><span class="p">()</span>
         <span class="n">b_down</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_downloadable_templates</span><span class="p">()</span>
-        <span class="n">b_installed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_installed_templates</span><span class="p">()</span>
-        <span class="n">b_all</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">b_def</span> <span class="o">+</span> <span class="n">b_down</span> <span class="o">+</span> <span class="n">b_installed</span><span class="p">))</span>
+        <span class="n">b_installed</span> <span class="o">=</span> <span class="n">get_files_in_data</span><span class="p">(</span><span class="s1">&#39;templates&#39;</span><span class="p">)</span>
+        <span class="n">b_tmp</span> <span class="o">=</span> <span class="n">get_files_in_data</span><span class="p">(</span><span class="s1">&#39;tmp&#39;</span><span class="p">)</span>
+        <span class="n">b_all</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">b_def</span> <span class="o">+</span> <span class="n">b_down</span> <span class="o">+</span> <span class="n">b_installed</span> <span class="o">+</span> <span class="n">b_tmp</span><span class="p">))</span>
         <span class="n">b_all</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">b_all</span>
 
@@ -335,19 +380,12 @@
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;hdr transformation missing for downloadable templates&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="s1">&#39;inflated&#39;</span><span class="p">,</span> <span class="s1">&#39;sphere&#39;</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">_get_installed_templates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get the list of available brain templates.&quot;&quot;&quot;</span>
-        <span class="n">all_files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_template_path</span><span class="p">())</span>
-        <span class="n">surf_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">k</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">all_files</span><span class="p">]</span>
-        <span class="n">surf_list</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">surf_list</span>
-
-    <span class="k">def</span> <span class="nf">_add_downloadable_templates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_add_downloadable_templates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s1">&#39;.npz&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Download then install a brain template.&quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_downloadable_templates</span><span class="p">()</span>
         <span class="n">to_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_template_path</span><span class="p">()</span>
         <span class="c1"># Download the file :</span>
-        <span class="n">download_file</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.npz&#39;</span><span class="p">,</span> <span class="n">to_path</span><span class="o">=</span><span class="n">to_path</span><span class="p">)</span>
+        <span class="n">download_file</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="n">ext</span><span class="p">,</span> <span class="n">to_path</span><span class="o">=</span><span class="n">to_path</span><span class="p">)</span>
 
     <span class="c1">###########################################################################</span>
     <span class="c1">###########################################################################</span>
@@ -377,7 +415,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">cam_state</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">set_default_state</span><span class="p">()</span>
 
-<div class="viewcode-block" id="BrainObj.rotate"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.BrainObj.rotate">[docs]</a>    <span class="k">def</span> <span class="nf">rotate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fixed</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="n">custom</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">margin</span><span class="o">=</span><span class="mf">1.08</span><span class="p">):</span>
+<div class="viewcode-block" id="BrainObj.rotate"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.BrainObj.rotate">[docs]</a>    <span class="k">def</span> <span class="nf">rotate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fixed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scale_factor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">custom</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">margin</span><span class="o">=</span><span class="mf">1.08</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Rotate the brain using predefined rotations or a custom one.</span>
 
 <span class="sd">        Parameters</span>
@@ -399,11 +437,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_get_camera</span><span class="p">()</span>
         <span class="n">cam_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">_opt_cam_state</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">xyz</span> <span class="o">=</span> <span class="n">cam_state</span><span class="p">[</span><span class="s1">&#39;scale_factor&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scale_factor</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+            <span class="n">cam_state</span><span class="p">[</span><span class="s1">&#39;scale_factor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scale_factor</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">custom</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">custom</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">):</span>
             <span class="n">cam_state</span><span class="p">[</span><span class="s1">&#39;azimuth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">custom</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">cam_state</span><span class="p">[</span><span class="s1">&#39;elevation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">custom</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">rotate_turntable</span><span class="p">(</span><span class="n">fixed</span><span class="p">,</span> <span class="n">cam_state</span><span class="p">,</span> <span class="n">camera</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="n">xyz</span><span class="p">,</span>
-                         <span class="n">csize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_csize</span><span class="p">,</span> <span class="n">margin</span><span class="o">=</span><span class="n">margin</span><span class="p">,</span> <span class="n">_scale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_scale</span><span class="p">)</span></div>
+            <span class="n">is_sc_float</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cam_state</span><span class="p">[</span><span class="s1">&#39;scale_factor&#39;</span><span class="p">],</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
+            <span class="k">if</span> <span class="s1">&#39;scale_factor&#39;</span> <span class="ow">in</span> <span class="n">cam_state</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_sc_float</span><span class="p">:</span>
+                <span class="k">del</span> <span class="n">cam_state</span><span class="p">[</span><span class="s1">&#39;scale_factor&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="o">**</span><span class="n">cam_state</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">rotate_turntable</span><span class="p">(</span><span class="n">fixed</span><span class="p">,</span> <span class="n">cam_state</span><span class="p">,</span> <span class="n">camera</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="n">xyz</span><span class="p">,</span>
+                             <span class="n">csize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_csize</span><span class="p">,</span> <span class="n">margin</span><span class="o">=</span><span class="n">margin</span><span class="p">,</span>
+                             <span class="n">_scale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_scale</span><span class="p">)</span></div>
 
     <span class="c1">###########################################################################</span>
     <span class="c1">###########################################################################</span>
@@ -502,11 +548,16 @@
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Add data to secific vertices.&quot;</span><span class="p">)</span>
             <span class="k">assert</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">vertices</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">smoothing_steps</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="n">smoothing_steps</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">smoothing_steps</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
             <span class="c1"># Get smoothed vertices // data :</span>
-            <span class="n">edges</span> <span class="o">=</span> <span class="n">mesh_edges</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">_faces</span><span class="p">)</span>
-            <span class="n">sm_mat</span> <span class="o">=</span> <span class="n">smoothing_matrix</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">smoothing_steps</span><span class="p">)</span>
-            <span class="n">sm_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">sm_mat</span><span class="o">.</span><span class="n">col</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">smoothing_steps</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                <span class="n">edges</span> <span class="o">=</span> <span class="n">mesh_edges</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">_faces</span><span class="p">)</span>
+                <span class="n">sm_mat</span> <span class="o">=</span> <span class="n">smoothing_matrix</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">smoothing_steps</span><span class="p">)</span>
+                <span class="n">sm_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">sm_mat</span><span class="o">.</span><span class="n">col</span><span class="p">]</span>
+                <span class="n">rows</span> <span class="o">=</span> <span class="n">sm_mat</span><span class="o">.</span><span class="n">row</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">sm_data</span> <span class="o">=</span> <span class="n">data</span>
+                <span class="n">rows</span> <span class="o">=</span> <span class="n">vertices</span>
             <span class="c1"># Clim :</span>
             <span class="n">clim</span> <span class="o">=</span> <span class="p">(</span><span class="n">sm_data</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">sm_data</span><span class="o">.</span><span class="n">max</span><span class="p">())</span> <span class="k">if</span> <span class="n">clim</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">clim</span>
             <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">clim</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
@@ -518,10 +569,10 @@
             <span class="c1"># Convert into colormap :</span>
             <span class="n">smooth_map</span> <span class="o">=</span> <span class="n">array2colormap</span><span class="p">(</span><span class="n">sm_data</span><span class="p">,</span> <span class="o">**</span><span class="n">col_kw</span><span class="p">)</span>
             <span class="n">color</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="p">),</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-            <span class="n">color</span><span class="p">[</span><span class="n">hemi_idx</span><span class="p">[</span><span class="n">sm_mat</span><span class="o">.</span><span class="n">row</span><span class="p">],</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">smooth_map</span>
+            <span class="n">color</span><span class="p">[</span><span class="n">hemi_idx</span><span class="p">[</span><span class="n">rows</span><span class="p">],</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">smooth_map</span>
             <span class="c1"># Mask :</span>
             <span class="k">if</span> <span class="n">is_under</span><span class="p">:</span>
-                <span class="n">mask</span><span class="p">[</span><span class="n">hemi_idx</span><span class="p">[</span><span class="n">sm_mat</span><span class="o">.</span><span class="n">row</span><span class="p">[</span><span class="n">sm_data</span> <span class="o">&gt;=</span> <span class="n">hide_under</span><span class="p">]]]</span> <span class="o">=</span> <span class="mf">1.</span>
+                <span class="n">mask</span><span class="p">[</span><span class="n">hemi_idx</span><span class="p">[</span><span class="n">rows</span><span class="p">[</span><span class="n">sm_data</span> <span class="o">&gt;=</span> <span class="n">hide_under</span><span class="p">]]]</span> <span class="o">=</span> <span class="mf">1.</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">mask</span><span class="p">[:]</span> <span class="o">=</span> <span class="mf">1.</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
@@ -608,7 +659,7 @@
             <span class="n">u_colors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">u_idx</span><span class="p">),</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
             <span class="n">kw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_cbar_args</span><span class="p">(</span><span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span> <span class="n">over</span><span class="p">)</span>
             <span class="n">data_color</span> <span class="o">=</span> <span class="n">array2colormap</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_default_cblabel</span> <span class="o">=</span> <span class="s2">&quot;Parcellate&#39;s data&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_default_cblabel</span> <span class="o">=</span> <span class="s2">&quot;Parcellates data&quot;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Use default color included in the file&quot;</span><span class="p">)</span>
             <span class="n">u_colors</span> <span class="o">=</span> <span class="n">u_colors</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.</span>
@@ -873,7 +924,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.3.7',
+            VERSION:'0.3.8',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

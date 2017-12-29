@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Cross-sections and volume control &mdash; visbrain 0.3.7 documentation</title>
+  <title>Cross-sections and volume control &mdash; visbrain 0.3.8 documentation</title>
   
 
   
@@ -39,9 +39,9 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.3.7 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.8 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
-        <link rel="next" title="Add a brain template" href="02_add_brain_template.html"/>
+        <link rel="next" title="Define a brain template using vertices and faces" href="02_brain_using_vertices.html"/>
         <link rel="prev" title="Brain control" href="00_brain_control.html"/> 
 
   
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.7
+                0.3.8
               </div>
             
           
@@ -105,7 +105,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#brain-examples">Brain Examples</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="00_brain_control.html">Brain control</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Cross-sections and volume control</a></li>
-<li class="toctree-l3"><a class="reference internal" href="02_add_brain_template.html">Add a brain template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_brain_using_vertices.html">Define a brain template using vertices and faces</a></li>
 <li class="toctree-l3"><a class="reference internal" href="03_sources.html">Add deep sources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="04_connectivity.html">Connect deep sources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="05_region_of_interest.html">Add Region of interest (ROI)</a></li>
@@ -114,11 +114,8 @@
 <li class="toctree-l3"><a class="reference internal" href="08_screenshot.html">Screenshot example</a></li>
 <li class="toctree-l3"><a class="reference internal" href="09_add_multiple_objects.html">Add multiple objects to the scene</a></li>
 <li class="toctree-l3"><a class="reference internal" href="10_add_nifti_volume.html">Add Nifti volume</a></li>
-<li class="toctree-l3"><a class="reference internal" href="11_convert_mesh_data.html">Convert mesh data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="12_colorbar_control.html">Colorbar control</a></li>
-<li class="toctree-l3"><a class="reference internal" href="13_load_gui_config.html">Load Graphical User Interface configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="14_add_vectors.html">Add vectors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="15_parcellize.html">Parcellize brain surface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11_add_vectors.html">Add vectors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12_parcellize.html">Parcellize brain surface</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#colorbar-examples">Colorbar Examples</a></li>
@@ -198,42 +195,39 @@
             
   <div class="section" id="cross-sections-and-volume-control">
 <span id="sphx-glr-auto-examples-brain-01-cross-sections-and-volume-py"></span><h1>Cross-sections and volume control<a class="headerlink" href="#cross-sections-and-volume-control" title="Permalink to this headline">¶</a></h1>
-<p>Control the cross-section panel and the volume. This script use a custom
-nifti volume downloadable at : <a class="reference external" href="https://brainder.org/download/flair/">https://brainder.org/download/flair/</a>
-The nibabel package should also be installed.</p>
+<p>Control the cross-section panel and the volume using a Nifti file. The nibabel
+package should also be installed.</p>
+<p>See : <a class="reference external" href="https://brainder.org/download/flair/">https://brainder.org/download/flair/</a></p>
 <img alt="../../_images/ex_crossec_and_volume.png" src="../../_images/ex_crossec_and_volume.png" />
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <a href="../../brainAPI.html#visbrain.Brain" title="View documentation for visbrain.Brain"><span class="n">Brain</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">read_nifti</span><span class="p">,</span> <span class="n">download_file</span><span class="p">,</span> <span class="n">path_to_visbrain_data</span>
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../objects.html#visbrain.objects.CrossSecObj" title="View documentation for visbrain.objects.CrossSecObj"><span class="n">CrossSecObj</span></a><span class="p">,</span> <a href="../../objects.html#visbrain.objects.VolumeObj" title="View documentation for visbrain.objects.VolumeObj"><span class="n">VolumeObj</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span>
 
 <span class="sd">&quot;&quot;&quot;Import the volume and the associated affine transformation</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="n">volume_name</span> <span class="o">=</span> <span class="s1">&#39;GG-853-WM-0.7mm.nii.gz&#39;</span>
+<span class="n">volume_name</span> <span class="o">=</span> <span class="s1">&#39;GG-853-WM-0.7mm.nii.gz&#39;</span>  <span class="c1"># &#39;GG-853-GM-0.7mm.nii.gz&#39;</span>
 
 <span class="sd">&quot;&quot;&quot;Download the file.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="n">download_file</span><span class="p">(</span><span class="n">volume_name</span><span class="p">)</span>
-<span class="n">data</span><span class="p">,</span> <span class="n">header</span><span class="p">,</span> <span class="n">tf</span> <span class="o">=</span> <span class="n">read_nifti</span><span class="p">(</span><span class="n">path_to_visbrain_data</span><span class="p">(</span><span class="n">volume_name</span><span class="p">))</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">download_file</span><span class="p">(</span><span class="n">volume_name</span><span class="p">)</span>
 
-<span class="n">vb</span> <span class="o">=</span> <a href="../../brainAPI.html#visbrain.Brain" title="View documentation for visbrain.Brain"><span class="n">Brain</span></a><span class="p">()</span>
+<span class="sd">&quot;&quot;&quot;Define a cross-section object</span>
 
-<span class="c1"># Add the volume to the GUI</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">add_volume</span><span class="p">(</span><span class="n">volume_name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">tf</span><span class="p">)</span>
-
-<span class="sd">&quot;&quot;&quot;Set the cross-section to be centered on the slice (70, 171, 80) with the</span>
-<span class="sd">gist_stern colormap.</span>
+<span class="sd">Go to the Objects tab and select &#39;Cross-section&#39; in the combo box. You can also</span>
+<span class="sd">press x to display the cross-section panel.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">cross_sections_control</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span> <span class="mi">171</span><span class="p">,</span> <span class="mi">80</span><span class="p">),</span> <span class="n">volume</span><span class="o">=</span><span class="n">volume_name</span><span class="p">,</span>
-                          <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gist_stern&#39;</span><span class="p">)</span>
+<span class="n">cs_obj</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.CrossSecObj" title="View documentation for visbrain.objects.CrossSecObj"><span class="n">CrossSecObj</span></a><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">section</span><span class="o">=</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span> <span class="mi">171</span><span class="p">,</span> <span class="mi">80</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gist_stern&#39;</span><span class="p">)</span>
 
-<span class="sd">&quot;&quot;&quot;Display the 3D volume using the translucent rendering method.</span>
+<span class="sd">&quot;&quot;&quot;Define a volume object.</span>
+
+<span class="sd">Go to the Objects tab and select &#39;Volume&#39; in the combo box. You can also</span>
+<span class="sd">press x to display the volume panel.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">volume_control</span><span class="p">(</span><span class="n">volume_name</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;TransFire&#39;</span><span class="p">,</span> <span class="n">rendering</span><span class="o">=</span><span class="s1">&#39;translucent&#39;</span><span class="p">)</span>
+<span class="n">v_obj</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.VolumeObj" title="View documentation for visbrain.objects.VolumeObj"><span class="n">VolumeObj</span></a><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
-<span class="sd">&quot;&quot;&quot;Finally, rotate the scene and hide the main brain.</span>
+<span class="sd">&quot;&quot;&quot;Create the GUI and pass the cross-section and the volume object</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">custom</span><span class="o">=</span><span class="p">(</span><span class="mi">142</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">brain_control</span><span class="p">(</span><span class="n">visible</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-
+<span class="n">vb</span> <span class="o">=</span> <a href="../../brainAPI.html#visbrain.Brain" title="View documentation for visbrain.Brain"><span class="n">Brain</span></a><span class="p">(</span><span class="n">cross_sec_obj</span><span class="o">=</span><span class="n">cs_obj</span><span class="p">,</span> <span class="n">vol_obj</span><span class="o">=</span><span class="n">v_obj</span><span class="p">)</span>
 <span class="n">vb</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -257,7 +251,7 @@ The nibabel package should also be installed.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="02_add_brain_template.html" class="btn btn-neutral float-right" title="Add a brain template" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="02_brain_using_vertices.html" class="btn btn-neutral float-right" title="Define a brain template using vertices and faces" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="00_brain_control.html" class="btn btn-neutral" title="Brain control" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -291,7 +285,7 @@ The nibabel package should also be installed.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.3.7',
+            VERSION:'0.3.8',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

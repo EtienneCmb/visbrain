@@ -14,5 +14,3 @@ Documentation
     colorbar
     figure
     objects
-    utils
-    io

@@ -1,0 +1,575 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>visbrain.objects.crossec_obj &mdash; visbrain 0.3.8 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="visbrain 0.3.8 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="../../../_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.8
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../community.html">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../documentation.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>visbrain.objects.crossec_obj</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for visbrain.objects.crossec_obj</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Base class for objects of type Cross-sections.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">vispy</span> <span class="k">import</span> <span class="n">scene</span>
+<span class="kn">import</span> <span class="nn">vispy.visuals.transforms</span> <span class="k">as</span> <span class="nn">vist</span>
+
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">array2colormap</span><span class="p">,</span> <span class="n">wrap_properties</span><span class="p">,</span> <span class="n">color2vb</span>
+<span class="kn">from</span> <span class="nn">.volume_obj</span> <span class="k">import</span> <span class="n">_Volume</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">_ImageSection</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Image section.</span>
+
+<span class="sd">    This class instantiate an image, markers and line for source location.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">loc_parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_im</span><span class="o">=</span><span class="p">{},</span> <span class="n">_mark</span><span class="o">=</span><span class="p">{},</span>
+                 <span class="n">_line</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Node_&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loc_node</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;LocNode_&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">loc_parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">visuals</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Im_&#39;</span> <span class="o">+</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">,</span>
+                                         <span class="o">**</span><span class="n">_im</span><span class="p">)</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">markers</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">visuals</span><span class="o">.</span><span class="n">Markers</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Mark_&#39;</span> <span class="o">+</span> <span class="n">name</span><span class="p">,</span>
+                                             <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">loc_node</span><span class="p">,</span> <span class="o">**</span><span class="n">_mark</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">line</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">visuals</span><span class="o">.</span><span class="n">Line</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Line_&#39;</span> <span class="o">+</span> <span class="n">name</span><span class="p">,</span> <span class="n">connect</span><span class="o">=</span><span class="s1">&#39;segments&#39;</span><span class="p">,</span>
+                                       <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">loc_node</span><span class="p">,</span> <span class="o">**</span><span class="n">_line</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">set_location</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">center</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)):</span>
+        <span class="sd">&quot;&quot;&quot;Set location of markers and line.&quot;&quot;&quot;</span>
+        <span class="c1"># Set marker :</span>
+        <span class="n">center</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">markers</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">center</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+                              <span class="n">face_color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+        <span class="c1"># Set line :</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="p">[</span><span class="n">limits</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+                        <span class="p">[</span><span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">limits</span><span class="p">[</span><span class="mi">1</span><span class="p">]]])</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">pos</span><span class="p">,</span> <span class="p">[</span><span class="mf">10.</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">line</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loc_node</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">markers</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">line</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="c1"># ----------- TRANSFORM -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the transform value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">transform</span>
+
+    <span class="nd">@transform</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set transform value.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loc_node</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">value</span>
+
+
+<div class="viewcode-block" id="CrossSecObj"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.CrossSecObj">[docs]</a><span class="k">class</span> <span class="nc">CrossSecObj</span><span class="p">(</span><span class="n">_Volume</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a Cross-sections object.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name : string</span>
+<span class="sd">        Name of the ROI object. If name is &#39;brodmann&#39;, &#39;aal&#39; or &#39;talairach&#39; a</span>
+<span class="sd">        predefined ROI object is used and vol, index and label are ignored.</span>
+<span class="sd">    vol : array_like | None</span>
+<span class="sd">        The volume to use for the cross-section. Sould be an array with three</span>
+<span class="sd">        dimensions.</span>
+<span class="sd">    section : tuple | (0, 0, 0)</span>
+<span class="sd">        The section to take (sagittal, coronal and axial slices).</span>
+<span class="sd">    interpolation : string | &#39;nearest&#39;</span>
+<span class="sd">        Interpolation method for the image. See vispy.scene.visuals.Image for</span>
+<span class="sd">        availables interpolation methods.</span>
+<span class="sd">    text_size : float | 15.</span>
+<span class="sd">        Text size to use.</span>
+<span class="sd">    text_color : string/tuple | &#39;white&#39;</span>
+<span class="sd">        Text color.</span>
+<span class="sd">    text_bold : bool | True</span>
+<span class="sd">        Use bold text.</span>
+<span class="sd">    transform : VisPy.visuals.transforms | None</span>
+<span class="sd">        VisPy transformation to set to the parent node.</span>
+<span class="sd">    parent : VisPy.parent | None</span>
+<span class="sd">        ROI object parent.</span>
+<span class="sd">    verbose : string</span>
+<span class="sd">        Verbosity level.</span>
+<span class="sd">    kw : dict | {}</span>
+<span class="sd">        Optional arguments are used to control the colorbar</span>
+<span class="sd">        (See :class:`ColorbarObj`).</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; from visbrain.objects import CrossSecObj</span>
+<span class="sd">    &gt;&gt;&gt; r = CrossSecObj(&#39;brodmann&#39;, section=(10, -10, 20))</span>
+<span class="sd">    &gt;&gt;&gt; r.preview(axis=True)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">#                                BUILT IN</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">vol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hdr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">section</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                 <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;bilinear&#39;</span><span class="p">,</span> <span class="n">text_size</span><span class="o">=</span><span class="mf">15.</span><span class="p">,</span> <span class="n">text_color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span>
+                 <span class="n">text_bold</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">preload</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="c1"># __________________________ VOLUME __________________________</span>
+        <span class="n">kw</span><span class="p">[</span><span class="s1">&#39;cmap&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cmap&#39;</span><span class="p">,</span> <span class="s1">&#39;gist_stern&#39;</span><span class="p">)</span>
+        <span class="n">_Volume</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sagittal</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_coronal</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_axial</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># __________________________ PARENTS __________________________</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_im_node</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Im_&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_loc_node</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Loc_&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_loc_node</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># __________________________ TRANSFORMATION __________________________</span>
+        <span class="c1"># Define three images (Sagittal, Coronal, Axial), markers and line :</span>
+        <span class="n">kwi</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_im_node</span><span class="p">,</span> <span class="n">loc_parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_loc_node</span><span class="p">,</span>
+                   <span class="n">_im</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">interpolation</span><span class="o">=</span><span class="n">interpolation</span><span class="p">),</span> <span class="n">_mark</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mf">20.</span><span class="p">),</span>
+                   <span class="n">_line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_im_sagit</span> <span class="o">=</span> <span class="n">_ImageSection</span><span class="p">(</span><span class="s1">&#39;Sagit&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwi</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_im_coron</span> <span class="o">=</span> <span class="n">_ImageSection</span><span class="p">(</span><span class="s1">&#39;Coron&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwi</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_im_axial</span> <span class="o">=</span> <span class="n">_ImageSection</span><span class="p">(</span><span class="s1">&#39;Axial&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwi</span><span class="p">)</span>
+        <span class="c1"># Add text (sagit, coron, axial, left, right) :</span>
+        <span class="n">txt_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-.</span><span class="mi">99</span><span class="p">,</span> <span class="o">-.</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span> <span class="p">[</span><span class="o">.</span><span class="mi">01</span><span class="p">,</span> <span class="o">-.</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span> <span class="p">[</span><span class="o">-.</span><span class="mi">99</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.99</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+                            <span class="p">[</span><span class="o">.</span><span class="mi">9</span><span class="p">,</span> <span class="o">-.</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="o">.</span><span class="mi">9</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span> <span class="p">[</span><span class="o">.</span><span class="mi">9</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.8</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+                            <span class="p">[</span><span class="mf">0.9</span><span class="p">,</span> <span class="o">.</span><span class="mi">9</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]])</span>
+        <span class="n">txt</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Text&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;L&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;R&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_txt</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">visuals</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">txt</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">txt_pos</span><span class="p">,</span> <span class="n">anchor_x</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span>
+                                       <span class="n">color</span><span class="o">=</span><span class="n">color2vb</span><span class="p">(</span><span class="n">text_color</span><span class="p">),</span>
+                                       <span class="n">font_size</span><span class="o">=</span><span class="n">text_size</span><span class="p">,</span> <span class="n">anchor_y</span><span class="o">=</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span>
+                                       <span class="n">bold</span><span class="o">=</span><span class="n">text_bold</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">preload</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">vol</span><span class="p">,</span> <span class="n">hdr</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">section</span><span class="o">=</span><span class="n">section</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CrossSecObj.__call__"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.CrossSecObj.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">vol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hdr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Change the volume object.&quot;&quot;&quot;</span>
+        <span class="n">_Volume</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">vol</span><span class="o">=</span><span class="n">vol</span><span class="p">,</span> <span class="n">hdr</span><span class="o">=</span><span class="n">hdr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_define_transformation</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_define_transformation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">sh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sh</span>
+        <span class="n">r90</span> <span class="o">=</span> <span class="n">vist</span><span class="o">.</span><span class="n">MatrixTransform</span><span class="p">()</span>
+        <span class="n">r90</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">rx180</span> <span class="o">=</span> <span class="n">vist</span><span class="o">.</span><span class="n">MatrixTransform</span><span class="p">()</span>
+        <span class="n">rx180</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="c1"># Sagittal transformation :</span>
+        <span class="n">norm_sagit</span> <span class="o">=</span> <span class="n">vist</span><span class="o">.</span><span class="n">STTransform</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">sh</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mf">1.</span><span class="p">),</span>
+                                      <span class="n">translate</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">))</span>
+        <span class="n">tf_sagit</span> <span class="o">=</span> <span class="n">vist</span><span class="o">.</span><span class="n">ChainTransform</span><span class="p">([</span><span class="n">norm_sagit</span><span class="p">,</span> <span class="n">r90</span><span class="p">,</span> <span class="n">rx180</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_im_sagit</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">tf_sagit</span>
+        <span class="c1"># Coronal transformation :</span>
+        <span class="n">norm_coron</span> <span class="o">=</span> <span class="n">vist</span><span class="o">.</span><span class="n">STTransform</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="n">sh</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">sh</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mf">1.</span><span class="p">),</span>
+                                      <span class="n">translate</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">))</span>
+        <span class="n">tf_coron</span> <span class="o">=</span> <span class="n">vist</span><span class="o">.</span><span class="n">ChainTransform</span><span class="p">([</span><span class="n">norm_coron</span><span class="p">,</span> <span class="n">r90</span><span class="p">,</span> <span class="n">rx180</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_im_coron</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">tf_coron</span>
+        <span class="c1"># Axial transformation :</span>
+        <span class="n">norm_axis</span> <span class="o">=</span> <span class="n">vist</span><span class="o">.</span><span class="n">STTransform</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="p">(</span><span class="mf">2.</span> <span class="o">/</span> <span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mf">2.</span> <span class="o">/</span> <span class="n">sh</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mf">1.</span><span class="p">),</span>
+                                     <span class="n">translate</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">))</span>
+        <span class="n">tf_axial</span> <span class="o">=</span> <span class="n">vist</span><span class="o">.</span><span class="n">ChainTransform</span><span class="p">([</span><span class="n">norm_axis</span><span class="p">,</span> <span class="n">rx180</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_im_axial</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">tf_axial</span>
+
+    <span class="k">def</span> <span class="nf">_get_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the camera.&quot;&quot;&quot;</span>
+        <span class="n">cam</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">cameras</span><span class="o">.</span><span class="n">PanZoomCamera</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">1.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">))</span>
+        <span class="n">cam</span><span class="o">.</span><span class="n">viewbox_mouse_event</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mouse_pos</span>
+        <span class="k">return</span> <span class="n">cam</span>
+
+    <span class="k">def</span> <span class="nf">_mouse_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;mouse_wheel&#39;</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;mouse_press&#39;</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Mouse press not configured for cross-sections&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Update the root node.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_im_node</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_loc_node</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_im_sagit</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_im_coron</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_im_axial</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_txt</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+<div class="viewcode-block" id="CrossSecObj.set_data"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.CrossSecObj.set_data">[docs]</a>    <span class="k">def</span> <span class="nf">set_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">clim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">under</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set data to the cross-section.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        section : tuple | (0, 0, 0)</span>
+<span class="sd">            The section to take (sagittal, coronal and axial slices).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">section</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">([</span><span class="n">k</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">section</span><span class="p">,</span>
+                                                                 <span class="bp">self</span><span class="o">.</span><span class="n">_sh</span><span class="p">)])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_section</span> <span class="o">=</span> <span class="n">section</span>
+        <span class="n">clim</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_vol</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vol</span><span class="o">.</span><span class="n">max</span><span class="p">())</span> <span class="k">if</span> <span class="n">clim</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">clim</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_cbar_args</span><span class="p">(</span><span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span> <span class="n">over</span><span class="p">)</span>  <span class="c1"># noqa</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update</span> <span class="o">=</span> <span class="n">update</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sagittal</span> <span class="o">=</span> <span class="n">section</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coronal</span> <span class="o">=</span> <span class="n">section</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axial</span> <span class="o">=</span> <span class="n">section</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+    <span class="k">def</span> <span class="nf">_set_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">im_visual</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">nb</span><span class="p">):</span>
+        <span class="c1"># Get colormap elements and get RgBA image :</span>
+        <span class="n">kw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_kwargs</span><span class="p">()</span>
+        <span class="n">im_rgba</span> <span class="o">=</span> <span class="n">array2colormap</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="c1"># Set image and text :</span>
+        <span class="n">im_visual</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">im_rgba</span><span class="p">)</span>
+        <span class="n">txt</span> <span class="o">=</span> <span class="s1">&#39;Slice </span><span class="si">%i</span><span class="s1"> | Position </span><span class="si">%.2f</span><span class="s1">&#39;</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_txt</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">text</span><span class="p">[</span><span class="n">nb</span><span class="p">]</span> <span class="o">=</span> <span class="n">txt</span> <span class="o">%</span> <span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_txt</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+<div class="viewcode-block" id="CrossSecObj.localize_source"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.CrossSecObj.localize_source">[docs]</a>    <span class="k">def</span> <span class="nf">localize_source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xyz</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Center the cross-sections arround a source location.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        xyz : array_like</span>
+<span class="sd">            The (x, y, z) location of the source. Could be a tuple, list or an</span>
+<span class="sd">            array.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Convert position into slice :</span>
+        <span class="n">sl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos_to_slice</span><span class="p">(</span><span class="n">xyz</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Center cross-sections at position </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">xyz</span><span class="p">))</span>
+        <span class="c1"># Set image slices :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sagittal</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sl</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coronal</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sl</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axial</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sl</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="c1"># Set location centers :</span>
+        <span class="n">sh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sh</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_im_sagit</span><span class="o">.</span><span class="n">set_location</span><span class="p">([</span><span class="n">sl</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">sl</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="n">limits</span><span class="o">=</span><span class="n">sh</span><span class="p">[[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_im_coron</span><span class="o">.</span><span class="n">set_location</span><span class="p">([</span><span class="n">sl</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">sl</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">limits</span><span class="o">=</span><span class="n">sh</span><span class="p">[[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_im_axial</span><span class="o">.</span><span class="n">set_location</span><span class="p">([</span><span class="n">sl</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">sl</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">limits</span><span class="o">=</span><span class="n">sh</span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_loc_node</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+    <span class="c1"># ----------- SAGITTAL -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sagittal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the sagittal value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sagittal</span>
+
+    <span class="nd">@sagittal</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">sagittal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set sagittal value.&quot;&quot;&quot;</span>
+        <span class="n">val_cond</span> <span class="o">=</span> <span class="n">value</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sagittal</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">val_cond</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sh</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">slice_to_pos</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_set_section</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_im_sagit</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vol</span><span class="p">[</span><span class="n">value</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
+                                  <span class="n">value</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_sagittal</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Cannot take sagittal section </span><span class="si">%s</span><span class="s2">. Max across &quot;</span>
+                             <span class="s2">&quot;first dimension is </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sh</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+    <span class="c1"># ----------- CORONAL -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">coronal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the coronal value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coronal</span>
+
+    <span class="nd">@coronal</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">coronal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set coronal value.&quot;&quot;&quot;</span>
+        <span class="n">val_cond</span> <span class="o">=</span> <span class="n">value</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coronal</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">val_cond</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sh</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">slice_to_pos</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_set_section</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_im_coron</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vol</span><span class="p">[:,</span> <span class="n">value</span><span class="p">,</span> <span class="p">:],</span>
+                                  <span class="n">value</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_coronal</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Cannot take coronal section </span><span class="si">%s</span><span class="s2">. Max across &quot;</span>
+                             <span class="s2">&quot;second dimension is </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sh</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+    <span class="c1"># ----------- AXIAL -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">axial</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the axial value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axial</span>
+
+    <span class="nd">@axial</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">axial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set axial value.&quot;&quot;&quot;</span>
+        <span class="n">val_cond</span> <span class="o">=</span> <span class="n">value</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axial</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">val_cond</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sh</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
+                <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">slice_to_pos</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_set_section</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_im_axial</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vol</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">value</span><span class="p">],</span>
+                                  <span class="n">value</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_axial</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Cannot take axial section </span><span class="si">%s</span><span class="s2">. Max across &quot;</span>
+                             <span class="s2">&quot;third dimension is </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sh</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+
+    <span class="c1"># ----------- INTERPOLATION -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">interpolation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the interpolation value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_im_sagit</span><span class="o">.</span><span class="n">interpolation</span>
+
+    <span class="nd">@interpolation</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@wrap_properties</span>
+    <span class="k">def</span> <span class="nf">interpolation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set interpolation value.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_im_sagit</span><span class="o">.</span><span class="n">interpolation</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_im_coron</span><span class="o">.</span><span class="n">interpolation</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_im_axial</span><span class="o">.</span><span class="n">interpolation</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="c1"># ----------- TEXT_SIZE -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">text_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the text_size value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text_size</span>
+
+    <span class="nd">@text_size</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@wrap_properties</span>
+    <span class="k">def</span> <span class="nf">text_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set text_size value.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_text_size</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_txt</span><span class="o">.</span><span class="n">font_size</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_txt</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.3.8',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

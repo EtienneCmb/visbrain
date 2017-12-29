@@ -21,16 +21,22 @@ https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
     import numpy as np
 
     from visbrain import Brain
-    from visbrain.objects import Picture3DObj
-    from visbrain.io import download_file, path_to_visbrain_data
+    from visbrain.objects import Picture3DObj, SourceObj
+    from visbrain.io import download_file
 
     kwargs = {}
     # Load the xyz coordinates and corresponding subject name :
-    download_file('xyz_sample.npz')
-    s_xyz = np.load(path_to_visbrain_data('xyz_sample.npz'))['xyz']
+
+    s_xyz = np.load(download_file('xyz_sample.npz'))['xyz']
     s_xyz = s_xyz[4::10, ...]
     n_sources = s_xyz.shape[0]
 
+    """Define a source object
+    """
+    s_obj = SourceObj('MySources', s_xyz, symbol='disc', color='green')
+
+    """Define picture data
+    """
     sf = 1024.
     n = 50
     x, y = np.ogrid[0:n / 2, 0:n / 2]
@@ -41,8 +47,9 @@ https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
     data = np.sinc(coef * 2 * np.pi * 1. * time)
     data += .2 * np.random.rand(*data.shape)
 
-    # If you want to remove some pictures, define a pic_select array of boolean
-    # values and specify if those pictures has to be hide or displayed :
+    """If you want to remove some pictures, define a pic_select array of boolean
+    values and specify if those pictures has to be hide or displayed :
+    """
     pic_select = np.ones((n_sources,), dtype=bool)
     pic_to_hide = [2, 6, 10, 11, 31, 35, 41, 44, 51, 55]
     pic_select[pic_to_hide] = False
@@ -59,10 +66,11 @@ https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
     kwargs['over'] = '#ab4642'           # Color over vmax
     kwargs['cblabel'] = '3D Pictures'    # Color over vmax
 
+    """Define the 3-D picture object
+    """
     pic = Picture3DObj('Pic', data, s_xyz, **kwargs)
 
-    vb = Brain(picture_obj=pic)
-    vb.pictures_control('Pic', width=22, height=32, cmap='inferno')
+    vb = Brain(picture_obj=pic, source_obj=s_obj)
     vb.show()
 
 **Total running time of the script:** ( 0 minutes  0.000 seconds)

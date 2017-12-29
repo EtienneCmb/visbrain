@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>visbrain.brain.brain &mdash; visbrain 0.3.7 documentation</title>
+  <title>visbrain.brain.brain &mdash; visbrain 0.3.8 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="visbrain 0.3.7 documentation" href="../../../index.html"/>
+    <link rel="top" title="visbrain 0.3.8 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.7
+                0.3.8
               </div>
             
           
@@ -176,7 +176,8 @@
 <span class="kn">import</span> <span class="nn">vispy.scene.cameras</span> <span class="k">as</span> <span class="nn">viscam</span>
 
 <span class="kn">from</span> <span class="nn">.interface</span> <span class="k">import</span> <span class="n">UiInit</span><span class="p">,</span> <span class="n">UiElements</span><span class="p">,</span> <span class="n">BrainShortcuts</span>
-<span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">BaseVisual</span><span class="p">,</span> <span class="n">BrainCbar</span>
+<span class="kn">from</span> <span class="nn">.visuals</span> <span class="k">import</span> <span class="n">Visuals</span>
+<span class="kn">from</span> <span class="nn">.cbar</span> <span class="k">import</span> <span class="n">BrainCbar</span>
 <span class="kn">from</span> <span class="nn">.user</span> <span class="k">import</span> <span class="n">BrainUserMethods</span>
 <span class="kn">from</span> <span class="nn">..pyqt_module</span> <span class="k">import</span> <span class="n">PyQtModule</span>
 <span class="kn">from</span> <span class="nn">..config</span> <span class="k">import</span> <span class="n">PROFILER</span>
@@ -184,32 +185,36 @@
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Brain"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.Brain">[docs]</a><span class="k">class</span> <span class="nc">Brain</span><span class="p">(</span><span class="n">PyQtModule</span><span class="p">,</span> <span class="n">UiInit</span><span class="p">,</span> <span class="n">UiElements</span><span class="p">,</span> <span class="n">BaseVisual</span><span class="p">,</span> <span class="n">BrainCbar</span><span class="p">,</span>
+<div class="viewcode-block" id="Brain"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.Brain">[docs]</a><span class="k">class</span> <span class="nc">Brain</span><span class="p">(</span><span class="n">PyQtModule</span><span class="p">,</span> <span class="n">UiInit</span><span class="p">,</span> <span class="n">UiElements</span><span class="p">,</span> <span class="n">Visuals</span><span class="p">,</span> <span class="n">BrainCbar</span><span class="p">,</span>
             <span class="n">BrainUserMethods</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Visualization of brain-data on a standard MNI brain.</span>
 
 <span class="sd">    By default the Brain module display a standard MNI brain. Then, this brain</span>
 <span class="sd">    can interact with several objects :</span>
 
+<span class="sd">        * Brain (brain_obj)</span>
 <span class="sd">        * Sources (source_obj)</span>
 <span class="sd">        * Connectivity (connect_obj)</span>
 <span class="sd">        * Time-series (time_series_obj)</span>
 <span class="sd">        * Pictures (picture_obj)</span>
 <span class="sd">        * Vectors (vector_obj)</span>
+<span class="sd">        * Volume (vol_obj)</span>
+<span class="sd">        * Cross-sections (cross_sec_obj)</span>
+<span class="sd">        * Region Of Interest (roi_obj)</span>
 
 <span class="sd">    Alternatively, if an other brain template is needed, a brain object</span>
 <span class="sd">    (BrainObj) can also be used (see brain_obj).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    brain_template : string | &#39;B1&#39;</span>
-<span class="sd">        The MNI brain template to use. Switch between &#39;B1&#39;, &#39;B2&#39; or &#39;B3&#39;</span>
-<span class="sd">    brain_translucent : bool | True</span>
-<span class="sd">        Use translucent or opaque brain.</span>
-<span class="sd">    brain_hemisphere : {&#39;left&#39;, &#39;both&#39;, &#39;right&#39;}</span>
-<span class="sd">        Specify which brain hemisphere to use. Default is &#39;both&#39;.</span>
 <span class="sd">    brain_obj : BrainObj | None</span>
 <span class="sd">        A brain object.</span>
+<span class="sd">    vol_obj : VolumeObj | None</span>
+<span class="sd">        A volume object.</span>
+<span class="sd">    cross_sec_obj : CrossSecObj | None</span>
+<span class="sd">        A cross-sections object.</span>
+<span class="sd">    roi_obj : RoiObj | None</span>
+<span class="sd">        A Region Of Interest (ROI) object.</span>
 <span class="sd">    source_obj : SourceObj | None</span>
 <span class="sd">        An object (or list of objects) of type source (SourceObj).</span>
 <span class="sd">    connect_obj : ConnectObj | None</span>
@@ -254,7 +259,6 @@
         <span class="n">PyQtModule</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">to_describe</span><span class="o">=</span><span class="s1">&#39;view.wc&#39;</span><span class="p">,</span>
                             <span class="n">icon</span><span class="o">=</span><span class="s1">&#39;brain_icon.svg&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_userobj</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_proj_obj</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_gl_scale</span> <span class="o">=</span> <span class="mf">100.</span>  <span class="c1"># fix appearance for small meshes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span> <span class="o">=</span> <span class="n">viscam</span><span class="o">.</span><span class="n">TurntableCamera</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;MainBrainCamera&#39;</span><span class="p">)</span>
 
@@ -264,7 +268,7 @@
 
         <span class="c1"># ====================== App creation ======================</span>
         <span class="n">PROFILER</span><span class="p">(</span><span class="s2">&quot;Visual elements&quot;</span><span class="p">,</span> <span class="n">as_type</span><span class="o">=</span><span class="s1">&#39;title&#39;</span><span class="p">)</span>
-        <span class="n">BaseVisual</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">wc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csGrid</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">Visuals</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">wc</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="c1"># ====================== Ui interactions ======================</span>
         <span class="n">UiElements</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="c1"># GUI interactions</span>
@@ -276,6 +280,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_vbNode</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">scene</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">atlas</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">roi</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">atlas</span><span class="o">.</span><span class="n">_csize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">atlas</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="s1">&#39;top&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">atlas</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">set_default_state</span><span class="p">()</span>
@@ -286,7 +291,7 @@
         <span class="n">BrainCbar</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">camera</span><span class="p">)</span>
         <span class="n">PROFILER</span><span class="p">(</span><span class="s2">&quot;Colorbar and panzoom creation&quot;</span><span class="p">)</span>
 
-        <span class="c1"># ====================== Colorbar ======================</span>
+        <span class="c1"># ====================== Shortcuts ======================</span>
         <span class="n">BrainShortcuts</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cbqt</span><span class="o">.</span><span class="n">cbviz</span><span class="o">.</span><span class="n">_canvas</span><span class="p">)</span>
         <span class="n">PROFILER</span><span class="p">(</span><span class="s2">&quot;Set brain shortcuts&quot;</span><span class="p">)</span>
 
@@ -299,14 +304,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_objsPage</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">menuDispQuickSettings</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_source_tab</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_obj_type_lst</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="c1"># Progress bar and rotation panel :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">progressBar</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">userRotationPanel</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
         <span class="c1"># Display menu :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">menuDispBrain</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atlas</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">visible</span><span class="p">)</span>
         <span class="c1"># Objects :</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_3dobj_type</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_all_object_are_none</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_obj_type</span><span class="p">()</span>
         <span class="c1"># Colorbar :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_menu_disp_cbar</span><span class="p">()</span></div>
@@ -346,7 +350,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.3.7',
+            VERSION:'0.3.8',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

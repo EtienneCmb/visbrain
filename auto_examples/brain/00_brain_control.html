@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Brain control &mdash; visbrain 0.3.7 documentation</title>
+  <title>Brain control &mdash; visbrain 0.3.8 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.3.7 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.8 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
         <link rel="next" title="Cross-sections and volume control" href="01_cross_sections_and_volume.html"/>
         <link rel="prev" title="Examples" href="../index.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.7
+                0.3.8
               </div>
             
           
@@ -105,7 +105,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#brain-examples">Brain Examples</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Brain control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="01_cross_sections_and_volume.html">Cross-sections and volume control</a></li>
-<li class="toctree-l3"><a class="reference internal" href="02_add_brain_template.html">Add a brain template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_brain_using_vertices.html">Define a brain template using vertices and faces</a></li>
 <li class="toctree-l3"><a class="reference internal" href="03_sources.html">Add deep sources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="04_connectivity.html">Connect deep sources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="05_region_of_interest.html">Add Region of interest (ROI)</a></li>
@@ -114,11 +114,8 @@
 <li class="toctree-l3"><a class="reference internal" href="08_screenshot.html">Screenshot example</a></li>
 <li class="toctree-l3"><a class="reference internal" href="09_add_multiple_objects.html">Add multiple objects to the scene</a></li>
 <li class="toctree-l3"><a class="reference internal" href="10_add_nifti_volume.html">Add Nifti volume</a></li>
-<li class="toctree-l3"><a class="reference internal" href="11_convert_mesh_data.html">Convert mesh data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="12_colorbar_control.html">Colorbar control</a></li>
-<li class="toctree-l3"><a class="reference internal" href="13_load_gui_config.html">Load Graphical User Interface configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="14_add_vectors.html">Add vectors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="15_parcellize.html">Parcellize brain surface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11_add_vectors.html">Add vectors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12_parcellize.html">Parcellize brain surface</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#colorbar-examples">Colorbar Examples</a></li>
@@ -198,12 +195,10 @@
             
   <div class="section" id="brain-control">
 <span id="sphx-glr-auto-examples-brain-00-brain-control-py"></span><h1>Brain control<a class="headerlink" href="#brain-control" title="Permalink to this headline">¶</a></h1>
-<p>Control the brain such as the choice of the template to use, the hemisphere
-to display and transparency level. By default, Visbrain come with three
-different templates (B1, B2 and B3).</p>
-<p>This file also show how to rotate the using either predefined rotations
-(axial, sagittal or coronal) or custom rotation. Uncomment lines to be
-executed.</p>
+<p>Control the brain i.e the brain template to use, the transparency and
+the hemisphere.</p>
+<p>You can also rotate the scene using predefined rotations (axial, sagittal or
+coronal) or custom rotation.</p>
 <p>Fixed parameters for rotation :</p>
 <blockquote>
 <div><ul class="simple">
@@ -219,12 +214,42 @@ executed.</p>
 elevation.</p>
 <img alt="../../_images/ex_brain_control.png" src="../../_images/ex_brain_control.png" />
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <a href="../../brainAPI.html#visbrain.Brain" title="View documentation for visbrain.Brain"><span class="n">Brain</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../objects.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a>
 
-<span class="c1"># Define the Brain instance :</span>
-<span class="n">vb</span> <span class="o">=</span> <a href="../../brainAPI.html#visbrain.Brain" title="View documentation for visbrain.Brain"><span class="n">Brain</span></a><span class="p">()</span>
+<span class="sd">&quot;&quot;&quot;Visbrain comes with three default templates :</span>
+<span class="sd">* B1 (with cerebellum)</span>
+<span class="sd">* B2</span>
+<span class="sd">* B3</span>
 
+<span class="sd">Three templates can also be downloaded :</span>
+<span class="sd">* inflated (inflated brain of PySurfer)</span>
+<span class="sd">* white</span>
+<span class="sd">* sphere</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Display opaque right hemisphere of B3 :</span>
+<span class="n">b_obj</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;B3&#39;</span><span class="p">)</span>  <span class="c1"># &#39;B1&#39;, &#39;B2&#39;, &#39;inflated&#39;, &#39;sphere&#39;, &#39;white&#39;</span>
+
+<span class="sd">&quot;&quot;&quot;By default, the brain is translucent but it can be turned to opaque</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># b_obj = BrainObj(&#39;B3&#39;, translucent=False)</span>
+
+<span class="sd">&quot;&quot;&quot;You can also select a specific hemisphere</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># b_obj = BrainObj(&#39;B3&#39;, translucent=False, hemisphere=&#39;left&#39;)  # &#39;right&#39;</span>
+
+<span class="sd">&quot;&quot;&quot;For the inflated, white and translucent templates, sulcus can be also used</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># b_obj = BrainObj(&#39;inflated&#39;, translucent=False, hemisphere=&#39;right&#39;,</span>
+<span class="c1">#                  sulcus=True)</span>
+
+<span class="sd">&quot;&quot;&quot;Once the brain object created, pass it to the graphical user interface.</span>
+
+<span class="sd">If you want to control the brain from the GUI, go to the Objects tab and select</span>
+<span class="sd">&#39;Brain&#39; from the first combo box. You can also use the key shortcut b to</span>
+<span class="sd">display/hide the brain.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">vb</span> <span class="o">=</span> <a href="../../brainAPI.html#visbrain.Brain" title="View documentation for visbrain.Brain"><span class="n">Brain</span></a><span class="p">(</span><span class="n">brain_obj</span><span class="o">=</span><span class="n">b_obj</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="s1">&#39;slateblue&#39;</span><span class="p">)</span>
+
+<span class="sd">&quot;&quot;&quot;Display opaque right hemisphere of B3 :</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1"># vb.brain_control(template=&#39;B3&#39;, hemisphere=&#39;right&#39;, translucent=False)</span>
 
@@ -312,7 +337,7 @@ elevation.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.3.7',
+            VERSION:'0.3.8',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

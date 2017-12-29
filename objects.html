@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>7. Objects &mdash; visbrain 0.3.7 documentation</title>
+  <title>7. Objects &mdash; visbrain 0.3.8 documentation</title>
   
 
   
@@ -39,9 +39,9 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="visbrain 0.3.7 documentation" href="index.html"/>
+    <link rel="top" title="visbrain 0.3.8 documentation" href="index.html"/>
         <link rel="up" title="Documentation" href="documentation.html"/>
-        <link rel="next" title="8. Utils" href="utils.html"/>
+        <link rel="next" title="Examples" href="auto_examples/index.html"/>
         <link rel="prev" title="6. Figure" href="figure.html"/> 
 
   
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.7
+                0.3.8
               </div>
             
           
@@ -144,23 +144,32 @@
 <li class="toctree-l4"><a class="reference internal" href="#examples-using-visbrain-objects-roiobj">7.9.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.RoiObj</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#volume-object">7.10. Volume object</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#image-object">7.11. Image object</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#examples-using-visbrain-objects-imageobj">7.11.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.ImageObj</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#volume-object">7.10. Volume object</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#examples-using-visbrain-objects-volumeobj">7.10.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.VolumeObj</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#time-frequency-map-object">7.12. Time-frequency map object</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#examples-using-visbrain-objects-timefrequencymapobj">7.12.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.TimeFrequencyMapObj</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cross-section-object">7.11. Cross-section object</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#examples-using-visbrain-objects-crosssecobj">7.11.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.CrossSecObj</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#spectrogram-object">7.13. Spectrogram object</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#examples-using-visbrain-objects-spectrogramobj">7.13.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.SpectrogramObj</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#image-object">7.12. Image object</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#examples-using-visbrain-objects-imageobj">7.12.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.ImageObj</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#time-frequency-map-object">7.13. Time-frequency map object</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#examples-using-visbrain-objects-timefrequencymapobj">7.13.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.TimeFrequencyMapObj</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#spectrogram-object">7.14. Spectrogram object</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#examples-using-visbrain-objects-spectrogramobj">7.14.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.SpectrogramObj</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#multi-taper-object">7.15. Multi-taper object</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#examples-using-visbrain-objects-multitaperobj">7.15.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.MultiTaperObj</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html">8. Utils</a></li>
-<li class="toctree-l2"><a class="reference internal" href="io.html">9. I/O</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
@@ -245,9 +254,11 @@
 <li><a class="reference internal" href="#pic3dobj"><span class="std std-ref">Pictures 3D object</span></a></li>
 <li><a class="reference internal" href="#roiobj"><span class="std std-ref">Region Of Interest object</span></a></li>
 <li><a class="reference internal" href="#volumeobj"><span class="std std-ref">Volume object</span></a></li>
+<li><a class="reference internal" href="#csobj"><span class="std std-ref">Cross-section object</span></a></li>
 <li><a class="reference internal" href="#imageobj"><span class="std std-ref">Image object</span></a></li>
 <li><a class="reference internal" href="#tfobj"><span class="std std-ref">Time-frequency map object</span></a></li>
 <li><a class="reference internal" href="#specobj"><span class="std std-ref">Spectrogram object</span></a></li>
+<li><a class="reference internal" href="#mtobj"><span class="std std-ref">Multi-taper object</span></a></li>
 </ul>
 <p>Each object inherit to the following methods :</p>
 <table border="1" class="longtable docutils">
@@ -269,13 +280,13 @@
 </table>
 <dl class="method">
 <dt id="visbrain.objects.VisbrainObject.describe_tree">
-<code class="descclassname">VisbrainObject.</code><code class="descname">describe_tree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/visbrain_obj.html#VisbrainObject.describe_tree"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/visbrain_obj.py#L115-L117"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.VisbrainObject.describe_tree" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">VisbrainObject.</code><code class="descname">describe_tree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/visbrain_obj.html#VisbrainObject.describe_tree"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/visbrain_obj.py#L119-L121"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.VisbrainObject.describe_tree" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tree description.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="visbrain.objects.VisbrainObject.preview">
-<code class="descclassname">VisbrainObject.</code><code class="descname">preview</code><span class="sig-paren">(</span><em>bgcolor='white'</em>, <em>axis=False</em>, <em>xyz=False</em>, <em>show=True</em>, <em>obj=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/visbrain_obj.html#VisbrainObject.preview"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/visbrain_obj.py#L89-L113"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.VisbrainObject.preview" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">VisbrainObject.</code><code class="descname">preview</code><span class="sig-paren">(</span><em>bgcolor='white'</em>, <em>axis=False</em>, <em>xyz=False</em>, <em>show=True</em>, <em>obj=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/visbrain_obj.html#VisbrainObject.preview"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/visbrain_obj.py#L91-L117"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.VisbrainObject.preview" title="Permalink to this definition">¶</a></dt>
 <dd><p>Previsualize the result.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -294,9 +305,13 @@
 <div><p>Add an (x, y, z) axis to the scene.</p>
 </div></blockquote>
 <p><strong>obj</strong> : VisbrainObj | None</p>
-<blockquote class="last">
+<blockquote>
 <div><p>Pass a Visbrain object if you want to use the camera of an other
 object.</p>
+</div></blockquote>
+<p><strong>kwargs</strong> : dict | {}</p>
+<blockquote class="last">
+<div><p>Optional arguments are passed to the VisbrainCanvas class.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -306,7 +321,7 @@ object.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.VisbrainObject.screenshot">
-<code class="descclassname">VisbrainObject.</code><code class="descname">screenshot</code><span class="sig-paren">(</span><em>saveas</em>, <em>print_size=None</em>, <em>dpi=300.0</em>, <em>unit='centimeter'</em>, <em>factor=None</em>, <em>region=None</em>, <em>autocrop=False</em>, <em>bgcolor=None</em>, <em>transparent=False</em>, <em>obj=None</em>, <em>line_width=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/visbrain_obj.html#VisbrainObject.screenshot"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/visbrain_obj.py#L119-L176"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.VisbrainObject.screenshot" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">VisbrainObject.</code><code class="descname">screenshot</code><span class="sig-paren">(</span><em>saveas</em>, <em>print_size=None</em>, <em>dpi=300.0</em>, <em>unit='centimeter'</em>, <em>factor=None</em>, <em>region=None</em>, <em>autocrop=False</em>, <em>bgcolor=None</em>, <em>transparent=False</em>, <em>obj=None</em>, <em>line_width=1.0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/visbrain_obj.html#VisbrainObject.screenshot"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/visbrain_obj.py#L123-L182"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.VisbrainObject.screenshot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Take a screeshot of the scene.</p>
 <p>By default, the rendered canvas will have the size of your screen.
 The screenshot() method provides two ways to increase to exported image
@@ -373,9 +388,13 @@ space between the brain and the border of the picture.</p>
 background.</p>
 </div></blockquote>
 <p><strong>obj</strong> : VisbrainObj | None</p>
-<blockquote class="last">
+<blockquote>
 <div><p>Pass a Visbrain object if you want to use the camera of an other
 object for the sceen rendering.</p>
+</div></blockquote>
+<p><strong>kwargs</strong> : dict | {}</p>
+<blockquote class="last">
+<div><p>Optional arguments are passed to the VisbrainCanvas class.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -387,7 +406,7 @@ object for the sceen rendering.</p>
 <span id="sceneobj"></span><h2>7.1. Scene object<a class="headerlink" href="#scene-object" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="visbrain.objects.SceneObj">
-<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">SceneObj</code><span class="sig-paren">(</span><em>bgcolor='black'</em>, <em>camera_state={}</em>, <em>verbose=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/scene_obj.html#SceneObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/scene_obj.py#L339-L579"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.SceneObj" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">SceneObj</code><span class="sig-paren">(</span><em>bgcolor='black'</em>, <em>camera_state={}</em>, <em>verbose=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/scene_obj.html#SceneObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/scene_obj.py#L339-L584"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.SceneObj" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a scene and add objects to it.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -432,7 +451,7 @@ object for the sceen rendering.</p>
 </table>
 <dl class="method">
 <dt id="visbrain.objects.SceneObj.add_to_subplot">
-<code class="descname">add_to_subplot</code><span class="sig-paren">(</span><em>obj</em>, <em>row=0</em>, <em>col=0</em>, <em>row_span=1</em>, <em>col_span=1</em>, <em>title=None</em>, <em>title_color='white'</em>, <em>title_bold=True</em>, <em>use_this_cam=False</em>, <em>rotate=None</em>, <em>camera_state={}</em>, <em>width_max=None</em>, <em>height_max=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/scene_obj.html#SceneObj.add_to_subplot"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/scene_obj.py#L417-L489"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.SceneObj.add_to_subplot" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_to_subplot</code><span class="sig-paren">(</span><em>obj</em>, <em>row=0</em>, <em>col=0</em>, <em>row_span=1</em>, <em>col_span=1</em>, <em>title=None</em>, <em>title_size=12.0</em>, <em>title_color='white'</em>, <em>title_bold=True</em>, <em>use_this_cam=False</em>, <em>rotate=None</em>, <em>camera_state={}</em>, <em>width_max=None</em>, <em>height_max=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/scene_obj.html#SceneObj.add_to_subplot"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/scene_obj.py#L418-L494"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.SceneObj.add_to_subplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add object to subplot.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -461,6 +480,10 @@ object for the sceen rendering.</p>
 <p><strong>title</strong> : string | None</p>
 <blockquote>
 <div><p>Subplot title.</p>
+</div></blockquote>
+<p><strong>title_size</strong> : float | 12.</p>
+<blockquote>
+<div><p>Title font size.</p>
 </div></blockquote>
 <p><strong>title_color</strong> : string/tuple/array_like | ‘white’</p>
 <blockquote>
@@ -501,7 +524,7 @@ to True.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.SceneObj.link">
-<code class="descname">link</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/scene_obj.html#SceneObj.link"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/scene_obj.py#L491-L513"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.SceneObj.link" title="Permalink to this definition">¶</a></dt>
+<code class="descname">link</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/scene_obj.html#SceneObj.link"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/scene_obj.py#L496-L518"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.SceneObj.link" title="Permalink to this definition">¶</a></dt>
 <dd><p>Link the camera of several objects of the scene.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -531,29 +554,41 @@ to link all cameras.</p>
 <img alt="_images/sphx_glr_ex_brain_obj_thumb.png" src="_images/sphx_glr_ex_brain_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_brain_obj.html#sphx-glr-auto-examples-objects-ex-brain-obj-py"><span class="std std-ref">Brain object</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram."><div class="figure" id="id3">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Illustration of the main functionalities and inputs of the connctivity object."><div class="figure" id="id3">
+<img alt="_images/sphx_glr_ex_connectivity_obj_thumb.png" src="_images/sphx_glr_ex_connectivity_obj_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_connectivity_obj.html#sphx-glr-auto-examples-objects-ex-connectivity-obj-py"><span class="std std-ref">Connectivity object</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Illustration and main functionalities and inputs of the cross-section object."><div class="figure" id="id4">
+<img alt="_images/sphx_glr_ex_cross_section_obj_thumb.png" src="_images/sphx_glr_ex_cross_section_obj_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_cross_section_obj.html#sphx-glr-auto-examples-objects-ex-cross-section-obj-py"><span class="std std-ref">Cross-section object</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram."><div class="figure" id="id5">
 <img alt="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" src="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_im_tf_spec_obj.html#sphx-glr-auto-examples-objects-ex-im-tf-spec-obj-py"><span class="std std-ref">Image, time-frequency map and spectrogram objects</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the roi object i.e :"><div class="figure" id="id4">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the roi object i.e :"><div class="figure" id="id6">
 <img alt="_images/sphx_glr_ex_roi_object_thumb.png" src="_images/sphx_glr_ex_roi_object_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_roi_object.html#sphx-glr-auto-examples-objects-ex-roi-object-py"><span class="std std-ref">Region Of Interest (ROI) object</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the source object i.e :"><div class="figure" id="id5">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the source object i.e :"><div class="figure" id="id7">
 <img alt="_images/sphx_glr_ex_source_obj_thumb.png" src="_images/sphx_glr_ex_source_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_source_obj.html#sphx-glr-auto-examples-objects-ex-source-obj-py"><span class="std std-ref">Source object</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Illustration of the main functionalities and inputs of the volume object."><div class="figure" id="id8">
+<img alt="_images/sphx_glr_ex_volume_obj_thumb.png" src="_images/sphx_glr_ex_volume_obj_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_volume_obj.html#sphx-glr-auto-examples-objects-ex-volume-obj-py"><span class="std std-ref">Volume object</span></a></span></p>
 </div>
 </div><div style='clear:both'></div></div>
 </div>
 <div class="section" id="brain-object">
 <span id="brainobj"></span><h2>7.2. Brain object<a class="headerlink" href="#brain-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id6">
+<div class="figure align-center" id="id9">
 <img alt="_images/pic_brain_obj.png" src="_images/pic_brain_obj.png" />
 <p class="caption"><span class="caption-text">Brain object example</span></p>
 </div>
 <dl class="class">
 <dt id="visbrain.objects.BrainObj">
-<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">BrainObj</code><span class="sig-paren">(</span><em>name</em>, <em>vertices=None</em>, <em>faces=None</em>, <em>normals=None</em>, <em>lr_index=None</em>, <em>hemisphere='both'</em>, <em>translucent=True</em>, <em>invert_normals=False</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>_scale=1.0</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L18-L674"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">BrainObj</code><span class="sig-paren">(</span><em>name</em>, <em>vertices=None</em>, <em>faces=None</em>, <em>normals=None</em>, <em>lr_index=None</em>, <em>hemisphere='both'</em>, <em>translucent=True</em>, <em>sulcus=False</em>, <em>invert_normals=False</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>_scale=1.0</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L21-L725"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a brain object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -633,7 +668,7 @@ hemisphere.</p>
 <tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.BrainObj.set_data" title="visbrain.objects.BrainObj.set_data"><code class="xref py py-obj docutils literal"><span class="pre">set_data</span></code></a>([name,&nbsp;vertices,&nbsp;faces,&nbsp;normals,&nbsp;…])</td>
 <td>Load a brain template.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#visbrain.objects.BrainObj.rotate" title="visbrain.objects.BrainObj.rotate"><code class="xref py py-obj docutils literal"><span class="pre">rotate</span></code></a>([fixed,&nbsp;custom,&nbsp;margin])</td>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.objects.BrainObj.rotate" title="visbrain.objects.BrainObj.rotate"><code class="xref py py-obj docutils literal"><span class="pre">rotate</span></code></a>([fixed,&nbsp;scale_factor,&nbsp;custom,&nbsp;margin])</td>
 <td>Rotate the brain using predefined rotations or a custom one.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.BrainObj.project_sources" title="visbrain.objects.BrainObj.project_sources"><code class="xref py py-obj docutils literal"><span class="pre">project_sources</span></code></a>(s_obj[,&nbsp;project,&nbsp;radius,&nbsp;…])</td>
@@ -653,7 +688,7 @@ hemisphere.</p>
 </div></blockquote>
 <dl class="method">
 <dt id="visbrain.objects.BrainObj.add_activation">
-<code class="descname">add_activation</code><span class="sig-paren">(</span><em>data=None</em>, <em>vertices=None</em>, <em>smoothing_steps=20</em>, <em>file=None</em>, <em>hemisphere=None</em>, <em>hide_under=None</em>, <em>n_contours=None</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>under='gray'</em>, <em>over='red'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.add_activation"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L288-L396"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.add_activation" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_activation</code><span class="sig-paren">(</span><em>data=None</em>, <em>vertices=None</em>, <em>smoothing_steps=20</em>, <em>file=None</em>, <em>hemisphere=None</em>, <em>hide_under=None</em>, <em>n_contours=None</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>under='gray'</em>, <em>over='red'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.add_activation"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L334-L447"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.add_activation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add activation to the brain template.</p>
 <p>This method can be used for :</p>
 <blockquote>
@@ -729,7 +764,7 @@ instead.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.BrainObj.get_parcellates">
-<code class="descname">get_parcellates</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.get_parcellates"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L501-L515"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.get_parcellates" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_parcellates</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.get_parcellates"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L552-L566"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.get_parcellates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the list of supported parcellates names and index.</p>
 <p>This method require the pandas and nibabel packages to be installed.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -748,7 +783,7 @@ instead.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.BrainObj.parcellize">
-<code class="descname">parcellize</code><span class="sig-paren">(</span><em>file</em>, <em>select=None</em>, <em>hemisphere=None</em>, <em>data=None</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>under='gray'</em>, <em>vmax=None</em>, <em>over='red'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.parcellize"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L398-L499"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.parcellize" title="Permalink to this definition">¶</a></dt>
+<code class="descname">parcellize</code><span class="sig-paren">(</span><em>file</em>, <em>select=None</em>, <em>hemisphere=None</em>, <em>data=None</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>under='gray'</em>, <em>vmax=None</em>, <em>over='red'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.parcellize"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L449-L550"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.parcellize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parcellize the brain surface using a .annot file.</p>
 <p>This method require the nibabel package to be installed.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -802,7 +837,7 @@ instead.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.BrainObj.project_sources">
-<code class="descname">project_sources</code><span class="sig-paren">(</span><em>s_obj</em>, <em>project='modulation'</em>, <em>radius=10.0</em>, <em>contribute=False</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>under='black'</em>, <em>vmax=None</em>, <em>over='red'</em>, <em>mask_color=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.project_sources"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L249-L286"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.project_sources" title="Permalink to this definition">¶</a></dt>
+<code class="descname">project_sources</code><span class="sig-paren">(</span><em>s_obj</em>, <em>project='modulation'</em>, <em>radius=10.0</em>, <em>contribute=False</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>under='black'</em>, <em>vmax=None</em>, <em>over='red'</em>, <em>mask_color=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.project_sources"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L295-L332"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.project_sources" title="Permalink to this definition">¶</a></dt>
 <dd><p>Project source’s activity or repartition onto the brain object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -863,7 +898,7 @@ the color of the masked sources is going to be used.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.BrainObj.rotate">
-<code class="descname">rotate</code><span class="sig-paren">(</span><em>fixed='top'</em>, <em>custom=None</em>, <em>margin=1.08</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.rotate"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L215-L241"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.rotate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">rotate</code><span class="sig-paren">(</span><em>fixed=None</em>, <em>scale_factor=None</em>, <em>custom=None</em>, <em>margin=1.08</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.rotate"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L253-L287"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.rotate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Rotate the brain using predefined rotations or a custom one.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -896,7 +931,7 @@ respectively describing the (azimuth, elevation).</p>
 
 <dl class="method">
 <dt id="visbrain.objects.BrainObj.set_data">
-<code class="descname">set_data</code><span class="sig-paren">(</span><em>name=None</em>, <em>vertices=None</em>, <em>faces=None</em>, <em>normals=None</em>, <em>lr_index=None</em>, <em>hemisphere='both'</em>, <em>invert_normals=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.set_data"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L87-L108"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.set_data" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_data</code><span class="sig-paren">(</span><em>name=None</em>, <em>vertices=None</em>, <em>faces=None</em>, <em>normals=None</em>, <em>lr_index=None</em>, <em>hemisphere='both'</em>, <em>invert_normals=False</em>, <em>sulcus=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.set_data"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L90-L125"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.set_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load a brain template.</p>
 </dd></dl>
 
@@ -904,39 +939,59 @@ respectively describing the (azimuth, elevation).</p>
 
 <div class="section" id="examples-using-visbrain-objects-brainobj">
 <h3>7.2.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.BrainObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-brainobj" title="Permalink to this headline">¶</a></h3>
-<div class="sphx-glr-thumbcontainer" tooltip="Add sources to the scene. This script also illustrate most of the controls for sources. Each so..."><div class="figure" id="id7">
+<div class="sphx-glr-thumbcontainer" tooltip="Control the brain i.e the brain template to use, the transparency and the hemisphere."><div class="figure" id="id10">
+<img alt="_images/sphx_glr_00_brain_control_thumb.png" src="_images/sphx_glr_00_brain_control_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/00_brain_control.html#sphx-glr-auto-examples-brain-00-brain-control-py"><span class="std std-ref">Brain control</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to define a custom brain template using your own vertices and faces..."><div class="figure" id="id11">
+<img alt="_images/sphx_glr_02_brain_using_vertices_thumb.png" src="_images/sphx_glr_02_brain_using_vertices_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/02_brain_using_vertices.html#sphx-glr-auto-examples-brain-02-brain-using-vertices-py"><span class="std std-ref">Define a brain template using vertices and faces</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Add sources to the scene. This script also illustrate most of the controls for sources. Each so..."><div class="figure" id="id12">
 <img alt="_images/sphx_glr_03_sources_thumb.png" src="_images/sphx_glr_03_sources_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/03_sources.html#sphx-glr-auto-examples-brain-03-sources-py"><span class="std std-ref">Add deep sources</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Add vectors to the scene. This example demonstrate the two methods to defined vectors :"><div class="figure" id="id8">
-<img alt="_images/sphx_glr_14_add_vectors_thumb.png" src="_images/sphx_glr_14_add_vectors_thumb.png" />
-<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/14_add_vectors.html#sphx-glr-auto-examples-brain-14-add-vectors-py"><span class="std std-ref">Add vectors</span></a></span></p>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to display Region Of Interest (ROI)."><div class="figure" id="id13">
+<img alt="_images/sphx_glr_05_region_of_interest_thumb.png" src="_images/sphx_glr_05_region_of_interest_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/05_region_of_interest.html#sphx-glr-auto-examples-brain-05-region-of-interest-py"><span class="std std-ref">Add Region of interest (ROI)</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Parcellize the brain surface using .annot files. This example use Nibabel to read the .annot fi..."><div class="figure" id="id9">
-<img alt="_images/sphx_glr_15_parcellize_thumb.png" src="_images/sphx_glr_15_parcellize_thumb.png" />
-<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/15_parcellize.html#sphx-glr-auto-examples-brain-15-parcellize-py"><span class="std std-ref">Parcellize brain surface</span></a></span></p>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Offline rendering of selected canvas."><div class="figure" id="id14">
+<img alt="_images/sphx_glr_08_screenshot_thumb.png" src="_images/sphx_glr_08_screenshot_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/08_screenshot.html#sphx-glr-auto-examples-brain-08-screenshot-py"><span class="std std-ref">Screenshot example</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the brain object i.e :"><div class="figure" id="id10">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Add vectors to the scene. This example demonstrate the two methods to defined vectors :"><div class="figure" id="id15">
+<img alt="_images/sphx_glr_11_add_vectors_thumb.png" src="_images/sphx_glr_11_add_vectors_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/11_add_vectors.html#sphx-glr-auto-examples-brain-11-add-vectors-py"><span class="std std-ref">Add vectors</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Parcellize the brain surface using .annot files. This example use Nibabel to read the .annot fi..."><div class="figure" id="id16">
+<img alt="_images/sphx_glr_12_parcellize_thumb.png" src="_images/sphx_glr_12_parcellize_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/12_parcellize.html#sphx-glr-auto-examples-brain-12-parcellize-py"><span class="std std-ref">Parcellize brain surface</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the brain object i.e :"><div class="figure" id="id17">
 <img alt="_images/sphx_glr_ex_brain_obj_thumb.png" src="_images/sphx_glr_ex_brain_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_brain_obj.html#sphx-glr-auto-examples-objects-ex-brain-obj-py"><span class="std std-ref">Brain object</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the roi object i.e :"><div class="figure" id="id11">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Illustration of the main functionalities and inputs of the connctivity object."><div class="figure" id="id18">
+<img alt="_images/sphx_glr_ex_connectivity_obj_thumb.png" src="_images/sphx_glr_ex_connectivity_obj_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_connectivity_obj.html#sphx-glr-auto-examples-objects-ex-connectivity-obj-py"><span class="std std-ref">Connectivity object</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the roi object i.e :"><div class="figure" id="id19">
 <img alt="_images/sphx_glr_ex_roi_object_thumb.png" src="_images/sphx_glr_ex_roi_object_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_roi_object.html#sphx-glr-auto-examples-objects-ex-roi-object-py"><span class="std std-ref">Region Of Interest (ROI) object</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Display a conjunction map from a nii.gz file (NiBabel required)."><div class="figure" id="id12">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Display a conjunction map from a nii.gz file (NiBabel required)."><div class="figure" id="id20">
 <img alt="_images/sphx_glr_conjunction_map_thumb.png" src="_images/sphx_glr_conjunction_map_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/pysurfer/conjunction_map.html#sphx-glr-auto-examples-pysurfer-conjunction-map-py"><span class="std std-ref">Display conjunction map</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Display fMRI activations from a nii.gz file (NiBabel required)."><div class="figure" id="id13">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Display fMRI activations from a nii.gz file (NiBabel required)."><div class="figure" id="id21">
 <img alt="_images/sphx_glr_fmri_activation_thumb.png" src="_images/sphx_glr_fmri_activation_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/pysurfer/fmri_activation.html#sphx-glr-auto-examples-pysurfer-fmri-activation-py"><span class="std std-ref">Display fMRI activation</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Plot MEG inverse solution."><div class="figure" id="id14">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Plot MEG inverse solution."><div class="figure" id="id22">
 <img alt="_images/sphx_glr_meg_inverse_solution_thumb.png" src="_images/sphx_glr_meg_inverse_solution_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/pysurfer/meg_inverse_solution.html#sphx-glr-auto-examples-pysurfer-meg-inverse-solution-py"><span class="std std-ref">Plot MEG inverse solution</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Plot vector-valued MEG inverse solution."><div class="figure" id="id15">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Plot vector-valued MEG inverse solution."><div class="figure" id="id23">
 <img alt="_images/sphx_glr_vector_based_meg_inverse_thumb.png" src="_images/sphx_glr_vector_based_meg_inverse_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/pysurfer/vector_based_meg_inverse.html#sphx-glr-auto-examples-pysurfer-vector-based-meg-inverse-py"><span class="std std-ref">Plot vector-valued MEG inverse solution</span></a></span></p>
 </div>
@@ -944,7 +999,7 @@ respectively describing the (azimuth, elevation).</p>
 </div>
 <div class="section" id="colorbar-object">
 <span id="colorbarobj"></span><h2>7.3. Colorbar object<a class="headerlink" href="#colorbar-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id16">
+<div class="figure align-center" id="id24">
 <img alt="_images/pic_cbar_obj.png" src="_images/pic_cbar_obj.png" />
 <p class="caption"><span class="caption-text">Colorbar object example</span></p>
 </div>
@@ -1074,19 +1129,19 @@ using the over parameter.</p>
 
 <div class="section" id="examples-using-visbrain-objects-colorbarobj">
 <h3>7.3.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.ColorbarObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-colorbarobj" title="Permalink to this headline">¶</a></h3>
-<div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the brain object i.e :"><div class="figure" id="id17">
+<div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the brain object i.e :"><div class="figure" id="id25">
 <img alt="_images/sphx_glr_ex_brain_obj_thumb.png" src="_images/sphx_glr_ex_brain_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_brain_obj.html#sphx-glr-auto-examples-objects-ex-brain-obj-py"><span class="std std-ref">Brain object</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram."><div class="figure" id="id18">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram."><div class="figure" id="id26">
 <img alt="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" src="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_im_tf_spec_obj.html#sphx-glr-auto-examples-objects-ex-im-tf-spec-obj-py"><span class="std std-ref">Image, time-frequency map and spectrogram objects</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the roi object i.e :"><div class="figure" id="id19">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the roi object i.e :"><div class="figure" id="id27">
 <img alt="_images/sphx_glr_ex_roi_object_thumb.png" src="_images/sphx_glr_ex_roi_object_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_roi_object.html#sphx-glr-auto-examples-objects-ex-roi-object-py"><span class="std std-ref">Region Of Interest (ROI) object</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the source object i.e :"><div class="figure" id="id20">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the source object i.e :"><div class="figure" id="id28">
 <img alt="_images/sphx_glr_ex_source_obj_thumb.png" src="_images/sphx_glr_ex_source_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_source_obj.html#sphx-glr-auto-examples-objects-ex-source-obj-py"><span class="std std-ref">Source object</span></a></span></p>
 </div>
@@ -1094,7 +1149,7 @@ using the over parameter.</p>
 </div>
 <div class="section" id="source-object">
 <span id="sourceobj"></span><h2>7.4. Source object<a class="headerlink" href="#source-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id21">
+<div class="figure align-center" id="id29">
 <img alt="_images/pic_source_obj.png" src="_images/pic_source_obj.png" />
 <p class="caption"><span class="caption-text">Source object example</span></p>
 </div>
@@ -1465,43 +1520,55 @@ False) to show or hide all of the sources.</p>
 
 <div class="section" id="examples-using-visbrain-objects-sourceobj">
 <h3>7.4.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.SourceObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-sourceobj" title="Permalink to this headline">¶</a></h3>
-<div class="sphx-glr-thumbcontainer" tooltip="Add sources to the scene. This script also illustrate most of the controls for sources. Each so..."><div class="figure" id="id22">
+<div class="sphx-glr-thumbcontainer" tooltip="Add sources to the scene. This script also illustrate most of the controls for sources. Each so..."><div class="figure" id="id30">
 <img alt="_images/sphx_glr_03_sources_thumb.png" src="_images/sphx_glr_03_sources_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/03_sources.html#sphx-glr-auto-examples-brain-03-sources-py"><span class="std std-ref">Add deep sources</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Display and customize connectivity. To this end, we define some deep sources and connect them."><div class="figure" id="id23">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Display and customize connectivity. To this end, we define some deep sources and connect them."><div class="figure" id="id31">
 <img alt="_images/sphx_glr_04_connectivity_thumb.png" src="_images/sphx_glr_04_connectivity_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/04_connectivity.html#sphx-glr-auto-examples-brain-04-connectivity-py"><span class="std std-ref">Connect deep sources</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to display Region Of Interest (ROI)."><div class="figure" id="id24">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to display Region Of Interest (ROI)."><div class="figure" id="id32">
 <img alt="_images/sphx_glr_05_region_of_interest_thumb.png" src="_images/sphx_glr_05_region_of_interest_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/05_region_of_interest.html#sphx-glr-auto-examples-brain-05-region-of-interest-py"><span class="std std-ref">Add Region of interest (ROI)</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Offline rendering of selected canvas."><div class="figure" id="id25">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display time-series attached to sources. The time-series can th..."><div class="figure" id="id33">
+<img alt="_images/sphx_glr_06_add_time_series_thumb.png" src="_images/sphx_glr_06_add_time_series_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/06_add_time_series.html#sphx-glr-auto-examples-brain-06-add-time-series-py"><span class="std std-ref">Add time series</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display small pictures attached to sources. The pictures can th..."><div class="figure" id="id34">
+<img alt="_images/sphx_glr_07_add_pictures_thumb.png" src="_images/sphx_glr_07_add_pictures_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/07_add_pictures.html#sphx-glr-auto-examples-brain-07-add-pictures-py"><span class="std std-ref">Add pictures</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Offline rendering of selected canvas."><div class="figure" id="id35">
 <img alt="_images/sphx_glr_08_screenshot_thumb.png" src="_images/sphx_glr_08_screenshot_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/08_screenshot.html#sphx-glr-auto-examples-brain-08-screenshot-py"><span class="std std-ref">Screenshot example</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Add multiple source&#x27;s and connectivity object to the scene."><div class="figure" id="id26">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Add multiple source&#x27;s and connectivity object to the scene."><div class="figure" id="id36">
 <img alt="_images/sphx_glr_09_add_multiple_objects_thumb.png" src="_images/sphx_glr_09_add_multiple_objects_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/09_add_multiple_objects.html#sphx-glr-auto-examples-brain-09-add-multiple-objects-py"><span class="std std-ref">Add multiple objects to the scene</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Control the colorbar of selected objects. The colormap of three objects can actually be control..."><div class="figure" id="id27">
-<img alt="_images/sphx_glr_12_colorbar_control_thumb.png" src="_images/sphx_glr_12_colorbar_control_thumb.png" />
-<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/12_colorbar_control.html#sphx-glr-auto-examples-brain-12-colorbar-control-py"><span class="std std-ref">Colorbar control</span></a></span></p>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Import a custom Nifti volume that can be then used in the cross-section or volume tab. To this ..."><div class="figure" id="id37">
+<img alt="_images/sphx_glr_10_add_nifti_volume_thumb.png" src="_images/sphx_glr_10_add_nifti_volume_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/10_add_nifti_volume.html#sphx-glr-auto-examples-brain-10-add-nifti-volume-py"><span class="std std-ref">Add Nifti volume</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Add vectors to the scene. This example demonstrate the two methods to defined vectors :"><div class="figure" id="id28">
-<img alt="_images/sphx_glr_14_add_vectors_thumb.png" src="_images/sphx_glr_14_add_vectors_thumb.png" />
-<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/14_add_vectors.html#sphx-glr-auto-examples-brain-14-add-vectors-py"><span class="std std-ref">Add vectors</span></a></span></p>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Add vectors to the scene. This example demonstrate the two methods to defined vectors :"><div class="figure" id="id38">
+<img alt="_images/sphx_glr_11_add_vectors_thumb.png" src="_images/sphx_glr_11_add_vectors_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/11_add_vectors.html#sphx-glr-auto-examples-brain-11-add-vectors-py"><span class="std std-ref">Add vectors</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the brain object i.e :"><div class="figure" id="id29">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the brain object i.e :"><div class="figure" id="id39">
 <img alt="_images/sphx_glr_ex_brain_obj_thumb.png" src="_images/sphx_glr_ex_brain_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_brain_obj.html#sphx-glr-auto-examples-objects-ex-brain-obj-py"><span class="std std-ref">Brain object</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the roi object i.e :"><div class="figure" id="id30">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Illustration of the main functionalities and inputs of the connctivity object."><div class="figure" id="id40">
+<img alt="_images/sphx_glr_ex_connectivity_obj_thumb.png" src="_images/sphx_glr_ex_connectivity_obj_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_connectivity_obj.html#sphx-glr-auto-examples-objects-ex-connectivity-obj-py"><span class="std std-ref">Connectivity object</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the roi object i.e :"><div class="figure" id="id41">
 <img alt="_images/sphx_glr_ex_roi_object_thumb.png" src="_images/sphx_glr_ex_roi_object_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_roi_object.html#sphx-glr-auto-examples-objects-ex-roi-object-py"><span class="std std-ref">Region Of Interest (ROI) object</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the source object i.e :"><div class="figure" id="id31">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the source object i.e :"><div class="figure" id="id42">
 <img alt="_images/sphx_glr_ex_source_obj_thumb.png" src="_images/sphx_glr_ex_source_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_source_obj.html#sphx-glr-auto-examples-objects-ex-source-obj-py"><span class="std std-ref">Source object</span></a></span></p>
 </div>
@@ -1509,7 +1576,7 @@ False) to show or hide all of the sources.</p>
 </div>
 <div class="section" id="connectivity-object">
 <span id="connectobj"></span><h2>7.5. Connectivity object<a class="headerlink" href="#connectivity-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id32">
+<div class="figure align-center" id="id43">
 <img alt="_images/pic_connect_obj.png" src="_images/pic_connect_obj.png" />
 <p class="caption"><span class="caption-text">Connectivity object example</span></p>
 </div>
@@ -1628,23 +1695,23 @@ strong connections will be more opaque than weaker connections.</p>
 
 <div class="section" id="examples-using-visbrain-objects-connectobj">
 <h3>7.5.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.ConnectObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-connectobj" title="Permalink to this headline">¶</a></h3>
-<div class="sphx-glr-thumbcontainer" tooltip="Display and customize connectivity. To this end, we define some deep sources and connect them."><div class="figure" id="id33">
+<div class="sphx-glr-thumbcontainer" tooltip="Display and customize connectivity. To this end, we define some deep sources and connect them."><div class="figure" id="id44">
 <img alt="_images/sphx_glr_04_connectivity_thumb.png" src="_images/sphx_glr_04_connectivity_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/04_connectivity.html#sphx-glr-auto-examples-brain-04-connectivity-py"><span class="std std-ref">Connect deep sources</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Add multiple source&#x27;s and connectivity object to the scene."><div class="figure" id="id34">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Add multiple source&#x27;s and connectivity object to the scene."><div class="figure" id="id45">
 <img alt="_images/sphx_glr_09_add_multiple_objects_thumb.png" src="_images/sphx_glr_09_add_multiple_objects_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/09_add_multiple_objects.html#sphx-glr-auto-examples-brain-09-add-multiple-objects-py"><span class="std std-ref">Add multiple objects to the scene</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Control the colorbar of selected objects. The colormap of three objects can actually be control..."><div class="figure" id="id35">
-<img alt="_images/sphx_glr_12_colorbar_control_thumb.png" src="_images/sphx_glr_12_colorbar_control_thumb.png" />
-<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/12_colorbar_control.html#sphx-glr-auto-examples-brain-12-colorbar-control-py"><span class="std std-ref">Colorbar control</span></a></span></p>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Illustration of the main functionalities and inputs of the connctivity object."><div class="figure" id="id46">
+<img alt="_images/sphx_glr_ex_connectivity_obj_thumb.png" src="_images/sphx_glr_ex_connectivity_obj_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_connectivity_obj.html#sphx-glr-auto-examples-objects-ex-connectivity-obj-py"><span class="std std-ref">Connectivity object</span></a></span></p>
 </div>
 </div><div style='clear:both'></div></div>
 </div>
 <div class="section" id="vector-object">
 <span id="vectorobj"></span><h2>7.6. Vector object<a class="headerlink" href="#vector-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id36">
+<div class="figure align-center" id="id47">
 <img alt="_images/pic_vector_obj.png" src="_images/pic_vector_obj.png" />
 <p class="caption"><span class="caption-text">Vector object example</span></p>
 </div>
@@ -1789,11 +1856,11 @@ not None).</p>
 
 <div class="section" id="examples-using-visbrain-objects-vectorobj">
 <h3>7.6.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.VectorObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-vectorobj" title="Permalink to this headline">¶</a></h3>
-<div class="sphx-glr-thumbcontainer" tooltip="Add vectors to the scene. This example demonstrate the two methods to defined vectors :"><div class="figure" id="id37">
-<img alt="_images/sphx_glr_14_add_vectors_thumb.png" src="_images/sphx_glr_14_add_vectors_thumb.png" />
-<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/14_add_vectors.html#sphx-glr-auto-examples-brain-14-add-vectors-py"><span class="std std-ref">Add vectors</span></a></span></p>
+<div class="sphx-glr-thumbcontainer" tooltip="Add vectors to the scene. This example demonstrate the two methods to defined vectors :"><div class="figure" id="id48">
+<img alt="_images/sphx_glr_11_add_vectors_thumb.png" src="_images/sphx_glr_11_add_vectors_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/11_add_vectors.html#sphx-glr-auto-examples-brain-11-add-vectors-py"><span class="std std-ref">Add vectors</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Plot vector-valued MEG inverse solution."><div class="figure" id="id38">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Plot vector-valued MEG inverse solution."><div class="figure" id="id49">
 <img alt="_images/sphx_glr_vector_based_meg_inverse_thumb.png" src="_images/sphx_glr_vector_based_meg_inverse_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/pysurfer/vector_based_meg_inverse.html#sphx-glr-auto-examples-pysurfer-vector-based-meg-inverse-py"><span class="std std-ref">Plot vector-valued MEG inverse solution</span></a></span></p>
 </div>
@@ -1801,13 +1868,13 @@ not None).</p>
 </div>
 <div class="section" id="time-series-3d-object">
 <span id="ts3dobj"></span><h2>7.7. Time-series 3D object<a class="headerlink" href="#time-series-3d-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id39">
+<div class="figure align-center" id="id50">
 <img alt="_images/pic_ts_obj.png" src="_images/pic_ts_obj.png" />
 <p class="caption"><span class="caption-text">3-D time-series object example</span></p>
 </div>
 <dl class="class">
 <dt id="visbrain.objects.TimeSeries3DObj">
-<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">TimeSeries3DObj</code><span class="sig-paren">(</span><em>name</em>, <em>data</em>, <em>xyz</em>, <em>select=None</em>, <em>line_width=1.5</em>, <em>color='white'</em>, <em>ts_amp=6.0</em>, <em>ts_width=20.0</em>, <em>alpha=1.0</em>, <em>antialias=False</em>, <em>translate=(0.0</em>, <em>0.0</em>, <em>1.0)</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>_z=-10.0</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/ts_obj.html#TimeSeries3DObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/ts_obj.py#L12-L231"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.TimeSeries3DObj" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">TimeSeries3DObj</code><span class="sig-paren">(</span><em>name</em>, <em>data</em>, <em>xyz</em>, <em>select=None</em>, <em>line_width=1.5</em>, <em>color='white'</em>, <em>ts_amp=6.0</em>, <em>ts_width=20.0</em>, <em>alpha=1.0</em>, <em>antialias=False</em>, <em>translate=(0.0</em>, <em>0.0</em>, <em>1.0)</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>_z=-10.0</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/ts3d_obj.html#TimeSeries3DObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/ts3d_obj.py#L12-L231"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.TimeSeries3DObj" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a  3-D time-series object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1900,7 +1967,7 @@ of shape (n_sources,).</p>
 
 <div class="section" id="examples-using-visbrain-objects-timeseries3dobj">
 <h3>7.7.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.TimeSeries3DObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-timeseries3dobj" title="Permalink to this headline">¶</a></h3>
-<div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display time-series attached to sources. The time-series can th..."><div class="figure" id="id40">
+<div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display time-series attached to sources. The time-series can th..."><div class="figure" id="id51">
 <img alt="_images/sphx_glr_06_add_time_series_thumb.png" src="_images/sphx_glr_06_add_time_series_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/06_add_time_series.html#sphx-glr-auto-examples-brain-06-add-time-series-py"><span class="std std-ref">Add time series</span></a></span></p>
 </div>
@@ -1908,13 +1975,13 @@ of shape (n_sources,).</p>
 </div>
 <div class="section" id="pictures-3d-object">
 <span id="pic3dobj"></span><h2>7.8. Pictures 3D object<a class="headerlink" href="#pictures-3d-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id41">
+<div class="figure align-center" id="id52">
 <img alt="_images/pic_picture_obj.png" src="_images/pic_picture_obj.png" />
 <p class="caption"><span class="caption-text">3-D pictures object example</span></p>
 </div>
 <dl class="class">
 <dt id="visbrain.objects.Picture3DObj">
-<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">Picture3DObj</code><span class="sig-paren">(</span><em>name</em>, <em>data</em>, <em>xyz</em>, <em>select=None</em>, <em>pic_width=7.0</em>, <em>pic_height=7.0</em>, <em>alpha=1.0</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>under='gray'</em>, <em>over='red'</em>, <em>translate=(0.0</em>, <em>0.0</em>, <em>1.0)</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>_z=-10.0</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/picture_obj.html#Picture3DObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/picture_obj.py#L12-L186"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.Picture3DObj" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">Picture3DObj</code><span class="sig-paren">(</span><em>name</em>, <em>data</em>, <em>xyz</em>, <em>select=None</em>, <em>pic_width=7.0</em>, <em>pic_height=7.0</em>, <em>alpha=1.0</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>under='gray'</em>, <em>over='red'</em>, <em>translate=(0.0</em>, <em>0.0</em>, <em>1.0)</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>_z=-10.0</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/picture3d_obj.html#Picture3DObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/picture3d_obj.py#L12-L186"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.Picture3DObj" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a 3-D picture object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2012,25 +2079,21 @@ of shape (n_sources,).</p>
 
 <div class="section" id="examples-using-visbrain-objects-picture3dobj">
 <h3>7.8.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.Picture3DObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-picture3dobj" title="Permalink to this headline">¶</a></h3>
-<div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display small pictures attached to sources. The pictures can th..."><div class="figure" id="id42">
+<div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display small pictures attached to sources. The pictures can th..."><div class="figure" id="id53">
 <img alt="_images/sphx_glr_07_add_pictures_thumb.png" src="_images/sphx_glr_07_add_pictures_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/07_add_pictures.html#sphx-glr-auto-examples-brain-07-add-pictures-py"><span class="std std-ref">Add pictures</span></a></span></p>
-</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Control the colorbar of selected objects. The colormap of three objects can actually be control..."><div class="figure" id="id43">
-<img alt="_images/sphx_glr_12_colorbar_control_thumb.png" src="_images/sphx_glr_12_colorbar_control_thumb.png" />
-<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/12_colorbar_control.html#sphx-glr-auto-examples-brain-12-colorbar-control-py"><span class="std std-ref">Colorbar control</span></a></span></p>
 </div>
 </div><div style='clear:both'></div></div>
 </div>
 <div class="section" id="region-of-interest-object">
 <span id="roiobj"></span><h2>7.9. Region Of Interest object<a class="headerlink" href="#region-of-interest-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id44">
+<div class="figure align-center" id="id54">
 <img alt="_images/pic_roi_obj.png" src="_images/pic_roi_obj.png" />
 <p class="caption"><span class="caption-text">Region Of Interest object example</span></p>
 </div>
 <dl class="class">
 <dt id="visbrain.objects.RoiObj">
-<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">RoiObj</code><span class="sig-paren">(</span><em>name</em>, <em>vol=None</em>, <em>label=None</em>, <em>index=None</em>, <em>hdr=None</em>, <em>system='mni'</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>preload=True</em>, <em>_scale=1.0</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L45-L677"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">RoiObj</code><span class="sig-paren">(</span><em>name</em>, <em>vol=None</em>, <em>labels=None</em>, <em>index=None</em>, <em>hdr=None</em>, <em>system='mni'</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>preload=True</em>, <em>_scale=1.0</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L42-L676"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a Region Of Interest (ROI) object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2045,7 +2108,7 @@ predefined ROI object is used and vol, index and label are ignored.</p>
 <blockquote>
 <div><p>ROI volume. Sould be an array with three dimensions.</p>
 </div></blockquote>
-<p><strong>label</strong> : array_like | None</p>
+<p><strong>labels</strong> : array_like | None</p>
 <blockquote>
 <div><p>Array of labels. A structured array can be used (i.e
 label=np.zeros(n_sources, dtype=[(‘brodmann’, int), (‘aal’, object)])).</p>
@@ -2105,7 +2168,7 @@ a (4, 4) array.</p>
 <tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.RoiObj.get_labels" title="visbrain.objects.RoiObj.get_labels"><code class="xref py py-obj docutils literal"><span class="pre">get_labels</span></code></a>([save_to_path])</td>
 <td>Get the labels associated with the loaded ROI.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#visbrain.objects.RoiObj.where_is" title="visbrain.objects.RoiObj.where_is"><code class="xref py py-obj docutils literal"><span class="pre">where_is</span></code></a>(patterns[,&nbsp;df,&nbsp;union,&nbsp;columns])</td>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.objects.RoiObj.where_is" title="visbrain.objects.RoiObj.where_is"><code class="xref py py-obj docutils literal"><span class="pre">where_is</span></code></a>(patterns[,&nbsp;df,&nbsp;union,&nbsp;columns,&nbsp;exact])</td>
 <td>Find a list of string patterns in a DataFrame.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.RoiObj.select_roi" title="visbrain.objects.RoiObj.select_roi"><code class="xref py py-obj docutils literal"><span class="pre">select_roi</span></code></a>([select,&nbsp;unique_color,&nbsp;…])</td>
@@ -2117,18 +2180,18 @@ a (4, 4) array.</p>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">project_sources</span></code>(s_obj[,&nbsp;project,&nbsp;radius,&nbsp;…])</td>
 <td>Project source’s activity or repartition onto ROI.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#visbrain.objects.RoiObj.save" title="visbrain.objects.RoiObj.save"><code class="xref py py-obj docutils literal"><span class="pre">save</span></code></a>()</td>
-<td>Save the ROI object.</td>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.objects.RoiObj.save" title="visbrain.objects.RoiObj.save"><code class="xref py py-obj docutils literal"><span class="pre">save</span></code></a>([tmpfile])</td>
+<td>Save the volume template.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.RoiObj.remove" title="visbrain.objects.RoiObj.remove"><code class="xref py py-obj docutils literal"><span class="pre">remove</span></code></a>()</td>
-<td>Remove an ROI object.</td>
+<td>Remove the volume template.</td>
 </tr>
 </tbody>
 </table>
 </div></blockquote>
 <dl class="method">
 <dt id="visbrain.objects.RoiObj.get_labels">
-<code class="descname">get_labels</code><span class="sig-paren">(</span><em>save_to_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.get_labels"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L234-L250"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.get_labels" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_labels</code><span class="sig-paren">(</span><em>save_to_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.get_labels"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L212-L229"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.get_labels" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the labels associated with the loaded ROI.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2146,7 +2209,7 @@ a (4, 4) array.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.RoiObj.localize_sources">
-<code class="descname">localize_sources</code><span class="sig-paren">(</span><em>xyz, source_name=None, replace_bad=True, bad_patterns=[-1, 'undefined', 'None'], replace_with='Not found', distance=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.localize_sources"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L313-L405"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.localize_sources" title="Permalink to this definition">¶</a></dt>
+<code class="descname">localize_sources</code><span class="sig-paren">(</span><em>xyz, source_name=None, replace_bad=True, bad_patterns=[-1, 'undefined', 'None'], replace_with='Not found', distance=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.localize_sources"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L299-L389"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.localize_sources" title="Permalink to this definition">¶</a></dt>
 <dd><p>Localize source’s using this ROI object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2180,20 +2243,19 @@ a (4, 4) array.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.RoiObj.remove">
-<code class="descname">remove</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.remove"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L230-L232"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.remove" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove an ROI object.</p>
+<code class="descname">remove</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/volume_obj.py#L104-L106"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove the volume template.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="visbrain.objects.RoiObj.save">
-<code class="descname">save</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.save"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L216-L228"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.save" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save the ROI object.</p>
-<p>Once saved, the RoiObj can then be created using only the name.</p>
+<code class="descname">save</code><span class="sig-paren">(</span><em>tmpfile=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/volume_obj.py#L98-L102"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the volume template.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="visbrain.objects.RoiObj.select_roi">
-<code class="descname">select_roi</code><span class="sig-paren">(</span><em>select=0.5</em>, <em>unique_color=False</em>, <em>roi_to_color=None</em>, <em>smooth=3</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.select_roi"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L448-L508"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.select_roi" title="Permalink to this definition">¶</a></dt>
+<code class="descname">select_roi</code><span class="sig-paren">(</span><em>select=0.5</em>, <em>unique_color=False</em>, <em>roi_to_color=None</em>, <em>smooth=3</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.select_roi"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L432-L495"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.select_roi" title="Permalink to this definition">¶</a></dt>
 <dd><p>Select several Region Of Interest (ROI).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2207,6 +2269,11 @@ a (4, 4) array.</p>
 <blockquote>
 <div><p>Use a random unique color for each ROI.</p>
 </div></blockquote>
+<p><strong>roi_to_color</strong> : dict | None</p>
+<blockquote>
+<div><p>Color of specific ROI using a dictionary i.e
+{1: ‘red’, 2: ‘orange’}.</p>
+</div></blockquote>
 <p><strong>smooth</strong> : int | 3</p>
 <blockquote class="last">
 <div><p>Smoothing level. Must be an odd integer (smooth % 2 = 1).</p>
@@ -2219,7 +2286,7 @@ a (4, 4) array.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.RoiObj.where_is">
-<code class="descname">where_is</code><span class="sig-paren">(</span><em>patterns</em>, <em>df=None</em>, <em>union=True</em>, <em>columns=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.where_is"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L252-L305"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.where_is" title="Permalink to this definition">¶</a></dt>
+<code class="descname">where_is</code><span class="sig-paren">(</span><em>patterns</em>, <em>df=None</em>, <em>union=True</em>, <em>columns=None</em>, <em>exact=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.where_is"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L231-L291"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.where_is" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find a list of string patterns in a DataFrame.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2244,6 +2311,10 @@ intersection (False).</p>
 <div><p>List of specific column names to search in. If None, this method
 inspect every columns in the DataFrame.</p>
 </div></blockquote>
+<p><strong>exact</strong> : bool | False</p>
+<blockquote>
+<div><p>Specify if the pattern to search have to be exact matching.</p>
+</div></blockquote>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>idx</strong> : list</p>
@@ -2260,7 +2331,15 @@ inspect every columns in the DataFrame.</p>
 
 <div class="section" id="examples-using-visbrain-objects-roiobj">
 <h3>7.9.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.RoiObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-roiobj" title="Permalink to this headline">¶</a></h3>
-<div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the roi object i.e :"><div class="figure" id="id45">
+<div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to display Region Of Interest (ROI)."><div class="figure" id="id55">
+<img alt="_images/sphx_glr_05_region_of_interest_thumb.png" src="_images/sphx_glr_05_region_of_interest_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/05_region_of_interest.html#sphx-glr-auto-examples-brain-05-region-of-interest-py"><span class="std std-ref">Add Region of interest (ROI)</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Offline rendering of selected canvas."><div class="figure" id="id56">
+<img alt="_images/sphx_glr_08_screenshot_thumb.png" src="_images/sphx_glr_08_screenshot_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/08_screenshot.html#sphx-glr-auto-examples-brain-08-screenshot-py"><span class="std std-ref">Screenshot example</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the roi object i.e :"><div class="figure" id="id57">
 <img alt="_images/sphx_glr_ex_roi_object_thumb.png" src="_images/sphx_glr_ex_roi_object_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_roi_object.html#sphx-glr-auto-examples-objects-ex-roi-object-py"><span class="std std-ref">Region Of Interest (ROI) object</span></a></span></p>
 </div>
@@ -2268,13 +2347,13 @@ inspect every columns in the DataFrame.</p>
 </div>
 <div class="section" id="volume-object">
 <span id="volumeobj"></span><h2>7.10. Volume object<a class="headerlink" href="#volume-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id46">
+<div class="figure align-center" id="id58">
 <img alt="_images/pic_vol_obj.png" src="_images/pic_vol_obj.png" />
 <p class="caption"><span class="caption-text">Volume object example</span></p>
 </div>
 <dl class="class">
 <dt id="visbrain.objects.VolumeObj">
-<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">VolumeObj</code><span class="sig-paren">(</span><em>name</em>, <em>vol=None</em>, <em>hdr=None</em>, <em>method='mip'</em>, <em>threshold=0.0</em>, <em>cmap='OpaqueGrays'</em>, <em>select=None</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/volume_obj.html#VolumeObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/volume_obj.py#L98-L240"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.VolumeObj" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">VolumeObj</code><span class="sig-paren">(</span><em>name</em>, <em>vol=None</em>, <em>hdr=None</em>, <em>method='mip'</em>, <em>threshold=0.0</em>, <em>cmap='OpaqueGrays'</em>, <em>select=None</em>, <em>transform=None</em>, <em>parent=None</em>, <em>preload=True</em>, <em>verbose=None</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/volume_obj.html#VolumeObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/volume_obj.py#L193-L331"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.VolumeObj" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a 3-D volume object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2342,10 +2421,10 @@ ignored. The name input can also be the path to an nii.gz file.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.VolumeObj.__call__" title="visbrain.objects.VolumeObj.__call__"><code class="xref py py-obj docutils literal"><span class="pre">__call__</span></code></a>(name)</td>
-<td>Load a predefined volume.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.VolumeObj.__call__" title="visbrain.objects.VolumeObj.__call__"><code class="xref py py-obj docutils literal"><span class="pre">__call__</span></code></a>(name[,&nbsp;vol,&nbsp;hdr,&nbsp;threshold,&nbsp;cmap,&nbsp;…])</td>
+<td>Change the volume.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#visbrain.objects.VolumeObj.set_data" title="visbrain.objects.VolumeObj.set_data"><code class="xref py py-obj docutils literal"><span class="pre">set_data</span></code></a>(name[,&nbsp;vol,&nbsp;hdr,&nbsp;threshold,&nbsp;cmap,&nbsp;…])</td>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.objects.VolumeObj.set_data" title="visbrain.objects.VolumeObj.set_data"><code class="xref py py-obj docutils literal"><span class="pre">set_data</span></code></a>(vol[,&nbsp;hdr,&nbsp;threshold,&nbsp;cmap,&nbsp;…])</td>
 <td>Set data to the volume.</td>
 </tr>
 </tbody>
@@ -2353,22 +2432,191 @@ ignored. The name input can also be the path to an nii.gz file.</p>
 </div></blockquote>
 <dl class="method">
 <dt id="visbrain.objects.VolumeObj.__call__">
-<code class="descname">__call__</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/volume_obj.py#L75-L81"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.VolumeObj.__call__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load a predefined volume.</p>
+<code class="descname">__call__</code><span class="sig-paren">(</span><em>name</em>, <em>vol=None</em>, <em>hdr=None</em>, <em>threshold=None</em>, <em>cmap=None</em>, <em>method=None</em>, <em>select=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/volume_obj.html#VolumeObj.__call__"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/volume_obj.py#L245-L250"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.VolumeObj.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the volume.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="visbrain.objects.VolumeObj.set_data">
-<code class="descname">set_data</code><span class="sig-paren">(</span><em>name</em>, <em>vol=None</em>, <em>hdr=None</em>, <em>threshold=None</em>, <em>cmap=None</em>, <em>method=None</em>, <em>select=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/volume_obj.html#VolumeObj.set_data"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/volume_obj.py#L156-L178"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.VolumeObj.set_data" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_data</code><span class="sig-paren">(</span><em>vol</em>, <em>hdr=None</em>, <em>threshold=None</em>, <em>cmap=None</em>, <em>method=None</em>, <em>select=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/volume_obj.html#VolumeObj.set_data"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/volume_obj.py#L252-L266"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.VolumeObj.set_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set data to the volume.</p>
 </dd></dl>
 
 </dd></dl>
 
-<div style='clear:both'></div></div>
+<div class="section" id="examples-using-visbrain-objects-volumeobj">
+<h3>7.10.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.VolumeObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-volumeobj" title="Permalink to this headline">¶</a></h3>
+<div class="sphx-glr-thumbcontainer" tooltip="Control the cross-section panel and the volume using a Nifti file. The nibabel package should a..."><div class="figure" id="id59">
+<img alt="_images/sphx_glr_01_cross_sections_and_volume_thumb.png" src="_images/sphx_glr_01_cross_sections_and_volume_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/01_cross_sections_and_volume.html#sphx-glr-auto-examples-brain-01-cross-sections-and-volume-py"><span class="std std-ref">Cross-sections and volume control</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Import a custom Nifti volume that can be then used in the cross-section or volume tab. To this ..."><div class="figure" id="id60">
+<img alt="_images/sphx_glr_10_add_nifti_volume_thumb.png" src="_images/sphx_glr_10_add_nifti_volume_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/10_add_nifti_volume.html#sphx-glr-auto-examples-brain-10-add-nifti-volume-py"><span class="std std-ref">Add Nifti volume</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Illustration of the main functionalities and inputs of the volume object."><div class="figure" id="id61">
+<img alt="_images/sphx_glr_ex_volume_obj_thumb.png" src="_images/sphx_glr_ex_volume_obj_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_volume_obj.html#sphx-glr-auto-examples-objects-ex-volume-obj-py"><span class="std std-ref">Volume object</span></a></span></p>
+</div>
+</div><div style='clear:both'></div></div>
+</div>
+<div class="section" id="cross-section-object">
+<span id="csobj"></span><h2>7.11. Cross-section object<a class="headerlink" href="#cross-section-object" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-center" id="id62">
+<img alt="_images/pic_cs_obj.png" src="_images/pic_cs_obj.png" />
+<p class="caption"><span class="caption-text">Cross-section object example</span></p>
+</div>
+<dl class="class">
+<dt id="visbrain.objects.CrossSecObj">
+<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">CrossSecObj</code><span class="sig-paren">(</span><em>name</em>, <em>vol=None</em>, <em>hdr=None</em>, <em>section=(0</em>, <em>0</em>, <em>0)</em>, <em>interpolation='bilinear'</em>, <em>text_size=15.0</em>, <em>text_color='white'</em>, <em>text_bold=True</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>preload=True</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/crossec_obj.html#CrossSecObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/crossec_obj.py#L66-L344"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.CrossSecObj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a Cross-sections object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
+<blockquote>
+<div><p>Name of the ROI object. If name is ‘brodmann’, ‘aal’ or ‘talairach’ a
+predefined ROI object is used and vol, index and label are ignored.</p>
+</div></blockquote>
+<p><strong>vol</strong> : array_like | None</p>
+<blockquote>
+<div><p>The volume to use for the cross-section. Sould be an array with three
+dimensions.</p>
+</div></blockquote>
+<p><strong>section</strong> : tuple | (0, 0, 0)</p>
+<blockquote>
+<div><p>The section to take (sagittal, coronal and axial slices).</p>
+</div></blockquote>
+<p><strong>interpolation</strong> : string | ‘nearest’</p>
+<blockquote>
+<div><p>Interpolation method for the image. See vispy.scene.visuals.Image for
+availables interpolation methods.</p>
+</div></blockquote>
+<p><strong>text_size</strong> : float | 15.</p>
+<blockquote>
+<div><p>Text size to use.</p>
+</div></blockquote>
+<p><strong>text_color</strong> : string/tuple | ‘white’</p>
+<blockquote>
+<div><p>Text color.</p>
+</div></blockquote>
+<p><strong>text_bold</strong> : bool | True</p>
+<blockquote>
+<div><p>Use bold text.</p>
+</div></blockquote>
+<p><strong>transform</strong> : VisPy.visuals.transforms | None</p>
+<blockquote>
+<div><p>VisPy transformation to set to the parent node.</p>
+</div></blockquote>
+<p><strong>parent</strong> : VisPy.parent | None</p>
+<blockquote>
+<div><p>ROI object parent.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : string</p>
+<blockquote>
+<div><p>Verbosity level.</p>
+</div></blockquote>
+<p><strong>kw</strong> : dict | {}</p>
+<blockquote class="last">
+<div><p>Optional arguments are used to control the colorbar
+(See <a class="reference internal" href="#visbrain.objects.ColorbarObj" title="visbrain.objects.ColorbarObj"><code class="xref py py-class docutils literal"><span class="pre">ColorbarObj</span></code></a>).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <span class="n">CrossSecObj</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">CrossSecObj</span><span class="p">(</span><span class="s1">&#39;brodmann&#39;</span><span class="p">,</span> <span class="n">section</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">preview</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.CrossSecObj.__call__" title="visbrain.objects.CrossSecObj.__call__"><code class="xref py py-obj docutils literal"><span class="pre">__call__</span></code></a>(name[,&nbsp;vol,&nbsp;hdr])</td>
+<td>Change the volume object.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.objects.CrossSecObj.set_data" title="visbrain.objects.CrossSecObj.set_data"><code class="xref py py-obj docutils literal"><span class="pre">set_data</span></code></a>([section,&nbsp;clim,&nbsp;cmap,&nbsp;vmin,&nbsp;under,&nbsp;…])</td>
+<td>Set data to the cross-section.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.CrossSecObj.localize_source" title="visbrain.objects.CrossSecObj.localize_source"><code class="xref py py-obj docutils literal"><span class="pre">localize_source</span></code></a>(xyz)</td>
+<td>Center the cross-sections arround a source location.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<dl class="method">
+<dt id="visbrain.objects.CrossSecObj.__call__">
+<code class="descname">__call__</code><span class="sig-paren">(</span><em>name</em>, <em>vol=None</em>, <em>hdr=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/crossec_obj.html#CrossSecObj.__call__"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/crossec_obj.py#L150-L154"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.CrossSecObj.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the volume object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="visbrain.objects.CrossSecObj.localize_source">
+<code class="descname">localize_source</code><span class="sig-paren">(</span><em>xyz</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/crossec_obj.html#CrossSecObj.localize_source"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/crossec_obj.py#L231-L253"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.CrossSecObj.localize_source" title="Permalink to this definition">¶</a></dt>
+<dd><p>Center the cross-sections arround a source location.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>xyz</strong> : array_like</p>
+<blockquote class="last">
+<div><p>The (x, y, z) location of the source. Could be a tuple, list or an
+array.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="visbrain.objects.CrossSecObj.set_data">
+<code class="descname">set_data</code><span class="sig-paren">(</span><em>section=(0</em>, <em>0</em>, <em>0)</em>, <em>clim=None</em>, <em>cmap=None</em>, <em>vmin=None</em>, <em>under=None</em>, <em>vmax=None</em>, <em>over=None</em>, <em>update=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/crossec_obj.html#CrossSecObj.set_data"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/crossec_obj.py#L199-L217"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.CrossSecObj.set_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set data to the cross-section.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>section</strong> : tuple | (0, 0, 0)</p>
+<blockquote class="last">
+<div><p>The section to take (sagittal, coronal and axial slices).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="examples-using-visbrain-objects-crosssecobj">
+<h3>7.11.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.CrossSecObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-crosssecobj" title="Permalink to this headline">¶</a></h3>
+<div class="sphx-glr-thumbcontainer" tooltip="Control the cross-section panel and the volume using a Nifti file. The nibabel package should a..."><div class="figure" id="id63">
+<img alt="_images/sphx_glr_01_cross_sections_and_volume_thumb.png" src="_images/sphx_glr_01_cross_sections_and_volume_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/01_cross_sections_and_volume.html#sphx-glr-auto-examples-brain-01-cross-sections-and-volume-py"><span class="std std-ref">Cross-sections and volume control</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Import a custom Nifti volume that can be then used in the cross-section or volume tab. To this ..."><div class="figure" id="id64">
+<img alt="_images/sphx_glr_10_add_nifti_volume_thumb.png" src="_images/sphx_glr_10_add_nifti_volume_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/10_add_nifti_volume.html#sphx-glr-auto-examples-brain-10-add-nifti-volume-py"><span class="std std-ref">Add Nifti volume</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Illustration and main functionalities and inputs of the cross-section object."><div class="figure" id="id65">
+<img alt="_images/sphx_glr_ex_cross_section_obj_thumb.png" src="_images/sphx_glr_ex_cross_section_obj_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_cross_section_obj.html#sphx-glr-auto-examples-objects-ex-cross-section-obj-py"><span class="std std-ref">Cross-section object</span></a></span></p>
+</div>
+</div><div style='clear:both'></div></div>
+</div>
 <div class="section" id="image-object">
-<span id="imageobj"></span><h2>7.11. Image object<a class="headerlink" href="#image-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id47">
+<span id="imageobj"></span><h2>7.12. Image object<a class="headerlink" href="#image-object" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-center" id="id66">
 <img alt="_images/pic_image_obj.png" src="_images/pic_image_obj.png" />
 <p class="caption"><span class="caption-text">Image object example</span></p>
 </div>
@@ -2485,16 +2733,16 @@ images.</p>
 </dd></dl>
 
 <div class="section" id="examples-using-visbrain-objects-imageobj">
-<h3>7.11.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.ImageObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-imageobj" title="Permalink to this headline">¶</a></h3>
-<div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram."><div class="figure" id="id48">
+<h3>7.12.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.ImageObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-imageobj" title="Permalink to this headline">¶</a></h3>
+<div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram."><div class="figure" id="id67">
 <img alt="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" src="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_im_tf_spec_obj.html#sphx-glr-auto-examples-objects-ex-im-tf-spec-obj-py"><span class="std std-ref">Image, time-frequency map and spectrogram objects</span></a></span></p>
 </div>
 </div><div style='clear:both'></div></div>
 </div>
 <div class="section" id="time-frequency-map-object">
-<span id="tfobj"></span><h2>7.12. Time-frequency map object<a class="headerlink" href="#time-frequency-map-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id49">
+<span id="tfobj"></span><h2>7.13. Time-frequency map object<a class="headerlink" href="#time-frequency-map-object" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-center" id="id68">
 <img alt="_images/pic_tf_obj.png" src="_images/pic_tf_obj.png" />
 <p class="caption"><span class="caption-text">Time-frequency map object example</span></p>
 </div>
@@ -2641,16 +2889,16 @@ images.</p>
 </dd></dl>
 
 <div class="section" id="examples-using-visbrain-objects-timefrequencymapobj">
-<h3>7.12.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.TimeFrequencyMapObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-timefrequencymapobj" title="Permalink to this headline">¶</a></h3>
-<div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram."><div class="figure" id="id50">
+<h3>7.13.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.TimeFrequencyMapObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-timefrequencymapobj" title="Permalink to this headline">¶</a></h3>
+<div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram."><div class="figure" id="id69">
 <img alt="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" src="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_im_tf_spec_obj.html#sphx-glr-auto-examples-objects-ex-im-tf-spec-obj-py"><span class="std std-ref">Image, time-frequency map and spectrogram objects</span></a></span></p>
 </div>
 </div><div style='clear:both'></div></div>
 </div>
 <div class="section" id="spectrogram-object">
-<span id="specobj"></span><h2>7.13. Spectrogram object<a class="headerlink" href="#spectrogram-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id51">
+<span id="specobj"></span><h2>7.14. Spectrogram object<a class="headerlink" href="#spectrogram-object" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-center" id="id70">
 <img alt="_images/pic_spec_obj.png" src="_images/pic_spec_obj.png" />
 <p class="caption"><span class="caption-text">Spectrogram object example</span></p>
 </div>
@@ -2777,8 +3025,143 @@ images.</p>
 </dd></dl>
 
 <div class="section" id="examples-using-visbrain-objects-spectrogramobj">
-<h3>7.13.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.SpectrogramObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-spectrogramobj" title="Permalink to this headline">¶</a></h3>
-<div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram."><div class="figure" id="id52">
+<h3>7.14.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.SpectrogramObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-spectrogramobj" title="Permalink to this headline">¶</a></h3>
+<div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram."><div class="figure" id="id71">
+<img alt="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" src="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_im_tf_spec_obj.html#sphx-glr-auto-examples-objects-ex-im-tf-spec-obj-py"><span class="std std-ref">Image, time-frequency map and spectrogram objects</span></a></span></p>
+</div>
+</div><div style='clear:both'></div></div>
+</div>
+<div class="section" id="multi-taper-object">
+<span id="mtobj"></span><h2>7.15. Multi-taper object<a class="headerlink" href="#multi-taper-object" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-center" id="id72">
+<img alt="_images/pic_spec_obj.png" src="_images/pic_spec_obj.png" />
+<p class="caption"><span class="caption-text">Multi-taper object example</span></p>
+</div>
+<dl class="class">
+<dt id="visbrain.objects.MultiTaperObj">
+<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">MultiTaperObj</code><span class="sig-paren">(</span><em>name</em>, <em>data=None</em>, <em>sf=1.0</em>, <em>nperseg=256</em>, <em>overlap=0.0</em>, <em>c_parameter=20</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>under='gray'</em>, <em>vmax=None</em>, <em>over='red'</em>, <em>interpolation='nearest'</em>, <em>max_pts=-1</em>, <em>parent=None</em>, <em>transform=None</em>, <em>verbose=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/multitaper_obj.html#MultiTaperObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/multitaper_obj.py#L11-L112"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.MultiTaperObj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a multitaper spectrogram object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string | None</p>
+<blockquote>
+<div><p>Name of the time-frequency object.</p>
+</div></blockquote>
+<p><strong>data</strong> : array_like</p>
+<blockquote>
+<div><p>Array of data of shape (N,)</p>
+</div></blockquote>
+<p><strong>sf</strong> : float | 1.</p>
+<blockquote>
+<div><p>The sampling frequency.</p>
+</div></blockquote>
+<p><strong>nperseg</strong> : int | 256</p>
+<blockquote>
+<div><p>Length of each segment. Argument pass to the <cite>scipy.signal.spectrogram</cite>
+function.</p>
+</div></blockquote>
+<p><strong>c_parameter</strong> : int | 20</p>
+<blockquote>
+<div><p>Parameter ‘c’ described in doi:10.1155/2011/980805</p>
+</div></blockquote>
+<p><strong>overlap</strong> : float | 0.</p>
+<blockquote>
+<div><p>Overlap between segments. Must be between 0. and 1.</p>
+</div></blockquote>
+<p><strong>window</strong> : string | ‘hamming’</p>
+<blockquote>
+<div><p>Desired window to use. Argument pass to the <cite>scipy.signal.spectrogram</cite>
+function.</p>
+</div></blockquote>
+<p><strong>clim</strong> : tuple | None</p>
+<blockquote>
+<div><p>Colorbar limits. If None, <cite>clim=(data.min(), data.max())</cite></p>
+</div></blockquote>
+<p><strong>cmap</strong> : string | None</p>
+<blockquote>
+<div><p>Colormap name.</p>
+</div></blockquote>
+<p><strong>vmin</strong> : float | None</p>
+<blockquote>
+<div><p>Minimum threshold of the colorbar.</p>
+</div></blockquote>
+<p><strong>under</strong> : string/tuple/array_like | None</p>
+<blockquote>
+<div><p>Color for values under vmin.</p>
+</div></blockquote>
+<p><strong>vmax</strong> : float | None</p>
+<blockquote>
+<div><p>Maximum threshold of the colorbar.</p>
+</div></blockquote>
+<p><strong>over</strong> : string/tuple/array_like | None</p>
+<blockquote>
+<div><p>Color for values over vmax.</p>
+</div></blockquote>
+<p><strong>interpolation</strong> : string | ‘nearest’</p>
+<blockquote>
+<div><p>Interpolation method for the image. See vispy.scene.visuals.Image for
+availables interpolation methods.</p>
+</div></blockquote>
+<p><strong>max_pts</strong> : int | -1</p>
+<blockquote>
+<div><p>Maximum number of points of the image along the x or y axis. This
+parameter is essentially used to solve OpenGL issues with very large
+images.</p>
+</div></blockquote>
+<p><strong>transform</strong> : VisPy.visuals.transforms | None</p>
+<blockquote>
+<div><p>VisPy transformation to set to the parent node.</p>
+</div></blockquote>
+<p><strong>parent</strong> : VisPy.parent | None</p>
+<blockquote>
+<div><p>Markers object parent.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : string</p>
+<blockquote class="last">
+<div><p>Verbosity level.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <span class="n">MultiTaperObj</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span><span class="p">,</span> <span class="n">sf</span> <span class="o">=</span> <span class="mi">512</span><span class="p">,</span> <span class="mi">256</span>  <span class="c1"># number of time-points and sampling frequency</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">/</span> <span class="n">sf</span>  <span class="c1"># time vector</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mf">25.</span> <span class="o">*</span> <span class="n">time</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">spec</span> <span class="o">=</span> <span class="n">MultiTaperObj</span><span class="p">(</span><span class="s1">&#39;multitaper&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">spec</span><span class="o">.</span><span class="n">preview</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.MultiTaperObj.set_data" title="visbrain.objects.MultiTaperObj.set_data"><code class="xref py py-obj docutils literal"><span class="pre">set_data</span></code></a>(data[,&nbsp;sf,&nbsp;nperseg,&nbsp;overlap,&nbsp;…])</td>
+<td>Compute multitaper spectrogram and set data to the ImageObj.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<dl class="method">
+<dt id="visbrain.objects.MultiTaperObj.set_data">
+<code class="descname">set_data</code><span class="sig-paren">(</span><em>data</em>, <em>sf=1.0</em>, <em>nperseg=None</em>, <em>overlap=None</em>, <em>c_parameter=20</em>, <em>clim=None</em>, <em>cmap=None</em>, <em>vmin=None</em>, <em>under=None</em>, <em>vmax=None</em>, <em>over=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/multitaper_obj.html#MultiTaperObj.set_data"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/multitaper_obj.py#L85-L112"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.MultiTaperObj.set_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute multitaper spectrogram and set data to the ImageObj.</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="examples-using-visbrain-objects-multitaperobj">
+<h3>7.15.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.MultiTaperObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-multitaperobj" title="Permalink to this headline">¶</a></h3>
+<div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram."><div class="figure" id="id73">
 <img alt="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" src="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_im_tf_spec_obj.html#sphx-glr-auto-examples-objects-ex-im-tf-spec-obj-py"><span class="std std-ref">Image, time-frequency map and spectrogram objects</span></a></span></p>
 </div>
@@ -2796,7 +3179,7 @@ images.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="utils.html" class="btn btn-neutral float-right" title="8. Utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="auto_examples/index.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="figure.html" class="btn btn-neutral" title="6. Figure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -2830,7 +3213,7 @@ images.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.3.7',
+            VERSION:'0.3.8',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

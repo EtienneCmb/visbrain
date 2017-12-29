@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Add time series &mdash; visbrain 0.3.7 documentation</title>
+  <title>Add time series &mdash; visbrain 0.3.8 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.3.7 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.8 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
         <link rel="next" title="Add pictures" href="07_add_pictures.html"/>
         <link rel="prev" title="Add Region of interest (ROI)" href="05_region_of_interest.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.7
+                0.3.8
               </div>
             
           
@@ -105,7 +105,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#brain-examples">Brain Examples</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="00_brain_control.html">Brain control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="01_cross_sections_and_volume.html">Cross-sections and volume control</a></li>
-<li class="toctree-l3"><a class="reference internal" href="02_add_brain_template.html">Add a brain template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_brain_using_vertices.html">Define a brain template using vertices and faces</a></li>
 <li class="toctree-l3"><a class="reference internal" href="03_sources.html">Add deep sources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="04_connectivity.html">Connect deep sources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="05_region_of_interest.html">Add Region of interest (ROI)</a></li>
@@ -114,11 +114,8 @@
 <li class="toctree-l3"><a class="reference internal" href="08_screenshot.html">Screenshot example</a></li>
 <li class="toctree-l3"><a class="reference internal" href="09_add_multiple_objects.html">Add multiple objects to the scene</a></li>
 <li class="toctree-l3"><a class="reference internal" href="10_add_nifti_volume.html">Add Nifti volume</a></li>
-<li class="toctree-l3"><a class="reference internal" href="11_convert_mesh_data.html">Convert mesh data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="12_colorbar_control.html">Colorbar control</a></li>
-<li class="toctree-l3"><a class="reference internal" href="13_load_gui_config.html">Load Graphical User Interface configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="14_add_vectors.html">Add vectors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="15_parcellize.html">Parcellize brain surface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11_add_vectors.html">Add vectors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12_parcellize.html">Parcellize brain surface</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#colorbar-examples">Colorbar Examples</a></li>
@@ -206,17 +203,22 @@ time-series can then be controlled from the GUI in the Sources/Time-series tab.<
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <a href="../../brainAPI.html#visbrain.Brain" title="View documentation for visbrain.Brain"><span class="n">Brain</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <span class="n">TimeSeries3DObj</span>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span><span class="p">,</span> <span class="n">path_to_visbrain_data</span>
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../objects.html#visbrain.objects.TimeSeries3DObj" title="View documentation for visbrain.objects.TimeSeries3DObj"><span class="n">TimeSeries3DObj</span></a><span class="p">,</span> <a href="../../objects.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span>
 
 <span class="c1"># Load the xyz coordinates and corresponding subject name :</span>
-<span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">)</span>
-<span class="n">s_xyz</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.load.html#numpy.load" title="View documentation for numpy.load"><span class="n">np</span><span class="o">.</span><span class="n">load</span></a><span class="p">(</span><span class="n">path_to_visbrain_data</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">))[</span><span class="s1">&#39;xyz&#39;</span><span class="p">]</span>
+
+<span class="n">s_xyz</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.load.html#numpy.load" title="View documentation for numpy.load"><span class="n">np</span><span class="o">.</span><span class="n">load</span></a><span class="p">(</span><span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">))[</span><span class="s1">&#39;xyz&#39;</span><span class="p">]</span>
 <span class="n">s_xyz</span> <span class="o">=</span> <span class="n">s_xyz</span><span class="p">[</span><span class="mi">4</span><span class="p">::</span><span class="mi">25</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
 <span class="n">s_text</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">s_xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
 <span class="n">s_textsize</span> <span class="o">=</span> <span class="mf">1.5</span>
 
-<span class="c1"># Define time-series variables :</span>
+<span class="sd">&quot;&quot;&quot;Define a source object</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">s_obj</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">(</span><span class="s1">&#39;MySources&#39;</span><span class="p">,</span> <span class="n">s_xyz</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;disc&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+
+<span class="sd">&quot;&quot;&quot;Define the time-series data</span>
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="n">sf</span> <span class="o">=</span> <span class="mf">512.</span>                   <span class="c1"># Sampling frequency</span>
 <span class="n">n_time_points</span> <span class="o">=</span> <span class="mi">700</span>         <span class="c1"># Number of time points</span>
 <span class="n">n_sources</span> <span class="o">=</span> <span class="n">s_xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Number of sources</span>
@@ -240,11 +242,13 @@ time-series can then be controlled from the GUI in the Sources/Time-series tab.<
 <span class="n">ts_dxyz</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">)</span>  <span class="c1"># TS offset along the (x, y, z) axes</span>
 <span class="n">ts_lw</span> <span class="o">=</span> <span class="mf">2.2</span>             <span class="c1"># TS line-width</span>
 
-<span class="n">ts</span> <span class="o">=</span> <span class="n">TimeSeries3DObj</span><span class="p">(</span><span class="s1">&#39;Ts1&#39;</span><span class="p">,</span> <span class="n">ts_data</span><span class="p">,</span> <span class="n">s_xyz</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="n">ts_select</span><span class="p">,</span> <span class="n">ts_amp</span><span class="o">=</span><span class="n">ts_amp</span><span class="p">,</span>
+<span class="sd">&quot;&quot;&quot;Define the 3-D time-series object</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">ts</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.TimeSeries3DObj" title="View documentation for visbrain.objects.TimeSeries3DObj"><span class="n">TimeSeries3DObj</span></a><span class="p">(</span><span class="s1">&#39;Ts1&#39;</span><span class="p">,</span> <span class="n">ts_data</span><span class="p">,</span> <span class="n">s_xyz</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="n">ts_select</span><span class="p">,</span> <span class="n">ts_amp</span><span class="o">=</span><span class="n">ts_amp</span><span class="p">,</span>
                      <span class="n">ts_width</span><span class="o">=</span><span class="n">ts_width</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="n">ts_lw</span><span class="p">,</span> <span class="n">translate</span><span class="o">=</span><span class="n">ts_dxyz</span><span class="p">,</span>
                      <span class="n">color</span><span class="o">=</span><span class="n">ts_color</span><span class="p">)</span>
 
-<span class="n">vb</span> <span class="o">=</span> <a href="../../brainAPI.html#visbrain.Brain" title="View documentation for visbrain.Brain"><span class="n">Brain</span></a><span class="p">(</span><span class="n">time_series_obj</span><span class="o">=</span><span class="n">ts</span><span class="p">)</span>
+<span class="n">vb</span> <span class="o">=</span> <a href="../../brainAPI.html#visbrain.Brain" title="View documentation for visbrain.Brain"><span class="n">Brain</span></a><span class="p">(</span><span class="n">time_series_obj</span><span class="o">=</span><span class="n">ts</span><span class="p">,</span> <span class="n">source_obj</span><span class="o">=</span><span class="n">s_obj</span><span class="p">)</span>
 <span class="n">vb</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -302,7 +306,7 @@ time-series can then be controlled from the GUI in the Sources/Time-series tab.<
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.3.7',
+            VERSION:'0.3.8',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

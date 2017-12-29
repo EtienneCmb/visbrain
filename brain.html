@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>1. Brain &mdash; visbrain 0.3.7 documentation</title>
+  <title>1. Brain &mdash; visbrain 0.3.8 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="visbrain 0.3.7 documentation" href="index.html"/>
+    <link rel="top" title="visbrain 0.3.8 documentation" href="index.html"/>
         <link rel="up" title="Documentation" href="documentation.html"/>
         <link rel="next" title="1.3.1. Main Brain class inputs" href="brainAPI.html"/>
         <link rel="prev" title="Documentation" href="documentation.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.7
+                0.3.8
               </div>
             
           
@@ -122,13 +122,11 @@
 <li class="toctree-l4"><a class="reference internal" href="brainAPI.html#gui-functions-and-settings">1.3.2. GUI functions and settings</a></li>
 <li class="toctree-l4"><a class="reference internal" href="brainAPI.html#load-and-save-gui-configuration">1.3.3. Load and save GUI configuration</a></li>
 <li class="toctree-l4"><a class="reference internal" href="brainAPI.html#brain-methods">1.3.4. Brain methods</a></li>
-<li class="toctree-l4"><a class="reference internal" href="brainAPI.html#volume-and-cross-sections">1.3.5. Volume and cross-sections</a></li>
-<li class="toctree-l4"><a class="reference internal" href="brainAPI.html#sources-methods">1.3.6. Sources methods</a></li>
-<li class="toctree-l4"><a class="reference internal" href="brainAPI.html#time-series-methods">1.3.7. Time-series methods</a></li>
-<li class="toctree-l4"><a class="reference internal" href="brainAPI.html#pictures-methods">1.3.8. Pictures methods</a></li>
-<li class="toctree-l4"><a class="reference internal" href="brainAPI.html#connectivity-methods">1.3.9. Connectivity methods</a></li>
-<li class="toctree-l4"><a class="reference internal" href="brainAPI.html#region-of-interest-roi-methods">1.3.10. Region Of Interest (ROI) methods</a></li>
-<li class="toctree-l4"><a class="reference internal" href="brainAPI.html#colorbar-methods">1.3.11. Colorbar methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="brainAPI.html#sources-methods">1.3.5. Sources methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="brainAPI.html#time-series-methods">1.3.6. Time-series methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="brainAPI.html#pictures-methods">1.3.7. Pictures methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="brainAPI.html#connectivity-methods">1.3.8. Connectivity methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="brainAPI.html#colorbar-methods">1.3.9. Colorbar methods</a></li>
 </ul>
 </li>
 </ul>
@@ -139,8 +137,6 @@
 <li class="toctree-l2"><a class="reference internal" href="colorbar.html">5. <code class="docutils literal"><span class="pre">Colorbar</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="figure.html">6. <code class="docutils literal"><span class="pre">Figure</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="objects.html">7. Objects</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html">8. Utils</a></li>
-<li class="toctree-l2"><a class="reference internal" href="io.html">9. I/O</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
@@ -313,22 +309,6 @@
 <li><strong>Colorbar canvas</strong> (<em>hide by default</em>)</li>
 <li><strong>Cross-sections canvas</strong> (<em>hide by default</em>)</li>
 </ul>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p>If you want to save the current GUI state (i.e. all buttons properties) and retrieve it later, use the menu File/Save/GUI config and File/Load/GUI config or the associated <em>Brain</em> method.</p>
-<dl class="last docutils">
-<dt><strong>Examples</strong></dt>
-<dd><ul class="first last simple">
-<li><a class="reference internal" href="auto_examples/brain/13_load_gui_config.html#sphx-glr-auto-examples-brain-13-load-gui-config-py"><span class="std std-ref">Load Graphical User Interface configuration</span></a></li>
-</ul>
-</dd>
-<dt><strong>API</strong></dt>
-<dd><ul class="first last simple">
-<li><a class="reference internal" href="brainAPI.html#loadsaveconfig"><span class="std std-ref">Load and save GUI configuration</span></a></li>
-</ul>
-</dd>
-</dl>
-</div>
 </div>
 <div class="section" id="settings-panel-tabs">
 <h4>1.1.5.2. Settings panel tabs<a class="headerlink" href="#settings-panel-tabs" title="Permalink to this headline">¶</a></h4>
@@ -440,19 +420,14 @@
 <div class="figure align-center">
 <img alt="_images/brain_templates.png" src="_images/brain_templates.png" />
 </div>
-<p>By default, <em>Brain</em> comes with three brain templates respectively B1 (with cerebellum), B2 and B3 (smoothest). But this list can be extended using those following functions :</p>
-<ul class="simple">
-<li><a class="reference internal" href="utils.html#convertmeshdata"><span class="std std-ref">Convert mesh data</span></a> : convert vertices and faces to be compatibles with <em>Brain</em></li>
-<li><a class="reference internal" href="utils.html#addbraintemplate"><span class="std std-ref">Add brain template</span></a> and <a class="reference internal" href="utils.html#removebraintemplate"><span class="std std-ref">Remove brain template</span></a> : using converted vertices and faces, add/remove the template to visbrain</li>
-</ul>
+<p>By default, <em>Brain</em> comes with three brain templates respectively B1 (with cerebellum), B2 and B3 (smoothest).</p>
 <p>Further brain templates can be downloaded <a class="reference external" href="https://drive.google.com/open?id=0B6vtJiCQZUBvd0xfTHJqcHg2bTA">here</a>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <dl class="last docutils">
 <dt><strong>Examples</strong></dt>
 <dd><ul class="first last simple">
-<li><a class="reference internal" href="auto_examples/brain/11_convert_mesh_data.html#sphx-glr-auto-examples-brain-11-convert-mesh-data-py"><span class="std std-ref">Convert mesh data</span></a></li>
-<li><a class="reference internal" href="auto_examples/brain/02_add_brain_template.html#sphx-glr-auto-examples-brain-02-add-brain-template-py"><span class="std std-ref">Add a brain template</span></a></li>
+<li><a class="reference internal" href="auto_examples/brain/02_brain_using_vertices.html#sphx-glr-auto-examples-brain-02-brain-using-vertices-py"><span class="std std-ref">Define a brain template using vertices and faces</span></a></li>
 </ul>
 </dd>
 <dt><strong>API</strong></dt>
@@ -511,7 +486,6 @@
 <dd><ul class="first last simple">
 <li><a class="reference internal" href="auto_examples/brain/03_sources.html#sphx-glr-auto-examples-brain-03-sources-py"><span class="std std-ref">Add deep sources</span></a></li>
 <li><a class="reference internal" href="auto_examples/brain/08_screenshot.html#sphx-glr-auto-examples-brain-08-screenshot-py"><span class="std std-ref">Screenshot example</span></a></li>
-<li><a class="reference internal" href="auto_examples/brain/12_colorbar_control.html#sphx-glr-auto-examples-brain-12-colorbar-control-py"><span class="std std-ref">Colorbar control</span></a></li>
 </ul>
 </dd>
 <dt><strong>API</strong></dt>
@@ -609,11 +583,6 @@
 <li><a class="reference internal" href="auto_examples/brain/10_add_nifti_volume.html#sphx-glr-auto-examples-brain-10-add-nifti-volume-py"><span class="std std-ref">Add Nifti volume</span></a></li>
 </ul>
 </dd>
-<dt><strong>API</strong></dt>
-<dd><ul class="first last simple">
-<li><a class="reference internal" href="brainAPI.html#volcrossecapi"><span class="std std-ref">Volume and cross-sections</span></a></li>
-</ul>
-</dd>
 </dl>
 </div>
 </div>
@@ -633,11 +602,6 @@
 <li><a class="reference internal" href="auto_examples/brain/08_screenshot.html#sphx-glr-auto-examples-brain-08-screenshot-py"><span class="std std-ref">Screenshot example</span></a></li>
 </ul>
 </dd>
-<dt><strong>API</strong></dt>
-<dd><ul class="first last simple">
-<li><a class="reference internal" href="brainAPI.html#roiapi"><span class="std std-ref">Region Of Interest (ROI) methods</span></a></li>
-</ul>
-</dd>
 </dl>
 </div>
 </div>
@@ -654,11 +618,6 @@
 <dd><ul class="first last simple">
 <li><a class="reference internal" href="auto_examples/brain/00_brain_control.html#sphx-glr-auto-examples-brain-00-brain-control-py"><span class="std std-ref">Brain control</span></a></li>
 <li><a class="reference internal" href="auto_examples/brain/10_add_nifti_volume.html#sphx-glr-auto-examples-brain-10-add-nifti-volume-py"><span class="std std-ref">Add Nifti volume</span></a></li>
-</ul>
-</dd>
-<dt><strong>API</strong></dt>
-<dd><ul class="first last simple">
-<li><a class="reference internal" href="brainAPI.html#volcrossecapi"><span class="std std-ref">Volume and cross-sections</span></a></li>
 </ul>
 </dd>
 </dl>
@@ -682,7 +641,6 @@
 <dl class="last docutils">
 <dt><strong>Examples</strong></dt>
 <dd><ul class="first last simple">
-<li><a class="reference internal" href="auto_examples/brain/12_colorbar_control.html#sphx-glr-auto-examples-brain-12-colorbar-control-py"><span class="std std-ref">Colorbar control</span></a></li>
 <li><a class="reference internal" href="auto_examples/brain/08_screenshot.html#sphx-glr-auto-examples-brain-08-screenshot-py"><span class="std std-ref">Screenshot example</span></a></li>
 </ul>
 </dd>
@@ -719,45 +677,33 @@
 <li class="toctree-l2"><a class="reference internal" href="brainAPI.html#add-mesh-to-the-scene">1.3.4.3. Add mesh to the scene</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="brainAPI.html#volume-and-cross-sections">1.3.5. Volume and cross-sections</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#control-the-volume">1.3.5.1. Control the volume</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#add-volume">1.3.5.2. Add volume</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#get-the-list-of-volumes">1.3.5.3. Get the list of volumes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#control-cross-sections">1.3.5.4. Control cross-sections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brainAPI.html#sources-methods">1.3.5. Sources methods</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#control-sources">1.3.5.1. Control sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#select-sources">1.3.5.2. Select sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#fit-to-an-object">1.3.5.3. Fit to an object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#convert-into-convex-hull">1.3.5.4. Convert into convex hull</a></li>
+<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#cortical-projection">1.3.5.5. Cortical projection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#cortical-repartition">1.3.5.6. Cortical repartition</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="brainAPI.html#sources-methods">1.3.6. Sources methods</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#control-sources">1.3.6.1. Control sources</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#select-sources">1.3.6.2. Select sources</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#fit-to-an-object">1.3.6.3. Fit to an object</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#convert-into-convex-hull">1.3.6.4. Convert into convex hull</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#cortical-projection">1.3.6.5. Cortical projection</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#cortical-repartition">1.3.6.6. Cortical repartition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brainAPI.html#time-series-methods">1.3.6. Time-series methods</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#time-series-control">1.3.6.1. Time-series control</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="brainAPI.html#time-series-methods">1.3.7. Time-series methods</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#time-series-control">1.3.7.1. Time-series control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brainAPI.html#pictures-methods">1.3.7. Pictures methods</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#pictures-control">1.3.7.1. Pictures control</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="brainAPI.html#pictures-methods">1.3.8. Pictures methods</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#pictures-control">1.3.8.1. Pictures control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brainAPI.html#connectivity-methods">1.3.8. Connectivity methods</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#control-connectivity">1.3.8.1. Control Connectivity</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="brainAPI.html#connectivity-methods">1.3.9. Connectivity methods</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#control-connectivity">1.3.9.1. Control Connectivity</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="brainAPI.html#region-of-interest-roi-methods">1.3.10. Region Of Interest (ROI) methods</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#roi-control">1.3.10.1. ROI control</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#list-of-suported-roi">1.3.10.2. List of suported ROI</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="brainAPI.html#colorbar-methods">1.3.11. Colorbar methods</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#colorbar-control">1.3.11.1. Colorbar control</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#select-a-colorbar">1.3.11.2. Select a colorbar</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#list-of-available-colorbars">1.3.11.3. List of available colorbars</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#export-colorbar">1.3.11.4. Export colorbar</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#auto-scaling">1.3.11.5. Auto-scaling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brainAPI.html#colorbar-methods">1.3.9. Colorbar methods</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#colorbar-control">1.3.9.1. Colorbar control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#select-a-colorbar">1.3.9.2. Select a colorbar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#list-of-available-colorbars">1.3.9.3. List of available colorbars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#export-colorbar">1.3.9.4. Export colorbar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#auto-scaling">1.3.9.5. Auto-scaling</a></li>
 </ul>
 </li>
 </ul>
@@ -809,7 +755,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.3.7',
+            VERSION:'0.3.8',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Add Region of interest (ROI) &mdash; visbrain 0.3.7 documentation</title>
+  <title>Add Region of interest (ROI) &mdash; visbrain 0.3.8 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.3.7 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.8 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
         <link rel="next" title="Add time series" href="06_add_time_series.html"/>
         <link rel="prev" title="Connect deep sources" href="04_connectivity.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.7
+                0.3.8
               </div>
             
           
@@ -105,7 +105,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#brain-examples">Brain Examples</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="00_brain_control.html">Brain control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="01_cross_sections_and_volume.html">Cross-sections and volume control</a></li>
-<li class="toctree-l3"><a class="reference internal" href="02_add_brain_template.html">Add a brain template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_brain_using_vertices.html">Define a brain template using vertices and faces</a></li>
 <li class="toctree-l3"><a class="reference internal" href="03_sources.html">Add deep sources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="04_connectivity.html">Connect deep sources</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Add Region of interest (ROI)</a></li>
@@ -114,11 +114,8 @@
 <li class="toctree-l3"><a class="reference internal" href="08_screenshot.html">Screenshot example</a></li>
 <li class="toctree-l3"><a class="reference internal" href="09_add_multiple_objects.html">Add multiple objects to the scene</a></li>
 <li class="toctree-l3"><a class="reference internal" href="10_add_nifti_volume.html">Add Nifti volume</a></li>
-<li class="toctree-l3"><a class="reference internal" href="11_convert_mesh_data.html">Convert mesh data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="12_colorbar_control.html">Colorbar control</a></li>
-<li class="toctree-l3"><a class="reference internal" href="13_load_gui_config.html">Load Graphical User Interface configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="14_add_vectors.html">Add vectors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="15_parcellize.html">Parcellize brain surface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11_add_vectors.html">Add vectors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12_parcellize.html">Parcellize brain surface</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#colorbar-examples">Colorbar Examples</a></li>
@@ -202,54 +199,67 @@
 <p>This small dataset (thx to Tarek Lajnef) contains sources inside the thalamus
 and alpha power for each source. We are going to display the thalamus, then
 project the source’s activity on it.</p>
-<p>Download source’s coordinates (thalamus.txt) :
-<a class="reference external" href="https://drive.google.com/open?id=0B6vtJiCQZUBvSkEwclFlaUdJVW8">https://drive.google.com/open?id=0B6vtJiCQZUBvSkEwclFlaUdJVW8</a></p>
-<p>Download alpha power (Px.npy):
-<a class="reference external" href="https://drive.google.com/open?id=0B6vtJiCQZUBvTXhVc1NvSHRxQzA">https://drive.google.com/open?id=0B6vtJiCQZUBvTXhVc1NvSHRxQzA</a></p>
 <img alt="../../_images/ex_region_of_interest.png" src="../../_images/ex_region_of_interest.png" />
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <a href="../../brainAPI.html#visbrain.Brain" title="View documentation for visbrain.Brain"><span class="n">Brain</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../objects.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span><span class="p">,</span> <span class="n">path_to_visbrain_data</span>
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../objects.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">,</span> <a href="../../objects.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">,</span> <a href="../../objects.html#visbrain.objects.RoiObj" title="View documentation for visbrain.objects.RoiObj"><span class="n">RoiObj</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span>
 
-<span class="c1"># Load thalamus sources :</span>
-<span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;thalamus.txt&#39;</span><span class="p">)</span>
-<span class="n">s_xyz</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.loadtxt.html#numpy.loadtxt" title="View documentation for numpy.loadtxt"><span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span></a><span class="p">(</span><span class="n">path_to_visbrain_data</span><span class="p">(</span><span class="s1">&#39;thalamus.txt&#39;</span><span class="p">))</span>
-<span class="c1"># Load alpha power. In fact, the PX.npy contains the power across several time</span>
-<span class="c1"># windows. So we take the mean across time :</span>
-<span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;Px.npy&#39;</span><span class="p">)</span>
-<span class="n">s_data</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.load.html#numpy.load" title="View documentation for numpy.load"><span class="n">np</span><span class="o">.</span><span class="n">load</span></a><span class="p">(</span><span class="n">path_to_visbrain_data</span><span class="p">(</span><span class="s1">&#39;Px.npy&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mf">10e26</span>
+<span class="sd">&quot;&quot;&quot;Download the location of sources closed to the thalamus and the power of</span>
+<span class="sd">alpha oscillations</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">s_xyz</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.loadtxt.html#numpy.loadtxt" title="View documentation for numpy.loadtxt"><span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span></a><span class="p">(</span><span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;thalamus.txt&#39;</span><span class="p">))</span>
+<span class="n">s_data</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.load.html#numpy.load" title="View documentation for numpy.load"><span class="n">np</span><span class="o">.</span><span class="n">load</span></a><span class="p">(</span><span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;Px.npy&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mf">10e26</span>
 
+<span class="sd">&quot;&quot;&quot;Create a source object</span>
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="n">s_obj</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">(</span><span class="s1">&#39;ThalamusSources&#39;</span><span class="p">,</span> <span class="n">s_xyz</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">s_data</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#ab4642&#39;</span><span class="p">,</span>
                   <span class="n">radius_min</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">radius_max</span><span class="o">=</span><span class="mf">20.</span><span class="p">)</span>
 
+<span class="sd">&quot;&quot;&quot;Create a ROI object. The ROI object comes with three default templates :</span>
+<span class="sd">* &#39;brodmann&#39; : Brodmann areas</span>
+<span class="sd">* &#39;aal&#39; : Automatic Anatomical Labeling</span>
+<span class="sd">* &#39;talairach&#39;</span>
+
+<span class="sd">You can also define your own RoiObj with your own labels.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">roi_obj</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.RoiObj" title="View documentation for visbrain.objects.RoiObj"><span class="n">RoiObj</span></a><span class="p">(</span><span class="s1">&#39;aal&#39;</span><span class="p">,</span> <span class="n">cblabel</span><span class="o">=</span><span class="s2">&quot;Alpha power&quot;</span><span class="p">,</span> <span class="n">border</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="sd">&quot;&quot;&quot;Find index of the thalamus and get the mesh.</span>
+
+<span class="sd">If you want to get all of the index of the ROI template use :</span>
+<span class="sd">* `roi_obj.get_labels()` : return a pandas DatFrame</span>
+<span class="sd">* `roi_obj.get_labels(&#39;/home/&#39;)` : save all supported ROI and labels in an</span>
+<span class="sd">  excel file.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">idx_thalamus</span> <span class="o">=</span> <span class="n">roi_obj</span><span class="o">.</span><span class="n">where_is</span><span class="p">(</span><span class="s1">&#39;Thalamus&#39;</span><span class="p">)</span>
+<span class="n">roi_obj</span><span class="o">.</span><span class="n">select_roi</span><span class="p">(</span><span class="n">idx_thalamus</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="sd">&quot;&quot;&quot;Once the ROI object created, we can project source&#39;s alpha modulations</span>
+<span class="sd">directly on the thalamus</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">roi_obj</span><span class="o">.</span><span class="n">project_sources</span><span class="p">(</span><span class="n">s_obj</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="mf">200.</span><span class="p">,</span> <span class="mf">2000.</span><span class="p">),</span>
+                        <span class="n">vmin</span><span class="o">=</span><span class="mf">300.</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">1800.</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;darkred&#39;</span><span class="p">)</span>
+
+<span class="sd">&quot;&quot;&quot;You can also force sources to fit onto the thalamus</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># s_obj.fit_to_vertices(roi_obj.vertices)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">b_obj</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;B3&#39;</span><span class="p">)</span>
+
 <span class="c1"># Define a Brain instance :</span>
-<span class="n">vb</span> <span class="o">=</span> <a href="../../brainAPI.html#visbrain.Brain" title="View documentation for visbrain.Brain"><span class="n">Brain</span></a><span class="p">(</span><span class="n">source_obj</span><span class="o">=</span><span class="n">s_obj</span><span class="p">)</span>
+<span class="n">vb</span> <span class="o">=</span> <a href="../../brainAPI.html#visbrain.Brain" title="View documentation for visbrain.Brain"><span class="n">Brain</span></a><span class="p">(</span><span class="n">brain_obj</span><span class="o">=</span><span class="n">b_obj</span><span class="p">,</span> <span class="n">source_obj</span><span class="o">=</span><span class="n">s_obj</span><span class="p">,</span> <span class="n">roi_obj</span><span class="o">=</span><span class="n">roi_obj</span><span class="p">)</span>
 
+<span class="sd">&quot;&quot;&quot;Select the colorbar of the ROI</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Select the thalamus index (76 for the left and 77 for the right). If you</span>
-<span class="sd">don&#39;t know what is the index of your ROI, open the GUI and look at the</span>
-<span class="sd">number in front of the name. Otherwise, un comment the following line :</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">cbar_select</span><span class="p">(</span><span class="s1">&#39;ROI&#39;</span><span class="p">)</span>
+
+<span class="sd">&quot;&quot;&quot;Eventualy, take a screenshot</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="c1"># print(vb.roi_list(&#39;AAL&#39;))</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">roi_control</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="p">[</span><span class="mi">76</span><span class="p">,</span> <span class="mi">77</span><span class="p">],</span> <span class="n">roi_type</span><span class="o">=</span><span class="s1">&#39;AAL&#39;</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-               <span class="n">name</span><span class="o">=</span><span class="s1">&#39;thalamus&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-
-<span class="c1"># Project the source&#39;s activity onto the thalamus :</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">cortical_projection</span><span class="p">(</span><span class="n">project_on</span><span class="o">=</span><span class="s1">&#39;thalamus&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">,</span>
-                       <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="mf">11.</span><span class="p">,</span> <span class="mf">18.</span><span class="p">),</span> <span class="n">cblabel</span><span class="o">=</span><span class="s2">&quot;Alpha power&quot;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">11.7</span><span class="p">,</span>
-                       <span class="n">vmax</span><span class="o">=</span><span class="mf">17.1</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;darkred&#39;</span><span class="p">,</span> <span class="n">isvmin</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-                       <span class="n">isvmax</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-
-<span class="sd">&quot;&quot;&quot;The displayed sources can be forced to fit to the roi. To this end, the</span>
-<span class="sd">sources_fit() method find the closest roi vertex to each source and change the</span>
-<span class="sd">source&#39;s coordinate for it.</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="c1"># vb.sources_fit_to_vertices(fit_to=&#39;thalamus&#39;)</span>
-
-<span class="c1"># Eventualy, take a screenshot :</span>
 <span class="c1"># vb.screenshot(&#39;thalamus.png&#39;, autocrop=True)</span>
 
 <span class="c1"># Show the interface :</span>
@@ -310,7 +320,7 @@ project the source’s activity on it.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.3.7',
+            VERSION:'0.3.8',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

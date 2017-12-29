@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Add deep sources &mdash; visbrain 0.3.7 documentation</title>
+  <title>Add deep sources &mdash; visbrain 0.3.8 documentation</title>
   
 
   
@@ -39,10 +39,10 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.3.7 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.8 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
         <link rel="next" title="Connect deep sources" href="04_connectivity.html"/>
-        <link rel="prev" title="Add a brain template" href="02_add_brain_template.html"/> 
+        <link rel="prev" title="Define a brain template using vertices and faces" href="02_brain_using_vertices.html"/> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.7
+                0.3.8
               </div>
             
           
@@ -105,7 +105,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#brain-examples">Brain Examples</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="00_brain_control.html">Brain control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="01_cross_sections_and_volume.html">Cross-sections and volume control</a></li>
-<li class="toctree-l3"><a class="reference internal" href="02_add_brain_template.html">Add a brain template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_brain_using_vertices.html">Define a brain template using vertices and faces</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Add deep sources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="04_connectivity.html">Connect deep sources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="05_region_of_interest.html">Add Region of interest (ROI)</a></li>
@@ -114,11 +114,8 @@
 <li class="toctree-l3"><a class="reference internal" href="08_screenshot.html">Screenshot example</a></li>
 <li class="toctree-l3"><a class="reference internal" href="09_add_multiple_objects.html">Add multiple objects to the scene</a></li>
 <li class="toctree-l3"><a class="reference internal" href="10_add_nifti_volume.html">Add Nifti volume</a></li>
-<li class="toctree-l3"><a class="reference internal" href="11_convert_mesh_data.html">Convert mesh data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="12_colorbar_control.html">Colorbar control</a></li>
-<li class="toctree-l3"><a class="reference internal" href="13_load_gui_config.html">Load Graphical User Interface configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="14_add_vectors.html">Add vectors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="15_parcellize.html">Parcellize brain surface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11_add_vectors.html">Add vectors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12_parcellize.html">Parcellize brain surface</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#colorbar-examples">Colorbar Examples</a></li>
@@ -212,14 +209,12 @@ which is defined as the number of contributing sources per vertex.</p>
 
 <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Load the xyz coordinates and corresponding subject name</span>
+<span class="sd">&quot;&quot;&quot;Load the xyz coordinates and corresponding subject name</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="n">mat</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.load.html#numpy.load" title="View documentation for numpy.load"><span class="n">np</span><span class="o">.</span><span class="n">load</span></a><span class="p">(</span><span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">))</span>
 <span class="n">xyz</span><span class="p">,</span> <span class="n">subjects</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;xyz&#39;</span><span class="p">],</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;subjects&#39;</span><span class="p">]</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">The &quot;subjects&quot; list is composed of 6 diffrents subjects and here we set one</span>
+<span class="sd">&quot;&quot;&quot;The &quot;subjects&quot; list is composed of 6 diffrents subjects and here we set one</span>
 <span class="sd">unique color (u_color) per subject.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="n">u_color</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;#9b59b6&quot;</span><span class="p">,</span> <span class="s2">&quot;#3498db&quot;</span><span class="p">,</span> <span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="s2">&quot;#e74c3c&quot;</span><span class="p">,</span> <span class="s2">&quot;#34495e&quot;</span><span class="p">,</span> <span class="s2">&quot;#2ecc71&quot;</span><span class="p">]</span>
@@ -231,9 +226,9 @@ which is defined as the number of contributing sources per vertex.</p>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.arange.html#numpy.arange" title="View documentation for numpy.arange"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">subjects</span><span class="p">))</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">The source&#39;s radius is proportional to the data attached. But this proportion</span>
-<span class="sd">can be controlled using a minimum and maximum radius (s_radiusmin, s_radiusmax)</span>
+<span class="sd">&quot;&quot;&quot;The source&#39;s radius is proportional to the data attached. But this</span>
+<span class="sd">proportion can be controlled using a minimum and maximum radius</span>
+<span class="sd">(s_radiusmin, s_radiusmax)</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;radius_min&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>               <span class="c1"># Minimum radius</span>
 <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;radius_max&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">15</span>              <span class="c1"># Maximum radius</span>
@@ -249,8 +244,7 @@ which is defined as the number of contributing sources per vertex.</p>
 <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;mask&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mask</span>
 <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;mask_color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;gray&#39;</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">It&#39;s also possible to add text to each source. Here, we show the name of the</span>
+<span class="sd">&quot;&quot;&quot;It&#39;s also possible to add text to each source. Here, we show the name of the</span>
 <span class="sd">subject in yellow.</span>
 <span class="sd">To avoid a superposition between the text and sources sphere, we introduce an</span>
 <span class="sd">offset to the text using the s_textshift input</span>
@@ -312,7 +306,7 @@ which is defined as the number of contributing sources per vertex.</p>
         <a href="04_connectivity.html" class="btn btn-neutral float-right" title="Connect deep sources" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="02_add_brain_template.html" class="btn btn-neutral" title="Add a brain template" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="02_brain_using_vertices.html" class="btn btn-neutral" title="Define a brain template using vertices and faces" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -343,7 +337,7 @@ which is defined as the number of contributing sources per vertex.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.3.7',
+            VERSION:'0.3.8',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

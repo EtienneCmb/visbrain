@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Region Of Interest (ROI) object &mdash; visbrain 0.3.7 documentation</title>
+  <title>Region Of Interest (ROI) object &mdash; visbrain 0.3.8 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.3.7 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.8 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
         <link rel="next" title="Source object" href="ex_source_obj.html"/>
         <link rel="prev" title="Image, time-frequency map and spectrogram objects" href="ex_im_tf_spec_obj.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.7
+                0.3.8
               </div>
             
           
@@ -108,9 +108,11 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#objects-examples">Objects examples</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="ex_brain_obj.html">Brain object</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ex_connectivity_obj.html">Connectivity object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ex_cross_section_obj.html">Cross-section object</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ex_im_tf_spec_obj.html">Image, time-frequency map and spectrogram objects</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Region Of Interest (ROI) object</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ex_source_obj.html">Source object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ex_volume_obj.html">Volume object</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#pysurfer-examples">Pysurfer Examples</a></li>
@@ -200,8 +202,8 @@ object i.e :</p>
 <img alt="../../_images/ex_roi_obj.png" src="../../_images/ex_roi_obj.png" />
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../objects.html#visbrain.objects.RoiObj" title="View documentation for visbrain.objects.RoiObj"><span class="n">RoiObj</span></a><span class="p">,</span> <span class="n">ColorbarObj</span><span class="p">,</span> <span class="n">SceneObj</span><span class="p">,</span> <a href="../../objects.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">,</span> <a href="../../objects.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span><span class="p">,</span> <span class="n">path_to_visbrain_data</span>
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../objects.html#visbrain.objects.RoiObj" title="View documentation for visbrain.objects.RoiObj"><span class="n">RoiObj</span></a><span class="p">,</span> <a href="../../objects.html#visbrain.objects.ColorbarObj" title="View documentation for visbrain.objects.ColorbarObj"><span class="n">ColorbarObj</span></a><span class="p">,</span> <a href="../../objects.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a><span class="p">,</span> <a href="../../objects.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">,</span> <a href="../../objects.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span><span class="p">,</span> <span class="n">path_to_visbrain_data</span><span class="p">,</span> <span class="n">read_nifti</span>
 
 <span class="sd">&quot;&quot;&quot;Get the path to Visbrain data and download deep sources</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -210,6 +212,9 @@ object i.e :</p>
 <span class="n">xyz</span><span class="p">,</span> <span class="n">subjects</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;xyz&#39;</span><span class="p">],</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;subjects&#39;</span><span class="p">]</span>
 <span class="n">data</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.uniform.html#numpy.random.uniform" title="View documentation for numpy.random.uniform"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span></a><span class="p">(</span><span class="n">low</span><span class="o">=-</span><span class="mf">1.</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],))</span>
 
+<span class="c1"># =============================================================================</span>
+<span class="c1">#                              MAIN SCENE</span>
+<span class="c1"># =============================================================================</span>
 <span class="k">print</span><span class="p">(</span><span class="s2">&quot;-&gt; Create a scene. By default, we fix the top view of the camera&quot;</span><span class="p">)</span>
 <span class="n">CAM_STATE</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">azimuth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>        <span class="c1"># azimuth angle</span>
                  <span class="n">elevation</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>     <span class="c1"># elevation angle</span>
@@ -218,16 +223,43 @@ object i.e :</p>
                  <span class="p">)</span>
 <span class="n">CBAR_STATE</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">cbtxtsz</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">txtsz</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">width</span><span class="o">=.</span><span class="mi">1</span><span class="p">,</span> <span class="n">cbtxtsh</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span>
                   <span class="n">rect</span><span class="o">=</span><span class="p">(</span><span class="o">-.</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">))</span>
-<span class="n">sc</span> <span class="o">=</span> <span class="n">SceneObj</span><span class="p">(</span><span class="n">camera_state</span><span class="o">=</span><span class="n">CAM_STATE</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="p">(</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1400</span><span class="p">,</span> <span class="mi">1000</span><span class="p">))</span>
+<span class="n">sc</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a><span class="p">(</span><span class="n">camera_state</span><span class="o">=</span><span class="n">CAM_STATE</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="p">(</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1400</span><span class="p">,</span> <span class="mi">1000</span><span class="p">))</span>
 
+<span class="c1"># =============================================================================</span>
+<span class="c1">#                          FIND INDEX OF AN ROI</span>
+<span class="c1"># =============================================================================</span>
+<span class="sd">&quot;&quot;&quot;Here, we illustrate how to find the integer index of the ROI to plot</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># Method 1 : save all ROI in an excel file and search manually the ROI</span>
+<span class="n">roi_to_find1</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.RoiObj" title="View documentation for visbrain.objects.RoiObj"><span class="n">RoiObj</span></a><span class="p">(</span><span class="s1">&#39;brodmann&#39;</span><span class="p">)</span>             <span class="c1"># Use Brodmann areas</span>
+<span class="n">ref_brod</span> <span class="o">=</span> <span class="n">roi_to_find1</span><span class="o">.</span><span class="n">get_labels</span><span class="p">(</span><span class="n">vb_path</span><span class="p">)</span>   <span class="c1"># Save Brodmann</span>
+<span class="n">roi_to_find1</span><span class="p">(</span><span class="s1">&#39;aal&#39;</span><span class="p">)</span>                           <span class="c1"># Switch to AAL</span>
+<span class="n">ref_aal</span> <span class="o">=</span> <span class="n">roi_to_find1</span><span class="o">.</span><span class="n">get_labels</span><span class="p">(</span><span class="n">vb_path</span><span class="p">)</span>    <span class="c1"># Save AAL</span>
+<span class="n">roi_to_find1</span><span class="p">(</span><span class="s1">&#39;talairach&#39;</span><span class="p">)</span>                     <span class="c1"># Switch to Talairach</span>
+<span class="n">ref_tal</span> <span class="o">=</span> <span class="n">roi_to_find1</span><span class="o">.</span><span class="n">get_labels</span><span class="p">(</span><span class="n">vb_path</span><span class="p">)</span>    <span class="c1"># Save Talairach</span>
+
+<span class="c1"># Method 2 : use the `where_is` method</span>
+<span class="n">roi_to_find1</span><span class="p">(</span><span class="s1">&#39;brodmann&#39;</span><span class="p">)</span>                      <span class="c1"># Switch to Brodmann</span>
+<span class="n">idx_ba6</span> <span class="o">=</span> <span class="n">roi_to_find1</span><span class="o">.</span><span class="n">where_is</span><span class="p">(</span><span class="s1">&#39;BA6&#39;</span><span class="p">)</span>        <span class="c1"># Find only BA6</span>
+<span class="k">print</span><span class="p">(</span><span class="n">ref_brod</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx_ba6</span><span class="p">])</span>
+<span class="n">roi_to_find1</span><span class="p">(</span><span class="s1">&#39;aal&#39;</span><span class="p">)</span>                           <span class="c1"># Switch to AAL</span>
+<span class="n">idx_sma</span> <span class="o">=</span> <span class="n">roi_to_find1</span><span class="o">.</span><span class="n">where_is</span><span class="p">([</span><span class="s1">&#39;Supp Motor Area&#39;</span><span class="p">,</span> <span class="s1">&#39;(L)&#39;</span><span class="p">],</span> <span class="n">union</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="c1"># =============================================================================</span>
+<span class="c1">#                              BRAIN + BA6</span>
+<span class="c1"># =============================================================================</span>
 <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">-&gt; Plot brodmann area 6&#39;</span><span class="p">)</span>
 <span class="n">b_obj</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;B1&#39;</span><span class="p">)</span>
 <span class="n">roi_brod</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.RoiObj" title="View documentation for visbrain.objects.RoiObj"><span class="n">RoiObj</span></a><span class="p">(</span><span class="s1">&#39;brodmann&#39;</span><span class="p">)</span>
-<span class="n">roi_brod</span><span class="o">.</span><span class="n">select_roi</span><span class="p">(</span><span class="n">select</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">idx_ba6</span> <span class="o">=</span> <span class="n">roi_brod</span><span class="o">.</span><span class="n">where_is</span><span class="p">(</span><span class="s1">&#39;BA6&#39;</span><span class="p">)</span>
+<span class="n">roi_brod</span><span class="o">.</span><span class="n">select_roi</span><span class="p">(</span><span class="n">select</span><span class="o">=</span><span class="n">idx_ba6</span><span class="p">)</span>
 <span class="n">roi_brod</span><span class="o">.</span><span class="n">get_labels</span><span class="p">(</span><span class="n">save_to_path</span><span class="o">=</span><span class="n">vb_path</span><span class="p">)</span>  <span class="c1"># print available brodmann labels</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">roi_brod</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Brodmann area 6&#39;</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">b_obj</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">use_this_cam</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
+<span class="c1"># =============================================================================</span>
+<span class="c1">#                       MULTIPLE ROI + UNIQUE COLORS</span>
+<span class="c1"># =============================================================================</span>
 <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">-&gt; Select and plot multiple ROI with random unique colors&#39;</span><span class="p">)</span>
 <span class="n">roi_aal</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.RoiObj" title="View documentation for visbrain.objects.RoiObj"><span class="n">RoiObj</span></a><span class="p">(</span><span class="s1">&#39;aal&#39;</span><span class="p">)</span>
 <span class="n">roi_aal</span><span class="o">.</span><span class="n">select_roi</span><span class="p">(</span><span class="n">select</span><span class="o">=</span><span class="p">[</span><span class="mi">29</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">78</span><span class="p">],</span> <span class="n">unique_color</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
@@ -235,13 +267,42 @@ object i.e :</p>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">roi_aal</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                   <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Select and plot multiple ROI with unique colors&#39;</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">-&gt; Plot SMA with fixed colors&#39;</span><span class="p">)</span>
-<span class="n">roi_aal_2</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.RoiObj" title="View documentation for visbrain.objects.RoiObj"><span class="n">RoiObj</span></a><span class="p">(</span><span class="s1">&#39;aal&#39;</span><span class="p">)</span>
-<span class="n">colors</span> <span class="o">=</span> <span class="p">{</span><span class="mi">19</span><span class="p">:</span> <span class="s1">&#39;slateblue&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">:</span> <span class="s1">&#39;olive&#39;</span><span class="p">}</span>
-<span class="n">roi_aal_2</span><span class="o">.</span><span class="n">select_roi</span><span class="p">(</span><span class="n">select</span><span class="o">=</span><span class="p">[</span><span class="mi">19</span><span class="p">,</span> <span class="mi">20</span><span class="p">],</span> <span class="n">smooth</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">roi_to_color</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span>
-<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">roi_aal_2</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-                  <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Plot SMA with fixed colors&#39;</span><span class="p">)</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1">#                              CUSTOM ROI + FIXED COLORS</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">-&gt; Use a custom roi_object and plot dorsal and ventral thalamus with &quot;</span>
+      <span class="s2">&quot;fixed colors&quot;</span><span class="p">)</span>
+<span class="c1"># Download the MIST_ROI.zip archive. See the README inside the archive</span>
+<span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;MIST_ROI.zip&#39;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">nifti_file</span> <span class="o">=</span> <span class="n">path_to_visbrain_data</span><span class="p">(</span><span class="s1">&#39;MIST_ROI.nii.gz&#39;</span><span class="p">)</span>
+<span class="n">csv_file</span> <span class="o">=</span> <span class="n">path_to_visbrain_data</span><span class="p">(</span><span class="s1">&#39;MIST_ROI.csv&#39;</span><span class="p">)</span>
+<span class="c1"># Read the .csv file :</span>
+<span class="n">arr</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.genfromtxt.html#numpy.genfromtxt" title="View documentation for numpy.genfromtxt"><span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span></a><span class="p">(</span><span class="n">csv_file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+<span class="c1"># Get column names, labels and index :</span>
+<span class="n">column_names</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+<span class="n">arr</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.delete.html#numpy.delete" title="View documentation for numpy.delete"><span class="n">np</span><span class="o">.</span><span class="n">delete</span></a><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">n_roi</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">roi_index</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">roi_labels</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[:,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+<span class="c1"># Build the struct array :</span>
+<span class="n">label</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.zeros.html#numpy.zeros" title="View documentation for numpy.zeros"><span class="n">np</span><span class="o">.</span><span class="n">zeros</span></a><span class="p">(</span><span class="n">n_roi</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;label&#39;</span><span class="p">,</span> <span class="nb">object</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="nb">object</span><span class="p">)])</span>
+<span class="n">label</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">roi_labels</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">label</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">roi_labels</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="c1"># Get the volume and the hdr transformation :</span>
+<span class="n">vol</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">hdr</span> <span class="o">=</span> <span class="n">read_nifti</span><span class="p">(</span><span class="n">nifti_file</span><span class="p">,</span> <span class="n">hdr_as_array</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="c1"># Define the ROI object and save it :</span>
+<span class="n">roi_custom</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.RoiObj" title="View documentation for visbrain.objects.RoiObj"><span class="n">RoiObj</span></a><span class="p">(</span><span class="s1">&#39;mist_roi&#39;</span><span class="p">,</span> <span class="n">vol</span><span class="o">=</span><span class="n">vol</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">roi_index</span><span class="p">,</span>
+                    <span class="n">hdr</span><span class="o">=</span><span class="n">hdr</span><span class="p">)</span>
+<span class="c1"># Find thalamus entries :</span>
+<span class="n">idx_thalamus</span> <span class="o">=</span> <span class="n">roi_custom</span><span class="o">.</span><span class="n">where_is</span><span class="p">(</span><span class="s1">&#39;THALAMUS&#39;</span><span class="p">)</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">{</span><span class="mi">55</span><span class="p">:</span> <span class="s1">&#39;slateblue&#39;</span><span class="p">,</span> <span class="mi">56</span><span class="p">:</span> <span class="s1">&#39;olive&#39;</span><span class="p">,</span> <span class="mi">63</span><span class="p">:</span> <span class="s1">&#39;darkred&#39;</span><span class="p">,</span> <span class="mi">64</span><span class="p">:</span> <span class="s1">&#39;#ab4642&#39;</span><span class="p">}</span>
+<span class="n">roi_custom</span><span class="o">.</span><span class="n">select_roi</span><span class="p">(</span><span class="n">idx_thalamus</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">roi_to_color</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">roi_custom</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                  <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Plot dorsal and ventral thalamus with fixed colors&#39;</span><span class="p">)</span>
 
+<span class="c1"># =============================================================================</span>
+<span class="c1">#                        ANATOMICAL LOCATION OF SOURCES</span>
+<span class="c1"># =============================================================================</span>
 <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">-&gt; Anatomical location of sources using an ROI object&#39;</span><span class="p">)</span>
 <span class="c1"># Define the ROI object :</span>
 <span class="n">roi_tal</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.RoiObj" title="View documentation for visbrain.objects.RoiObj"><span class="n">RoiObj</span></a><span class="p">(</span><span class="s1">&#39;talairach&#39;</span><span class="p">)</span>
@@ -256,6 +317,9 @@ object i.e :</p>
                   <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Anatomical location of sources&#39;</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">roi_tal</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">use_this_cam</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
+<span class="c1"># =============================================================================</span>
+<span class="c1">#                         SELECT SOURCES INSIDE ROI&#39;S</span>
+<span class="c1"># =============================================================================</span>
 <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">-&gt; Select only sources inside BA 4, 6 and 8&#39;</span><span class="p">)</span>
 <span class="c1"># Define the ROI object :</span>
 <span class="n">roi_brod_2</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.RoiObj" title="View documentation for visbrain.objects.RoiObj"><span class="n">RoiObj</span></a><span class="p">(</span><span class="s1">&#39;brodmann&#39;</span><span class="p">)</span>
@@ -270,6 +334,9 @@ object i.e :</p>
                   <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Plot only sources in BA4, 6 and 8&#39;</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">roi_brod_2</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">use_this_cam</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
+<span class="c1"># =============================================================================</span>
+<span class="c1">#                   CORTICAL PROJECTION OF SOURCE&#39;S ACTIVITY</span>
+<span class="c1"># =============================================================================</span>
 <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">-&gt; Project source&#39;s activity onto ROI&quot;</span><span class="p">)</span>
 <span class="c1"># Define the ROI object :</span>
 <span class="n">roi_brod_3</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.RoiObj" title="View documentation for visbrain.objects.RoiObj"><span class="n">RoiObj</span></a><span class="p">(</span><span class="s1">&#39;aal&#39;</span><span class="p">)</span>
@@ -278,7 +345,7 @@ object i.e :</p>
 <span class="n">s_obj_3</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">(</span><span class="s1">&#39;SecondSources&#39;</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
 <span class="n">roi_brod_3</span><span class="o">.</span><span class="n">project_sources</span><span class="p">(</span><span class="n">s_obj_3</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;plasma&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">),</span> <span class="n">vmin</span><span class="o">=-.</span><span class="mi">5</span><span class="p">,</span>
                            <span class="n">vmax</span><span class="o">=.</span><span class="mi">7</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
-<span class="n">cb_brod_3</span> <span class="o">=</span> <span class="n">ColorbarObj</span><span class="p">(</span><span class="n">roi_brod_3</span><span class="p">,</span> <span class="n">cblabel</span><span class="o">=</span><span class="s1">&#39;Source activity&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">CBAR_STATE</span><span class="p">)</span>
+<span class="n">cb_brod_3</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.ColorbarObj" title="View documentation for visbrain.objects.ColorbarObj"><span class="n">ColorbarObj</span></a><span class="p">(</span><span class="n">roi_brod_3</span><span class="p">,</span> <span class="n">cblabel</span><span class="o">=</span><span class="s1">&#39;Source activity&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">CBAR_STATE</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">roi_brod_3</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                   <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Project source activity onto ROI&quot;</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">cb_brod_3</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">width_max</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
@@ -340,7 +407,7 @@ object i.e :</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.3.7',
+            VERSION:'0.3.8',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

@@ -24,37 +24,50 @@ https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
 
 .. code-block:: python
 
+    import os
     import numpy as np
 
     from visbrain import Brain
-    from visbrain.objects import SourceObj
+    from visbrain.objects import BrainObj, SourceObj, RoiObj
     from visbrain.io import download_file, path_to_visbrain_data
 
+    save_pic_path = path_to_visbrain_data(folder='Example_pic')
+
     # Load the xyz coordinates and corresponding subject name :
-    download_file('xyz_sample.npz')
-    s_xyz = np.load(path_to_visbrain_data('xyz_sample.npz'))['xyz']
+    s_xyz = np.load(download_file('xyz_sample.npz'))['xyz']
 
-    # Now, create some random data between [-50,50]
+    """Create a source object with random data between [-50,50]
+    """
     s_data = np.random.uniform(-50, 50, s_xyz.shape[0])
-
     s_obj = SourceObj('Sobj', s_xyz, data=s_data, color='darkred', alpha=.5,
                       radius_min=2., radius_max=8., edge_width=0.)
 
-    # Create a brain instance :
-    vb = Brain(source_obj=s_obj)
-
-    """First, make a basic screenshot of the scene.
-
-    Once exported, you should notice that the image doesn't have a proper size to
-    be used in a paper. In addition, the image have to cropped to remove
-    unnecessary background.
+    """Create a Region of Interest Object (ROI) and display brodmann area 4 and 6
     """
-    vb.screenshot('0_main_brain.jpg')
+    roi_obj = RoiObj('brodmann')
+    idx_4_6 = roi_obj.where_is(['BA4', 'BA6'], exact=True)
+    roi_color = {idx_4_6[0]: 'red',    # BA4 in red and BA6 in green
+                 idx_4_6[1]: 'green'}
+    roi_obj.select_roi(idx_4_6, unique_color=True, roi_to_color=roi_color,
+                       smooth=7)
 
-    # Run the cortical projection :
+    """Create a brain object
+    """
+    b_obj = BrainObj('B1', hemisphere='both', translucent=True)
+
+    """Pass the brain, source and ROI object to the GUI
+    """
+    vb = Brain(brain_obj=b_obj, source_obj=s_obj, roi_obj=roi_obj)
+
+    """Render the scene and save the jpg picture with a 300dpi
+    """
+    save_as = os.path.join(save_pic_path, '0_main_brain.jpg')
+    vb.screenshot(save_as, dpi=300, print_size=(10, 10), autocrop=True)
+
+    """Project source's activity onto the surface
+    """
     vb.cortical_projection(clim=(0, 50), cmap='Spectral_r', vmin=10.1,
-                           isvmin=True, under='black', vmax=41.2, over='green',
-                           isvmax=True)
+                           under='black', vmax=41.2, over='green')
     vb.sources_control('Sobj', visible=False)        # Hide sources
     vb.rotate(custom=(-160., 10.))                   # Rotate the brain
     vb.brain_control(translucent=False)              # Make the brain opaque
@@ -67,7 +80,8 @@ https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
     Taken together, this mean that the image should have a sufficient size to be
     (20 centimeters x 20 centimeters) at 300 dpi.
     """
-    vb.screenshot('1_proj_brain.tiff', autocrop=True, print_size=(20, 20),
+    save_as = os.path.join(save_pic_path, '1_proj_brain.tiff')
+    vb.screenshot(save_as, autocrop=True, print_size=(20, 20),
                   unit='centimeter', dpi=300.)
 
     """Colorbar screenshot
@@ -79,39 +93,26 @@ https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
     Start by selecting the colorbar of the cortical projection, improve the
     appearance and make a screenshot of it.
     """
-    vb.cbar_select('Projection')
-    vb.cbar_control('Projection', txtsz=8., cbtxtsz=9.,
-                    cblabel='Cortical projection')
-    vb.screenshot('1_proj_colorbar.tiff', canvas='colorbar', autocrop=True,
-                  factor=4.)
-
-    """Cross-sections splitted-view screenshot
-    """
-    vb.cross_sections_control(pos=s_xyz[10, :], split_view=True,
-                              cmap='viridis', show_text=False)
-    vb.screenshot('2_cross_sections.png', canvas='cross-sections',
-                  print_size=(200, 100), unit='millimeter', dpi=600.)
-    vb.cross_sections_control(visible=False, split_view=False)
+    save_as = os.path.join(save_pic_path, '2_proj_colorbar.tiff')
+    vb.screenshot(save_as, canvas='colorbar', autocrop=True, factor=2.)
 
     """Background color and transparency control of ROI screenshot
     """
-    vb.roi_control(name='BA3-4-32', selection=[3, 5, 32], roi_type='Brodmann',
-                   smooth=7)
+    roi_obj('aal')
+    idx_precentral_l = roi_obj.where_is(['Precentral (L)'], exact=True)
+    idx_postcentral_r = roi_obj.where_is(['Postcentral (R)'], exact=True)
+    roi_obj.select_roi(idx_precentral_l + idx_postcentral_r, smooth=11)
 
-    # Run the cortical repartition
-    vb.cortical_repartition(radius=20., project_on='BA3-4-32', clim=(1, 48),
-                            isvmin=True, vmin=7, under='gray', cmap='viridis',
-                            cblabel='Roi colorbar')
-    vb.cbar_select('Projection')                # Select the Projection colorbar
+    vb.cortical_repartition(project_on='roi', clim=(1, 17), vmin=2,
+                            under='gray', cmap='Reds')
     vb.sources_control('Sobj', visible=False)   # Display sources
     vb.rotate(custom=(-210, 10.))               # Rotate the brain
     vb.brain_control(visible=False)             # Hide the brain
 
-    """
-    Export ROI with a transparent background and the colorbar with a green one
-    """
-    vb.screenshot('3_roi_repartition.png', transparent=True, autocrop=True,
-                  print_size=(5, 5), unit='inch')
+    save_as = os.path.join(save_pic_path, '3_cort_proj_roi.tiff')
+    save_as_cbar = os.path.join(save_pic_path, '3_cort_proj_roi_cbar.tiff')
+    vb.screenshot(save_as, transparent=True, autocrop=True, print_size=(5, 5))
+    vb.screenshot(save_as_cbar, canvas='colorbar', autocrop=True, factor=2.)
 
     # Alternatively, you can display the GUI at the end, but it's not a necessity
     # vb.show()

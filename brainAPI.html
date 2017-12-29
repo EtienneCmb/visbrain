@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>1.3.1. Main Brain class inputs &mdash; visbrain 0.3.7 documentation</title>
+  <title>1.3.1. Main Brain class inputs &mdash; visbrain 0.3.8 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="visbrain 0.3.7 documentation" href="index.html"/>
+    <link rel="top" title="visbrain 0.3.8 documentation" href="index.html"/>
         <link rel="up" title="1. Brain" href="brain.html"/>
         <link rel="next" title="2. Sleep" href="sleep.html"/>
         <link rel="prev" title="1. Brain" href="brain.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.7
+                0.3.8
               </div>
             
           
@@ -109,13 +109,11 @@
 <li class="toctree-l4"><a class="reference internal" href="#gui-functions-and-settings">1.3.2. GUI functions and settings</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#load-and-save-gui-configuration">1.3.3. Load and save GUI configuration</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#brain-methods">1.3.4. Brain methods</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#volume-and-cross-sections">1.3.5. Volume and cross-sections</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#sources-methods">1.3.6. Sources methods</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#time-series-methods">1.3.7. Time-series methods</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pictures-methods">1.3.8. Pictures methods</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#connectivity-methods">1.3.9. Connectivity methods</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#region-of-interest-roi-methods">1.3.10. Region Of Interest (ROI) methods</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#colorbar-methods">1.3.11. Colorbar methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sources-methods">1.3.5. Sources methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#time-series-methods">1.3.6. Time-series methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pictures-methods">1.3.7. Pictures methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#connectivity-methods">1.3.8. Connectivity methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#colorbar-methods">1.3.9. Colorbar methods</a></li>
 </ul>
 </li>
 </ul>
@@ -126,8 +124,6 @@
 <li class="toctree-l2"><a class="reference internal" href="colorbar.html">5. <code class="docutils literal"><span class="pre">Colorbar</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="figure.html">6. <code class="docutils literal"><span class="pre">Figure</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="objects.html">7. Objects</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html">8. Utils</a></li>
-<li class="toctree-l2"><a class="reference internal" href="io.html">9. I/O</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
@@ -203,17 +199,21 @@
 <span id="brainclass"></span><h1>1.3.1. Main <em>Brain</em> class inputs<a class="headerlink" href="#main-brain-class-inputs" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="visbrain.Brain">
-<em class="property">class </em><code class="descclassname">visbrain.</code><code class="descname">Brain</code><span class="sig-paren">(</span><em>bgcolor='black'</em>, <em>verbose=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/brain.html#Brain"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/brain.py#L22-L147"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">visbrain.</code><code class="descname">Brain</code><span class="sig-paren">(</span><em>bgcolor='black'</em>, <em>verbose=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/brain.html#Brain"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/brain.py#L23-L151"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain" title="Permalink to this definition">¶</a></dt>
 <dd><p>Visualization of brain-data on a standard MNI brain.</p>
 <p>By default the Brain module display a standard MNI brain. Then, this brain
 can interact with several objects :</p>
 <blockquote>
 <div><ul class="simple">
+<li>Brain (brain_obj)</li>
 <li>Sources (source_obj)</li>
 <li>Connectivity (connect_obj)</li>
 <li>Time-series (time_series_obj)</li>
 <li>Pictures (picture_obj)</li>
 <li>Vectors (vector_obj)</li>
+<li>Volume (vol_obj)</li>
+<li>Cross-sections (cross_sec_obj)</li>
+<li>Region Of Interest (roi_obj)</li>
 </ul>
 </div></blockquote>
 <p>Alternatively, if an other brain template is needed, a brain object
@@ -222,21 +222,21 @@ can interact with several objects :</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>brain_template</strong> : string | ‘B1’</p>
-<blockquote>
-<div><p>The MNI brain template to use. Switch between ‘B1’, ‘B2’ or ‘B3’</p>
-</div></blockquote>
-<p><strong>brain_translucent</strong> : bool | True</p>
-<blockquote>
-<div><p>Use translucent or opaque brain.</p>
-</div></blockquote>
-<p><strong>brain_hemisphere</strong> : {‘left’, ‘both’, ‘right’}</p>
-<blockquote>
-<div><p>Specify which brain hemisphere to use. Default is ‘both’.</p>
-</div></blockquote>
-<p><strong>brain_obj</strong> : BrainObj | None</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>brain_obj</strong> : BrainObj | None</p>
 <blockquote>
 <div><p>A brain object.</p>
+</div></blockquote>
+<p><strong>vol_obj</strong> : VolumeObj | None</p>
+<blockquote>
+<div><p>A volume object.</p>
+</div></blockquote>
+<p><strong>cross_sec_obj</strong> : CrossSecObj | None</p>
+<blockquote>
+<div><p>A cross-sections object.</p>
+</div></blockquote>
+<p><strong>roi_obj</strong> : RoiObj | None</p>
+<blockquote>
+<div><p>A Region Of Interest (ROI) object.</p>
 </div></blockquote>
 <p><strong>source_obj</strong> : SourceObj | None</p>
 <blockquote>
@@ -344,18 +344,6 @@ belong.</p>
 <tr class="row-odd"><td><a class="reference internal" href="#visbrain.Brain.add_mesh" title="visbrain.Brain.add_mesh"><code class="xref py py-obj docutils literal"><span class="pre">add_mesh</span></code></a>(name,&nbsp;vertices,&nbsp;faces,&nbsp;**kwargs)</td>
 <td>Add a mesh to the scene.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#visbrain.Brain.volume_control" title="visbrain.Brain.volume_control"><code class="xref py py-obj docutils literal"><span class="pre">volume_control</span></code></a>([volume,&nbsp;rendering,&nbsp;cmap,&nbsp;…])</td>
-<td>Control the 3-D volume.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#visbrain.Brain.add_volume" title="visbrain.Brain.add_volume"><code class="xref py py-obj docutils literal"><span class="pre">add_volume</span></code></a>(name,&nbsp;vol[,&nbsp;transform,&nbsp;…])</td>
-<td>Add a new volume to the interface.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#visbrain.Brain.volume_list" title="visbrain.Brain.volume_list"><code class="xref py py-obj docutils literal"><span class="pre">volume_list</span></code></a>()</td>
-<td>Get the list of volumes available.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#visbrain.Brain.cross_sections_control" title="visbrain.Brain.cross_sections_control"><code class="xref py py-obj docutils literal"><span class="pre">cross_sections_control</span></code></a>([pos,&nbsp;center,&nbsp;…])</td>
-<td>Control the cross-section.</td>
-</tr>
 <tr class="row-even"><td><a class="reference internal" href="#visbrain.Brain.sources_control" title="visbrain.Brain.sources_control"><code class="xref py py-obj docutils literal"><span class="pre">sources_control</span></code></a>(name[,&nbsp;data,&nbsp;color,&nbsp;symbol,&nbsp;…])</td>
 <td>Set data to sources and control source’s properties.</td>
 </tr>
@@ -382,12 +370,6 @@ belong.</p>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#visbrain.Brain.connect_control" title="visbrain.Brain.connect_control"><code class="xref py py-obj docutils literal"><span class="pre">connect_control</span></code></a>(name[,&nbsp;color_by,&nbsp;dynamic,&nbsp;…])</td>
 <td>Update connectivity object.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#visbrain.Brain.roi_control" title="visbrain.Brain.roi_control"><code class="xref py py-obj docutils literal"><span class="pre">roi_control</span></code></a>([selection,&nbsp;roi_type,&nbsp;smooth,&nbsp;…])</td>
-<td>Select Region Of Interest (ROI) to plot.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#visbrain.Brain.roi_list" title="visbrain.Brain.roi_list"><code class="xref py py-obj docutils literal"><span class="pre">roi_list</span></code></a>([roi_type])</td>
-<td>Get the list of supported ROI.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#visbrain.Brain.cbar_control" title="visbrain.Brain.cbar_control"><code class="xref py py-obj docutils literal"><span class="pre">cbar_control</span></code></a>(name,&nbsp;**kwargs)</td>
 <td>Control the colorbar of a specific object.</td>
@@ -416,7 +398,7 @@ belong.</p>
 <h2>1.3.2.1. Show graphical interface<a class="headerlink" href="#show-graphical-interface" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="visbrain.Brain.show">
-<code class="descclassname">Brain.</code><code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/pyqt_module.py#L54-L85"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.show" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Brain.</code><code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/pyqt_module.py#L74-L107"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>Display the graphical user interface.</p>
 </dd></dl>
 
@@ -425,7 +407,7 @@ belong.</p>
 <h2>1.3.2.2. Rotation<a class="headerlink" href="#rotation" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="visbrain.Brain.rotate">
-<code class="descclassname">Brain.</code><code class="descname">rotate</code><span class="sig-paren">(</span><em>fixed='top'</em>, <em>custom=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L47-L78"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.rotate" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Brain.</code><code class="descname">rotate</code><span class="sig-paren">(</span><em>fixed='top'</em>, <em>custom=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L37-L68"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.rotate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Rotate the scene elements using a predefined or a custom rotation.</p>
 <p>The rotation is applied on every objects on the scene.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -473,7 +455,7 @@ respectively describing the (azimuth, elevation).</p>
 <h2>1.3.2.3. Background color<a class="headerlink" href="#background-color" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="visbrain.Brain.background_color">
-<code class="descclassname">Brain.</code><code class="descname">background_color</code><span class="sig-paren">(</span><em>color=(0.1</em>, <em>0.1</em>, <em>0.1)</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L80-L108"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.background_color" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Brain.</code><code class="descname">background_color</code><span class="sig-paren">(</span><em>color=(0.1</em>, <em>0.1</em>, <em>0.1)</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L70-L98"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.background_color" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the background color of the main canvas and the colorbar.</p>
 <p>The main canvas is defined as the canvas where all objects are
 displayed. The colorbar has it own canvas and the background set will
@@ -512,7 +494,7 @@ a matplotlib color (string) or a hexadecimal color (string).</p>
 <h2>1.3.2.4. Screenshot<a class="headerlink" href="#screenshot" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="visbrain.Brain.screenshot">
-<code class="descclassname">Brain.</code><code class="descname">screenshot</code><span class="sig-paren">(</span><em>saveas</em>, <em>canvas='main'</em>, <em>print_size=None</em>, <em>dpi=300.0</em>, <em>unit='centimeter'</em>, <em>factor=None</em>, <em>region=None</em>, <em>autocrop=False</em>, <em>bgcolor=None</em>, <em>transparent=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L110-L194"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.screenshot" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Brain.</code><code class="descname">screenshot</code><span class="sig-paren">(</span><em>saveas</em>, <em>canvas='main'</em>, <em>print_size=None</em>, <em>dpi=300.0</em>, <em>unit='centimeter'</em>, <em>factor=None</em>, <em>region=None</em>, <em>autocrop=False</em>, <em>bgcolor=None</em>, <em>transparent=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L100-L184"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.screenshot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Take a screeshot of the selected canvas.</p>
 <p>By default, the rendered canvas will have the size of your screen.
 The screenshot() method provides two ways to increase to exported image
@@ -606,7 +588,7 @@ background.</p>
 <h2>1.3.3.1. Load an existing configuration<a class="headerlink" href="#load-an-existing-configuration" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="visbrain.Brain.load_config">
-<code class="descclassname">Brain.</code><code class="descname">load_config</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L196-L204"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.load_config" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Brain.</code><code class="descname">load_config</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L186-L194"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.load_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load a configuration file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -627,7 +609,7 @@ background.</p>
 <h2>1.3.3.2. Save the current configuration<a class="headerlink" href="#save-the-current-configuration" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="visbrain.Brain.save_config">
-<code class="descclassname">Brain.</code><code class="descname">save_config</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L206-L214"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.save_config" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Brain.</code><code class="descname">save_config</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L196-L204"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.save_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save a configuration file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -652,7 +634,7 @@ background.</p>
 <h2>1.3.4.1. Control the brain<a class="headerlink" href="#control-the-brain" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="visbrain.Brain.brain_control">
-<code class="descclassname">Brain.</code><code class="descname">brain_control</code><span class="sig-paren">(</span><em>template=None</em>, <em>hemisphere=None</em>, <em>translucent=None</em>, <em>alpha=None</em>, <em>visible=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L221-L283"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.brain_control" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Brain.</code><code class="descname">brain_control</code><span class="sig-paren">(</span><em>template=None</em>, <em>hemisphere=None</em>, <em>translucent=None</em>, <em>alpha=None</em>, <em>visible=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L211-L273"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.brain_control" title="Permalink to this definition">¶</a></dt>
 <dd><p>Control the type of brain to use.</p>
 <p>Use this method to switch between several brain templates. Then, you
 can to display selected hemisphere (left or right).</p>
@@ -713,7 +695,7 @@ Otherwise use ‘both’.</p>
 <h2>1.3.4.2. List of available templates<a class="headerlink" href="#list-of-available-templates" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="visbrain.Brain.brain_list">
-<code class="descclassname">Brain.</code><code class="descname">brain_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L285-L299"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.brain_list" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Brain.</code><code class="descname">brain_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L275-L289"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.brain_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the list of available mesh brain templates.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -740,7 +722,7 @@ Otherwise use ‘both’.</p>
 <h2>1.3.4.3. Add mesh to the scene<a class="headerlink" href="#add-mesh-to-the-scene" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="visbrain.Brain.add_mesh">
-<code class="descclassname">Brain.</code><code class="descname">add_mesh</code><span class="sig-paren">(</span><em>name</em>, <em>vertices</em>, <em>faces</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L301-L321"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.add_mesh" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Brain.</code><code class="descname">add_mesh</code><span class="sig-paren">(</span><em>name</em>, <em>vertices</em>, <em>faces</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L291-L308"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.add_mesh" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a mesh to the scene.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -770,193 +752,14 @@ Otherwise use ‘both’.</p>
 
 </div>
 </div>
-<div class="section" id="volume-and-cross-sections">
-<span id="volcrossecapi"></span><h1>1.3.5. Volume and cross-sections<a class="headerlink" href="#volume-and-cross-sections" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="control-the-volume">
-<h2>1.3.5.1. Control the volume<a class="headerlink" href="#control-the-volume" title="Permalink to this headline">¶</a></h2>
-<dl class="method">
-<dt id="visbrain.Brain.volume_control">
-<code class="descclassname">Brain.</code><code class="descname">volume_control</code><span class="sig-paren">(</span><em>volume='Brodmann'</em>, <em>rendering='mip'</em>, <em>cmap='OpaqueGrays'</em>, <em>threshold=0.0</em>, <em>visible=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L444-L477"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.volume_control" title="Permalink to this definition">¶</a></dt>
-<dd><p>Control the 3-D volume.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>volume</strong> : string | ‘Brodmann’</p>
-<blockquote>
-<div><p>Name of the volume to use. See the volume_list() method to get the
-list of volumes available.</p>
-</div></blockquote>
-<p><strong>rendering</strong> : {‘mip’, ‘translucent’, ‘additive’, ‘iso’}</p>
-<blockquote>
-<div><p>description</p>
-</div></blockquote>
-<p><strong>cmap</strong> : {‘TransFire’, ‘OpaqueFire’, ‘TransGrays’, ‘OpaqueGrays’}</p>
-<blockquote>
-<div><p>Name of the colormap to use.</p>
-</div></blockquote>
-<p><strong>threshold</strong> : float | 0.</p>
-<blockquote>
-<div><p>Volume threshold for ‘iso’ rendering.</p>
-</div></blockquote>
-<p><strong>visible</strong> : bool | True</p>
-<blockquote class="last">
-<div><p>Display or hide the volume.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</div>
-<div class="section" id="add-volume">
-<h2>1.3.5.2. Add volume<a class="headerlink" href="#add-volume" title="Permalink to this headline">¶</a></h2>
-<dl class="method">
-<dt id="visbrain.Brain.add_volume">
-<code class="descclassname">Brain.</code><code class="descname">add_volume</code><span class="sig-paren">(</span><em>name</em>, <em>vol</em>, <em>transform=None</em>, <em>roi_values=None</em>, <em>roi_labels=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L323-L361"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.add_volume" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a new volume to the interface.</p>
-<p>When a new volume is added, it can be then used in the Cross-sections,
-Volume or ROI part if the roi_values and roi_labels are not None.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
-<blockquote>
-<div><p>Name of the cross-section object.</p>
-</div></blockquote>
-<p><strong>vol</strong> : array_like</p>
-<blockquote>
-<div><p>The 3-D volume array.</p>
-</div></blockquote>
-<p><strong>transform</strong> : VisPy.transform | None</p>
-<blockquote>
-<div><p>The transformation to add to this volume.</p>
-</div></blockquote>
-<p><strong>roi_labels</strong> : array_like | None</p>
-<blockquote>
-<div><p>Array of strings describing the name of each ROI.</p>
-</div></blockquote>
-<p><strong>roi_values</strong> : array_like | None</p>
-<blockquote class="last">
-<div><p>Array of values describing values of each ROI.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<dl class="last docutils">
-<dt><a class="reference internal" href="#visbrain.Brain.volume_list" title="visbrain.Brain.volume_list"><code class="xref py py-obj docutils literal"><span class="pre">volume_list</span></code></a></dt>
-<dd>Get the list of volumes available.</dd>
-</dl>
-</div>
-</dd></dl>
-
-</div>
-<div class="section" id="get-the-list-of-volumes">
-<h2>1.3.5.3. Get the list of volumes<a class="headerlink" href="#get-the-list-of-volumes" title="Permalink to this headline">¶</a></h2>
-<dl class="method">
-<dt id="visbrain.Brain.volume_list">
-<code class="descclassname">Brain.</code><code class="descname">volume_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L363-L371"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.volume_list" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the list of volumes available.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>volume_list</strong> : list</p>
-<blockquote class="last">
-<div><p>List of volumes availables.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</div>
-<div class="section" id="control-cross-sections">
-<h2>1.3.5.4. Control cross-sections<a class="headerlink" href="#control-cross-sections" title="Permalink to this headline">¶</a></h2>
-<dl class="method">
-<dt id="visbrain.Brain.cross_sections_control">
-<code class="descclassname">Brain.</code><code class="descname">cross_sections_control</code><span class="sig-paren">(</span><em>pos=(0.0</em>, <em>0.0</em>, <em>0.0)</em>, <em>center=None</em>, <em>volume='Brodmann'</em>, <em>split_view=True</em>, <em>transparent=True</em>, <em>cmap='gray'</em>, <em>show_text=True</em>, <em>visible=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L373-L442"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.cross_sections_control" title="Permalink to this definition">¶</a></dt>
-<dd><p>Control the cross-section.</p>
-<p>The three sections (sagittal, coronal and axial) can be defined in two
-ways :</p>
-<blockquote>
-<div><ul class="simple">
-<li>Using the _pos_ input for the use of real coordinates.</li>
-<li>Using the _center_ input to directly use slices.</li>
-</ul>
-</div></blockquote>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pos</strong> : array_like | (0., 0., 0.)</p>
-<blockquote>
-<div><p>The position of the center in the MNI system. This array of float
-positions is then converted into slices usng the inverse transform
-of the selected volume.</p>
-</div></blockquote>
-<p><strong>center</strong> : type | default</p>
-<blockquote>
-<div><p>Array of 3 integers corresponding respectively to the position of
-the sagittal, coronal and axial sections.</p>
-</div></blockquote>
-<p><strong>volume</strong> : string | ‘Brodmann’</p>
-<blockquote>
-<div><p>Name of the volume to use. See the volume_list() method to get the
-list of volumes available.</p>
-</div></blockquote>
-<p><strong>split_view</strong> : bool | True</p>
-<blockquote>
-<div><p>If True, the cross-section is splitted into three images. If False,
-the cross-section is directly displayed inside the brain.</p>
-</div></blockquote>
-<p><strong>transparent</strong> : bool | True</p>
-<blockquote>
-<div><p>Use transparent or opaque borders.</p>
-</div></blockquote>
-<p><strong>cmap</strong> : string | ‘gray’</p>
-<blockquote>
-<div><p>Name of the colormap to use.</p>
-</div></blockquote>
-<p><strong>show_text</strong> : bool | True</p>
-<blockquote>
-<div><p>Display or hide slice text.</p>
-</div></blockquote>
-<p><strong>visible</strong> : bool | True</p>
-<blockquote class="last">
-<div><p>Set the cross-sections visible.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<dl class="last docutils">
-<dt><a class="reference internal" href="#visbrain.Brain.add_volume" title="visbrain.Brain.add_volume"><code class="xref py py-obj docutils literal"><span class="pre">add_volume</span></code></a></dt>
-<dd>Add a new volume to the interface.</dd>
-<dt><a class="reference internal" href="#visbrain.Brain.volume_list" title="visbrain.Brain.volume_list"><code class="xref py py-obj docutils literal"><span class="pre">volume_list</span></code></a></dt>
-<dd>Get the list of volumes available.</dd>
-</dl>
-</div>
-</dd></dl>
-
-</div>
-</div>
 <div class="section" id="sources-methods">
-<span id="sourcesapi"></span><h1>1.3.6. Sources methods<a class="headerlink" href="#sources-methods" title="Permalink to this headline">¶</a></h1>
+<span id="sourcesapi"></span><h1>1.3.5. Sources methods<a class="headerlink" href="#sources-methods" title="Permalink to this headline">¶</a></h1>
 <p>Set of functions for an interactive control of sources object. Use the methods below to pass some data to sources, to control the transparency level, to run the cortical projection / repartition…</p>
 <div class="section" id="control-sources">
-<h2>1.3.6.1. Control sources<a class="headerlink" href="#control-sources" title="Permalink to this headline">¶</a></h2>
+<h2>1.3.5.1. Control sources<a class="headerlink" href="#control-sources" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="visbrain.Brain.sources_control">
-<code class="descclassname">Brain.</code><code class="descname">sources_control</code><span class="sig-paren">(</span><em>name</em>, <em>data=None</em>, <em>color=None</em>, <em>symbol=None</em>, <em>radius_min=None</em>, <em>radius_max=None</em>, <em>edge_color=None</em>, <em>edge_width=None</em>, <em>alpha=None</em>, <em>mask=None</em>, <em>mask_color=None</em>, <em>visible=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L484-L508"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.sources_control" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Brain.</code><code class="descname">sources_control</code><span class="sig-paren">(</span><em>name</em>, <em>data=None</em>, <em>color=None</em>, <em>symbol=None</em>, <em>radius_min=None</em>, <em>radius_max=None</em>, <em>edge_color=None</em>, <em>edge_width=None</em>, <em>alpha=None</em>, <em>mask=None</em>, <em>mask_color=None</em>, <em>visible=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L315-L339"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.sources_control" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set data to sources and control source’s properties.</p>
 <p>See the definition of SourceObj for the description of input
 parameters.</p>
@@ -971,10 +774,10 @@ parameters.</p>
 
 </div>
 <div class="section" id="select-sources">
-<h2>1.3.6.2. Select sources<a class="headerlink" href="#select-sources" title="Permalink to this headline">¶</a></h2>
+<h2>1.3.5.2. Select sources<a class="headerlink" href="#select-sources" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="visbrain.Brain.sources_display">
-<code class="descclassname">Brain.</code><code class="descname">sources_display</code><span class="sig-paren">(</span><em>name=None</em>, <em>select='all'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L510-L534"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.sources_display" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Brain.</code><code class="descname">sources_display</code><span class="sig-paren">(</span><em>name=None</em>, <em>select='all'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L341-L365"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.sources_display" title="Permalink to this definition">¶</a></dt>
 <dd><p>Select sources to display.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1005,10 +808,10 @@ applied to all sources.</p>
 
 </div>
 <div class="section" id="fit-to-an-object">
-<h2>1.3.6.3. Fit to an object<a class="headerlink" href="#fit-to-an-object" title="Permalink to this headline">¶</a></h2>
+<h2>1.3.5.3. Fit to an object<a class="headerlink" href="#fit-to-an-object" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="visbrain.Brain.sources_fit_to_vertices">
-<code class="descclassname">Brain.</code><code class="descname">sources_fit_to_vertices</code><span class="sig-paren">(</span><em>name=None</em>, <em>fit_to='brain'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L601-L613"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.sources_fit_to_vertices" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Brain.</code><code class="descname">sources_fit_to_vertices</code><span class="sig-paren">(</span><em>name=None</em>, <em>fit_to='brain'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L433-L445"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.sources_fit_to_vertices" title="Permalink to this definition">¶</a></dt>
 <dd><p>Force sources coordinates to fit to a selected object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1030,10 +833,10 @@ applied to all sources.</p>
 
 </div>
 <div class="section" id="convert-into-convex-hull">
-<h2>1.3.6.4. Convert into convex hull<a class="headerlink" href="#convert-into-convex-hull" title="Permalink to this headline">¶</a></h2>
+<h2>1.3.5.4. Convert into convex hull<a class="headerlink" href="#convert-into-convex-hull" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="visbrain.Brain.sources_to_convex_hull">
-<code class="descclassname">Brain.</code><code class="descname">sources_to_convex_hull</code><span class="sig-paren">(</span><em>xyz</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L615-L632"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.sources_to_convex_hull" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Brain.</code><code class="descname">sources_to_convex_hull</code><span class="sig-paren">(</span><em>xyz</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L447-L464"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.sources_to_convex_hull" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert a set of sources into a convex hull.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1064,10 +867,10 @@ applied to all sources.</p>
 
 </div>
 <div class="section" id="cortical-projection">
-<span id="cortproj"></span><h2>1.3.6.5. Cortical projection<a class="headerlink" href="#cortical-projection" title="Permalink to this headline">¶</a></h2>
+<span id="cortproj"></span><h2>1.3.5.5. Cortical projection<a class="headerlink" href="#cortical-projection" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="visbrain.Brain.cortical_projection">
-<code class="descclassname">Brain.</code><code class="descname">cortical_projection</code><span class="sig-paren">(</span><em>radius=10.0</em>, <em>project_on='brain'</em>, <em>contribute=False</em>, <em>mask_color='orange'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L536-L571"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.cortical_projection" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Brain.</code><code class="descname">cortical_projection</code><span class="sig-paren">(</span><em>radius=10.0</em>, <em>project_on='brain'</em>, <em>contribute=False</em>, <em>mask_color='orange'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L380-L409"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.cortical_projection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Project sources activity.</p>
 <p>This method can be used to project the sources activity either onto the
 brain or on region of interest.</p>
@@ -1079,9 +882,9 @@ brain or on region of interest.</p>
 <blockquote>
 <div><p>Projection radius.</p>
 </div></blockquote>
-<p><strong>project_on</strong> : string | ‘brain’</p>
+<p><strong>project_on</strong> : {‘brain’, ‘roi’}</p>
 <blockquote>
-<div><p>Define on which object to project the sources activity. Chose
+<div><p>Define on which object to project the sources activity. Choose
 either ‘brain’ for projecting the sources activity onto the
 brain or ‘roi’ to project on region of interest (if defined).</p>
 </div></blockquote>
@@ -1106,7 +909,7 @@ brain or ‘roi’ to project on region of interest (if defined).</p>
 <dl class="last docutils">
 <dt><a class="reference internal" href="#visbrain.Brain.cortical_repartition" title="visbrain.Brain.cortical_repartition"><code class="xref py py-obj docutils literal"><span class="pre">cortical_repartition</span></code></a></dt>
 <dd>project number of contributing sources.</dd>
-<dt><a class="reference internal" href="#visbrain.Brain.roi_control" title="visbrain.Brain.roi_control"><code class="xref py py-obj docutils literal"><span class="pre">roi_control</span></code></a></dt>
+<dt><code class="xref py py-obj docutils literal"><span class="pre">roi_control</span></code></dt>
 <dd>add a region of interest.</dd>
 <dt><code class="xref py py-obj docutils literal"><span class="pre">sources_colormap</span></code></dt>
 <dd>Change the colormap properties.</dd>
@@ -1116,10 +919,10 @@ brain or ‘roi’ to project on region of interest (if defined).</p>
 
 </div>
 <div class="section" id="cortical-repartition">
-<span id="cortrepart"></span><h2>1.3.6.6. Cortical repartition<a class="headerlink" href="#cortical-repartition" title="Permalink to this headline">¶</a></h2>
+<span id="cortrepart"></span><h2>1.3.5.6. Cortical repartition<a class="headerlink" href="#cortical-repartition" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="visbrain.Brain.cortical_repartition">
-<code class="descclassname">Brain.</code><code class="descname">cortical_repartition</code><span class="sig-paren">(</span><em>radius=10.0</em>, <em>project_on='brain'</em>, <em>contribute=False</em>, <em>mask_color='orange'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L573-L599"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.cortical_repartition" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Brain.</code><code class="descname">cortical_repartition</code><span class="sig-paren">(</span><em>radius=10.0</em>, <em>project_on='brain'</em>, <em>contribute=False</em>, <em>mask_color='orange'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L411-L431"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.cortical_repartition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Project the number of contributing sources per vertex.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1129,7 +932,7 @@ brain or ‘roi’ to project on region of interest (if defined).</p>
 <blockquote>
 <div><p>Projection radius.</p>
 </div></blockquote>
-<p><strong>project_on</strong> : string | ‘brain’</p>
+<p><strong>project_on</strong> : {‘brain’, ‘roi’}</p>
 <blockquote>
 <div><p>Define on which object to project the sources activity. Chose
 either ‘brain’ for projecting the sources activity onto the
@@ -1156,12 +959,12 @@ brain or ‘roi’ to project on region of interest (if defined).</p>
 </div>
 </div>
 <div class="section" id="time-series-methods">
-<span id="timeseriesapi"></span><h1>1.3.7. Time-series methods<a class="headerlink" href="#time-series-methods" title="Permalink to this headline">¶</a></h1>
+<span id="timeseriesapi"></span><h1>1.3.6. Time-series methods<a class="headerlink" href="#time-series-methods" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="time-series-control">
-<h2>1.3.7.1. Time-series control<a class="headerlink" href="#time-series-control" title="Permalink to this headline">¶</a></h2>
+<h2>1.3.6.1. Time-series control<a class="headerlink" href="#time-series-control" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="visbrain.Brain.time_series_control">
-<code class="descclassname">Brain.</code><code class="descname">time_series_control</code><span class="sig-paren">(</span><em>name</em>, <em>color=None</em>, <em>line_width=None</em>, <em>amplitude=None</em>, <em>width=None</em>, <em>translate=None</em>, <em>visible=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L639-L665"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.time_series_control" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Brain.</code><code class="descname">time_series_control</code><span class="sig-paren">(</span><em>name</em>, <em>color=None</em>, <em>line_width=None</em>, <em>amplitude=None</em>, <em>width=None</em>, <em>translate=None</em>, <em>visible=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L471-L497"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.time_series_control" title="Permalink to this definition">¶</a></dt>
 <dd><p>Control time-series settings.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1200,12 +1003,12 @@ brain or ‘roi’ to project on region of interest (if defined).</p>
 </div>
 </div>
 <div class="section" id="pictures-methods">
-<span id="picturesapi"></span><h1>1.3.8. Pictures methods<a class="headerlink" href="#pictures-methods" title="Permalink to this headline">¶</a></h1>
+<span id="picturesapi"></span><h1>1.3.7. Pictures methods<a class="headerlink" href="#pictures-methods" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="pictures-control">
-<h2>1.3.8.1. Pictures control<a class="headerlink" href="#pictures-control" title="Permalink to this headline">¶</a></h2>
+<h2>1.3.7.1. Pictures control<a class="headerlink" href="#pictures-control" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="visbrain.Brain.pictures_control">
-<code class="descclassname">Brain.</code><code class="descname">pictures_control</code><span class="sig-paren">(</span><em>name</em>, <em>width=None</em>, <em>height=None</em>, <em>translate=None</em>, <em>visible=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L672-L693"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.pictures_control" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Brain.</code><code class="descname">pictures_control</code><span class="sig-paren">(</span><em>name</em>, <em>width=None</em>, <em>height=None</em>, <em>translate=None</em>, <em>visible=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L504-L525"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.pictures_control" title="Permalink to this definition">¶</a></dt>
 <dd><p>Control pictures settings.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1237,13 +1040,13 @@ vmin, under, vmax, over).</p>
 </div>
 </div>
 <div class="section" id="connectivity-methods">
-<span id="connectapi"></span><h1>1.3.9. Connectivity methods<a class="headerlink" href="#connectivity-methods" title="Permalink to this headline">¶</a></h1>
+<span id="connectapi"></span><h1>1.3.8. Connectivity methods<a class="headerlink" href="#connectivity-methods" title="Permalink to this headline">¶</a></h1>
 <p>Set of functions for an interactive control of connectivity object. Use the methods below to pass some data to connectivity, to control the transparency level…</p>
 <div class="section" id="control-connectivity">
-<h2>1.3.9.1. Control Connectivity<a class="headerlink" href="#control-connectivity" title="Permalink to this headline">¶</a></h2>
+<h2>1.3.8.1. Control Connectivity<a class="headerlink" href="#control-connectivity" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="visbrain.Brain.connect_control">
-<code class="descclassname">Brain.</code><code class="descname">connect_control</code><span class="sig-paren">(</span><em>name</em>, <em>color_by=None</em>, <em>dynamic=None</em>, <em>alpha=None</em>, <em>line_width=None</em>, <em>visible=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L700-L733"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.connect_control" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Brain.</code><code class="descname">connect_control</code><span class="sig-paren">(</span><em>name</em>, <em>color_by=None</em>, <em>dynamic=None</em>, <em>alpha=None</em>, <em>line_width=None</em>, <em>visible=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L532-L565"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.connect_control" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update connectivity object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1290,88 +1093,13 @@ vmin, under, vmax, over).</p>
 
 </div>
 </div>
-<div class="section" id="region-of-interest-roi-methods">
-<span id="roiapi"></span><h1>1.3.10. Region Of Interest (ROI) methods<a class="headerlink" href="#region-of-interest-roi-methods" title="Permalink to this headline">¶</a></h1>
-<p>Set of functions for an interactive control of ROI (Region of interest) objects. Use methods below to select the ROI to display, to control the transparency level…</p>
-<div class="section" id="roi-control">
-<h2>1.3.10.1. ROI control<a class="headerlink" href="#roi-control" title="Permalink to this headline">¶</a></h2>
-<dl class="method">
-<dt id="visbrain.Brain.roi_control">
-<code class="descclassname">Brain.</code><code class="descname">roi_control</code><span class="sig-paren">(</span><em>selection=[]</em>, <em>roi_type='Brodmann'</em>, <em>smooth=3</em>, <em>name='roi'</em>, <em>translucent=False</em>, <em>alpha=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L740-L781"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.roi_control" title="Permalink to this definition">¶</a></dt>
-<dd><p>Select Region Of Interest (ROI) to plot.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>selection</strong> : list | []</p>
-<blockquote>
-<div><p>List of integers where each one refer to a particular roi. The
-corresponding list can be found in the graphical interface in
-the ROI tab or using the function roi_list.</p>
-</div></blockquote>
-<p><strong>roi_type</strong> : {‘Brodmann’, ‘AAL’, ‘Talairach’}</p>
-<blockquote>
-<div><p>Select the sub-division method i.e ‘Brodmann’ (for brodmann areas)
-or ‘AAL’ (Anatomical Automatic Labeling) or ‘Talairach’.</p>
-</div></blockquote>
-<p><strong>smoth</strong> : int | 3</p>
-<blockquote>
-<div><p>Define smooth proportion.</p>
-</div></blockquote>
-<p><strong>name</strong> : string | ‘roi’</p>
-<blockquote class="last">
-<div><p>Name of the displayed ROI.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<dl class="last docutils">
-<dt><a class="reference internal" href="#visbrain.Brain.roi_list" title="visbrain.Brain.roi_list"><code class="xref py py-obj docutils literal"><span class="pre">roi_list</span></code></a></dt>
-<dd>display the list of supported areas.</dd>
-</dl>
-</div>
-</dd></dl>
-
-</div>
-<div class="section" id="list-of-suported-roi">
-<h2>1.3.10.2. List of suported ROI<a class="headerlink" href="#list-of-suported-roi" title="Permalink to this headline">¶</a></h2>
-<dl class="method">
-<dt id="visbrain.Brain.roi_list">
-<code class="descclassname">Brain.</code><code class="descname">roi_list</code><span class="sig-paren">(</span><em>roi_type='Brodmann'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L783-L797"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.roi_list" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the list of supported ROI.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>roi_type</strong> : str | ‘Brodmann’</p>
-<blockquote>
-<div><p>Select the sub-division method i.e ‘Brodmann’ (for brodmann areas)
-or ‘AAL’ (Anatomical Automatic Labeling)</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>roi_labels</strong> : array_like</p>
-<blockquote class="last">
-<div><p>The currently supported ROI’s labels.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</div>
-</div>
 <div class="section" id="colorbar-methods">
-<span id="cbarapi"></span><h1>1.3.11. Colorbar methods<a class="headerlink" href="#colorbar-methods" title="Permalink to this headline">¶</a></h1>
+<span id="cbarapi"></span><h1>1.3.9. Colorbar methods<a class="headerlink" href="#colorbar-methods" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="colorbar-control">
-<h2>1.3.11.1. Colorbar control<a class="headerlink" href="#colorbar-control" title="Permalink to this headline">¶</a></h2>
+<h2>1.3.9.1. Colorbar control<a class="headerlink" href="#colorbar-control" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="visbrain.Brain.cbar_control">
-<code class="descclassname">Brain.</code><code class="descname">cbar_control</code><span class="sig-paren">(</span><em>name</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L822-L885"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.cbar_control" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Brain.</code><code class="descname">cbar_control</code><span class="sig-paren">(</span><em>name</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L590-L649"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.cbar_control" title="Permalink to this definition">¶</a></dt>
 <dd><p>Control the colorbar of a specific object.</p>
 <p>Optional parameters let to None are going to be ignored.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1393,18 +1121,10 @@ either the cortical projection, use ‘Projection’. And
 <div><p>Colorbar limit. Every values under / over clim will
 clip.</p>
 </div></blockquote>
-<p><strong>isvmin</strong> : bool | None</p>
-<blockquote>
-<div><p>Activate/deactivate vmin.</p>
-</div></blockquote>
 <p><strong>vmin</strong> : float | None</p>
 <blockquote>
 <div><p>Every values under vmin will have the color defined
 using the under parameter.</p>
-</div></blockquote>
-<p><strong>isvmax</strong> : bool | None</p>
-<blockquote>
-<div><p>Activate/deactivate vmax.</p>
 </div></blockquote>
 <p><strong>vmax</strong> : float | None</p>
 <blockquote>
@@ -1471,10 +1191,10 @@ using the over parameter.</p>
 
 </div>
 <div class="section" id="select-a-colorbar">
-<h2>1.3.11.2. Select a colorbar<a class="headerlink" href="#select-a-colorbar" title="Permalink to this headline">¶</a></h2>
+<h2>1.3.9.2. Select a colorbar<a class="headerlink" href="#select-a-colorbar" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="visbrain.Brain.cbar_select">
-<code class="descclassname">Brain.</code><code class="descname">cbar_select</code><span class="sig-paren">(</span><em>name</em>, <em>visible=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L887-L905"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.cbar_select" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Brain.</code><code class="descname">cbar_select</code><span class="sig-paren">(</span><em>name</em>, <em>visible=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L651-L669"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.cbar_select" title="Permalink to this definition">¶</a></dt>
 <dd><p>Select and display a colorbar.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1498,10 +1218,10 @@ either the cortical projection, use ‘Projection’. And
 
 </div>
 <div class="section" id="list-of-available-colorbars">
-<h2>1.3.11.3. List of available colorbars<a class="headerlink" href="#list-of-available-colorbars" title="Permalink to this headline">¶</a></h2>
+<h2>1.3.9.3. List of available colorbars<a class="headerlink" href="#list-of-available-colorbars" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="visbrain.Brain.cbar_list">
-<code class="descclassname">Brain.</code><code class="descname">cbar_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L907-L918"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.cbar_list" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Brain.</code><code class="descname">cbar_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L671-L682"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.cbar_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the list of objects for which the colorbar can be controlled.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1519,10 +1239,10 @@ either the cortical projection, use ‘Projection’. And
 
 </div>
 <div class="section" id="export-colorbar">
-<h2>1.3.11.4. Export colorbar<a class="headerlink" href="#export-colorbar" title="Permalink to this headline">¶</a></h2>
+<h2>1.3.9.4. Export colorbar<a class="headerlink" href="#export-colorbar" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="visbrain.Brain.cbar_export">
-<code class="descclassname">Brain.</code><code class="descname">cbar_export</code><span class="sig-paren">(</span><em>filename=None</em>, <em>export_only=None</em>, <em>get_dict=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L935-L963"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.cbar_export" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Brain.</code><code class="descname">cbar_export</code><span class="sig-paren">(</span><em>filename=None</em>, <em>export_only=None</em>, <em>get_dict=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L699-L727"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.cbar_export" title="Permalink to this definition">¶</a></dt>
 <dd><p>Export colorbars in a text file or in a dictionary.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1555,10 +1275,10 @@ going to be saved.</p>
 
 </div>
 <div class="section" id="auto-scaling">
-<h2>1.3.11.5. Auto-scaling<a class="headerlink" href="#auto-scaling" title="Permalink to this headline">¶</a></h2>
+<h2>1.3.9.5. Auto-scaling<a class="headerlink" href="#auto-scaling" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="visbrain.Brain.cbar_autoscale">
-<code class="descclassname">Brain.</code><code class="descname">cbar_autoscale</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L920-L933"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.cbar_autoscale" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Brain.</code><code class="descname">cbar_autoscale</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/brain/user.py#L684-L697"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Brain.cbar_autoscale" title="Permalink to this definition">¶</a></dt>
 <dd><p>Autoscale the colorbar to the best limits.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1623,7 +1343,7 @@ either the cortical projection, use ‘Projection’. And
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.3.7',
+            VERSION:'0.3.8',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

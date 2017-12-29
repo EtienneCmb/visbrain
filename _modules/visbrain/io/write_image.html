@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>visbrain.io.write_image &mdash; visbrain 0.3.7 documentation</title>
+  <title>visbrain.io.write_image &mdash; visbrain 0.3.8 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="visbrain 0.3.7 documentation" href="../../../index.html"/>
+    <link rel="top" title="visbrain 0.3.8 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.7
+                0.3.8
               </div>
             
           
@@ -174,11 +174,10 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">..utils.color</span> <span class="k">import</span> <span class="n">color2vb</span>
 
-
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;write_fig_hyp&#39;</span><span class="p">,</span> <span class="s1">&#39;write_fig_canvas&#39;</span><span class="p">,</span> <span class="s1">&#39;write_fig_pyqt&#39;</span><span class="p">)</span>
-
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;write_fig_hyp&#39;</span><span class="p">,</span> <span class="s1">&#39;write_fig_spindles&#39;</span><span class="p">,</span> <span class="s1">&#39;write_fig_canvas&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;write_fig_pyqt&#39;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="write_fig_hyp"><a class="viewcode-back" href="../../../io.html#visbrain.io.write_image.write_fig_hyp">[docs]</a><span class="k">def</span> <span class="nf">write_fig_hyp</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">hypno</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="n">tstartsec</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ascolor</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                   <span class="n">dpi</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;#8bbf56&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span> <span class="s1">&#39;#56bf8b&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;#aabcce&#39;</span><span class="p">,</span>
@@ -188,7 +187,7 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    file : str</span>
-<span class="sd">        Filename (with full path) to sleep dataset.</span>
+<span class="sd">        Output filename (with full path)</span>
 <span class="sd">    hypno : array_like</span>
 <span class="sd">        Hypnogram vector</span>
 <span class="sd">    sf : float</span>
@@ -305,6 +304,116 @@
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Image successfully saved (</span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="n">file</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
+
+<span class="k">def</span> <span class="nf">write_fig_spindles</span><span class="p">(</span><span class="n">elec</span><span class="p">,</span> <span class="n">hypno</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="n">start_s</span><span class="p">,</span> <span class="n">window_s</span><span class="p">,</span> <span class="n">thr</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span>
+                        <span class="n">nrem_only</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Show steps of the spindles detection for a specific time window</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    elec : array_like</span>
+<span class="sd">        Data vector</span>
+<span class="sd">    hypno : array_like</span>
+<span class="sd">        Hypnogram vector</span>
+<span class="sd">    sf : float</span>
+<span class="sd">        The sampling frequency of displayed elements (could be the</span>
+<span class="sd">        down-sampling frequency)</span>
+<span class="sd">    start_s : float</span>
+<span class="sd">        Starting point in sec of the window to plot</span>
+<span class="sd">    window_s : float</span>
+<span class="sd">        Window duration in seconds</span>
+<span class="sd">    thresh : float | 3</span>
+<span class="sd">        Hard threshold for the spindles detection</span>
+<span class="sd">    dpi : int | 300</span>
+<span class="sd">        Dots per inches</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+    <span class="kn">from</span> <span class="nn">..utils.sleep</span> <span class="k">import</span> <span class="n">spindlesdetect</span>
+    <span class="kn">from</span> <span class="nn">..utils.filtering</span> <span class="k">import</span> <span class="n">filt</span>
+
+    <span class="c1"># Run spindles detection on the selected channel</span>
+    <span class="n">idx_spindles</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">dur</span><span class="p">,</span> <span class="n">pwr</span><span class="p">,</span> <span class="n">idx_start</span><span class="p">,</span> <span class="n">idx_stop</span><span class="p">,</span> <span class="n">hard_thr</span><span class="p">,</span> <span class="n">soft_thr</span><span class="p">,</span> \
+    <span class="n">idx_sigma</span><span class="p">,</span> <span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="n">sigma_nfpow</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">sigma_thr</span> <span class="o">=</span> <span class="n">spindlesdetect</span><span class="p">(</span>
+    <span class="n">elec</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="n">thr</span><span class="p">,</span> <span class="n">hypno</span><span class="p">,</span> <span class="n">nrem_only</span><span class="p">,</span> <span class="n">return_full</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Define plotting range</span>
+    <span class="n">start_sf</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">start_s</span> <span class="o">*</span> <span class="n">sf</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_sf</span><span class="p">,</span> <span class="n">start_sf</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">window_s</span> <span class="o">*</span> <span class="n">sf</span><span class="p">))</span>
+
+    <span class="c1"># Bandpass filter of the window</span>
+    <span class="n">elec_filt</span> <span class="o">=</span> <span class="n">filt</span><span class="p">(</span><span class="n">sf</span><span class="p">,</span> <span class="p">[</span><span class="mf">12.</span><span class="p">,</span> <span class="mf">14.</span><span class="p">],</span> <span class="n">elec</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">order</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+    <span class="c1"># Find beginning and end of spindle within the window</span>
+    <span class="n">idx_start_win</span> <span class="o">=</span> <span class="n">idx_start</span><span class="p">[(</span><span class="n">idx_start</span> <span class="o">&gt;=</span> <span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">idx_start</span> <span class="o">&lt;=</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">))]</span>
+    <span class="n">idx_stop_win</span> <span class="o">=</span> <span class="n">idx_stop</span><span class="p">[(</span><span class="n">idx_stop</span> <span class="o">&gt;=</span> <span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">idx_stop</span> <span class="o">&lt;=</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">))]</span>
+    <span class="n">sp_in_win</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">idx_start</span><span class="p">,</span> <span class="n">idx_start_win</span><span class="p">)</span>
+    <span class="n">sp_power</span> <span class="o">=</span> <span class="n">pwr</span><span class="p">[</span><span class="n">sp_in_win</span><span class="p">]</span>
+    <span class="n">sp_duration</span> <span class="o">=</span> <span class="n">dur</span><span class="p">[</span><span class="n">sp_in_win</span><span class="p">]</span>
+
+    <span class="c1"># Find indices of spindles within the window</span>
+    <span class="n">idx_spindles_win</span> <span class="o">=</span> <span class="n">idx_spindles</span><span class="p">[(</span><span class="n">idx_spindles</span> <span class="o">&gt;=</span> <span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">idx_spindles</span> <span class="o">&lt;=</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">))]</span>
+
+    <span class="c1"># Find indices of sigma power &gt; supra-threshold within window</span>
+    <span class="n">idx_sigma_win</span> <span class="o">=</span> <span class="n">idx_sigma</span><span class="p">[(</span><span class="n">idx_sigma</span> <span class="o">&gt;</span> <span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">idx_sigma</span> <span class="o">&lt;</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">))]</span>
+    <span class="c1"># Find indices of wavelet amplitude &gt; supra-threshold within window</span>
+    <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">):</span>
+        <span class="n">idx_hard</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">amplitude</span> <span class="o">&gt;</span> <span class="n">hard_thr</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">idx_hard_win</span> <span class="o">=</span> <span class="n">idx_hard</span><span class="p">[(</span><span class="n">idx_hard</span> <span class="o">&gt;</span> <span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">idx_hard</span> <span class="o">&lt;</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">))]</span>
+
+    <span class="c1"># Initialize Y vector</span>
+    <span class="n">y_sigma</span><span class="p">,</span> <span class="n">y_spindles</span><span class="p">,</span> <span class="n">y_wlt</span><span class="p">,</span> <span class="n">y_hard</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> \
+                                            <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="n">y_sigma</span><span class="p">[:],</span> <span class="n">y_spindles</span><span class="p">[:],</span> <span class="n">y_wlt</span><span class="p">[:],</span> <span class="n">y_hard</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> \
+                                                                        <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="c1"># Fill Y vector</span>
+    <span class="n">y_sigma</span><span class="p">[</span><span class="n">idx_sigma_win</span> <span class="o">-</span> <span class="n">start_sf</span><span class="p">]</span> <span class="o">=</span> <span class="n">sigma_nfpow</span><span class="p">[</span><span class="n">idx_sigma_win</span><span class="p">]</span>
+    <span class="n">y_spindles</span><span class="p">[</span><span class="n">idx_spindles_win</span> <span class="o">-</span> <span class="n">start_sf</span><span class="p">]</span> <span class="o">=</span> <span class="n">elec</span><span class="p">[</span><span class="n">idx_spindles_win</span><span class="p">]</span>
+    <span class="n">y_wlt</span><span class="p">[</span><span class="n">idx_spindles_win</span> <span class="o">-</span> <span class="n">start_sf</span><span class="p">]</span> <span class="o">=</span> <span class="n">amplitude</span><span class="p">[</span><span class="n">idx_spindles_win</span><span class="p">]</span>
+    <span class="n">y_hard</span><span class="p">[</span><span class="n">idx_hard_win</span> <span class="o">-</span> <span class="n">start_sf</span><span class="p">]</span> <span class="o">=</span> <span class="n">amplitude</span><span class="p">[</span><span class="n">idx_hard_win</span><span class="p">]</span>
+
+    <span class="c1"># Start plot</span>
+    <span class="n">f</span><span class="p">,</span> <span class="n">axarr</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">hspace</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+
+    <span class="c1"># Plot original signal</span>
+    <span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">elec</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="s1">&#39;darkslategrey&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+    <span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y_spindles</span><span class="p">,</span> <span class="s1">&#39;brown&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+    <span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Original signal (&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">window_s</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; sec)&#39;</span><span class="p">)</span>
+    <span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">)])</span>
+
+    <span class="k">if</span> <span class="n">sp_power</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;power = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">sp_power</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">+</span> \
+                <span class="s1">&#39; - duration = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sp_duration</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; ms&#39;</span>
+        <span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="n">elec</span><span class="p">[</span><span class="n">x</span><span class="p">])),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span>
+                          <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Plot filtered signal</span>
+    <span class="n">axarr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">elec_filt</span><span class="p">,</span> <span class="s1">&#39;darkslategrey&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+    <span class="n">axarr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Filtered&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Plot wavelet envelope</span>
+    <span class="n">axarr</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="s1">&#39;darkslategrey&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">axarr</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y_wlt</span><span class="p">,</span> <span class="s1">&#39;coral&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="c1"># axarr[2].plot(x, y_hard, &#39;indianred&#39;, lw=3)</span>
+    <span class="n">axarr</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">idx_start_win</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">[</span><span class="n">idx_start_win</span><span class="p">],</span> <span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;coral&#39;</span><span class="p">)</span>
+    <span class="n">axarr</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">idx_stop_win</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">[</span><span class="n">idx_stop_win</span><span class="p">],</span> <span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;coral&#39;</span><span class="p">)</span>
+    <span class="n">axarr</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Wavelet&#39;</span><span class="p">)</span>
+    <span class="n">axarr</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">hard_thr</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+    <span class="n">axarr</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">soft_thr</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+
+    <span class="c1"># Plot sigma normalized power</span>
+    <span class="n">axarr</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sigma_nfpow</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="s1">&#39;darkslategrey&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">axarr</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Sigma power&#39;</span><span class="p">)</span>
+    <span class="n">axarr</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y_sigma</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightcoral&#39;</span><span class="p">)</span>
+    <span class="n">axarr</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">sigma_thr</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+
+    <span class="c1"># Despine</span>
+    <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+        <span class="n">axarr</span><span class="p">[</span><span class="n">ax</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 <div class="viewcode-block" id="write_fig_canvas"><a class="viewcode-back" href="../../../io.html#visbrain.io.write_image.write_fig_canvas">[docs]</a><span class="k">def</span> <span class="nf">write_fig_canvas</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">canvas</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">autocrop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                      <span class="n">region</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">print_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;centimeter&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mf">300.</span><span class="p">,</span>
@@ -509,7 +618,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.3.7',
+            VERSION:'0.3.8',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

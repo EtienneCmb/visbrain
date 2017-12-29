@@ -26,14 +26,12 @@ which is defined as the number of contributing sources per vertex.
 
     kwargs = {}
 
-    """
-    Load the xyz coordinates and corresponding subject name
+    """Load the xyz coordinates and corresponding subject name
     """
     mat = np.load(download_file('xyz_sample.npz'))
     xyz, subjects = mat['xyz'], mat['subjects']
 
-    """
-    The "subjects" list is composed of 6 diffrents subjects and here we set one
+    """The "subjects" list is composed of 6 diffrents subjects and here we set one
     unique color (u_color) per subject.
     """
     u_color = ["#9b59b6", "#3498db", "white", "#e74c3c", "#34495e", "#2ecc71"]
@@ -45,9 +43,9 @@ which is defined as the number of contributing sources per vertex.
     """
     kwargs['data'] = np.arange(len(subjects))
 
-    """
-    The source's radius is proportional to the data attached. But this proportion
-    can be controlled using a minimum and maximum radius (s_radiusmin, s_radiusmax)
+    """The source's radius is proportional to the data attached. But this
+    proportion can be controlled using a minimum and maximum radius
+    (s_radiusmin, s_radiusmax)
     """
     kwargs['radius_min'] = 2               # Minimum radius
     kwargs['radius_max'] = 15              # Maximum radius
@@ -63,8 +61,7 @@ which is defined as the number of contributing sources per vertex.
     kwargs['mask'] = mask
     kwargs['mask_color'] = 'gray'
 
-    """
-    It's also possible to add text to each source. Here, we show the name of the
+    """It's also possible to add text to each source. Here, we show the name of the
     subject in yellow.
     To avoid a superposition between the text and sources sphere, we introduce an
     offset to the text using the s_textshift input

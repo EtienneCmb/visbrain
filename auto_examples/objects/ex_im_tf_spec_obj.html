@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Image, time-frequency map and spectrogram objects &mdash; visbrain 0.3.7 documentation</title>
+  <title>Image, time-frequency map and spectrogram objects &mdash; visbrain 0.3.8 documentation</title>
   
 
   
@@ -39,10 +39,10 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.3.7 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.8 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
         <link rel="next" title="Region Of Interest (ROI) object" href="ex_roi_object.html"/>
-        <link rel="prev" title="Connectivity object" href="ex_connectivity_obj.html"/> 
+        <link rel="prev" title="Cross-section object" href="ex_cross_section_obj.html"/> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.7
+                0.3.8
               </div>
             
           
@@ -108,9 +108,11 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#objects-examples">Objects examples</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="ex_brain_obj.html">Brain object</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ex_connectivity_obj.html">Connectivity object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ex_cross_section_obj.html">Cross-section object</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Image, time-frequency map and spectrogram objects</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ex_roi_object.html">Region Of Interest (ROI) object</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ex_source_obj.html">Source object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ex_volume_obj.html">Volume object</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#pysurfer-examples">Pysurfer Examples</a></li>
@@ -191,10 +193,10 @@
 <img alt="../../_images/ex_imtfspec_obj.png" src="../../_images/ex_imtfspec_obj.png" />
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <span class="p">(</span><a href="../../objects.html#visbrain.objects.ImageObj" title="View documentation for visbrain.objects.ImageObj"><span class="n">ImageObj</span></a><span class="p">,</span> <a href="../../objects.html#visbrain.objects.TimeFrequencyMapObj" title="View documentation for visbrain.objects.TimeFrequencyMapObj"><span class="n">TimeFrequencyMapObj</span></a><span class="p">,</span> <a href="../../objects.html#visbrain.objects.SpectrogramObj" title="View documentation for visbrain.objects.SpectrogramObj"><span class="n">SpectrogramObj</span></a><span class="p">,</span>
-                              <span class="n">ColorbarObj</span><span class="p">,</span> <span class="n">SceneObj</span><span class="p">)</span>
+                              <a href="../../objects.html#visbrain.objects.MultiTaperObj" title="View documentation for visbrain.objects.MultiTaperObj"><span class="n">MultiTaperObj</span></a><span class="p">,</span> <a href="../../objects.html#visbrain.objects.ColorbarObj" title="View documentation for visbrain.objects.ColorbarObj"><span class="n">ColorbarObj</span></a><span class="p">,</span> <a href="../../objects.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a><span class="p">)</span>
 
 <span class="n">CBAR_STATE</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">cbtxtsz</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">txtsz</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">width</span><span class="o">=.</span><span class="mi">2</span><span class="p">,</span> <span class="n">rect</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">))</span>
-<span class="n">sc</span> <span class="o">=</span> <span class="n">SceneObj</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1200</span><span class="p">,</span> <span class="mi">1000</span><span class="p">))</span>
+<span class="n">sc</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1200</span><span class="p">,</span> <span class="mi">1000</span><span class="p">))</span>
 
 <span class="sd">&quot;&quot;&quot;Create a 2-D image</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -203,19 +205,31 @@
 <span class="n">time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">time</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">time</span><span class="p">[</span><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.diag_indices_from.html#numpy.diag_indices_from" title="View documentation for numpy.diag_indices_from"><span class="n">np</span><span class="o">.</span><span class="n">diag_indices_from</span></a><span class="p">(</span><span class="n">time</span><span class="p">)]</span> <span class="o">=</span> <span class="mf">30.</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">-&gt; Basic image&#39;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2"># =============================================================================</span>
+<span class="s2">#                              Basic image</span>
+<span class="s2"># =============================================================================</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
 <span class="n">im_basic</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.ImageObj" title="View documentation for visbrain.objects.ImageObj"><span class="n">ImageObj</span></a><span class="p">(</span><span class="s1">&#39;im&#39;</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">im_basic</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Basic image&#39;</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">-&gt; Interpolated image&#39;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2"># =============================================================================</span>
+<span class="s2">#                           Interpolated image</span>
+<span class="s2"># =============================================================================</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
 <span class="n">im_interp</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.ImageObj" title="View documentation for visbrain.objects.ImageObj"><span class="n">ImageObj</span></a><span class="p">(</span><span class="s1">&#39;im&#39;</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;bicubic&#39;</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">im_interp</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Interpolated image&#39;</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">-&gt; Custom color properties&#39;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2"># =============================================================================</span>
+<span class="s2">#                         Custom color properties</span>
+<span class="s2"># =============================================================================</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
 <span class="n">im_color</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.ImageObj" title="View documentation for visbrain.objects.ImageObj"><span class="n">ImageObj</span></a><span class="p">(</span><span class="s1">&#39;im&#39;</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;bicubic&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">,</span>
                     <span class="n">vmin</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">20.</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;darkred&#39;</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">im_color</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Custom colors&#39;</span><span class="p">)</span>
-<span class="n">cb_im_color</span> <span class="o">=</span> <span class="n">ColorbarObj</span><span class="p">(</span><span class="n">im_color</span><span class="p">,</span> <span class="n">cblabel</span><span class="o">=</span><span class="s1">&#39;Image data&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">CBAR_STATE</span><span class="p">)</span>
+<span class="n">cb_im_color</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.ColorbarObj" title="View documentation for visbrain.objects.ColorbarObj"><span class="n">ColorbarObj</span></a><span class="p">(</span><span class="n">im_color</span><span class="p">,</span> <span class="n">cblabel</span><span class="o">=</span><span class="s1">&#39;Image data&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">CBAR_STATE</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">cb_im_color</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">width_max</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
 
 <span class="sd">&quot;&quot;&quot;Define a 25hz sine</span>
@@ -224,20 +238,32 @@
 <span class="n">time</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.arange.html#numpy.arange" title="View documentation for numpy.arange"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">/</span> <span class="n">sf</span>  <span class="c1"># time vector</span>
 <span class="n">data</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.sin.html#numpy.sin" title="View documentation for numpy.sin"><span class="n">np</span><span class="o">.</span><span class="n">sin</span></a><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mf">25.</span> <span class="o">*</span> <span class="n">time</span><span class="p">)</span> <span class="o">+</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.rand.html#numpy.random.rand" title="View documentation for numpy.random.rand"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span></a><span class="p">(</span><span class="n">n</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">-&gt; Compute the spectrogram&#39;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2"># =============================================================================</span>
+<span class="s2">#                                Spectrogram</span>
+<span class="s2"># =============================================================================</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
 <span class="n">spec</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.SpectrogramObj" title="View documentation for visbrain.objects.SpectrogramObj"><span class="n">SpectrogramObj</span></a><span class="p">(</span><span class="s1">&#39;spec&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;RdBu_r&#39;</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Spectrogram&#39;</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">-&gt; Compute time-frequency map&#39;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2"># =============================================================================</span>
+<span class="s2">#                             Time-frequency map</span>
+<span class="s2"># =============================================================================</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
 <span class="n">tf</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.TimeFrequencyMapObj" title="View documentation for visbrain.objects.TimeFrequencyMapObj"><span class="n">TimeFrequencyMapObj</span></a><span class="p">(</span><span class="s1">&#39;tf&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">tf</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Time-frequency map&#39;</span><span class="p">)</span>
 
 <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">-&gt; Compute time-frequency map with windows&#39;</span><span class="p">)</span>
-<span class="n">tf_win</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.TimeFrequencyMapObj" title="View documentation for visbrain.objects.TimeFrequencyMapObj"><span class="n">TimeFrequencyMapObj</span></a><span class="p">(</span><span class="s1">&#39;tf&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="n">f_min</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">f_max</span><span class="o">=</span><span class="mf">40.</span><span class="p">,</span> <span class="n">f_step</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span>
-                             <span class="n">n_window</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">overlap</span><span class="o">=.</span><span class="mi">7</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;bicubic&#39;</span><span class="p">,</span>
-                             <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">)</span>
-<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">tf_win</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Time-frequency map&#39;</span><span class="p">)</span>
-<span class="n">cb_tf_win</span> <span class="o">=</span> <span class="n">ColorbarObj</span><span class="p">(</span><span class="n">tf_win</span><span class="p">,</span> <span class="n">cblabel</span><span class="o">=</span><span class="s1">&#39;Power&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">CBAR_STATE</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2"># =============================================================================</span>
+<span class="s2">#                                 Multi-taper</span>
+<span class="s2"># =============================================================================</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+<span class="n">tf_mt</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.MultiTaperObj" title="View documentation for visbrain.objects.MultiTaperObj"><span class="n">MultiTaperObj</span></a><span class="p">(</span><span class="s1">&#39;mt&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="n">overlap</span><span class="o">=.</span><span class="mi">7</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;bicubic&#39;</span><span class="p">,</span>
+                      <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">tf_mt</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Multi-taper&#39;</span><span class="p">)</span>
+<span class="n">cb_tf_win</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.ColorbarObj" title="View documentation for visbrain.objects.ColorbarObj"><span class="n">ColorbarObj</span></a><span class="p">(</span><span class="n">tf_mt</span><span class="p">,</span> <span class="n">cblabel</span><span class="o">=</span><span class="s1">&#39;Power&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">CBAR_STATE</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">cb_tf_win</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">width_max</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
 
 <span class="n">sc</span><span class="o">.</span><span class="n">preview</span><span class="p">()</span>
@@ -266,7 +292,7 @@
         <a href="ex_roi_object.html" class="btn btn-neutral float-right" title="Region Of Interest (ROI) object" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="ex_connectivity_obj.html" class="btn btn-neutral" title="Connectivity object" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="ex_cross_section_obj.html" class="btn btn-neutral" title="Cross-section object" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -297,7 +323,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.3.7',
+            VERSION:'0.3.8',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

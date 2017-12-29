@@ -6,9 +6,10 @@
 Cross-sections and volume control
 =================================
 
-Control the cross-section panel and the volume. This script use a custom
-nifti volume downloadable at : https://brainder.org/download/flair/
-The nibabel package should also be installed.
+Control the cross-section panel and the volume using a Nifti file. The nibabel
+package should also be installed.
+
+See : https://brainder.org/download/flair/
 
 .. image:: ../../picture/picbrain/ex_crossec_and_volume.png
 
@@ -17,37 +18,34 @@ The nibabel package should also be installed.
 .. code-block:: python
 
     from visbrain import Brain
-    from visbrain.io import read_nifti, download_file, path_to_visbrain_data
+    from visbrain.objects import CrossSecObj, VolumeObj
+    from visbrain.io import download_file
 
     """Import the volume and the associated affine transformation
     """
-    volume_name = 'GG-853-WM-0.7mm.nii.gz'
+    volume_name = 'GG-853-WM-0.7mm.nii.gz'  # 'GG-853-GM-0.7mm.nii.gz'
 
-    """Download the file. 
+    """Download the file.
     """
-    download_file(volume_name)
-    data, header, tf = read_nifti(path_to_visbrain_data(volume_name))
+    path = download_file(volume_name)
 
-    vb = Brain()
+    """Define a cross-section object
 
-    # Add the volume to the GUI
-    vb.add_volume(volume_name, data, transform=tf)
-
-    """Set the cross-section to be centered on the slice (70, 171, 80) with the
-    gist_stern colormap.
+    Go to the Objects tab and select 'Cross-section' in the combo box. You can also
+    press x to display the cross-section panel.
     """
-    vb.cross_sections_control(center=(70, 171, 80), volume=volume_name,
-                              cmap='gist_stern')
+    cs_obj = CrossSecObj(path, section=(70, 171, 80), cmap='gist_stern')
 
-    """Display the 3D volume using the translucent rendering method.
+    """Define a volume object.
+
+    Go to the Objects tab and select 'Volume' in the combo box. You can also
+    press x to display the volume panel.
     """
-    vb.volume_control(volume_name, cmap='TransFire', rendering='translucent')
+    v_obj = VolumeObj(path)
 
-    """Finally, rotate the scene and hide the main brain.
+    """Create the GUI and pass the cross-section and the volume object
     """
-    vb.rotate(custom=(142, 12))
-    vb.brain_control(visible=False)
-
+    vb = Brain(cross_sec_obj=cs_obj, vol_obj=v_obj)
     vb.show()
 
 **Total running time of the script:** ( 0 minutes  0.000 seconds)

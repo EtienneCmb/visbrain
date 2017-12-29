@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>visbrain.utils.mesh &mdash; visbrain 0.3.7 documentation</title>
+  <title>visbrain.utils.mesh &mdash; visbrain 0.3.8 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="visbrain 0.3.7 documentation" href="../../../index.html"/>
+    <link rel="top" title="visbrain 0.3.8 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.7
+                0.3.8
               </div>
             
           
@@ -164,7 +164,6 @@
             
   <h1>Source code for visbrain.utils.mesh</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Surfaces (mesh) and volume utility functions.&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -174,12 +173,10 @@
 <span class="kn">from</span> <span class="nn">vispy.geometry.isosurface</span> <span class="k">import</span> <span class="n">isosurface</span>
 
 <span class="kn">from</span> <span class="nn">.sigproc</span> <span class="k">import</span> <span class="n">smooth_3d</span>
-<span class="kn">from</span> <span class="nn">.others</span> <span class="k">import</span> <span class="n">get_data_path</span>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;vispy_array&#39;</span><span class="p">,</span> <span class="s1">&#39;convert_meshdata&#39;</span><span class="p">,</span> <span class="s1">&#39;volume_to_mesh&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;add_brain_template&#39;</span><span class="p">,</span> <span class="s1">&#39;remove_brain_template&#39;</span><span class="p">,</span> <span class="s1">&#39;smoothing_matrix&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;mesh_edges&#39;</span><span class="p">,</span> <span class="s1">&#39;laplacian_smoothing&#39;</span><span class="p">)</span>
+           <span class="s1">&#39;smoothing_matrix&#39;</span><span class="p">,</span> <span class="s1">&#39;mesh_edges&#39;</span><span class="p">,</span> <span class="s1">&#39;laplacian_smoothing&#39;</span><span class="p">)</span>
 
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
@@ -305,53 +302,6 @@
     <span class="c1"># Convert to meshdata :</span>
     <span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="n">normals</span> <span class="o">=</span> <span class="n">convert_meshdata</span><span class="p">(</span><span class="n">vert_n</span><span class="p">,</span> <span class="n">faces_n</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="n">normals</span>
-
-
-<div class="viewcode-block" id="add_brain_template"><a class="viewcode-back" href="../../../utils.html#visbrain.utils.mesh.add_brain_template">[docs]</a><span class="k">def</span> <span class="nf">add_brain_template</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="n">normals</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lr_index</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Add a brain template to the default list.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    name : string</span>
-<span class="sd">        Name of the template.</span>
-<span class="sd">    vertices : array_like</span>
-<span class="sd">        Vertices of the template of shape (N, 3) or (N, 3, 3) if indexed by</span>
-<span class="sd">        faces.</span>
-<span class="sd">    faces : array_like</span>
-<span class="sd">        Faces of the template of shape (M, 3)</span>
-<span class="sd">    normals : array_like</span>
-<span class="sd">        The normals of the template, with the same shape as vertices.</span>
-<span class="sd">    lr_index : int | None</span>
-<span class="sd">        Specify where to cut vertices for left and right hemisphere so that</span>
-<span class="sd">        x_left &lt;= lr_index and right &gt; lr_index</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Convert meshdata :</span>
-    <span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="n">normals</span> <span class="o">=</span> <span class="n">convert_meshdata</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="n">normals</span><span class="p">)</span>
-    <span class="c1"># Get path to the templates/ folder :</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">name</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="n">get_data_path</span><span class="p">(</span><span class="n">folder</span><span class="o">=</span><span class="s1">&#39;templates&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.npz&#39;</span><span class="p">)</span>
-    <span class="c1"># Save the template :</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">savez</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="o">=</span><span class="n">faces</span><span class="p">,</span> <span class="n">normals</span><span class="o">=</span><span class="n">normals</span><span class="p">,</span>
-             <span class="n">lr_index</span><span class="o">=</span><span class="n">lr_index</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="remove_brain_template"><a class="viewcode-back" href="../../../utils.html#visbrain.utils.mesh.remove_brain_template">[docs]</a><span class="k">def</span> <span class="nf">remove_brain_template</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Remove brain template from the default list.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    name : string</span>
-<span class="sd">        Name of the template to remove.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">assert</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;B1&#39;</span><span class="p">,</span> <span class="s1">&#39;B2&#39;</span><span class="p">,</span> <span class="s1">&#39;B3&#39;</span><span class="p">]</span>
-    <span class="c1"># Get path to the templates/ folder :</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">name</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="n">get_data_path</span><span class="p">(</span><span class="n">folder</span><span class="o">=</span><span class="s1">&#39;templates&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.npz&#39;</span><span class="p">)</span>
-    <span class="c1"># Remove the file from templates/ folder :</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No file &quot;</span> <span class="o">+</span> <span class="n">path</span><span class="p">)</span></div>
 
 
 <span class="k">def</span> <span class="nf">smoothing_matrix</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">adj_mat</span><span class="p">,</span> <span class="n">smoothing_steps</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
@@ -517,7 +467,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.3.7',
+            VERSION:'0.3.8',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
