@@ -3,6 +3,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 import numpy as np
 
+from visbrain.io.dependencies import is_lspopt_installed
+
 from ..ui_init import AxisCanvas, TimeAxis
 from ....utils import mpl_cmap, color2vb
 from ....config import PROFILER
@@ -82,6 +84,8 @@ class UiPanels(object):
         self._PanSpecCmap.setCurrentIndex(self._cmap_lst.index(self._defcmap))
         # Add list of channels :
         self._PanSpecChan.addItems(self._channels)
+        # Disable multitaper option if not is_lspopt_installed
+        self._PanSpecMethod.model().item(2).setEnabled(is_lspopt_installed())
         # Connect spectrogam properties :
         self._PanSpecApply.setEnabled(False)
         self._PanSpecApply.clicked.connect(self._fcn_specSetData)
@@ -426,7 +430,7 @@ class UiPanels(object):
         # Get channel to get spectrogram :
         chan = self._PanSpecChan.currentIndex()
         # Use spectrogram / tf :
-        self._spec._use_tf = int(self._PanSpecMethod.currentIndex() == 1)
+        method = str(self._PanSpecMethod.currentText())
         # Interpolation :
         interp = str(self._PanSpecInterp.currentText())
         # Normalization :
@@ -439,7 +443,7 @@ class UiPanels(object):
         self._spec.set_data(self._sf, self._data[chan, ...], self._time,
                             nfft=nfft, overlap=over, fstart=fstart, fend=fend,
                             cmap=cmap, contrast=contrast, interp=interp,
-                            norm=norm)
+                            norm=norm, method=method)
         # Set apply button disable :
         self._PanSpecApply.setEnabled(False)
 
@@ -450,7 +454,7 @@ class UiPanels(object):
         # Get starting / ending frequency :
         _, fend = self._PanSpecFstart.value(), self._PanSpecFend.value()  # noqa
         # Enable / disable normalization :
-        use_tf = int(self._PanSpecMethod.currentIndex() == 1)
+        use_tf = 1 if str(self._PanSpecMethod.currentText()) == 'time-frequency' else 0
         self._PanSpecNormW.setEnabled(use_tf)
 
         self._PanSpecStep.setMaximum(nfft * .99)

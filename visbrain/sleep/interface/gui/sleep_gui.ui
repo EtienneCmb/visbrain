@@ -107,15 +107,15 @@
                <bool>true</bool>
               </property>
               <property name="currentIndex">
-               <number>2</number>
+               <number>1</number>
               </property>
               <widget class="QWidget" name="page_3">
                <property name="geometry">
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>303</width>
-                 <height>285</height>
+                 <width>330</width>
+                 <height>905</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -172,8 +172,8 @@
                        <rect>
                         <x>0</x>
                         <y>0</y>
-                        <width>96</width>
-                        <height>26</height>
+                        <width>306</width>
+                        <height>678</height>
                        </rect>
                       </property>
                       <layout class="QVBoxLayout" name="verticalLayout_14">
@@ -401,10 +401,10 @@
               <widget class="QWidget" name="page_4">
                <property name="geometry">
                 <rect>
-                 <x>0</x>
+                 <x>-21</x>
                  <y>0</y>
                  <width>351</width>
-                 <height>105</height>
+                 <height>888</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -440,7 +440,7 @@
                      <item row="1" column="2">
                       <widget class="QComboBox" name="_PanSpecMethod">
                        <property name="toolTip">
-                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select to channel used for the spectrogram&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Computation method for the spectrogram&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                        <item>
                         <property name="text">
@@ -450,6 +450,11 @@
                        <item>
                         <property name="text">
                          <string>time-frequency</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>multitaper</string>
                         </property>
                        </item>
                       </widget>
@@ -533,7 +538,7 @@ channel</string>
                      <item row="0" column="2">
                       <widget class="QComboBox" name="_PanSpecChan">
                        <property name="toolTip">
-                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select to channel used for the spectrogram&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select the channel on which to compute the spectrogram&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                       </widget>
                      </item>
@@ -1276,8 +1281,8 @@ channel</string>
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>278</width>
-                 <height>208</height>
+                 <width>330</width>
+                 <height>905</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -2013,8 +2018,8 @@ re-referenced</string>
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>302</width>
-                 <height>374</height>
+                 <width>330</width>
+                 <height>959</height>
                 </rect>
                </property>
                <attribute name="label">
