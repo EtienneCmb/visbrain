@@ -129,6 +129,7 @@ class UiMenu(HelpMenu):
     def _fcn_menu_disp_cbar(self):
         """Display/hide the colorbar."""
         viz = self.menuDispCbar.isChecked()
+        self.cbqt.cbui._cbar_grp.setChecked(viz)
         self.cbpanelW.setVisible(viz)
 
     def _fcn_menu_set_object(self, nb):
