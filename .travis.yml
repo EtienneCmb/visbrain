@@ -48,7 +48,7 @@ install:
     - if [ "${TEST}" == "standard" ]; then
         pip install codecov pytest pytest-cov pytest-sugar pytest-travis-fold openpyxl;
         pip install mne nibabel pandas;
-        pip install git+https://github.com/hbldh/lspopt.git#egg=lspopt
+        pip install git+https://github.com/hbldh/lspopt.git#egg=lspopt;
       fi;
     - if [ "${TEST}" == "minimal" ]; then
         pip install flake8 pep8-naming;

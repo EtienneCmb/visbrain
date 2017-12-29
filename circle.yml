@@ -44,7 +44,7 @@ dependencies:
     - conda install -n circleenv --yes numpy scipy pip;
     - pip install codecov pytest pytest-cov pytest-travis-fold;
     - pip install mne nibabel pandas openpyxl;
-    - pip install git+https://github.com/hbldh/lspopt.git#egg=lspopt
+    - pip install git+https://github.com/hbldh/lspopt.git#egg=lspopt;
     - ls -al /home/ubuntu/miniconda3;
     - ls -al /home/ubuntu/miniconda3/bin;
     - echo $PATH;
