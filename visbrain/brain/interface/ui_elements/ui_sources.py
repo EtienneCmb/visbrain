@@ -185,15 +185,14 @@ class UiSources(object):
         self._s_proj_mask_color.setText(str(color))
         self._fcn_proj_mask_color()
 
-    def _fcn_source_proj(self):
+    def _fcn_source_proj(self, _, **kwargs):
         """Apply source projection."""
-        kw = self.cbqt.cbobjs._objs['Brain'].to_kwargs(False)
+        project_on = str(self._s_proj_on.currentText())
+        b_obj = self.atlas if project_on == 'brain' else self.roi
         radius = self._s_proj_radius.value()
         contribute = self._s_proj_contribute.isChecked()
         mask_color = textline2color(str(self._s_proj_mask_color.text()))[1]
         project = str(self._s_proj_type.currentText())
-        project_on = str(self._s_proj_on.currentText())
-        b_obj = self.atlas if project_on == 'brain' else self.roi
         self.sources.project_sources(b_obj, project=project, radius=radius,
                                      contribute=contribute,
-                                     mask_color=mask_color, **kw)
+                                     mask_color=mask_color, **kwargs)

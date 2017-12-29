@@ -1,7 +1,7 @@
 """GUI interactions with the contextual menu."""
 import vispy.scene.cameras as viscam
 
-from ....utils import toggle_enable_tab, HelpMenu
+from ....utils import HelpMenu
 
 
 class UiMenu(HelpMenu):
@@ -129,7 +129,6 @@ class UiMenu(HelpMenu):
     def _fcn_menu_disp_cbar(self):
         """Display/hide the colorbar."""
         viz = self.menuDispCbar.isChecked()
-        toggle_enable_tab(self.QuickSettings, 'Cbar', viz)
         self.cbpanelW.setVisible(viz)
 
     def _fcn_menu_set_object(self, nb):
@@ -198,9 +197,9 @@ class UiMenu(HelpMenu):
     def _fcn_menu_projection(self):
         """Run the cortical projection."""
         self._s_proj_type.setCurrentIndex(0)
-        self._fcn_source_proj()
+        self._fcn_source_proj('')
 
     def _fcn_menu_repartition(self):
         """Run the cortical projection."""
         self._s_proj_type.setCurrentIndex(1)
-        self._fcn_source_proj()
+        self._fcn_source_proj('')
