@@ -38,3 +38,8 @@ flake: clean-test
 
 examples: clean
 	@echo "NOT CONFIGURED YET"
+
+
+pypi:
+	@python setup.py register -r pypi
+	@python setup.py sdist upload -r pypi
