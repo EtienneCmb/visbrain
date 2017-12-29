@@ -60,7 +60,13 @@ class BrainCbar(object):
 
         # Add the camera to the colorbar :
         self.cbqt.add_camera(camera)
+        self.cbqt.cbui._cbar_grp.clicked.connect(self._fcn_cbar_display_grp)
 
+    def _fcn_cbar_display_grp(self):
+        """Display colorbar using the checkbox display."""
+        viz = self.cbqt.cbui._cbar_grp.isChecked()
+        self.menuDispCbar.setChecked(viz)
+        self._fcn_menu_disp_cbar()
     ###########################################################################
     #                              BRAIN
     ###########################################################################
