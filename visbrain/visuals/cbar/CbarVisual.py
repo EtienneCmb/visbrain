@@ -77,6 +77,7 @@ class CbarVisual(CbarBase):
             # Define the camera :
             self._camera = FixedCam(rect=(-1.2, -1.2, 2.4, 2.4))
             self._wc.camera = self._camera
+        self.parent = parent
 
         # _____________________ OBJECTS _____________________
         # --------------------- Node ---------------------

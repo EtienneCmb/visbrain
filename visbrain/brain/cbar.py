@@ -20,10 +20,17 @@ class BrainCbar(object):
         # ------------------- CBARBASE -------------------
         # ________ BRAIN ________
         cbproj = CbarBase(**self.atlas.to_dict())
-        self.cbobjs.add_object('Brain', cbproj)
-        obj = self.cbobjs._objs['Brain']
+        self.cbobjs.add_object('brain', cbproj)
+        obj = self.cbobjs._objs['brain']
         obj._fcn = self._fcn_link_brain
         obj._minmaxfcn = self._fcn_minmax_brain
+
+        # ________ ROI ________
+        cbproj = CbarBase(**self.roi.to_dict())
+        self.cbobjs.add_object('roi', cbproj)
+        obj = self.cbobjs._objs['roi']
+        obj._fcn = self._fcn_link_roi
+        obj._minmaxfcn = self._fcn_minmax_roi
 
         # ________ Connectivity ________
         if self.connect.name is not None:
@@ -60,21 +67,43 @@ class BrainCbar(object):
 
         # Add the camera to the colorbar :
         self.cbqt.add_camera(camera)
+        self.cbqt.cbui._cbar_grp.clicked.connect(self._fcn_cbar_display_grp)
+
+    def _fcn_cbar_display_grp(self):
+        """Display colorbar using the checkbox display."""
+        viz = self.cbqt.cbui._cbar_grp.isChecked()
+        self.menuDispCbar.setChecked(viz)
+        self._fcn_menu_disp_cbar()
 
     ###########################################################################
     #                              BRAIN
     ###########################################################################
     def _fcn_link_brain(self):
         """Executed function when projection need updates."""
-        kwargs = self.cbqt.cbobjs._objs['Brain'].to_kwargs(True)
+        kwargs = self.cbqt.cbobjs._objs['brain'].to_kwargs(True)
         self.atlas.update_from_dict(kwargs)
         self.atlas._update_cbar()
 
     def _fcn_minmax_brain(self):
         """Executed function for autoscale projections."""
-        self.cbqt.cbobjs._objs['Brain']._clim = self.atlas._minmax
+        self.cbqt.cbobjs._objs['brain']._clim = self.atlas._minmax
         self.atlas._clim = self.atlas._minmax
         self.atlas._update_cbar()
+
+    ###########################################################################
+    #                              ROI
+    ###########################################################################
+    def _fcn_link_roi(self):
+        """Executed function when projection need updates."""
+        kwargs = self.cbqt.cbobjs._objs['roi'].to_kwargs(True)
+        self.roi.update_from_dict(kwargs)
+        # self.roi._update_cbar()
+
+    def _fcn_minmax_roi(self):
+        """Executed function for autoscale projections."""
+        self.cbqt.cbobjs._objs['roi']._clim = self.roi._minmax
+        self.roi._clim = self.roi._minmax
+        # self.roi._update_cbar()
 
     ###########################################################################
     #                              CONNECTIVITY

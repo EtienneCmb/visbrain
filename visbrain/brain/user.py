@@ -175,7 +175,7 @@ class BrainUserMethods(object):
             self._objsPage.setCurrentIndex(1)
             self._csView.canvas.show(True)
             canvas = self._csView.canvas
-            widget = self._csGrid['grid']
+            widget = self._csView.wc
         else:
             raise ValueError("The canvas " + canvas + " doesn't exist. Use "
                              "either 'main', 'colorbar' or 'cross-sections'")
@@ -336,7 +336,7 @@ class BrainUserMethods(object):
         obj.mask = mask
         obj.mask_color = mask_color
         obj.alpha = alpha
-        obj.visible = visible
+        obj.visible_obj = visible
 
     def sources_display(self, name=None, select='all'):
         """Select sources to display.
@@ -363,6 +363,19 @@ class BrainUserMethods(object):
         elif select in ['inside', 'outside']:
             vert = self.atlas.vertices
             obj.set_visible_sources(select=select, v=vert)
+
+    def __projection(self, idx_proj, radius, project_on, contribute,
+                     mask_color, **kwargs):
+        """Apply cortical projection and repartition."""
+        self._s_proj_type.setCurrentIndex(idx_proj)
+        self._s_proj_radius.setValue(float(radius))
+        self._s_proj_contribute.setChecked(contribute)
+        self._s_proj_mask_color.setText(str(mask_color))
+        safely_set_cbox(self._s_proj_on, project_on)
+        # Colormap control :
+        self._fcn_source_proj('', **kwargs)
+        self.cbar_control(project_on, **kwargs)
+        self.cbar_select(project_on)
 
     def cortical_projection(self, radius=10., project_on='brain',
                             contribute=False, mask_color='orange', **kwargs):
@@ -392,14 +405,8 @@ class BrainUserMethods(object):
         roi_control : add a region of interest.
         sources_colormap : Change the colormap properties.
         """
-        self._s_proj_radius.setValue(float(radius))
-        self._s_proj_contribute.setChecked(contribute)
-        self._s_proj_type.setCurrentIndex(0)
-        self._s_proj_mask_color.setText(str(mask_color))
-        safely_set_cbox(self._s_proj_on, project_on)
-        # Colormap control :
-        self._fcn_source_proj()
-        self.cbar_control('Brain', **kwargs)
+        self.__projection(0, radius, project_on, contribute, mask_color,
+                          **kwargs)
 
     def cortical_repartition(self, radius=10., project_on='brain',
                              contribute=False, mask_color='orange', **kwargs):
@@ -420,14 +427,8 @@ class BrainUserMethods(object):
         kwargs : dict
             Further arguments are be passed to the cbar_control method
         """
-        self._s_proj_radius.setValue(float(radius))
-        self._s_proj_contribute.setChecked(contribute)
-        self._s_proj_type.setCurrentIndex(1)
-        self._s_proj_mask_color.setText(str(mask_color))
-        safely_set_cbox(self._s_proj_on, project_on)
-        # Colormap control :
-        self._fcn_source_proj()
-        self.cbar_control('Brain', **kwargs)
+        self.__projection(1, radius, project_on, contribute, mask_color,
+                          **kwargs)
 
     def sources_fit_to_vertices(self, name=None, fit_to='brain'):
         """Force sources coordinates to fit to a selected object.
@@ -602,13 +603,9 @@ class BrainUserMethods(object):
         clim : tuple/list | None
             Colorbar limit. Every values under / over clim will
             clip.
-        isvmin : bool | None
-            Activate/deactivate vmin.
         vmin : float | None
             Every values under vmin will have the color defined
             using the under parameter.
-        isvmax : bool | None
-            Activate/deactivate vmax.
         vmax : float | None
             Every values over vmin will have the color defined
             using the over parameter.
@@ -639,8 +636,8 @@ class BrainUserMethods(object):
         ndigits : int | None
             Number of digits for the text.
         """
-        # kwargs['isvmin'] = isinstance(kwargs.get('vmin', None), (int, float))
-        # kwargs['isvmax'] = isinstance(vmax, (int, float))
+        kwargs['isvmin'] = isinstance(kwargs.get('vmin', None), (int, float))
+        kwargs['isvmax'] = isinstance(kwargs.get('vmax', None), (int, float))
         # Test if the item "name" is enabled :
         self._cbar_item_is_enable(name)
         # Select the object :
