@@ -1108,7 +1108,7 @@ type</string>
                 <item>
                  <widget class="QTabWidget" name="_source_tab">
                   <property name="currentIndex">
-                   <number>1</number>
+                   <number>2</number>
                   </property>
                   <widget class="QWidget" name="tab_2">
                    <attribute name="title">
@@ -2025,6 +2025,13 @@ color</string>
                       <property name="topMargin">
                        <number>0</number>
                       </property>
+                      <item row="1" column="3">
+                       <widget class="QPushButton" name="_s_analyse_run">
+                        <property name="text">
+                         <string>Run</string>
+                        </property>
+                       </widget>
+                      </item>
                       <item row="0" column="0" rowspan="2">
                        <widget class="QLabel" name="label_24">
                         <property name="font">
@@ -2038,7 +2045,7 @@ ROI</string>
                         </property>
                        </widget>
                       </item>
-                      <item row="2" column="2">
+                      <item row="3" column="2">
                        <spacer name="horizontalSpacer_9">
                         <property name="orientation">
                          <enum>Qt::Horizontal</enum>
@@ -2077,12 +2084,61 @@ ROI</string>
                         </property>
                        </widget>
                       </item>
-                      <item row="1" column="3">
-                       <widget class="QPushButton" name="_s_analyse_run">
-                        <property name="text">
-                         <string>Run</string>
+                      <item row="2" column="1">
+                       <widget class="Line" name="line_6">
+                        <property name="orientation">
+                         <enum>Qt::Vertical</enum>
                         </property>
                        </widget>
+                      </item>
+                      <item row="2" column="0">
+                       <widget class="QLabel" name="label_29">
+                        <property name="font">
+                         <font>
+                          <italic>true</italic>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>Cross-section</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="2" column="2" colspan="2">
+                       <layout class="QHBoxLayout" name="horizontalLayout_20">
+                        <item>
+                         <spacer name="horizontalSpacer_4">
+                          <property name="orientation">
+                           <enum>Qt::Horizontal</enum>
+                          </property>
+                          <property name="sizeHint" stdset="0">
+                           <size>
+                            <width>40</width>
+                            <height>20</height>
+                           </size>
+                          </property>
+                         </spacer>
+                        </item>
+                        <item>
+                         <widget class="QPushButton" name="_s_show_cs">
+                          <property name="text">
+                           <string>Show</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <spacer name="horizontalSpacer_5">
+                          <property name="orientation">
+                           <enum>Qt::Horizontal</enum>
+                          </property>
+                          <property name="sizeHint" stdset="0">
+                           <size>
+                            <width>40</width>
+                            <height>20</height>
+                           </size>
+                          </property>
+                         </spacer>
+                        </item>
+                       </layout>
                       </item>
                      </layout>
                     </item>

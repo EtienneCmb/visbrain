@@ -42,8 +42,8 @@ class UiSources(object):
             col_names = ['Text', 'X', 'Y', 'Z']
             fill_pyqt_table(self._s_table, col_names, col)
             self._s_table.setEnabled(True)
-            self._s_table.itemSelectionChanged.connect(self._fcn_goto_cs)
         self._s_analyse_run.clicked.connect(self._fcn_analyse_sources)
+        self._s_show_cs.clicked.connect(self._fcn_goto_cs)
 
         # ====================== PROJECTION ======================
         self._s_proj_mask_color.editingFinished.connect(
