@@ -27,11 +27,14 @@ clean-test: clean-build clean-pyc clean-ctags clean-cache
 	@echo "Cleaning build, pyc, ctags, and cache"
 
 test: clean-test
-	python setup.py test
-	coverage report
+	@python setup.py test
+	@coverage report
+
+test-html: clean-test
+	@py.test --cov-report html --showlocals --durations=10 --html=report.html --self-contained-html
 
 flake: clean-test
-	flake8
+	@flake8
 
 examples: clean
 	@echo "NOT CONFIGURED YET"

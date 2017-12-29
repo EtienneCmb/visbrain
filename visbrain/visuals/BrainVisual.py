@@ -38,19 +38,28 @@ void main() {
     v_position = $a_position;
     v_normal = $a_normal;
 
-    // Custom colors (0. = white, 1. = color, 2. = mask_color)
+    // Mask : (0. = (white, sulcus), 1. = color, 2. = mask_color)
+    // Sulcus : (0. = white, sulcus = gray)
     if ($a_mask == 0.)
     {
-        v_color = vec4(1., 1., 1., 1.) * $u_light_color;
+        if ($a_sulcus == 0.)
+        {
+            v_color = vec4(1., 1., 1., 1.);
+        }
+        else if ($a_sulcus == 1.)
+        {
+        v_color = vec4(.5, .5, .5, 1.);
+        }
     }
     else if ($a_mask == 1.)
     {
-        v_color = $a_color * $u_light_color;
+        v_color = $a_color;
     }
     else if ($a_mask == 2.)
     {
-        v_color = $u_mask_color * $u_light_color;
+        v_color = $u_mask_color;
     }
+    v_color *= $u_light_color;
     gl_Position = $transform(vec4($a_position, 1));
 }
 """
@@ -180,10 +189,11 @@ class BrainVisual(Visual):
         pass
 
     def __init__(self, vertices=None, faces=None, normals=None, lr_index=None,
-                 hemisphere='both', alpha=1., mask_color='orange',
+                 hemisphere='both', sulcus=None, alpha=1., mask_color='orange',
                  light_position=[100.] * 3, light_color=[1.] * 4,
                  light_intensity=[1.] * 3, coef_ambient=.05, coef_specular=.5,
-                 vertfcn=None, camera=None, meshdata=None):
+                 vertfcn=None, camera=None, meshdata=None,
+                 invert_normals=False):
         """Init."""
         self._camera = None
         self._camera_transform = vist.NullTransform()
@@ -205,6 +215,7 @@ class BrainVisual(Visual):
         self._color_buffer = gloo.VertexBuffer(def_4)
         self._normals_buffer = gloo.VertexBuffer(def_3)
         self._mask_buffer = gloo.VertexBuffer()
+        self._sulcus_buffer = gloo.VertexBuffer()
         self._index_buffer = gloo.IndexBuffer()
 
         # _________________ PROGRAMS _________________
@@ -214,7 +225,8 @@ class BrainVisual(Visual):
         self.shared_program.frag['u_alpha'] = alpha
 
         # _________________ DATA / CAMERA / LIGHT _________________
-        self.set_data(vertices, faces, normals, hemisphere, lr_index)
+        self.set_data(vertices, faces, normals, hemisphere, lr_index,
+                      invert_normals, sulcus, meshdata)
         self.set_camera(camera)
         self.mask_color = mask_color
         self.light_color = light_color
@@ -236,8 +248,8 @@ class BrainVisual(Visual):
     # =======================================================================
     # =======================================================================
     def set_data(self, vertices=None, faces=None, normals=None,
-                 hemisphere='both', lr_index=None, meshdata=None,
-                 invert_normals=False):
+                 hemisphere='both', lr_index=None, invert_normals=False,
+                 sulcus=None, meshdata=None):
         """Set data to the mesh.
 
         Parameters
@@ -271,11 +283,15 @@ class BrainVisual(Visual):
 
         # Find ratio for the camera :
         v_max, v_min = vertices.max(0), vertices.min(0)
-        self._center = (v_max + v_min).astype(float) / 2.
-        self._camratio = (v_max - v_min).astype(float)
+        cam_center = (v_max + v_min).astype(float) / 2.
+        cam_scale_factor = (v_max - v_min).astype(float)
+        self._opt_cam_state = dict(center=cam_center,
+                                   scale_factor=cam_scale_factor)
+        logger.debug("Optimal camera state : %r" % self._opt_cam_state)
 
         # ____________________ HEMISPHERE ____________________
-        if lr_index is None or len(lr_index) != vertices.shape[0]:
+        if lr_index is None:
+            logger.debug('Left/Right hemispheres inferred from verices')
             lr_index = vertices[:, 0] <= vertices[:, 0].mean()
         self._lr_index = lr_index.astype(bool)
 
@@ -288,6 +304,14 @@ class BrainVisual(Visual):
         self._mask = np.zeros((len(self),), dtype=np.float32)
         self._mask_buffer.set_data(self._mask, convert=True)
         self.shared_program.vert['a_mask'] = self._mask_buffer
+        # Sulcus :
+        sulcus = self._mask.copy() if sulcus is None else sulcus
+        sulcus = sulcus.astype(np.float32)
+        assert isinstance(sulcus, np.ndarray)
+        assert len(sulcus) == vertices.shape[0]
+        assert (sulcus.min() == 0.) and (sulcus.max() <= 1.)
+        self._sulcus_buffer.set_data(sulcus, convert=True)
+        self.shared_program.vert['a_sulcus'] = self._sulcus_buffer
         # Color :
         self.color = np.ones((len(self), 4), dtype=np.float32)
 
@@ -463,6 +487,22 @@ class BrainVisual(Visual):
         self._mask_buffer.set_data(value.astype(np.float32), convert=True)
         self.update()
         # self._mask = value
+
+    # ----------- SULCUS -----------
+    @property
+    def sulcus(self):
+        """Get the sulcus value."""
+        pass
+        # return self._sulcus
+
+    @sulcus.setter
+    def sulcus(self, value):
+        """Set sulcus value."""
+        assert isinstance(value, np.ndarray) and len(value) == len(self)
+        value = value.astype(np.float32)
+        assert (value.min() == 0.) and (value.max() == 1.)
+        self._sulcus_buffer.set_data(value, convert=True)
+        self.update()
 
     # ----------- TRANSPARENT -----------
     @property

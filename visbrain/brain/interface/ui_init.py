@@ -9,6 +9,7 @@ Grouped components :
 from PyQt5 import QtWidgets
 
 from vispy import app
+from vispy.scene.cameras import TurntableCamera
 
 from .gui import Ui_MainWindow
 from ...objects import VisbrainCanvas
@@ -98,7 +99,7 @@ class BrainShortcuts(object):
 
             :event: the trigger event
             """
-            if self.view.wc.camera.name == 'turntable':
+            if isinstance(self.view.wc.camera, TurntableCamera):
                 # Display the rotation panel and set informations :
                 self._fcn_gui_rotation()
 
@@ -108,7 +109,7 @@ class BrainShortcuts(object):
 
             :event: the trigger event
             """
-            if self.view.wc.camera.name == 'turntable':
+            if isinstance(self.view.wc.camera, TurntableCamera):
                 # Display the rotation panel :
                 self._fcn_gui_rotation()
                 self.userRotationPanel.setVisible(True)
@@ -136,14 +137,6 @@ class UiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas, BrainShortcuts):
         #                         CROSS-SECTIONS CANVAS
         #######################################################################
         self._csView = VisbrainCanvas(name='SplittedCrossSections', **cdict)
-        self._csGrid = {'grid': self._csView.canvas.central_widget.add_grid()}
-        self._csGrid['Sagit'] = self._csGrid['grid'].add_view(row=0, col=0)
-        self._csGrid['Coron'] = self._csGrid['grid'].add_view(row=0, col=1)
-        self._csGrid['Axial'] = self._csGrid['grid'].add_view(row=1, col=0,
-                                                              col_span=2)
-        self._csGrid['Axial'].border_color = (1., 1., 1., 1.)
-        self._csGrid['Coron'].border_color = (1., 1., 1., 1.)
-        self._csGrid['Sagit'].border_color = (1., 1., 1., 1.)
         self._axialLayout.addWidget(self._csView.canvas.native)
 
         # Initialize shortcuts :

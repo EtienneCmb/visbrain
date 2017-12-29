@@ -81,11 +81,6 @@ class UiMenu(HelpMenu):
         # Zoom :
         self.menuDispZoom.triggered.connect(self._disptog_zoom)
 
-        # _____________________________________________________________________
-        #                               SETTINGS
-        # _____________________________________________________________________
-        self.menuSettingCleanHyp.triggered.connect(self.settCleanHyp)
-
     ###########################################################################
     ###########################################################################
     #                           SAVE
@@ -543,18 +538,3 @@ class UiMenu(HelpMenu):
         self._TimeAxis.mesh.visible = not activeIndic
 
         self._fcn_sliderSettings()
-
-    ###########################################################################
-    ###########################################################################
-    #                            SETTINGS
-    ###########################################################################
-    ###########################################################################
-    def settCleanHyp(self):
-        """Clean the hypnogram."""
-        self._hypno = np.zeros((len(self._hyp),), dtype=np.float32)
-        self._hyp.clean(self._sf, self._time)
-        # Update info table :
-        self._fcn_infoUpdate()
-        # Update scoring table :
-        self._fcn_Hypno2Score()
-        self._fcn_Score2Hypno()

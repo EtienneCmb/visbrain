@@ -1,15 +1,18 @@
 """Group of functions for physiological processing."""
 from re import findall
+import logging
 
 import numpy as np
 from itertools import product
 from scipy.stats import zscore
 
 from .sigproc import smoothing
-from .others import get_data_path
+from ..io.path import get_data_path, get_files_in_data
 
 __all__ = ('find_non_eeg', 'rereferencing', 'bipolarization', 'commonaverage',
            'tal2mni', 'mni2tal', 'load_predefined_roi', 'generate_eeg')
+
+logger = logging.getLogger('visbrain')
 
 
 def find_non_eeg(channels, pattern=['eog', 'emg', 'ecg', 'abd']):
@@ -341,10 +344,11 @@ def load_predefined_roi(name):
     system : {'mni', 'tal'}
         The system used by the volume.
     """
-    name = name.lower()
-    assert name in ['brodmann', 'aal', 'talairach']
+    if name in get_files_in_data('roi', with_ext=False):
+        file = get_data_path(folder='roi', file=name + '.npz')
+    else:
+        file = name
     # Load archive :
-    file = get_data_path(folder='roi', file=name + '.npz')
     arch = np.load(file)
     # Extract informations :
     vol, hdr = arch['vol'], arch['hdr']
@@ -354,7 +358,7 @@ def load_predefined_roi(name):
 
 
 def generate_eeg(sf=512., n_pts=1000, n_channels=1, n_trials=1, n_sines=100,
-                 f_min=.5, f_max=160., smooth=50, noise=10):
+                 f_min=.5, f_max=160., smooth=50, noise=10, random_state=0):
     """Generate random eeg signals.
 
     Parameters
@@ -377,6 +381,8 @@ def generate_eeg(sf=512., n_pts=1000, n_channels=1, n_trials=1, n_sines=100,
         The smoothing factor. Use larger smoothing to reduce high frequencies.
     noise : float | 10.
         Noise level.
+    random_state : int | 0
+        Fix the random state for the reproducibility.
 
     Returns
     -------
@@ -385,18 +391,19 @@ def generate_eeg(sf=512., n_pts=1000, n_channels=1, n_trials=1, n_sines=100,
     time : array_like
         A (n_pts,) vector containing time values.
     """
+    _rnd = np.random.RandomState(random_state)
     n_pts += 100  # edge effect compensation
     signal = np.zeros((n_channels, n_trials, n_pts), dtype=float)
     time = np.arange(n_pts).reshape(-1, 1) / sf
     f_sines = np.linspace(f_min, f_max, num=n_sines, endpoint=True)
-    phy = np.random.uniform(0., 2. * np.pi, (n_pts, n_sines))
+    phy = _rnd.uniform(0., 2. * np.pi, (n_pts, n_sines))
     sines = np.sin(2. * np.pi * f_sines.reshape(1, -1) * time + phy)
     amp_log = np.logspace(0, 1, n_sines, base=.1)
 
     for k, i in product(range(n_channels), range(n_trials)):
-        amp = amp_log * np.random.normal(0., 1., n_sines)
+        amp = amp_log * _rnd.normal(0., 1., n_sines)
         sig = smoothing(np.dot(sines, amp), smooth, 'hanning')
-        sig += np.random.randn(*sig.shape) / (noise * sig.std())
+        sig += _rnd.randn(*sig.shape) / (noise * sig.std())
         signal[k, i] = sig
     signal = zscore(signal, -1)
     signal = signal[..., 50:-50]

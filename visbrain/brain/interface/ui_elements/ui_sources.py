@@ -3,8 +3,7 @@ import logging
 import numpy as np
 
 from .ui_objects import _run_method_if_needed
-from ....utils import (textline2color, safely_set_cbox, fill_pyqt_table,
-                       color2tuple)
+from ....utils import (textline2color, safely_set_cbox, fill_pyqt_table)
 from ....io import dialog_color
 
 
@@ -43,16 +42,10 @@ class UiSources(object):
             col_names = ['Text', 'X', 'Y', 'Z']
             fill_pyqt_table(self._s_table, col_names, col)
             self._s_table.setEnabled(True)
-            self._s_table.itemSelectionChanged.connect(self._fcn_goto_cs)
         self._s_analyse_run.clicked.connect(self._fcn_analyse_sources)
+        self._s_show_cs.clicked.connect(self._fcn_goto_cs)
 
         # ====================== PROJECTION ======================
-        self._s_proj_radius.setValue(self._proj_radius)
-        self._s_proj_contribute.setChecked(self._proj_contribute)
-        safely_set_cbox(self._s_proj_type, self._proj_type)
-        mask_color = color2tuple(self._proj_mask_color)
-        self.atlas.mesh.mask_color = mask_color
-        self._s_proj_mask_color.setText(str(mask_color))
         self._s_proj_mask_color.editingFinished.connect(
             self._fcn_proj_mask_color)
         self._s_proj_mask_color_p.clicked.connect(self._fcn_mask_color_p)
@@ -88,8 +81,7 @@ class UiSources(object):
     def _fcn_source_select(self):
         """Select the source to display."""
         txt = self._s_select.currentText().split(' ')[0].lower()
-        v = self._proj_obj['brain'].mesh.get_vertices
-        self.sources.set_visible_sources(txt, v)
+        self.sources.set_visible_sources(txt, self.atlas.vertices)
 
     @_run_method_if_needed
     def _fcn_source_symbol(self):
@@ -162,16 +154,15 @@ class UiSources(object):
         row = self._s_table.currentRow()
         xyz = self.sources._xyz[row, :]
         # Set menu cross-sections menu checked :
-        self.grpSec.setChecked(True)
+        self._sec_grp.setChecked(True)
         self._fcn_crossec_viz()
         # Get transformation and apply to xyz :
-        ixyz = self.volume.transform.imap(xyz)[0:-1]
-        ixyz = np.round(ixyz).astype(int)
+        self.cross_sec.localize_source(xyz)
         # Set it to cross-sections sliders :
-        self._csSagit.setValue(ixyz[0])
-        self._csCoron.setValue(ixyz[1])
-        self._csAxial.setValue(ixyz[2])
-        self._fcn_crossec_move()
+        self._csSagit.setValue(self.cross_sec.sagittal)
+        self._csCoron.setValue(self.cross_sec.coronal)
+        self._csAxial.setValue(self.cross_sec.axial)
+        self._fcn_crossec_move(update=True)
 
     def _fcn_analyse_sources(self):
         """Analyse sources locations."""
@@ -183,11 +174,6 @@ class UiSources(object):
     # =====================================================================
     # PROJECTION
     # =====================================================================
-    def _fcn_update_proj_list(self):
-        """Update the available projection list objects."""
-        self._s_proj_on.clear()
-        self._s_proj_on.addItems(list(self._proj_obj.keys()))
-
     def _fcn_proj_mask_color(self):
         """Change the color for projected masked sources."""
         color = textline2color(str(self._s_proj_mask_color.text()))[1]
@@ -199,30 +185,14 @@ class UiSources(object):
         self._s_proj_mask_color.setText(str(color))
         self._fcn_proj_mask_color()
 
-    def _fcn_source_proj(self):
+    def _fcn_source_proj(self, _, **kwargs):
         """Apply source projection."""
-        # Get projection radius :
-        new_radius = self._s_proj_radius.value()
-        if self._proj_radius != new_radius:
-            self._proj_radius = new_radius
-            self._clean_source_projection()
-        # Get if activity has to be projected on surface / ROI :
-        new_projecton = str(self._s_proj_on.currentText())
-        if self._proj_on != new_projecton:
-            self._proj_on = new_projecton
-            self._clean_source_projection()
-        # Get if projection has to contribute on both hemisphere :
-        new_contribute = self._s_proj_contribute.isChecked()
-        if self._proj_contribute != new_contribute:
-            self._proj_contribute = new_contribute
-            self._clean_source_projection()
-        # Run either the activity / repartition projection :
-        idxproj = int(self._s_proj_type.currentIndex())
-        if idxproj == 0:
-            self._proj_type = 'activity'
-        elif idxproj == 1:
-            self._proj_type = 'repartition'
-        # Mask color :
-        color = textline2color(str(self._s_proj_mask_color.text()))[1]
-        self._proj_mask_color = color
-        self._run_source_projection()
+        project_on = str(self._s_proj_on.currentText())
+        b_obj = self.atlas if project_on == 'brain' else self.roi
+        radius = self._s_proj_radius.value()
+        contribute = self._s_proj_contribute.isChecked()
+        mask_color = textline2color(str(self._s_proj_mask_color.text()))[1]
+        project = str(self._s_proj_type.currentText())
+        self.sources.project_sources(b_obj, project=project, radius=radius,
+                                     contribute=contribute,
+                                     mask_color=mask_color, **kwargs)

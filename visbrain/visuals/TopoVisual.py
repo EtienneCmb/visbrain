@@ -22,7 +22,8 @@ from vispy.scene import visuals
 import vispy.visuals.transforms as vist
 
 from ..utils import (array2colormap, color2vb, mpl_cmap, normalize,
-                     vpnormalize, vprecenter, get_data_path)
+                     vpnormalize, vprecenter)
+from ..io import get_data_path
 from .cbar import CbarVisual
 
 logger = logging.getLogger('visbrain')
@@ -387,7 +388,8 @@ class TopoMesh(object):
         if any(keeponly):
             if not all(keeponly):
                 ignore = list(np.array(channels)[np.invert(keeponly)])
-                logger.info("Channels " + str(ignore) + " have been ignored")
+                logger.warning("Ignored channels for topoplot :"
+                               " %s" % ', '.join(ignore))
 
             # ----------- Conversion -----------
             if isinstance(xyz, np.ndarray):

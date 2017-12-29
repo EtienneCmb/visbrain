@@ -1,7 +1,7 @@
-.. _Topo:
+.. _TopoModule:
 
-Topo
-====
+:py:class:`Topo`
+================
 
 .. figure::  picture/ico/topo_ico.png
    :align:   center
@@ -9,7 +9,7 @@ Topo
 Description
 -----------
 
-*Topo* is a GUI based module for topographic representations.
+:class:`Topo` is a GUI based module for topographic representations.
 
 .. figure::  picture/pictopo/ex_topoplot_plotting_properties.png
    :align:   center
@@ -17,7 +17,7 @@ Description
 Help
 ~~~~
 
-If you need help with the *Topo* module, ask your questions in the dedicated `gitter Topo chat <https://gitter.im/visbrain-python/Topo?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
+If you need help with the :class:`Topo` module, ask your questions in the dedicated `gitter Topo chat <https://gitter.im/visbrain-python/Topo?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
 
 Main features
 ~~~~~~~~~~~~~
@@ -34,7 +34,7 @@ Main features
 Import and use Topo
 ~~~~~~~~~~~~~~~~~~~
 
-The *Topo* module can be imported as follow :
+The :class:`Topo` module can be imported as follow :
 
 .. code-block:: python
 
@@ -51,9 +51,10 @@ API
 Topo class
 ~~~~~~~~~~
 
-.. currentmodule:: visbrain.topo.topo
+.. currentmodule:: visbrain
 
 .. autoclass:: Topo
+    :members: show, add_topoplot, add_shared_colorbar
 
     .. rubric:: Methods
 
@@ -61,14 +62,3 @@ Topo class
         ~Topo.show
         ~Topo.add_topoplot
         ~Topo.add_shared_colorbar
-
-Methods
-~~~~~~~
-
-Add topoplot
-^^^^^^^^^^^^
-.. automethod:: visbrain.topo.topo.Topo.add_topoplot
-
-Add shared colorbar topoplot
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. automethod:: visbrain.topo.topo.Topo.add_shared_colorbar

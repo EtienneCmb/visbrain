@@ -1,7 +1,7 @@
 """Main class for the objects panel."""
 from functools import wraps
 
-from ....utils import disconnect_all, toggle_enable_tab
+from ....utils import disconnect_all
 
 
 def _run_method_if_needed(fn):
@@ -30,18 +30,27 @@ class UiObjects(object):
         # Add object names :
         disconnect_all(self._obj_name_lst)
         self._obj_name_lst.clear()
-        if idx_type == 0:    # Sources
+        if idx_type == 0:    # Brain
+            obj = self.atlas
+        elif idx_type == 1:    # ROI
+            obj = self.roi
+        elif idx_type == 2:    # Volume
+            obj = self.volume
+        elif idx_type == 3:    # Cross-sections
+            obj = self.cross_sec
+        elif idx_type == 4:    # Sources
             obj = self.sources
-        elif idx_type == 1:  # Connectivity
+        elif idx_type == 5:  # Connectivity
             obj = self.connect
-        elif idx_type == 2:  # Time-series
+        elif idx_type == 6:  # Time-series
             obj = self.tseries
-        elif idx_type == 3:  # Pictures
+        elif idx_type == 7:  # Pictures
             obj = self.pic
-        elif idx_type == 4:  # Pictures
+        elif idx_type == 8:  # Vectors
             obj = self.vectors
         self._obj_stack.setEnabled(obj.name is not None)
-        if obj.name is not None:
+        self._obj_name_lst.setEnabled(idx_type > 3)
+        if (idx_type > 3) and (obj.name is not None):
             self._obj_name_lst.addItems(obj.get_list_of_objects())
             self._fcn_obj_name()
             self._obj_name_lst.currentIndexChanged.connect(self._fcn_obj_name)
@@ -49,16 +58,17 @@ class UiObjects(object):
     def _fcn_obj_name(self):
         """Change object name."""
         idx_type = self._obj_type_lst.currentIndex()
-        if idx_type == 0:    # Sources
+        if idx_type == 4:    # Sources
             fcn = self._sources_to_gui
-        elif idx_type == 1:  # Connectivity
+        elif idx_type == 5:  # Connectivity
             fcn = self._connect_to_gui
-        elif idx_type == 2:  # time-series
+        elif idx_type == 6:  # time-series
             fcn = self._ts_to_gui
-        elif idx_type == 3:  # pictures
+        elif idx_type == 7:  # pictures
             fcn = self._pic_to_gui
-        elif idx_type == 4:  # vectors
+        elif idx_type == 8:  # vectors
             fcn = self._vec_to_gui
+        # if idx_type > 4:
         self._obj_run_method = False
         fcn()
         self._obj_run_method = True
@@ -67,22 +77,13 @@ class UiObjects(object):
         """Get the select object."""
         idx_type = self._obj_type_lst.currentIndex()
         name = self._obj_name_lst.currentText()
-        if name and idx_type == 0:  # Sources
+        if name and idx_type == 4:  # Sources
             return self.sources[name]
-        elif name and idx_type == 1:  # Connectivity
+        elif name and idx_type == 5:  # Connectivity
             return self.connect[name]
-        elif name and idx_type == 2:  # Time-series
+        elif name and idx_type == 6:  # Time-series
             return self.tseries[name]
-        elif name and idx_type == 3:  # Pictures
+        elif name and idx_type == 7:  # Pictures
             return self.pic[name]
-        elif name and idx_type == 4:  # Vectors
+        elif name and idx_type == 8:  # Vectors
             return self.vectors[name]
-
-    def _all_object_are_none(self):
-        """Test if all objects are None."""
-        all_none = any([k.name is not None for k in (self.sources,
-                                                     self.connect,
-                                                     self.tseries, self.pic,
-                                                     self.vectors)])
-        toggle_enable_tab(self.QuickSettings, 'Objects', all_none)
-        self._obj_stack.setEnabled(all_none)

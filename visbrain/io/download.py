@@ -7,13 +7,13 @@ import zipfile
 from warnings import warn
 
 from .rw_config import load_config_json
-from ..utils import get_data_path
+from .path import get_data_path
 
 
 logger = logging.getLogger('visbrain')
 
 
-__all__ = ["get_data_url_file", "download_file", "path_to_visbrain_data"]
+__all__ = ["get_data_url_file", "download_file"]
 
 
 def get_data_url_file():
@@ -89,7 +89,6 @@ def download_file(name, filename=None, to_path=None, unzip=False,
     # Default visbrain-path to data (HOME/visbrain_data):
     vb_path = os.path.join(os.path.expanduser('~'), 'visbrain_data')
     vb_path = os.getcwd() if use_pwd else vb_path
-    print('\n----------------------------------------------------------------')
     if bool(name.find('http') + 1):
         if filename is None:
             filename = os.path.split(name)[1]
@@ -122,25 +121,4 @@ def download_file(name, filename=None, to_path=None, unzip=False,
                 os.remove(path_to_file)
     else:
         logger.info("File already dowloaded (%s)." % path_to_file)
-    print('----------------------------------------------------------------\n')
     return path_to_file
-
-
-def path_to_visbrain_data(file=None, folder=None):
-    """Get the path to the visbrain_data folder.
-
-    Parameters
-    ----------
-    file : string | None
-        File name. If None, only the path to the visbrain_data folder is
-        returned.
-
-    Returns
-    -------
-    path : string
-        Path to the file or to the visbrain_data.
-    """
-    vb_path = os.path.expanduser('~')
-    folder = '' if not isinstance(folder, str) else folder
-    file = '' if not isinstance(file, str) else file
-    return os.path.join(*(vb_path, 'visbrain_data', folder, file))

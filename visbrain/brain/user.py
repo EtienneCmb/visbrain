@@ -7,25 +7,15 @@ Brain instance.
 """
 import logging
 
-import numpy as np
 from scipy.spatial import ConvexHull
 
 from ..visuals import BrainMesh
-from ..utils import (color2vb, extend_combo_list, safely_set_cbox,
-                     get_combo_list_index, safely_set_spin, safely_set_slider)
+from ..utils import (color2vb, safely_set_cbox)
 from ..io import save_config_json, write_fig_canvas
 
 logger = logging.getLogger('visbrain')
 
 __all__ = ('BrainUserMethods')
-
-
-class AddMesh(object):
-    """Add a mesh object."""
-
-    def __init__(self, mesh):
-        """Init."""
-        self.mesh = mesh
 
 
 class BrainUserMethods(object):
@@ -185,7 +175,7 @@ class BrainUserMethods(object):
             self._objsPage.setCurrentIndex(1)
             self._csView.canvas.show(True)
             canvas = self._csView.canvas
-            widget = self._csGrid['grid']
+            widget = self._csView.wc
         else:
             raise ValueError("The canvas " + canvas + " doesn't exist. Use "
                              "either 'main', 'colorbar' or 'cross-sections'")
@@ -296,7 +286,7 @@ class BrainUserMethods(object):
         >>> vb = Brain()
         >>> print(vb.brain_list())
         """
-        return self.atlas._get_all_available_templates()
+        return self.atlas.list()
 
     def add_mesh(self, name, vertices, faces, **kwargs):
         """Add a mesh to the scene.
@@ -313,168 +303,9 @@ class BrainUserMethods(object):
             Supplementar arguments pass to the BrainMesh class.
         """
         # Add mesh to user objects :
-        self._userobj[name] = BrainMesh(vertices=vertices, faces=faces,
-                                        name=name, **kwargs)
-        self._userobj[name].set_camera(self.view.wc.camera)
-        self._userobj[name].parent = self._vbNode
-        # Add mesh for projection :
-        self._proj_obj[name] = AddMesh(self._userobj[name])
-
-    def add_volume(self, name, vol, transform=None, roi_values=None,
-                   roi_labels=None):
-        """Add a new volume to the interface.
-
-        When a new volume is added, it can be then used in the Cross-sections,
-        Volume or ROI part if the roi_values and roi_labels are not None.
-
-        Parameters
-        ----------
-        name : string
-            Name of the cross-section object.
-        vol : array_like
-            The 3-D volume array.
-        transform : VisPy.transform | None
-            The transformation to add to this volume.
-        roi_labels : array_like | None
-            Array of strings describing the name of each ROI.
-        roi_values : array_like | None
-            Array of values describing values of each ROI.
-
-        See also
-        --------
-        volume_list : Get the list of volumes available.
-        """
-        # Add the volume :
-        self.volume.add_volume(name, vol, transform=transform,
-                               roi_values=roi_values, roi_labels=roi_labels)
-
-        # Extend the list of volumes for 3-D volume and cross-section :
-        extend_combo_list(self._csDiv, name, self._fcn_crossec_change)
-        extend_combo_list(self._volDiv, name, self._fcn_vol3d_change)
-
-        # Extend the list of ROI volumes if possible :
-        if self.volume._vols[name]._is_roi:
-            # Set label to "N: " + label :
-            label = self.volume._labels_to_gui(roi_labels)
-            self.volume._vols[name].roi_labels = label
-            # Extend ROI combo list :
-            extend_combo_list(self._roiDiv, name, self._fcn_build_roi_lst)
-
-    def volume_list(self):
-        """Get the list of volumes available.
-
-        Returns
-        -------
-        volume_list : list
-            List of volumes availables.
-        """
-        return list(self.volume._vols.keys())
-
-    def cross_sections_control(self, pos=(0., 0., 0.), center=None,
-                               volume='Brodmann', split_view=True,
-                               transparent=True, cmap='gray', show_text=True,
-                               visible=True):
-        """Control the cross-section.
-
-        The three sections (sagittal, coronal and axial) can be defined in two
-        ways :
-
-            * Using the _pos_ input for the use of real coordinates.
-            * Using the _center_ input to directly use slices.
-
-        Parameters
-        ----------
-        pos : array_like | (0., 0., 0.)
-            The position of the center in the MNI system. This array of float
-            positions is then converted into slices usng the inverse transform
-            of the selected volume.
-        center : type | default
-            Array of 3 integers corresponding respectively to the position of
-            the sagittal, coronal and axial sections.
-        volume : string | 'Brodmann'
-            Name of the volume to use. See the volume_list() method to get the
-            list of volumes available.
-        split_view : bool | True
-            If True, the cross-section is splitted into three images. If False,
-            the cross-section is directly displayed inside the brain.
-        transparent : bool | True
-            Use transparent or opaque borders.
-        cmap : string | 'gray'
-            Name of the colormap to use.
-        show_text : bool | True
-            Display or hide slice text.
-        visible : bool | True
-            Set the cross-sections visible.
-
-        See also
-        --------
-        add_volume : Add a new volume to the interface.
-        volume_list : Get the list of volumes available.
-        """
-        # Set volume :
-        safely_set_cbox(self._csDiv, volume, [self._fcn_crossec_change])
-        # Get cross-center :
-        if center is not None:
-            dx, dy, dz = center
-        else:
-            pos = np.asarray(pos).ravel()
-            ipos = self.volume.transform.imap(pos)[0:-1]
-            dx, dy, dz = np.round(ipos).astype(int)
-        # Set sagittal, coronal and axial sections :
-        self.volume._test_cs_range(dx, dy, dz)
-        safely_set_slider(self._csSagit, dx, [self._fcn_crossec_move])
-        safely_set_slider(self._csCoron, dy, [self._fcn_crossec_move])
-        safely_set_slider(self._csAxial, dz, [self._fcn_crossec_move])
-        # Set colormap :
-        safely_set_cbox(self._csCmap, cmap, [self._fcn_crossec_move])
-        # Set split view, transparent and visible :
-        self._csSplit.setChecked(split_view)
-        self._csTransp.setChecked(transparent)
-        self.grpSec.setChecked(visible)
-        self.menuDispCrossec.setChecked(visible)
-        # Show text :
-        self.volume._cspTxtSagit.visible = show_text
-        self.volume._cspTxtAxial.visible = show_text
-        self.volume._cspTxtCoron.visible = show_text
-        # Update the volume to use and split-view :
-        self._fcn_crossec_change()
-        self._fcn_crossec_split()
-        self._fcn_crossec_viz()
-
-    def volume_control(self, volume='Brodmann', rendering='mip',
-                       cmap='OpaqueGrays', threshold=0., visible=True):
-        """Control the 3-D volume.
-
-        Parameters
-        ----------
-        volume : string | 'Brodmann'
-            Name of the volume to use. See the volume_list() method to get the
-            list of volumes available.
-        rendering : {'mip', 'translucent', 'additive', 'iso'}
-            description
-        cmap : {'TransFire', 'OpaqueFire', 'TransGrays', 'OpaqueGrays'}
-            Name of the colormap to use.
-        threshold : float | 0.
-            Volume threshold for 'iso' rendering.
-        visible : bool | True
-            Display or hide the volume.
-        """
-        # Set volume :
-        if volume in self.volume_list():
-            safely_set_cbox(self._volDiv, volume, [self._fcn_vol3d_change])
-        # Threshold :
-        safely_set_spin(self._volIsoTh, threshold, [self._fcn_vol3d_change],
-                        False)
-        # Set cmap :
-        safely_set_cbox(self._volCmap, cmap, [self._fcn_vol3d_change])
-        # Set rendering :
-        if rendering in ['mip', 'translucent', 'additive', 'iso']:
-            safely_set_cbox(self._volRendering, rendering,
-                            [self._fcn_vol3d_change])
-        # Visible :
-        self.menuDispVol.setChecked(visible)
-        self.grpVol.setChecked(visible)
-        self._fcn_vol3d_change()
+        mesh = BrainMesh(vertices=vertices, faces=faces, name=name, **kwargs)
+        mesh.set_camera(self.view.wc.camera)
+        mesh.parent = self._vbNode
 
     # =========================================================================
     # =========================================================================
@@ -505,7 +336,7 @@ class BrainUserMethods(object):
         obj.mask = mask
         obj.mask_color = mask_color
         obj.alpha = alpha
-        obj.visible = visible
+        obj.visible_obj = visible
 
     def sources_display(self, name=None, select='all'):
         """Select sources to display.
@@ -533,6 +364,19 @@ class BrainUserMethods(object):
             vert = self.atlas.vertices
             obj.set_visible_sources(select=select, v=vert)
 
+    def __projection(self, idx_proj, radius, project_on, contribute,
+                     mask_color, **kwargs):
+        """Apply cortical projection and repartition."""
+        self._s_proj_type.setCurrentIndex(idx_proj)
+        self._s_proj_radius.setValue(float(radius))
+        self._s_proj_contribute.setChecked(contribute)
+        self._s_proj_mask_color.setText(str(mask_color))
+        safely_set_cbox(self._s_proj_on, project_on)
+        # Colormap control :
+        self._fcn_source_proj('', **kwargs)
+        self.cbar_control(project_on, **kwargs)
+        self.cbar_select(project_on)
+
     def cortical_projection(self, radius=10., project_on='brain',
                             contribute=False, mask_color='orange', **kwargs):
         """Project sources activity.
@@ -544,8 +388,8 @@ class BrainUserMethods(object):
         ----------
         radius : float | 10.
             Projection radius.
-        project_on : string | 'brain'
-            Define on which object to project the sources activity. Chose
+        project_on : {'brain', 'roi'}
+            Define on which object to project the sources activity. Choose
             either 'brain' for projecting the sources activity onto the
             brain or 'roi' to project on region of interest (if defined).
         contribute : bool | False
@@ -561,14 +405,8 @@ class BrainUserMethods(object):
         roi_control : add a region of interest.
         sources_colormap : Change the colormap properties.
         """
-        self._s_proj_radius.setValue(float(radius))
-        self._s_proj_contribute.setChecked(contribute)
-        self._s_proj_type.setCurrentIndex(0)
-        self._s_proj_mask_color.setText(str(mask_color))
-        safely_set_cbox(self._s_proj_on, project_on)
-        # Colormap control :
-        self._fcn_source_proj()
-        self.cbar_control('Projection', **kwargs)
+        self.__projection(0, radius, project_on, contribute, mask_color,
+                          **kwargs)
 
     def cortical_repartition(self, radius=10., project_on='brain',
                              contribute=False, mask_color='orange', **kwargs):
@@ -578,7 +416,7 @@ class BrainUserMethods(object):
         ----------
         radius : float | 10.
             Projection radius.
-        project_on : string | 'brain'
+        project_on : {'brain', 'roi'}
             Define on which object to project the sources activity. Chose
             either 'brain' for projecting the sources activity onto the
             brain or 'roi' to project on region of interest (if defined).
@@ -589,14 +427,8 @@ class BrainUserMethods(object):
         kwargs : dict
             Further arguments are be passed to the cbar_control method
         """
-        self._s_proj_radius.setValue(float(radius))
-        self._s_proj_contribute.setChecked(contribute)
-        self._s_proj_type.setCurrentIndex(1)
-        self._s_proj_mask_color.setText(str(mask_color))
-        safely_set_cbox(self._s_proj_on, project_on)
-        # Colormap control :
-        self.cbar_control('Projection', **kwargs)
-        self._fcn_source_proj()
+        self.__projection(1, radius, project_on, contribute, mask_color,
+                          **kwargs)
 
     def sources_fit_to_vertices(self, name=None, fit_to='brain'):
         """Force sources coordinates to fit to a selected object.
@@ -609,8 +441,8 @@ class BrainUserMethods(object):
             The object name to fit. Use 'brain' or 'roi'.
         """
         obj = self.sources[name] if name is not None else self.sources
-        v = self._get_obj_vertices(fit_to)
-        obj.fit_to_vertices(v)
+        v = self.atlas if fit_to == 'brain' else self.roi
+        obj.fit_to_vertices(v.vertices)
 
     def sources_to_convex_hull(self, xyz):
         """Convert a set of sources into a convex hull.
@@ -734,70 +566,6 @@ class BrainUserMethods(object):
 
     # =========================================================================
     # =========================================================================
-    #                                 ROI
-    # =========================================================================
-    # =========================================================================
-    def roi_control(self, selection=[], roi_type='Brodmann', smooth=3,
-                    name='roi', translucent=False, alpha=None):
-        """Select Region Of Interest (ROI) to plot.
-
-        Parameters
-        ----------
-        selection : list | []
-            List of integers where each one refer to a particular roi. The
-            corresponding list can be found in the graphical interface in
-            the ROI tab or using the function roi_list.
-        roi_type : {'Brodmann', 'AAL', 'Talairach'}
-            Select the sub-division method i.e 'Brodmann' (for brodmann areas)
-            or 'AAL' (Anatomical Automatic Labeling) or 'Talairach'.
-        smoth : int | 3
-            Define smooth proportion.
-        name : string | 'roi'
-            Name of the displayed ROI.
-
-        See also
-        --------
-        roi_list : display the list of supported areas.
-        """
-        # Check ROI selection :
-        if not isinstance(selection, list) and bool(selection):
-            raise ValueError("The selection parameter must be a list of "
-                             "integers")
-        selection = np.unique(selection)
-        logger.info("Select {} ROI of {} template".format(selection, roi_type))
-        # Select roi_type in the combo list :
-        idx = get_combo_list_index(self._roiDiv, roi_type)
-        self._roiDiv.setCurrentIndex(idx)
-        # Update the list of structures :
-        self._fcn_build_roi_list()
-        # Set selection :
-        self._fcn_set_selected_rois(selection)
-        # Apply selection :
-        self._fcn_apply_roi_selection(name)
-        # Add ROI to mesh list :
-        self._proj_obj[name] = self.volume
-        self._fcn_update_proj_list()
-        self.volume.mesh.translucent = translucent
-        self.volume.mesh.alpha = alpha
-
-    def roi_list(self, roi_type='Brodmann'):
-        """Get the list of supported ROI.
-
-        Parameters
-        ----------
-        roi_type : str | 'Brodmann'
-            Select the sub-division method i.e 'Brodmann' (for brodmann areas)
-            or 'AAL' (Anatomical Automatic Labeling)
-
-        Returns
-        -------
-        roi_labels : array_like
-            The currently supported ROI's labels.
-        """
-        return self.volume._vols[roi_type].roi_labels
-
-    # =========================================================================
-    # =========================================================================
     #                             COLORBAR
     # =========================================================================
     # =========================================================================
@@ -835,13 +603,9 @@ class BrainUserMethods(object):
         clim : tuple/list | None
             Colorbar limit. Every values under / over clim will
             clip.
-        isvmin : bool | None
-            Activate/deactivate vmin.
         vmin : float | None
             Every values under vmin will have the color defined
             using the under parameter.
-        isvmax : bool | None
-            Activate/deactivate vmax.
         vmax : float | None
             Every values over vmin will have the color defined
             using the over parameter.
@@ -872,8 +636,8 @@ class BrainUserMethods(object):
         ndigits : int | None
             Number of digits for the text.
         """
-        # kwargs['isvmin'] = isinstance(kwargs.get('vmin', None), (int, float))
-        # kwargs['isvmax'] = isinstance(vmax, (int, float))
+        kwargs['isvmin'] = isinstance(kwargs.get('vmin', None), (int, float))
+        kwargs['isvmax'] = isinstance(kwargs.get('vmax', None), (int, float))
         # Test if the item "name" is enabled :
         self._cbar_item_is_enable(name)
         # Select the object :

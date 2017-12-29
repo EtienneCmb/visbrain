@@ -70,7 +70,7 @@
            <bool>true</bool>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <property name="documentMode">
            <bool>true</bool>
@@ -78,16 +78,13 @@
           <property name="movable">
            <bool>true</bool>
           </property>
-          <widget class="QWidget" name="q_MNI">
-           <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
+          <widget class="QWidget" name="tab_4">
            <attribute name="title">
-            <string>Brain</string>
+            <string>Objects</string>
            </attribute>
-           <layout class="QVBoxLayout" name="verticalLayout_5">
+           <layout class="QVBoxLayout" name="verticalLayout_8">
             <item>
-             <widget class="QFrame" name="frame_5">
+             <widget class="QFrame" name="frame_4">
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -100,7 +97,7 @@
               <property name="frameShadow">
                <enum>QFrame::Raised</enum>
               </property>
-              <layout class="QGridLayout" name="gridLayout_19">
+              <layout class="QGridLayout" name="gridLayout_16">
                <property name="leftMargin">
                 <number>6</number>
                </property>
@@ -113,8 +110,15 @@
                <property name="bottomMargin">
                 <number>0</number>
                </property>
+               <item row="0" column="1">
+                <widget class="Line" name="line">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                </widget>
+               </item>
                <item row="0" column="0">
-                <widget class="QLabel" name="label_29">
+                <widget class="QLabel" name="label_5">
                  <property name="font">
                   <font>
                    <weight>75</weight>
@@ -123,44 +127,13 @@
                   </font>
                  </property>
                  <property name="text">
-                  <string>3-D object
+                  <string>Object
 type</string>
                  </property>
                 </widget>
                </item>
-               <item row="0" column="1">
-                <widget class="Line" name="line_6">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="2">
-                <widget class="QComboBox" name="_3dobj_type_lst">
-                 <item>
-                  <property name="text">
-                   <string>Brain</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Region of interest (ROI)</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Cross-sections</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Volume</string>
-                  </property>
-                 </item>
-                </widget>
-               </item>
-               <item row="1" column="2">
-                <spacer name="horizontalSpacer_16">
+               <item row="2" column="2">
+                <spacer name="horizontalSpacer_15">
                  <property name="orientation">
                   <enum>Qt::Horizontal</enum>
                  </property>
@@ -172,11 +145,92 @@ type</string>
                  </property>
                 </spacer>
                </item>
+               <item row="0" column="2">
+                <widget class="QComboBox" name="_obj_type_lst">
+                 <item>
+                  <property name="text">
+                   <string>Brain</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Region Of Interest (ROI)</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Volume</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Cross-sections</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Sources</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Connectivity</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Time-series</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Pictures</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Vectors</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_16">
+                 <property name="font">
+                  <font>
+                   <weight>75</weight>
+                   <italic>true</italic>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Object
+name</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="Line" name="line_2">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QComboBox" name="_obj_name_lst">
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Color connectivity line according to :&lt;/p&gt;&lt;p&gt;- Their connectivity strength&lt;/p&gt;&lt;p&gt;- The number of connections per node&lt;/p&gt;&lt;p&gt;- The line density (use the radius to control the density)&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Input parameter : &lt;/span&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;c_colorby&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                </widget>
+               </item>
               </layout>
              </widget>
             </item>
             <item>
-             <widget class="QStackedWidget" name="_3dobj_stack">
+             <widget class="QStackedWidget" name="_obj_stack">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
                 <horstretch>0</horstretch>
@@ -184,10 +238,10 @@ type</string>
                </sizepolicy>
               </property>
               <property name="currentIndex">
-               <number>1</number>
+               <number>4</number>
               </property>
-              <widget class="QWidget" name="page_6">
-               <layout class="QVBoxLayout" name="verticalLayout_13">
+              <widget class="QWidget" name="_brain_page">
+               <layout class="QVBoxLayout" name="verticalLayout_3">
                 <item>
                  <widget class="QGroupBox" name="_brain_grp">
                   <property name="title">
@@ -359,28 +413,31 @@ type</string>
                      </item>
                     </layout>
                    </item>
+                   <item>
+                    <spacer name="verticalSpacer_3">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>20</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
                   </layout>
                  </widget>
                 </item>
-                <item>
-                 <spacer name="verticalSpacer_11">
-                  <property name="orientation">
-                   <enum>Qt::Vertical</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>20</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
                </layout>
               </widget>
-              <widget class="QWidget" name="page_7">
-               <layout class="QVBoxLayout" name="verticalLayout_30">
+              <widget class="QWidget" name="_roi_page">
+               <layout class="QVBoxLayout" name="verticalLayout_11">
                 <item>
-                 <widget class="QGroupBox" name="grpRoi">
+                 <widget class="QGroupBox" name="_roi_grp">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
                   <property name="title">
                    <string>Display</string>
                   </property>
@@ -388,7 +445,7 @@ type</string>
                    <bool>true</bool>
                   </property>
                   <property name="checked">
-                   <bool>true</bool>
+                   <bool>false</bool>
                   </property>
                   <layout class="QVBoxLayout" name="verticalLayout_23">
                    <property name="leftMargin">
@@ -500,23 +557,7 @@ type</string>
                       </widget>
                      </item>
                      <item row="1" column="2">
-                      <widget class="QComboBox" name="_roiDiv">
-                       <item>
-                        <property name="text">
-                         <string>Brodmann</string>
-                        </property>
-                       </item>
-                       <item>
-                        <property name="text">
-                         <string>AAL</string>
-                        </property>
-                       </item>
-                       <item>
-                        <property name="text">
-                         <string>Talairach</string>
-                        </property>
-                       </item>
-                      </widget>
+                      <widget class="QComboBox" name="_roiDiv"/>
                      </item>
                     </layout>
                    </item>
@@ -588,31 +629,6 @@ type</string>
                        </item>
                       </layout>
                      </item>
-                     <item row="0" column="0">
-                      <widget class="QListWidget" name="_roiToAdd">
-                       <property name="sizePolicy">
-                        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                         <horstretch>0</horstretch>
-                         <verstretch>0</verstretch>
-                        </sizepolicy>
-                       </property>
-                       <property name="minimumSize">
-                        <size>
-                         <width>0</width>
-                         <height>0</height>
-                        </size>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <weight>50</weight>
-                         <bold>false</bold>
-                        </font>
-                       </property>
-                       <property name="resizeMode">
-                        <enum>QListView::Fixed</enum>
-                       </property>
-                      </widget>
-                     </item>
                      <item row="0" column="1">
                       <spacer name="verticalSpacer_12">
                        <property name="orientation">
@@ -626,287 +642,20 @@ type</string>
                        </property>
                       </spacer>
                      </item>
-                    </layout>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-              <widget class="QWidget" name="page_8">
-               <layout class="QVBoxLayout" name="verticalLayout_31">
-                <item>
-                 <widget class="QGroupBox" name="grpSec">
-                  <property name="title">
-                   <string>Display</string>
-                  </property>
-                  <property name="checkable">
-                   <bool>true</bool>
-                  </property>
-                  <property name="checked">
-                   <bool>false</bool>
-                  </property>
-                  <layout class="QVBoxLayout" name="verticalLayout_19">
-                   <property name="leftMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="topMargin">
-                    <number>9</number>
-                   </property>
-                   <property name="rightMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>9</number>
-                   </property>
-                   <item>
-                    <widget class="Line" name="line_47">
-                     <property name="minimumSize">
-                      <size>
-                       <width>200</width>
-                       <height>0</height>
-                      </size>
-                     </property>
-                     <property name="orientation">
-                      <enum>Qt::Horizontal</enum>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <layout class="QGridLayout" name="gridLayout_10">
-                     <item row="2" column="0">
-                      <widget class="QLabel" name="label_46">
-                       <property name="font">
-                        <font>
-                         <italic>true</italic>
-                        </font>
-                       </property>
-                       <property name="text">
-                        <string>Coronal</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="3" column="1">
-                      <widget class="Line" name="line_71">
-                       <property name="minimumSize">
-                        <size>
-                         <width>20</width>
-                         <height>0</height>
-                        </size>
-                       </property>
-                       <property name="orientation">
-                        <enum>Qt::Vertical</enum>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="1">
-                      <widget class="Line" name="line_73">
-                       <property name="minimumSize">
-                        <size>
-                         <width>20</width>
-                         <height>0</height>
-                        </size>
-                       </property>
-                       <property name="orientation">
-                        <enum>Qt::Vertical</enum>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="2" column="2">
-                      <widget class="QSlider" name="_csCoron">
-                       <property name="minimum">
-                        <number>-5</number>
-                       </property>
-                       <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="3" column="0">
-                      <widget class="QLabel" name="label_47">
-                       <property name="font">
-                        <font>
-                         <italic>true</italic>
-                        </font>
-                       </property>
-                       <property name="text">
-                        <string>Axial</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="2">
-                      <widget class="QComboBox" name="_csDiv">
-                       <item>
-                        <property name="text">
-                         <string>Brodmann</string>
-                        </property>
-                       </item>
-                       <item>
-                        <property name="text">
-                         <string>AAL</string>
-                        </property>
-                       </item>
-                       <item>
-                        <property name="text">
-                         <string>Talairach</string>
-                        </property>
-                       </item>
-                      </widget>
-                     </item>
-                     <item row="2" column="1">
-                      <widget class="Line" name="line_69">
-                       <property name="minimumSize">
-                        <size>
-                         <width>20</width>
-                         <height>0</height>
-                        </size>
-                       </property>
-                       <property name="orientation">
-                        <enum>Qt::Vertical</enum>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="1" column="1">
-                      <widget class="Line" name="line_48">
-                       <property name="minimumSize">
-                        <size>
-                         <width>20</width>
-                         <height>0</height>
-                        </size>
-                       </property>
-                       <property name="orientation">
-                        <enum>Qt::Vertical</enum>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="1" column="2">
-                      <widget class="QSlider" name="_csSagit">
-                       <property name="minimum">
-                        <number>-5</number>
-                       </property>
-                       <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                       </property>
-                       <property name="invertedAppearance">
-                        <bool>false</bool>
-                       </property>
-                       <property name="invertedControls">
-                        <bool>false</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="4" column="1">
-                      <widget class="Line" name="line_87">
-                       <property name="minimumSize">
-                        <size>
-                         <width>20</width>
-                         <height>0</height>
-                        </size>
-                       </property>
-                       <property name="orientation">
-                        <enum>Qt::Vertical</enum>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="4" column="2">
-                      <widget class="QComboBox" name="_csCmap"/>
-                     </item>
-                     <item row="3" column="2">
-                      <widget class="QSlider" name="_csAxial">
-                       <property name="minimum">
-                        <number>-5</number>
-                       </property>
-                       <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="4" column="0">
-                      <widget class="QLabel" name="label_59">
-                       <property name="font">
-                        <font>
-                         <italic>true</italic>
-                        </font>
-                       </property>
-                       <property name="text">
-                        <string>Cmap</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="1" column="0">
-                      <widget class="QLabel" name="label_44">
-                       <property name="font">
-                        <font>
-                         <italic>true</italic>
-                        </font>
-                       </property>
-                       <property name="text">
-                        <string>Sagittal</string>
-                       </property>
-                      </widget>
-                     </item>
                      <item row="0" column="0">
-                      <widget class="QLabel" name="label_49">
-                       <property name="font">
-                        <font>
-                         <italic>true</italic>
-                        </font>
-                       </property>
-                       <property name="text">
-                        <string>Volume</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="5" column="0" colspan="3">
-                      <widget class="QWidget" name="widget_5" native="true">
-                       <layout class="QHBoxLayout" name="horizontalLayout_15">
-                        <property name="margin">
-                         <number>0</number>
-                        </property>
-                        <item>
-                         <widget class="QCheckBox" name="_csTransp">
-                          <property name="text">
-                           <string>Transparent</string>
-                          </property>
-                          <property name="checked">
-                           <bool>true</bool>
-                          </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <widget class="QCheckBox" name="_csSplit">
-                          <property name="text">
-                           <string>Split view</string>
-                          </property>
-                         </widget>
-                        </item>
-                       </layout>
-                      </widget>
+                      <widget class="QTableWidget" name="_roiToAdd"/>
                      </item>
                     </layout>
                    </item>
                   </layout>
                  </widget>
                 </item>
-                <item>
-                 <spacer name="verticalSpacer_2">
-                  <property name="orientation">
-                   <enum>Qt::Vertical</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>20</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
                </layout>
               </widget>
-              <widget class="QWidget" name="page_9">
-               <layout class="QVBoxLayout" name="verticalLayout_32">
+              <widget class="QWidget" name="_volume_page">
+               <layout class="QVBoxLayout" name="verticalLayout_14">
                 <item>
-                 <widget class="QGroupBox" name="grpVol">
+                 <widget class="QGroupBox" name="_vol_grp">
                   <property name="title">
                    <string>Display</string>
                   </property>
@@ -1042,23 +791,7 @@ type</string>
                       </widget>
                      </item>
                      <item row="0" column="2">
-                      <widget class="QComboBox" name="_volDiv">
-                       <item>
-                        <property name="text">
-                         <string>Brodmann</string>
-                        </property>
-                       </item>
-                       <item>
-                        <property name="text">
-                         <string>AAL</string>
-                        </property>
-                       </item>
-                       <item>
-                        <property name="text">
-                         <string>Talairach</string>
-                        </property>
-                       </item>
-                      </widget>
+                      <widget class="QComboBox" name="_volDiv"/>
                      </item>
                      <item row="1" column="0">
                       <widget class="QLabel" name="label_58">
@@ -1115,176 +848,267 @@ type</string>
                      </item>
                     </layout>
                    </item>
+                   <item>
+                    <spacer name="verticalSpacer_5">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>20</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
                   </layout>
                  </widget>
                 </item>
+               </layout>
+              </widget>
+              <widget class="QWidget" name="_crossec_page">
+               <layout class="QVBoxLayout" name="verticalLayout_15">
                 <item>
-                 <spacer name="verticalSpacer_4">
-                  <property name="orientation">
-                   <enum>Qt::Vertical</enum>
+                 <widget class="QGroupBox" name="_sec_grp">
+                  <property name="title">
+                   <string>Display</string>
                   </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>20</width>
-                    <height>40</height>
-                   </size>
+                  <property name="checkable">
+                   <bool>true</bool>
                   </property>
-                 </spacer>
+                  <property name="checked">
+                   <bool>false</bool>
+                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_19">
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>9</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>9</number>
+                   </property>
+                   <item>
+                    <widget class="Line" name="line_47">
+                     <property name="minimumSize">
+                      <size>
+                       <width>200</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <layout class="QGridLayout" name="gridLayout_10">
+                     <item row="2" column="0">
+                      <widget class="QLabel" name="label_46">
+                       <property name="font">
+                        <font>
+                         <italic>true</italic>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>Coronal</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="3" column="1">
+                      <widget class="Line" name="line_71">
+                       <property name="minimumSize">
+                        <size>
+                         <width>20</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Vertical</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="1">
+                      <widget class="Line" name="line_73">
+                       <property name="minimumSize">
+                        <size>
+                         <width>20</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Vertical</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="2" column="2">
+                      <widget class="QSlider" name="_csCoron">
+                       <property name="minimum">
+                        <number>-5</number>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="3" column="0">
+                      <widget class="QLabel" name="label_47">
+                       <property name="font">
+                        <font>
+                         <italic>true</italic>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>Axial</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="2">
+                      <widget class="QComboBox" name="_csDiv"/>
+                     </item>
+                     <item row="2" column="1">
+                      <widget class="Line" name="line_69">
+                       <property name="minimumSize">
+                        <size>
+                         <width>20</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Vertical</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="1" column="1">
+                      <widget class="Line" name="line_48">
+                       <property name="minimumSize">
+                        <size>
+                         <width>20</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Vertical</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="1" column="2">
+                      <widget class="QSlider" name="_csSagit">
+                       <property name="minimum">
+                        <number>-5</number>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                       <property name="invertedAppearance">
+                        <bool>false</bool>
+                       </property>
+                       <property name="invertedControls">
+                        <bool>false</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="4" column="1">
+                      <widget class="Line" name="line_87">
+                       <property name="minimumSize">
+                        <size>
+                         <width>20</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Vertical</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="4" column="2">
+                      <widget class="QComboBox" name="_csCmap"/>
+                     </item>
+                     <item row="3" column="2">
+                      <widget class="QSlider" name="_csAxial">
+                       <property name="minimum">
+                        <number>-5</number>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="4" column="0">
+                      <widget class="QLabel" name="label_59">
+                       <property name="font">
+                        <font>
+                         <italic>true</italic>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>Cmap</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="1" column="0">
+                      <widget class="QLabel" name="label_44">
+                       <property name="font">
+                        <font>
+                         <italic>true</italic>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>Sagittal</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="0">
+                      <widget class="QLabel" name="label_49">
+                       <property name="font">
+                        <font>
+                         <italic>true</italic>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>Volume</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="5" column="0" colspan="3">
+                      <widget class="QWidget" name="widget_5" native="true">
+                       <layout class="QHBoxLayout" name="horizontalLayout_15">
+                        <property name="margin">
+                         <number>0</number>
+                        </property>
+                       </layout>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item>
+                    <spacer name="verticalSpacer_7">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>20</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </widget>
                 </item>
                </layout>
               </widget>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-          <widget class="QWidget" name="tab_4">
-           <attribute name="title">
-            <string>Objects</string>
-           </attribute>
-           <layout class="QVBoxLayout" name="verticalLayout_8">
-            <item>
-             <widget class="QFrame" name="frame_4">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="frameShape">
-               <enum>QFrame::StyledPanel</enum>
-              </property>
-              <property name="frameShadow">
-               <enum>QFrame::Raised</enum>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_16">
-               <property name="leftMargin">
-                <number>6</number>
-               </property>
-               <property name="topMargin">
-                <number>6</number>
-               </property>
-               <property name="rightMargin">
-                <number>6</number>
-               </property>
-               <property name="bottomMargin">
-                <number>0</number>
-               </property>
-               <item row="0" column="1">
-                <widget class="Line" name="line">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0">
-                <widget class="QLabel" name="label_5">
-                 <property name="font">
-                  <font>
-                   <weight>75</weight>
-                   <italic>true</italic>
-                   <bold>true</bold>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Object
-type</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="2">
-                <spacer name="horizontalSpacer_15">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>40</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-               <item row="0" column="2">
-                <widget class="QComboBox" name="_obj_type_lst">
-                 <item>
-                  <property name="text">
-                   <string>Sources</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Connectivity</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Time-series</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Pictures</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Vectors</string>
-                  </property>
-                 </item>
-                </widget>
-               </item>
-               <item row="1" column="0">
-                <widget class="QLabel" name="label_16">
-                 <property name="font">
-                  <font>
-                   <weight>75</weight>
-                   <italic>true</italic>
-                   <bold>true</bold>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Object
-name</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="Line" name="line_2">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="2">
-                <widget class="QComboBox" name="_obj_name_lst">
-                 <property name="toolTip">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Color connectivity line according to :&lt;/p&gt;&lt;p&gt;- Their connectivity strength&lt;/p&gt;&lt;p&gt;- The number of connections per node&lt;/p&gt;&lt;p&gt;- The line density (use the radius to control the density)&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Input parameter : &lt;/span&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;c_colorby&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </item>
-            <item>
-             <widget class="QStackedWidget" name="_obj_stack">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="currentIndex">
-               <number>4</number>
-              </property>
               <widget class="QWidget" name="_sources_page">
                <layout class="QVBoxLayout" name="verticalLayout_9">
                 <item>
                  <widget class="QTabWidget" name="_source_tab">
                   <property name="currentIndex">
-                   <number>0</number>
+                   <number>2</number>
                   </property>
                   <widget class="QWidget" name="tab_2">
                    <attribute name="title">
@@ -1304,8 +1128,8 @@ name</string>
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>312</width>
-                         <height>392</height>
+                         <width>316</width>
+                         <height>569</height>
                         </rect>
                        </property>
                        <layout class="QVBoxLayout" name="verticalLayout_12">
@@ -1931,6 +1755,9 @@ name</string>
                            <property name="decimals">
                             <number>1</number>
                            </property>
+                           <property name="value">
+                            <double>10.000000000000000</double>
+                           </property>
                           </widget>
                          </item>
                          <item row="0" column="1">
@@ -2052,7 +1879,7 @@ type</string>
                            </property>
                            <item>
                             <property name="text">
-                             <string>activity</string>
+                             <string>modulation</string>
                             </property>
                            </item>
                            <item>
@@ -2091,7 +1918,11 @@ color</string>
                          <item row="3" column="2">
                           <layout class="QHBoxLayout" name="horizontalLayout_19">
                            <item>
-                            <widget class="QLineEdit" name="_s_proj_mask_color"/>
+                            <widget class="QLineEdit" name="_s_proj_mask_color">
+                             <property name="text">
+                              <string>gray</string>
+                             </property>
+                            </widget>
                            </item>
                            <item>
                             <widget class="QToolButton" name="_s_proj_mask_color_p">
@@ -2194,6 +2025,13 @@ color</string>
                       <property name="topMargin">
                        <number>0</number>
                       </property>
+                      <item row="1" column="3">
+                       <widget class="QPushButton" name="_s_analyse_run">
+                        <property name="text">
+                         <string>Run</string>
+                        </property>
+                       </widget>
+                      </item>
                       <item row="0" column="0" rowspan="2">
                        <widget class="QLabel" name="label_24">
                         <property name="font">
@@ -2207,7 +2045,7 @@ ROI</string>
                         </property>
                        </widget>
                       </item>
-                      <item row="2" column="2">
+                      <item row="3" column="2">
                        <spacer name="horizontalSpacer_9">
                         <property name="orientation">
                          <enum>Qt::Horizontal</enum>
@@ -2246,12 +2084,61 @@ ROI</string>
                         </property>
                        </widget>
                       </item>
-                      <item row="1" column="3">
-                       <widget class="QPushButton" name="_s_analyse_run">
-                        <property name="text">
-                         <string>Run</string>
+                      <item row="2" column="1">
+                       <widget class="Line" name="line_6">
+                        <property name="orientation">
+                         <enum>Qt::Vertical</enum>
                         </property>
                        </widget>
+                      </item>
+                      <item row="2" column="0">
+                       <widget class="QLabel" name="label_29">
+                        <property name="font">
+                         <font>
+                          <italic>true</italic>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>Cross-section</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="2" column="2" colspan="2">
+                       <layout class="QHBoxLayout" name="horizontalLayout_20">
+                        <item>
+                         <spacer name="horizontalSpacer_4">
+                          <property name="orientation">
+                           <enum>Qt::Horizontal</enum>
+                          </property>
+                          <property name="sizeHint" stdset="0">
+                           <size>
+                            <width>40</width>
+                            <height>20</height>
+                           </size>
+                          </property>
+                         </spacer>
+                        </item>
+                        <item>
+                         <widget class="QPushButton" name="_s_show_cs">
+                          <property name="text">
+                           <string>Show</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <spacer name="horizontalSpacer_5">
+                          <property name="orientation">
+                           <enum>Qt::Horizontal</enum>
+                          </property>
+                          <property name="sizeHint" stdset="0">
+                           <size>
+                            <width>40</width>
+                            <height>20</height>
+                           </size>
+                          </property>
+                         </spacer>
+                        </item>
+                       </layout>
                       </item>
                      </layout>
                     </item>
@@ -4010,7 +3897,7 @@ type</string>
     <bool>true</bool>
    </property>
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text">
     <string>ROI</string>

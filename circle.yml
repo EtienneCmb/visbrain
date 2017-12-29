@@ -43,7 +43,8 @@ dependencies:
       fi;
     - conda install -n circleenv --yes numpy scipy pip;
     - pip install codecov pytest pytest-cov pytest-travis-fold;
-    - pip install mne nibabel pandas;
+    - pip install mne nibabel pandas openpyxl;
+    - pip install git+https://github.com/hbldh/lspopt.git#egg=lspopt;
     - ls -al /home/ubuntu/miniconda3;
     - ls -al /home/ubuntu/miniconda3/bin;
     - echo $PATH;
@@ -57,6 +58,6 @@ dependencies:
 
 test:
   override:
-    - make test;
+    - py.test --cov;
   post:
     - codecov;

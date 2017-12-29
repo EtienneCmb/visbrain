@@ -77,6 +77,7 @@ class CbarVisual(CbarBase):
             # Define the camera :
             self._camera = FixedCam(rect=(-1.2, -1.2, 2.4, 2.4))
             self._wc.camera = self._camera
+        self.parent = parent
 
         # _____________________ OBJECTS _____________________
         # --------------------- Node ---------------------
@@ -104,6 +105,7 @@ class CbarVisual(CbarBase):
         self._mBorder = visuals.Line(parent=self._cbNode, name='Border')
         self._mBorder.set_data(pos=pos, width=2., connect='segments',
                                color=self._txtcolor)
+        self._mBorder.visible = self._border
 
         # --------------------- Labels ---------------------
         # Clim labels :
@@ -140,6 +142,8 @@ class CbarVisual(CbarBase):
         try:
             # Check if clim is int/float :
             if self._clim is None:
+                if not hasattr(self, '_minmax'):
+                    self._minmax = (0., 1.)
                 self._clim = self._minmax
             assert all([isinstance(k, (int, float)) for k in self._clim])
             # Check vmin/vmax :

@@ -1,7 +1,7 @@
-.. _Signal:
+.. _SignalModule:
 
-Signal
-######
+:class:`Signal`
+###############
 
 .. figure::  picture/ico/signal_ico.png
    :align:   center
@@ -9,7 +9,7 @@ Signal
 Description
 -----------
 
-*Signal* is a data-mining module for 1-D, 2-D and 3-D datasets. It tries to offer a convenient way to inspect datasets, locate bad trials and reveal time-frequency properties. It is subdivided into to two distinct components :
+:class:`Signal` is a data-mining module for 1-D, 2-D and 3-D datasets. It tries to offer a convenient way to inspect datasets, locate bad trials and reveal time-frequency properties. It is subdivided into to two distinct components :
 
 * **The grid** : each datasets is re-arranged into a clickable 2-D grid so that all of the time-series of a dataset are represented inside. This idea of a grid was originally present into the `VisPy examples <https://github.com/vispy/vispy/blob/master/examples/demo/gloo/realtime_signals.py>`_ and has been adapted for brain signals.
 * **The signal canvas** : the second layout display one trial at a time. This trial can either be represented as a continuous line or markers. It's also possible to compute the histogram, time-frequency map or PSD.
@@ -39,7 +39,7 @@ Main features
 Import and use Signal
 ~~~~~~~~~~~~~~~~~~~~~
 
-The *Signal* module can be imported as follow :
+The :class:`Signal` module can be imported as follow :
 
 .. code-block:: python
 
@@ -64,29 +64,20 @@ API
 Signal class
 ~~~~~~~~~~~~
 
-.. currentmodule:: visbrain.signal.signal
+.. currentmodule:: visbrain
 
 .. autoclass:: Signal
+    :members: show, set_xlim, set_ylim, set_signal_index, set_signal_form, screenshot
 
     .. rubric:: Methods
 
     .. autosummary::
-        ~visbrain.signal.signal.Signal.show
-        ~visbrain.signal.signal.Signal.set_xlim
-        ~visbrain.signal.signal.Signal.set_ylim
-        ~visbrain.signal.signal.Signal.set_signal_index
-        ~visbrain.signal.signal.Signal.set_signal_form
-        ~visbrain.signal.signal.Signal.screenshot
-
-Methods
-~~~~~~~
-
-.. automethod:: visbrain.signal.signal.Signal.show
-.. automethod:: visbrain.signal.signal.Signal.set_xlim
-.. automethod:: visbrain.signal.signal.Signal.set_ylim
-.. automethod:: visbrain.signal.signal.Signal.set_signal_index
-.. automethod:: visbrain.signal.signal.Signal.set_signal_form
-.. automethod:: visbrain.signal.signal.Signal.screenshot
+        ~visbrain.Signal.show
+        ~visbrain.Signal.set_xlim
+        ~visbrain.Signal.set_ylim
+        ~visbrain.Signal.set_signal_index
+        ~visbrain.Signal.set_signal_form
+        ~visbrain.Signal.screenshot
 
 
 Shortcuts

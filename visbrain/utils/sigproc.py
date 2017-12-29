@@ -180,7 +180,7 @@ def averaging(ts, n_window, axis=-1, overlap=0., window='flat'):
         Overlap of successive window (0 <= overlap < 1). By default, no overlap
         is performed.
     window : {'flat', 'hanning', 'hamming', 'bartlett', 'blackman'}
-        description
+        Windowing method.
 
     Returns
     -------

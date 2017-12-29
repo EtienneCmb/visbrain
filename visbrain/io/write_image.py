@@ -4,16 +4,15 @@
 - write_fig_canvas : Export a canvas as a figure
 - write_fig_pyqt : Export a GUI window as a figure
 """
+import os
 import logging
-# from os.path import splitext
 import numpy as np
 from ..utils.color import color2vb
 
-
 logger = logging.getLogger('visbrain')
 
-__all__ = ('write_fig_hyp', 'write_fig_canvas', 'write_fig_pyqt')
-
+__all__ = ('write_fig_hyp', 'write_fig_spindles', 'write_fig_canvas',
+           'write_fig_pyqt')
 
 def write_fig_hyp(file, hypno, sf, tstartsec, grid=False, ascolor=False,
                   dpi=600, colors={-1: '#8bbf56', 0: '#56bf8b', 1: '#aabcce',
@@ -23,7 +22,7 @@ def write_fig_hyp(file, hypno, sf, tstartsec, grid=False, ascolor=False,
     Parameters
     ----------
     file : str
-        Filename (with full path) to sleep dataset.
+        Output filename (with full path)
     hypno : array_like
         Hypnogram vector
     sf : float
@@ -141,6 +140,116 @@ def write_fig_hyp(file, hypno, sf, tstartsec, grid=False, ascolor=False,
     plt.close()
 
 
+def write_fig_spindles(elec, hypno, sf, start_s, window_s, thr=3.,
+                        nrem_only=False, dpi=300):
+    """Show steps of the spindles detection for a specific time window
+
+    Parameters
+    ----------
+    elec : array_like
+        Data vector
+    hypno : array_like
+        Hypnogram vector
+    sf : float
+        The sampling frequency of displayed elements (could be the
+        down-sampling frequency)
+    start_s : float
+        Starting point in sec of the window to plot
+    window_s : float
+        Window duration in seconds
+    thresh : float | 3
+        Hard threshold for the spindles detection
+    dpi : int | 300
+        Dots per inches
+    """
+    import matplotlib.pyplot as plt
+    from ..utils.sleep import spindlesdetect
+    from ..utils.filtering import filt
+
+    # Run spindles detection on the selected channel
+    idx_spindles, _, _, dur, pwr, idx_start, idx_stop, hard_thr, soft_thr, \
+    idx_sigma, fmin, fmax, sigma_nfpow, amplitude, sigma_thr = spindlesdetect(
+    elec, sf, thr, hypno, nrem_only, return_full=True)
+
+    # Define plotting range
+    start_sf = int(start_s * sf)
+    x = range(start_sf, start_sf + int(window_s * sf))
+
+    # Bandpass filter of the window
+    elec_filt = filt(sf, [12., 14.], elec[x], order=4)
+
+    # Find beginning and end of spindle within the window
+    idx_start_win = idx_start[(idx_start >= min(x)) & (idx_start <= max(x))]
+    idx_stop_win = idx_stop[(idx_stop >= min(x)) & (idx_stop <= max(x))]
+    sp_in_win = np.in1d(idx_start, idx_start_win)
+    sp_power = pwr[sp_in_win]
+    sp_duration = dur[sp_in_win]
+
+    # Find indices of spindles within the window
+    idx_spindles_win = idx_spindles[(idx_spindles >= min(x)) & (idx_spindles <= max(x))]
+
+    # Find indices of sigma power > supra-threshold within window
+    idx_sigma_win = idx_sigma[(idx_sigma > min(x)) & (idx_sigma < max(x))]
+    # Find indices of wavelet amplitude > supra-threshold within window
+    with np.errstate(divide='ignore', invalid='ignore'):
+        idx_hard = np.where(amplitude > hard_thr)[0]
+
+    idx_hard_win = idx_hard[(idx_hard > min(x)) & (idx_hard < max(x))]
+
+    # Initialize Y vector
+    y_sigma, y_spindles, y_wlt, y_hard = np.empty(len(x)), np.empty(len(x)), \
+                                            np.empty(len(x)), np.empty(len(x))
+    y_sigma[:], y_spindles[:], y_wlt[:], y_hard[:] = np.nan, np.nan, np.nan, \
+                                                                        np.nan
+
+    # Fill Y vector
+    y_sigma[idx_sigma_win - start_sf] = sigma_nfpow[idx_sigma_win]
+    y_spindles[idx_spindles_win - start_sf] = elec[idx_spindles_win]
+    y_wlt[idx_spindles_win - start_sf] = amplitude[idx_spindles_win]
+    y_hard[idx_hard_win - start_sf] = amplitude[idx_hard_win]
+
+    # Start plot
+    f, axarr = plt.subplots(4, figsize=(10,6), sharex=True)
+    f.subplots_adjust(hspace=0.6)
+
+    # Plot original signal
+    axarr[0].plot(x, elec[x], 'darkslategrey', lw=1.5)
+    axarr[0].plot(x, y_spindles, 'brown', lw=1.5)
+    axarr[0].set_title('Original signal (' + str(window_s) + ' sec)')
+    axarr[0].set_xlim([min(x), max(x)])
+
+    if sp_power.size >= 1:
+        text = 'power = ' + str(np.round(sp_power, 2)) + \
+                ' - duration = ' + str(sp_duration) + ' ms'
+        axarr[0].annotate(text, xy=(min(x), min(elec[x])), fontsize=9,
+                          xycoords='data')
+
+    # Plot filtered signal
+    axarr[1].plot(x, elec_filt, 'darkslategrey', linewidth=1.5)
+    axarr[1].set_title('Filtered')
+
+    # Plot wavelet envelope
+    axarr[2].plot(x, amplitude[x], 'darkslategrey', linewidth=2)
+    axarr[2].plot(x, y_wlt, 'coral', lw=3)
+    # axarr[2].plot(x, y_hard, 'indianred', lw=3)
+    axarr[2].scatter(idx_start_win, amplitude[idx_start_win], 60, 'coral')
+    axarr[2].scatter(idx_stop_win, amplitude[idx_stop_win], 60, 'coral')
+    axarr[2].set_title('Wavelet')
+    axarr[2].axhline(y=hard_thr, color='grey', linestyle=':', lw=1.5)
+    axarr[2].axhline(y=soft_thr, color='grey', linestyle=':', lw=1.5)
+
+    # Plot sigma normalized power
+    axarr[3].plot(x, sigma_nfpow[x], 'darkslategrey', linewidth=2)
+    axarr[3].set_title('Sigma power')
+    axarr[3].plot(x, y_sigma, lw=3, color='lightcoral')
+    axarr[3].axhline(y=sigma_thr, color='grey', linestyle=':', lw=1.5)
+
+    # Despine
+    for ax in range(4):
+        axarr[ax].axis('off')
+
+    plt.show()
+
 def write_fig_canvas(filename, canvas, widget=None, autocrop=False,
                      region=None, print_size=None, unit='centimeter', dpi=300.,
                      factor=1., bgcolor=None, transparent=False):
@@ -195,23 +304,30 @@ def write_fig_canvas(filename, canvas, widget=None, autocrop=False,
     backup_size = canvas.physical_size
     backup_bgcolor = canvas.bgcolor
 
+    # dpi checking :
+    if print_size is None:
+        logger.warning("dpi parameter is not active if `print_size` is None. "
+                       "Use for example `print_size=(5, 5)`")
+
     # User select a desired print size with at a specific dpi :
     if print_size is not None:
         # Type checking :
-        if not isinstance(print_size, (tuple, list, np.ndarray)):
-            raise TypeError("The print_size must either be a tuple, list or a "
-                            "NumPy array describing the (width, height) of the"
-                            " image in " + unit)
+        if not isinstance(print_size, (tuple, list)):
+            raise TypeError("The print_size must either be a tuple or a list "
+                            "describing the (width, height) of the"
+                            " image in %s" % unit)
         # Check print size :
         if not all([isinstance(k, (int, float)) for k in print_size]):
             raise TypeError("print_size must be a tuple describing the "
-                            "(width, height) of the image in " + unit)
+                            "(width, height) of the image in %s" % unit)
+
         print_size = np.asarray(print_size)
         # If the user select the auto-croping option, the canvas must be render
         # before :
         if autocrop:
             img = canvas.render()
             s_output = piccrop(img)[:, :, 0].shape
+            logger.info("Image cropped to closest non-backround pixels")
         else:
             s_output = b_size
         # Unit conversion :
@@ -242,8 +358,6 @@ def write_fig_canvas(filename, canvas, widget=None, autocrop=False,
         if widget is not None:
             widget.size = (new_width, new_height)
 
-    # Don't use transparency for jpg files :
-    # transparent = transparent if splitext(filename)[1] != '.jpg' else False
     # Background color and transparency :
     if bgcolor is not None:
         canvas.bgcolor = color2vb(bgcolor, alpha=1.)
@@ -257,12 +371,18 @@ def write_fig_canvas(filename, canvas, widget=None, autocrop=False,
         raise ValueError("Can not render the canvas. Try to decrease the "
                          "resolution")
 
+    # Remove alpha for files that are not png or tiff :
+    if os.path.splitext(filename)[1] not in ['.png', '.tiff']:
+        img = img[..., 0:-1]
+
     # Apply auto-cropping to the image :
     if autocrop:
         img = piccrop(img)
+        logger.info("Image cropped to closest non-backround pixels")
     # Save it :
     imsave(filename, img)
-    logger.info('Image successfully saved (%s)' % filename)
+    px = tuple(img[:, :, 0].T.shape)
+    logger.info("Image of size %rpx successfully saved (%s)" % (px, filename))
 
     # Set to the canvas it's previous size :
     canvas._backend._physical_size = backup_size

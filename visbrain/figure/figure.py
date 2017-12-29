@@ -61,7 +61,7 @@ class Figure(object):
     figsize : tuple | None
         The size of the figure. Should be a tuple of integers.
     subspace : dict | {'left': 0., 'right': 1., 'bottom': 0., 'top': .9,
-               'wspace': 0., 'hspace': 0.05}
+                       'wspace': 0., 'hspace': 0.05}
         Control margins and the distance between subplots. Use:
 
             * 'left' : The left side of the subplots of the figure

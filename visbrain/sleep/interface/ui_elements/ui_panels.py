@@ -3,9 +3,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 import numpy as np
 
+from visbrain.io.dependencies import is_lspopt_installed
+
 from ..ui_init import AxisCanvas, TimeAxis
-from ....utils import mpl_cmap
-from ....config import profiler
+from ....utils import mpl_cmap, color2vb
+from ....config import PROFILER
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -33,7 +35,7 @@ class UiPanels(object):
         self._chanGrid.setSpacing(3)
         self._chanGrid.setObjectName(_fromUtf8("_chanGrid"))
         self.gridLayout_21.addLayout(self._chanGrid, 0, 0, 1, 1)
-        profiler("Channel grid", level=2)
+        PROFILER("Channel grid", level=2)
 
         # =====================================================================
         # CHANNELS
@@ -44,7 +46,7 @@ class UiPanels(object):
         self._PanChanDeselectAll.clicked.connect(self._fcn_DeselectAllchan)
         self._PanAmpAuto.clicked.connect(self._fcn_chanAutoAmp)
         self._PanAmpSym.clicked.connect(self._fcn_chanSymAmp)
-        profiler("Channel canvas, widgets and buttons", level=2)
+        PROFILER("Channel canvas, widgets and buttons", level=2)
 
         # =====================================================================
         # AMPLITUDES
@@ -55,7 +57,7 @@ class UiPanels(object):
         self._fcn_updateAmpInfo()
         self._PanAllAmpMin.valueChanged.connect(self._fcn_allAmp)
         self._PanAllAmpMax.valueChanged.connect(self._fcn_allAmp)
-        profiler("Channel amplitudes", level=2)
+        PROFILER("Channel amplitudes", level=2)
 
         # =====================================================================
         # SPECTROGRAM
@@ -82,6 +84,8 @@ class UiPanels(object):
         self._PanSpecCmap.setCurrentIndex(self._cmap_lst.index(self._defcmap))
         # Add list of channels :
         self._PanSpecChan.addItems(self._channels)
+        # Disable multitaper option if not is_lspopt_installed
+        self._PanSpecMethod.model().item(2).setEnabled(is_lspopt_installed())
         # Connect spectrogam properties :
         self._PanSpecApply.setEnabled(False)
         self._PanSpecApply.clicked.connect(self._fcn_specSetData)
@@ -96,7 +100,7 @@ class UiPanels(object):
         self._PanSpecCmapInv.clicked.connect(self._fcn_specCompat)
         self._PanSpecNorm.currentIndexChanged.connect(self._fcn_specCompat)
         self._PanSpecInterp.currentIndexChanged.connect(self._fcn_spec_interp)
-        profiler("Spectrogram", level=2)
+        PROFILER("Spectrogram", level=2)
 
         # =====================================================================
         # HYPNOGRAM
@@ -122,7 +126,11 @@ class UiPanels(object):
             layout.addWidget(label)
             self._hypYLabels.append(label)
         self._chanGrid.addWidget(self._hypLabel, len(self) + 2, 0, 1, 1)
-        profiler("Hypnogram", level=2)
+        PROFILER("Hypnogram", level=2)
+        # Connect :
+        self._PanHypnoReset.clicked.connect(self._fcn_hypnoClean)
+        self._PanHypnoLw.valueChanged.connect(self._fcn_hypnoLw)
+        self._PanHypnoColor.clicked.connect(self._fcn_hypnoColor)
 
         # =====================================================================
         # TOPOPLOT
@@ -151,7 +159,7 @@ class UiPanels(object):
         self._PanTopoFmax.valueChanged.connect(self._fcn_topoSettings)
         self._PanTopoAutoClim.clicked.connect(self._fcn_topoSettings)
         self._PanTopoApply.clicked.connect(self._fcn_topoApply)
-        profiler("Topoplot", level=2)
+        PROFILER("Topoplot", level=2)
 
         # =====================================================================
         # TIME AXIS
@@ -173,7 +181,7 @@ class UiPanels(object):
         self._timeLabel.setText(self._addspace + 'Time')
         self._timeLabel.setFont(self._font)
         self._chanGrid.addWidget(self._timeLabel, len(self) + 3, 0, 1, 1)
-        profiler("Time axis", level=2)
+        PROFILER("Time axis", level=2)
 
     # =====================================================================
     # CHANNELS
@@ -422,7 +430,7 @@ class UiPanels(object):
         # Get channel to get spectrogram :
         chan = self._PanSpecChan.currentIndex()
         # Use spectrogram / tf :
-        self._spec._use_tf = int(self._PanSpecMethod.currentIndex() == 1)
+        method = str(self._PanSpecMethod.currentText())
         # Interpolation :
         interp = str(self._PanSpecInterp.currentText())
         # Normalization :
@@ -435,7 +443,7 @@ class UiPanels(object):
         self._spec.set_data(self._sf, self._data[chan, ...], self._time,
                             nfft=nfft, overlap=over, fstart=fstart, fend=fend,
                             cmap=cmap, contrast=contrast, interp=interp,
-                            norm=norm)
+                            norm=norm, method=method)
         # Set apply button disable :
         self._PanSpecApply.setEnabled(False)
 
@@ -446,7 +454,7 @@ class UiPanels(object):
         # Get starting / ending frequency :
         _, fend = self._PanSpecFstart.value(), self._PanSpecFend.value()  # noqa
         # Enable / disable normalization :
-        use_tf = int(self._PanSpecMethod.currentIndex() == 1)
+        use_tf = 1 if str(self._PanSpecMethod.currentText()) == 'time-frequency' else 0
         self._PanSpecNormW.setEnabled(use_tf)
 
         self._PanSpecStep.setMaximum(nfft * .99)
@@ -459,6 +467,45 @@ class UiPanels(object):
         """Change the 2-D interpolation method."""
         # Interpolation :
         self._spec.interp = str(self._PanSpecInterp.currentText())
+
+    # =====================================================================
+    # HYPNOGRAM
+    # =====================================================================
+    def _fcn_hypnoLw(self):
+        """Change the line width of the hypnogram"""
+        self._hyp.width = self._PanHypnoLw.value()
+        self._hyp.set_data(self._sf, self._hypno, self._time)
+
+    def _fcn_hypnoColor(self):
+        """Change the color of the hypnogram"""
+        if not(self._PanHypnoColor.isChecked()):
+            color = {-1: '#292824', 0: '#292824', 1: '#292824',
+                      2: '#292824', 3: '#292824', 4: '#292824'}
+        else:
+            color = self._hypcolor
+        # Get color :
+        self._hyp.color = {k: color2vb(color=i) for k, i in zip(color.keys(),
+                                                           color.values())}
+        # Update hypnogram
+        self._hyp.set_data(self._sf, self._hypno, self._time)
+
+    def _fcn_hypnoClean(self):
+        """Clean the hypnogram."""
+        # Confirmation dialog
+        reply = QtWidgets.QMessageBox.question(self, 'Message',
+                "Are you sure you want to reset the program?",
+                QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+
+        if reply == QtWidgets.QMessageBox.Yes:
+            self._hypno = np.zeros((len(self._hyp),), dtype=np.float32)
+            self._hyp.clean(self._sf, self._time)
+            # Update info table :
+            self._fcn_infoUpdate()
+            # Update scoring table :
+            self._fcn_Hypno2Score()
+            self._fcn_Score2Hypno()
+        else:
+            pass
 
     # =====================================================================
     # TOPOPLOT

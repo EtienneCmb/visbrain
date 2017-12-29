@@ -46,8 +46,9 @@ install:
     - source activate testenv
     # Install dependencies :
     - if [ "${TEST}" == "standard" ]; then
-        pip install codecov pytest pytest-cov pytest-sugar pytest-travis-fold;
+        pip install codecov pytest pytest-cov pytest-sugar pytest-travis-fold openpyxl;
         pip install mne nibabel pandas;
+        pip install git+https://github.com/hbldh/lspopt.git#egg=lspopt;
       fi;
     - if [ "${TEST}" == "minimal" ]; then
         pip install flake8 pep8-naming;
@@ -67,9 +68,9 @@ before_script:
 
 script:
     - if [[ "${TEST}" == "standard" ]]; then
-          make test;
+          py.test --cov;
       elif [[ "${TEST}" == "minimal" ]]; then
-          make flake;
+          flake8;
       elif [[ "${TEST}" == "examples" ]]; then
           make examples;
       fi;

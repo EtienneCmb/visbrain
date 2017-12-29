@@ -13,17 +13,22 @@ https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
 import numpy as np
 
 from visbrain import Brain
-from visbrain.objects import TimeSeriesObj
-from visbrain.io import download_file, path_to_visbrain_data
+from visbrain.objects import TimeSeries3DObj, SourceObj
+from visbrain.io import download_file
 
 # Load the xyz coordinates and corresponding subject name :
-download_file('xyz_sample.npz')
-s_xyz = np.load(path_to_visbrain_data('xyz_sample.npz'))['xyz']
+
+s_xyz = np.load(download_file('xyz_sample.npz'))['xyz']
 s_xyz = s_xyz[4::25, ...]
 s_text = [str(k) for k in range(s_xyz.shape[0])]
 s_textsize = 1.5
 
-# Define time-series variables :
+"""Define a source object
+"""
+s_obj = SourceObj('MySources', s_xyz, symbol='disc', color='green')
+
+"""Define the time-series data
+"""
 sf = 512.                   # Sampling frequency
 n_time_points = 700         # Number of time points
 n_sources = s_xyz.shape[0]  # Number of sources
@@ -47,9 +52,11 @@ ts_color = 'orange'     # TS color
 ts_dxyz = (1., 2., 5.)  # TS offset along the (x, y, z) axes
 ts_lw = 2.2             # TS line-width
 
-ts = TimeSeriesObj('Ts1', ts_data, s_xyz, select=ts_select, amplitude=ts_amp,
-                   width=ts_width, line_width=ts_lw, translate=ts_dxyz,
-                   color=ts_color)
+"""Define the 3-D time-series object
+"""
+ts = TimeSeries3DObj('Ts1', ts_data, s_xyz, select=ts_select, ts_amp=ts_amp,
+                     ts_width=ts_width, line_width=ts_lw, translate=ts_dxyz,
+                     color=ts_color)
 
-vb = Brain(time_series_obj=ts)
+vb = Brain(time_series_obj=ts, source_obj=s_obj)
 vb.show()

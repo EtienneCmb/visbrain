@@ -15,7 +15,7 @@ from .marker import Markers
 from ...utils import (array2colormap, color2vb, PrepareData)
 from ...utils.sleep.event import _index_to_events
 from ...visuals import TopoMesh, TFmapsMesh
-from ...config import profiler
+from ...config import PROFILER
 
 logger = logging.getLogger('visbrain')
 
@@ -415,7 +415,7 @@ class Spectrogram(PrepareData):
     color, new frequency / time range, new settings...
     """
 
-    def __init__(self, camera, parent=None, fcn=None, use_tf=False):
+    def __init__(self, camera, parent=None, fcn=None):
         # Initialize PrepareData :
         PrepareData.__init__(self, axis=0)
 
@@ -423,7 +423,6 @@ class Spectrogram(PrepareData):
         self._camera = camera
         self._rect = (0., 0., 0., 0.)
         self._fcn = fcn
-        self._use_tf = use_tf
 
         # Time-frequency map
         self.tf = TFmapsMesh(parent=parent)
@@ -432,8 +431,9 @@ class Spectrogram(PrepareData):
                                         name='spectrogram', parent=parent)
         self.mesh.transform = vist.STTransform()
 
-    def set_data(self, sf, data, time, cmap='rainbow', nfft=30., overlap=0.,
-                 fstart=.5, fend=20., contrast=.5, interp='nearest', norm=0):
+    def set_data(self, sf, data, time, method='spectrogram', cmap='rainbow',
+                nfft=30., overlap=0.,fstart=.5, fend=20., contrast=.5,
+                interp='nearest', norm=0):
         """Set data to the spectrogram.
 
         Use this method to change data, colormap, spectrogram settings, the
@@ -447,6 +447,8 @@ class Spectrogram(PrepareData):
             The data to use for the spectrogram. Must be a row vector.
         time: array_like
             The time vector.
+        method: string | 'spectrogram'
+            Computation method.
         cmap : string | 'viridis'
             The matplotlib colormap to use.
         nfft : float | 30.
@@ -472,7 +474,7 @@ class Spectrogram(PrepareData):
         nperseg = int(round(nfft * sf))
 
         # =================== TF // SPECTRO ===================
-        if self._use_tf:
+        if method == 'time-frequency':
             self.tf.set_data(data, sf, f_min=fstart, f_max=fend, cmap=cmap,
                              contrast=contrast, n_window=nperseg,
                              overlap=overlap, window='hamming', norm=norm)
@@ -483,9 +485,13 @@ class Spectrogram(PrepareData):
             # =================== CONVERSION ===================
             overlap = int(round(overlap * nperseg))
 
-            # =================== COMPUTE ===================
-            # Compute the spectrogram :
-            freq, _, mesh = scpsig.spectrogram(data, fs=sf, nperseg=nperseg,
+            if method == 'multitaper':
+                from lspopt import spectrogram_lspopt
+                freq, _, mesh = spectrogram_lspopt(data, fs=sf,
+                                nperseg=nperseg, c_parameter=20,
+                                noverlap=overlap)
+            elif method == 'spectrogram':
+                freq, _, mesh = scpsig.spectrogram(data, fs=sf, nperseg=nperseg,
                                                noverlap=overlap,
                                                window='hamming')
             mesh = 20 * np.log10(mesh)
@@ -522,8 +528,8 @@ class Spectrogram(PrepareData):
             self.rect = (tm, freq.min(), tM - tm, freq.max() - freq.min())
             self.freq = freq
         # Visibility :
-        self.mesh.visible = not self._use_tf
-        self.tf.visible = self._use_tf
+        self.mesh.visible = 0 if method == 'time-frequency' else 1
+        self.tf.visible = 1 if method == 'time-frequency' else 0
 
     def clean(self):
         """Clean indicators."""
@@ -563,7 +569,7 @@ class Spectrogram(PrepareData):
 class Hypnogram(object):
     """Create a hypnogram object."""
 
-    def __init__(self, time, camera, color='darkblue', width=2., parent=None,
+    def __init__(self, time, camera, color='#292824', width=2., parent=None,
                  hconv=None):
         # Keep camera :
         self._camera = camera
@@ -579,7 +585,8 @@ class Hypnogram(object):
         # Create a default line :
         pos = np.array([[0, 0], [0, 100]])
         self.mesh = scene.visuals.Line(pos, name='hypnogram', method='gl',
-                                       parent=parent)
+                                       parent=parent, width=width)
+        self.mesh._width = width
         self.mesh.set_gl_state('translucent')
         # Create a default marker (for edition):
         self.edit = Markers(parent=parent)
@@ -1093,20 +1100,19 @@ class Visuals(CanvasShortcuts):
                                  width=self._lw, color_detection=self._indicol,
                                  parent=self._chanCanvas,
                                  fcn=self._fcn_sliderMove)
-        profiler('Channels', level=1)
+        PROFILER('Channels', level=1)
 
         # =================== SPECTROGRAM ===================
         # Create a spectrogram object :
         self._spec = Spectrogram(camera=cameras[1], fcn=self._fcn_specSetData,
-                                 parent=self._specCanvas.wc.scene,
-                                 use_tf=self._use_tf)
+                                 parent=self._specCanvas.wc.scene)
         self._spec.set_data(sf, data[0, ...], time, cmap=self._defcmap)
-        profiler('Spectrogram', level=1)
+        PROFILER('Spectrogram', level=1)
         # Create a visual indicator for spectrogram :
         self._specInd = Indicator(name='spectro_indic', visible=True, alpha=.3,
                                   parent=self._specCanvas.wc.scene)
         self._specInd.set_data(xlim=(0, 30), ylim=(0, 20))
-        profiler('Spectrogram indicator', level=1)
+        PROFILER('Spectrogram indicator', level=1)
 
         # =================== HYPNOGRAM ===================
         # Create a hypnogram object :
@@ -1114,12 +1120,12 @@ class Visuals(CanvasShortcuts):
                               width=self._lwhyp, hconv=self._hconv,
                               parent=self._hypCanvas.wc.scene)
         self._hyp.set_data(sf, hypno, time)
-        profiler('Hypnogram', level=1)
+        PROFILER('Hypnogram', level=1)
         # Create a visual indicator for hypnogram :
         self._hypInd = Indicator(name='hypno_indic', visible=True, alpha=.3,
                                  parent=self._hypCanvas.wc.scene)
         self._hypInd.set_data(xlim=(0., 30.), ylim=(-6., 2.))
-        profiler('Hypnogram indicator', level=1)
+        PROFILER('Hypnogram indicator', level=1)
 
         # =================== DETECTIONS ===================
         self._detect = Detection(self._channels.copy(), self._time,
@@ -1128,7 +1134,7 @@ class Visuals(CanvasShortcuts):
                                  self._spinsym, self._remsym, self._kcsym,
                                  self._swsym, self._peaksym, self._mtsym,
                                  self._chan.node, self._hypCanvas.wc.scene)
-        profiler('Detections', level=1)
+        PROFILER('Detections', level=1)
 
         # =================== TOPOPLOT ===================
         self._topo = TopoSleep(channels=self._channels, margin=.2,
@@ -1138,11 +1144,11 @@ class Visuals(CanvasShortcuts):
         cameras[3].aspect = 1.
         if not any(self._topo._keeponly):
             self.toolBox_2.setItemEnabled(2, False)
-        profiler('Topoplot', level=1)
+        PROFILER('Topoplot', level=1)
 
         # =================== SHORTCUTS ===================
         vbcanvas = self._chanCanvas + [self._specCanvas, self._hypCanvas]
         for k in vbcanvas:
             CanvasShortcuts.__init__(self, k.canvas)
         self._shpopup.set_shortcuts(self.sh)
-        profiler('Shortcuts', level=1)
+        PROFILER('Shortcuts', level=1)

@@ -1,9 +1,16 @@
 """Create a basic scene for objects."""
+import sys
+import logging
+
+import numpy as np
 from vispy import scene
 
-from ..utils import color2vb
+from ..io import write_fig_canvas
+from ..utils import color2vb, set_log_level, rotate_turntable
 from ..visuals import CbarVisual
-from ..config import vispy_app
+from ..config import CONFIG, PROFILER
+
+logger = logging.getLogger('visbrain')
 
 
 class VisbrainCanvas(object):
@@ -77,8 +84,7 @@ class VisbrainCanvas(object):
 
         # ########################## MAIN CANVAS ##########################
         self.canvas = scene.SceneCanvas(keys='interactive', bgcolor=bgcolor,
-                                        show=show, title=name, app=vispy_app,
-                                        **cargs)
+                                        show=show, title=name, **cargs)
 
         # ########################## AXIS ##########################
         if axis:  # add axis to canvas
@@ -117,6 +123,10 @@ class VisbrainCanvas(object):
             # ----------- MAIN -----------
             self.wc = grid.add_view(row=1, col=1, camera=camera)
             self.grid = grid
+
+            # ----------- LINK -----------
+            self.xaxis.link_view(self.wc)
+            self.yaxis.link_view(self.wc)
 
             # ----------- CBAR -----------
             rpad_col = 0
@@ -327,22 +337,88 @@ class VisbrainCanvas(object):
 
 
 class SceneObj(object):
-    """Create a scene for objects.
+    """Create a scene and add objects to it.
 
     Parameters
     ----------
     bgcolor : string | 'black'
         Background color of the scene.
+    show : bool | True
+        Display the canvas.
+    camera_state : dict | {}
+        The default camera state to use.
+    verbose : string
+        Verbosity level.
     """
 
-    def __init__(self, bgcolor='black', show=True):
+    def __init__(self, bgcolor='black', camera_state={}, verbose=None,
+                 **kwargs):
         """Init."""
-        self._canvas = scene.SceneCanvas(keys='interactive', show=show,
-                                         title='Object scene', app=vispy_app,
-                                         bgcolor=color2vb(bgcolor))
+        set_log_level(verbose)
+        logger.info("Scene creation")
+        PROFILER('Scene creation')
+        # Create the canvas and the grid :
+        self._canvas = scene.SceneCanvas(keys='interactive', show=False,
+                                         title='Object scene',
+                                         bgcolor=color2vb(bgcolor), **kwargs)
         self._grid = self._canvas.central_widget.add_grid(margin=10)
+        # Padding at (0, 0) :
+        _rpad = self._grid.add_widget(row=0, col=0, row_span=1)
+        _rpad.width_max = 20
+        _rpad.height_max = 20
+        self._grid.spacing = 0
+        self._grid_desc = {}
+        self._camera_state = camera_state
+        # OpenGL f***** up with small objects. So we need rescale scenes :
+        self._fix_gl = 100.
 
-    def add_to_subplot(self, obj, row=0, col=0):
+    def __getitem__(self, rowcol):
+        """Get an element of the grid.
+
+        Parameters
+        ----------
+        rowcol : tuple
+            Tuple of two integers to get the subplot of the grid.
+        """
+        assert len(rowcol) == 2
+        return self._grid[(rowcol[0] + 1, rowcol[1] + 1)]
+
+    def _gl_uniform_transforms(self):
+        """Check that transforms are uniforms inside the grid."""
+        for k in self._grid.children:  # loop over viewbox
+            for i in k.children:  # loop over sub-scenes
+                objs, transforms = [], []
+                for j in i.children:  # loop of visuals in the scene
+                    # Don't consider the camera :
+                    if not isinstance(j, scene.cameras.BaseCamera):
+                        objs.append(j)
+                        transforms.append(j.transform)
+                        # Get scaling factor :
+                        sc = np.array([k.scale.sum() for k in transforms])
+                        if sc.size and not len(np.unique(sc)) == 1:
+                            unique_tf = transforms[sc.argmax()]
+                            for k in objs:
+                                k.transform = unique_tf
+                            logger.debug("Standardized transformations")
+
+    def _gl_transform(self, obj):
+        """Get the transformation to apply to the object."""
+        if hasattr(obj, 'mesh'):
+            logger.debug("Object rescaled %s" % str([self._fix_gl] * 3))
+            obj._scale = self._fix_gl
+            sc = [self._fix_gl] * 3
+        else:
+            sc = [1.] * 3
+        # Add transformation to the node :
+        if hasattr(obj, '_node'):  # VisbrainObject
+            obj._node.transform = scene.transforms.STTransform(scale=sc)
+        elif hasattr(obj, '_cnode'):  # combineObjects
+            obj._cnode.transform = scene.transforms.STTransform(scale=sc)
+
+    def add_to_subplot(self, obj, row=0, col=0, row_span=1, col_span=1,
+                       title=None, title_size=12., title_color='white',
+                       title_bold=True, use_this_cam=False, rotate=None,
+                       camera_state={}, width_max=None, height_max=None):
         """Add object to subplot.
 
         Parameters
@@ -353,10 +429,156 @@ class SceneObj(object):
             Row location for the object.
         col : int | 0
             Columns location for the object.
+        row_span : int | 1
+            Number of rows to use.
+        col_span : int | 1
+            Number of columns to use.
+        title : string | None
+            Subplot title.
+        title_size : float | 12.
+            Title font size.
+        title_color : string/tuple/array_like | 'white'
+            Color of the title.
+        title_bold : bool | True
+            Use bold title.
+        use_this_cam : bool | False
+            If you add multiple objects to the same scene and if you want to
+            use the camera of an object as the reference, turn this parameter
+            to True.
+        rotate : string | None
+            Rotate the scene. Use 'top', 'bottom', 'left', 'right', 'front' or
+            'back'. Only available for 3-D objects.
+        camera_state : dict | {}
+            Arguments to pass to the camera.
+        width_max : float | None
+            Maximum width of the subplot.
+        height_max : float | None
+            Maximum height of the subplot.
         """
-        try:
+        # Apply to objects (GL issue for small mesh) :
+        self._gl_transform(obj)
+        title = '' if not isinstance(title, str) else title
+        if (row + 1, col + 1) not in self._grid_desc.keys():
+            # Get the camera and add view to the grid :
             cam = obj._get_camera()
-        except:
-            cam = 'turntable'
-        sub = self._grid.add_view(row=row, col=col, camera=cam)
+            cam.set_default_state()
+            sub = self._grid.add_view(row=row + 1, col=col + 1,
+                                      row_span=row_span, col_span=col_span,
+                                      camera=cam)
+            self._grid_desc[(row + 1, col + 1)] = len(self._grid.children)
+            title_color = color2vb(title_color)
+            tit = scene.visuals.Text(title, color=title_color, anchor_x='left',
+                                     bold=title_bold, font_size=title_size)
+            sub.add_subvisual(tit)
+        else:
+            sub = self[(row, col)]
+            if use_this_cam:
+                sub.camera = obj._get_camera()
+                sub.camera.set_default_state()
+            # For objects that have a mesh attribute, pass the camera :
+            if hasattr(obj, 'mesh'):
+                obj.mesh.set_camera(sub.camera)
+            if title:
+                logger.error("A title is already set. '%s' ignored" % title)
+        # Fix the (height, width) max of the subplot :
+        sub.height_max = height_max
+        sub.width_max = width_max
         sub.add(obj.parent)
+        # Camera :
+        if camera_state == {}:
+            camera_state = self._camera_state
+        if isinstance(sub.camera, scene.cameras.TurntableCamera):
+            rotate_turntable(fixed=rotate, camera_state=camera_state,
+                             camera=sub.camera)
+        PROFILER('%s added to the scene' % repr(obj))
+        logger.info('%s added to the scene' % repr(obj))
+
+    def link(self, *args):
+        """Link the camera of several objects of the scene.
+
+        Parameters
+        ----------
+        args : list
+            List of tuple describing subplot locations. Alternatively, use `-1`
+            to link all cameras.
+
+        Examples
+        --------
+        >>> # Link cameras of subplots (0, 0), (0, 1) and (1, 0)
+        >>> sc.link((0, 0), (0, 1), (1, 0))
+        """
+        logger.info('Link cameras')
+        if args[0] == -1:
+            args = [(k[0] - 1, k[1] - 1) for k in self._grid_desc.keys()]
+        assert len(args) > 1
+        assert all([len(k) == 2 for k in args])
+        cam_obj_1 = self[args[0]].camera
+        for obj in args[1::]:
+            cam_obj_1.link(self[obj].camera)
+        PROFILER('Link cameras %s' % str(args))
+
+    def screenshot(self, saveas, print_size=None, dpi=300.,
+                   unit='centimeter', factor=None, region=None, autocrop=False,
+                   bgcolor=None, transparent=False, line_width=1.):
+        """Take a screeshot of the scene.
+
+        By default, the rendered canvas will have the size of your screen.
+        The screenshot() method provides two ways to increase to exported image
+        resolution :
+
+            * Using print_size, unit and dpi inputs : specify the size of the
+              image at a specific dpi level. For example, you might want to
+              have an (10cm, 15cm) image at 300 dpi.
+            * Using the factor input : multiply the default image size by this
+              factor. For example, if you have a (1920, 1080) monitor and if
+              factor is 2, the exported image should have a shape of
+              (3840, 2160) pixels.
+
+        Parameters
+        ----------
+        saveas : str
+            The name of the file to be saved. This file must contains a
+            extension like .png, .tiff, .jpg...
+        print_size : tuple | None
+            The desired print size. This argument should be used in association
+            with the dpi and unit inputs. print_size describe should be a tuple
+            of two floats describing (width, height) of the exported image for
+            a specific dpi level. The final image might not have the exact
+            desired size but will try instead to find a compromize
+            regarding to the proportion of width/height of the original image.
+        dpi : float | 300.
+            Dots per inch for printing the image.
+        unit : {'centimeter', 'millimeter', 'pixel', 'inch'}
+            Unit of the printed size.
+        factor : float | None
+            If you don't want to use the print_size input, factor simply
+            multiply the resolution of your screen.
+        region : tuple | None
+            Select a specific region. Must be a tuple of four integers each one
+            describing (x_start, y_start, width, height).
+        autocrop : bool | False
+            Automaticaly crop the figure in order to have the smallest
+            space between the brain and the border of the picture.
+        bgcolor : array_like/string | None
+            The background color of the image.
+        transparent : bool | False
+            Specify if the exported figure have to contains a transparent
+            background.
+        """
+        kwargs = dict(print_size=print_size, dpi=dpi, factor=factor,
+                      autocrop=autocrop, unit=unit, region=region,
+                      bgcolor=bgcolor, transparent=transparent)
+        self._gl_uniform_transforms()
+        write_fig_canvas(saveas, self._canvas,
+                         widget=self._canvas.central_widget, **kwargs)
+
+    def preview(self):
+        """Previsualize the result."""
+        self._gl_uniform_transforms()
+        self._canvas.show(visible=True)
+        if PROFILER and logger.level == 1:
+            logger.profiler("PARENT TREE \n%s" % self._grid.describe_tree())
+            logger.profiler(" ")
+            PROFILER.finish()
+        if sys.flags.interactive != 1:
+            CONFIG['VISPY_APP'].run()

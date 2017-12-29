@@ -12,11 +12,16 @@ https://pysurfer.github.io/auto_examples/plot_fmri_activation.html#sphx-glr-auto
 """
 from visbrain import Brain
 from visbrain.objects import BrainObj
-from visbrain.io import path_to_visbrain_data
+from visbrain.io import path_to_visbrain_data, download_file
 
-file = path_to_visbrain_data(file='lh.sig.nii.gz')
+"""Download file if needed
+"""
+file_name = 'lh.sig.nii.gz'
+download_file(file_name)
+file = path_to_visbrain_data(file=file_name)
 
-b_obj = BrainObj('inflated', translucent=False)
+
+b_obj = BrainObj('inflated', translucent=False, sulcus=True)
 b_obj.add_activation(file=file, clim=(5., 20.), hide_under=5, cmap='viridis',
                      hemisphere='left')
 

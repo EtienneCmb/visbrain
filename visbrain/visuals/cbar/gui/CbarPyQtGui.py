@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/etienne/Toolbox/visbrain/visbrain/utils/cbar/gui/CbarPyQtGui.ui'
+# Form implementation generated from reading ui file '/home/etienne/Toolbox/visbrain/visbrain/visuals/cbar/gui/CbarPyQtGui.ui'
 #
-# Created by: PyQt5 UI code generator 5.8.2
+# Created by: PyQt5 UI code generator 5.9
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -14,10 +14,16 @@ class Ui_Form(object):
         Form.resize(489, 881)
         self.verticalLayout = QtWidgets.QVBoxLayout(Form)
         self.verticalLayout.setObjectName("verticalLayout")
+        self._cbar_grp = QtWidgets.QGroupBox(Form)
+        self._cbar_grp.setCheckable(True)
+        self._cbar_grp.setChecked(False)
+        self._cbar_grp.setObjectName("_cbar_grp")
+        self.verticalLayout_10 = QtWidgets.QVBoxLayout(self._cbar_grp)
+        self.verticalLayout_10.setObjectName("verticalLayout_10")
         self.CbarLayout = QtWidgets.QVBoxLayout()
         self.CbarLayout.setContentsMargins(-1, 0, -1, -1)
         self.CbarLayout.setObjectName("CbarLayout")
-        self.groupBox_4 = QtWidgets.QGroupBox(Form)
+        self.groupBox_4 = QtWidgets.QGroupBox(self._cbar_grp)
         self.groupBox_4.setObjectName("groupBox_4")
         self.verticalLayout_7 = QtWidgets.QVBoxLayout(self.groupBox_4)
         self.verticalLayout_7.setObjectName("verticalLayout_7")
@@ -38,7 +44,7 @@ class Ui_Form(object):
         self.gridLayout_9.addItem(spacerItem, 1, 2, 1, 1)
         self.verticalLayout_7.addLayout(self.gridLayout_9)
         self.CbarLayout.addWidget(self.groupBox_4)
-        self.groupBox_3 = QtWidgets.QGroupBox(Form)
+        self.groupBox_3 = QtWidgets.QGroupBox(self._cbar_grp)
         self.groupBox_3.setObjectName("groupBox_3")
         self.verticalLayout_9 = QtWidgets.QVBoxLayout(self.groupBox_3)
         self.verticalLayout_9.setObjectName("verticalLayout_9")
@@ -122,7 +128,7 @@ class Ui_Form(object):
         self.gridLayout_7.addWidget(self.line_6, 0, 1, 1, 1)
         self.verticalLayout_9.addLayout(self.gridLayout_7)
         self.CbarLayout.addWidget(self.groupBox_3)
-        self.groupBox_2 = QtWidgets.QGroupBox(Form)
+        self.groupBox_2 = QtWidgets.QGroupBox(self._cbar_grp)
         self.groupBox_2.setObjectName("groupBox_2")
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.groupBox_2)
         self.verticalLayout_4.setContentsMargins(0, -1, 0, -1)
@@ -269,7 +275,7 @@ class Ui_Form(object):
         self.gridLayout.addWidget(self.widget_2, 6, 0, 1, 4)
         self.verticalLayout_4.addLayout(self.gridLayout)
         self.CbarLayout.addWidget(self.groupBox_2)
-        self.groupBox = QtWidgets.QGroupBox(Form)
+        self.groupBox = QtWidgets.QGroupBox(self._cbar_grp)
         self.groupBox.setObjectName("groupBox")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.groupBox)
         self.verticalLayout_5.setContentsMargins(0, -1, 0, -1)
@@ -358,19 +364,9 @@ class Ui_Form(object):
         self.verticalLayout_5.addLayout(self.gridLayout_4)
         spacerItem5 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_5.addItem(spacerItem5)
-        self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_5.setContentsMargins(-1, 0, -1, -1)
-        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
-        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_5.addItem(spacerItem6)
-        self._cbarRstCam = QtWidgets.QPushButton(self.groupBox)
-        self._cbarRstCam.setObjectName("_cbarRstCam")
-        self.horizontalLayout_5.addWidget(self._cbarRstCam)
-        spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_5.addItem(spacerItem7)
-        self.verticalLayout_5.addLayout(self.horizontalLayout_5)
         self.CbarLayout.addWidget(self.groupBox)
-        self.verticalLayout.addLayout(self.CbarLayout)
+        self.verticalLayout_10.addLayout(self.CbarLayout)
+        self.verticalLayout.addWidget(self._cbar_grp)
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -378,6 +374,7 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
+        self._cbar_grp.setTitle(_translate("Form", "Display"))
         self.groupBox_4.setTitle(_translate("Form", "Objects"))
         self.object.setToolTip(_translate("Form", "<html><head/><body><p>Colorbar object to control</p></body></html>"))
         self.label_18.setText(_translate("Form", "Colorbar of"))
@@ -435,7 +432,6 @@ class Ui_Form(object):
         self.txtSz.setToolTip(_translate("Form", "<html><head/><body><p>Text size of limits (clim / vmin / vmax)</p></body></html>"))
         self.label_14.setText(_translate("Form", "Size"))
         self.label_15.setText(_translate("Form", "Shift"))
-        self._cbarRstCam.setText(_translate("Form", "Reset camera"))
 
 
 if __name__ == "__main__":

@@ -166,4 +166,3 @@ class TFmapsMesh(CbarBase):
         """Set interpolation value."""
         self._interpolation = value
         self._image.interpolation = value
-

@@ -9,7 +9,7 @@ from .tools import Tools
 from ..pyqt_module import PyQtModule
 from ..utils import (FixedCam, color2vb, MouseEventControl)
 from ..io import ReadSleepData
-from ..config import profiler
+from ..config import PROFILER
 
 
 class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements, Tools,
@@ -55,9 +55,6 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements, Tools,
         plateforms.
     hedit : bool | False
         Enable the drag and drop hypnogram edition.
-    use_tf : bool | False
-        Specify if the spectrogram has to be replaced by a time-frequency map
-        using morlet's wavelets.
     href : list | ['art', 'wake', 'rem', 'n1', 'n2', 'n3']
         List of sleep stages. This list can be used to changed the display
         order into the GUI.
@@ -77,7 +74,7 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements, Tools,
           (BrainVision), .eeg (Elan), .trc (Micromed) and .edf (European Data
           Format). If mne-python is installed, this default list of supported
           files is extended to .cnt, .egi, .mff, .edf, .bdf, .gdf, .set, .vhdr.
-        * Supproted hypnogram files : by default, Sleep support .txt, .csv and
+        * Supported hypnogram files : by default, Sleep support .txt, .csv and
           .hyp hypnogram files.
 
     .. deprecated:: 0.3.4
@@ -87,7 +84,7 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements, Tools,
 
     def __init__(self, data=None, hypno=None, config_file=None,
                  annotations=None, channels=None, sf=None, downsample=100.,
-                 axis=False, line='gl', hedit=False, use_tf=False,
+                 axis=False, line='gl', hedit=False,
                  href=['art', 'wake', 'rem', 'n1', 'n2', 'n3'],
                  preload=True, use_mne=False, kwargs_mne={}, verbose=None):
         """Init."""
@@ -102,7 +99,7 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements, Tools,
         MouseEventControl.__init__(self)
 
         # ====================== LOAD FILE ======================
-        profiler("Import file", as_type='title')
+        PROFILER("Import file", as_type='title')
         ReadSleepData.__init__(self, data, channels, sf, hypno, href, preload,
                                use_mne, downsample, kwargs_mne,
                                annotations)
@@ -114,11 +111,10 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements, Tools,
         self._hconvinv = {v: k for k, v in self._hconv.items()}
         self._ax = axis
         self._enabhypedit = hedit
-        self._use_tf = use_tf
         # ---------- Default line width ----------
         self._linemeth = line
         self._lw = 1.
-        self._lwhyp = 2.5
+        self._lwhyp = 2
         self._defwin = 30.
         self._defstd = 5.
         # ---------- Default colors ----------
@@ -151,27 +147,27 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements, Tools,
         self._peaksym = 'disc'
         # Get some data info (min / max / std / mean)
         self._get_data_info()
-        profiler("Data info")
+        PROFILER("Data info")
 
         # ====================== USER & GUI INTERACTION  ======================
         # User <-> GUI :
-        profiler("Initialize GUI interactions", as_type='title')
+        PROFILER("Initialize GUI interactions", as_type='title')
         UiElements.__init__(self)
 
         # ====================== CAMERAS ======================
         self._cam_creation()
 
         # ====================== OBJECTS CREATION ======================
-        profiler("Initialize visual elements", as_type='title')
+        PROFILER("Initialize visual elements", as_type='title')
         Visuals.__init__(self)
 
         # ====================== TOOLS ======================
         Tools.__init__(self)
-        profiler("Initialize tools")
+        PROFILER("Initialize tools")
 
         # ====================== FUNCTIONS ON LOAD ======================
         self._fcns_on_creation()
-        profiler("Functions on creation")
+        PROFILER("Functions on creation")
 
     def __len__(self):
         """Return the number of channels."""

@@ -2,6 +2,7 @@
 from warnings import warn
 import logging
 import numpy as np
+from itertools import product
 from scipy.spatial.distance import cdist
 
 from vispy import scene
@@ -9,205 +10,17 @@ from vispy.scene import visuals
 import vispy.visuals.transforms as vist
 
 from .visbrain_obj import VisbrainObject, CombineObjects
+from ._projection import _project_sources_data
 from .roi_obj import RoiObj
-from ..utils import tal2mni, color2vb, normalize, vispy_array, wrap_properties
-from ..visuals import CbarArgs
+from ..utils import (tal2mni, color2vb, normalize, vispy_array,
+                     wrap_properties, array2colormap)
 
 
 logger = logging.getLogger('visbrain')
 PROJ_STR = "%i sources visibles and not masked used for the %s"
 
 
-class SourceProjection(CbarArgs):
-    """Group cortical projection and cortical repartition projections."""
-
-    def __init__(self, cmap='viridis', clim=(0., 1.), vmin=None, under='gray',
-                 vmax=None, over='red'):
-        """Init."""
-        isvmin = isinstance(vmin, (int, float))
-        isvmax = isinstance(vmax, (int, float))
-        # Initialize colorbar arguments :
-        CbarArgs.__init__(self, cmap, clim, isvmin, vmin, isvmax, vmax, under,
-                          over)
-
-    @staticmethod
-    def _get_eucl_mask(v, xyz, radius, contribute, xsign):
-        # Compute euclidian distance and get sources under radius :
-        eucl = cdist(v, xyz)
-        eucl = eucl.astype(np.float32, copy=False)
-        mask = eucl <= radius
-        # Contribute :
-        if not contribute:
-            # Get vertices sign :
-            vsign = np.sign(v[:, 0]).reshape(-1, 1)
-            # Find where vsign and xsign are equals :
-            isign = np.logical_and(vsign != xsign, xsign != 0)
-            mask[isign] = False
-        return eucl, mask
-
-    def _check_projection(self, v, radius, contribute, not_masked=True):
-        # =============== CHECKING ===============
-        assert isinstance(v, np.ndarray)
-        assert isinstance(radius, (int, float))
-        assert isinstance(contribute, bool)
-        if v.ndim == 2:  # index faced vertices
-            v = v[:, np.newaxis, :]
-
-        # =============== PRE-ALLOCATION ===============
-        if not_masked:  # get visible and not masked sources
-            mask = self.visible_and_not_masked
-        else:           # get visible and masked sources
-            mask = np.logical_and(self.mask, self.visible)
-        xyz, data = self._xyz[mask, :], self._data[mask]
-        # Get sign of the x coordinate :
-        xsign = np.sign(xyz[:, 0]).reshape(1, -1)
-
-        return xyz, data, v, xsign
-
-    def project_modulation(self, v, radius, contribute=False):
-        """Project source's data onto vertices.
-
-        Parameters
-        ----------
-        v : array_like
-            The vertices of shape (nv, 3) or (nv, 3, 3) if index faced.
-        radius : float
-            The radius under which activity is projected on vertices.
-        contribute: bool | False
-            Specify if sources contribute on both hemisphere.
-
-        Returns
-        -------
-        modulation : array_like
-            The modulations of shape (nv, 3) or (nv, 3, 3) if index faced. This
-            is a masked array where the mask refer to sources that are over the
-            radius.
-        """
-        # Check inputs :
-        xyz, data, v, xsign = self._check_projection(v, radius, contribute)
-        logger.info(PROJ_STR % (len(data), 'projection'))
-        index_faced = v.shape[1]
-        # Modulation / proportion / (Min, Max) :
-        modulation = np.ma.zeros((v.shape[0], index_faced), dtype=np.float32)
-        prop = np.zeros_like(modulation.data)
-        minmax = np.zeros((index_faced, 2), dtype=np.float32)
-        if len(data) == 0:
-            logger.warn("Projection ignored because no sources visibles and "
-                         "not masked")
-            return np.squeeze(np.ma.masked_array(modulation, True))
-
-        # For each triangle :
-        for k in range(index_faced):
-            # =============== EUCLIDIAN DISTANCE ===============
-            eucl, mask = self._get_eucl_mask(v[:, k, :], xyz, radius,
-                                             contribute, xsign)
-            # Invert euclidian distance for modulation and mask it :
-            np.multiply(eucl, -1. / eucl.max(), out=eucl)
-            np.add(eucl, 1., out=eucl)
-            eucl = np.ma.masked_array(eucl, mask=np.invert(mask),
-                                      dtype=np.float32)
-
-            # =============== MODULATION ===============
-            # Modulate data by distance (only for sources under radius) :
-            modulation[:, k] = np.ma.dot(eucl, data, strict=False)
-
-            # =============== PROPORTIONS ===============
-            np.sum(mask, axis=1, dtype=np.float32, out=prop[:, k])
-            nnz = np.nonzero(mask.sum(0))
-            minmax[k, :] = np.array([data[nnz].min(), data[nnz].max()])
-
-        # Divide modulations by the number of contributing sources :
-        prop[prop == 0.] = 1.
-        np.divide(modulation, prop, out=modulation)
-        # Normalize inplace modulations between under radius data :
-        normalize(modulation, minmax.min(), minmax.max())
-        self._minmax = (modulation.min(), modulation.max())
-
-        return np.squeeze(modulation)
-
-    def project_repartition(self, v, radius, contribute=False):
-        """Project source's repartition onto vertices.
-
-        Parameters
-        ----------
-        v : array_like
-            The vertices of shape (nv, 3) or (nv, 3, 3) if index faced.
-        radius : float
-            The radius under which activity is projected on vertices.
-        contribute: bool | False
-            Specify if sources contribute on both hemisphere.
-
-        Returns
-        -------
-        repartition: array_like
-            The repartition of shape (nv, 3) or (nv, 3, 3) if index faced. This
-            is a masked array where the mask refer to sources that are over the
-            radius.
-        """
-        # Check inputs :
-        xyz, _, v, xsign = self._check_projection(v, radius, contribute)
-        logger.info(PROJ_STR % (xyz.shape[0], 'repartition'))
-        index_faced = v.shape[1]
-        # Corticale repartition :
-        repartition = np.ma.zeros((v.shape[0], index_faced), dtype=np.int)
-        if not xyz.size:
-            logger.warn("Repartition ignored because no sources visibles and "
-                         "not masked")
-            return np.squeeze(np.ma.masked_array(repartition, True))
-
-        # For each triangle :
-        for k in range(index_faced):
-            # =============== EUCLIDIAN DISTANCE ===============
-            eucl, mask = self._get_eucl_mask(v[:, k, :], xyz, radius,
-                                             contribute, xsign)
-
-            # =============== REPARTITION ===============
-            # Sum over sources dimension :
-            sm = np.sum(mask, 1, dtype=np.int)
-            smmask = np.invert(sm.astype(bool))
-            repartition[:, k] = np.ma.masked_array(sm, mask=smmask)
-        self._minmax = (repartition.min(), repartition.max())
-
-        return np.squeeze(repartition)
-
-    def get_masked_index(self, v, radius, contribute=False):
-        """Get the index of masked source's under radius.
-
-        Parameters
-        ----------
-        v : array_like
-            The vertices of shape (nv, 3) or (nv, 3, 3) if index faced.
-        radius : float
-            The radius under which activity is projected on vertices.
-        contribute: bool | False
-            Specify if sources contribute on both hemisphere.
-
-        Returns
-        -------
-        idx: array_like
-            The repartition of shape (nv, 3) or (nv, 3, 3) if index faced.
-        """
-        # Check inputs and get masked xyz / data :
-        xyz, data, v, xsign = self._check_projection(v, radius, contribute,
-                                                     False)
-        logger.info("%i sources visibles and masked found" % len(data))
-        # Predefined masked euclidian distance :
-        nv, index_faced = v.shape[0], v.shape[1]
-        fmask = np.ones((v.shape[0], index_faced, len(data)), dtype=bool)
-
-        # For each triangle :
-        for k in range(index_faced):
-            # =============== EUCLIDIAN DISTANCE ===============
-            _, fmask[:, k, :] = self._get_eucl_mask(v[:, k, :], xyz, radius,
-                                                    contribute, xsign)
-        # Find where there's sources under radius and need to be masked :
-        m = fmask.reshape(fmask.shape[0] * index_faced, fmask.shape[2])
-        idx = np.dot(m, np.ones((len(data),), dtype=bool))
-
-        return np.squeeze(idx.reshape(nv, index_faced))
-
-
-class SourceObj(VisbrainObject, SourceProjection):
+class SourceObj(VisbrainObject):
     """Create a source object.
 
     Parameters
@@ -218,7 +31,7 @@ class SourceObj(VisbrainObject, SourceProjection):
         Array of positions of shape (n_sources, 2) or (n_sources, 3).
     data : array_like | None
         Array of weights of shape (n_sources,).
-    color : array_like/string/tuple | 'black'
+    color : array_like/string/tuple | 'red'
         Marker's color. Use a string (i.e 'green') to use the same color across
         markers or a list of colors of length n_sources to use different colors
         for markers.
@@ -241,7 +54,7 @@ class SourceObj(VisbrainObject, SourceProjection):
     mask : array_like | None
         Array of boolean values to specify masked sources. For example, if data
         are p-values, mask could be non-significant sources.
-    mask_color : array_like/tuple/string | 'red'
+    mask_color : array_like/tuple/string | 'gray'
         Color to use for masked sources.
     text : list | None
         Text to attach to each source. For example, text could be the name of
@@ -266,6 +79,9 @@ class SourceObj(VisbrainObject, SourceProjection):
         Verbosity level.
     _z : float | 10.
         In case of (n_sources, 2) use _z to specify the elevation.
+    kw : dict | {}
+        Optional arguments are used to control the colorbar
+        (See :class:`ColorbarObj`).
 
     Examples
     --------
@@ -288,16 +104,15 @@ class SourceObj(VisbrainObject, SourceProjection):
     ###########################################################################
     ###########################################################################
 
-    def __init__(self, name, xyz, data=None, color='black', alpha=1.,
+    def __init__(self, name, xyz, data=None, color='red', alpha=1.,
                  symbol='disc', radius_min=5., radius_max=10., edge_width=0.,
-                 edge_color='black', system='mni', mask=None, mask_color='red',
-                 text=None, text_size=3., text_color='black', text_bold=False,
+                 edge_color='black', system='mni', mask=None,
+                 mask_color='gray', text=None, text_size=3.,
+                 text_color='black', text_bold=False,
                  text_translate=(0., 2., 0.), visible=True, transform=None,
-                 parent=None, verbose=None, _z=-10., **kwargs):
+                 parent=None, verbose=None, _z=-10., **kw):
         """Init."""
-        # Init Visbrain object base class and SourceProjection :
-        VisbrainObject.__init__(self, name, parent, transform, verbose)
-        SourceProjection.__init__(self, **kwargs)
+        VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)
         # _______________________ CHECKING _______________________
         # XYZ :
         sh = xyz.shape
@@ -450,13 +265,58 @@ class SourceObj(VisbrainObject, SourceProjection):
 
     ###########################################################################
     ###########################################################################
+    #                             PROJECTIONS
+    ###########################################################################
+    ###########################################################################
+
+    def project_sources(self, b_obj, project='modulation', radius=10.,
+                        contribute=False, cmap='viridis', clim=None, vmin=None,
+                        under='black', vmax=None, over='red',
+                        mask_color=None):
+        """Project source's activity or repartition onto the brain object.
+
+        Parameters
+        ----------
+        b_obj : {BrainObj, RoiObj}
+            The object on which to project sources.
+        project : {'modulation', 'repartition'}
+            Project either the source's data ('modulation') or get the number
+            of contributing sources per vertex ('repartition').
+        radius : float
+            The radius under which activity is projected on vertices.
+        contribute: bool | False
+            Specify if sources contribute on both hemisphere.
+        cmap : string | 'viridis'
+            The colormap to use.
+        clim : tuple | None
+            The colorbar limits. If None, (data.min(), data.max()) will be used
+            instead.
+        vmin : float | None
+            Minimum threshold.
+        vmax : float | None
+            Maximum threshold.
+        under : string/tuple/array_like | 'gray'
+            The color to use for values under vmin.
+        over : string/tuple/array_like | 'red'
+            The color to use for values over vmax.
+        mask_color : string/tuple/array_like | 'gray'
+            The color to use for the projection of masked sources. If None,
+            the color of the masked sources is going to be used.
+        """
+        kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
+        self._default_cblabel = "Source's %s" % project
+        _project_sources_data(self, b_obj, project, radius, contribute,
+                              mask_color=mask_color, **kw)
+
+    ###########################################################################
+    ###########################################################################
     #                                  PHYSIO
     ###########################################################################
     ###########################################################################
 
     def analyse_sources(self, roi_obj='talairach', replace_bad=True,
-                        bad_patterns=[-1, 'undefined', 'None'],
-                        replace_with='Not found'):
+                        bad_patterns=[-1, 'undefined', 'None'], distance=None,
+                        replace_with='Not found', keep_only=None):
         """Analyse sources using Region of interest (ROI).
 
         This method can be used to identify in which structure is located a
@@ -474,6 +334,8 @@ class SourceObj(VisbrainObject, SourceProjection):
             Bad patterns to replace if replace_bad is True.
         replace_with : string | 'Not found'
             Replace bad patterns with this string.
+        keep_only : list | None
+            List of string patterns to keep only sources that match.
 
         Returns
         -------
@@ -483,10 +345,15 @@ class SourceObj(VisbrainObject, SourceProjection):
         # List of predefined ROI objects :
         proi = ['brodmann', 'aal', 'talairach']
         # Define the ROI object if needed :
-        if isinstance(roi_obj, str):
+        if isinstance(roi_obj, (str, list, tuple)):
+            if isinstance(roi_obj, str):
+                roi_obj = [roi_obj]
+            if all([isinstance(k, str) for k in roi_obj]):
+                roi_obj = [RoiObj(k) for k in roi_obj if k in proi]
+        elif isinstance(roi_obj, RoiObj):
             roi_obj = [roi_obj]
+        assert all([isinstance(k, RoiObj) for k in roi_obj])
         # Convert predefined ROI into RoiObj objects :
-        roi_obj = [RoiObj(k) for k in roi_obj if k in proi]
         logger.info("Analyse source's locations using the %s "
                     "atlas" % ', '.join([k.name for k in roi_obj]))
         if isinstance(roi_obj, (list, tuple)):
@@ -496,19 +363,56 @@ class SourceObj(VisbrainObject, SourceProjection):
                                 "'talairach' or a list or RoiObj objects.")
         # Get all of the DataFrames :
         df = [k.localize_sources(self._xyz, self._text, replace_bad,
-                                 bad_patterns, replace_with) for k in roi_obj]
-        # Return the df if len == 1 :
-        return df[0] if len(df) == 1 else df
+                                 bad_patterns, replace_with,
+                                 distance) for k in roi_obj]
+        # Merge multiple DataFrames :
+        if len(df) > 1:
+            logger.info('Merging DataFrames')
+            import pandas as pd
+            df_full = df.copy()
+            df = df_full[0]
+            for i, k in enumerate(df_full[1::]):
+                df = pd.merge(df, k, on=['Text', 'X', 'Y', 'Z', 'hemisphere'],
+                              suffixes=('_' + roi_obj[0].name,
+                                        '_' + roi_obj[i + 1].name))
+        else:
+            df = df[0]
+        # Keep only sources that match with patterns :
+        if isinstance(keep_only, (list, tuple)):
+            idx_to_keep = []
+            for k, i in product(df.keys(), keep_only):
+                idx_to_keep.append(np.array(df[k], dtype=object) == i)
+            idx_to_keep = np.vstack(idx_to_keep).sum(0).astype(bool)
+            df = df.loc[idx_to_keep]
+            self.visible = idx_to_keep
+            logger.info("%i sources found in %s" % (len(df),
+                                                    ', '.join(keep_only)))
 
-    def color_sources(self, analysis, color_by, roi_to_color=None,
-                      color_others='black', hide_others=False):
-        """Color sources according to ROI analysis.
+        return df
+
+    def color_sources(self, analysis=None, color_by=None, data=None,
+                      roi_to_color=None, color_others='black',
+                      hide_others=False, cmap='viridis', clim=None, vmin=None,
+                      vmax=None, under='gray', over='red'):
+        """Custom color sources methods.
+
+        This method can be used to color sources :
+
+            * According to a data vector. In that case, source's colors are
+              inferred using colormap inputs (i.e cmap, vmin, vmax, clim, under
+              and over)
+            * According to ROI analysis (using the `analysis` and `color_by`
+              input parameters)
 
         Parameters
         ----------
-        analysis : pandas.DataFrames
+        data : array_like | None
+            A vector of data with the same length as the number os sources.
+            The color is inferred from this data vector and can be controlled
+            using the cmap, clim, vmin, vmax, under and over parameters.
+        analysis : pandas.DataFrames | None
             ROI analysis runned using the analyse_sources method.
-        color_by : string
+        color_by : string | None
             A column name of the analysis DataFrames. This columns is then used
             to identify the color to set to each source inside ROI.
         roi_to_color : dict | None
@@ -522,33 +426,40 @@ class SourceObj(VisbrainObject, SourceProjection):
             Show or hide sources that are not found using the
             roi_to_color dictionary.
         """
-        # Group analysis :
-        assert color_by in list(analysis.columns)
-        logger.info("Color sources according to the %s" % color_by)
-        gp = analysis.groupby(color_by).groups
-        # Compute color :
-        if roi_to_color is None:  # random color
-            # Predefined colors and define unique color for each ROI :
-            colors = np.zeros((len(self), 3), dtype=np.float32)
-            u_col = np.random.uniform(.1, .8, (len(gp), 3)).astype(np.float32)
-            # Assign color to the ROI :
-            for k, index in enumerate(gp.values()):
-                colors[list(index), :] = u_col[k, :]
-        elif isinstance(roi_to_color, dict):  # user defined colors
-            colors = color2vb(color_others, length=len(self))
-            keep_visible = np.zeros(len(self), dtype=bool)
-            for roi_name, roi_col in roi_to_color.items():
-                if roi_name in list(gp.keys()):
-                    colors[list(gp[roi_name]), :] = color2vb(roi_col)
-                    keep_visible[list(gp[roi_name])] = True
-                else:
-                    warn(roi_name + " not found in the " + color_by + " column"
-                         " of analysis.")
-            if hide_others:
-                self.visible = keep_visible
-        else:
-            raise TypeError("roi_to_color must either be None or a dictionary "
-                            "like {'roi_name': 'red'}.")
+        if isinstance(data, np.ndarray):
+            assert len(data) == len(self) and (data.ndim == 1)
+            logger.info("Color %s using a data vector" % self.name)
+            kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
+            colors = array2colormap(data, **kw)
+        elif (analysis is not None) and (color_by is not None):
+            # Group analysis :
+            assert color_by in list(analysis.columns)
+            logger.info("Color %s according to the %s" % (self.name, color_by))
+            gp = analysis.groupby(color_by).groups
+            # Compute color :
+            if roi_to_color is None:  # random color
+                # Predefined colors and define unique color for each ROI :
+                colors = np.zeros((len(self), 3), dtype=np.float32)
+                u_col = np.random.uniform(.1, .8, (len(gp), 3))
+                u_col = u_col.astype(np.float32)
+                # Assign color to the ROI :
+                for k, index in enumerate(gp.values()):
+                    colors[list(index), :] = u_col[k, :]
+            elif isinstance(roi_to_color, dict):  # user defined colors
+                colors = color2vb(color_others, length=len(self))
+                keep_visible = np.zeros(len(self), dtype=bool)
+                for roi_name, roi_col in roi_to_color.items():
+                    if roi_name in list(gp.keys()):
+                        colors[list(gp[roi_name]), :] = color2vb(roi_col)
+                        keep_visible[list(gp[roi_name])] = True
+                    else:
+                        warn("%s not found in the %s column of analysis"
+                             "." % (roi_name, color_by))
+                if hide_others:
+                    self.visible = keep_visible
+            else:
+                raise TypeError("roi_to_color must either be None or a "
+                                "dictionary like {'roi_name': 'red'}.")
         self.color = colors
 
     def set_visible_sources(self, select='all', v=None, distance=5.):
@@ -573,6 +484,7 @@ class SourceObj(VisbrainObject, SourceProjection):
         assert isinstance(distance, (int, float))
         xyz = self._xyz
         if select in ['inside', 'outside', 'close']:
+            logger.info("Select sources %s vertices" % select)
             if v.ndim == 2:  # index faced vertices
                 v = v[:, np.newaxis, :]
             # Predifined inside :
@@ -595,8 +507,13 @@ class SourceObj(VisbrainObject, SourceProjection):
                     inside[i] = np.abs(xyz_t0 - v_t0) > distance
             self.visible = inside if select == 'inside' else np.invert(inside)
         elif select in ['all', 'none', None, True, False]:
-            self.visible = select in ['all', True]
+            cond = select in ['all', True]
+            self.visible = cond
+            self.visible_obj = cond
+            msg = 'Display' if cond else 'Hide'
+            logger.info("%s all sources" % msg)
         elif select in ['left', 'right']:
+            logger.info('Select sources in the %s hemisphere' % select)
             vec = xyz[:, 0]
             self.visible = vec <= 0 if select == 'left' else vec >= 0
 
@@ -876,7 +793,7 @@ class SourceObj(VisbrainObject, SourceProjection):
         self._sources_text.update()
 
 
-class CombineSources(CombineObjects, SourceProjection):
+class CombineSources(CombineObjects):
     """Combine sources objects.
 
     Parameters
@@ -892,7 +809,16 @@ class CombineSources(CombineObjects, SourceProjection):
     def __init__(self, sobjs=None, select=None, parent=None, **kwargs):
         """Init."""
         CombineObjects.__init__(self, SourceObj, sobjs, select, parent)
-        SourceProjection.__init__(self, **kwargs)
+
+    def project_sources(self, b_obj, project='modulation', radius=10.,
+                        contribute=False, cmap='viridis', clim=None, vmin=None,
+                        under='black', vmax=None, over='red',
+                        mask_color=None):
+        """Project source's activity or repartition onto the brain object."""
+        kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
+        self._default_cblabel = "Source's %s" % project
+        _project_sources_data(self, b_obj, project, radius, contribute,
+                              mask_color=mask_color, **kw)
 
     def fit_to_vertices(self, v):
         """See sources doc."""

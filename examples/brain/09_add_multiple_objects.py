@@ -14,7 +14,7 @@ import numpy as np
 
 from visbrain import Brain
 from visbrain.objects import SourceObj, ConnectObj
-from visbrain.io import download_file, path_to_visbrain_data
+from visbrain.io import download_file
 
 print(__doc__)
 
@@ -22,8 +22,7 @@ print(__doc__)
 kwargs = {}
 
 # Load the xyz coordinates and corresponding subject name :
-download_file('xyz_sample.npz')
-mat = np.load(path_to_visbrain_data('xyz_sample.npz'))
+mat = np.load(download_file('xyz_sample.npz'))
 s_xyz, subjects = mat['xyz'], mat['subjects']
 
 """
@@ -44,8 +43,12 @@ data_l = np.random.uniform(-10, 10, s_xyz_l.shape[0])
 """Create a first source object with uniform red square markers
 """
 s_obj_l = SourceObj('S_left', s_xyz_l, data=data_l, color='red',
-                    edge_color='white', symbol='square', edge_width=2.,
+                    edge_color='white', symbol='disc', edge_width=2.,
                     radius_min=10., radius_max=20., alpha=.4)
+
+"""Color the sources according to data
+"""
+s_obj_l.color_sources(data=data_l, cmap='plasma')
 
 """Create a second source object. Then, we analyse where are located the
 sources using the AAL region of interest and used color according to gyrus
@@ -73,13 +76,14 @@ s_obj_rf = SourceObj('S_right_front', s_xyz_rf, symbol='ring', radius_min=10.,
 """Analyse source's locations using the Talairach atlas
 """
 df = s_obj_rf.analyse_sources('talairach')
+
 """Color source's according to the lobe location. This time we set different
 colors to lobes :
 """
-custom_color = {'Frontal': 'orange', 'Temporal': 'olive'}
+custom_color = {'Frontal': 'orange', 'Temporal': 'green', 'Sub-lobar': 'red'}
 color_others = 'gray'  # color of every sources that are not in custom_color
 hide_others = False    # hide every sources that are not in custom_color
-s_obj_rf.color_sources(df, 'lobe', roi_to_color=custom_color,
+s_obj_rf.color_sources(analysis=df, color_by='lobe', roi_to_color=custom_color,
                        color_others=color_others, hide_others=hide_others)
 
 ###############################################################################

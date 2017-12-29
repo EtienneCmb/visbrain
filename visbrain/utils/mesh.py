@@ -1,19 +1,17 @@
 """Surfaces (mesh) and volume utility functions."""
-import os
 import logging
 
 import numpy as np
+from scipy.spatial.distance import cdist
 
 from vispy.geometry import MeshData
 from vispy.geometry.isosurface import isosurface
 
 from .sigproc import smooth_3d
-from .others import get_data_path
 
 
 __all__ = ('vispy_array', 'convert_meshdata', 'volume_to_mesh',
-           'add_brain_template', 'remove_brain_template', 'smoothing_matrix',
-           'mesh_edges')
+           'smoothing_matrix', 'mesh_edges', 'laplacian_smoothing')
 
 
 logger = logging.getLogger('visbrain')
@@ -141,53 +139,6 @@ def volume_to_mesh(vol, smooth_factor=3, level=None, **kwargs):
     return vertices, faces, normals
 
 
-def add_brain_template(name, vertices, faces, normals=None, lr_index=None):
-    """Add a brain template to the default list.
-
-    Parameters
-    ----------
-    name : string
-        Name of the template.
-    vertices : array_like
-        Vertices of the template of shape (N, 3) or (N, 3, 3) if indexed by
-        faces.
-    faces : array_like
-        Faces of the template of shape (M, 3)
-    normals : array_like
-        The normals of the template, with the same shape as vertices.
-    lr_index : int | None
-        Specify where to cut vertices for left and right hemisphere so that
-        x_left <= lr_index and right > lr_index
-    """
-    # Convert meshdata :
-    vertices, faces, normals = convert_meshdata(vertices, faces, normals)
-    # Get path to the templates/ folder :
-    name = os.path.splitext(name)[0]
-    path = get_data_path(folder='templates', file=name + '.npz')
-    # Save the template :
-    np.savez(path, vertices=vertices, faces=faces, normals=normals,
-             lr_index=lr_index)
-
-
-def remove_brain_template(name):
-    """Remove brain template from the default list.
-
-    Parameters
-    ----------
-    name : string
-        Name of the template to remove.
-    """
-    assert name not in ['B1', 'B2', 'B3']
-    # Get path to the templates/ folder :
-    name = os.path.splitext(name)[0]
-    path = get_data_path(folder='templates', file=name + '.npz')
-    # Remove the file from templates/ folder :
-    if os.path.isfile(path):
-        os.remove(path)
-    else:
-        raise ValueError("No file " + path)
-
-
 def smoothing_matrix(vertices, adj_mat, smoothing_steps=20):
     """Create a smoothing matrix.
 
@@ -275,3 +226,43 @@ def mesh_edges(faces):
     edges = edges + edges.T
     edges = edges.tocoo()
     return edges
+
+
+def laplacian_smoothing(vertices, faces, n_neighbors=-1):
+    """Apply a laplacian smoothing to vertices.
+
+    Parameters
+    ----------
+    vertices : array_like
+        Array of vertices.
+    vertices : array_like
+        Array of faces.
+    n_neighbors : int | -1
+        Specify maximum number of closest neighbors to take into account in the
+        mean.
+
+    Returns
+    -------
+    new_vertices : array_like
+        New smoothed vertices.
+    """
+    assert vertices.ndim == 2 and vertices.shape[1] == 3
+    assert faces.ndim == 2 and faces.shape[1] == 3
+    assert n_neighbors >= -1 and isinstance(n_neighbors, int)
+    n_vertices = vertices.shape[0]
+    new_vertices = np.zeros_like(vertices)
+    for k in range(n_vertices):
+        # Find connected vertices :
+        faces_idx = np.where(faces == k)[0]
+        u_faces_idx = np.unique(np.ravel(faces[faces_idx, :])).tolist()
+        u_faces_idx.remove(k)
+        # Select closest connected vertices :
+        if n_neighbors == -1:
+            to_smooth = u_faces_idx
+        else:
+            norms = cdist(vertices[[k], :], vertices[u_faces_idx, :]).ravel()
+            n_norm = min(n_neighbors, len(norms))
+            to_smooth = np.array(u_faces_idx)[np.argsort(norms)[0:n_norm]]
+        # Take the mean of selected vertices :
+        new_vertices[k, :] = vertices[to_smooth, :].mean(0).reshape(1, -1)
+    return new_vertices
