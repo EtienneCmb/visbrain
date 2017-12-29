@@ -603,13 +603,9 @@ class BrainUserMethods(object):
         clim : tuple/list | None
             Colorbar limit. Every values under / over clim will
             clip.
-        isvmin : bool | None
-            Activate/deactivate vmin.
         vmin : float | None
             Every values under vmin will have the color defined
             using the under parameter.
-        isvmax : bool | None
-            Activate/deactivate vmax.
         vmax : float | None
             Every values over vmin will have the color defined
             using the over parameter.
@@ -640,8 +636,8 @@ class BrainUserMethods(object):
         ndigits : int | None
             Number of digits for the text.
         """
-        # kwargs['isvmin'] = isinstance(kwargs.get('vmin', None), (int, float))
-        # kwargs['isvmax'] = isinstance(vmax, (int, float))
+        kwargs['isvmin'] = isinstance(kwargs.get('vmin', None), (int, float))
+        kwargs['isvmax'] = isinstance(kwargs.get('vmax', None), (int, float))
         # Test if the item "name" is enabled :
         self._cbar_item_is_enable(name)
         # Select the object :
