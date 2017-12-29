@@ -20,15 +20,27 @@ time = np.r_[np.arange(n - 1), np.arange(n)[::-1]]
 time = time.reshape(-1, 1) + time.reshape(1, -1)
 time[np.diag_indices_from(time)] = 30.
 
-print('\n-> Basic image')
+print("""
+# =============================================================================
+#                              Basic image
+# =============================================================================
+""")
 im_basic = ImageObj('im', time)
 sc.add_to_subplot(im_basic, row=0, col=0, title='Basic image')
 
-print('\n-> Interpolated image')
+print("""
+# =============================================================================
+#                           Interpolated image
+# =============================================================================
+""")
 im_interp = ImageObj('im', time, interpolation='bicubic')
 sc.add_to_subplot(im_interp, row=0, col=1, title='Interpolated image')
 
-print('\n-> Custom color properties')
+print("""
+# =============================================================================
+#                         Custom color properties
+# =============================================================================
+""")
 im_color = ImageObj('im', time, interpolation='bicubic', cmap='Spectral_r',
                     vmin=5., vmax=20., under='gray', over='darkred')
 sc.add_to_subplot(im_color, row=0, col=2, title='Custom colors')
@@ -41,15 +53,28 @@ n, sf = 512, 256
 time = np.arange(n) / sf  # time vector
 data = np.sin(2 * np.pi * 25. * time) + np.random.rand(n)
 
-print('\n-> Compute the spectrogram')
+print("""
+# =============================================================================
+#                                Spectrogram
+# =============================================================================
+""")
 spec = SpectrogramObj('spec', data, sf, cmap='RdBu_r')
 sc.add_to_subplot(spec, row=1, col=0, title='Spectrogram')
 
-print('\n-> Compute time-frequency map')
+print("""
+# =============================================================================
+#                             Time-frequency map
+# =============================================================================
+""")
 tf = TimeFrequencyMapObj('tf', data, sf)
 sc.add_to_subplot(tf, row=1, col=1, title='Time-frequency map')
 
 print('\n-> Compute time-frequency map with windows')
+print("""
+# =============================================================================
+#                                 Multi-taper
+# =============================================================================
+""")
 tf_mt = MultiTaperObj('mt', data, sf, overlap=.7, interpolation='bicubic',
                       cmap='Spectral_r')
 sc.add_to_subplot(tf_mt, row=1, col=2, title='Multi-taper')

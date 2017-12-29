@@ -40,7 +40,7 @@ cross_sec_obj = CrossSecObj(path_2)
 
 """Localize a source in the cross-section object
 """
-cross_sec_obj.localize_source(s_xyz[3, :])
+cross_sec_obj.localize_source(s_xyz[2, :])
 
 """Define a Brain instance and pass the source, volume and cross-section
 object
