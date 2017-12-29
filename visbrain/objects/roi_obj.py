@@ -228,7 +228,8 @@ class RoiObj(_Volume):
             logger.info("Saved as %s" % save_as)
         return self.ref
 
-    def where_is(self, patterns, df=None, union=True, columns=None):
+    def where_is(self, patterns, df=None, union=True, columns=None,
+                 exact=False):
         """Find a list of string patterns in a DataFrame.
 
         Parameters
@@ -244,6 +245,8 @@ class RoiObj(_Volume):
         columns : list | None
             List of specific column names to search in. If None, this method
             inspect every columns in the DataFrame.
+        exact : bool | False
+            Specify if the pattern to search have to be exact matching.
 
         Returns
         -------
@@ -269,7 +272,10 @@ class RoiObj(_Volume):
         for p, k in enumerate(patterns):
             pat_in_col = np.zeros((n_rows, n_cols), dtype=bool)
             for c, i in enumerate(columns):
-                pat_in_col[:, c] = df_to_use[i].astype(str).str.contains(k)
+                if exact:
+                    pat_in_col[:, c] = df_to_use[i].astype(str) == k
+                else:
+                    pat_in_col[:, c] = df_to_use[i].astype(str).str.match(k)
             idx_to_keep[:, p] = np.any(pat_in_col, 1)
         # Return either the union or intersection across research :
         if union:
@@ -281,7 +287,8 @@ class RoiObj(_Volume):
                          "%s" % (self.name, ', '.join(patterns)))
             return []
         else:
-            return np.array(df_to_use['index'].loc[idx_to_keep]).astype(int)
+            idx_roi = np.array(df_to_use['index'].loc[idx_to_keep]).astype(int)
+            return idx_roi.tolist()
 
     ###########################################################################
     ###########################################################################
