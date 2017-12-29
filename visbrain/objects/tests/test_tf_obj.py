@@ -2,10 +2,11 @@
 import numpy as np
 
 from visbrain.objects.tests._testing_objects import _TestObjects
-from visbrain.objects import TimeFrequencyMapObj, SpectrogramObj
+from visbrain.objects import TimeFrequencyMapObj, SpectrogramObj, MultiTaperObj
 
 tf_obj = TimeFrequencyMapObj('TF', np.random.rand(1000))
 sp_obj = SpectrogramObj('Spec', np.random.rand(1000))
+mt_obj = MultiTaperObj('MT', np.random.rand(1000))
 
 
 class TestTFObj(_TestObjects):
@@ -39,5 +40,23 @@ class TestSpecObj(_TestObjects):
         """Test set_data method."""
         data = np.random.rand(200)
         sp_obj.set_data(data, nperseg=10, overlap=.5, cmap='plasma',
+                        clim=(-1., 1.), vmin=-.8, vmax=.8, under='orange',
+                        over='blue')
+
+
+class TestMTObj(_TestObjects):
+    """Test MultiTaperObj object."""
+
+    OBJ = mt_obj
+
+    def test_definition(self):
+        """Test function definition."""
+        MultiTaperObj('MT_None')
+        MultiTaperObj('MT_Data1D', np.random.rand(1000))
+
+    def test_set_data(self):
+        """Test set_data method."""
+        data = np.random.rand(200)
+        mt_obj.set_data(data, nperseg=10, overlap=.5, cmap='plasma',
                         clim=(-1., 1.), vmin=-.8, vmax=.8, under='orange',
                         over='blue')
