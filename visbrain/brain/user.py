@@ -364,6 +364,19 @@ class BrainUserMethods(object):
             vert = self.atlas.vertices
             obj.set_visible_sources(select=select, v=vert)
 
+    def __projection(self, idx_proj, radius, project_on, contribute,
+                     mask_color, **kwargs):
+        """Apply cortical projection and repartition."""
+        self._s_proj_type.setCurrentIndex(idx_proj)
+        self._s_proj_radius.setValue(float(radius))
+        self._s_proj_contribute.setChecked(contribute)
+        self._s_proj_mask_color.setText(str(mask_color))
+        safely_set_cbox(self._s_proj_on, project_on)
+        # Colormap control :
+        self._fcn_source_proj('', **kwargs)
+        self.cbar_control(project_on, **kwargs)
+        self.cbar_select(project_on)
+
     def cortical_projection(self, radius=10., project_on='brain',
                             contribute=False, mask_color='orange', **kwargs):
         """Project sources activity.
@@ -392,14 +405,8 @@ class BrainUserMethods(object):
         roi_control : add a region of interest.
         sources_colormap : Change the colormap properties.
         """
-        self._s_proj_radius.setValue(float(radius))
-        self._s_proj_contribute.setChecked(contribute)
-        self._s_proj_type.setCurrentIndex(0)
-        self._s_proj_mask_color.setText(str(mask_color))
-        safely_set_cbox(self._s_proj_on, project_on)
-        # Colormap control :
-        self._fcn_source_proj()
-        self.cbar_control('Brain', **kwargs)
+        self.__projection(0, radius, project_on, contribute, mask_color,
+                          **kwargs)
 
     def cortical_repartition(self, radius=10., project_on='brain',
                              contribute=False, mask_color='orange', **kwargs):
@@ -420,14 +427,8 @@ class BrainUserMethods(object):
         kwargs : dict
             Further arguments are be passed to the cbar_control method
         """
-        self._s_proj_radius.setValue(float(radius))
-        self._s_proj_contribute.setChecked(contribute)
-        self._s_proj_type.setCurrentIndex(1)
-        self._s_proj_mask_color.setText(str(mask_color))
-        safely_set_cbox(self._s_proj_on, project_on)
-        # Colormap control :
-        self._fcn_source_proj()
-        self.cbar_control('Brain', **kwargs)
+        self.__projection(1, radius, project_on, contribute, mask_color,
+                          **kwargs)
 
     def sources_fit_to_vertices(self, name=None, fit_to='brain'):
         """Force sources coordinates to fit to a selected object.
