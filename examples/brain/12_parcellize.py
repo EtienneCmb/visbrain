@@ -14,19 +14,15 @@ import numpy as np
 
 from visbrain import Brain
 from visbrain.objects import BrainObj
-from visbrain.io import download_file, path_to_visbrain_data
+from visbrain.io import download_file
 
 
 file1 = 'lh.aparc.a2009s.annot'
 file2 = 'rh.aparc.annot'
 
 # Download files if needed :
-download_file(file1)
-download_file(file2)
-
-# Get the path to the files :
-path_to_file1 = path_to_visbrain_data(file1)
-path_to_file2 = path_to_visbrain_data(file2)
+path_to_file1 = download_file(file1)
+path_to_file2 = download_file(file2)
 
 # Define a brain object :
 b_obj = BrainObj('inflated', hemisphere='both', translucent=False,

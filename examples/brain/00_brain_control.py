@@ -2,13 +2,11 @@
 Brain control
 =============
 
-Control the brain such as the choice of the template to use, the hemisphere
-to display and transparency level. By default, Visbrain come with three
-different templates (B1, B2 and B3).
+Control the brain i.e the brain template to use, the transparency and
+the hemisphere.
 
-This file also show how to rotate the using either predefined rotations
-(axial, sagittal or coronal) or custom rotation. Uncomment lines to be
-executed.
+You can also rotate the scene using predefined rotations (axial, sagittal or
+coronal) or custom rotation.
 
 Fixed parameters for rotation :
 
@@ -25,15 +23,42 @@ elevation.
 .. image:: ../../picture/picbrain/ex_brain_control.png
 """
 from visbrain import Brain
+from visbrain.objects import BrainObj
 
-from visbrain.objects import CrossSecObj
-cs = CrossSecObj('aal')
+"""Visbrain comes with three default templates :
+* B1 (with cerebellum)
+* B2
+* B3
 
-# Define the Brain instance :
-vb = Brain(cross_sec_obj=cs)
-
+Three templates can also be downloaded :
+* inflated (inflated brain of PySurfer)
+* white
+* sphere
 """
-Display opaque right hemisphere of B3 :
+b_obj = BrainObj('B3')  # 'B1', 'B2', 'inflated', 'sphere', 'white'
+
+"""By default, the brain is translucent but it can be turned to opaque
+"""
+# b_obj = BrainObj('B3', translucent=False)
+
+"""You can also select a specific hemisphere
+"""
+# b_obj = BrainObj('B3', translucent=False, hemisphere='left')  # 'right'
+
+"""For the inflated, white and translucent templates, sulcus can be also used
+"""
+# b_obj = BrainObj('inflated', translucent=False, hemisphere='right',
+#                  sulcus=True)
+
+"""Once the brain object created, pass it to the graphical user interface.
+
+If you want to control the brain from the GUI, go to the Objects tab and select
+'Brain' from the first combo box. You can also use the key shortcut b to
+display/hide the brain.
+"""
+vb = Brain(brain_obj=b_obj, bgcolor='slateblue')
+
+"""Display opaque right hemisphere of B3 :
 """
 # vb.brain_control(template='B3', hemisphere='right', translucent=False)
 
