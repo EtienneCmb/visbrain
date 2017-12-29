@@ -6,30 +6,6 @@ Main *Brain* class inputs
 
 .. currentmodule:: visbrain
 
-.. .. autosummary::
-..     :toctree: generated
-..     :template: class.rst
-
-..     Brain
-
-.. .. autoclass:: Brain
-..     :members: rotate, background_color, screenshot
-
-..     .. rubric:: Methods
-
-..     .. autosummary::
-
-..         .. rubric:: Test
-
-..         ~Brain.show
-..         ~Brain.rotate
-..         ~Brain.background_color
-
-..         .. rubric:: Test2
-..         ~Brain.screenshot
-
-
-
 .. autoclass:: Brain
 
     .. rubric:: Methods
@@ -47,12 +23,6 @@ Main *Brain* class inputs
         ~visbrain.Brain.brain_list
         ~visbrain.Brain.add_mesh
 
-        ~visbrain.Brain.volume_control
-        ~visbrain.Brain.add_volume
-        ~visbrain.Brain.volume_list
-
-        ~visbrain.Brain.cross_sections_control
-
         ~visbrain.Brain.sources_control
         ~visbrain.Brain.sources_display
         ~visbrain.Brain.sources_fit_to_vertices
@@ -66,9 +36,6 @@ Main *Brain* class inputs
         ~visbrain.Brain.pictures_control
 
         ~visbrain.Brain.connect_control
-
-        ~visbrain.Brain.roi_control
-        ~visbrain.Brain.roi_list
 
         ~visbrain.Brain.cbar_control
         ~visbrain.Brain.cbar_select
@@ -138,33 +105,6 @@ List of available templates
 Add mesh to the scene
 +++++++++++++++++++++
 .. automethod:: visbrain.Brain.add_mesh
-
-.. ##########################################################################
-..                       VOLUME AND CROSS-SECTIONS
-.. ##########################################################################
-
-.. _VolCrossecApi:
-
-Volume and cross-sections
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Control the volume
-++++++++++++++++++
-
-.. automethod:: visbrain.Brain.volume_control
-
-Add volume
-++++++++++
-.. automethod:: visbrain.Brain.add_volume
-
-Get the list of volumes
-+++++++++++++++++++++++
-.. automethod:: visbrain.Brain.volume_list
-
-Control cross-sections
-++++++++++++++++++++++
-
-.. automethod:: visbrain.Brain.cross_sections_control
 
 .. ##########################################################################
 ..                                 SOURCES
@@ -247,25 +187,6 @@ Set of functions for an interactive control of connectivity object. Use the meth
 Control Connectivity
 ++++++++++++++++++++
 .. automethod:: visbrain.Brain.connect_control
-
-.. ##########################################################################
-..                                    ROI
-.. ##########################################################################
-
-.. _RoiApi:
-
-Region Of Interest (ROI) methods
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Set of functions for an interactive control of ROI (Region of interest) objects. Use methods below to select the ROI to display, to control the transparency level...
-
-ROI control
-+++++++++++
-.. automethod:: visbrain.Brain.roi_control
-
-List of suported ROI
-++++++++++++++++++++
-.. automethod:: visbrain.Brain.roi_list
 
 .. ##########################################################################
 ..                              COLORBAR

@@ -17,9 +17,11 @@ Here's the list of currently supported modules :
 * :ref:`Pic3DObj`
 * :ref:`RoiObj`
 * :ref:`VolumeObj`
+* :ref:`CSObj`
 * :ref:`ImageObj`
 * :ref:`TFObj`
 * :ref:`SpecObj`
+* :ref:`MTObj`
 
 Each object inherit to the following methods :
 
@@ -267,6 +269,33 @@ Volume object
     <div style='clear:both'></div>
 
 
+.. _CSObj:
+
+Cross-section object
+--------------------
+
+.. figure::  picture/picobjects/pic_cs_obj.png
+   :align:   center
+
+   Cross-section object example
+
+.. currentmodule:: visbrain.objects
+
+.. autoclass:: CrossSecObj
+  :members: __call__, set_data, localize_source
+
+    .. rubric:: Methods
+
+    .. autosummary::
+        ~CrossSecObj.__call__
+        ~CrossSecObj.set_data
+        ~CrossSecObj.localize_source
+
+.. include:: generated/visbrain.objects.CrossSecObj.examples
+.. raw:: html
+
+    <div style='clear:both'></div>
+
 .. _ImageObj:
 
 Image object
@@ -340,6 +369,32 @@ Spectrogram object
         ~SpectrogramObj.set_data
 
 .. include:: generated/visbrain.objects.SpectrogramObj.examples
+.. raw:: html
+
+    <div style='clear:both'></div>
+
+
+.. _MTObj:
+
+Multi-taper object
+------------------
+
+.. figure::  picture/picobjects/pic_spec_obj.png
+   :align:   center
+
+   Multi-taper object example
+
+.. currentmodule:: visbrain.objects
+
+.. autoclass:: MultiTaperObj
+  :members: set_data
+
+    .. rubric:: Methods
+
+    .. autosummary::
+        ~MultiTaperObj.set_data
+
+.. include:: generated/visbrain.objects.MultiTaperObj.examples
 .. raw:: html
 
     <div style='clear:both'></div>
