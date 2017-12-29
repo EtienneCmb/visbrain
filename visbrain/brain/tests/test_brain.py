@@ -115,9 +115,8 @@ class TestBrain(_TestVisbrain):
     ###########################################################################
     @staticmethod
     def _get_cmap_properties():
-        skw = {'vmin': .1, 'vmax': .8, 'isvmin': True, 'isvmax': True,
-               'under': 'gray', 'over': 'red', 'clim': (0., 1.),
-               'cmap': 'Spectral_r'}
+        skw = {'vmin': .1, 'vmax': .8, 'under': 'gray', 'over': 'red',
+               'clim': (0., 1.), 'cmap': 'Spectral_r'}
         return skw
 
     def test_sources_control(self):
