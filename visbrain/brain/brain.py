@@ -126,7 +126,7 @@ class Brain(PyQtModule, UiInit, UiElements, Visuals, BrainCbar,
         BrainCbar.__init__(self, camera)
         PROFILER("Colorbar and panzoom creation")
 
-        # ====================== Colorbar ======================
+        # ====================== Shortcuts ======================
         BrainShortcuts.__init__(self, self.cbqt.cbviz._canvas)
         PROFILER("Set brain shortcuts")
 
