@@ -336,7 +336,7 @@ class BrainUserMethods(object):
         obj.mask = mask
         obj.mask_color = mask_color
         obj.alpha = alpha
-        obj.visible = visible
+        obj.visible_obj = visible
 
     def sources_display(self, name=None, select='all'):
         """Select sources to display.
