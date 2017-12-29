@@ -175,7 +175,7 @@ class BrainUserMethods(object):
             self._objsPage.setCurrentIndex(1)
             self._csView.canvas.show(True)
             canvas = self._csView.canvas
-            widget = self._csGrid['grid']
+            widget = self._csView.wc
         else:
             raise ValueError("The canvas " + canvas + " doesn't exist. Use "
                              "either 'main', 'colorbar' or 'cross-sections'")
