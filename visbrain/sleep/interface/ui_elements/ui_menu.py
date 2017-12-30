@@ -169,7 +169,7 @@ class UiMenu(HelpMenu):
 
     def saveSelectDetect(self, *args, filename=None):
         """Export selected detection."""
-        channel, method = self._getCurrentChanType()
+        channel, method = self._get_current_chan_type()
         # Read Table
         rowCount = self._DetectLocations.rowCount()
         staInd = [channel, '', 'Time index (s)']
@@ -382,7 +382,7 @@ class UiMenu(HelpMenu):
                 self._chan.visible[idx] = True
         # Plot update :
         self._fcn_sliderMove()
-        self._locLineReport()
+        self._loc_line_report()
         self._CheckDetectMenu()
 
     def loadDetectSelect(self, *args, filename=None):
@@ -408,7 +408,7 @@ class UiMenu(HelpMenu):
             self._detect[(chan, meth)]['index'] = index
             # Plot update :
             self._fcn_sliderMove()
-            self._locLineReport()
+            self._loc_line_report()
             self._CheckDetectMenu()
 
     def loadAnnotationTable(self, *args, filename=None):

@@ -35,7 +35,7 @@ class TestSleep(_TestVisbrain):
         sp._ToolDetectChan.setCurrentIndex(2)  # Select CZ channel
         for k in range(6):
             sp._ToolDetectType.setCurrentIndex(k)
-            sp._fcn_applyDetection()
+            sp._fcn_apply_detection()
 
     def test_ui_annotations(self):
         """Test method for annotations."""
