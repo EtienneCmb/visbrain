@@ -181,9 +181,10 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
     def _set_default_state(self):
         """Set the default window state."""
         # ================= TAB =================
-        self.toolBox.setCurrentIndex(1)
-        self.toolBox_2.setCurrentIndex(0)
         self._DetectionTab.setCurrentIndex(0)
+        self._stacked_panels.setCurrentIndex(0)
+        self._stacked_tools.setCurrentIndex(0)
+        self._stacked_detections.setCurrentIndex(0)
 
     def _cam_creation(self):
         """Create a set of cameras."""

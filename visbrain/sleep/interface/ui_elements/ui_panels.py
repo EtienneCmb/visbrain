@@ -26,6 +26,7 @@ class UiPanels(object):
         self._font = QtGui.QFont()
         self._font.setBold(True)
         self._addspace = '   '
+        self._pan_pick.currentIndexChanged.connect(self._fcn_pan_pick)
 
         # =====================================================================
         # MAIN GRID :
@@ -186,6 +187,11 @@ class UiPanels(object):
     # =====================================================================
     # CHANNELS
     # =====================================================================
+    def _fcn_pan_pick(self):
+        """Change the panel."""
+        idx = int(self._pan_pick.currentIndex())
+        self._stacked_panels.setCurrentIndex(idx)
+
     def _createCompatibleW(self, name_wiget, name_layout, visible=False):
         """This function create a widget and a layout."""
         Widget = QtWidgets.QWidget(self.centralwidget)  # noqa

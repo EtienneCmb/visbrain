@@ -11,6 +11,7 @@ class UiTools(object):
 
     def __init__(self):
         """Init."""
+        self._tool_pick.currentIndexChanged.connect(self._fcn_tool_pick)
         # Find non-eeg channels :
         self._noneeg = find_non_eeg(self._channels)
         # =====================================================================
@@ -50,6 +51,11 @@ class UiTools(object):
         self._SigFiltApply.clicked.connect(self._fcn_sigProcessing)
         self._SigFilt.clicked.connect(self._fcn_filtViz)
         self._SigFiltBand.currentIndexChanged.connect(self._fcn_filtBand)
+
+    def _fcn_tool_pick(self):
+        """Change tool type."""
+        idx = int(self._tool_pick.currentIndex())
+        self._stacked_tools.setCurrentIndex(idx)
 
     # =====================================================================
     # RE-REFERENCING

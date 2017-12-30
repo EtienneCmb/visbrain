@@ -56,18 +56,8 @@ class UiDetection(object):
     # =====================================================================
     def _fcn_switchDetection(self):
         """Switch between detection types (show / hide panels)."""
-        # Define ref :
-        ref = ['REM', 'Spindles', 'Peaks', 'Slow waves', 'K-complexes',
-               'Muscle twitches']
-        # Get current selected text :
-        viz = [str(self._ToolDetectType.currentText()) == k for k in ref]
-        # Set widget visibility :
-        _ = [k.setVisible(i) for k, i in zip([self._ToolRemPanel,  # noqa
-                                              self._ToolSpinPanel,
-                                              self._ToolPeakPanel,
-                                              self._ToolWavePanel,
-                                              self._ToolKCPanel,
-                                              self._ToolMTPanel], viz)]
+        idx = int(self._ToolDetectType.currentIndex())
+        self._stacked_detections.setCurrentIndex(idx)
 
     # =====================================================================
     # RUN DETECTION

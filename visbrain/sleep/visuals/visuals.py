@@ -1142,8 +1142,7 @@ class Visuals(CanvasShortcuts):
         # Set camera properties :
         cameras[3].rect = self._topo.rect
         cameras[3].aspect = 1.
-        if not any(self._topo._keeponly):
-            self.toolBox_2.setItemEnabled(2, False)
+        self._pan_pick.model().item(3).setEnabled(any(self._topo._keeponly))
         PROFILER('Topoplot', level=1)
 
         # =================== SHORTCUTS ===================
