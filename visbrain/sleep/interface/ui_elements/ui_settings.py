@@ -247,7 +247,7 @@ class UiSettings(object):
         self._hypno[t[0]:t[1]] = stage
         self._hyp.set_stage(t[0], t[1], stage)
         # # Update info table :
-        self._fcn_infoUpdate()
+        self._fcn_info_update()
         # Update scoring table :
         self._fcn_hypno_to_score()
         # self._fcn_score_to_hypno()
@@ -260,7 +260,7 @@ class UiSettings(object):
         # Set the current tab to the annotation tab :
         self.QuickSettings.setCurrentIndex(5)
         # Run annotation :
-        self._fcn_annotateAdd('')
+        self._fcn_annotate_add('')
 
     # =====================================================================
     # CLEAN / RESET GUI

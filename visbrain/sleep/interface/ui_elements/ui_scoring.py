@@ -62,7 +62,7 @@ class UiScoring(object):
                     self._hyp.set_stage(tstart, tend, stage)
             self._hyp.edit.update()
             # Update sleep info :
-            self._fcn_infoUpdate()
+            self._fcn_info_update()
 
     def _get_score_marker(self, idx):
         """Get a specific row dat.

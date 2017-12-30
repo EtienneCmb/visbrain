@@ -1022,7 +1022,7 @@ class CanvasShortcuts(object):
             # Set the current tab to the annotation tab :
             self.QuickSettings.setCurrentIndex(5)
             # Run annotation :
-            self._fcn_annotateAdd('', (cursor, cursor), title)
+            self._fcn_annotate_add('', (cursor, cursor), title)
 
         @canvas.events.mouse_move.connect
         def on_mouse_move(event):

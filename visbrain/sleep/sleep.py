@@ -216,7 +216,7 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
         self._hypLabel.setVisible(self.menuDispHypno.isChecked())
         self._fcn_chanViz()
         self._fcn_chanSymAmp()
-        self._fcn_infoUpdate()
+        self._fcn_info_update()
         self._fcn_hypno_to_score()
         # Set objects visible :
         self._SpecW.setVisible(True)

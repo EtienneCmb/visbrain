@@ -10,12 +10,12 @@ class UiAnnotate(object):
     def __init__(self):
         """Init."""
         # Add/remove line :
-        self._AnnotateAdd.clicked.connect(self._fcn_annotateAdd)
-        self._AnnotateRm.clicked.connect(self._fcn_annotateRm)
+        self._AnnotateAdd.clicked.connect(self._fcn_annotate_add)
+        self._AnnotateRm.clicked.connect(self._fcn_annotate_rm)
         self._AnnotateTable.itemSelectionChanged.connect(
-            self._fcn_annotateGoto)
+            self._fcn_annotate_goto)
 
-    def _fcn_annotateAdd(self, _, xlim=None, txt="Enter your annotation"):
+    def _fcn_annotate_add(self, _, xlim=None, txt="Enter your annotation"):
         """Add a ligne to the annotation table."""
         # Add a ligne :
         self._AnnotateTable.setRowCount(self._AnnotateTable.rowCount() + 1)
@@ -41,14 +41,14 @@ class UiAnnotate(object):
         self._annot_mark = np.append(self._annot_mark, np.array(xlim).mean())
         self._fcn_sliderMove()
 
-    def _fcn_annotateRm(self):
+    def _fcn_annotate_rm(self):
         """Remove a line to the annotation table."""
         row = self._AnnotateTable.currentRow()
         self._AnnotateTable.removeRow(row)
         self._annot_mark = np.delete(self._annot_mark, row, 0)
         self._fcn_sliderMove()
 
-    def _fcn_annotateGoto(self):
+    def _fcn_annotate_goto(self):
         """Go to the annotation location."""
         row = self._AnnotateTable.currentRow()
         if row >= 0:

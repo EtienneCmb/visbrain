@@ -291,7 +291,7 @@ class UiMenu(HelpMenu):
             self._hypno = oversample_hypno(self._hypno, self._N)[::self._dsf]
             self._hyp.set_data(self._sf, self._hypno, self._time)
             # Update info table :
-            self._fcn_infoUpdate()
+            self._fcn_info_update()
             # Update scoring table :
             self._fcn_hypno_to_score()
             self._fcn_score_to_hypno()

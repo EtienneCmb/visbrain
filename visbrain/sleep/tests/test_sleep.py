@@ -39,13 +39,13 @@ class TestSleep(_TestVisbrain):
     def test_ui_annotations(self):
         """Test method for annotations."""
         # Add annotations :
-        sp._fcn_annotateAdd('', xlim=(10, 20), txt='Annotation1')
-        sp._fcn_annotateAdd('', xlim=(20, 30), txt='Annotation2')
-        sp._fcn_annotateAdd('', xlim=(5, 15), txt='Annotation3')
+        sp._fcn_annotate_add('', xlim=(10, 20), txt='Annotation1')
+        sp._fcn_annotate_add('', xlim=(20, 30), txt='Annotation2')
+        sp._fcn_annotate_add('', xlim=(5, 15), txt='Annotation3')
         # Remove annotation :
-        sp._fcn_annotateRm()
+        sp._fcn_annotate_rm()
         # Go to :
-        sp._fcn_annotateGoto()
+        sp._fcn_annotate_goto()
 
     ###########################################################################
     #                                SAVE

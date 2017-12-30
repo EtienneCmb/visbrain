@@ -506,7 +506,7 @@ class UiPanels(object):
             self._hypno = np.zeros((len(self._hyp),), dtype=np.float32)
             self._hyp.clean(self._sf, self._time)
             # Update info table :
-            self._fcn_infoUpdate()
+            self._fcn_info_update()
             # Update scoring table :
             self._fcn_hypno_to_score()
             self._fcn_score_to_hypno()
