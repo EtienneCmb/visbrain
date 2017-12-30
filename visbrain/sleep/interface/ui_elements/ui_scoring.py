@@ -60,16 +60,6 @@ class UiScoring(object):
                 if tstart is not None:
                     self._hypno[tstart:tend] = stage
                     self._hyp.set_stage(tstart, tend, stage)
-            if self._enabhypedit:
-                # Reset markers points position and color :
-                self._hypedit.pos = np.array([])
-                # Update hypnogram :
-                self._hypedit._transient(-self._hypno, self._time)
-                self._hypedit.color = np.tile(self._hypedit.color_static,
-                                              (self._hypedit.pos.shape[0], 1))
-                self._hyp.edit.set_data(pos=self._hypedit.pos,
-                                        face_color=self._hypedit.color,
-                                        size=self._hypedit.size, edge_width=0.)
             self._hyp.edit.update()
             # Update sleep info :
             self._fcn_infoUpdate()

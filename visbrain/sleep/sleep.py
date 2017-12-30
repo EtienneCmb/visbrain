@@ -5,14 +5,13 @@ import vispy.scene.cameras as viscam
 
 from .interface import UiInit, UiElements
 from .visuals import Visuals
-from .tools import Tools
 from ..pyqt_module import PyQtModule
 from ..utils import (FixedCam, color2vb, MouseEventControl)
 from ..io import ReadSleepData
 from ..config import PROFILER
 
 
-class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements, Tools,
+class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
             MouseEventControl):
     """Visualize and edit sleep data.
 
@@ -53,8 +52,6 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements, Tools,
         Specify the line rendering. Use 'gl' for the default line (fast) or
         'agg' for smooth lines. This option might not works on some
         plateforms.
-    hedit : bool | False
-        Enable the drag and drop hypnogram edition.
     href : list | ['art', 'wake', 'rem', 'n1', 'n2', 'n3']
         List of sleep stages. This list can be used to changed the display
         order into the GUI.
@@ -84,7 +81,7 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements, Tools,
 
     def __init__(self, data=None, hypno=None, config_file=None,
                  annotations=None, channels=None, sf=None, downsample=100.,
-                 axis=False, line='gl', hedit=False,
+                 axis=False, line='gl',
                  href=['art', 'wake', 'rem', 'n1', 'n2', 'n3'],
                  preload=True, use_mne=False, kwargs_mne={}, verbose=None):
         """Init."""
@@ -110,7 +107,6 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements, Tools,
         self._annot_mark = np.array([])
         self._hconvinv = {v: k for k, v in self._hconv.items()}
         self._ax = axis
-        self._enabhypedit = hedit
         # ---------- Default line width ----------
         self._linemeth = line
         self._lw = 1.
@@ -160,10 +156,6 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements, Tools,
         # ====================== OBJECTS CREATION ======================
         PROFILER("Initialize visual elements", as_type='title')
         Visuals.__init__(self)
-
-        # ====================== TOOLS ======================
-        Tools.__init__(self)
-        PROFILER("Initialize tools")
 
         # ====================== FUNCTIONS ON LOAD ======================
         self._fcns_on_creation()
