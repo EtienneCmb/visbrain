@@ -466,7 +466,6 @@ class UiMenu(HelpMenu):
         viz = self.menuDispSpec.isChecked()
         self._SpecW.setVisible(viz)
         self._specLabel.setVisible(viz)
-        self._PanSpecW.setEnabled(viz)
 
     def _disptog_hyp(self):
         """Toggle method for display / hide the hypnogram.

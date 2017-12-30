@@ -20,8 +20,7 @@ if not os.path.isfile(sleep_file):
 onset = np.array([100, 2000, 5000])
 
 # Create Sleep application :
-sp = Sleep(data=sleep_file, hypno=hypno_file, axis=True, hedit=True,
-           annotations=onset)
+sp = Sleep(data=sleep_file, hypno=hypno_file, axis=True, annotations=onset)
 
 
 class TestSleep(_TestVisbrain):
