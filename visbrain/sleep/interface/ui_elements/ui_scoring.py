@@ -47,7 +47,7 @@ class UiScoring(object):
                 items[stages[k]]))
         self._scoreSet = True
 
-    def _fcn_Score2Hypno(self):
+    def _fcn_score_to_hypno(self):
         """Update hypno data from hypno score."""
         if self._scoreSet:
             # Reset hypnogram :
@@ -55,7 +55,7 @@ class UiScoring(object):
             # Loop over table row :
             for k in range(self._scoreTable.rowCount()):
                 # Get tstart / tend / stage :
-                tstart, tend, stage = self._get_scoreMarker(k)
+                tstart, tend, stage = self._get_score_marker(k)
                 # Update pos if not None :
                 if tstart is not None:
                     self._hypno[tstart:tend] = stage
@@ -64,25 +64,25 @@ class UiScoring(object):
             # Update sleep info :
             self._fcn_infoUpdate()
 
-    def _get_scoreMarker(self, idx):
+    def _get_score_marker(self, idx):
         """Get a specific row dat.
 
         This function insure that the edited line is complete and is properly
         formated.
 
-        Args:
-            idx: int
-                The row from which get data.
+        Parameters
+        ----------
+        idx : int
+            The row from which get data.
 
-        Returns:
-            tstart: float
-                Time start (in sample)
-
-            tend: float
-                Time end (in sample).
-
-            stage: int
-                The stage.
+        Returns
+        -------
+        tstart : float
+            Time start (in sample)
+        tend : float
+            Time end (in sample).
+        stage : int
+            The stage.
         """
         it = {'art': -1., 'wake': 0., 'n1': 1., 'n2': 2., 'n3': 3., 'rem': 4.}
         # Get unit :
@@ -95,19 +95,19 @@ class UiScoring(object):
                  "float numbers (with time start < time end) and stage " + \
                  "must be Wake, N1, N2, N3, REM or Art"
         # Get row data and update if possible:
-        tstartItem = self._scoreTable.item(idx, 0)
-        tendItem = self._scoreTable.item(idx, 1)
-        stageItem = self._scoreTable.item(idx, 2)
-        if tstartItem and tendItem and stageItem:
+        tstart_item = self._scoreTable.item(idx, 0)
+        tend_item = self._scoreTable.item(idx, 1)
+        stage_item = self._scoreTable.item(idx, 2)
+        if tstart_item and tend_item and stage_item:
             # ============= PROPER FORMAT =============
-            if all([bool(str(tstartItem.text())), bool(str(tendItem.text())),
-                    str(stageItem.text()).lower() in it.keys()]):
+            if all([bool(str(tstart_item.text())), bool(str(tend_item.text())),
+                    str(stage_item.text()).lower() in it.keys()]):
                 try:
                     # Get start / end / stage :
-                    tstart = int(float(str(tstartItem.text(
+                    tstart = int(float(str(tstart_item.text(
                     ))) * fact * self._sf)
-                    tend = int(float(str(tendItem.text())) * fact * self._sf)
-                    stage = it[str(stageItem.text()).lower()]
+                    tend = int(float(str(tend_item.text())) * fact * self._sf)
+                    stage = it[str(stage_item.text()).lower()]
 
                     return tstart, tend, stage
                 except:
@@ -120,14 +120,14 @@ class UiScoring(object):
     ##########################################################################
     # EDITING TABLE
     ##########################################################################
-    def _fcn_addScoreRow(self):
+    def _fcn_add_score_row(self):
         """Add a row to the table."""
         # Increase length :
         self._scoreTable.setRowCount(self._scoreTable.rowCount() + 1)
 
-    def _fcn_rmScoreRow(self):
+    def _fcn_rm_score_row(self):
         """Remove selected row."""
         # Remove row :
         self._scoreTable.removeRow(self._scoreTable.currentRow())
         # Update hypnogram from table :
-        self._fcn_Score2Hypno()
+        self._fcn_score_to_hypno()
