@@ -11,16 +11,16 @@ class UiScoring(object):
     def __init__(self):
         """Init."""
         # Add / remove line :
-        self._scoreAdd.clicked.connect(self._fcn_addScoreRow)
-        self._scoreRm.clicked.connect(self._fcn_rmScoreRow)
+        self._scoreAdd.clicked.connect(self._fcn_add_score_row)
+        self._scoreRm.clicked.connect(self._fcn_rm_score_row)
 
         # Table edited :
-        self._scoreTable.cellChanged.connect(self._fcn_Score2Hypno)
+        self._scoreTable.cellChanged.connect(self._fcn_score_to_hypno)
 
     ##########################################################################
     # UPDATE SCORE <=> HYPNO
     ##########################################################################
-    def _fcn_Hypno2Score(self):
+    def _fcn_hypno_to_score(self):
         """Update hypno table from hypno data."""
         self._hypno = self._hyp.gui_to_hyp()
         # Avoid updating data while setting cell :
