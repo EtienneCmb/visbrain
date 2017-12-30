@@ -224,6 +224,6 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
         self._TimeAxisW.setVisible(True)
         # File to load :
         if self._config_file is not None:  # Config file
-            self.loadConfig(filename=self._config_file)
+            self._load_config(filename=self._config_file)
         if self._annot_file is not None:   # Annotation file
-            self.loadAnnotationTable(filename=self._annot_file)
+            self._load_annotation_table(filename=self._annot_file)

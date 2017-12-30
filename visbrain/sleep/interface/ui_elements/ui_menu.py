@@ -27,18 +27,18 @@ class UiMenu(HelpMenu):
         # _____________________________________________________________________
         # Hypnogram :
         self.menuSaveHypnogramData.triggered.connect(self.saveHypData)
-        self.menuSaveHypnogramFigure.triggered.connect(self.saveHypFig)
+        self.menuSaveHypnogramFigure.triggered.connect(self._save_hyp_fig)
         # Stats info table :
-        self.menuSaveInfoTable.triggered.connect(self.saveInfoTable)
+        self.menu_save_info_table.triggered.connect(self._save_info_table)
         # Scoring table :
-        self.menuSaveScoringTable.triggered.connect(self.saveScoringTable)
+        self.menuSaveScoringTable.triggered.connect(self._save_scoring_table)
         # Detections :
-        self.menuSaveDetectAll.triggered.connect(self.saveAllDetect)
-        self.menuSaveDetectSelected.triggered.connect(self.saveSelectDetect)
+        self.menuSaveDetectAll.triggered.connect(self._save_all_detect)
+        self.menuSaveDetectSelected.triggered.connect(self._save_select_detect)
         # Sleep GUI config :
-        self.menuSaveConfig.triggered.connect(self.saveConfig)
+        self.menuSaveConfig.triggered.connect(self._save_config)
         # Annotations :
-        self.menuSaveAnnotations.triggered.connect(self.saveAnnotationTable)
+        self.menuSaveAnnotations.triggered.connect(self._save_annotation_table)
         # Screenshot :
         self.menuSaveScreenshot.triggered.connect(self._fcn_gui_screenshot)
 
@@ -46,14 +46,14 @@ class UiMenu(HelpMenu):
         #                                 LOAD
         # _____________________________________________________________________
         # Load hypnogram :
-        self.menuLoadHypno.triggered.connect(self.loadHypno)
+        self.menuLoadHypno.triggered.connect(self._load_hypno)
         # Sleep GUI config :
-        self.menuLoadConfig.triggered.connect(self.loadConfig)
+        self.menuLoadConfig.triggered.connect(self._load_config)
         # Detections :
-        self.menuLoadDetectAll.triggered.connect(self.loadDetectAll)
-        self.menuLoadDetectSelect.triggered.connect(self.loadDetectSelect)
+        self.menuLoadDetectAll.triggered.connect(self._load_detect_all)
+        self.menuLoadDetectSelect.triggered.connect(self._load_detect_select)
         # Annotations :
-        self.menuLoadAnnotations.triggered.connect(self.loadAnnotationTable)
+        self.menuLoadAnnotations.triggered.connect(self._load_annotation_table)
 
         # _____________________________________________________________________
         #                                 EXIT
@@ -106,7 +106,7 @@ class UiMenu(HelpMenu):
             else:
                 raise ValueError("Not a valid extension")
 
-    def saveHypFig(self, *args, filename=None, **kwargs):
+    def _save_hyp_fig(self, *args, filename=None, **kwargs):
         """Save a 600 dpi .png figure of the hypnogram."""
         if filename is None:
             filename = dialogSave(self, 'Save Hypnogram figure', 'hypno',
@@ -116,7 +116,7 @@ class UiMenu(HelpMenu):
                           **kwargs)
 
     # ______________________ STATS INFO TABLE ______________________
-    def saveInfoTable(self, *args, filename=None):
+    def _save_info_table(self, *args, filename=None):
         """Export stat info."""
         # Get file name :
         if filename is None:
@@ -131,14 +131,14 @@ class UiMenu(HelpMenu):
                 write_txt(file + '.txt', zip(self._keysInfo, self._valInfo))
 
     # ______________________ SCORING TABLE ______________________
-    def saveScoringTable(self, *args, filename=None):
+    def _save_scoring_table(self, *args, filename=None):
         """Export score info."""
         # Read Table
-        rowCount = self._scoreTable.rowCount()
-        staInd, endInd, stage = [], [], []
-        for row in np.arange(rowCount):
-            staInd.append(str(self._scoreTable.item(row, 0).text()))
-            endInd.append(str(self._scoreTable.item(row, 1).text()))
+        row_count = self._scoreTable.row_count()
+        sta_ind, end_ind, stage = [], [], []
+        for row in np.arange(row_count):
+            sta_ind.append(str(self._scoreTable.item(row, 0).text()))
+            end_ind.append(str(self._scoreTable.item(row, 1).text()))
             stage.append(str(self._scoreTable.item(row, 2).text()))
         # Get file name :
         if filename is None:
@@ -148,16 +148,16 @@ class UiMenu(HelpMenu):
         if filename:
             file, ext = os.path.splitext(filename)
             if ext.find('csv') + 1:
-                write_csv(file + '.csv', zip(staInd, endInd, stage))
+                write_csv(file + '.csv', zip(sta_ind, end_ind, stage))
             elif ext.find('txt') + 1:
-                write_txt(file + '.txt', zip(staInd, endInd, stage))
+                write_txt(file + '.txt', zip(sta_ind, end_ind, stage))
 
     # ______________________ DETECTIONS ______________________
-    def _CheckDetectMenu(self):
+    def _check_detect_menu(self):
         """Activate/Deactivate the saving detection menu."""
         self.menuSaveDetections.setEnabled(bool(self._detect))
 
-    def saveAllDetect(self, *args, filename=None):
+    def _save_all_detect(self, *args, filename=None):
         """Export all detections."""
         # Get file name :
         if filename is None:
@@ -167,18 +167,18 @@ class UiMenu(HelpMenu):
             file = os.path.splitext(str(filename))[0]
             np.save(file + '.npy', self._detect.dict)
 
-    def saveSelectDetect(self, *args, filename=None):
+    def _save_select_detect(self, *args, filename=None):
         """Export selected detection."""
         channel, method = self._get_current_chan_type()
         # Read Table
-        rowCount = self._DetectLocations.rowCount()
-        staInd = [channel, '', 'Time index (s)']
-        endInd = [method, '', 'Time index (s)']
+        row_count = self._DetectLocations.row_count()
+        sta_ind = [channel, '', 'Time index (s)']
+        end_ind = [method, '', 'Time index (s)']
         duration = ['', '', 'Duration (s)']
         stage = ['', '', 'Sleep stage']
-        for row in np.arange(rowCount):
-            staInd.append(str(self._DetectLocations.item(row, 0).text()))
-            endInd.append(str(self._DetectLocations.item(row, 1).text()))
+        for row in np.arange(row_count):
+            sta_ind.append(str(self._DetectLocations.item(row, 0).text()))
+            end_ind.append(str(self._DetectLocations.item(row, 1).text()))
             duration.append(str(self._DetectLocations.item(row, 2).text()))
             stage.append(str(self._DetectLocations.item(row, 3).text()))
         # Get file name :
@@ -190,13 +190,14 @@ class UiMenu(HelpMenu):
         if filename:
             file, ext = os.path.splitext(filename)
             file += '_' + channel + '-' + method
+            zp = zip(sta_ind, end_ind, duration, stage)
             if ext.find('csv') + 1:
-                write_csv(file + '.csv', zip(staInd, endInd, duration, stage))
+                write_csv(file + '.csv', zp)
             elif ext.find('txt') + 1:
-                write_txt(file + '.txt', zip(staInd, endInd, duration, stage))
+                write_txt(file + '.txt', zp)
 
     # ______________________ SLEEP GUI CONFIG ______________________
-    def saveConfig(self, *args, filename=None):
+    def _save_config(self, *args, filename=None):
         """Save a config file (*.txt) containing several display parameters."""
         import json
         if filename is None:
@@ -245,14 +246,14 @@ class UiMenu(HelpMenu):
                 json.dump(config, f)
 
     # ______________________ ANNOTATION TABLE ______________________
-    def saveAnnotationTable(self, *args, filename=None):
+    def _save_annotation_table(self, *args, filename=None):
         """Export annotation table."""
         # Read Table
-        rowCount = self._AnnotateTable.rowCount()
-        staInd, endInd, annot = [], [], []
-        for row in np.arange(rowCount):
-            staInd.append(str(self._AnnotateTable.item(row, 0).text()))
-            endInd.append(str(self._AnnotateTable.item(row, 1).text()))
+        row_count = self._AnnotateTable.row_count()
+        sta_ind, end_ind, annot = [], [], []
+        for row in np.arange(row_count):
+            sta_ind.append(str(self._AnnotateTable.item(row, 0).text()))
+            end_ind.append(str(self._AnnotateTable.item(row, 1).text()))
             annot.append(str(self._AnnotateTable.item(row, 2).text()))
         # Get file name :
         if filename is None:
@@ -262,9 +263,9 @@ class UiMenu(HelpMenu):
         if filename:
             file, ext = os.path.splitext(filename)
             if ext.find('csv') + 1:
-                write_csv(file + '.csv', zip(staInd, endInd, annot))
+                write_csv(file + '.csv', zip(sta_ind, end_ind, annot))
             elif ext.find('txt') + 1:
-                write_txt(file + '.txt', zip(staInd, endInd, annot))
+                write_txt(file + '.txt', zip(sta_ind, end_ind, annot))
 
     # ______________________ SCREENSHOT ______________________
     def _fcn_gui_screenshot(self):
@@ -277,7 +278,7 @@ class UiMenu(HelpMenu):
     ###########################################################################
     ###########################################################################
 
-    def loadHypno(self, *args, filename=None):
+    def _load_hypno(self, *args, filename=None):
         """Load a hypnogram."""
         # Get filename :
         if filename is None:
@@ -295,7 +296,7 @@ class UiMenu(HelpMenu):
             self._fcn_hypno_to_score()
             self._fcn_score_to_hypno()
 
-    def loadConfig(self, *args, filename=None):
+    def _load_config(self, *args, filename=None):
         """Load a config file (*.txt) containing several display parameters."""
         import json
         if not filename:
@@ -366,7 +367,7 @@ class UiMenu(HelpMenu):
                 self._fcn_chanAutoAmp()
                 self._fcn_chanSymAmp()
 
-    def loadDetectAll(self, *args, filename=None):
+    def _load_detect_all(self, *args, filename=None):
         """Load all detections."""
         # Dialog window for detection file :
         if filename is None:
@@ -383,9 +384,9 @@ class UiMenu(HelpMenu):
         # Plot update :
         self._fcn_sliderMove()
         self._loc_line_report()
-        self._CheckDetectMenu()
+        self._check_detect_menu()
 
-    def loadDetectSelect(self, *args, filename=None):
+    def _load_detect_select(self, *args, filename=None):
         """Load a specific detection."""
         # Get file name :
         if filename is None:
@@ -409,9 +410,9 @@ class UiMenu(HelpMenu):
             # Plot update :
             self._fcn_sliderMove()
             self._loc_line_report()
-            self._CheckDetectMenu()
+            self._check_detect_menu()
 
-    def loadAnnotationTable(self, *args, filename=None):
+    def _load_annotation_table(self, *args, filename=None):
         """Load annotations."""
         # Get file name :
         if filename is None:
@@ -515,8 +516,8 @@ class UiMenu(HelpMenu):
 
     def _disptog_zoom(self):
         """Toggle zoom mode."""
-        activeIndic = self.menuDispZoom.isChecked()
-        if not activeIndic:
+        active_indic = self.menuDispZoom.isChecked()
+        if not active_indic:
             # Spectrogram camera :
             self._speccam.rect = (self._time.min(), self._spec.freq[0],
                                   self._time.max() - self._time.min(),
@@ -530,10 +531,10 @@ class UiMenu(HelpMenu):
                                   self._time.max() - self._time.min(), 1.)
 
         # Activate / Deactivate indicators :
-        self.menuDispIndic.setChecked(not activeIndic)
-        self.menuDispIndic.setEnabled(not activeIndic)
-        self._hypInd.mesh.visible = not activeIndic
-        self._specInd.mesh.visible = not activeIndic
-        self._TimeAxis.mesh.visible = not activeIndic
+        self.menuDispIndic.setChecked(not active_indic)
+        self.menuDispIndic.setEnabled(not active_indic)
+        self._hypInd.mesh.visible = not active_indic
+        self._specInd.mesh.visible = not active_indic
+        self._TimeAxis.mesh.visible = not active_indic
 
         self._fcn_sliderSettings()

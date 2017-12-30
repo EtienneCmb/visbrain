@@ -205,7 +205,7 @@ class UiDetection(object):
         self._loc_line_report()
 
         # Activate the save detections menu and activate detection tab :
-        self._CheckDetectMenu()
+        self._check_detect_menu()
 
         # Finally, hide progress bar :
         self._ToolDetectProgress.hide()
@@ -231,7 +231,7 @@ class UiDetection(object):
             self._DetectionTab.setTabEnabled(1, False)
         else:
             self._DetectionTab.setTabEnabled(1, True)
-        self._CheckDetectMenu()
+        self._check_detect_menu()
         # Reconnect table :
         self._DetectChanSw.currentIndexChanged.connect(
             self._fcn_run_switch_location)
@@ -272,7 +272,7 @@ class UiDetection(object):
             self._loc_line_report()
         else:
             self._DetectionTab.setTabEnabled(1, False)
-            self._CheckDetectMenu()
+            self._check_detect_menu()
 
     def _fcn_viz_location(self):
         """Display/hide detections."""
