@@ -29,7 +29,7 @@ class UiMenu(HelpMenu):
         self.menuSaveHypnogramData.triggered.connect(self.saveHypData)
         self.menuSaveHypnogramFigure.triggered.connect(self._save_hyp_fig)
         # Stats info table :
-        self.menu_save_info_table.triggered.connect(self._save_info_table)
+        self.menuSaveInfoTable.triggered.connect(self._save_info_table)
         # Scoring table :
         self.menuSaveScoringTable.triggered.connect(self._save_scoring_table)
         # Detections :
@@ -134,7 +134,7 @@ class UiMenu(HelpMenu):
     def _save_scoring_table(self, *args, filename=None):
         """Export score info."""
         # Read Table
-        row_count = self._scoreTable.row_count()
+        row_count = self._scoreTable.rowCount()
         sta_ind, end_ind, stage = [], [], []
         for row in np.arange(row_count):
             sta_ind.append(str(self._scoreTable.item(row, 0).text()))
@@ -171,7 +171,7 @@ class UiMenu(HelpMenu):
         """Export selected detection."""
         channel, method = self._get_current_chan_type()
         # Read Table
-        row_count = self._DetectLocations.row_count()
+        row_count = self._DetectLocations.rowCount()
         sta_ind = [channel, '', 'Time index (s)']
         end_ind = [method, '', 'Time index (s)']
         duration = ['', '', 'Duration (s)']
@@ -249,7 +249,7 @@ class UiMenu(HelpMenu):
     def _save_annotation_table(self, *args, filename=None):
         """Export annotation table."""
         # Read Table
-        row_count = self._AnnotateTable.row_count()
+        row_count = self._AnnotateTable.rowCount()
         sta_ind, end_ind, annot = [], [], []
         for row in np.arange(row_count):
             sta_ind.append(str(self._AnnotateTable.item(row, 0).text()))
