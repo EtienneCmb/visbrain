@@ -211,7 +211,7 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
 
     def _fcns_on_creation(self):
         """Applied on creation."""
-        self._fcn_sliderMove()
+        self._fcn_slider_move()
         self._chanChecks[0].setChecked(True)
         self._hypLabel.setVisible(self.menuDispHypno.isChecked())
         self._fcn_chanViz()

@@ -29,7 +29,7 @@ class UiScoring(object):
         # Remove every info in the table :
         self._scoreTable.setRowCount(0)
         # Find unit conversion :
-        fact = self._get_factFromUnit()
+        fact = self._get_fact_from_unit()
         # Find transients :
         _, idx, stages = transient(self._hypno, self._time / fact)
         idx = np.round(10. * idx) / 10.
@@ -86,7 +86,7 @@ class UiScoring(object):
         """
         it = {'art': -1., 'wake': 0., 'n1': 1., 'n2': 2., 'n3': 3., 'rem': 4.}
         # Get unit :
-        fact = self._get_factFromUnit()
+        fact = self._get_fact_from_unit()
         # Get selected row :
         # idx = self._scoreTable.currentRow()
         # ============= NON EMPTY ITEM =============

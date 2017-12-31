@@ -550,5 +550,5 @@ class UiPanels(object):
 
     def _fcn_topoApply(self):
         """Apply topo settings."""
-        self._fcn_sliderMove()
+        self._fcn_slider_move()
         self._PanTopoApply.setEnabled(False)

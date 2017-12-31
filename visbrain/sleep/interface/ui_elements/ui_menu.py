@@ -362,7 +362,7 @@ class UiMenu(HelpMenu):
                 self._disptog_topo()
                 self._disptog_indic()
                 self._disptog_zoom()
-                self._fcn_gridToggle()
+                self._fcn_grid_toggle()
                 self._fcn_updateAmpInfo()
                 self._fcn_chanAutoAmp()
                 self._fcn_chanSymAmp()
@@ -382,7 +382,7 @@ class UiMenu(HelpMenu):
                 self.canvas_setVisible(idx, True)
                 self._chan.visible[idx] = True
         # Plot update :
-        self._fcn_sliderMove()
+        self._fcn_slider_move()
         self._loc_line_report()
         self._check_detect_menu()
 
@@ -408,7 +408,7 @@ class UiMenu(HelpMenu):
             # Set index :
             self._detect[(chan, meth)]['index'] = index
             # Plot update :
-            self._fcn_sliderMove()
+            self._fcn_slider_move()
             self._loc_line_report()
             self._check_detect_menu()
 
@@ -441,7 +441,7 @@ class UiMenu(HelpMenu):
         # Set markers :
         middle = (start.astype(np.float32) + end.astype(np.float32)) / 2
         self._annot_mark = middle
-        self._fcn_sliderMove()
+        self._fcn_slider_move()
 
     ###########################################################
     ###########################################################
@@ -504,7 +504,7 @@ class UiMenu(HelpMenu):
         self._PanTopoVizW.setEnabled(viz)
         if viz:
             self._fcn_topoSettings()
-            self._fcn_sliderMove()
+            self._fcn_slider_move()
 
     def _disptog_indic(self):
         """Toggle method for display / hide the time indicators."""
@@ -512,7 +512,7 @@ class UiMenu(HelpMenu):
         self._specInd.mesh.visible = viz
         self._hypInd.mesh.visible = viz
         self._TimeAxis.mesh.visible = viz
-        self._fcn_sliderMove()
+        self._fcn_slider_move()
 
     def _disptog_zoom(self):
         """Toggle zoom mode."""
@@ -537,4 +537,4 @@ class UiMenu(HelpMenu):
         self._specInd.mesh.visible = not active_indic
         self._TimeAxis.mesh.visible = not active_indic
 
-        self._fcn_sliderSettings()
+        self._fcn_slider_settings()

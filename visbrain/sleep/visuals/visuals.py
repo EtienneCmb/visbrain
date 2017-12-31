@@ -945,12 +945,12 @@ class CanvasShortcuts(object):
             elif event.text.lower() == 'm':  # Magnify
                 viz = self._slMagnify.isChecked()
                 self._slMagnify.setChecked(not viz)
-                self._fcn_sliderMagnify()
+                self._fcn_slider_magnify()
 
             elif event.text.lower() == 'g':  # Grid
                 viz = self._slGrid.isChecked()
                 self._slGrid.setChecked(not viz)
-                self._fcn_gridToggle()
+                self._fcn_grid_toggle()
 
             # ------------ SCORING ------------
             elif event.text.lower() == 'a':  # Art
@@ -1099,7 +1099,7 @@ class Visuals(CanvasShortcuts):
                                  method=method, color=self._chancolor,
                                  width=self._lw, color_detection=self._indicol,
                                  parent=self._chanCanvas,
-                                 fcn=self._fcn_sliderMove)
+                                 fcn=self._fcn_slider_move)
         PROFILER('Channels', level=1)
 
         # =================== SPECTROGRAM ===================

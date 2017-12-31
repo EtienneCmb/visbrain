@@ -39,14 +39,14 @@ class UiAnnotate(object):
         self._AnnotateTable.editItem(self._AnnotateTable.item(rw, 2))
         # Send marker annotation to the time-axis :
         self._annot_mark = np.append(self._annot_mark, np.array(xlim).mean())
-        self._fcn_sliderMove()
+        self._fcn_slider_move()
 
     def _fcn_annotate_rm(self):
         """Remove a line to the annotation table."""
         row = self._AnnotateTable.currentRow()
         self._AnnotateTable.removeRow(row)
         self._annot_mark = np.delete(self._annot_mark, row, 0)
-        self._fcn_sliderMove()
+        self._fcn_slider_move()
 
     def _fcn_annotate_goto(self):
         """Go to the annotation location."""

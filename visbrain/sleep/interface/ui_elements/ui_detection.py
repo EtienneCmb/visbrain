@@ -180,7 +180,7 @@ class UiDetection(object):
                     self._chan.visible[k] = True
                 self._chan.loc[k].visible = True
                 # Update plot :
-                self._fcn_sliderMove()
+                self._fcn_slider_move()
 
             # Update progress bar :
             self._ToolDetectProgress.setValue(100. * (i + 1) / len(self))
