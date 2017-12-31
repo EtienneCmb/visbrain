@@ -945,12 +945,12 @@ class CanvasShortcuts(object):
             elif event.text.lower() == 'm':  # Magnify
                 viz = self._slMagnify.isChecked()
                 self._slMagnify.setChecked(not viz)
-                self._fcn_sliderMagnify()
+                self._fcn_slider_magnify()
 
             elif event.text.lower() == 'g':  # Grid
                 viz = self._slGrid.isChecked()
                 self._slGrid.setChecked(not viz)
-                self._fcn_gridToggle()
+                self._fcn_grid_toggle()
 
             # ------------ SCORING ------------
             elif event.text.lower() == 'a':  # Art
@@ -1022,7 +1022,7 @@ class CanvasShortcuts(object):
             # Set the current tab to the annotation tab :
             self.QuickSettings.setCurrentIndex(5)
             # Run annotation :
-            self._fcn_annotateAdd('', (cursor, cursor), title)
+            self._fcn_annotate_add('', (cursor, cursor), title)
 
         @canvas.events.mouse_move.connect
         def on_mouse_move(event):
@@ -1099,12 +1099,12 @@ class Visuals(CanvasShortcuts):
                                  method=method, color=self._chancolor,
                                  width=self._lw, color_detection=self._indicol,
                                  parent=self._chanCanvas,
-                                 fcn=self._fcn_sliderMove)
+                                 fcn=self._fcn_slider_move)
         PROFILER('Channels', level=1)
 
         # =================== SPECTROGRAM ===================
         # Create a spectrogram object :
-        self._spec = Spectrogram(camera=cameras[1], fcn=self._fcn_specSetData,
+        self._spec = Spectrogram(camera=cameras[1], fcn=self._fcn_spec_set_data,
                                  parent=self._specCanvas.wc.scene)
         self._spec.set_data(sf, data[0, ...], time, cmap=self._defcmap)
         PROFILER('Spectrogram', level=1)
@@ -1142,8 +1142,7 @@ class Visuals(CanvasShortcuts):
         # Set camera properties :
         cameras[3].rect = self._topo.rect
         cameras[3].aspect = 1.
-        if not any(self._topo._keeponly):
-            self.toolBox_2.setItemEnabled(2, False)
+        self._pan_pick.model().item(3).setEnabled(any(self._topo._keeponly))
         PROFILER('Topoplot', level=1)
 
         # =================== SHORTCUTS ===================
