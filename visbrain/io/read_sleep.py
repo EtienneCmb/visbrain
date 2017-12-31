@@ -56,9 +56,8 @@ class ReadSleepData(object):
             sleep_ext = ['.eeg', '.vhdr', '.edf', '.trc', '.rec']
             use_mne = True if ext not in sleep_ext else use_mne
 
-            if not is_mne_installed() and use_mne:
-                raise IOError("To load the file, MNE-python should be "
-                              "installed.")
+            if use_mne:
+                is_mne_installed(raise_error=True)
 
             # ---------- LOAD THE FILE ----------
             if use_mne:  # Load using MNE functions

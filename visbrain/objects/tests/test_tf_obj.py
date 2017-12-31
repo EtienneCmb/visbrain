@@ -1,62 +1,39 @@
-"""Test TimeFrequencyMapObj."""
+"""Test TimeFrequencyObj."""
 import numpy as np
 
 from visbrain.objects.tests._testing_objects import _TestObjects
-from visbrain.objects import TimeFrequencyMapObj, SpectrogramObj, MultiTaperObj
+from visbrain.objects import TimeFrequencyObj
 
-tf_obj = TimeFrequencyMapObj('TF', np.random.rand(1000))
-sp_obj = SpectrogramObj('Spec', np.random.rand(1000))
-mt_obj = MultiTaperObj('MT', np.random.rand(1000))
+tf_obj = TimeFrequencyObj('TF', np.random.rand(1000))
 
 
 class TestTFObj(_TestObjects):
-    """Test TimeFrequencyMapObj object."""
+    """Test TimeFrequencyObj object."""
 
     OBJ = tf_obj
 
     def test_definition(self):
         """Test function definition."""
-        TimeFrequencyMapObj('TF_None')
-        TimeFrequencyMapObj('TF_Data1D', np.random.rand(100))
+        TimeFrequencyObj('TF_None')
+        TimeFrequencyObj('TF_Data1D', np.random.rand(100))
 
-    def test_set_data(self):
-        """Test set_data method."""
+    def test_fourier(self):
+        """Compute time-frequency using fourier method."""
         data = np.random.rand(200)
-        tf_obj.set_data(data, n_window=10, cmap='plasma', clim=(-1., 1.),
-                        vmin=-.8, vmax=.8, under='orange', over='blue', norm=3)
+        tf_obj.set_data(data, method='fourier', nperseg=10, overlap=.5,
+                        cmap='plasma', clim=(-1., 1.), vmin=-.8, vmax=.8,
+                        under='orange', over='blue')
 
-
-class TestSpecObj(_TestObjects):
-    """Test SpectrogramObj object."""
-
-    OBJ = sp_obj
-
-    def test_definition(self):
-        """Test function definition."""
-        SpectrogramObj('Spec_None')
-        SpectrogramObj('Spec_Data1D', np.random.rand(1000))
-
-    def test_set_data(self):
-        """Test set_data method."""
+    def test_wavelet(self):
+        """Compute time-frequency using wavelet method."""
         data = np.random.rand(200)
-        sp_obj.set_data(data, nperseg=10, overlap=.5, cmap='plasma',
+        tf_obj.set_data(data, method='wavelet', n_window=10, cmap='plasma',
                         clim=(-1., 1.), vmin=-.8, vmax=.8, under='orange',
-                        over='blue')
+                        over='blue', norm=3)
 
-
-class TestMTObj(_TestObjects):
-    """Test MultiTaperObj object."""
-
-    OBJ = mt_obj
-
-    def test_definition(self):
-        """Test function definition."""
-        MultiTaperObj('MT_None')
-        MultiTaperObj('MT_Data1D', np.random.rand(1000))
-
-    def test_set_data(self):
-        """Test set_data method."""
+    def test_multitaper(self):
+        """Compute time-frequency using multitaper method."""
         data = np.random.rand(200)
-        mt_obj.set_data(data, nperseg=10, overlap=.5, cmap='plasma',
-                        clim=(-1., 1.), vmin=-.8, vmax=.8, under='orange',
-                        over='blue')
+        tf_obj.set_data(data, method='multitaper', nperseg=10, overlap=.5,
+                        cmap='plasma', clim=(-1., 1.), vmin=-.8, vmax=.8,
+                        under='orange', over='blue')

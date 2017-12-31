@@ -414,7 +414,7 @@ class BrainObj(VisbrainObject):
             assert os.path.isfile(file)
             logger.info("Add overlay to the {} brain template "
                         "({})".format(self._name, file))
-            assert is_nibabel_installed()
+            is_nibabel_installed(raise_error=True)
             import nibabel as nib
             # Load data using Nibabel :
             sc = nib.load(file).get_data().ravel(order="F")
@@ -559,7 +559,7 @@ class BrainObj(VisbrainObject):
         file : string
             Path to the .annot file.
         """
-        assert is_pandas_installed()
+        is_pandas_installed(raise_error=True)
         import pandas as pd
         _, color, labels, u_idx = self._load_annot_file(file)
         dico = dict(Index=u_idx, Labels=labels, Color=color.tolist())
@@ -599,7 +599,7 @@ class BrainObj(VisbrainObject):
     def _load_annot_file(file):
         """Load a .annot file."""
         assert os.path.isfile(file)
-        assert is_nibabel_installed()
+        is_nibabel_installed(raise_error=True)
         import nibabel
         # Get index and labels :
         id_vert, ctab, names = nibabel.freesurfer.read_annot(file)

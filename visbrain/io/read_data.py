@@ -73,23 +73,20 @@ def read_nifti(path, hdr_as_array=False):
     transform : VisPy.transform
         The transformation
     """
-    if is_nibabel_installed():
-        import nibabel as nib
-        # Load the file :
-        img = nib.load(path)
-        # Get the data and affine transformation ::
-        vol = img.get_data()
-        affine = img.affine
-        # Define the transformation :
-        if hdr_as_array:
-            transform = affine
-        else:
-            transform = array_to_stt(affine)
-
-        return vol, img.header, transform
+    is_nibabel_installed(raise_error=True)
+    import nibabel as nib
+    # Load the file :
+    img = nib.load(path)
+    # Get the data and affine transformation ::
+    vol = img.get_data()
+    affine = img.affine
+    # Define the transformation :
+    if hdr_as_array:
+        transform = affine
     else:
-        raise IOError("The python package Nibabel must be installed to load "
-                      "the Nifti file.")
+        transform = array_to_stt(affine)
+
+    return vol, img.header, transform
 
 
 def read_stc(path):
