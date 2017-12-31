@@ -471,13 +471,13 @@ Time-frequency
 
 There are currently three methods implemented in Sleep to compute the time-frequency (i.e. spectrogram) of the recording.
 
-=================   ===================================     ===========================================
+=================   ===================================     ============================================
 Name                Method                                  Dependency
-=================   ===================================     ===========================================
+=================   ===================================     ============================================
 Fourier transform   Fourier-based spectrogram (default)     SciPy
 Wavelet             Morlet's wavelet                        None
-Multitaper          Multitaper-based Wigner spectrogram     lspopt <https://github.com/hbldh/lspopt>`_
-=================   ===================================     ===========================================
+Multitaper          Multitaper-based Wigner spectrogram     `lspopt <https://github.com/hbldh/lspopt>`_
+=================   ===================================     ============================================
 
 .. figure::  picture/picsleep/sleep_spectro_methods.png
    :align:   center
@@ -485,7 +485,7 @@ Multitaper          Multitaper-based Wigner spectrogram     lspopt <https://gith
    Comparison of the 3 methods on a 50 minutes recording (C3 electrode, 0.5-20 Hz).
 
 .. note::
-   In most cases, the multitaper method is the one that gives the best results. To enable it, you must first install the excellent lspopt <https://github.com/hbldh/lspopt>`_ package.
+   In most cases, the multitaper method is the one that gives the best results. To enable it, you must first install the `lspopt <https://github.com/hbldh/lspopt>`_ package.
 
 .. ----------------------------------------------------------------------------
 ..                              SCORING
