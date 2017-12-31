@@ -185,7 +185,7 @@ type</string>
                <enum>QFrame::NoFrame</enum>
               </property>
               <property name="currentIndex">
-               <number>0</number>
+               <number>1</number>
               </property>
               <widget class="QWidget" name="_channels_page">
                <layout class="QVBoxLayout" name="verticalLayout_34">
@@ -482,17 +482,17 @@ type</string>
                     </property>
                     <item>
                      <property name="text">
-                      <string>spectrogram</string>
+                      <string>Fourier transform</string>
                      </property>
                     </item>
                     <item>
                      <property name="text">
-                      <string>wavelet</string>
+                      <string>Wavelet</string>
                      </property>
                     </item>
                     <item>
                      <property name="text">
-                      <string>multitaper</string>
+                      <string>Multitaper</string>
                      </property>
                     </item>
                    </widget>
@@ -2469,8 +2469,8 @@ re-referenced</string>
                        <rect>
                         <x>0</x>
                         <y>0</y>
-                        <width>341</width>
-                        <height>343</height>
+                        <width>98</width>
+                        <height>298</height>
                        </rect>
                       </property>
                       <layout class="QVBoxLayout" name="verticalLayout_2">

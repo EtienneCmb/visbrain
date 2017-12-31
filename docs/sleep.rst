@@ -15,7 +15,7 @@
 Description
 -----------
 
-:class:`Sleep` is a graphical user interface dedicated to visualization and scoring of sleep data. :class:`Sleep` runs on `Vispy <http://vispy.org/>`_ excellent package and benefits thus from the high-performance of this latter (GPU-based computation).
+:class:`Sleep` is a flexible graphical user interface for visualization, analysis and scoring of polysomnographic sleep data.
 
 .. figure::  picture/picsleep/sleep_main.png
    :align:   center
@@ -28,28 +28,32 @@ If you need help with the :class:`Sleep` module, ask your questions in the dedic
 Main features
 ~~~~~~~~~~~~~
 
-* **GUI**
+* **Graphical User Interface (GUI)**
     * Modular and responsive GUI
     * Take screenshot with controllable dpi
     * Save the GUI state (*buttons, sliders, checkbox*...)
-* **Load standard electro physiological files**
-    * Default supported files : **.vhdr** (BrainVision V1 and 2), **.edf** (European Data Format), **.trc** (Micromed), **.eeg** (ELAN)
+* **Load standard electro-physiological files**
+    * Default supported files : **.vhdr** (BrainVision V1 and V2), **.edf** (European Data Format), **.trc** (Micromed), **.eeg** (ELAN)
     * Pass raw data, or use MNE-python to load other `non natively supported files <https://martinos.org/mne/dev/manual/io.html#importing-eeg-data>`_
-    * Supported extensions for hypnogram files : **.txt**, **.csv**, **.hyp** or directly use raw data.
+    * Supported extensions for hypnogram files : **.txt**, **.csv**, **.hyp** or raw data.
 * **Display**
-    * Polysomnographic data (*with individual amplitude control*)
-    * Spectrogram (*with several controllable parameters such as frequency, channel, colormap*...)
+    * Polysomnographic data (e.g. EEG, EOG, EMG)
+    * Time-frequency (a.k.a. spectrogram)
     * Hypnogram
-    * Topoplot
+    * Topographic map
 * **Hypnogram**
     * Load, edit and save
     * Real-time computation of sleep statistics
     * Export high-quality hypnogram figure
-* **Semi-automatic detection and signal processing functions**
-    * Implemented methods : sleep spindles, K-complexes, slow waves, rapid eye movements, muscle twitches and peak detection (*each detection comes with additional and controllable parameters*)
+* **Signal processing**
+    * De-meaning / de-trending
+    * Filtering
+    * Re-referencing to a reference channel or common average
+    * Bipolarization
+* **Semi-automatic events detections**
+    * Spindles, K-complexes, slow waves, rapid eye movements, muscle twitches and peaks (*each detection comes with additional and controllable parameters*)
     * Can be performed either on single or multiple channels
     * Detections are reported on the hypnogram and inside a table
-    * Signal processing tools such as de-mean, de-trend and filtering
 
 
 Import and use sleep
@@ -79,7 +83,7 @@ The :class:`Sleep` interface is divided into N parts :
 * **Menu** : load and save files (GUI configuration, screenshot...), control which object to display / hide, open the documentation...
 * **Canvas** :
     * One individual canvas per channel
-    * One canvas for the spectrogram
+    * One canvas for the time-frequency
     * One canvas for the hypnogram
     * One canvas for the time axis
     * One canvas for the topoplot (*hidden by default*)
@@ -100,10 +104,10 @@ Settings panel tabs
 Sleep provide five settings tabs :
 
 * :ref:`paneltab` : manage channel, time-frequency, hypnogram and topographic map
-* :ref:`toolstab` : bundle of signal processing tools (*e.g filtering, re-referencing*)
+* :ref:`toolstab` : signal processing tools (*e.g filtering, re-referencing*)
 * :ref:`infotab` : sleep statistics and basic infos on the EEG recording
 * :ref:`scoringtab` : a scoring table that can be used to edit the hypnogram
-* :ref:`detectiontab` : automatic detection of sleep spindles, rapid eye movements (REMs), slow waves, K-complexes (KCs) and peaks
+* :ref:`detectiontab` : automatic events detections
 * :ref:`annotationtab` : manage annotations
 
 .. _paneltab:
@@ -116,9 +120,11 @@ Manage channel, time-frequency, hypnogram and topographic map
 .. figure::  picture/picsleep/sleep_topo.png
    :align:   center
 
+   The Settings panel: topoplot properties
+
 * *Channels*
     * Show / hide channels :
-        *  Select channels of your choice by clicking on the corresponding checkbox
+        * Select channels of your choice by clicking on the corresponding checkbox
         * Display / hide all channels
     * Control the amplitude :
         * Per channel
@@ -126,13 +132,17 @@ Manage channel, time-frequency, hypnogram and topographic map
         * Use symmetric amplitudes (-M, +M)
         * Use automatic amplitude (each amplitude fit to the (minimum, maximum) of the current displayed window)
 * *Time-frequency*
-    * Manage the time-frequency representation of the full recording
-        * the channel on which compute spectrogram
-        * the computation method (see :ref:`time_frequency`)
-        * starting and ending frequencies
-        * time length window and overlap
-        * colormap
-* **Topoplot**
+    * Manage the time-frequency of the full recording
+        * Channel on which to compute the time-frequency
+        * Computation method (see :ref:`time_frequency`)
+        * Starting and ending frequencies
+        * Time length window and overlap
+        * Colormap
+* *Hypnogram*
+    * Manage the hypnogram
+        * Width and color of hypnogram line
+        * Reset to an empty one
+* *Topoplot*
     * Manage the topographic map (topoplot) of the current window
         * Show / hide topoplot
         * Display either the filtered signal, the amplitude or the power in specific frequency band
@@ -148,7 +158,7 @@ Signal processing and re-referencing tools.
 .. figure::  picture/picsleep/sleep_filtering.png
    :align:   center
 
-   Bandpass filter applied across all channels and spectrogram.
+   Bandpass filter (12-14 Hz) applied on all channels.
 
 * Signal processing (*apply in real time*)
     * Apply de-meaning and de-trending
@@ -159,21 +169,21 @@ Signal processing and re-referencing tools.
 
 .. _infotab:
 
-Info
-++++
+Infos
++++++
 
-The Info panel displays the recording infos (e.g. name and downsampling frequency) as well as the main sleep statistics computed with the hypnogram (see specs below). These values are adjusted in real-time when you edit the hypnogram. Sleep statistics can be exported to **.csv** or **.txt** file.
+The Infos panel displays the recording infos (e.g. name and downsampling frequency) as well as the main sleep statistics computed with the hypnogram (see specs below). These values are adjusted in real-time when you edit the hypnogram. Sleep statistics can be exported to **.csv** or **.txt** file.
 
 .. figure::  picture/picsleep/sleep_info.png
    :align:   center
 
-   Sleep statistics.
+   The Infos panel: sleep statistics and basic infos of the current recording.
 
 * File properties
     * Filename
     * Sampling frequency
     * Down-sampling frequency
-* Sleep statistics(*All values are expressed in minutes*):
+* Sleep statistics (*All values are expressed in minutes*):
     * Time in Bed (TIB) : total duration of the hypnogram.
     * Total Dark Time (TDT) : duration of the hypnogram from beginning to last period of sleep.
     * Sleep Period Time (SPT) : duration from first to last period of sleep.
@@ -188,31 +198,31 @@ The Info panel displays the recording infos (e.g. name and downsampling frequenc
 Scoring
 +++++++
 
-This tab contains the scoring table, i.e. where each stage start and finish. For further informations about how to score your hypnogram see : :ref:`hypnogram_scoring`
+This tab contains the scoring table, i.e. where each stage start and finish. For further informations about how to score your hypnogram see :ref:`hypnogram_scoring`
 
 .. _detectiontab:
 
 Detections
 ++++++++++
 
-Perform semi-automatic detection. For a full tutorial about detections see : :ref:`apply_detection`
+Perform semi-automatic detection. For a full tutorial see :ref:`apply_detection`
 
 .. _annotationtab:
 
 Annotations
 +++++++++++
 
-Add and edit annotations (annotations are defined by a start and end point, as well as an optional text marker). To quickly add annotations :
+Add and edit annotations (annotations are defined by a start and end point, as well as an optional text marker). To quickly add annotations:
 
 * Use the *Annotate* button in the ruler to annotate the entire window
 * Double click (with left mouse button) on a canvas to add an annotation starting and finishing at the mouse cursor location.
 
-If you want to import / export annotations, see the :ref:`import_annotation` section.
+If you want to import / export annotations, see the :ref:`import_annotation`
 
 Shortcuts
 ^^^^^^^^^
 
-Sleep comes with a bundle of shortcuts that can be used to speed up your productivity. If shortcuts don't seems to be active, simply click on a canvas before.
+Sleep comes with a bundle of shortcuts that can be used to speed up your productivity. If shortcuts do not work, simply left click on a canvas.
 
 ===================     =======================================================
 Keys                    Description
@@ -459,20 +469,23 @@ It is possible to manually load raw data and pass them as inputs arguments Sleep
 Time-frequency
 ~~~~~~~~~~~~~~
 
-There are currently three methods implemented in Sleep to compute the time-frequency of the recording.
+There are currently three methods implemented in Sleep to compute the time-frequency (i.e. spectrogram) of the recording.
 
-==============  ===================================     ==========================================
-Name            Method                                  Dependency
-==============  ===================================     ==========================================
-Spectrogram     Fourier-based spectrogram               SciPy
-Wavelet         Morlet's wavelet                        None
-Multitaper      Multitaper-based Wigner spectrogram     lspopt<https://github.com/hbldh/lspopt>`_
-==============  ===================================     ==========================================
+==============      ===================================     ===========================================
+Name                Method                                  Dependency
+==============      ===================================     ===========================================
+Fourier transform   Fourier-based spectrogram (default)     SciPy
+Wavelet             Morlet's wavelet                        None
+Multitaper          Multitaper-based Wigner spectrogram     lspopt <https://github.com/hbldh/lspopt>`_
+==============      ===================================     ===========================================
 
 .. figure::  picture/picsleep/sleep_spectro_methods.png
    :align:   center
 
-   Comparison of the three time-frequency methods on a 50 minutes nap recording (C3 electrode, 0.5 - 20 Hz).
+   Comparison of the 3 methods on a 50 minutes recording (C3 electrode, 0.5-20 Hz).
+
+.. note::
+   In most cases, the multitaper method is the one that gives the best results. To enable it, you must first install the excellent lspopt <https://github.com/hbldh/lspopt>`_ package.
 
 .. ----------------------------------------------------------------------------
 ..                              SCORING
@@ -511,7 +524,7 @@ r                       REM stage
 After pressing one of those keys, data coming from the next window will be prompted automatically so that you can continue scoring.
 
 .. warning::
-   If no canvas are selected the shortcuts might be not working. Simply click on a canvas (on a channel / spectrogram / hypnogram) before starting to score to avoid this issue.
+   If no canvas are selected the shortcuts might not work. Simply click on a canvas (on a channel / spectrogram / hypnogram) before starting to score to avoid this issue.
 
 .. _scoretable:
 
@@ -527,7 +540,7 @@ The Scoring panel can be used to manually edit the hypnogram values. It contains
 At the end of the hypnogram, you can **Add line** or **Remove line** when a line is selected. An other interesting option is that the table is sortable (by clicking on the arrow inside the column name).
 
 .. note::
-    You can export either the raw hypnogram values, the hypnogram scoring table, or a high-quality figure of the hypnogram using the  Files > Save contextual menu.
+    You can export either the raw hypnogram values, the hypnogram scoring table, or a high-quality figure of the hypnogram using the  *Files > Save* contextual menu.
 
 .. ----------------------------------------------------------------------------
 ..                              DETECTIONS
@@ -568,7 +581,7 @@ This algorithm perform a semi-automatic detection of sleep spindles which are an
        * *Tmin* : Minimum duration, default 0.5 second
        * *Tmax* : Maximum duration, default 2 seconds
        * *Threshold* : defined as Mean + X * standard deviation of the signal. A  higher threshold will results in a more conservative detection.
-       * *Perform detection only for NREM sleep* : if this checkbox is checked and a hypnogram is loaded, the detection will only be performed on NREM sleep epochs.
+       * *Perform detection only for NREM sleep* : if True and a hypnogram is loaded, then the detection will only be performed on NREM sleep epochs.
 
 
 Peaks detection
@@ -594,7 +607,7 @@ Perform a peak detection.
 Load and save the GUI configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-From the **Files** menu, you can save the GUI configuration *Files/Save/Gui config*. This will save the state of all buttons and properties inside :class:`Sleep`. Then, you can recharge the GUI configuration using *Files/Load/Gui config*.
+From the *Files > Save* contextual menu, you can save the GUI configuration. This will save the state of all buttons and properties inside :class:`Sleep`. Then, you can recharge the GUI configuration using *Files > Load > GUI config*.
 Alternatively, if you want to use a configuration when running :class:`Sleep`, you can use the *config_file* argument to directly pass the path to a configuration file.
 
 .. code-block:: python
@@ -624,7 +637,7 @@ Import, add and save annotations
 Import annotations
 ^^^^^^^^^^^^^^^^^^
 
-If the interface is opened, load annotations from the menu *Files/Load/Annotations*. Otherwise, you can use the input variable *annotations* to set the path to an existing annotation file that need to be loaded. There is several ways to define annotations :
+If the interface is opened, load annotations from the menu *Files > Load > Annotations*. Otherwise, you can use the input variable *annotations* to set the path to an existing annotation file that need to be loaded. There is several ways to define annotations :
 
 * :ref:`annotations_txt`
 * :ref:`annotations_mne`
@@ -647,8 +660,8 @@ Annotations can be defined in a `csv file <https://drive.google.com/file/d/0B6vt
 
 .. _annotations_mne:
 
-Use MNE-Python annotations
-++++++++++++++++++++++++++
+Using MNE-Python annotations
+++++++++++++++++++++++++++++
 
 Alternatively, you can use annotations from MNE-python and pass your annotations to the *annotations* variable :
 
@@ -671,7 +684,7 @@ Alternatively, you can use annotations from MNE-python and pass your annotations
 Define only markers
 +++++++++++++++++++
 
-Annotations can be seen as the combination of a time-code with a text attached to it. If you don't need to attach text, you can only specify the time-code in seconds :
+Annotations can be seen as the combination of a time-code and a label. If you don't need a label to your event, you can only specify the time-code in seconds:
 
 .. code-block:: python
 
@@ -694,7 +707,7 @@ To add new annotations :
 Save annotations
 ^^^^^^^^^^^^^^^^
 
-The list of annotations can be exported (either in .txt or .csv) or loaded from the **Files** menu.
+The list of annotations can be exported (either in .txt or .csv) or loaded from the *Files* contextual menu.
 
 .. ##########################################################################
 .. ##########################################################################

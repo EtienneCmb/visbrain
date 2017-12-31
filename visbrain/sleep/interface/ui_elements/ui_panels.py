@@ -464,7 +464,7 @@ class UiPanels(object):
         _, fend = self._PanSpecFstart.value(), self._PanSpecFend.value()  # noqa
         # Enable / disable normalization :
         use_tf = 1 if str(self._PanSpecMethod.currentText()
-                          ) == 'wavelet' else 0
+                          ) == 'Wavelet' else 0
         self._PanSpecNormW.setEnabled(use_tf)
 
         self._PanSpecStep.setMaximum(nfft * .99)

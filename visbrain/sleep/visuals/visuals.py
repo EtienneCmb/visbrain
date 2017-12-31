@@ -428,10 +428,10 @@ class Spectrogram(PrepareData):
         self.tf = TFmapsMesh(parent=parent)
         # Spectrogram
         self.mesh = scene.visuals.Image(np.zeros((2, 2)),
-                                        name='spectrogram', parent=parent)
+                                        name='Fourier transform', parent=parent)
         self.mesh.transform = vist.STTransform()
 
-    def set_data(self, sf, data, time, method='spectrogram', cmap='rainbow',
+    def set_data(self, sf, data, time, method='Fourier transform', cmap='rainbow',
                  nfft=30., overlap=0., fstart=.5, fend=20., contrast=.5,
                  interp='nearest', norm=0):
         """Set data to the spectrogram.
@@ -447,7 +447,7 @@ class Spectrogram(PrepareData):
             The data to use for the spectrogram. Must be a row vector.
         time: array_like
             The time vector.
-        method: string | 'spectrogram'
+        method: string | 'Fourier transform'
             Computation method.
         cmap : string | 'viridis'
             The matplotlib colormap to use.
@@ -474,7 +474,7 @@ class Spectrogram(PrepareData):
         nperseg = int(round(nfft * sf))
 
         # =================== TF // SPECTRO ===================
-        if method == 'wavelet':
+        if method == 'Wavelet':
             self.tf.set_data(data, sf, f_min=fstart, f_max=fend, cmap=cmap,
                              contrast=contrast, n_window=nperseg,
                              overlap=overlap, window='hamming', norm=norm)
@@ -485,13 +485,13 @@ class Spectrogram(PrepareData):
             # =================== CONVERSION ===================
             overlap = int(round(overlap * nperseg))
 
-            if method == 'multitaper':
+            if method == 'Multitaper':
                 from lspopt import spectrogram_lspopt
                 freq, _, mesh = spectrogram_lspopt(data, fs=sf,
                                                    nperseg=nperseg,
                                                    c_parameter=20,
                                                    noverlap=overlap)
-            elif method == 'spectrogram':
+            elif method == 'Fourier transform':
                 freq, _, mesh = scpsig.spectrogram(data, fs=sf,
                                                    nperseg=nperseg,
                                                    noverlap=overlap,
@@ -530,8 +530,8 @@ class Spectrogram(PrepareData):
             self.rect = (tm, freq.min(), tM - tm, freq.max() - freq.min())
             self.freq = freq
         # Visibility :
-        self.mesh.visible = 0 if method == 'wavelet' else 1
-        self.tf.visible = 1 if method == 'wavelet' else 0
+        self.mesh.visible = 0 if method == 'Wavelet' else 1
+        self.tf.visible = 1 if method == 'Wavelet' else 0
 
     def clean(self):
         """Clean indicators."""
