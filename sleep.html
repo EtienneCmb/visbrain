@@ -346,7 +346,7 @@
 <div class="section" id="panels">
 <span id="paneltab"></span><h5>2.1.5.2.1. Panels<a class="headerlink" href="#panels" title="Permalink to this headline">¶</a></h5>
 <p>Manage channel, time-frequency, hypnogram and topographic map</p>
-<div class="figure align-center" id="id7">
+<div class="figure align-center" id="id8">
 <img alt="_images/sleep_topo.png" src="_images/sleep_topo.png" />
 <p class="caption"><span class="caption-text">The Settings panel: topoplot properties</span></p>
 </div>
@@ -435,7 +435,7 @@
 <div class="section" id="tools">
 <span id="toolstab"></span><h5>2.1.5.2.2. Tools<a class="headerlink" href="#tools" title="Permalink to this headline">¶</a></h5>
 <p>Signal processing and re-referencing tools.</p>
-<div class="figure align-center" id="id8">
+<div class="figure align-center" id="id9">
 <img alt="_images/sleep_filtering.png" src="_images/sleep_filtering.png" />
 <p class="caption"><span class="caption-text">Bandpass filter (12-14 Hz) applied on all channels.</span></p>
 </div>
@@ -463,7 +463,7 @@
 <div class="section" id="infos">
 <span id="infotab"></span><h5>2.1.5.2.3. Infos<a class="headerlink" href="#infos" title="Permalink to this headline">¶</a></h5>
 <p>The Infos panel displays the recording infos (e.g. name and downsampling frequency) as well as the main sleep statistics computed with the hypnogram (see specs below). These values are adjusted in real-time when you edit the hypnogram. Sleep statistics can be exported to <strong>.csv</strong> or <strong>.txt</strong> file.</p>
-<div class="figure align-center" id="id9">
+<div class="figure align-center" id="id10">
 <img alt="_images/sleep_info.png" src="_images/sleep_info.png" />
 <p class="caption"><span class="caption-text">The Infos panel: sleep statistics and basic infos of the current recording.</span></p>
 </div>
@@ -775,7 +775,7 @@
 <span class="n">Sleep</span><span class="p">()</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="figure align-center" id="id10">
+<div class="figure align-center" id="id11">
 <img alt="_images/sleep_open.png" src="_images/sleep_open.png" />
 <p class="caption"><span class="caption-text">Popup window for loading your files.</span></p>
 </div>
@@ -842,8 +842,8 @@
 <table border="1" class="docutils">
 <colgroup>
 <col width="18%" />
-<col width="37%" />
-<col width="45%" />
+<col width="36%" />
+<col width="46%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Name</th>
@@ -862,28 +862,28 @@
 </tr>
 <tr class="row-even"><td>Multitaper</td>
 <td>Multitaper-based Wigner spectrogram</td>
-<td>lspopt &lt;<a class="reference external" href="https://github.com/hbldh/lspopt">https://github.com/hbldh/lspopt</a>&gt;`_</td>
+<td><a class="reference external" href="https://github.com/hbldh/lspopt">lspopt</a></td>
 </tr>
 </tbody>
 </table>
-<div class="figure align-center" id="id11">
+<div class="figure align-center" id="id12">
 <img alt="_images/sleep_spectro_methods.png" src="_images/sleep_spectro_methods.png" />
 <p class="caption"><span class="caption-text">Comparison of the 3 methods on a 50 minutes recording (C3 electrode, 0.5-20 Hz).</span></p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">In most cases, the multitaper method is the one that gives the best results. To enable it, you must first install the excellent lspopt &lt;<a class="reference external" href="https://github.com/hbldh/lspopt">https://github.com/hbldh/lspopt</a>&gt;`_ package.</p>
+<p class="last">In most cases, the multitaper method is the one that gives the best results. To enable it, you must first install the <a class="reference external" href="https://github.com/hbldh/lspopt">lspopt</a> package.</p>
 </div>
 </div>
 <div class="section" id="hypnogram-scoring">
-<span id="id3"></span><h3>2.2.4. Hypnogram scoring<a class="headerlink" href="#hypnogram-scoring" title="Permalink to this headline">¶</a></h3>
+<span id="id4"></span><h3>2.2.4. Hypnogram scoring<a class="headerlink" href="#hypnogram-scoring" title="Permalink to this headline">¶</a></h3>
 <p>Sleep offers two possibilities to score the hypnogram, i.e. during the <a class="reference internal" href="#navigation"><span class="std std-ref">Navigation</span></a> using shortcuts or using the <a class="reference internal" href="#scoretable"><span class="std std-ref">Scoring table</span></a>.</p>
-<div class="figure align-center" id="id12">
+<div class="figure align-center" id="id13">
 <img alt="_images/sleep_scoring.png" src="_images/sleep_scoring.png" />
 <p class="caption"><span class="caption-text">Hypnogram scoring.</span></p>
 </div>
 <div class="section" id="navigation">
-<span id="id4"></span><h4>2.2.4.1. Navigation<a class="headerlink" href="#navigation" title="Permalink to this headline">¶</a></h4>
+<span id="id5"></span><h4>2.2.4.1. Navigation<a class="headerlink" href="#navigation" title="Permalink to this headline">¶</a></h4>
 <p>This is probably the most useful editing method. While you are navigating across time, simply press on your keyboard to insert a sleep stage. Use the key below :</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -956,7 +956,7 @@
 <div class="section" id="spindles-detection">
 <h4>2.2.5.1. Spindles detection<a class="headerlink" href="#spindles-detection" title="Permalink to this headline">¶</a></h4>
 <p>This algorithm perform a semi-automatic detection of sleep spindles which are an essential feature of N2 sleep. Sleep spindles are defined as bursts of 12-14 Hz waves that occur for at least 0.5 seconds. They are maximally visible on central electrodes.</p>
-<div class="figure align-center" id="id13">
+<div class="figure align-center" id="id14">
 <img alt="_images/sleep_spindles.png" src="_images/sleep_spindles.png" />
 <p class="caption"><span class="caption-text">Spindles detection on channel Cz.</span></p>
 </div>
@@ -982,7 +982,7 @@
 <div class="section" id="peaks-detection">
 <h4>2.2.5.2. Peaks detection<a class="headerlink" href="#peaks-detection" title="Permalink to this headline">¶</a></h4>
 <p>Perform a peak detection.</p>
-<div class="figure align-center" id="id14">
+<div class="figure align-center" id="id15">
 <img alt="_images/sleep_peak.png" src="_images/sleep_peak.png" />
 <p class="caption"><span class="caption-text">Peaks detection on ECG channel.</span></p>
 </div>
@@ -1017,7 +1017,7 @@ Alternatively, if you want to use a configuration when running <code class="xref
 <div class="section" id="import-add-and-save-annotations">
 <span id="import-annotation"></span><h3>2.2.7. Import, add and save annotations<a class="headerlink" href="#import-add-and-save-annotations" title="Permalink to this headline">¶</a></h3>
 <p><code class="xref py py-class docutils literal"><span class="pre">Sleep</span></code> provides a table for annotations. In this table, specify where the event start, finish and the associated text. Selecting a row of this table center the window around the selected time-code. This allow to quickly navigate even in large files.</p>
-<div class="figure align-center" id="id15">
+<div class="figure align-center" id="id16">
 <img alt="_images/sleep_annotations.png" src="_images/sleep_annotations.png" />
 <p class="caption"><span class="caption-text">Annotations in Sleep. All annotations are referenced in a table in the quick settings panel (left). Each annotation is then reported in the time axis as a green triangle.</span></p>
 </div>
@@ -1344,7 +1344,7 @@ to last period of sleep.</li>
 <dl class="option">
 <dt id="cmdoption-visbrain-sleep-stats-o">
 <code class="descname">-o</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--outfile</code><code class="descclassname"> &lt;outfile&gt;</code><a class="headerlink" href="#cmdoption-visbrain-sleep-stats-o" title="Permalink to this definition">¶</a></dt>
-<dd><p>Output filename (with extension - <a href="#id5"><span class="problematic" id="id6">*</span></a>.csv). If None, sleep               statistics will only be displayed and not saved into a file</p>
+<dd><p>Output filename (with extension - <a href="#id6"><span class="problematic" id="id7">*</span></a>.csv). If None, sleep               statistics will only be displayed and not saved into a file</p>
 </dd></dl>
 
 </div>
