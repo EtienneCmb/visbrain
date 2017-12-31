@@ -1,7 +1,6 @@
 """Base class for testing visbrain objects."""
 import pytest
 import vispy
-import numpy as np
 
 from visbrain.tests._tests_visbrain import _TestVisbrain
 

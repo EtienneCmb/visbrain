@@ -139,8 +139,8 @@ class BrainObj(VisbrainObject):
         v = self.mesh._vertices
         f = self.mesh._faces
         n = self.mesh._normals
-        l = self.mesh._lr_index
-        add_brain_template(save_as, v, f, normals=n, lr_index=l,
+        lr = self.mesh._lr_index
+        add_brain_template(save_as, v, f, normals=n, lr_index=lr,
                            tmpfile=tmpfile)
 
     def remove(self):

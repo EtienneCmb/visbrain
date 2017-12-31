@@ -14,6 +14,7 @@ logger = logging.getLogger('visbrain')
 __all__ = ('write_fig_hyp', 'write_fig_spindles', 'write_fig_canvas',
            'write_fig_pyqt')
 
+
 def write_fig_hyp(file, hypno, sf, tstartsec, grid=False, ascolor=False,
                   dpi=600, colors={-1: '#8bbf56', 0: '#56bf8b', 1: '#aabcce',
                                    2: '#405c79', 3: '#0b1c2c', 4: '#bf5656'}):
@@ -141,8 +142,8 @@ def write_fig_hyp(file, hypno, sf, tstartsec, grid=False, ascolor=False,
 
 
 def write_fig_spindles(elec, hypno, sf, start_s, window_s, thr=3.,
-                        nrem_only=False, dpi=300):
-    """Show steps of the spindles detection for a specific time window
+                       nrem_only=False, dpi=300):
+    """Show steps of the spindles detection for a specific time window.
 
     Parameters
     ----------
@@ -167,9 +168,10 @@ def write_fig_spindles(elec, hypno, sf, start_s, window_s, thr=3.,
     from ..utils.filtering import filt
 
     # Run spindles detection on the selected channel
-    idx_spindles, _, _, dur, pwr, idx_start, idx_stop, hard_thr, soft_thr, \
-    idx_sigma, fmin, fmax, sigma_nfpow, amplitude, sigma_thr = spindlesdetect(
-    elec, sf, thr, hypno, nrem_only, return_full=True)
+    (idx_spindles, _, _, dur, pwr, idx_start, idx_stop, hard_thr, soft_thr,
+     idx_sigma, fmin, fmax, sigma_nfpow, amplitude,
+     sigma_thr) = spindlesdetect(elec, sf, thr, hypno, nrem_only,
+                                 return_full=True)
 
     # Define plotting range
     start_sf = int(start_s * sf)
@@ -186,7 +188,8 @@ def write_fig_spindles(elec, hypno, sf, start_s, window_s, thr=3.,
     sp_duration = dur[sp_in_win]
 
     # Find indices of spindles within the window
-    idx_spindles_win = idx_spindles[(idx_spindles >= min(x)) & (idx_spindles <= max(x))]
+    idx_spindles_win = idx_spindles[
+        (idx_spindles >= min(x)) & (idx_spindles <= max(x))]
 
     # Find indices of sigma power > supra-threshold within window
     idx_sigma_win = idx_sigma[(idx_sigma > min(x)) & (idx_sigma < max(x))]
@@ -198,9 +201,9 @@ def write_fig_spindles(elec, hypno, sf, start_s, window_s, thr=3.,
 
     # Initialize Y vector
     y_sigma, y_spindles, y_wlt, y_hard = np.empty(len(x)), np.empty(len(x)), \
-                                            np.empty(len(x)), np.empty(len(x))
+        np.empty(len(x)), np.empty(len(x))
     y_sigma[:], y_spindles[:], y_wlt[:], y_hard[:] = np.nan, np.nan, np.nan, \
-                                                                        np.nan
+        np.nan
 
     # Fill Y vector
     y_sigma[idx_sigma_win - start_sf] = sigma_nfpow[idx_sigma_win]
@@ -209,7 +212,7 @@ def write_fig_spindles(elec, hypno, sf, start_s, window_s, thr=3.,
     y_hard[idx_hard_win - start_sf] = amplitude[idx_hard_win]
 
     # Start plot
-    f, axarr = plt.subplots(4, figsize=(10,6), sharex=True)
+    f, axarr = plt.subplots(4, figsize=(10, 6), sharex=True)
     f.subplots_adjust(hspace=0.6)
 
     # Plot original signal
@@ -220,7 +223,7 @@ def write_fig_spindles(elec, hypno, sf, start_s, window_s, thr=3.,
 
     if sp_power.size >= 1:
         text = 'power = ' + str(np.round(sp_power, 2)) + \
-                ' - duration = ' + str(sp_duration) + ' ms'
+            ' - duration = ' + str(sp_duration) + ' ms'
         axarr[0].annotate(text, xy=(min(x), min(elec[x])), fontsize=9,
                           xycoords='data')
 
@@ -249,6 +252,7 @@ def write_fig_spindles(elec, hypno, sf, start_s, window_s, thr=3.,
         axarr[ax].axis('off')
 
     plt.show()
+
 
 def write_fig_canvas(filename, canvas, widget=None, autocrop=False,
                      region=None, print_size=None, unit='centimeter', dpi=300.,

@@ -49,6 +49,7 @@ def is_faulthandler_installed():
     except:
         return False
 
+
 def is_lspopt_installed():
     """Test if lspopt is installed."""
     try:

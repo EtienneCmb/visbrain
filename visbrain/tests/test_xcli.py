@@ -7,7 +7,7 @@ from click.testing import CliRunner
 from visbrain.cli import cli_fig_hyp, cli_sleep_stats, cli_sleep
 from visbrain.io import download_file, path_to_visbrain_data
 from visbrain.tests._tests_visbrain import _TestVisbrain
-from visbrain.config import CONFIG
+# from visbrain.config import CONFIG
 
 # File to load :
 sleep_file = path_to_visbrain_data('excerpt2.edf')

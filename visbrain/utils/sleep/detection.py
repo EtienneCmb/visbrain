@@ -344,25 +344,27 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fmin=12., fmax=14.,
             for i, (start, stop) in enumerate(zip(idx_start, idx_stop)):
                 data_sp = data[start:stop]
                 # Using Morlet
-                ind_pwr = morlet_power(data_sp, [fmin, fmax], sf, norm=False)[0]
+                ind_pwr = morlet_power(data_sp, [fmin, fmax], sf,
+                                       norm=False)[0]
                 pwrs[i] = np.mean(ind_pwr)
             # Normalize by dividing by the mean
-            normalization(pwrs, norm = 2)
+            normalization(pwrs, norm=2)
 
             if return_full:
-                return idx_spindles, number, density, duration_ms, pwrs, idx_start,
-                idx_stop, hard_thr, soft_thr, idx_sigma, fmin, fmax, sigma_nfpow,
-                amplitude, sigma_thr
+                return (idx_spindles, number, density, duration_ms, pwrs,
+                        idx_start, idx_stop, hard_thr, soft_thr, idx_sigma,
+                        fmin, fmax, sigma_nfpow, amplitude, sigma_thr)
             else:
                 return idx_spindles, number, density, duration_ms, pwrs
 
         else:
+            empty = np.array([], dtype=int)
             if return_full:
-                return np.array([], dtype=int), 0., 0., np.array([], dtype=int),
-                np.array([]), np.array([], dtype=int), np.array([], dtype=int),
-                hard_thr, soft_thr, idx_sigma, fmin, fmax, sigma_nfpow, amplitude, sigma_thr
+                return (empty, 0., 0., empty, np.array([]), empty, empty,
+                        hard_thr, soft_thr, idx_sigma, fmin, fmax, sigma_nfpow,
+                        amplitude, sigma_thr)
             else:
-                return np.array([], dtype=int), 0., 0., np.array([], dtype=int), np.array([])
+                return empty, 0., 0., empty, np.array([])
 
     else:
         if return_full:

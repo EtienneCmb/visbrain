@@ -1,5 +1,5 @@
 """Screenshot window and related functions."""
-from ...io import write_fig_pyqt, write_fig_canvas, dialogSave
+from ...io import write_fig_pyqt, write_fig_canvas, dialog_save
 from ...utils import ScreenshotPopup
 
 
@@ -19,8 +19,9 @@ class UiScreenshot(object):
     def _fcn_run_screenshot(self):
         """Run the screenshot."""
         # Get filename :
-        filename = dialogSave(self, 'Screenshot', 'screenshot', "PNG (*.PNG);;"
-                              "TIFF (*.tiff);;JPG (*.jpg);;""All files (*.*)")
+        filename = dialog_save(self, 'Screenshot', 'screenshot', "PNG (*.PNG)"
+                               ";;TIFF (*.tiff);;JPG (*.jpg);;"
+                               "All files (*.*)")
         # Get screenshot arguments :
         kwargs = self._ssGui.to_kwargs()
 

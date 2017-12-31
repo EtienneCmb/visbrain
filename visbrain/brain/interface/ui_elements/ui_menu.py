@@ -19,10 +19,10 @@ class UiMenu(HelpMenu):
         # Screenshots :
         self.menuScreenshot.triggered.connect(self._fcn_show_screenshot)
         # Config :
-        self.menuSaveGuiConfig.triggered.connect(self._fcn_saveConfig)
+        self.menuSaveGuiConfig.triggered.connect(self._fcn_save_config)
         # ----------- LOAD -----------
         # Config :
-        self.menuLoadGuiConfig.triggered.connect(self._fcn_loadConfig)
+        self.menuLoadGuiConfig.triggered.connect(self._fcn_load_config)
         # Exit :
         self.actionExit.triggered.connect(self.closeEvent)
 

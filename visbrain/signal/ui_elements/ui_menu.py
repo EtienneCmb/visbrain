@@ -3,7 +3,7 @@ import os
 import numpy as np
 
 from ...utils import ScreenshotPopup, HelpMenu
-from ...io import (dialogSave, dialogLoad, write_fig_pyqt, write_fig_canvas,
+from ...io import (dialog_save, dialog_load, write_fig_pyqt, write_fig_canvas,
                    write_csv, write_txt)
 
 
@@ -28,18 +28,18 @@ class UiMenu(HelpMenu):
     def _fcn_save_annotations(self, *args, filename=None):
         """Save annotations."""
         # Read Table
-        rowCount = self._annot_table.rowCount()
+        row_count = self._annot_table.rowCount()
         time, amp, signal, text = [], [], [], []
-        for row in range(rowCount):
+        for row in range(row_count):
             time.append(self._annot_table.item(row, 0).text())
             amp.append(self._annot_table.item(row, 1).text())
             signal.append(self._annot_table.item(row, 2).text())
             text.append(self._annot_table.item(row, 3).text())
         # Get file name :
         if filename is None:
-            filename = dialogSave(self, 'Save annotations', 'annotations',
-                                  "CSV file (*.csv);;Text file (*.txt);;"
-                                  "All files (*.*)")
+            filename = dialog_save(self, 'Save annotations', 'annotations',
+                                   "CSV file (*.csv);;Text file (*.txt);;"
+                                   "All files (*.*)")
         if filename:
             kw = {'delimiter': '_'}
             file, ext = os.path.splitext(filename)
@@ -52,9 +52,9 @@ class UiMenu(HelpMenu):
         """Load annotations."""
         # Get file name :
         if filename is None:
-            filename = dialogLoad(self, "Import annotations", '',
-                                  "CSV file (*.csv);;Text file (*.txt);;"
-                                  "All files (*.*)")
+            filename = dialog_load(self, "Import annotations", '',
+                                   "CSV file (*.csv);;Text file (*.txt);;"
+                                   "All files (*.*)")
         # Clean annotations :
         self._annot_table.setRowCount(0)
         # Load the file :
@@ -104,8 +104,9 @@ class UiScreenshot(object):
     def _fcn_run_screenshot(self):
         """Run the screenshot."""
         # Get filename :
-        filename = dialogSave(self, 'Screenshot', 'screenshot', "PNG (*.PNG);;"
-                              "TIFF (*.tiff);;JPG (*.jpg);;""All files (*.*)")
+        filename = dialog_save(self, 'Screenshot', 'screenshot', "PNG (*.PNG)"
+                               ";;TIFF (*.tiff);;JPG (*.jpg);;"
+                               "All files (*.*)")
         # Get screenshot arguments :
         kwargs = self._ssGui.to_kwargs()
 

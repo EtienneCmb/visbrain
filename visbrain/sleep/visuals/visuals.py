@@ -432,8 +432,8 @@ class Spectrogram(PrepareData):
         self.mesh.transform = vist.STTransform()
 
     def set_data(self, sf, data, time, method='spectrogram', cmap='rainbow',
-                nfft=30., overlap=0.,fstart=.5, fend=20., contrast=.5,
-                interp='nearest', norm=0):
+                 nfft=30., overlap=0., fstart=.5, fend=20., contrast=.5,
+                 interp='nearest', norm=0):
         """Set data to the spectrogram.
 
         Use this method to change data, colormap, spectrogram settings, the
@@ -488,12 +488,14 @@ class Spectrogram(PrepareData):
             if method == 'multitaper':
                 from lspopt import spectrogram_lspopt
                 freq, _, mesh = spectrogram_lspopt(data, fs=sf,
-                                nperseg=nperseg, c_parameter=20,
-                                noverlap=overlap)
+                                                   nperseg=nperseg,
+                                                   c_parameter=20,
+                                                   noverlap=overlap)
             elif method == 'spectrogram':
-                freq, _, mesh = scpsig.spectrogram(data, fs=sf, nperseg=nperseg,
-                                               noverlap=overlap,
-                                               window='hamming')
+                freq, _, mesh = scpsig.spectrogram(data, fs=sf,
+                                                   nperseg=nperseg,
+                                                   noverlap=overlap,
+                                                   window='hamming')
             mesh = 20 * np.log10(mesh)
 
             # =================== FREQUENCY SELECTION ===================
@@ -1104,7 +1106,8 @@ class Visuals(CanvasShortcuts):
 
         # =================== SPECTROGRAM ===================
         # Create a spectrogram object :
-        self._spec = Spectrogram(camera=cameras[1], fcn=self._fcn_spec_set_data,
+        self._spec = Spectrogram(camera=cameras[1],
+                                 fcn=self._fcn_spec_set_data,
                                  parent=self._specCanvas.wc.scene)
         self._spec.set_data(sf, data[0, ...], time, cmap=self._defcmap)
         PROFILER('Spectrogram', level=1)
