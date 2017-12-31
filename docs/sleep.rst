@@ -471,13 +471,13 @@ Time-frequency
 
 There are currently three methods implemented in Sleep to compute the time-frequency (i.e. spectrogram) of the recording.
 
-==============      ===================================     ===========================================
+=================   ===================================     ===========================================
 Name                Method                                  Dependency
-==============      ===================================     ===========================================
+=================   ===================================     ===========================================
 Fourier transform   Fourier-based spectrogram (default)     SciPy
 Wavelet             Morlet's wavelet                        None
 Multitaper          Multitaper-based Wigner spectrogram     lspopt <https://github.com/hbldh/lspopt>`_
-==============      ===================================     ===========================================
+=================   ===================================     ===========================================
 
 .. figure::  picture/picsleep/sleep_spectro_methods.png
    :align:   center
