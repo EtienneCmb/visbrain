@@ -61,7 +61,16 @@
         <property name="sizeConstraint">
          <enum>QLayout::SetDefaultConstraint</enum>
         </property>
-        <property name="margin">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <item>
@@ -230,15 +239,24 @@ type</string>
                        <rect>
                         <x>0</x>
                         <y>0</y>
-                        <width>376</width>
-                        <height>689</height>
+                        <width>337</width>
+                        <height>728</height>
                        </rect>
                       </property>
                       <layout class="QVBoxLayout" name="verticalLayout_14">
                        <item>
                         <widget class="QWidget" name="widget" native="true">
                          <layout class="QVBoxLayout" name="verticalLayout_5">
-                          <property name="margin">
+                          <property name="leftMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="topMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="rightMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="bottomMargin">
                            <number>0</number>
                           </property>
                           <item>
@@ -469,7 +487,7 @@ type</string>
                     </item>
                     <item>
                      <property name="text">
-                      <string>time-frequency</string>
+                      <string>wavelet</string>
                      </property>
                     </item>
                     <item>
@@ -922,7 +940,16 @@ channel</string>
                        </size>
                       </property>
                       <layout class="QGridLayout" name="gridLayout_5">
-                       <property name="margin">
+                       <property name="leftMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="topMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="rightMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="bottomMargin">
                         <number>0</number>
                        </property>
                        <property name="spacing">
@@ -1257,7 +1284,16 @@ channel</string>
                      <property name="spacing">
                       <number>0</number>
                      </property>
-                     <property name="margin">
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
                       <number>0</number>
                      </property>
                      <item>
@@ -1321,7 +1357,16 @@ channel</string>
                      <property name="spacing">
                       <number>0</number>
                      </property>
-                     <property name="margin">
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
                       <number>0</number>
                      </property>
                      <item>
@@ -1338,7 +1383,16 @@ channel</string>
                           <property name="spacing">
                            <number>0</number>
                           </property>
-                          <property name="margin">
+                          <property name="leftMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="topMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="rightMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="bottomMargin">
                            <number>0</number>
                           </property>
                           <item>
@@ -1470,7 +1524,16 @@ channel</string>
                    <property name="spacing">
                     <number>0</number>
                    </property>
-                   <property name="margin">
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
                     <number>0</number>
                    </property>
                    <item>
@@ -1535,7 +1598,6 @@ channel</string>
                  </spacer>
                 </item>
                </layout>
-               <zorder>toolBox_2</zorder>
                <zorder>verticalSpacer_17</zorder>
                <zorder></zorder>
                <zorder>_PanTopoVizW</zorder>
@@ -1756,7 +1818,16 @@ to</string>
                       <property name="spacing">
                        <number>0</number>
                       </property>
-                      <property name="margin">
+                      <property name="leftMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="bottomMargin">
                        <number>0</number>
                       </property>
                       <item>
@@ -1969,7 +2040,16 @@ to</string>
                         <item row="2" column="2">
                          <widget class="QWidget" name="widget_4" native="true">
                           <layout class="QHBoxLayout" name="horizontalLayout_7">
-                           <property name="margin">
+                           <property name="leftMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="topMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="rightMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="bottomMargin">
                             <number>0</number>
                            </property>
                            <item>
@@ -2206,7 +2286,16 @@ to</string>
                      </size>
                     </property>
                     <layout class="QGridLayout" name="gridLayout_16">
-                     <property name="margin">
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
                       <number>0</number>
                      </property>
                      <property name="spacing">
@@ -2352,7 +2441,16 @@ re-referenced</string>
                    <property name="spacing">
                     <number>6</number>
                    </property>
-                   <property name="margin">
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
                     <number>0</number>
                    </property>
                    <item>
@@ -2371,8 +2469,8 @@ re-referenced</string>
                        <rect>
                         <x>0</x>
                         <y>0</y>
-                        <width>386</width>
-                        <height>315</height>
+                        <width>341</width>
+                        <height>343</height>
                        </rect>
                       </property>
                       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -2453,7 +2551,6 @@ re-referenced</string>
                  </spacer>
                 </item>
                </layout>
-               <zorder>frame_6</zorder>
                <zorder>frame_6</zorder>
                <zorder></zorder>
                <zorder>_ToolsRefGrp</zorder>
@@ -3079,11 +3176,11 @@ on</string>
                       <layout class="QVBoxLayout" name="verticalLayout_23">
                        <item>
                         <layout class="QGridLayout" name="gridLayout_8">
-                         <property name="verticalSpacing">
-                          <number>9</number>
-                         </property>
                          <property name="topMargin">
                           <number>0</number>
+                         </property>
+                         <property name="verticalSpacing">
+                          <number>9</number>
                          </property>
                          <item row="4" column="2" colspan="4">
                           <widget class="QWidget" name="widget_8" native="true">
@@ -3097,7 +3194,16 @@ on</string>
                             <property name="spacing">
                              <number>0</number>
                             </property>
-                            <property name="margin">
+                            <property name="leftMargin">
+                             <number>0</number>
+                            </property>
+                            <property name="topMargin">
+                             <number>0</number>
+                            </property>
+                            <property name="rightMargin">
+                             <number>0</number>
+                            </property>
+                            <property name="bottomMargin">
                              <number>0</number>
                             </property>
                             <item>
@@ -3233,7 +3339,16 @@ on</string>
                             <property name="spacing">
                              <number>0</number>
                             </property>
-                            <property name="margin">
+                            <property name="leftMargin">
+                             <number>0</number>
+                            </property>
+                            <property name="topMargin">
+                             <number>0</number>
+                            </property>
+                            <property name="rightMargin">
+                             <number>0</number>
+                            </property>
+                            <property name="bottomMargin">
                              <number>0</number>
                             </property>
                             <item>
@@ -4001,7 +4116,16 @@ display</string>
            <property name="spacing">
             <number>0</number>
            </property>
-           <property name="margin">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
             <number>0</number>
            </property>
            <item>
@@ -4098,19 +4222,28 @@ display</string>
              <property name="spacing">
               <number>0</number>
              </property>
-             <property name="margin">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
               <number>0</number>
              </property>
              <item>
               <layout class="QGridLayout" name="gridLayout_7">
+               <property name="topMargin">
+                <number>0</number>
+               </property>
                <property name="horizontalSpacing">
                 <number>7</number>
                </property>
                <property name="verticalSpacing">
                 <number>9</number>
-               </property>
-               <property name="topMargin">
-                <number>0</number>
                </property>
                <item row="2" column="8">
                 <widget class="QLabel" name="label_5">
@@ -4425,7 +4558,7 @@ display</string>
      <x>0</x>
      <y>0</y>
      <width>1359</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFiles">

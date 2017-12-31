@@ -66,12 +66,11 @@ Etienne
 	+5 Ajouter texte à hypnogram
 
 Raph
-	- Improve REM detect using MNE-Python function
-	- Suppression menu contextuel Settings > Clean hypnogram
-	- Spindles: write_fig_spindles à faire en version Cli?
-	- Spindles: calcul amplitude peak a peak (rejet d'artefact) et fréquence moyenne ?
-	- Spindles: rajouter colonnes power, fréquence dans location table
-	- Detection : améliorer calcul idx_start, idx_stop, duration en utilisant les fonctions d'étienne
+	-5 Add new parameters in load / save config
+	-4 Detection : améliorer calcul idx_start, idx_stop, duration en utilisant les fonctions d'étienne
+	-3 Improve REM detect using MNE-Python function
+	-2 Spindles: calcul amplitude peak a peak (rejet d'artefact) et fréquence moyenne ?
+	-2 Spindles: rajouter colonnes power, fréquence dans location table
 	-2 Scorage automatique du sommeil à partir propriete spectrale + detection auto
 	+5 Mettre à jour doc BrainVision et fonction batch
 	+5 Améliorer chargement hypno (oversampling + downsampling)

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/etienne/Toolbox/visbrain/visbrain/sleep/interface/gui/sleep_gui.ui'
+# Form implementation generated from reading ui file 'sleep_gui.ui'
 #
-# Created by: PyQt5 UI code generator 5.9
+# Created by: PyQt5 UI code generator 5.8.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -104,7 +104,7 @@ class Ui_MainWindow(object):
         self._PanScrollChan.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self._PanScrollChan.setObjectName("_PanScrollChan")
         self.scrollAreaWidgetContents_3 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 376, 689))
+        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 337, 728))
         self.scrollAreaWidgetContents_3.setObjectName("scrollAreaWidgetContents_3")
         self.verticalLayout_14 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents_3)
         self.verticalLayout_14.setContentsMargins(0, 0, 0, 0)
@@ -956,7 +956,7 @@ class Ui_MainWindow(object):
         self._ToolsRefIgnArea.setWidgetResizable(True)
         self._ToolsRefIgnArea.setObjectName("_ToolsRefIgnArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 386, 315))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 341, 343))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -982,7 +982,6 @@ class Ui_MainWindow(object):
         self.verticalLayout_30.addWidget(self._ToolsRefGrp)
         spacerItem31 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_30.addItem(spacerItem31)
-        self.frame_6.raise_()
         self.frame_6.raise_()
         self._ToolsRefGrp.raise_()
         self._stacked_tools.addWidget(self.page_4)
@@ -1769,7 +1768,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.addWidget(self.splitter)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1359, 25))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1359, 21))
         self.menubar.setObjectName("menubar")
         self.menuFiles = QtWidgets.QMenu(self.menubar)
         self.menuFiles.setObjectName("menuFiles")
@@ -1999,7 +1998,7 @@ class Ui_MainWindow(object):
         self._PanAllAmpMax.setToolTip(_translate("MainWindow", "<html><head/><body><p>Change maximum amplitude for all channels</p></body></html>"))
         self._PanSpecMethod.setToolTip(_translate("MainWindow", "<html><head/><body><p>Computation method for the spectrogram</p></body></html>"))
         self._PanSpecMethod.setItemText(0, _translate("MainWindow", "spectrogram"))
-        self._PanSpecMethod.setItemText(1, _translate("MainWindow", "time-frequency"))
+        self._PanSpecMethod.setItemText(1, _translate("MainWindow", "wavelet"))
         self._PanSpecMethod.setItemText(2, _translate("MainWindow", "multitaper"))
         self.label_54.setText(_translate("MainWindow", "Apply on\n"
 "channel"))

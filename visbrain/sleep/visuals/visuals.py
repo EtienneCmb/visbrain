@@ -474,7 +474,7 @@ class Spectrogram(PrepareData):
         nperseg = int(round(nfft * sf))
 
         # =================== TF // SPECTRO ===================
-        if method == 'time-frequency':
+        if method == 'wavelet':
             self.tf.set_data(data, sf, f_min=fstart, f_max=fend, cmap=cmap,
                              contrast=contrast, n_window=nperseg,
                              overlap=overlap, window='hamming', norm=norm)
@@ -530,8 +530,8 @@ class Spectrogram(PrepareData):
             self.rect = (tm, freq.min(), tM - tm, freq.max() - freq.min())
             self.freq = freq
         # Visibility :
-        self.mesh.visible = 0 if method == 'time-frequency' else 1
-        self.tf.visible = 1 if method == 'time-frequency' else 0
+        self.mesh.visible = 0 if method == 'wavelet' else 1
+        self.tf.visible = 1 if method == 'wavelet' else 0
 
     def clean(self):
         """Clean indicators."""

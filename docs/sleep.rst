@@ -44,7 +44,7 @@ Main features
 * **Hypnogram**
     * Load, edit and save
     * Real-time computation of sleep statistics
-    * Export the hypnogram as a color or black-and-white traditional figure
+    * Export high-quality hypnogram figure
 * **Semi-automatic detection and signal processing functions**
     * Implemented methods : sleep spindles, K-complexes, slow waves, rapid eye movements, muscle twitches and peak detection (*each detection comes with additional and controllable parameters*)
     * Can be performed either on single or multiple channels
@@ -99,8 +99,8 @@ Settings panel tabs
 
 Sleep provide five settings tabs :
 
-* :ref:`paneltab` : manage object visibility, channel's amplitudes, spectrogram properties...
-* :ref:`toolstab` : a bundle of signal processing tools (*e.g filtering, re-referencing*)
+* :ref:`paneltab` : manage channel, time-frequency, hypnogram and topographic map
+* :ref:`toolstab` : bundle of signal processing tools (*e.g filtering, re-referencing*)
 * :ref:`infotab` : sleep statistics and basic infos on the EEG recording
 * :ref:`scoringtab` : a scoring table that can be used to edit the hypnogram
 * :ref:`detectiontab` : automatic detection of sleep spindles, rapid eye movements (REMs), slow waves, K-complexes (KCs) and peaks
@@ -111,7 +111,7 @@ Sleep provide five settings tabs :
 Panels
 ++++++
 
-Manage object visibility, channel's amplitudes, spectrogram properties...
+Manage channel, time-frequency, hypnogram and topographic map
 
 .. figure::  picture/picsleep/sleep_topo.png
    :align:   center
@@ -125,18 +125,15 @@ Manage object visibility, channel's amplitudes, spectrogram properties...
         * By setting all amplitudes at once
         * Use symmetric amplitudes (-M, +M)
         * Use automatic amplitude (each amplitude fit to the (minimum, maximum) of the current displayed window)
-* *Spectrogram*
-    * Control spectrogram looking and properties
+* *Time-frequency*
+    * Manage the time-frequency representation of the full recording
         * the channel on which compute spectrogram
-        * tarting and ending frequencies
+        * the computation method (see :ref:`time_frequency`)
+        * starting and ending frequencies
         * time length window and overlap
         * colormap
-    * Display and zoom
-        * Show / hide spectrogram, hypnogram, time axis
-        * Display / hide visual indicators referring to the current time window
-        * Zoom : when zooming, the axis will fit to the time window according to the (window, step) parameters defined in the ruler
 * **Topoplot**
-    * Display and properties
+    * Manage the topographic map (topoplot) of the current window
         * Show / hide topoplot
         * Display either the filtered signal, the amplitude or the power in specific frequency band
         * Colormap control
@@ -173,6 +170,7 @@ The Info panel displays the recording infos (e.g. name and downsampling frequenc
    Sleep statistics.
 
 * File properties
+    * Filename
     * Sampling frequency
     * Down-sampling frequency
 * Sleep statistics(*All values are expressed in minutes*):
@@ -453,6 +451,30 @@ It is possible to manually load raw data and pass them as inputs arguments Sleep
 	Data must be an array with shape (channels, samples). The number of channels must be the same as in *channels* variable. If you load an hypnogram this way, it must have the same number of point (i.e same sampling rate) as the data. If your hypnogram comes with a different time base, the simplest way is to export it into a simple txt file and follow the procedure described above.
 
 .. ----------------------------------------------------------------------------
+..                              TIME-FREQUENCY
+.. ----------------------------------------------------------------------------
+
+.. _time_frequency:
+
+Time-frequency
+~~~~~~~~~~~~~~
+
+There are currently three methods implemented in Sleep to compute the time-frequency of the recording.
+
+==============  ===================================     ==========================================
+Name            Method                                  Dependency
+==============  ===================================     ==========================================
+Spectrogram     Fourier-based spectrogram               SciPy
+Wavelet         Morlet's wavelet                        None
+Multitaper      Multitaper-based Wigner spectrogram     lspopt<https://github.com/hbldh/lspopt>`_
+==============  ===================================     ==========================================
+
+.. figure::  picture/picsleep/sleep_spectro_methods.png
+   :align:   center
+
+   Comparison of the three time-frequency methods on a 50 minutes nap recording (C3 electrode, 0.5 - 20 Hz).
+
+.. ----------------------------------------------------------------------------
 ..                              SCORING
 .. ----------------------------------------------------------------------------
 
@@ -461,12 +483,12 @@ It is possible to manually load raw data and pass them as inputs arguments Sleep
 Hypnogram scoring
 ~~~~~~~~~~~~~~~~~
 
-Sleep offers three possibilities to score the hypnogram, during the :ref:`navigation` using shortcuts, manually using the :ref:`scoretable` or in :ref:`liveedit`.
+Sleep offers two possibilities to score the hypnogram, i.e. during the :ref:`navigation` using shortcuts or using the :ref:`scoretable`.
 
 .. figure::  picture/picsleep/sleep_scoring.png
    :align:   center
 
-   Hypnogram scoring table.
+   Hypnogram scoring.
 
 .. _navigation:
 
@@ -496,7 +518,7 @@ After pressing one of those keys, data coming from the next window will be promp
 Scoring table
 ^^^^^^^^^^^^^
 
-The Scoring panel can be used to manually edit the hypnogram values. It contains three columns :
+The Scoring panel can be used to manually edit the hypnogram values. It contains three columns:
 
 * **From** : specify where the stage start (*in minutes*)
 * **To** : specify where the stage finish (*in minutes*)
@@ -504,29 +526,8 @@ The Scoring panel can be used to manually edit the hypnogram values. It contains
 
 At the end of the hypnogram, you can **Add line** or **Remove line** when a line is selected. An other interesting option is that the table is sortable (by clicking on the arrow inside the column name).
 
-Then, you can export your hypnogram in **.hyp**, **.txt** or **cvs**.
-
-.. figure::  picture/picsleep/sleep_scoring_table.png
-   :align:   center
-
-   Hypnogram scoring using the Scoring table. Manually specify where each stage start / finish and precise the stage type.
-
-.. _liveedit:
-
-Live editing
-^^^^^^^^^^^^
-
-Live editing consist of editing your hypnogram directly from the axis by adding / selecting / dragging points. Unused points will be automatically destroyed.
-
-  - Your cursor is red. Existing points are set in gray.
-  - Double click on the hypnogram to add points
-  - Hover an existing point in order to select it (the point turn green)
-  - Drag the point (blue) on the different hypnogram values
-
-.. figure::  picture/picsleep/sleep_livedit.png
-   :align:   center
-
-   Edit the hypnogram directly from the axes.
+.. note::
+    You can export either the raw hypnogram values, the hypnogram scoring table, or a high-quality figure of the hypnogram using the  Files > Save contextual menu.
 
 .. ----------------------------------------------------------------------------
 ..                              DETECTIONS
@@ -544,11 +545,11 @@ The Detection panel offers several semi-automatic algorithms for the detection o
   * Selected : apply detection on selected channel
   * Visible : apply detection on all visible channels
   * All : apply detection on all channels (even those that are hidden)
-* *Report detection on hypnogram* : display markers on the hypnogram where your spindles / REM / peaks are located.
 
 .. note::
-   After performing one of the detection, got to the *Location* tab to see where detected events start, the duration and on which sleep stage they are located. Select the event to jump to it. Finally, you can export all located event.
+   After performing one of the detection, go to the *Location* tab to see infos about each detected events (starting and ending points, duration, sleep stage). Select the event to jump to it. Finally, you can export the location table using the File > Save contextual menu.
 
+Two examples of automatic event detection are shown below.
 
 Spindles detection
 ^^^^^^^^^^^^^^^^^^
@@ -557,7 +558,7 @@ This algorithm perform a semi-automatic detection of sleep spindles which are an
 .. figure::  picture/picsleep/sleep_spindles.png
    :align:   center
 
-   Spindles detection on channel Cz and report on the hypnogram.
+   Spindles detection on channel Cz.
 
 .. note::
 
@@ -567,23 +568,8 @@ This algorithm perform a semi-automatic detection of sleep spindles which are an
        * *Tmin* : Minimum duration, default 0.5 second
        * *Tmax* : Maximum duration, default 2 seconds
        * *Threshold* : defined as Mean + X * standard deviation of the signal. A  higher threshold will results in a more conservative detection.
-       * *Perform detection only for NREM sleep* : if this checkbox is checked and a hypnogram is loaded, the algorithm will only take into account epochs  scored as NREM sleep. This allows for a more precise and sensitive detection.
+       * *Perform detection only for NREM sleep* : if this checkbox is checked and a hypnogram is loaded, the detection will only be performed on NREM sleep epochs.
 
-Rapid Eye Movements detection
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This algorithm perform a semi-automatic detection of rapid eye movements (REMs, or saccades) which occur during REM sleep (hence the name). Briefly, the method identify consecutive supra-threshold samples of the first derivative of the signal (after filtering).
-
-.. figure::  picture/picsleep/sleep_rem.png
-   :align:   center
-
-   Rapid Eye Movements (REM) detection on channel EOG1 and report on the hypnogram.
-
-.. note::
-
-   * **Parameters**
-       * *Perform detection only for REM sleep* : once again, if a hypnogram is loaded, you can choose whether you want to perform the detection only for REM sleep epochs or for the whole recording.
-       * *Threshold* : defined as Mean + X * standard deviation of the signal. A higher threshold will results in a more conservative detection.
 
 Peaks detection
 ^^^^^^^^^^^^^^^
@@ -593,7 +579,7 @@ Perform a peak detection.
 .. figure::  picture/picsleep/sleep_peak.png
    :align:   center
 
-   Peaks detection on ECG channel and report on the hypnogram.
+   Peaks detection on ECG channel.
 
 .. note::
 

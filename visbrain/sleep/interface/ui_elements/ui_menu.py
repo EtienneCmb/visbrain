@@ -18,6 +18,7 @@ class UiMenu(HelpMenu):
         """Init."""
         base = 'http://visbrain.org/sleep.html'
         sections = {'Sleep': base,
+                    'Time-frequency': base + '#time-frequency',
                     'Hypnogram scoring': base + '#hypnogram-scoring',
                     'Detections': base + '#apply-semi-automatic-detection',
                     'Annotations': base + '#import-add-and-save-annotations'}
