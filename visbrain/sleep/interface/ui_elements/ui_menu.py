@@ -221,13 +221,16 @@ class UiMenu(HelpMenu):
                 config['AutoAmp'] = self._PanAmpAuto.isChecked()
                 # Spectrogram :
                 config['Spec_Visible'] = self.menuDispSpec.isChecked()
+                config['Spec_Method'] = self._PanSpecMethod.currentIndex()
                 config['Spec_Length'] = self._PanSpecNfft.value()
                 config['Spec_Overlap'] = self._PanSpecStep.value()
                 config['Spec_Cmap'] = self._PanSpecCmap.currentIndex()
+                config['Spec_CmapInv'] = self._PanSpecCmapInv.isChecked()
                 config['Spec_Chan'] = self._PanSpecChan.currentIndex()
                 config['Spec_Fstart'] = self._PanSpecFstart.value()
                 config['Spec_Fend'] = self._PanSpecFend.value()
                 config['Spec_Con'] = self._PanSpecCon.value()
+                config['Spec_Interp'] = self._PanSpecInterp.currentIndex()
                 # Hypnogram/time axis/navigation/topo/indic/zoom :
                 config['Hyp_Visible'] = self.menuDispHypno.isChecked()
                 config['Time_Visible'] = self.menuDispTimeax.isChecked()
@@ -235,6 +238,8 @@ class UiMenu(HelpMenu):
                 config['Nav_Visible'] = self.menuDispNavbar.isChecked()
                 config['Indic_Visible'] = self.menuDispIndic.isChecked()
                 config['Zoom_Visible'] = self.menuDispZoom.isChecked()
+                config['Hyp_Lw'] = self._PanHypnoLw.value()
+                config['Hyp_Color'] = self._PanHypnoColor.isChecked()
                 # Navigation bar properties :
                 config['Slider'] = self._SlVal.value()
                 config['Step'] = self._SigSlStep.value()
@@ -331,19 +336,26 @@ class UiMenu(HelpMenu):
                 _try("self._PanAmpAuto.setChecked(config['AutoAmp'])")
                 # Spectrogram
                 _try("self.menuDispSpec.setChecked(config['Spec_Visible'])")
+                _try("self._PanSpecMethod.setCurrentIndex("
+                                                    "config['Spec_Method'])")
                 _try("self._PanSpecNfft.setValue(config['Spec_Length'])")
                 _try("self._PanSpecStep.setValue(config['Spec_Overlap'])")
                 _try("self._PanSpecCmap.setCurrentIndex(config['Spec_Cmap'])")
+                _try("self._PanSpecCmapInv.setChecked(config['Spec_CmapInv'])")
                 _try("self._PanSpecChan.setCurrentIndex(config['Spec_Chan'])")
                 _try("self._PanSpecFstart.setValue(config['Spec_Fstart'])")
                 _try("self._PanSpecFend.setValue(config['Spec_Fend'])")
                 _try("self._PanSpecCon.setValue(config['Spec_Con'])")
+                _try("self._PanSpecInterp.setCurrentIndex("
+                                                    "config['Spec_Interp'])")
                 # Hypnogram/time axis/navigation/topo/indic/zoom :
                 _try("self.menuDispHypno.setChecked(config['Hyp_Visible'])")
                 _try("self.menuDispTimeax.setChecked(config['Time_Visible'])")
                 _try("self.menuDispTopo.setChecked(config['Topo_Visible'])")
                 _try("self.menuDispNavbar.setChecked(config['Nav_Visible'])")
                 _try("self.menuDispIndic.setChecked(config['Indic_Visible'])")
+                _try("self._PanHypnoLw.setValue(config['Hyp_Lw'])")
+                _try("self._PanHypnoColor.setChecked(config['Hyp_Color'])")
                 # Navigation bar properties :
                 _try("self._SlVal.setValue(config['Slider'])")
                 _try("self._SigSlStep.setValue(config['Step'])")
@@ -367,6 +379,8 @@ class UiMenu(HelpMenu):
                 self._fcn_update_amp_info()
                 self._fcn_chan_auto_amp()
                 self._fcn_chan_sym_amp()
+                self._fcn_set_hypno_lw()
+                self._fcn_set_hypno_color()
 
     def _load_detect_all(self, *args, filename=None):
         """Load all detections."""
