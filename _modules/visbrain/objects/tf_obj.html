@@ -166,15 +166,23 @@
 <span></span><span class="sd">&quot;&quot;&quot;Time-frequency map object.&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="k">import</span> <span class="n">spectrogram</span>
 
 <span class="kn">from</span> <span class="nn">.image_obj</span> <span class="k">import</span> <span class="n">ImageObj</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">morlet</span><span class="p">,</span> <span class="n">averaging</span><span class="p">,</span> <span class="n">normalization</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..io.dependencies</span> <span class="k">import</span> <span class="n">is_lspopt_installed</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="TimeFrequencyMapObj"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.TimeFrequencyMapObj">[docs]</a><span class="k">class</span> <span class="nc">TimeFrequencyMapObj</span><span class="p">(</span><span class="n">ImageObj</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Create a time-frequency map object.</span>
+<div class="viewcode-block" id="TimeFrequencyObj"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.TimeFrequencyObj">[docs]</a><span class="k">class</span> <span class="nc">TimeFrequencyObj</span><span class="p">(</span><span class="n">ImageObj</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute the time-frequency map (or spectrogram).</span>
+
+<span class="sd">    The time-frequency decomposition can be assessed using :</span>
+
+<span class="sd">        * The fourier transform</span>
+<span class="sd">        * Morlet&#39;s wavelet</span>
+<span class="sd">        * Multi-taper</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -184,24 +192,34 @@
 <span class="sd">        Array of data of shape (N,)</span>
 <span class="sd">    sf : float | 1.</span>
 <span class="sd">        The sampling frequency.</span>
+<span class="sd">    method : {&#39;fourier&#39;, &#39;wavelet&#39;, &#39;multitaper&#39;}</span>
+<span class="sd">        The method to use to compute the time-frequency decomposition.</span>
+<span class="sd">    nperseg : int | 256</span>
+<span class="sd">        Length of each segment. Argument pass to the `scipy.signal.spectrogram`</span>
+<span class="sd">        function (for &#39;fourier&#39; and &#39;multitaper&#39; method).</span>
+<span class="sd">    overlap : float | 0.</span>
+<span class="sd">        Overlap between segments. Must be between 0. and 1.</span>
 <span class="sd">    f_min : float | 1.</span>
-<span class="sd">        Minimum frequency.</span>
+<span class="sd">        Minimum frequency (for &#39;wavelet&#39; method).</span>
 <span class="sd">    f_max : float | 160.</span>
-<span class="sd">        Maximum frequency.</span>
+<span class="sd">        Maximum frequency (for &#39;wavelet&#39; method).</span>
 <span class="sd">    f_step : float | 2.</span>
-<span class="sd">        Frequency step between two consecutive frequencies.</span>
+<span class="sd">        Frequency step between two consecutive frequencies (for &#39;wavelet&#39;</span>
+<span class="sd">        method).</span>
 <span class="sd">    baseline : array_like | None</span>
-<span class="sd">        Baseline period.</span>
+<span class="sd">        Baseline period (for &#39;wavelet&#39; method).</span>
 <span class="sd">    norm : int | None</span>
-<span class="sd">        The normalization method. See the `normalization` function.</span>
+<span class="sd">        The normalization type (for &#39;wavelet&#39; method).. See the `normalization`</span>
+<span class="sd">        function.</span>
 <span class="sd">    n_window : int | None</span>
 <span class="sd">        If this parameter is an integer, the time-frequency map is going to be</span>
-<span class="sd">        averaged into smaller windows.</span>
-<span class="sd">    overlap : float | 0.</span>
-<span class="sd">        Overlap between consecutive windows during averaging. `overlap` must be</span>
-<span class="sd">        between 0. and 1.</span>
+<span class="sd">        averaged into smaller windows (for &#39;wavelet&#39; method).</span>
 <span class="sd">    window : {&#39;flat&#39;, &#39;hanning&#39;, &#39;hamming&#39;, &#39;bartlett&#39;, &#39;blackman&#39;}</span>
-<span class="sd">        Windowing method for averaging.</span>
+<span class="sd">        Windowing method for averaging. By default, &#39;flat&#39; is used for Wavelet</span>
+<span class="sd">        and &#39;hamming&#39; for Fourier.</span>
+<span class="sd">    c_parameter : int | 20</span>
+<span class="sd">        Parameter &#39;c&#39; described in doi:10.1155/2011/980805 (for &#39;multitaper&#39;</span>
+<span class="sd">        method)</span>
 <span class="sd">    clim : tuple | None</span>
 <span class="sd">        Colorbar limits. If None, `clim=(data.min(), data.max())`</span>
 <span class="sd">    cmap : string | None</span>
@@ -212,7 +230,7 @@
 <span class="sd">        Color for values under vmin.</span>
 <span class="sd">    vmax : float | None</span>
 <span class="sd">        Maximum threshold of the colorbar.</span>
-<span class="sd">    under : string/tuple/array_like | None</span>
+<span class="sd">    over : string/tuple/array_like | None</span>
 <span class="sd">        Color for values over vmax.</span>
 <span class="sd">    interpolation : string | &#39;nearest&#39;</span>
 <span class="sd">        Interpolation method for the image. See vispy.scene.visuals.Image for</span>
@@ -242,11 +260,12 @@
 <span class="sd">    &gt;&gt;&gt; tf.preview(axis=True)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">f_min</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">f_max</span><span class="o">=</span><span class="mf">160.</span><span class="p">,</span> <span class="n">f_step</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
-                 <span class="n">baseline</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_window</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overlap</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
-                 <span class="n">window</span><span class="o">=</span><span class="s1">&#39;flat&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span>
-                 <span class="n">max_pts</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;fourier&#39;</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span>
+                 <span class="n">f_min</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">f_max</span><span class="o">=</span><span class="mf">160.</span><span class="p">,</span> <span class="n">f_step</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">baseline</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">n_window</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overlap</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">c_parameter</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                 <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span> <span class="n">max_pts</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
         <span class="c1"># Initialize the image object :</span>
         <span class="n">ImageObj</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="n">interpolation</span><span class="p">,</span>
@@ -255,43 +274,66 @@
 
         <span class="c1"># Compute TF and set data to the ImageObj :</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="n">f_min</span><span class="p">,</span> <span class="n">f_max</span><span class="p">,</span> <span class="n">f_step</span><span class="p">,</span> <span class="n">baseline</span><span class="p">,</span> <span class="n">norm</span><span class="p">,</span>
-                          <span class="n">n_window</span><span class="p">,</span> <span class="n">overlap</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span>
-                          <span class="n">vmax</span><span class="p">,</span> <span class="n">over</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nperseg</span><span class="p">,</span> <span class="n">f_min</span><span class="p">,</span> <span class="n">f_max</span><span class="p">,</span> <span class="n">f_step</span><span class="p">,</span>
+                          <span class="n">baseline</span><span class="p">,</span> <span class="n">norm</span><span class="p">,</span> <span class="n">n_window</span><span class="p">,</span> <span class="n">overlap</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span>
+                          <span class="n">c_parameter</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">over</span><span class="p">)</span>
 
-<div class="viewcode-block" id="TimeFrequencyMapObj.set_data"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.TimeFrequencyMapObj.set_data">[docs]</a>    <span class="k">def</span> <span class="nf">set_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">f_min</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">f_max</span><span class="o">=</span><span class="mf">160.</span><span class="p">,</span> <span class="n">f_step</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
-                 <span class="n">baseline</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_window</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overlap</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
-                 <span class="n">window</span><span class="o">=</span><span class="s1">&#39;flat&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Compute TF map and set data to the ImageObj.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="TimeFrequencyObj.set_data"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.TimeFrequencyObj.set_data">[docs]</a>    <span class="k">def</span> <span class="nf">set_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;fourier&#39;</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">f_min</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+                 <span class="n">f_max</span><span class="o">=</span><span class="mf">160.</span><span class="p">,</span> <span class="n">f_step</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">baseline</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">n_window</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overlap</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">c_parameter</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                 <span class="n">clim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">over</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute TF and set data to the ImageObj.&quot;&quot;&quot;</span>
         <span class="c1"># ======================= CHECKING =======================</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sf</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
+        <span class="k">assert</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;fourier&#39;</span><span class="p">,</span> <span class="s1">&#39;wavelet&#39;</span><span class="p">,</span> <span class="s1">&#39;multitaper&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">window</span> <span class="o">=</span> <span class="s1">&#39;hamming&#39;</span> <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="s1">&#39;fourier&#39;</span> <span class="k">else</span> <span class="s1">&#39;flat&#39;</span>
+        <span class="k">assert</span> <span class="mf">0.</span> <span class="o">&lt;=</span> <span class="n">overlap</span> <span class="o">&lt;</span> <span class="mf">1.</span>
+        <span class="c1"># Wavelet args :</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">f_min</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">f_max</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">f_step</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
-        <span class="c1"># assert isinstance(baseline)</span>
+        <span class="c1"># Spectrogram and Multi-taper args :</span>
+        <span class="n">noverlap</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">overlap</span> <span class="o">*</span> <span class="n">nperseg</span><span class="p">))</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nperseg</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c_parameter</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+        <span class="c1">#  args :</span>
+
+        <span class="c1"># Update color arguments :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_update_cbar_args</span><span class="p">(</span><span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span> <span class="n">over</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Compute time-frequency decomposition using the&quot;</span>
+                    <span class="s2">&quot; </span><span class="si">%s</span><span class="s2"> method&quot;</span> <span class="o">%</span> <span class="n">method</span><span class="p">)</span>
 
-        <span class="c1"># Predefined variables :</span>
-        <span class="n">n_pts</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-        <span class="n">freqs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">f_min</span><span class="p">,</span> <span class="n">f_max</span><span class="p">,</span> <span class="n">f_step</span><span class="p">)</span>
-        <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_pts</span><span class="p">)</span> <span class="o">/</span> <span class="n">sf</span>
-        <span class="n">tf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">freqs</span><span class="p">),</span> <span class="n">n_pts</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;fourier&#39;</span><span class="p">:</span>
+            <span class="n">freqs</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">tf</span> <span class="o">=</span> <span class="n">spectrogram</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="n">nperseg</span><span class="p">,</span>
+                                          <span class="n">noverlap</span><span class="o">=</span><span class="n">noverlap</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;wavelet&#39;</span><span class="p">:</span>
+            <span class="n">n_pts</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">freqs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">f_min</span><span class="p">,</span> <span class="n">f_max</span><span class="p">,</span> <span class="n">f_step</span><span class="p">)</span>
+            <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_pts</span><span class="p">)</span> <span class="o">/</span> <span class="n">sf</span>
+            <span class="n">tf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">freqs</span><span class="p">),</span> <span class="n">n_pts</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+            <span class="c1"># Compute TF and inplace normalization :</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Compute the time-frequency map (&quot;</span>
+                        <span class="s2">&quot;normalization=</span><span class="si">%r</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="n">norm</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">freqs</span><span class="p">):</span>
+                <span class="n">tf</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">morlet</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="n">k</span><span class="p">)))</span>
+            <span class="n">normalization</span><span class="p">(</span><span class="n">tf</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="n">baseline</span><span class="o">=</span><span class="n">baseline</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-        <span class="c1"># Compute TF and inplace normalization :</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Compute the time-frequency map (normalization=</span><span class="si">%r</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="n">norm</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">freqs</span><span class="p">):</span>
-            <span class="n">tf</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">morlet</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="n">k</span><span class="p">)))</span>
-        <span class="n">normalization</span><span class="p">(</span><span class="n">tf</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="n">baseline</span><span class="o">=</span><span class="n">baseline</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-
-        <span class="c1"># Averaging :</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_window</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Averaging time-frequency map using windows of size </span><span class="si">%i</span><span class="s2">&quot;</span>
-                        <span class="s2">&quot; with a </span><span class="si">%f</span><span class="s2"> overlap&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">n_window</span><span class="p">,</span> <span class="n">overlap</span><span class="p">))</span>
-            <span class="n">tf</span> <span class="o">=</span> <span class="n">averaging</span><span class="p">(</span><span class="n">tf</span><span class="p">,</span> <span class="n">n_window</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">overlap</span><span class="o">=</span><span class="n">overlap</span><span class="p">,</span>
-                           <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">)</span>
-            <span class="n">time</span> <span class="o">=</span> <span class="n">averaging</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">n_window</span><span class="p">,</span> <span class="n">overlap</span><span class="o">=</span><span class="n">overlap</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">)</span>
+            <span class="c1"># Averaging :</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_window</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Averaging time-frequency map using windows of &quot;</span>
+                            <span class="s2">&quot;size </span><span class="si">%i</span><span class="s2"> with a </span><span class="si">%f</span><span class="s2"> overlap&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">n_window</span><span class="p">,</span> <span class="n">overlap</span><span class="p">))</span>
+                <span class="n">kw</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">overlap</span><span class="o">=</span><span class="n">overlap</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">)</span>
+                <span class="n">tf</span> <span class="o">=</span> <span class="n">averaging</span><span class="p">(</span><span class="n">tf</span><span class="p">,</span> <span class="n">n_window</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+                <span class="n">time</span> <span class="o">=</span> <span class="n">averaging</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">n_window</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;multitaper&#39;</span><span class="p">:</span>
+            <span class="n">is_lspopt_installed</span><span class="p">(</span><span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="kn">from</span> <span class="nn">lspopt</span> <span class="k">import</span> <span class="n">spectrogram_lspopt</span>
+            <span class="n">freqs</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">tf</span> <span class="o">=</span> <span class="n">spectrogram_lspopt</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="n">nperseg</span><span class="p">,</span>
+                                                 <span class="n">noverlap</span><span class="o">=</span><span class="n">noverlap</span><span class="p">,</span>
+                                                 <span class="n">c_parameter</span><span class="o">=</span><span class="n">c_parameter</span><span class="p">)</span>
 
         <span class="c1"># Set data to the image object :</span>
         <span class="n">ImageObj</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">xaxis</span><span class="o">=</span><span class="n">time</span><span class="p">,</span> <span class="n">yaxis</span><span class="o">=</span><span class="n">freqs</span><span class="p">,</span>

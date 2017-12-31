@@ -170,14 +170,13 @@
 
 <span class="kn">from</span> <span class="nn">.interface</span> <span class="k">import</span> <span class="n">UiInit</span><span class="p">,</span> <span class="n">UiElements</span>
 <span class="kn">from</span> <span class="nn">.visuals</span> <span class="k">import</span> <span class="n">Visuals</span>
-<span class="kn">from</span> <span class="nn">.tools</span> <span class="k">import</span> <span class="n">Tools</span>
 <span class="kn">from</span> <span class="nn">..pyqt_module</span> <span class="k">import</span> <span class="n">PyQtModule</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">FixedCam</span><span class="p">,</span> <span class="n">color2vb</span><span class="p">,</span> <span class="n">MouseEventControl</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">ReadSleepData</span>
 <span class="kn">from</span> <span class="nn">..config</span> <span class="k">import</span> <span class="n">PROFILER</span>
 
 
-<div class="viewcode-block" id="Sleep"><a class="viewcode-back" href="../../../sleep.html#visbrain.Sleep">[docs]</a><span class="k">class</span> <span class="nc">Sleep</span><span class="p">(</span><span class="n">PyQtModule</span><span class="p">,</span> <span class="n">ReadSleepData</span><span class="p">,</span> <span class="n">UiInit</span><span class="p">,</span> <span class="n">Visuals</span><span class="p">,</span> <span class="n">UiElements</span><span class="p">,</span> <span class="n">Tools</span><span class="p">,</span>
+<div class="viewcode-block" id="Sleep"><a class="viewcode-back" href="../../../sleep.html#visbrain.Sleep">[docs]</a><span class="k">class</span> <span class="nc">Sleep</span><span class="p">(</span><span class="n">PyQtModule</span><span class="p">,</span> <span class="n">ReadSleepData</span><span class="p">,</span> <span class="n">UiInit</span><span class="p">,</span> <span class="n">Visuals</span><span class="p">,</span> <span class="n">UiElements</span><span class="p">,</span>
             <span class="n">MouseEventControl</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Visualize and edit sleep data.</span>
 
@@ -218,8 +217,6 @@
 <span class="sd">        Specify the line rendering. Use &#39;gl&#39; for the default line (fast) or</span>
 <span class="sd">        &#39;agg&#39; for smooth lines. This option might not works on some</span>
 <span class="sd">        plateforms.</span>
-<span class="sd">    hedit : bool | False</span>
-<span class="sd">        Enable the drag and drop hypnogram edition.</span>
 <span class="sd">    href : list | [&#39;art&#39;, &#39;wake&#39;, &#39;rem&#39;, &#39;n1&#39;, &#39;n2&#39;, &#39;n3&#39;]</span>
 <span class="sd">        List of sleep stages. This list can be used to changed the display</span>
 <span class="sd">        order into the GUI.</span>
@@ -249,7 +246,7 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hypno</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">config_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">annotations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">downsample</span><span class="o">=</span><span class="mf">100.</span><span class="p">,</span>
-                 <span class="n">axis</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s1">&#39;gl&#39;</span><span class="p">,</span> <span class="n">hedit</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">axis</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s1">&#39;gl&#39;</span><span class="p">,</span>
                  <span class="n">href</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;art&#39;</span><span class="p">,</span> <span class="s1">&#39;wake&#39;</span><span class="p">,</span> <span class="s1">&#39;rem&#39;</span><span class="p">,</span> <span class="s1">&#39;n1&#39;</span><span class="p">,</span> <span class="s1">&#39;n2&#39;</span><span class="p">,</span> <span class="s1">&#39;n3&#39;</span><span class="p">],</span>
                  <span class="n">preload</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">use_mne</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">kwargs_mne</span><span class="o">=</span><span class="p">{},</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
@@ -275,7 +272,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_annot_mark</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_hconvinv</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hconv</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span> <span class="o">=</span> <span class="n">axis</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_enabhypedit</span> <span class="o">=</span> <span class="n">hedit</span>
         <span class="c1"># ---------- Default line width ----------</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_linemeth</span> <span class="o">=</span> <span class="n">line</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_lw</span> <span class="o">=</span> <span class="mf">1.</span>
@@ -326,10 +322,6 @@
         <span class="n">PROFILER</span><span class="p">(</span><span class="s2">&quot;Initialize visual elements&quot;</span><span class="p">,</span> <span class="n">as_type</span><span class="o">=</span><span class="s1">&#39;title&#39;</span><span class="p">)</span>
         <span class="n">Visuals</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-        <span class="c1"># ====================== TOOLS ======================</span>
-        <span class="n">Tools</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="n">PROFILER</span><span class="p">(</span><span class="s2">&quot;Initialize tools&quot;</span><span class="p">)</span>
-
         <span class="c1"># ====================== FUNCTIONS ON LOAD ======================</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fcns_on_creation</span><span class="p">()</span>
         <span class="n">PROFILER</span><span class="p">(</span><span class="s2">&quot;Functions on creation&quot;</span><span class="p">)</span>
@@ -354,9 +346,10 @@
     <span class="k">def</span> <span class="nf">_set_default_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set the default window state.&quot;&quot;&quot;</span>
         <span class="c1"># ================= TAB =================</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">toolBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">toolBox_2</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_DetectionTab</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stacked_panels</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stacked_tools</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stacked_detections</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_cam_creation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a set of cameras.&quot;&quot;&quot;</span>
@@ -383,22 +376,22 @@
 
     <span class="k">def</span> <span class="nf">_fcns_on_creation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Applied on creation.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_sliderMove</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_slider_move</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_chanChecks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_hypLabel</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">menuDispHypno</span><span class="o">.</span><span class="n">isChecked</span><span class="p">())</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_chanViz</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_chanSymAmp</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_infoUpdate</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_Hypno2Score</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_chan_viz</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_chan_sym_amp</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_info_update</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_hypno_to_score</span><span class="p">()</span>
         <span class="c1"># Set objects visible :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_SpecW</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_HypW</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_TimeAxisW</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="c1"># File to load :</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># Config file</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">loadConfig</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_config_file</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_load_config</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_config_file</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_annot_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>   <span class="c1"># Annotation file</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">loadAnnotationTable</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_annot_file</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_load_annotation_table</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_annot_file</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

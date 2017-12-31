@@ -114,10 +114,11 @@
 <li class="toctree-l3"><a class="reference internal" href="#tutorial">2.2. Tutorial</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#supported-files-and-format">2.2.1. Supported files and format</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#load-your-files">2.2.2. Load your files</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#hypnogram-scoring">2.2.3. Hypnogram scoring</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#apply-semi-automatic-detection">2.2.4. Apply semi-automatic detection</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#load-and-save-the-gui-configuration">2.2.5. Load and save the GUI configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#import-add-and-save-annotations">2.2.6. Import, add and save annotations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#time-frequency">2.2.3. Time-frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hypnogram-scoring">2.2.4. Hypnogram scoring</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#apply-semi-automatic-detection">2.2.5. Apply semi-automatic detection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#load-and-save-the-gui-configuration">2.2.6. Load and save the GUI configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#import-add-and-save-annotations">2.2.7. Import, add and save annotations</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#api">2.3. API</a><ul>
@@ -210,7 +211,7 @@
 </div>
 <div class="section" id="description">
 <h2>2.1. Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
-<p><code class="xref py py-class docutils literal"><span class="pre">Sleep</span></code> is a graphical user interface dedicated to visualization and scoring of sleep data. <code class="xref py py-class docutils literal"><span class="pre">Sleep</span></code> runs on <a class="reference external" href="http://vispy.org/">Vispy</a> excellent package and benefits thus from the high-performance of this latter (GPU-based computation).</p>
+<p><code class="xref py py-class docutils literal"><span class="pre">Sleep</span></code> is a flexible graphical user interface for visualization, analysis and scoring of polysomnographic sleep data.</p>
 <div class="figure align-center">
 <img alt="_images/sleep_main.png" src="_images/sleep_main.png" />
 </div>
@@ -222,7 +223,7 @@
 <h3>2.1.2. Main features<a class="headerlink" href="#main-features" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><dl class="first docutils">
-<dt><strong>GUI</strong></dt>
+<dt><strong>Graphical User Interface (GUI)</strong></dt>
 <dd><ul class="first last">
 <li>Modular and responsive GUI</li>
 <li>Take screenshot with controllable dpi</li>
@@ -232,11 +233,11 @@
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><strong>Load standard electro physiological files</strong></dt>
+<dt><strong>Load standard electro-physiological files</strong></dt>
 <dd><ul class="first last">
-<li>Default supported files : <strong>.vhdr</strong> (BrainVision V1 and 2), <strong>.edf</strong> (European Data Format), <strong>.trc</strong> (Micromed), <strong>.eeg</strong> (ELAN)</li>
+<li>Default supported files : <strong>.vhdr</strong> (BrainVision V1 and V2), <strong>.edf</strong> (European Data Format), <strong>.trc</strong> (Micromed), <strong>.eeg</strong> (ELAN)</li>
 <li>Pass raw data, or use MNE-python to load other <a class="reference external" href="https://martinos.org/mne/dev/manual/io.html#importing-eeg-data">non natively supported files</a></li>
-<li>Supported extensions for hypnogram files : <strong>.txt</strong>, <strong>.csv</strong>, <strong>.hyp</strong> or directly use raw data.</li>
+<li>Supported extensions for hypnogram files : <strong>.txt</strong>, <strong>.csv</strong>, <strong>.hyp</strong> or raw data.</li>
 </ul>
 </dd>
 </dl>
@@ -244,10 +245,10 @@
 <li><dl class="first docutils">
 <dt><strong>Display</strong></dt>
 <dd><ul class="first last">
-<li>Polysomnographic data (<em>with individual amplitude control</em>)</li>
-<li>Spectrogram (<em>with several controllable parameters such as frequency, channel, colormap</em>…)</li>
+<li>Polysomnographic data (e.g. EEG, EOG, EMG)</li>
+<li>Time-frequency (a.k.a. spectrogram)</li>
 <li>Hypnogram</li>
-<li>Topoplot</li>
+<li>Topographic map</li>
 </ul>
 </dd>
 </dl>
@@ -257,18 +258,28 @@
 <dd><ul class="first last">
 <li>Load, edit and save</li>
 <li>Real-time computation of sleep statistics</li>
-<li>Export the hypnogram as a color or black-and-white traditional figure</li>
+<li>Export high-quality hypnogram figure</li>
 </ul>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><strong>Semi-automatic detection and signal processing functions</strong></dt>
+<dt><strong>Signal processing</strong></dt>
 <dd><ul class="first last">
-<li>Implemented methods : sleep spindles, K-complexes, slow waves, rapid eye movements, muscle twitches and peak detection (<em>each detection comes with additional and controllable parameters</em>)</li>
+<li>De-meaning / de-trending</li>
+<li>Filtering</li>
+<li>Re-referencing to a reference channel or common average</li>
+<li>Bipolarization</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>Semi-automatic events detections</strong></dt>
+<dd><ul class="first last">
+<li>Spindles, K-complexes, slow waves, rapid eye movements, muscle twitches and peaks (<em>each detection comes with additional and controllable parameters</em>)</li>
 <li>Can be performed either on single or multiple channels</li>
 <li>Detections are reported on the hypnogram and inside a table</li>
-<li>Signal processing tools such as de-mean, de-trend and filtering</li>
 </ul>
 </dd>
 </dl>
@@ -297,7 +308,7 @@
 <dt><strong>Canvas</strong> :</dt>
 <dd><ul class="first last">
 <li>One individual canvas per channel</li>
-<li>One canvas for the spectrogram</li>
+<li>One canvas for the time-frequency</li>
 <li>One canvas for the hypnogram</li>
 <li>One canvas for the time axis</li>
 <li>One canvas for the topoplot (<em>hidden by default</em>)</li>
@@ -325,18 +336,19 @@
 <span id="sleep-settings-panel"></span><h4>2.1.5.2. Settings panel tabs<a class="headerlink" href="#settings-panel-tabs" title="Permalink to this headline">¶</a></h4>
 <p>Sleep provide five settings tabs :</p>
 <ul class="simple">
-<li><a class="reference internal" href="#paneltab"><span class="std std-ref">Panels</span></a> : manage object visibility, channel’s amplitudes, spectrogram properties…</li>
-<li><a class="reference internal" href="#toolstab"><span class="std std-ref">Tools</span></a> : a bundle of signal processing tools (<em>e.g filtering, re-referencing</em>)</li>
-<li><a class="reference internal" href="#infotab"><span class="std std-ref">Info</span></a> : sleep statistics and basic infos on the EEG recording</li>
+<li><a class="reference internal" href="#paneltab"><span class="std std-ref">Panels</span></a> : manage channel, time-frequency, hypnogram and topographic map</li>
+<li><a class="reference internal" href="#toolstab"><span class="std std-ref">Tools</span></a> : signal processing tools (<em>e.g filtering, re-referencing</em>)</li>
+<li><a class="reference internal" href="#infotab"><span class="std std-ref">Infos</span></a> : sleep statistics and basic infos on the EEG recording</li>
 <li><a class="reference internal" href="#scoringtab"><span class="std std-ref">Scoring</span></a> : a scoring table that can be used to edit the hypnogram</li>
-<li><a class="reference internal" href="#detectiontab"><span class="std std-ref">Detections</span></a> : automatic detection of sleep spindles, rapid eye movements (REMs), slow waves, K-complexes (KCs) and peaks</li>
+<li><a class="reference internal" href="#detectiontab"><span class="std std-ref">Detections</span></a> : automatic events detections</li>
 <li><a class="reference internal" href="#annotationtab"><span class="std std-ref">Annotations</span></a> : manage annotations</li>
 </ul>
 <div class="section" id="panels">
 <span id="paneltab"></span><h5>2.1.5.2.1. Panels<a class="headerlink" href="#panels" title="Permalink to this headline">¶</a></h5>
-<p>Manage object visibility, channel’s amplitudes, spectrogram properties…</p>
-<div class="figure align-center">
+<p>Manage channel, time-frequency, hypnogram and topographic map</p>
+<div class="figure align-center" id="id7">
 <img alt="_images/sleep_topo.png" src="_images/sleep_topo.png" />
+<p class="caption"><span class="caption-text">The Settings panel: topoplot properties</span></p>
 </div>
 <ul class="simple">
 <li><dl class="first docutils">
@@ -367,25 +379,16 @@
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><em>Spectrogram</em></dt>
+<dt><em>Time-frequency</em></dt>
 <dd><ul class="first last">
 <li><dl class="first docutils">
-<dt>Control spectrogram looking and properties</dt>
+<dt>Manage the time-frequency of the full recording</dt>
 <dd><ul class="first last">
-<li>the channel on which compute spectrogram</li>
-<li>tarting and ending frequencies</li>
-<li>time length window and overlap</li>
-<li>colormap</li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt>Display and zoom</dt>
-<dd><ul class="first last">
-<li>Show / hide spectrogram, hypnogram, time axis</li>
-<li>Display / hide visual indicators referring to the current time window</li>
-<li>Zoom : when zooming, the axis will fit to the time window according to the (window, step) parameters defined in the ruler</li>
+<li>Channel on which to compute the time-frequency</li>
+<li>Computation method (see <a class="reference internal" href="#time-frequency"><span class="std std-ref">Time-frequency</span></a>)</li>
+<li>Starting and ending frequencies</li>
+<li>Time length window and overlap</li>
+<li>Colormap</li>
 </ul>
 </dd>
 </dl>
@@ -395,10 +398,26 @@
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><strong>Topoplot</strong></dt>
+<dt><em>Hypnogram</em></dt>
 <dd><ul class="first last">
 <li><dl class="first docutils">
-<dt>Display and properties</dt>
+<dt>Manage the hypnogram</dt>
+<dd><ul class="first last">
+<li>Width and color of hypnogram line</li>
+<li>Reset to an empty one</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>Topoplot</em></dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>Manage the topographic map (topoplot) of the current window</dt>
 <dd><ul class="first last">
 <li>Show / hide topoplot</li>
 <li>Display either the filtered signal, the amplitude or the power in specific frequency band</li>
@@ -416,9 +435,9 @@
 <div class="section" id="tools">
 <span id="toolstab"></span><h5>2.1.5.2.2. Tools<a class="headerlink" href="#tools" title="Permalink to this headline">¶</a></h5>
 <p>Signal processing and re-referencing tools.</p>
-<div class="figure align-center" id="id6">
+<div class="figure align-center" id="id8">
 <img alt="_images/sleep_filtering.png" src="_images/sleep_filtering.png" />
-<p class="caption"><span class="caption-text">Bandpass filter applied across all channels and spectrogram.</span></p>
+<p class="caption"><span class="caption-text">Bandpass filter (12-14 Hz) applied on all channels.</span></p>
 </div>
 <ul class="simple">
 <li><dl class="first docutils">
@@ -441,17 +460,18 @@
 </li>
 </ul>
 </div>
-<div class="section" id="info">
-<span id="infotab"></span><h5>2.1.5.2.3. Info<a class="headerlink" href="#info" title="Permalink to this headline">¶</a></h5>
-<p>The Info panel displays the recording infos (e.g. name and downsampling frequency) as well as the main sleep statistics computed with the hypnogram (see specs below). These values are adjusted in real-time when you edit the hypnogram. Sleep statistics can be exported to <strong>.csv</strong> or <strong>.txt</strong> file.</p>
-<div class="figure align-center" id="id7">
+<div class="section" id="infos">
+<span id="infotab"></span><h5>2.1.5.2.3. Infos<a class="headerlink" href="#infos" title="Permalink to this headline">¶</a></h5>
+<p>The Infos panel displays the recording infos (e.g. name and downsampling frequency) as well as the main sleep statistics computed with the hypnogram (see specs below). These values are adjusted in real-time when you edit the hypnogram. Sleep statistics can be exported to <strong>.csv</strong> or <strong>.txt</strong> file.</p>
+<div class="figure align-center" id="id9">
 <img alt="_images/sleep_info.png" src="_images/sleep_info.png" />
-<p class="caption"><span class="caption-text">Sleep statistics.</span></p>
+<p class="caption"><span class="caption-text">The Infos panel: sleep statistics and basic infos of the current recording.</span></p>
 </div>
 <ul class="simple">
 <li><dl class="first docutils">
 <dt>File properties</dt>
 <dd><ul class="first last">
+<li>Filename</li>
 <li>Sampling frequency</li>
 <li>Down-sampling frequency</li>
 </ul>
@@ -459,7 +479,7 @@
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt>Sleep statistics(<em>All values are expressed in minutes</em>):</dt>
+<dt>Sleep statistics (<em>All values are expressed in minutes</em>):</dt>
 <dd><ul class="first last">
 <li>Time in Bed (TIB) : total duration of the hypnogram.</li>
 <li>Total Dark Time (TDT) : duration of the hypnogram from beginning to last period of sleep.</li>
@@ -477,25 +497,25 @@
 </div>
 <div class="section" id="scoring">
 <span id="scoringtab"></span><h5>2.1.5.2.4. Scoring<a class="headerlink" href="#scoring" title="Permalink to this headline">¶</a></h5>
-<p>This tab contains the scoring table, i.e. where each stage start and finish. For further informations about how to score your hypnogram see : <a class="reference internal" href="#hypnogram-scoring"><span class="std std-ref">Hypnogram scoring</span></a></p>
+<p>This tab contains the scoring table, i.e. where each stage start and finish. For further informations about how to score your hypnogram see <a class="reference internal" href="#hypnogram-scoring"><span class="std std-ref">Hypnogram scoring</span></a></p>
 </div>
 <div class="section" id="detections">
 <span id="detectiontab"></span><h5>2.1.5.2.5. Detections<a class="headerlink" href="#detections" title="Permalink to this headline">¶</a></h5>
-<p>Perform semi-automatic detection. For a full tutorial about detections see : <a class="reference internal" href="#apply-detection"><span class="std std-ref">Apply semi-automatic detection</span></a></p>
+<p>Perform semi-automatic detection. For a full tutorial see <a class="reference internal" href="#apply-detection"><span class="std std-ref">Apply semi-automatic detection</span></a></p>
 </div>
 <div class="section" id="annotations">
 <span id="annotationtab"></span><h5>2.1.5.2.6. Annotations<a class="headerlink" href="#annotations" title="Permalink to this headline">¶</a></h5>
-<p>Add and edit annotations (annotations are defined by a start and end point, as well as an optional text marker). To quickly add annotations :</p>
+<p>Add and edit annotations (annotations are defined by a start and end point, as well as an optional text marker). To quickly add annotations:</p>
 <ul class="simple">
 <li>Use the <em>Annotate</em> button in the ruler to annotate the entire window</li>
 <li>Double click (with left mouse button) on a canvas to add an annotation starting and finishing at the mouse cursor location.</li>
 </ul>
-<p>If you want to import / export annotations, see the <a class="reference internal" href="#import-annotation"><span class="std std-ref">Import, add and save annotations</span></a> section.</p>
+<p>If you want to import / export annotations, see the <a class="reference internal" href="#import-annotation"><span class="std std-ref">Import, add and save annotations</span></a></p>
 </div>
 </div>
 <div class="section" id="shortcuts">
 <h4>2.1.5.3. Shortcuts<a class="headerlink" href="#shortcuts" title="Permalink to this headline">¶</a></h4>
-<p>Sleep comes with a bundle of shortcuts that can be used to speed up your productivity. If shortcuts don’t seems to be active, simply click on a canvas before.</p>
+<p>Sleep comes with a bundle of shortcuts that can be used to speed up your productivity. If shortcuts do not work, simply left click on a canvas.</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="25%" />
@@ -755,7 +775,7 @@
 <span class="n">Sleep</span><span class="p">()</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="figure align-center" id="id8">
+<div class="figure align-center" id="id10">
 <img alt="_images/sleep_open.png" src="_images/sleep_open.png" />
 <p class="caption"><span class="caption-text">Popup window for loading your files.</span></p>
 </div>
@@ -816,15 +836,54 @@
 </div>
 </div>
 </div>
+<div class="section" id="time-frequency">
+<span id="id2"></span><h3>2.2.3. Time-frequency<a class="headerlink" href="#time-frequency" title="Permalink to this headline">¶</a></h3>
+<p>There are currently three methods implemented in Sleep to compute the time-frequency (i.e. spectrogram) of the recording.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="37%" />
+<col width="45%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Method</th>
+<th class="head">Dependency</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Fourier transform</td>
+<td>Fourier-based spectrogram (default)</td>
+<td>SciPy</td>
+</tr>
+<tr class="row-odd"><td>Wavelet</td>
+<td>Morlet’s wavelet</td>
+<td>None</td>
+</tr>
+<tr class="row-even"><td>Multitaper</td>
+<td>Multitaper-based Wigner spectrogram</td>
+<td>lspopt &lt;<a class="reference external" href="https://github.com/hbldh/lspopt">https://github.com/hbldh/lspopt</a>&gt;`_</td>
+</tr>
+</tbody>
+</table>
+<div class="figure align-center" id="id11">
+<img alt="_images/sleep_spectro_methods.png" src="_images/sleep_spectro_methods.png" />
+<p class="caption"><span class="caption-text">Comparison of the 3 methods on a 50 minutes recording (C3 electrode, 0.5-20 Hz).</span></p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In most cases, the multitaper method is the one that gives the best results. To enable it, you must first install the excellent lspopt &lt;<a class="reference external" href="https://github.com/hbldh/lspopt">https://github.com/hbldh/lspopt</a>&gt;`_ package.</p>
+</div>
+</div>
 <div class="section" id="hypnogram-scoring">
-<span id="id2"></span><h3>2.2.3. Hypnogram scoring<a class="headerlink" href="#hypnogram-scoring" title="Permalink to this headline">¶</a></h3>
-<p>Sleep offers three possibilities to score the hypnogram, during the <a class="reference internal" href="#navigation"><span class="std std-ref">Navigation</span></a> using shortcuts, manually using the <a class="reference internal" href="#scoretable"><span class="std std-ref">Scoring table</span></a> or in <a class="reference internal" href="#liveedit"><span class="std std-ref">Live editing</span></a>.</p>
-<div class="figure align-center" id="id9">
+<span id="id3"></span><h3>2.2.4. Hypnogram scoring<a class="headerlink" href="#hypnogram-scoring" title="Permalink to this headline">¶</a></h3>
+<p>Sleep offers two possibilities to score the hypnogram, i.e. during the <a class="reference internal" href="#navigation"><span class="std std-ref">Navigation</span></a> using shortcuts or using the <a class="reference internal" href="#scoretable"><span class="std std-ref">Scoring table</span></a>.</p>
+<div class="figure align-center" id="id12">
 <img alt="_images/sleep_scoring.png" src="_images/sleep_scoring.png" />
-<p class="caption"><span class="caption-text">Hypnogram scoring table.</span></p>
+<p class="caption"><span class="caption-text">Hypnogram scoring.</span></p>
 </div>
 <div class="section" id="navigation">
-<span id="id3"></span><h4>2.2.3.1. Navigation<a class="headerlink" href="#navigation" title="Permalink to this headline">¶</a></h4>
+<span id="id4"></span><h4>2.2.4.1. Navigation<a class="headerlink" href="#navigation" title="Permalink to this headline">¶</a></h4>
 <p>This is probably the most useful editing method. While you are navigating across time, simply press on your keyboard to insert a sleep stage. Use the key below :</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -860,43 +919,26 @@
 <p>After pressing one of those keys, data coming from the next window will be prompted automatically so that you can continue scoring.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">If no canvas are selected the shortcuts might be not working. Simply click on a canvas (on a channel / spectrogram / hypnogram) before starting to score to avoid this issue.</p>
+<p class="last">If no canvas are selected the shortcuts might not work. Simply click on a canvas (on a channel / spectrogram / hypnogram) before starting to score to avoid this issue.</p>
 </div>
 </div>
 <div class="section" id="scoring-table">
-<span id="scoretable"></span><h4>2.2.3.2. Scoring table<a class="headerlink" href="#scoring-table" title="Permalink to this headline">¶</a></h4>
-<p>The Scoring panel can be used to manually edit the hypnogram values. It contains three columns :</p>
+<span id="scoretable"></span><h4>2.2.4.2. Scoring table<a class="headerlink" href="#scoring-table" title="Permalink to this headline">¶</a></h4>
+<p>The Scoring panel can be used to manually edit the hypnogram values. It contains three columns:</p>
 <ul class="simple">
 <li><strong>From</strong> : specify where the stage start (<em>in minutes</em>)</li>
 <li><strong>To</strong> : specify where the stage finish (<em>in minutes</em>)</li>
 <li><strong>Stage</strong> : the stage type (use Art, Wake, N1, N2, N3 or REM. Can be lowercase)</li>
 </ul>
 <p>At the end of the hypnogram, you can <strong>Add line</strong> or <strong>Remove line</strong> when a line is selected. An other interesting option is that the table is sortable (by clicking on the arrow inside the column name).</p>
-<p>Then, you can export your hypnogram in <strong>.hyp</strong>, <strong>.txt</strong> or <strong>cvs</strong>.</p>
-<div class="figure align-center" id="id10">
-<img alt="_images/sleep_scoring_table.png" src="_images/sleep_scoring_table.png" />
-<p class="caption"><span class="caption-text">Hypnogram scoring using the Scoring table. Manually specify where each stage start / finish and precise the stage type.</span></p>
-</div>
-</div>
-<div class="section" id="live-editing">
-<span id="liveedit"></span><h4>2.2.3.3. Live editing<a class="headerlink" href="#live-editing" title="Permalink to this headline">¶</a></h4>
-<p>Live editing consist of editing your hypnogram directly from the axis by adding / selecting / dragging points. Unused points will be automatically destroyed.</p>
-<blockquote>
-<div><ul class="simple">
-<li>Your cursor is red. Existing points are set in gray.</li>
-<li>Double click on the hypnogram to add points</li>
-<li>Hover an existing point in order to select it (the point turn green)</li>
-<li>Drag the point (blue) on the different hypnogram values</li>
-</ul>
-</div></blockquote>
-<div class="figure align-center" id="id11">
-<img alt="_images/sleep_livedit.png" src="_images/sleep_livedit.png" />
-<p class="caption"><span class="caption-text">Edit the hypnogram directly from the axes.</span></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You can export either the raw hypnogram values, the hypnogram scoring table, or a high-quality figure of the hypnogram using the  <em>Files &gt; Save</em> contextual menu.</p>
 </div>
 </div>
 </div>
 <div class="section" id="apply-semi-automatic-detection">
-<span id="apply-detection"></span><h3>2.2.4. Apply semi-automatic detection<a class="headerlink" href="#apply-semi-automatic-detection" title="Permalink to this headline">¶</a></h3>
+<span id="apply-detection"></span><h3>2.2.5. Apply semi-automatic detection<a class="headerlink" href="#apply-semi-automatic-detection" title="Permalink to this headline">¶</a></h3>
 <p>The Detection panel offers several semi-automatic algorithms for the detection of sleep features such as sleep spindles, K-complexes, rapid eyes movements, slow waves, muscle twitches and peaks. All detection types shared the following parameters :</p>
 <ul class="simple">
 <li><em>Apply on</em> : choose on which channel to perform the detection<ul>
@@ -905,18 +947,18 @@
 <li>All : apply detection on all channels (even those that are hidden)</li>
 </ul>
 </li>
-<li><em>Report detection on hypnogram</em> : display markers on the hypnogram where your spindles / REM / peaks are located.</li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">After performing one of the detection, got to the <em>Location</em> tab to see where detected events start, the duration and on which sleep stage they are located. Select the event to jump to it. Finally, you can export all located event.</p>
+<p class="last">After performing one of the detection, go to the <em>Location</em> tab to see infos about each detected events (starting and ending points, duration, sleep stage). Select the event to jump to it. Finally, you can export the location table using the File &gt; Save contextual menu.</p>
 </div>
+<p>Two examples of automatic event detection are shown below.</p>
 <div class="section" id="spindles-detection">
-<h4>2.2.4.1. Spindles detection<a class="headerlink" href="#spindles-detection" title="Permalink to this headline">¶</a></h4>
+<h4>2.2.5.1. Spindles detection<a class="headerlink" href="#spindles-detection" title="Permalink to this headline">¶</a></h4>
 <p>This algorithm perform a semi-automatic detection of sleep spindles which are an essential feature of N2 sleep. Sleep spindles are defined as bursts of 12-14 Hz waves that occur for at least 0.5 seconds. They are maximally visible on central electrodes.</p>
-<div class="figure align-center" id="id12">
+<div class="figure align-center" id="id13">
 <img alt="_images/sleep_spindles.png" src="_images/sleep_spindles.png" />
-<p class="caption"><span class="caption-text">Spindles detection on channel Cz and report on the hypnogram.</span></p>
+<p class="caption"><span class="caption-text">Spindles detection on channel Cz.</span></p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -929,29 +971,7 @@
 <li><em>Tmin</em> : Minimum duration, default 0.5 second</li>
 <li><em>Tmax</em> : Maximum duration, default 2 seconds</li>
 <li><em>Threshold</em> : defined as Mean + X * standard deviation of the signal. A  higher threshold will results in a more conservative detection.</li>
-<li><em>Perform detection only for NREM sleep</em> : if this checkbox is checked and a hypnogram is loaded, the algorithm will only take into account epochs  scored as NREM sleep. This allows for a more precise and sensitive detection.</li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</div>
-</div>
-<div class="section" id="rapid-eye-movements-detection">
-<h4>2.2.4.2. Rapid Eye Movements detection<a class="headerlink" href="#rapid-eye-movements-detection" title="Permalink to this headline">¶</a></h4>
-<p>This algorithm perform a semi-automatic detection of rapid eye movements (REMs, or saccades) which occur during REM sleep (hence the name). Briefly, the method identify consecutive supra-threshold samples of the first derivative of the signal (after filtering).</p>
-<div class="figure align-center" id="id13">
-<img alt="_images/sleep_rem.png" src="_images/sleep_rem.png" />
-<p class="caption"><span class="caption-text">Rapid Eye Movements (REM) detection on channel EOG1 and report on the hypnogram.</span></p>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<ul class="last simple">
-<li><dl class="first docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="first last">
-<li><em>Perform detection only for REM sleep</em> : once again, if a hypnogram is loaded, you can choose whether you want to perform the detection only for REM sleep epochs or for the whole recording.</li>
-<li><em>Threshold</em> : defined as Mean + X * standard deviation of the signal. A higher threshold will results in a more conservative detection.</li>
+<li><em>Perform detection only for NREM sleep</em> : if True and a hypnogram is loaded, then the detection will only be performed on NREM sleep epochs.</li>
 </ul>
 </dd>
 </dl>
@@ -960,11 +980,11 @@
 </div>
 </div>
 <div class="section" id="peaks-detection">
-<h4>2.2.4.3. Peaks detection<a class="headerlink" href="#peaks-detection" title="Permalink to this headline">¶</a></h4>
+<h4>2.2.5.2. Peaks detection<a class="headerlink" href="#peaks-detection" title="Permalink to this headline">¶</a></h4>
 <p>Perform a peak detection.</p>
 <div class="figure align-center" id="id14">
 <img alt="_images/sleep_peak.png" src="_images/sleep_peak.png" />
-<p class="caption"><span class="caption-text">Peaks detection on ECG channel and report on the hypnogram.</span></p>
+<p class="caption"><span class="caption-text">Peaks detection on ECG channel.</span></p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -983,8 +1003,8 @@
 </div>
 </div>
 <div class="section" id="load-and-save-the-gui-configuration">
-<h3>2.2.5. Load and save the GUI configuration<a class="headerlink" href="#load-and-save-the-gui-configuration" title="Permalink to this headline">¶</a></h3>
-<p>From the <strong>Files</strong> menu, you can save the GUI configuration <em>Files/Save/Gui config</em>. This will save the state of all buttons and properties inside <code class="xref py py-class docutils literal"><span class="pre">Sleep</span></code>. Then, you can recharge the GUI configuration using <em>Files/Load/Gui config</em>.
+<h3>2.2.6. Load and save the GUI configuration<a class="headerlink" href="#load-and-save-the-gui-configuration" title="Permalink to this headline">¶</a></h3>
+<p>From the <em>Files &gt; Save</em> contextual menu, you can save the GUI configuration. This will save the state of all buttons and properties inside <code class="xref py py-class docutils literal"><span class="pre">Sleep</span></code>. Then, you can recharge the GUI configuration using <em>Files &gt; Load &gt; GUI config</em>.
 Alternatively, if you want to use a configuration when running <code class="xref py py-class docutils literal"><span class="pre">Sleep</span></code>, you can use the <em>config_file</em> argument to directly pass the path to a configuration file.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mne</span> <span class="kn">import</span> <span class="n">io</span>
 <span class="c1"># Import the Sleep module:</span>
@@ -995,22 +1015,22 @@ Alternatively, if you want to use a configuration when running <code class="xref
 </div>
 </div>
 <div class="section" id="import-add-and-save-annotations">
-<span id="import-annotation"></span><h3>2.2.6. Import, add and save annotations<a class="headerlink" href="#import-add-and-save-annotations" title="Permalink to this headline">¶</a></h3>
+<span id="import-annotation"></span><h3>2.2.7. Import, add and save annotations<a class="headerlink" href="#import-add-and-save-annotations" title="Permalink to this headline">¶</a></h3>
 <p><code class="xref py py-class docutils literal"><span class="pre">Sleep</span></code> provides a table for annotations. In this table, specify where the event start, finish and the associated text. Selecting a row of this table center the window around the selected time-code. This allow to quickly navigate even in large files.</p>
 <div class="figure align-center" id="id15">
 <img alt="_images/sleep_annotations.png" src="_images/sleep_annotations.png" />
 <p class="caption"><span class="caption-text">Annotations in Sleep. All annotations are referenced in a table in the quick settings panel (left). Each annotation is then reported in the time axis as a green triangle.</span></p>
 </div>
 <div class="section" id="import-annotations">
-<h4>2.2.6.1. Import annotations<a class="headerlink" href="#import-annotations" title="Permalink to this headline">¶</a></h4>
-<p>If the interface is opened, load annotations from the menu <em>Files/Load/Annotations</em>. Otherwise, you can use the input variable <em>annotations</em> to set the path to an existing annotation file that need to be loaded. There is several ways to define annotations :</p>
+<h4>2.2.7.1. Import annotations<a class="headerlink" href="#import-annotations" title="Permalink to this headline">¶</a></h4>
+<p>If the interface is opened, load annotations from the menu <em>Files &gt; Load &gt; Annotations</em>. Otherwise, you can use the input variable <em>annotations</em> to set the path to an existing annotation file that need to be loaded. There is several ways to define annotations :</p>
 <ul class="simple">
 <li><a class="reference internal" href="#annotations-txt"><span class="std std-ref">Annotations in a text file</span></a></li>
-<li><a class="reference internal" href="#annotations-mne"><span class="std std-ref">Use MNE-Python annotations</span></a></li>
+<li><a class="reference internal" href="#annotations-mne"><span class="std std-ref">Using MNE-Python annotations</span></a></li>
 <li><a class="reference internal" href="#annotations-mark"><span class="std std-ref">Define only markers</span></a></li>
 </ul>
 <div class="section" id="annotations-in-a-text-file">
-<span id="annotations-txt"></span><h5>2.2.6.1.1. Annotations in a text file<a class="headerlink" href="#annotations-in-a-text-file" title="Permalink to this headline">¶</a></h5>
+<span id="annotations-txt"></span><h5>2.2.7.1.1. Annotations in a text file<a class="headerlink" href="#annotations-in-a-text-file" title="Permalink to this headline">¶</a></h5>
 <p>Annotations can be defined in a <a class="reference external" href="https://drive.google.com/file/d/0B6vtJiCQZUBvSXpmS0FGZ1E4M1U/view?usp=sharing">csv file</a> or in a <a class="reference external" href="https://drive.google.com/file/d/0B6vtJiCQZUBvOENtTks1Z3NLam8/view?usp=sharing">txt file</a> file.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mne</span> <span class="kn">import</span> <span class="n">io</span>
 <span class="c1"># Import the Sleep module:</span>
@@ -1020,8 +1040,8 @@ Alternatively, if you want to use a configuration when running <code class="xref
 </pre></div>
 </div>
 </div>
-<div class="section" id="use-mne-python-annotations">
-<span id="annotations-mne"></span><h5>2.2.6.1.2. Use MNE-Python annotations<a class="headerlink" href="#use-mne-python-annotations" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="using-mne-python-annotations">
+<span id="annotations-mne"></span><h5>2.2.7.1.2. Using MNE-Python annotations<a class="headerlink" href="#using-mne-python-annotations" title="Permalink to this headline">¶</a></h5>
 <p>Alternatively, you can use annotations from MNE-python and pass your annotations to the <em>annotations</em> variable :</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">mne</span> <span class="kn">import</span> <span class="n">Annotations</span>
@@ -1038,8 +1058,8 @@ Alternatively, if you want to use a configuration when running <code class="xref
 </div>
 </div>
 <div class="section" id="define-only-markers">
-<span id="annotations-mark"></span><h5>2.2.6.1.3. Define only markers<a class="headerlink" href="#define-only-markers" title="Permalink to this headline">¶</a></h5>
-<p>Annotations can be seen as the combination of a time-code with a text attached to it. If you don’t need to attach text, you can only specify the time-code in seconds :</p>
+<span id="annotations-mark"></span><h5>2.2.7.1.3. Define only markers<a class="headerlink" href="#define-only-markers" title="Permalink to this headline">¶</a></h5>
+<p>Annotations can be seen as the combination of a time-code and a label. If you don’t need a label to your event, you can only specify the time-code in seconds:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Sleep</span>
 
@@ -1052,7 +1072,7 @@ Alternatively, if you want to use a configuration when running <code class="xref
 </div>
 </div>
 <div class="section" id="add-new-annotations">
-<h4>2.2.6.2. Add new annotations<a class="headerlink" href="#add-new-annotations" title="Permalink to this headline">¶</a></h4>
+<h4>2.2.7.2. Add new annotations<a class="headerlink" href="#add-new-annotations" title="Permalink to this headline">¶</a></h4>
 <p>To add new annotations :</p>
 <ul class="simple">
 <li>From the ruler or from the <strong>Annotations</strong> tab of the quick settings panel, use the <strong>Annotate</strong> button to annotate the currently displayed window</li>
@@ -1060,8 +1080,8 @@ Alternatively, if you want to use a configuration when running <code class="xref
 </ul>
 </div>
 <div class="section" id="save-annotations">
-<h4>2.2.6.3. Save annotations<a class="headerlink" href="#save-annotations" title="Permalink to this headline">¶</a></h4>
-<p>The list of annotations can be exported (either in .txt or .csv) or loaded from the <strong>Files</strong> menu.</p>
+<h4>2.2.7.3. Save annotations<a class="headerlink" href="#save-annotations" title="Permalink to this headline">¶</a></h4>
+<p>The list of annotations can be exported (either in .txt or .csv) or loaded from the <em>Files</em> contextual menu.</p>
 </div>
 </div>
 </div>
@@ -1072,7 +1092,7 @@ Alternatively, if you want to use a configuration when running <code class="xref
 <p>Here is the list of default Sleep inputs :</p>
 <dl class="class">
 <dt id="visbrain.Sleep">
-<em class="property">class </em><code class="descclassname">visbrain.</code><code class="descname">Sleep</code><span class="sig-paren">(</span><em>data=None, hypno=None, config_file=None, annotations=None, channels=None, sf=None, downsample=100.0, axis=False, line='gl', hedit=False, href=['art', 'wake', 'rem', 'n1', 'n2', 'n3'], preload=True, use_mne=False, kwargs_mne={}, verbose=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/sleep/sleep.html#Sleep"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/sleep/sleep.py#L15-L236"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Sleep" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">visbrain.</code><code class="descname">Sleep</code><span class="sig-paren">(</span><em>data=None, hypno=None, config_file=None, annotations=None, channels=None, sf=None, downsample=100.0, axis=False, line='gl', href=['art', 'wake', 'rem', 'n1', 'n2', 'n3'], preload=True, use_mne=False, kwargs_mne={}, verbose=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/sleep/sleep.html#Sleep"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/sleep/sleep.py#L14-L229"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Sleep" title="Permalink to this definition">¶</a></dt>
 <dd><p>Visualize and edit sleep data.</p>
 <p>Use this module to :</p>
 <blockquote>
@@ -1131,10 +1151,6 @@ with this option, the rendering can be much slower.</p>
 <div><p>Specify the line rendering. Use ‘gl’ for the default line (fast) or
 ‘agg’ for smooth lines. This option might not works on some
 plateforms.</p>
-</div></blockquote>
-<p><strong>hedit</strong> : bool | False</p>
-<blockquote>
-<div><p>Enable the drag and drop hypnogram edition.</p>
 </div></blockquote>
 <p><strong>href</strong> : list | [‘art’, ‘wake’, ‘rem’, ‘n1’, ‘n2’, ‘n3’]</p>
 <blockquote>
@@ -1328,7 +1344,7 @@ to last period of sleep.</li>
 <dl class="option">
 <dt id="cmdoption-visbrain-sleep-stats-o">
 <code class="descname">-o</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--outfile</code><code class="descclassname"> &lt;outfile&gt;</code><a class="headerlink" href="#cmdoption-visbrain-sleep-stats-o" title="Permalink to this definition">¶</a></dt>
-<dd><p>Output filename (with extension - <a href="#id4"><span class="problematic" id="id5">*</span></a>.csv). If None, sleep               statistics will only be displayed and not saved into a file</p>
+<dd><p>Output filename (with extension - <a href="#id5"><span class="problematic" id="id6">*</span></a>.csv). If None, sleep               statistics will only be displayed and not saved into a file</p>
 </dd></dl>
 
 </div>

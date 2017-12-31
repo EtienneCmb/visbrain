@@ -171,7 +171,7 @@
 
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="k">import</span> <span class="n">set_widget_size</span><span class="p">,</span> <span class="n">set_log_level</span>
 <span class="kn">from</span> <span class="nn">.config</span> <span class="k">import</span> <span class="n">PROFILER</span><span class="p">,</span> <span class="n">CONFIG</span>
-<span class="kn">from</span> <span class="nn">.io</span> <span class="k">import</span> <span class="p">(</span><span class="n">is_faulthandler_installed</span><span class="p">,</span> <span class="n">get_data_path</span><span class="p">,</span> <span class="n">path_to_tmp</span><span class="p">,</span>
+<span class="kn">from</span> <span class="nn">.io</span> <span class="k">import</span> <span class="p">(</span><span class="n">get_data_path</span><span class="p">,</span> <span class="n">path_to_tmp</span><span class="p">,</span>
                  <span class="n">clean_tmp</span><span class="p">)</span>
 
 <span class="n">sip</span><span class="o">.</span><span class="n">setdestroyonexit</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
@@ -198,7 +198,7 @@
         <span class="c1"># Log level and profiler creation (if verbose=&#39;debug&#39;)</span>
         <span class="n">set_log_level</span><span class="p">(</span><span class="n">verbose</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_create_tmp_folder</span><span class="p">()</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">logger</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="mi">10</span><span class="p">)</span> <span class="ow">and</span> <span class="n">is_faulthandler_installed</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">logger</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="mi">10</span><span class="p">:</span>
             <span class="kn">import</span> <span class="nn">faulthandler</span>
             <span class="n">faulthandler</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Faulthandler enabled&quot;</span><span class="p">)</span>

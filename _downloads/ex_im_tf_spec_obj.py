@@ -7,8 +7,8 @@ Use and control image, time-frequency maps and spectrogram.
 .. image:: ../../picture/picobjects/ex_imtfspec_obj.png
 """
 import numpy as np
-from visbrain.objects import (ImageObj, TimeFrequencyMapObj, SpectrogramObj,
-                              MultiTaperObj, ColorbarObj, SceneObj)
+from visbrain.objects import (ImageObj, TimeFrequencyObj, ColorbarObj,
+                              SceneObj)
 
 CBAR_STATE = dict(cbtxtsz=12, txtsz=10., width=.2, rect=(-0.2, -2., 1., 4.))
 sc = SceneObj(size=(1200, 1000))
@@ -58,7 +58,7 @@ print("""
 #                                Spectrogram
 # =============================================================================
 """)
-spec = SpectrogramObj('spec', data, sf, cmap='RdBu_r')
+spec = TimeFrequencyObj('spec', data, sf, cmap='RdBu_r')
 sc.add_to_subplot(spec, row=1, col=0, title='Spectrogram')
 
 print("""
@@ -66,7 +66,7 @@ print("""
 #                             Time-frequency map
 # =============================================================================
 """)
-tf = TimeFrequencyMapObj('tf', data, sf)
+tf = TimeFrequencyObj('tf', data, sf, method='wavelet')
 sc.add_to_subplot(tf, row=1, col=1, title='Time-frequency map')
 
 print('\n-> Compute time-frequency map with windows')
@@ -75,8 +75,8 @@ print("""
 #                                 Multi-taper
 # =============================================================================
 """)
-tf_mt = MultiTaperObj('mt', data, sf, overlap=.7, interpolation='bicubic',
-                      cmap='Spectral_r')
+tf_mt = TimeFrequencyObj('mt', data, sf, method='multitaper', overlap=.7,
+                         interpolation='bicubic', cmap='Spectral_r')
 sc.add_to_subplot(tf_mt, row=1, col=2, title='Multi-taper')
 cb_tf_win = ColorbarObj(tf_mt, cblabel='Power', **CBAR_STATE)
 sc.add_to_subplot(cb_tf_win, row=1, col=3, width_max=150)

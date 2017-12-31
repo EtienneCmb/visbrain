@@ -157,15 +157,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#time-frequency-map-object">7.13. Time-frequency map object</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#examples-using-visbrain-objects-timefrequencymapobj">7.13.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.TimeFrequencyMapObj</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#spectrogram-object">7.14. Spectrogram object</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#examples-using-visbrain-objects-spectrogramobj">7.14.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.SpectrogramObj</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#multi-taper-object">7.15. Multi-taper object</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#examples-using-visbrain-objects-multitaperobj">7.15.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.MultiTaperObj</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examples-using-visbrain-objects-timefrequencyobj">7.13.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.TimeFrequencyObj</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -257,8 +249,6 @@
 <li><a class="reference internal" href="#csobj"><span class="std std-ref">Cross-section object</span></a></li>
 <li><a class="reference internal" href="#imageobj"><span class="std std-ref">Image object</span></a></li>
 <li><a class="reference internal" href="#tfobj"><span class="std std-ref">Time-frequency map object</span></a></li>
-<li><a class="reference internal" href="#specobj"><span class="std std-ref">Spectrogram object</span></a></li>
-<li><a class="reference internal" href="#mtobj"><span class="std std-ref">Multi-taper object</span></a></li>
 </ul>
 <p>Each object inherit to the following methods :</p>
 <table border="1" class="longtable docutils">
@@ -2093,7 +2083,7 @@ of shape (n_sources,).</p>
 </div>
 <dl class="class">
 <dt id="visbrain.objects.RoiObj">
-<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">RoiObj</code><span class="sig-paren">(</span><em>name</em>, <em>vol=None</em>, <em>labels=None</em>, <em>index=None</em>, <em>hdr=None</em>, <em>system='mni'</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>preload=True</em>, <em>_scale=1.0</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L42-L676"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">RoiObj</code><span class="sig-paren">(</span><em>name</em>, <em>vol=None</em>, <em>labels=None</em>, <em>index=None</em>, <em>hdr=None</em>, <em>system='mni'</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>preload=True</em>, <em>_scale=1.0</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L42-L674"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a Region Of Interest (ROI) object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2191,7 +2181,7 @@ a (4, 4) array.</p>
 </div></blockquote>
 <dl class="method">
 <dt id="visbrain.objects.RoiObj.get_labels">
-<code class="descname">get_labels</code><span class="sig-paren">(</span><em>save_to_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.get_labels"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L212-L229"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.get_labels" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_labels</code><span class="sig-paren">(</span><em>save_to_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.get_labels"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L210-L227"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.get_labels" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the labels associated with the loaded ROI.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2209,7 +2199,7 @@ a (4, 4) array.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.RoiObj.localize_sources">
-<code class="descname">localize_sources</code><span class="sig-paren">(</span><em>xyz, source_name=None, replace_bad=True, bad_patterns=[-1, 'undefined', 'None'], replace_with='Not found', distance=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.localize_sources"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L299-L389"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.localize_sources" title="Permalink to this definition">¶</a></dt>
+<code class="descname">localize_sources</code><span class="sig-paren">(</span><em>xyz, source_name=None, replace_bad=True, bad_patterns=[-1, 'undefined', 'None'], replace_with='Not found', distance=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.localize_sources"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L297-L387"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.localize_sources" title="Permalink to this definition">¶</a></dt>
 <dd><p>Localize source’s using this ROI object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2255,7 +2245,7 @@ a (4, 4) array.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.RoiObj.select_roi">
-<code class="descname">select_roi</code><span class="sig-paren">(</span><em>select=0.5</em>, <em>unique_color=False</em>, <em>roi_to_color=None</em>, <em>smooth=3</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.select_roi"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L432-L495"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.select_roi" title="Permalink to this definition">¶</a></dt>
+<code class="descname">select_roi</code><span class="sig-paren">(</span><em>select=0.5</em>, <em>unique_color=False</em>, <em>roi_to_color=None</em>, <em>smooth=3</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.select_roi"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L430-L493"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.select_roi" title="Permalink to this definition">¶</a></dt>
 <dd><p>Select several Region Of Interest (ROI).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2286,7 +2276,7 @@ a (4, 4) array.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.RoiObj.where_is">
-<code class="descname">where_is</code><span class="sig-paren">(</span><em>patterns</em>, <em>df=None</em>, <em>union=True</em>, <em>columns=None</em>, <em>exact=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.where_is"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L231-L291"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.where_is" title="Permalink to this definition">¶</a></dt>
+<code class="descname">where_is</code><span class="sig-paren">(</span><em>patterns</em>, <em>df=None</em>, <em>union=True</em>, <em>columns=None</em>, <em>exact=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.where_is"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L229-L289"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.where_is" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find a list of string patterns in a DataFrame.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2747,9 +2737,17 @@ images.</p>
 <p class="caption"><span class="caption-text">Time-frequency map object example</span></p>
 </div>
 <dl class="class">
-<dt id="visbrain.objects.TimeFrequencyMapObj">
-<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">TimeFrequencyMapObj</code><span class="sig-paren">(</span><em>name</em>, <em>data=None</em>, <em>sf=1.0</em>, <em>f_min=1.0</em>, <em>f_max=160.0</em>, <em>f_step=1.0</em>, <em>baseline=None</em>, <em>norm=None</em>, <em>n_window=None</em>, <em>overlap=0.0</em>, <em>window='flat'</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>under='gray'</em>, <em>vmax=None</em>, <em>over='red'</em>, <em>interpolation='nearest'</em>, <em>max_pts=-1</em>, <em>parent=None</em>, <em>transform=None</em>, <em>verbose=None</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/tf_obj.html#TimeFrequencyMapObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/tf_obj.py#L11-L133"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.TimeFrequencyMapObj" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a time-frequency map object.</p>
+<dt id="visbrain.objects.TimeFrequencyObj">
+<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">TimeFrequencyObj</code><span class="sig-paren">(</span><em>name</em>, <em>data=None</em>, <em>sf=1.0</em>, <em>method='fourier'</em>, <em>nperseg=256</em>, <em>f_min=1.0</em>, <em>f_max=160.0</em>, <em>f_step=1.0</em>, <em>baseline=None</em>, <em>norm=None</em>, <em>n_window=None</em>, <em>overlap=0.0</em>, <em>window=None</em>, <em>c_parameter=20</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>under='gray'</em>, <em>vmax=None</em>, <em>over='red'</em>, <em>interpolation='nearest'</em>, <em>max_pts=-1</em>, <em>parent=None</em>, <em>transform=None</em>, <em>verbose=None</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/tf_obj.html#TimeFrequencyObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/tf_obj.py#L13-L175"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.TimeFrequencyObj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the time-frequency map (or spectrogram).</p>
+<p>The time-frequency decomposition can be assessed using :</p>
+<blockquote>
+<div><ul class="simple">
+<li>The fourier transform</li>
+<li>Morlet’s wavelet</li>
+<li>Multi-taper</li>
+</ul>
+</div></blockquote>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -2766,39 +2764,55 @@ images.</p>
 <blockquote>
 <div><p>The sampling frequency.</p>
 </div></blockquote>
+<p><strong>method</strong> : {‘fourier’, ‘wavelet’, ‘multitaper’}</p>
+<blockquote>
+<div><p>The method to use to compute the time-frequency decomposition.</p>
+</div></blockquote>
+<p><strong>nperseg</strong> : int | 256</p>
+<blockquote>
+<div><p>Length of each segment. Argument pass to the <cite>scipy.signal.spectrogram</cite>
+function (for ‘fourier’ and ‘multitaper’ method).</p>
+</div></blockquote>
+<p><strong>overlap</strong> : float | 0.</p>
+<blockquote>
+<div><p>Overlap between segments. Must be between 0. and 1.</p>
+</div></blockquote>
 <p><strong>f_min</strong> : float | 1.</p>
 <blockquote>
-<div><p>Minimum frequency.</p>
+<div><p>Minimum frequency (for ‘wavelet’ method).</p>
 </div></blockquote>
 <p><strong>f_max</strong> : float | 160.</p>
 <blockquote>
-<div><p>Maximum frequency.</p>
+<div><p>Maximum frequency (for ‘wavelet’ method).</p>
 </div></blockquote>
 <p><strong>f_step</strong> : float | 2.</p>
 <blockquote>
-<div><p>Frequency step between two consecutive frequencies.</p>
+<div><p>Frequency step between two consecutive frequencies (for ‘wavelet’
+method).</p>
 </div></blockquote>
 <p><strong>baseline</strong> : array_like | None</p>
 <blockquote>
-<div><p>Baseline period.</p>
+<div><p>Baseline period (for ‘wavelet’ method).</p>
 </div></blockquote>
 <p><strong>norm</strong> : int | None</p>
 <blockquote>
-<div><p>The normalization method. See the <cite>normalization</cite> function.</p>
+<div><p>The normalization type (for ‘wavelet’ method).. See the <cite>normalization</cite>
+function.</p>
 </div></blockquote>
 <p><strong>n_window</strong> : int | None</p>
 <blockquote>
 <div><p>If this parameter is an integer, the time-frequency map is going to be
-averaged into smaller windows.</p>
-</div></blockquote>
-<p><strong>overlap</strong> : float | 0.</p>
-<blockquote>
-<div><p>Overlap between consecutive windows during averaging. <cite>overlap</cite> must be
-between 0. and 1.</p>
+averaged into smaller windows (for ‘wavelet’ method).</p>
 </div></blockquote>
 <p><strong>window</strong> : {‘flat’, ‘hanning’, ‘hamming’, ‘bartlett’, ‘blackman’}</p>
 <blockquote>
-<div><p>Windowing method for averaging.</p>
+<div><p>Windowing method for averaging. By default, ‘flat’ is used for Wavelet
+and ‘hamming’ for Fourier.</p>
+</div></blockquote>
+<p><strong>c_parameter</strong> : int | 20</p>
+<blockquote>
+<div><p>Parameter ‘c’ described in doi:10.1155/2011/980805 (for ‘multitaper’
+method)</p>
 </div></blockquote>
 <p><strong>clim</strong> : tuple | None</p>
 <blockquote>
@@ -2820,7 +2834,7 @@ between 0. and 1.</p>
 <blockquote>
 <div><p>Maximum threshold of the colorbar.</p>
 </div></blockquote>
-<p><strong>under</strong> : string/tuple/array_like | None</p>
+<p><strong>over</strong> : string/tuple/array_like | None</p>
 <blockquote>
 <div><p>Color for values over vmax.</p>
 </div></blockquote>
@@ -2874,294 +2888,23 @@ images.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.TimeFrequencyMapObj.set_data" title="visbrain.objects.TimeFrequencyMapObj.set_data"><code class="xref py py-obj docutils literal"><span class="pre">set_data</span></code></a>(data[,&nbsp;sf,&nbsp;f_min,&nbsp;f_max,&nbsp;f_step,&nbsp;…])</td>
-<td>Compute TF map and set data to the ImageObj.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.TimeFrequencyObj.set_data" title="visbrain.objects.TimeFrequencyObj.set_data"><code class="xref py py-obj docutils literal"><span class="pre">set_data</span></code></a>(data[,&nbsp;sf,&nbsp;method,&nbsp;nperseg,&nbsp;f_min,&nbsp;…])</td>
+<td>Compute TF and set data to the ImageObj.</td>
 </tr>
 </tbody>
 </table>
 </div></blockquote>
 <dl class="method">
-<dt id="visbrain.objects.TimeFrequencyMapObj.set_data">
-<code class="descname">set_data</code><span class="sig-paren">(</span><em>data</em>, <em>sf=1.0</em>, <em>f_min=1.0</em>, <em>f_max=160.0</em>, <em>f_step=1.0</em>, <em>baseline=None</em>, <em>norm=None</em>, <em>n_window=None</em>, <em>overlap=0.0</em>, <em>window='flat'</em>, <em>clim=None</em>, <em>cmap=None</em>, <em>vmin=None</em>, <em>under=None</em>, <em>vmax=None</em>, <em>over=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/tf_obj.html#TimeFrequencyMapObj.set_data"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/tf_obj.py#L97-L133"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.TimeFrequencyMapObj.set_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute TF map and set data to the ImageObj.</p>
+<dt id="visbrain.objects.TimeFrequencyObj.set_data">
+<code class="descname">set_data</code><span class="sig-paren">(</span><em>data</em>, <em>sf=1.0</em>, <em>method='fourier'</em>, <em>nperseg=256</em>, <em>f_min=1.0</em>, <em>f_max=160.0</em>, <em>f_step=1.0</em>, <em>baseline=None</em>, <em>norm=None</em>, <em>n_window=None</em>, <em>overlap=0.0</em>, <em>window=None</em>, <em>c_parameter=20</em>, <em>clim=None</em>, <em>cmap='viridis'</em>, <em>vmin=None</em>, <em>under=None</em>, <em>vmax=None</em>, <em>over=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/tf_obj.html#TimeFrequencyObj.set_data"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/tf_obj.py#L116-L175"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.TimeFrequencyObj.set_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute TF and set data to the ImageObj.</p>
 </dd></dl>
 
 </dd></dl>
 
-<div class="section" id="examples-using-visbrain-objects-timefrequencymapobj">
-<h3>7.13.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.TimeFrequencyMapObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-timefrequencymapobj" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="examples-using-visbrain-objects-timefrequencyobj">
+<h3>7.13.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.TimeFrequencyObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-timefrequencyobj" title="Permalink to this headline">¶</a></h3>
 <div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram."><div class="figure" id="id69">
-<img alt="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" src="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" />
-<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_im_tf_spec_obj.html#sphx-glr-auto-examples-objects-ex-im-tf-spec-obj-py"><span class="std std-ref">Image, time-frequency map and spectrogram objects</span></a></span></p>
-</div>
-</div><div style='clear:both'></div></div>
-</div>
-<div class="section" id="spectrogram-object">
-<span id="specobj"></span><h2>7.14. Spectrogram object<a class="headerlink" href="#spectrogram-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id70">
-<img alt="_images/pic_spec_obj.png" src="_images/pic_spec_obj.png" />
-<p class="caption"><span class="caption-text">Spectrogram object example</span></p>
-</div>
-<dl class="class">
-<dt id="visbrain.objects.SpectrogramObj">
-<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">SpectrogramObj</code><span class="sig-paren">(</span><em>name</em>, <em>data=None</em>, <em>sf=1.0</em>, <em>nperseg=256</em>, <em>overlap=0.0</em>, <em>window='hamming'</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>under='gray'</em>, <em>vmax=None</em>, <em>over='red'</em>, <em>interpolation='nearest'</em>, <em>max_pts=-1</em>, <em>parent=None</em>, <em>transform=None</em>, <em>verbose=None</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/spec_obj.html#SpectrogramObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/spec_obj.py#L8-L103"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.SpectrogramObj" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a spectrogram object.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string | None</p>
-<blockquote>
-<div><p>Name of the time-frequency object.</p>
-</div></blockquote>
-<p><strong>data</strong> : array_like</p>
-<blockquote>
-<div><p>Array of data of shape (N,)</p>
-</div></blockquote>
-<p><strong>sf</strong> : float | 1.</p>
-<blockquote>
-<div><p>The sampling frequency.</p>
-</div></blockquote>
-<p><strong>nperseg</strong> : int | 256</p>
-<blockquote>
-<div><p>Length of each segment. Argument pass to the <cite>scipy.signal.spectrogram</cite>
-function.</p>
-</div></blockquote>
-<p><strong>overlap</strong> : float | 0.</p>
-<blockquote>
-<div><p>Overlap between segemnts. Must be between 0. and 1.</p>
-</div></blockquote>
-<p><strong>window</strong> : string | ‘hamming’</p>
-<blockquote>
-<div><p>Desired window to use. Argument pass to the <cite>scipy.signal.spectrogram</cite>
-function.</p>
-</div></blockquote>
-<p><strong>clim</strong> : tuple | None</p>
-<blockquote>
-<div><p>Colorbar limits. If None, <cite>clim=(data.min(), data.max())</cite></p>
-</div></blockquote>
-<p><strong>cmap</strong> : string | None</p>
-<blockquote>
-<div><p>Colormap name.</p>
-</div></blockquote>
-<p><strong>vmin</strong> : float | None</p>
-<blockquote>
-<div><p>Minimum threshold of the colorbar.</p>
-</div></blockquote>
-<p><strong>under</strong> : string/tuple/array_like | None</p>
-<blockquote>
-<div><p>Color for values under vmin.</p>
-</div></blockquote>
-<p><strong>vmax</strong> : float | None</p>
-<blockquote>
-<div><p>Maximum threshold of the colorbar.</p>
-</div></blockquote>
-<p><strong>under</strong> : string/tuple/array_like | None</p>
-<blockquote>
-<div><p>Color for values over vmax.</p>
-</div></blockquote>
-<p><strong>interpolation</strong> : string | ‘nearest’</p>
-<blockquote>
-<div><p>Interpolation method for the image. See vispy.scene.visuals.Image for
-availables interpolation methods.</p>
-</div></blockquote>
-<p><strong>max_pts</strong> : int | -1</p>
-<blockquote>
-<div><p>Maximum number of points of the image along the x or y axis. This
-parameter is essentially used to solve OpenGL issues with very large
-images.</p>
-</div></blockquote>
-<p><strong>transform</strong> : VisPy.visuals.transforms | None</p>
-<blockquote>
-<div><p>VisPy transformation to set to the parent node.</p>
-</div></blockquote>
-<p><strong>parent</strong> : VisPy.parent | None</p>
-<blockquote>
-<div><p>Markers object parent.</p>
-</div></blockquote>
-<p><strong>verbose</strong> : string</p>
-<blockquote>
-<div><p>Verbosity level.</p>
-</div></blockquote>
-<p><strong>kw</strong> : dict | {}</p>
-<blockquote class="last">
-<div><p>Optional arguments are used to control the colorbar
-(See <a class="reference internal" href="#visbrain.objects.ColorbarObj" title="visbrain.objects.ColorbarObj"><code class="xref py py-class docutils literal"><span class="pre">ColorbarObj</span></code></a>).</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <span class="n">SpectrogramObj</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span><span class="p">,</span> <span class="n">sf</span> <span class="o">=</span> <span class="mi">512</span><span class="p">,</span> <span class="mi">256</span>  <span class="c1"># number of time-points and sampling frequency</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">/</span> <span class="n">sf</span>  <span class="c1"># time vector</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mf">25.</span> <span class="o">*</span> <span class="n">time</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">spec</span> <span class="o">=</span> <span class="n">SpectrogramObj</span><span class="p">(</span><span class="s1">&#39;spec&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">spec</span><span class="o">.</span><span class="n">preview</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-<blockquote>
-<div><p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.SpectrogramObj.set_data" title="visbrain.objects.SpectrogramObj.set_data"><code class="xref py py-obj docutils literal"><span class="pre">set_data</span></code></a>(data[,&nbsp;sf,&nbsp;nperseg,&nbsp;overlap,&nbsp;…])</td>
-<td>Compute spectrogram and set data to the ImageObj.</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-<dl class="method">
-<dt id="visbrain.objects.SpectrogramObj.set_data">
-<code class="descname">set_data</code><span class="sig-paren">(</span><em>data</em>, <em>sf=1.0</em>, <em>nperseg=None</em>, <em>overlap=None</em>, <em>window='hamming'</em>, <em>clim=None</em>, <em>cmap=None</em>, <em>vmin=None</em>, <em>under=None</em>, <em>vmax=None</em>, <em>over=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/spec_obj.html#SpectrogramObj.set_data"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/spec_obj.py#L83-L103"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.SpectrogramObj.set_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute spectrogram and set data to the ImageObj.</p>
-</dd></dl>
-
-</dd></dl>
-
-<div class="section" id="examples-using-visbrain-objects-spectrogramobj">
-<h3>7.14.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.SpectrogramObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-spectrogramobj" title="Permalink to this headline">¶</a></h3>
-<div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram."><div class="figure" id="id71">
-<img alt="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" src="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" />
-<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_im_tf_spec_obj.html#sphx-glr-auto-examples-objects-ex-im-tf-spec-obj-py"><span class="std std-ref">Image, time-frequency map and spectrogram objects</span></a></span></p>
-</div>
-</div><div style='clear:both'></div></div>
-</div>
-<div class="section" id="multi-taper-object">
-<span id="mtobj"></span><h2>7.15. Multi-taper object<a class="headerlink" href="#multi-taper-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id72">
-<img alt="_images/pic_spec_obj.png" src="_images/pic_spec_obj.png" />
-<p class="caption"><span class="caption-text">Multi-taper object example</span></p>
-</div>
-<dl class="class">
-<dt id="visbrain.objects.MultiTaperObj">
-<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">MultiTaperObj</code><span class="sig-paren">(</span><em>name</em>, <em>data=None</em>, <em>sf=1.0</em>, <em>nperseg=256</em>, <em>overlap=0.0</em>, <em>c_parameter=20</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>under='gray'</em>, <em>vmax=None</em>, <em>over='red'</em>, <em>interpolation='nearest'</em>, <em>max_pts=-1</em>, <em>parent=None</em>, <em>transform=None</em>, <em>verbose=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/multitaper_obj.html#MultiTaperObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/multitaper_obj.py#L11-L112"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.MultiTaperObj" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a multitaper spectrogram object.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string | None</p>
-<blockquote>
-<div><p>Name of the time-frequency object.</p>
-</div></blockquote>
-<p><strong>data</strong> : array_like</p>
-<blockquote>
-<div><p>Array of data of shape (N,)</p>
-</div></blockquote>
-<p><strong>sf</strong> : float | 1.</p>
-<blockquote>
-<div><p>The sampling frequency.</p>
-</div></blockquote>
-<p><strong>nperseg</strong> : int | 256</p>
-<blockquote>
-<div><p>Length of each segment. Argument pass to the <cite>scipy.signal.spectrogram</cite>
-function.</p>
-</div></blockquote>
-<p><strong>c_parameter</strong> : int | 20</p>
-<blockquote>
-<div><p>Parameter ‘c’ described in doi:10.1155/2011/980805</p>
-</div></blockquote>
-<p><strong>overlap</strong> : float | 0.</p>
-<blockquote>
-<div><p>Overlap between segments. Must be between 0. and 1.</p>
-</div></blockquote>
-<p><strong>window</strong> : string | ‘hamming’</p>
-<blockquote>
-<div><p>Desired window to use. Argument pass to the <cite>scipy.signal.spectrogram</cite>
-function.</p>
-</div></blockquote>
-<p><strong>clim</strong> : tuple | None</p>
-<blockquote>
-<div><p>Colorbar limits. If None, <cite>clim=(data.min(), data.max())</cite></p>
-</div></blockquote>
-<p><strong>cmap</strong> : string | None</p>
-<blockquote>
-<div><p>Colormap name.</p>
-</div></blockquote>
-<p><strong>vmin</strong> : float | None</p>
-<blockquote>
-<div><p>Minimum threshold of the colorbar.</p>
-</div></blockquote>
-<p><strong>under</strong> : string/tuple/array_like | None</p>
-<blockquote>
-<div><p>Color for values under vmin.</p>
-</div></blockquote>
-<p><strong>vmax</strong> : float | None</p>
-<blockquote>
-<div><p>Maximum threshold of the colorbar.</p>
-</div></blockquote>
-<p><strong>over</strong> : string/tuple/array_like | None</p>
-<blockquote>
-<div><p>Color for values over vmax.</p>
-</div></blockquote>
-<p><strong>interpolation</strong> : string | ‘nearest’</p>
-<blockquote>
-<div><p>Interpolation method for the image. See vispy.scene.visuals.Image for
-availables interpolation methods.</p>
-</div></blockquote>
-<p><strong>max_pts</strong> : int | -1</p>
-<blockquote>
-<div><p>Maximum number of points of the image along the x or y axis. This
-parameter is essentially used to solve OpenGL issues with very large
-images.</p>
-</div></blockquote>
-<p><strong>transform</strong> : VisPy.visuals.transforms | None</p>
-<blockquote>
-<div><p>VisPy transformation to set to the parent node.</p>
-</div></blockquote>
-<p><strong>parent</strong> : VisPy.parent | None</p>
-<blockquote>
-<div><p>Markers object parent.</p>
-</div></blockquote>
-<p><strong>verbose</strong> : string</p>
-<blockquote class="last">
-<div><p>Verbosity level.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <span class="n">MultiTaperObj</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span><span class="p">,</span> <span class="n">sf</span> <span class="o">=</span> <span class="mi">512</span><span class="p">,</span> <span class="mi">256</span>  <span class="c1"># number of time-points and sampling frequency</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">/</span> <span class="n">sf</span>  <span class="c1"># time vector</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mf">25.</span> <span class="o">*</span> <span class="n">time</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">spec</span> <span class="o">=</span> <span class="n">MultiTaperObj</span><span class="p">(</span><span class="s1">&#39;multitaper&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">spec</span><span class="o">.</span><span class="n">preview</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-<blockquote>
-<div><p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.MultiTaperObj.set_data" title="visbrain.objects.MultiTaperObj.set_data"><code class="xref py py-obj docutils literal"><span class="pre">set_data</span></code></a>(data[,&nbsp;sf,&nbsp;nperseg,&nbsp;overlap,&nbsp;…])</td>
-<td>Compute multitaper spectrogram and set data to the ImageObj.</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-<dl class="method">
-<dt id="visbrain.objects.MultiTaperObj.set_data">
-<code class="descname">set_data</code><span class="sig-paren">(</span><em>data</em>, <em>sf=1.0</em>, <em>nperseg=None</em>, <em>overlap=None</em>, <em>c_parameter=20</em>, <em>clim=None</em>, <em>cmap=None</em>, <em>vmin=None</em>, <em>under=None</em>, <em>vmax=None</em>, <em>over=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/multitaper_obj.html#MultiTaperObj.set_data"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/multitaper_obj.py#L85-L112"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.MultiTaperObj.set_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute multitaper spectrogram and set data to the ImageObj.</p>
-</dd></dl>
-
-</dd></dl>
-
-<div class="section" id="examples-using-visbrain-objects-multitaperobj">
-<h3>7.15.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.MultiTaperObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-multitaperobj" title="Permalink to this headline">¶</a></h3>
-<div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram."><div class="figure" id="id73">
 <img alt="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" src="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_im_tf_spec_obj.html#sphx-glr-auto-examples-objects-ex-im-tf-spec-obj-py"><span class="std std-ref">Image, time-frequency map and spectrogram objects</span></a></span></p>
 </div>

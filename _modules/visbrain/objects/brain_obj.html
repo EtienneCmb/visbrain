@@ -304,8 +304,8 @@
         <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">_vertices</span>
         <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">_faces</span>
         <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">_normals</span>
-        <span class="n">l</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">_lr_index</span>
-        <span class="n">add_brain_template</span><span class="p">(</span><span class="n">save_as</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">normals</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">lr_index</span><span class="o">=</span><span class="n">l</span><span class="p">,</span>
+        <span class="n">lr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">_lr_index</span>
+        <span class="n">add_brain_template</span><span class="p">(</span><span class="n">save_as</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">normals</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">lr_index</span><span class="o">=</span><span class="n">lr</span><span class="p">,</span>
                            <span class="n">tmpfile</span><span class="o">=</span><span class="n">tmpfile</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -579,7 +579,7 @@
             <span class="k">assert</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Add overlay to the </span><span class="si">{}</span><span class="s2"> brain template &quot;</span>
                         <span class="s2">&quot;(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="n">file</span><span class="p">))</span>
-            <span class="k">assert</span> <span class="n">is_nibabel_installed</span><span class="p">()</span>
+            <span class="n">is_nibabel_installed</span><span class="p">(</span><span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="kn">import</span> <span class="nn">nibabel</span> <span class="k">as</span> <span class="nn">nib</span>
             <span class="c1"># Load data using Nibabel :</span>
             <span class="n">sc</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">)</span>
@@ -724,7 +724,7 @@
 <span class="sd">        file : string</span>
 <span class="sd">            Path to the .annot file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="n">is_pandas_installed</span><span class="p">()</span>
+        <span class="n">is_pandas_installed</span><span class="p">(</span><span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">u_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_annot_file</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
         <span class="n">dico</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">Index</span><span class="o">=</span><span class="n">u_idx</span><span class="p">,</span> <span class="n">Labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">Color</span><span class="o">=</span><span class="n">color</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
@@ -764,7 +764,7 @@
     <span class="k">def</span> <span class="nf">_load_annot_file</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Load a .annot file.&quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">is_nibabel_installed</span><span class="p">()</span>
+        <span class="n">is_nibabel_installed</span><span class="p">(</span><span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="kn">import</span> <span class="nn">nibabel</span>
         <span class="c1"># Get index and labels :</span>
         <span class="n">id_vert</span><span class="p">,</span> <span class="n">ctab</span><span class="p">,</span> <span class="n">names</span> <span class="o">=</span> <span class="n">nibabel</span><span class="o">.</span><span class="n">freesurfer</span><span class="o">.</span><span class="n">read_annot</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
