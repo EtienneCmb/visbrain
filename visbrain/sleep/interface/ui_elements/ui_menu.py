@@ -337,7 +337,7 @@ class UiMenu(HelpMenu):
                 # Spectrogram
                 _try("self.menuDispSpec.setChecked(config['Spec_Visible'])")
                 _try("self._PanSpecMethod.setCurrentIndex("
-                                                    "config['Spec_Method'])")
+                     "config['Spec_Method'])")
                 _try("self._PanSpecNfft.setValue(config['Spec_Length'])")
                 _try("self._PanSpecStep.setValue(config['Spec_Overlap'])")
                 _try("self._PanSpecCmap.setCurrentIndex(config['Spec_Cmap'])")
@@ -347,7 +347,7 @@ class UiMenu(HelpMenu):
                 _try("self._PanSpecFend.setValue(config['Spec_Fend'])")
                 _try("self._PanSpecCon.setValue(config['Spec_Con'])")
                 _try("self._PanSpecInterp.setCurrentIndex("
-                                                    "config['Spec_Interp'])")
+                     "config['Spec_Interp'])")
                 # Hypnogram/time axis/navigation/topo/indic/zoom :
                 _try("self.menuDispHypno.setChecked(config['Hyp_Visible'])")
                 _try("self.menuDispTimeax.setChecked(config['Time_Visible'])")

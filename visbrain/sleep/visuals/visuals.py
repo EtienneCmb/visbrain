@@ -427,8 +427,8 @@ class Spectrogram(PrepareData):
         # Time-frequency map
         self.tf = TFmapsMesh(parent=parent)
         # Spectrogram
-        self.mesh = scene.visuals.Image(np.zeros((2, 2)),
-                                    name='Fourier transform', parent=parent)
+        self.mesh = scene.visuals.Image(np.zeros((2, 2)), parent=parent,
+                                        name='Fourier transform')
         self.mesh.transform = vist.STTransform()
 
     def set_data(self, sf, data, time, method='Fourier transform',
