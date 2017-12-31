@@ -214,8 +214,8 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
         self._fcn_slider_move()
         self._chanChecks[0].setChecked(True)
         self._hypLabel.setVisible(self.menuDispHypno.isChecked())
-        self._fcn_chanViz()
-        self._fcn_chanSymAmp()
+        self._fcn_chan_viz()
+        self._fcn_chan_sym_amp()
         self._fcn_info_update()
         self._fcn_hypno_to_score()
         # Set objects visible :

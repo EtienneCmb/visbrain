@@ -61,7 +61,7 @@ class UiScreenshot(object):
                 kc = self._channels.index(name)
                 # Force the channel to be displayed :
                 self._chanChecks[kc].setChecked(True)
-                self._fcn_chanViz()
+                self._fcn_chan_viz()
                 canvas = self._chanCanvas[kc].canvas
             # Finally, render the canvas :
             write_fig_canvas(filename, canvas=canvas, **kwargs)

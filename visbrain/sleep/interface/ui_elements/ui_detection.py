@@ -175,8 +175,8 @@ class UiDetection(object):
                     index = _events_to_index(index)
                 self._detect.dict[(self._channels[k], method)]['index'] = index
                 # Be sure panel is displayed :
-                if not self.canvas_isVisible(k):
-                    self.canvas_setVisible(k, True)
+                if not self._canvas_is_visible(k):
+                    self._canvas_set_visible(k, True)
                     self._chan.visible[k] = True
                 self._chan.loc[k].visible = True
                 # Update plot :

@@ -147,10 +147,10 @@ class UiTools(object):
         if not any([k.isChecked() for k in self._chanChecks]):
             self._chanChecks[a_max].setChecked(True)
         # Reconnect :
-        self._PanSpecChan.currentIndexChanged.connect(self._fcn_specSetData)
+        self._PanSpecChan.currentIndexChanged.connect(self._fcn_spec_set_data)
 
         self._chan.update()
-        self._fcn_chanViz()
+        self._fcn_chan_viz()
 
         # Finally disable GroupBox :
         self._ToolsRefGrp.setEnabled(False)
@@ -177,7 +177,7 @@ class UiTools(object):
         channel = int(self._SigFiltChan.currentIndex()) - 1
         if channel >= 0:
             self._chanChecks[channel].setChecked(True)
-            self._fcn_chanViz()
+            self._fcn_chan_viz()
 
         # ========== CHANNELS ==========
         # ---- Demean / detrend ----

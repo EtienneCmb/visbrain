@@ -1104,7 +1104,7 @@ class Visuals(CanvasShortcuts):
 
         # =================== SPECTROGRAM ===================
         # Create a spectrogram object :
-        self._spec = Spectrogram(camera=cameras[1], fcn=self._fcn_specSetData,
+        self._spec = Spectrogram(camera=cameras[1], fcn=self._fcn_spec_set_data,
                                  parent=self._specCanvas.wc.scene)
         self._spec.set_data(sf, data[0, ...], time, cmap=self._defcmap)
         PROFILER('Spectrogram', level=1)

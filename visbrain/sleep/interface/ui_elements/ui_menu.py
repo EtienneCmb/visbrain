@@ -353,9 +353,9 @@ class UiMenu(HelpMenu):
                 _try("self._slGrid.setChecked(config['Grid'])")
                 _try("self._slRules.setCurrentIndex(config['Unit'])")
                 # Update display
-                self._fcn_chanViz()
-                self._fcn_chanAmplitude()
-                self._fcn_specSetData()
+                self._fcn_chan_viz()
+                self._fcn_chan_amplitude()
+                self._fcn_spec_set_data()
                 self._disptog_spec()
                 self._disptog_hyp()
                 self._disptog_timeax()
@@ -363,9 +363,9 @@ class UiMenu(HelpMenu):
                 self._disptog_indic()
                 self._disptog_zoom()
                 self._fcn_grid_toggle()
-                self._fcn_updateAmpInfo()
-                self._fcn_chanAutoAmp()
-                self._fcn_chanSymAmp()
+                self._fcn_update_amp_info()
+                self._fcn_chan_auto_amp()
+                self._fcn_chan_sym_amp()
 
     def _load_detect_all(self, *args, filename=None):
         """Load all detections."""
@@ -379,7 +379,7 @@ class UiMenu(HelpMenu):
             if self._detect[k]['index'].size:
                 # Get channel number :
                 idx = self._channels.index(k[0])
-                self.canvas_setVisible(idx, True)
+                self._canvas_set_visible(idx, True)
                 self._chan.visible[idx] = True
         # Plot update :
         self._fcn_slider_move()
@@ -503,7 +503,7 @@ class UiMenu(HelpMenu):
         self._topoW.setVisible(viz)
         self._PanTopoVizW.setEnabled(viz)
         if viz:
-            self._fcn_topoSettings()
+            self._fcn_topo_settings()
             self._fcn_slider_move()
 
     def _disptog_indic(self):
