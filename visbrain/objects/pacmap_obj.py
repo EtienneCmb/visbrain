@@ -1,4 +1,4 @@
-"""Spectrogram object."""
+"""Pacmap object."""
 import numpy as np
 
 from .image_obj import ImageObj
