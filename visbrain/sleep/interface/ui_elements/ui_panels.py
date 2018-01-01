@@ -33,7 +33,7 @@ class UiPanels(object):
         # =====================================================================
         self._chanGrid = QtWidgets.QGridLayout()
         self._chanGrid.setContentsMargins(-1, -1, -1, 6)
-        self._chanGrid.setSpacing(3)
+        self._chanGrid.setSpacing(2)
         self._chanGrid.setObjectName(_fromUtf8("_chanGrid"))
         self.gridLayout_21.addLayout(self._chanGrid, 0, 0, 1, 1)
         PROFILER("Channel grid", level=2)
@@ -47,6 +47,8 @@ class UiPanels(object):
         self._PanChanDeselectAll.clicked.connect(self._fcn_deselect_all_chan)
         self._PanAmpAuto.clicked.connect(self._fcn_chan_auto_amp)
         self._PanAmpSym.clicked.connect(self._fcn_chan_sym_amp)
+        self._channels_lw.valueChanged.connect(self._fcn_chan_set_lw)
+        self._channels_alias.clicked.connect(self._fcn_chan_antialias)
         PROFILER("Channel canvas, widgets and buttons", level=2)
 
         # =====================================================================
@@ -64,11 +66,7 @@ class UiPanels(object):
         # SPECTROGRAM
         # =====================================================================
         # Main canvas for the spectrogram :
-        self._specCanvas = AxisCanvas(axis=self._ax, bgcolor=(1., 1., 1.),
-                                      y_label=None, x_label=None,
-                                      name='Spectrogram', color='black',
-                                      yargs={'text_color': 'black'},
-                                      xargs={'text_color': 'black'},
+        self._specCanvas = AxisCanvas(axis=self._ax, name='Spectrogram',
                                       fcn=[self.on_mouse_wheel])
         self._SpecW, self._SpecLayout = self._create_compatible_w("SpecW",
                                                                   "SpecL")
@@ -106,12 +104,8 @@ class UiPanels(object):
         # =====================================================================
         # HYPNOGRAM
         # =====================================================================
-        self._hypCanvas = AxisCanvas(axis=self._ax, bgcolor=(1., 1., 1.),
-                                     y_label=None, x_label=None,
-                                     name='Hypnogram', color='black',
-                                     yargs={'text_color': 'black'},
-                                     xargs={'text_color': 'black'},
-                                     fcn=[self.on_mouse_wheel])
+        self._hypCanvas = AxisCanvas(axis=self._ax, name='Hypnogram',
+                                     fcn=[self.on_mouse_wheel], use_pad=True)
         self._HypW, self._HypLayout = self._create_compatible_w("HypW", "HypL")
         self._HypLayout.addWidget(self._hypCanvas.canvas.native)
         self._chanGrid.addWidget(self._HypW, len(self) + 2, 1, 1, 1)
@@ -137,11 +131,7 @@ class UiPanels(object):
         # TOPOPLOT
         # =====================================================================
         # Main canvas for the spectrogram :
-        self._topoCanvas = AxisCanvas(axis=self._ax, bgcolor=(1., 1., 1.),
-                                      y_label=None, x_label=None,
-                                      name='Topoplot', color='black',
-                                      yargs={'text_color': 'black'},
-                                      xargs={'text_color': 'black'})
+        self._topoCanvas = AxisCanvas(axis=False, name='Topoplot')
         self._topoLayout.addWidget(self._topoCanvas.canvas.native)
         self._topoW.setVisible(False)
         self._PanTopoCmin.setValue(-.5)
@@ -166,9 +156,7 @@ class UiPanels(object):
         # TIME AXIS
         # =====================================================================
         # Create a unique time axis :
-        self._TimeAxis = TimeAxis(xargs={'text_color': 'black'},
-                                  x_label=None, name='TimeAxis',
-                                  bgcolor=(1., 1., 1.), color='black',
+        self._TimeAxis = TimeAxis(axis=self._ax, name='TimeAxis',
                                   indic_color=self._indicol,
                                   fcn=[self.on_mouse_wheel])
         self._TimeAxisW, self._TimeLayout = self._create_compatible_w("TimeW",
@@ -287,11 +275,7 @@ class UiPanels(object):
             # ============ CANVAS ============
             # Create canvas :
             self._chanCanvas[i] = AxisCanvas(axis=self._ax,
-                                             bgcolor=(1., 1., 1.),
-                                             y_label=None, x_label=None,
-                                             name='Canvas_' + k, color='black',
-                                             yargs={'text_color': 'black'},
-                                             xargs={'text_color': 'black'},
+                                             name='Canvas_' + k,
                                              fcn=[self.on_mouse_wheel])
             # Add the canvas to the layout :
             self._chanLayout[i].addWidget(self._chanCanvas[i].canvas.native)
@@ -366,6 +350,23 @@ class UiPanels(object):
         self._PanAllAmpMin.setMaximum(self['max'].max())
         self._PanAllAmpMax.setMinimum(self['min'].min())
         self._PanAllAmpMax.setMaximum(self['max'].max())
+
+    def _fcn_chan_set_lw(self):
+        """Set channels line-width."""
+        self._chan.width = self._channels_lw.value()
+        self._fcn_slider_move()
+
+    def _fcn_chan_antialias(self):
+        """Set anti-aliasing lines."""
+        aa = self._channels_alias.isChecked()
+        for k in range(len(self._channels)):
+            self._chan.mesh[k].antialias = aa
+            self._chan.mesh[k].update()
+        if aa:
+            self._channels_lw.setMinimum(1.5)
+        else:
+            self._channels_lw.setMinimum(1.)
+        self._fcn_chan_set_lw()
 
     # =====================================================================
     # CHANNEL SELECTION

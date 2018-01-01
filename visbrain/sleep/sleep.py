@@ -48,14 +48,9 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
     axis : bool | False
         Specify if each axis have to contains its own axis. Be carefull
         with this option, the rendering can be much slower.
-    line : string | 'gl'
-        Specify the line rendering. Use 'gl' for the default line (fast) or
-        'agg' for smooth lines. This option might not works on some
-        plateforms.
     href : list | ['art', 'wake', 'rem', 'n1', 'n2', 'n3']
         List of sleep stages. This list can be used to changed the display
         order into the GUI.
-    ..versionadded:: 0.3.4
     preload : bool | True
         Preload data into memory. For large datasets, turn this parameter to
         True.
@@ -81,8 +76,7 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
 
     def __init__(self, data=None, hypno=None, config_file=None,
                  annotations=None, channels=None, sf=None, downsample=100.,
-                 axis=False, line='gl',
-                 href=['art', 'wake', 'rem', 'n1', 'n2', 'n3'],
+                 axis=True, href=['art', 'wake', 'rem', 'n1', 'n2', 'n3'],
                  preload=True, use_mne=False, kwargs_mne={}, verbose=None):
         """Init."""
         PyQtModule.__init__(self, verbose=verbose, icon='sleep_icon.svg')
@@ -108,7 +102,6 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
         self._hconvinv = {v: k for k, v in self._hconv.items()}
         self._ax = axis
         # ---------- Default line width ----------
-        self._linemeth = line
         self._lw = 1.
         self._lwhyp = 2
         self._defwin = 30.
@@ -211,6 +204,7 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
 
     def _fcns_on_creation(self):
         """Applied on creation."""
+        self._fcn_grid_toggle()
         self._fcn_slider_move()
         self._chanChecks[0].setChecked(True)
         self._hypLabel.setVisible(self.menuDispHypno.isChecked())
