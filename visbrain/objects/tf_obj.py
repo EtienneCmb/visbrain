@@ -87,11 +87,11 @@ class TimeFrequencyObj(ImageObj):
     Examples
     --------
     >>> import numpy as np
-    >>> from visbrain.objects import TimeFrequencyMapObj
+    >>> from visbrain.objects import TimeFrequencyObj
     >>> n, sf = 512, 256  # number of time-points and sampling frequency
     >>> time = np.arange(n) / sf  # time vector
     >>> data = np.sin(2 * np.pi * 25. * time) + np.random.rand(n)
-    >>> tf = TimeFrequencyMapObj('tf', data, sf)
+    >>> tf = TimeFrequencyObj('tf', data, sf)
     >>> tf.preview(axis=True)
     """
 
@@ -134,7 +134,6 @@ class TimeFrequencyObj(ImageObj):
         noverlap = int(round(overlap * nperseg))
         assert isinstance(nperseg, int)
         assert isinstance(c_parameter, int)
-        #  args :
 
         # Update color arguments :
         self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
