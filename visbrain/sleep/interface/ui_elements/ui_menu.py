@@ -113,8 +113,11 @@ class UiMenu(HelpMenu):
             filename = dialog_save(self, 'Save Hypnogram figure', 'hypno',
                                    "PNG (*.png);;All files (*.*)")
         if filename:
-            write_fig_hyp(filename, self._hypno, self._sf, self._toffset,
-                          **kwargs)
+            hypno = self._hypno.copy()
+            grid = self._slGrid.isChecked()
+            ascolor = self._PanHypnoColor.isChecked()
+            write_fig_hyp(filename, hypno, self._sf, self._toffset,
+                          grid=grid, ascolor=ascolor, **kwargs)
 
     # ______________________ STATS INFO TABLE ______________________
     def _save_info_table(self, *args, filename=None):
