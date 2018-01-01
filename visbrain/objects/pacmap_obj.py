@@ -77,7 +77,7 @@ class PacmapObj(ImageObj):
                  f_amp=[(40, 60), (60, 100)], idpac=(4, 0, 0), n_window=None,
                  cmap='viridis', clim=None, vmin=None, under='gray', vmax=None,
                  over='red', interpolation='nearest', max_pts=-1, parent=None,
-                 transform=None, verbose=None, **kw):
+                 transform=None, verbose=None, pac_kw={}, **kw):
         """Init."""
         # Initialize the image object :
         ImageObj.__init__(self, name, interpolation=interpolation,
@@ -87,7 +87,7 @@ class PacmapObj(ImageObj):
         # Compute pacmap and set data to the ImageObj :
         if isinstance(data, np.ndarray):
             self.set_data(data, sf, f_pha, f_amp, idpac, n_window, clim, cmap,
-                          vmin, under, vmax, over)
+                          vmin, under, vmax, over, **pac_kw)
 
     def set_data(self, data, sf=1., f_pha=[(2, 4), (5, 7), (8, 13)],
                  f_amp=[(40, 60), (60, 100)], idpac=(4, 0, 0), n_window=None,
@@ -112,7 +112,7 @@ class PacmapObj(ImageObj):
             time /= sf
             data = np.array(np.array_split(data, sections)[0:-1]).T
         # Define the pac object and compute pac :
-        p = Pac(idpac=idpac, fpha=f_pha, famp=f_amp)
+        p = Pac(idpac=idpac, fpha=f_pha, famp=f_amp, **kwargs)
         pac = np.squeeze(p.filterfit(sf, data, njobs=1, axis=0))
         pac[np.isnan(pac)] = 0.
         assert pac.ndim == 2
