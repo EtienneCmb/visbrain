@@ -6,6 +6,23 @@ Changelog and future directions
 Changelog
 ---------
 
+v0.3.8
+^^^^^^
+
+Visbrain
+~~~~~~~~
+
+* Added logging
+* Code improvements: PEP8 and flake8
+
+Sleep
+~~~~~
+
+* Simplified and improved user interface
+* Multitaper-based spectrogram (require `lspopt <https://github.com/hbldh/lspopt>`_ package, see doc)
+* Improved automatic spindles detection
+* Removed drag-and-drop method for hypnogram scoring
+
 v0.3.4
 ^^^^^^
 
@@ -28,9 +45,7 @@ Future directions
 Visbrain
 ^^^^^^^^
 
-* conda installation
-* Independent of the VisPy developer version for better installation (ST)
-* Code style improvements (flake8 and numpydoc) (ST)
+* Conda installation
 * New modules are planned (*Connect*, *Pictures*, *ERP*) (LT)
 
 Brain
