@@ -97,6 +97,7 @@ class PacmapObj(ImageObj):
         # ======================= CHECKING =======================
         is_tensorpac_installed(raise_error=True)
         from tensorpac import Pac
+        data = np.squeeze(data)
         assert isinstance(data, np.ndarray) and data.ndim == 1
         assert isinstance(sf, (int, float))
         time = np.arange(len(data))
