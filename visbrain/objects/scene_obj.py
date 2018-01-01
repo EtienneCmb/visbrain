@@ -5,7 +5,7 @@ import logging
 import numpy as np
 from vispy import scene
 
-from ..io import write_fig_canvas
+from ..io import write_fig_canvas, dialog_save
 from ..utils import color2vb, set_log_level, rotate_turntable
 from ..visuals import CbarVisual
 from ..config import CONFIG, PROFILER
@@ -13,7 +13,78 @@ from ..config import CONFIG, PROFILER
 logger = logging.getLogger('visbrain')
 
 
-class VisbrainCanvas(object):
+class _Shortcuts(object):
+    """Triggered events on VisbrainCanvas."""
+
+    KEY_PRESS = {}
+
+    def __init__(self, canvas, *args, **kwargs):
+        """Init."""
+        if 'save' in args:
+            def _save_canvas(event):
+                from PyQt5.QtWidgets import QWidget
+                ext = ['png', 'tiff', 'jpg']
+                _ext = ['%s file (*.%s)' % (k.upper(), k) for k in ext]
+                _ext += ['All files (*.*)']
+                saveas = dialog_save(QWidget(), name='Export the scene',
+                                     default='canvas.png', allext=_ext)
+                if saveas:
+                    write_fig_canvas(saveas, self.canvas,
+                                     widget=self.canvas.central_widget)
+            self.KEY_PRESS['s'] = _save_canvas
+
+        # Key press :
+        if 'on_key_press' in kwargs.keys():
+            _fcn_key_press = kwargs['on_key_press']
+        else:
+            def _fcn_key_press(event):
+                """Key pressed."""
+                if event.text in self.KEY_PRESS.keys():
+                    self.KEY_PRESS[event.text](event)
+
+        @canvas.events.key_press.connect
+        def on_key_press(event):
+            """Key pressed."""
+            _fcn_key_press(event)
+
+        @canvas.events.mouse_release.connect
+        def on_mouse_release(event):
+            """Mouse release."""
+            pass
+
+        @canvas.events.mouse_double_click.connect
+        def on_mouse_double_click(event):
+            """Mouse double click."""
+            pass
+
+        # Mouse move :
+        if 'on_mouse_move' in kwargs.keys():
+            _fcn_mouse_move = kwargs['on_mouse_move']
+        else:
+            def _fcn_mouse_move(event):
+                """Mouse move."""
+                pass
+
+        @canvas.events.mouse_move.connect
+        def on_mouse_move(event):
+            """Mouse move."""
+            _fcn_mouse_move(event)
+
+        # Mouse move :
+        if 'on_mouse_press' in kwargs.keys():
+            _fcn_mouse_press = kwargs['on_mouse_press']
+        else:
+            def _fcn_mouse_press(event):
+                """Mouse move."""
+                pass
+
+        @canvas.events.mouse_press.connect
+        def on_mouse_press(event):
+            """Mouse press."""
+            _fcn_mouse_press(event)
+
+
+class VisbrainCanvas(_Shortcuts):
     """Create a canvas with an embeded axis.
 
     Parameters
@@ -64,7 +135,7 @@ class VisbrainCanvas(object):
                  tick_font_size=10., name=None, x_height_max=80,
                  y_width_max=80, axis_label_margin=50, tick_label_margin=5,
                  rpad=20., bgcolor='white', add_cbar=False, cargs={}, xargs={},
-                 yargs={}, cbargs={}, show=False, camera=None):
+                 yargs={}, cbargs={}, show=False, camera=None, shortcuts={}):
         """Init."""
         self._axis = axis
         self._title = title
@@ -85,6 +156,7 @@ class VisbrainCanvas(object):
         # ########################## MAIN CANVAS ##########################
         self.canvas = scene.SceneCanvas(keys='interactive', bgcolor=bgcolor,
                                         show=show, title=name, **cargs)
+        _Shortcuts.__init__(self, self.canvas, **shortcuts)
 
         # ########################## AXIS ##########################
         if axis:  # add axis to canvas
@@ -336,7 +408,7 @@ class VisbrainCanvas(object):
         self.canvas.bgcolor = color2vb(value)
 
 
-class SceneObj(object):
+class SceneObj(_Shortcuts):
     """Create a scene and add objects to it.
 
     Parameters
@@ -358,10 +430,11 @@ class SceneObj(object):
         logger.info("Scene creation")
         PROFILER('Scene creation')
         # Create the canvas and the grid :
-        self._canvas = scene.SceneCanvas(keys='interactive', show=False,
-                                         title='Object scene',
-                                         bgcolor=color2vb(bgcolor), **kwargs)
-        self._grid = self._canvas.central_widget.add_grid(margin=10)
+        self.canvas = scene.SceneCanvas(keys='interactive', show=False,
+                                        title='Object scene',
+                                        bgcolor=color2vb(bgcolor), **kwargs)
+        _Shortcuts.__init__(self, self.canvas, 'save')
+        self._grid = self.canvas.central_widget.add_grid(margin=10)
         # Padding at (0, 0) :
         _rpad = self._grid.add_widget(row=0, col=0, row_span=1)
         _rpad.width_max = 20
@@ -569,13 +642,13 @@ class SceneObj(object):
                       autocrop=autocrop, unit=unit, region=region,
                       bgcolor=bgcolor, transparent=transparent)
         self._gl_uniform_transforms()
-        write_fig_canvas(saveas, self._canvas,
-                         widget=self._canvas.central_widget, **kwargs)
+        write_fig_canvas(saveas, self.canvas,
+                         widget=self.canvas.central_widget, **kwargs)
 
     def preview(self):
         """Previsualize the result."""
         self._gl_uniform_transforms()
-        self._canvas.show(visible=True)
+        self.canvas.show(visible=True)
         if PROFILER and logger.level == 1:
             logger.profiler("PARENT TREE \n%s" % self._grid.describe_tree())
             logger.profiler(" ")

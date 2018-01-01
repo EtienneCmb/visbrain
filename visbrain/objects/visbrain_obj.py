@@ -55,6 +55,7 @@ class VisbrainObject(_VisbrainObj):
         self._node = vispy.scene.Node(name=name)
         self._node.parent = parent
         self._csize = None  # canvas size
+        self._shortcuts = {}
         # Name :
         assert isinstance(name, str)
         self._name = name
@@ -82,11 +83,18 @@ class VisbrainObject(_VisbrainObj):
             camera = self._get_camera()
         canvas = VisbrainCanvas(axis=axis, show=show, name=self._name,
                                 bgcolor=color2vb(bgcolor), camera=camera,
-                                **kwargs)
+                                shortcuts=self._shortcuts, **kwargs)
         self._csize = canvas.canvas.size
+        self.canvas = canvas
         if not hasattr(self._node.parent, 'name'):
             self._node.parent = canvas.wc.scene
         return canvas
+
+    def set_shortcuts_to_canvas(self, canvas):
+        assert isinstance(canvas, VisbrainCanvas)
+        #################################################################################################
+        self.canvas = canvas
+        VisbrainShortcuts.__init__(self, canvas)
 
     def preview(self, bgcolor='white', axis=False, xyz=False, show=True,
                 obj=None, **kwargs):
