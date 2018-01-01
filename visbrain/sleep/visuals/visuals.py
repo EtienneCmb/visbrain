@@ -1094,12 +1094,11 @@ class Visuals(CanvasShortcuts):
         # =================== VARIABLES ===================
         sf, data, time = self._sf, self._data, self._time
         channels, hypno, cameras = self._channels, self._hypno, self._allCams
-        method = self._linemeth
 
         # =================== CHANNELS ===================
         self._chan = ChannelPlot(channels, time, camera=cameras[0],
-                                 method=method, color=self._chancolor,
-                                 width=self._lw, color_detection=self._indicol,
+                                 color=self._chancolor, width=self._lw,
+                                 color_detection=self._indicol,
                                  parent=self._chanCanvas,
                                  fcn=self._fcn_slider_move)
         PROFILER('Channels', level=1)

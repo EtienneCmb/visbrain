@@ -47,6 +47,8 @@ class UiPanels(object):
         self._PanChanDeselectAll.clicked.connect(self._fcn_deselect_all_chan)
         self._PanAmpAuto.clicked.connect(self._fcn_chan_auto_amp)
         self._PanAmpSym.clicked.connect(self._fcn_chan_sym_amp)
+        self._channels_lw.valueChanged.connect(self._fcn_chan_set_lw)
+        self._channels_alias.clicked.connect(self._fcn_chan_antialias)
         PROFILER("Channel canvas, widgets and buttons", level=2)
 
         # =====================================================================
@@ -348,6 +350,23 @@ class UiPanels(object):
         self._PanAllAmpMin.setMaximum(self['max'].max())
         self._PanAllAmpMax.setMinimum(self['min'].min())
         self._PanAllAmpMax.setMaximum(self['max'].max())
+
+    def _fcn_chan_set_lw(self):
+        """Set channels line-width."""
+        self._chan.width = self._channels_lw.value()
+        self._fcn_slider_move()
+
+    def _fcn_chan_antialias(self):
+        """Set anti-aliasing lines."""
+        aa = self._channels_alias.isChecked()
+        for k in range(len(self._channels)):
+            self._chan.mesh[k].antialias = aa
+            self._chan.mesh[k].update()
+        if aa:
+            self._channels_lw.setMinimum(1.5)
+        else:
+            self._channels_lw.setMinimum(1.)
+        self._fcn_chan_set_lw()
 
     # =====================================================================
     # CHANNEL SELECTION

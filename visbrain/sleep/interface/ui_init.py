@@ -107,16 +107,15 @@ class TimeAxis(object):
 class AxisCanvas(object):
     """Create a canvas with an embeded axis."""
 
-    def __init__(self, axis=True, x_label='', x_heightmax=40, y_label='',
-                 y_widthmax=50, name='', use_pad=False, bgcolor='white',
-                 cargs={}, fcn=[]):
+    def __init__(self, axis=True, x_label='', name='', use_pad=False,
+                 bgcolor='white', fcn=[]):
         """Init."""
         # Save variables :
         self._axis = axis
 
         # Create the main canvas :
-        self.canvas = scene.SceneCanvas(keys=None, bgcolor=bgcolor,
-                                        show=False, title=name, **cargs)
+        self.canvas = scene.SceneCanvas(keys=None, bgcolor=bgcolor, show=False,
+                                        title=name)
         _ = [self.canvas.connect(k) for k in fcn]  # noqa
 
         # Add axis :
@@ -127,11 +126,11 @@ class AxisCanvas(object):
             # Add y-axis :
             if use_pad:
                 pad = grid.add_widget(row=1, col=0)
-                pad.width_max = y_widthmax
+                pad.width_max = 50
             else:
                 self.yaxis = scene.AxisWidget(orientation='left',
                                               text_color='black')
-                self.yaxis.width_max = y_widthmax
+                self.yaxis.width_max = 50
                 grid.add_widget(self.yaxis, row=1, col=0)
 
             # Add right padding :
