@@ -662,7 +662,7 @@ def mtdetect(data, sf, threshold, hypno, rem_only, fmin=0., fmax=50.,
     with np.errstate(divide='ignore', invalid='ignore'):
         idx_hard = np.where(amplitude > hard_thr)[0]
 
-    if idx_hard.size > 0:
+    if idx_hard.size:
         # Keep only MT in period with low relative delta power
         idx_hard = np.setdiff1d(idx_hard, idx_high_delta, True)
 
@@ -688,12 +688,17 @@ def mtdetect(data, sf, threshold, hypno, rem_only, fmin=0., fmax=50.,
         idx_mt = _index_to_events(np.c_[idx_start, idx_stop][good_amp])
 
         # Compute number, duration, density
-        idx_start, idx_stop = _events_to_index(idx_mt).T
-        number = idx_start.size
-        duration_ms = (idx_stop - idx_start) * (1000 / sf)
-        density = number / (length / sf / 60.)
-        return idx_mt, number, density, duration_ms
+        if idx_hard.size:
+            idx_start, idx_stop = _events_to_index(idx_mt).T
+            number = idx_start.size
+            duration_ms = (idx_stop - idx_start) * (1000 / sf)
+            density = number / (length / sf / 60.)
 
+            return idx_mt, number, density, duration_ms
+
+        else:
+            return np.array([], dtype=int), 0., 0., np.array([], dtype=int)
+            
     else:
         return np.array([], dtype=int), 0., 0., np.array([], dtype=int)
 
