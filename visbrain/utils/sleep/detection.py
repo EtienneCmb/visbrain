@@ -688,7 +688,7 @@ def mtdetect(data, sf, threshold, hypno, rem_only, fmin=0., fmax=50.,
         idx_mt = _index_to_events(np.c_[idx_start, idx_stop][good_amp])
 
         # Compute number, duration, density
-        if idx_hard.size:
+        if idx_mt.size:
             idx_start, idx_stop = _events_to_index(idx_mt).T
             number = idx_start.size
             duration_ms = (idx_stop - idx_start) * (1000 / sf)
@@ -698,7 +698,7 @@ def mtdetect(data, sf, threshold, hypno, rem_only, fmin=0., fmax=50.,
 
         else:
             return np.array([], dtype=int), 0., 0., np.array([], dtype=int)
-            
+
     else:
         return np.array([], dtype=int), 0., 0., np.array([], dtype=int)
 
