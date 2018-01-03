@@ -16,7 +16,7 @@ __all__ = ('write_fig_hyp', 'write_fig_spindles', 'write_fig_canvas',
 
 
 def write_fig_hyp(file, hypno, sf, tstartsec, grid=False, ascolor=False,
-                  dpi=600, colors={-1: '#8bbf56', 0: '#56bf8b', 1: '#aabcce',
+                  dpi=300, colors={-1: '#8bbf56', 0: '#56bf8b', 1: '#aabcce',
                                    2: '#405c79', 3: '#0b1c2c', 4: '#bf5656'}):
     """Export hypnogram to a high-res png figure.
 
@@ -60,7 +60,7 @@ def write_fig_hyp(file, hypno, sf, tstartsec, grid=False, ascolor=False,
     art = True if -1 in hypno else False
 
     # Start plotting
-    fig, ax = plt.subplots(figsize=(10, 4), edgecolor='k')
+    fig, ax = plt.subplots(figsize=(8, 3), edgecolor='k')
     lhyp = len(hypno) / 60
     lw = 1.5
     if lhyp < 60:

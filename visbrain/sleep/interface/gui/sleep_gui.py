@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/etienne/Toolbox/visbrain/visbrain/sleep/interface/gui/sleep_gui.ui'
+# Form implementation generated from reading ui file 'sleep_gui.ui'
 #
-# Created by: PyQt5 UI code generator 5.9
+# Created by: PyQt5 UI code generator 5.8.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -105,7 +105,7 @@ class Ui_MainWindow(object):
         self._PanScrollChan.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self._PanScrollChan.setObjectName("_PanScrollChan")
         self.scrollAreaWidgetContents_3 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 376, 609))
+        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 341, 657))
         self.scrollAreaWidgetContents_3.setObjectName("scrollAreaWidgetContents_3")
         self.verticalLayout_14 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents_3)
         self.verticalLayout_14.setContentsMargins(0, 0, 0, 0)
@@ -991,7 +991,7 @@ class Ui_MainWindow(object):
         self._ToolsRefIgnArea.setWidgetResizable(True)
         self._ToolsRefIgnArea.setObjectName("_ToolsRefIgnArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 384, 321))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 98, 298))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -1304,17 +1304,17 @@ class Ui_MainWindow(object):
         self.horizontalLayout_15.addWidget(self.label_64)
         self._ToolKCMinAmp = QtWidgets.QDoubleSpinBox(self.widget_8)
         self._ToolKCMinAmp.setDecimals(1)
-        self._ToolKCMinAmp.setMinimum(1.0)
-        self._ToolKCMinAmp.setMaximum(2000.0)
+        self._ToolKCMinAmp.setMinimum(10.0)
+        self._ToolKCMinAmp.setMaximum(500.0)
         self._ToolKCMinAmp.setSingleStep(10.0)
-        self._ToolKCMinAmp.setProperty("value", 100.0)
+        self._ToolKCMinAmp.setProperty("value", 80.0)
         self._ToolKCMinAmp.setObjectName("_ToolKCMinAmp")
         self.horizontalLayout_15.addWidget(self._ToolKCMinAmp)
         self._ToolKCMaxAmp = QtWidgets.QDoubleSpinBox(self.widget_8)
         self._ToolKCMaxAmp.setDecimals(1)
-        self._ToolKCMaxAmp.setMinimum(101.0)
+        self._ToolKCMaxAmp.setMinimum(110.0)
         self._ToolKCMaxAmp.setMaximum(1000.0)
-        self._ToolKCMaxAmp.setSingleStep(5.0)
+        self._ToolKCMaxAmp.setSingleStep(10.0)
         self._ToolKCMaxAmp.setProperty("value", 600.0)
         self._ToolKCMaxAmp.setObjectName("_ToolKCMaxAmp")
         self.horizontalLayout_15.addWidget(self._ToolKCMaxAmp)
@@ -1375,8 +1375,8 @@ class Ui_MainWindow(object):
         self._ToolKCMaxDur.setDecimals(1)
         self._ToolKCMaxDur.setMinimum(1000.0)
         self._ToolKCMaxDur.setMaximum(10000.0)
-        self._ToolKCMaxDur.setSingleStep(50.0)
-        self._ToolKCMaxDur.setProperty("value", 4000.0)
+        self._ToolKCMaxDur.setSingleStep(100.0)
+        self._ToolKCMaxDur.setProperty("value", 3000.0)
         self._ToolKCMaxDur.setObjectName("_ToolKCMaxDur")
         self.horizontalLayout_14.addWidget(self._ToolKCMaxDur)
         self.gridLayout_8.addWidget(self.widget_7, 3, 2, 1, 4)
@@ -1803,7 +1803,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.addWidget(self.splitter)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1359, 25))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1359, 21))
         self.menubar.setObjectName("menubar")
         self.menuFiles = QtWidgets.QMenu(self.menubar)
         self.menuFiles.setObjectName("menuFiles")
@@ -1998,12 +1998,12 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuDisplay.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.QuickSettings.setCurrentIndex(0)
+        self.QuickSettings.setCurrentIndex(4)
         self._stacked_panels.setCurrentIndex(0)
         self._PanTopoDisp.setCurrentIndex(0)
         self._stacked_tools.setCurrentIndex(1)
         self._DetectionTab.setCurrentIndex(0)
-        self._stacked_detections.setCurrentIndex(5)
+        self._stacked_detections.setCurrentIndex(2)
         self._slRules.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 

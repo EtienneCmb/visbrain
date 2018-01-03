@@ -1,9 +1,7 @@
 """Test functions in events.py."""
 import numpy as np
 
-from visbrain.utils.sleep.event import (_events_duration, _events_removal,
-                                        _events_distance_fill,
-                                        _events_mean_freq, _events_amplitude,
+from visbrain.utils.sleep.event import (_events_distance_fill,
                                         _events_to_index, _index_to_events)
 
 
@@ -22,29 +20,9 @@ class TestEvent(object):
         idx_stop = np.array([50, 75, 200])
         return data, idx_sup_thr, idx_start, idx_stop
 
-    def test_events_duration(self):
-        """Test function events_duration."""
-        _events_duration(self._get_index(), 100.)
-
-    def test_events_removal(self):
-        """Test function events_removal."""
-        idx_start = np.array([100, 1200, 1300])
-        idx_stop = np.array([110, 2200, 1800])
-        _events_removal(idx_start, idx_stop, [0, 1])
-
     def test_events_distance_fill(self):
         """Test function events_distance_fill."""
         _events_distance_fill(self._get_index(), 200., 100.)
-
-    def test_events_mean_freq(self):
-        """Test function events_mean_freq."""
-        data, idx_sup_thr, idx_start, idx_stop = self._get_data()
-        _events_mean_freq(data, idx_sup_thr, idx_start, idx_stop, 100.)
-
-    def test_event_amplitude(self):
-        """Test function event_amplitude."""
-        data, idx_sup_thr, idx_start, idx_stop = self._get_data()
-        _events_amplitude(data, idx_sup_thr, idx_start, idx_stop, 100.)
 
     def test_event_to_index(self):
         """Test function event_to_index."""
