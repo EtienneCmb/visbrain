@@ -120,7 +120,6 @@ class CrossSecObj(_Volume):
         self._sagittal = 0
         self._coronal = 0
         self._axial = 0
-        self._shortcuts['on_mouse_press'] = self._on_mouse_press()
         # __________________________ PARENTS __________________________
         self._im_node = scene.Node(name='Im_', parent=self._node)
         self._loc_node = scene.Node(name='Loc_', parent=self._node)
@@ -234,7 +233,7 @@ class CrossSecObj(_Volume):
         """
         # Convert position into slice :
         sl = self.pos_to_slice(xyz)
-        # logger.info("Center cross-sections at position %s" % str(xyz))
+        logger.info("Center cross-sections at position %s" % str(xyz))
         # Set image slices :
         self.sagittal = int(sl[0])
         self.coronal = int(sl[1])
