@@ -1082,7 +1082,7 @@ class CanvasShortcuts(object):
                 self._chan.node[idx].transform = transform
 
         @canvas.events.mouse_wheel.connect
-        def on_mouse_wheek(event):
+        def on_mouse_wheel(event):
             pass
 
 
