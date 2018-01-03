@@ -42,7 +42,7 @@ class TestVectorObj(_TestObjects):
 
     def test_attributes(self):
         """Test function connect_attributes."""
-        from visbrain.visuals.arrow import ARROW_TYPES
+        from vispy.visuals.line.arrow import ARROW_TYPES
         self.assert_and_test('line_width', 4.4)
         for k in ARROW_TYPES:
             self.assert_and_test('arrow_type', k)
