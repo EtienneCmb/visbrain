@@ -708,54 +708,6 @@ class Hypnogram(object):
             data[datac == k] = self._hconvinv[k]
         return data
 
-    def pos_to_gui(self, pos):
-        """Convert a position array.
-
-        Parameters
-        ----------
-        pos : array_like, int
-            Array of positions of shape (n_pos, 3) where the three
-            components are (time, y, z). Pos will also be converted if it's
-            a integer or float.
-
-        Returns
-        -------
-        pos : array_like, int
-            The converted position array/integer.
-        """
-        if isinstance(pos, np.ndarray):
-            y = pos[:, 1]
-            # Convert each y-value :
-            for k in range(len(y)):
-                y[k] = -self._hconv[-int(y[k])]
-            return pos.astype(np.float32)
-        elif isinstance(pos, (int, float)):
-            return -self._hconv[-int(pos)]
-
-    def pos_to_gui_inv(self, pos):
-        """Convert a position array.
-
-        Parameters
-        ----------
-        pos : array_like, int
-            Array of positions of shape (n_pos, 3) where the three
-            components are (time, y, z). Pos will also be converted if it's
-            a integer or float.
-
-        Returns
-        -------
-        pos : array_like, int
-            The converted position array/integer.
-        """
-        if isinstance(pos, np.ndarray):
-            y = pos[:, 1]
-            # Convert each y-value :
-            for k in range(len(y)):
-                y[k] = -self._hconvinv[-int(y[k])]
-            return pos.astype(np.float32)
-        elif isinstance(pos, (int, float)):
-            return -self._hconvinv[-int(pos)]
-
     def clean(self, sf, time):
         """Clean indicators."""
         # Mesh :
