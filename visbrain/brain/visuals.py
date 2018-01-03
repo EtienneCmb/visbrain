@@ -100,6 +100,7 @@ class Visuals(object):
         self.cross_sec.text_size = 2.
         self.cross_sec.parent = self._csView.wc.scene
         self._csView.camera = self.cross_sec._get_camera()
+        self.cross_sec.set_shortcuts_to_canvas(self._csView)
         PROFILER("Cross-sections object", level=1)
 
         # ========================= BRAIN =========================
