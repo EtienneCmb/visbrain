@@ -10,8 +10,8 @@ from vispy import gloo, visuals
 from vispy.visuals.shaders import Function
 from vispy.scene.visuals import create_visual_node
 
-from visbrain.io import is_opengl_installed
 from visbrain.utils import vispy_array, wrap_properties, color2vb, transient
+# from visbrain.io import is_opengl_installed
 
 
 __all__ = ('Hypnogram')
@@ -209,13 +209,15 @@ class HypogramVisual(visuals.Visual):
 
     def _prepare_draw(self, view=None):
         """Function called everytime there's a camera update."""
-        if is_opengl_installed():
+        try:
             import OpenGL.GL as GL
             GL.glLineWidth(self._line_width)
             if self._antialias:
                 GL.glEnable(GL.GL_LINE_SMOOTH)
             else:
                 GL.glDisable(GL.GL_LINE_SMOOTH)
+        except:
+            pass
 
     def min_visual(self):
         return min(self.art_visual, self.wake_visual, self.rem_visual,
@@ -520,10 +522,8 @@ class HypogramVisual(visuals.Visual):
     @wrap_properties
     def line_width(self, value):
         """Set line_width value."""
-        if is_opengl_installed() and isinstance(value, (int, float)):
-            import OpenGL.GL as GL
-            GL.glLineWidth(max(value, 1.))
-            self._line_width = value
+        assert isinstance(value, (int, float))
+        self._line_width = value
 
     # ----------- ANTIALIAS -----------
     @property
@@ -534,14 +534,8 @@ class HypogramVisual(visuals.Visual):
     @antialias.setter
     def antialias(self, value):
         """Set antialias value."""
-        if is_opengl_installed() and isinstance(value, bool):
-            import OpenGL.GL as GL
-            GL.glLineWidth(self._line_width)
-            if value:
-                GL.glEnable(GL.GL_LINE_SMOOTH)
-            else:
-                GL.glDisable(GL.GL_LINE_SMOOTH)
-            self._antialias = value
+        assert isinstance(value, bool)
+        self._antialias = value
 
     # ----------- UNICOLOR -----------
     @property
