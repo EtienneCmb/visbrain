@@ -1,5 +1,4 @@
 """Visual objects."""
-from .arrow import Arrow
 from .BrainVisual import BrainMesh
 from .cbar import *
 from .GridSignalVisual import GridSignal

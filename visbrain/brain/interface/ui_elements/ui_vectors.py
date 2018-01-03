@@ -1,7 +1,7 @@
 """GUI interactions with pictures."""
+from vispy.visuals.line.arrow import ARROW_TYPES
 
 from .ui_objects import _run_method_if_needed
-from ....visuals.arrow import ARROW_TYPES
 
 
 class UiVectors(object):
