@@ -10,7 +10,9 @@ NEEDED_FILES = dict(ANNOT_FILE_1='lh.aparc.annot',
                     ANNOT_FILE_2='rh.PALS_B12_Brodmann.annot',
                     MEG_INVERSE='meg_source_estimate-lh.stc',
                     OVERLAY_1='lh.sig.nii.gz',
-                    OVERLAY_2='lh.alt_sig.nii.gz'
+                    OVERLAY_2='lh.alt_sig.nii.gz',
+                    PARCELLATES_1='lh.aparc.a2009s.annot',
+                    PARCELLATES_2='rh.aparc.annot'
                     )
 
 # BRAIN :
@@ -50,7 +52,7 @@ class TestBrainObj(_TestObjects):
 
     def test_definition(self):
         """Test function definition."""
-        BrainObj('B1')
+        BrainObj('inflated', sulcus=True)
         # Test default templates :
         for k, i in zip(['B1', 'B2', 'B3'], ['left', 'both', 'right']):
             b_obj.set_data(name=k, hemisphere=i)
@@ -87,6 +89,16 @@ class TestBrainObj(_TestObjects):
         b_obj.add_activation(data=data, vertices=vertices, smoothing_steps=3)
         b_obj.add_activation(data=data, vertices=vertices, smoothing_steps=5,
                              clim=(13., 22.), hide_under=13., cmap='plasma')
+
+    def test_parcellize(self):
+        """Test function parcellize."""
+        file_1 = self.need_file(NEEDED_FILES['PARCELLATES_1'])
+        file_2 = self.need_file(NEEDED_FILES['PARCELLATES_2'])
+        b_obj.parcellize(file_1, hemisphere='left')
+        select = ['insula', 'paracentral', 'precentral']
+        data = np.arange(len(select))
+        b_obj.parcellize(file_2, hemisphere='right', select=select, data=data,
+                         cmap='Spectral_r')
 
     def test_projection(self):
         """Test cortical projection and repartition."""
