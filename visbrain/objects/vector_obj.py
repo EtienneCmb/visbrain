@@ -3,11 +3,11 @@ import logging
 import numpy as np
 
 from vispy import scene
+from vispy.scene.visuals import Arrow
+from vispy.visuals.line.arrow import ARROW_TYPES
 
 from .visbrain_obj import VisbrainObject, CombineObjects
 from ..utils import array2colormap, color2vb, wrap_properties, normalize
-from ..visuals import Arrow
-from ..visuals.arrow import ARROW_TYPES
 
 
 logger = logging.getLogger('visbrain')
