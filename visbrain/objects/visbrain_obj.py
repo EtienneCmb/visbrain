@@ -6,7 +6,7 @@ import vispy
 import vispy.visuals.transforms as vist
 
 from .scene_obj import VisbrainCanvas
-from ..io import write_fig_canvas
+from ..io import write_fig_canvas, dialog_save
 from ..utils import color2vb, set_log_level, merge_cameras
 from ..config import CONFIG
 from ..visuals import CbarBase
@@ -14,12 +14,51 @@ from ..visuals import CbarBase
 logger = logging.getLogger('visbrain')
 
 
-class _VisbrainObj(CbarBase):
+class _VisbrainShortcuts(object):
+    """Add shortcuts to a canvas."""
+
+    def __init__(self):
+        """Init."""
+        self.key_press = {}
+        self.events = ['mouse_release', 'mouse_double_click', 'mouse_move',
+                       'mouse_press']
+
+    def set_shortcuts_to_canvas(self, canvas):
+        """Set shortcuts to a VisbrainCanvas."""
+        assert isinstance(canvas, VisbrainCanvas)
+        self.canvas = canvas
+        ce = canvas.canvas.events  # noqa
+        for k in self.events:
+            if hasattr(self, '_on_' + k):
+                eval('ce.%s.connect(self._on_%s())' % (k, k))
+        # Key-pressed :
+
+        def _save_canvas(event):
+            from PyQt5.QtWidgets import QWidget
+            ext = ['png', 'tiff', 'jpg']
+            _ext = ['%s file (*.%s)' % (k.upper(), k) for k in ext]
+            _ext += ['All files (*.*)']
+            saveas = dialog_save(QWidget(), name='Export the scene',
+                                 default='canvas.png', allext=_ext)
+            if saveas:
+                write_fig_canvas(saveas, self.canvas.canvas,
+                                 widget=self.canvas.canvas.central_widget)
+        self.key_press['s'] = _save_canvas
+
+        def _fcn_key_press(event):
+            """Key pressed."""
+            if event.text in self.key_press.keys():
+                self.key_press[event.text](event)
+        ce.key_press.connect(_fcn_key_press)
+
+
+class _VisbrainObj(CbarBase, _VisbrainShortcuts):
     """Class for VisbrainObjects and CombineObjects."""
 
     def __init__(self, **kw):
         """Init."""
         CbarBase.__init__(self, **kw)
+        _VisbrainShortcuts.__init__(self)
         self._cbar_data = None
         self._default_cblabel = ''
         self._minmax = None
@@ -85,16 +124,10 @@ class VisbrainObject(_VisbrainObj):
                                 bgcolor=color2vb(bgcolor), camera=camera,
                                 shortcuts=self._shortcuts, **kwargs)
         self._csize = canvas.canvas.size
-        self.canvas = canvas
+        self.set_shortcuts_to_canvas(canvas)
         if not hasattr(self._node.parent, 'name'):
             self._node.parent = canvas.wc.scene
         return canvas
-
-    def set_shortcuts_to_canvas(self, canvas):
-        assert isinstance(canvas, VisbrainCanvas)
-        #################################################################################################
-        self.canvas = canvas
-        VisbrainShortcuts.__init__(self, canvas)
 
     def preview(self, bgcolor='white', axis=False, xyz=False, show=True,
                 obj=None, **kwargs):
