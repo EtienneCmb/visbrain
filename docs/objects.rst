@@ -20,6 +20,7 @@ Here's the list of currently supported modules :
 * :ref:`CSObj`
 * :ref:`ImageObj`
 * :ref:`TFObj`
+* :ref:`HypnoObj`
 
 Each object inherit to the following methods :
 
@@ -341,6 +342,32 @@ Time-frequency map object
         ~TimeFrequencyObj.set_data
 
 .. include:: generated/visbrain.objects.TimeFrequencyObj.examples
+.. raw:: html
+
+    <div style='clear:both'></div>
+
+
+.. _HypnoObj:
+
+Hypnogram object
+----------------
+
+.. figure::  picture/picobjects/pic_hypno_obj.png
+   :align:   center
+
+   Hypnogram object example
+
+.. currentmodule:: visbrain.objects
+
+.. autoclass:: HypnogramObj
+  :members: set_stage
+
+    .. rubric:: Methods
+
+    .. autosummary::
+        ~HypnogramObj.set_stage
+
+.. include:: generated/visbrain.objects.HypnogramObj.examples
 .. raw:: html
 
     <div style='clear:both'></div>
