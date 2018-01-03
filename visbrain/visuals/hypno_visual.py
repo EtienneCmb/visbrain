@@ -11,11 +11,13 @@ from vispy.visuals.shaders import Function
 from vispy.scene.visuals import create_visual_node
 
 from visbrain.io import is_opengl_installed
-from visbrain.utils import vispy_array, wrap_properties, color2vb
+from visbrain.utils import vispy_array, wrap_properties, color2vb, transient
 
 
 __all__ = ('Hypnogram')
 
+
+STAGES = ['art', 'wake', 'rem', 'n1', 'n2', 'n3']
 
 vec2to4 = Function("""
     vec4 vec2to4(vec2 inp) {
@@ -27,11 +29,12 @@ vertex_shader = """
 #version 120
 varying vec4 pos;
 varying vec4 v_color;
+float pos_y;
 
 void main() {
 
+    // Position conversion :
     pos = $to_vec4($position);
-
     if (pos.y == $u_art){ // ART
         pos.y = $u_art_visual;
         v_color = $u_art_color;
@@ -56,6 +59,17 @@ void main() {
         pos.y = $u_n3_visual;
         v_color = $u_n3_color;
     }
+
+    // Color conversion :
+    if ($transient != 10.){
+        v_color = vec4(.95, .95, .95, 1.);
+    }
+
+    // Uniform color :
+    if ($u_unicolor == 1){
+        v_color = vec4(0., 0., 0., 1.);
+    }
+
     gl_Position = $transform(pos);
 }
 """
@@ -75,6 +89,22 @@ class HypogramVisual(visuals.Visual):
 
     Parameters
     ----------
+    data : array_like
+        Array of data of shape (n_pts,).
+    time : array_like | None
+        Array of time points of shape (n_pts,)
+    art, wake, rem, n1, n2, n3 :
+        Stage identification inside the data array.
+    art_visual, wake_visual, rem_visual, n1_visual, n2_visual, n3_visual :
+        Stage order when plotting.
+    art_color, wake_color, rem_color, n1_color, n2_color, n3_color :
+        Stage color.
+    line_width : float | 2.
+        Line with of the hypnogram.
+    antialias : bool | False
+        Use anti-aliasing line.
+    unicolor : bool | False
+        Use a uni black color for the hypnogram.
     """
 
     def __len__(self):
@@ -85,21 +115,24 @@ class HypogramVisual(visuals.Visual):
                  rem=4, art_visual=1, wake_visual=0, rem_visual=-1,
                  n1_visual=-2, n2_visual=-3, n3_visual=-4, art_color='#8bbf56',
                  wake_color='#56bf8b', rem_color='#bf5656', n1_color='#aabcce',
-                 n2_color='#405c79', n3_color='#0b1c2c', line_width=2.):
+                 n2_color='#405c79', n3_color='#0b1c2c', line_width=2.,
+                 antialias=False, unicolor=False):
         """Init."""
         # =========================== VISUALS ===========================
         visuals.Visual.__init__(self, vertex_shader, fragment_shader)
-
-        self.set_gl_state('translucent', depth_test=True, cull_face=False,
-                          blend=True, blend_func=('src_alpha',
-                                                  'one_minus_src_alpha'))
         self._draw_mode = 'line_strip'
 
         # =========================== BUFFERS ===========================
-        pos = np.random.rand(1, 2).astype(np.float32)
-        self._position = gloo.VertexBuffer(pos)
-        self.shared_program.vert['position'] = self._position
+        pos_2 = np.random.rand(1, 2).astype(np.float32)
+        pos_1 = np.random.rand(1).astype(np.float32)
+        self._position_vbo = gloo.VertexBuffer(pos_2)
+        self._transient_vbo = gloo.VertexBuffer(pos_1)
+        self.shared_program.vert['position'] = self._position_vbo
+        self.shared_program.vert['transient'] = self._transient_vbo
         self._program.vert['to_vec4'] = vec2to4
+        self.line_width = line_width
+        self.antialias = antialias
+        self.unicolor = unicolor
         # Stage :
         self.art = art
         self.wake = wake
@@ -123,14 +156,18 @@ class HypogramVisual(visuals.Visual):
         self.n3_color = n3_color
 
         # Set data :
-        self.set_data(data, time, line_width)
+        self.set_data(data, time)
         self.freeze()
 
-    def set_data(self, data, time=None, line_width=None):
+    def set_data(self, data, time=None):
         """Set data to the grid of signals.
 
         Parameters
         ----------
+        data : array_like
+            Array of data of shape (n_pts,).
+        time : array_like | None
+            Array of time points of shape (n_pts,)
         """
         data = np.asarray(data)
         assert data.ndim == 1
@@ -138,11 +175,31 @@ class HypogramVisual(visuals.Visual):
         time = np.arange(len(data)) if time is None else np.asarray(time)
         assert len(time) == len(self)
 
-        self.line_width = line_width
+        # Transient detection :
+        self.transient = data
 
         #
-        data_time = vispy_array(np.c_[time, data])
-        self._position.set_data(data_time)
+        self._pos = vispy_array(np.c_[time, data])
+        self._position_vbo.set_data(self._pos)
+
+    def set_stage(self, stage, idx_start, idx_end):
+        """Set stage.
+
+        Parameters
+        ----------
+        stage : str, int
+            Stage to define. Should either be a string (e.g 'art', 'rem'...) or
+            an integer.
+        idx_start : int
+            Index where the stage begin.
+        idx_end : int
+            Index where the stage finish.
+        """
+        if isinstance(stage, str):
+            assert stage in STAGES
+            stage = eval('self.%s' % stage)
+        self._pos[idx_start:idx_end, 1] = stage
+        self.transient = self._pos[:, 1]
 
     def _prepare_transforms(self, view):
         """Call for the first rendering."""
@@ -152,22 +209,39 @@ class HypogramVisual(visuals.Visual):
 
     def _prepare_draw(self, view=None):
         """Function called everytime there's a camera update."""
-        pass
-        # try:
-        #     import OpenGL.GL as GL
-        #     GL.glLineWidth(self._width)
-        #     if self._smooth_line:
-        #         GL.glEnable(GL.GL_LINE_SMOOTH)
-        #     else:
-        #         GL.glDisable(GL.GL_LINE_SMOOTH)
-        # except Exception:  # can be other than ImportError sometimes
-        #     pass
+        if is_opengl_installed():
+            import OpenGL.GL as GL
+            GL.glLineWidth(self._line_width)
+            if self._antialias:
+                GL.glEnable(GL.GL_LINE_SMOOTH)
+            else:
+                GL.glDisable(GL.GL_LINE_SMOOTH)
+
+    def min_visual(self):
+        return min(self.art_visual, self.wake_visual, self.rem_visual,
+                   self.n1_visual, self.n2_visual, self.n3_visual)
+
+    def max_visual(self):
+        return max(self.art_visual, self.wake_visual, self.rem_visual,
+                   self.n1_visual, self.n2_visual, self.n3_visual)
 
     # ========================================================================
     # ========================================================================
     # PROPERTIES
     # ========================================================================
     # ========================================================================
+    # ----------- TIME -----------
+    @property
+    def time(self):
+        """Get the time value."""
+        return self._pos[:, 0]
+
+    # ----------- DATA -----------
+    @property
+    def data(self):
+        """Get the data value."""
+        return self._pos[:, 1]
+
     # ----------- ART -----------
     @property
     def art(self):
@@ -420,6 +494,22 @@ class HypogramVisual(visuals.Visual):
         self.shared_program.vert['u_n3_color'] = color
         self._n3_color = color
 
+    # ----------- TRANSIENT -----------
+    @property
+    def transient(self):
+        """Get the transient value."""
+        return self._transient
+
+    @transient.setter
+    def transient(self, value):
+        """Set transient value."""
+        assert isinstance(value, np.ndarray) and len(value) == len(self)
+        self._transient = np.full((len(self),), 10., dtype=np.float32)
+        idx = transient(value)[0]
+        idx_double = np.r_[idx, idx + 1]
+        self._transient[idx_double] = value[idx_double]
+        self._transient_vbo.set_data(self._transient)
+
     # ----------- LINE_WIDTH -----------
     @property
     def line_width(self):
@@ -435,26 +525,35 @@ class HypogramVisual(visuals.Visual):
             GL.glLineWidth(max(value, 1.))
             self._line_width = value
 
+    # ----------- ANTIALIAS -----------
+    @property
+    def antialias(self):
+        """Get the antialias value."""
+        return self._antialias
+
+    @antialias.setter
+    def antialias(self, value):
+        """Set antialias value."""
+        if is_opengl_installed() and isinstance(value, bool):
+            import OpenGL.GL as GL
+            GL.glLineWidth(self._line_width)
+            if value:
+                GL.glEnable(GL.GL_LINE_SMOOTH)
+            else:
+                GL.glDisable(GL.GL_LINE_SMOOTH)
+            self._antialias = value
+
+    # ----------- UNICOLOR -----------
+    @property
+    def unicolor(self):
+        """Get the unicolor value."""
+        return self._unicolor
+
+    @unicolor.setter
+    def unicolor(self, value):
+        """Set unicolor value."""
+        assert isinstance(value, bool)
+        self.shared_program.vert['u_unicolor'] = int(value)
+        self._unicolor = value
 
 Hypnogram = create_visual_node(HypogramVisual)  # noqa
-
-
-if __name__ == '__main__':
-    from vispy import scene, app
-    from visbrain.objects.scene_obj import VisbrainCanvas
-
-    data = np.repeat(np.arange(6), 100) - 1.
-    time = np.arange(len(data)) / 1024.
-    print(data.min(), data.max())
-
-    rect = (time.min(), -4.5, time.max(), 6)
-    cam = scene.cameras.PanZoomCamera(rect=rect)
-
-    vb = VisbrainCanvas(axis=True, show=True, camera=cam)
-
-    h = Hypnogram(data, time=time, parent=vb.wc.scene, line_width=10.)
-    # h = scene.visuals.Line(np.c_[time, data])
-    # h.parent = vb.parent
-
-    # can.show()
-    app.run()
