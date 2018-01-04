@@ -27,6 +27,24 @@ class TestSleep(_TestVisbrain):
     """Test sleep.py."""
 
     ###########################################################################
+    #                                TOOLS
+    ###########################################################################
+    def test_reference_switch(self):
+        """Test function reference_switch."""
+        for k in [2]:  # range(3)
+            sp._ToolsRefMeth.setCurrentIndex(k)
+            sp._fcn_ref_switch()
+            sp._fcn_ref_apply()
+        sp._fcn_ref_chan_ignore()
+
+    def test_signal_processing(self):
+        """Test function signal_processing."""
+        sp._fcn_sig_processing()
+        sp._SigMean.setChecked(True)
+        sp._SigTrend.setChecked(True)
+        sp._fcn_sig_processing()
+
+    ###########################################################################
     #                                    GUI
     ###########################################################################
     def test_ui_detections(self):
