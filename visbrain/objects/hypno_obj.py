@@ -63,7 +63,7 @@ class HypnogramObj(VisbrainObject):
         file, ext = os.path.splitext(name)
         if ext in ['.csv', '.txt', '.hyp']:
             data, sf = read_hypno(name)
-            name, time = file, np.arange(len(data)) / sf
+            name, time = os.path.split(name)[1], np.arange(len(data)) / sf
         # Initialize VisbrainObject and Hypnogram visuam creation :
         VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)
         self.line = Hypnogram(data, time, art, wake, n1, n2, n3, rem,
