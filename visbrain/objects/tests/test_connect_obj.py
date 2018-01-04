@@ -36,10 +36,6 @@ class TestConnectObj(_TestObjects):
         ConnectObj('C1', nodes, edges, dynamic=(.1, .4))
         ConnectObj('C2', nodes, edges, custom_colors=custom_colors)
 
-    def test_preview(self):
-        """Test function preview."""
-        c_obj.preview(show=False, axis=False)
-
     def test_builtin_methods(self):
         """Test function connect_builtin_methods."""
         custom_colors[None] = 'blue'

@@ -29,14 +29,12 @@ class UiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas):
 class TimeAxis(object):
     """Create a unique time axis."""
 
-    def __init__(self, axis=True, x_label='', x_heightmax=40,
-                 font_size=12, color='white', title='', axis_label_margin=50,
-                 tick_label_margin=5, name='', bgcolor=(.9, .9, .9), cargs={},
-                 xargs={}, indic_color='darkred', fcn=[]):
+    def __init__(self, axis=True, x_label='', name='', bgcolor=(1., 1., 1.),
+                 indic_color='darkred', fcn=[]):
         """Init."""
         # Create the main canvas :
         self.canvas = scene.SceneCanvas(keys=None, bgcolor=bgcolor,
-                                        show=False, title=name, **cargs)
+                                        show=False)
         _ = [self.canvas.connect(k) for k in fcn]  # noqa
 
         # Create a grid :
@@ -44,16 +42,15 @@ class TimeAxis(object):
         grid.spacing = 0
 
         # Add x-axis :
-        self.xaxis = scene.AxisWidget(orientation='bottom', axis_label=x_label,
-                                      axis_font_size=font_size,
-                                      axis_label_margin=axis_label_margin,
-                                      tick_label_margin=tick_label_margin,
-                                      **xargs)
-        self.xaxis.height_max = x_heightmax
-        grid.add_widget(self.xaxis, row=1, col=0)
+        self.xaxis = scene.AxisWidget(orientation='bottom', text_color='black')
+        if axis:
+            pad = grid.add_widget(row=0, col=0)
+            pad.width_max = 50
+        _col = int(axis)
+        grid.add_widget(self.xaxis, row=1, col=_col)
 
         # Main plot :
-        self.wc = grid.add_view(row=0, col=0, border_color=color)
+        self.wc = grid.add_view(row=0, col=_col, border_color='black')
 
         # Add a square indicator :
         image = color2vb(indic_color)[np.newaxis, ...]
@@ -110,86 +107,53 @@ class TimeAxis(object):
 class AxisCanvas(object):
     """Create a canvas with an embeded axis."""
 
-    def __init__(self, axis=True, x_label='', x_heightmax=40, y_label='',
-                 y_widthmax=80, font_size=14, color='white', title='',
-                 axis_label_margin=50, tick_label_margin=5, name='',
-                 bgcolor=(.9, .9, .9), cargs={}, xargs={}, yargs={}, fcn=[]):
+    def __init__(self, axis=True, x_label='', name='', use_pad=False,
+                 bgcolor='white', fcn=[]):
         """Init."""
         # Save variables :
         self._axis = axis
-        self._title = title
-        self._xlabel = x_label
-        self._ylabel = y_label
 
         # Create the main canvas :
-        self.canvas = scene.SceneCanvas(keys=None, bgcolor=bgcolor,
-                                        show=False, title=name, **cargs)
+        self.canvas = scene.SceneCanvas(keys=None, bgcolor=bgcolor, show=False,
+                                        title=name)
         _ = [self.canvas.connect(k) for k in fcn]  # noqa
 
         # Add axis :
         if axis:
             # Create a grid :
             grid = self.canvas.central_widget.add_grid(margin=0)
-            grid.spacing = 0
 
             # Add y-axis :
-            self.yaxis = scene.AxisWidget(orientation='left', domain=(0, 129),
-                                          axis_label=y_label,
-                                          axis_font_size=font_size,
-                                          axis_label_margin=axis_label_margin,
-                                          tick_label_margin=tick_label_margin,
-                                          **yargs)
-            self.yaxis.width_max = y_widthmax
-            grid.add_widget(self.yaxis, row=0, col=0)
-
-            # Add x-axis :
-            self.xaxis = scene.AxisWidget(orientation='bottom',
-                                          axis_label=x_label,
-                                          axis_font_size=font_size,
-                                          axis_label_margin=axis_label_margin,
-                                          tick_label_margin=tick_label_margin,
-                                          **xargs)
-            self.xaxis.height_max = x_heightmax
-            grid.add_widget(self.xaxis, row=1, col=1)
+            if use_pad:
+                pad = grid.add_widget(row=1, col=0)
+                pad.width_max = 50
+            else:
+                self.yaxis = scene.AxisWidget(orientation='left',
+                                              text_color='black')
+                self.yaxis.width_max = 50
+                grid.add_widget(self.yaxis, row=1, col=0)
 
             # Add right padding :
-            self._rpad = grid.add_widget(row=0, col=2, row_span=1)
-            self._rpad.width_max = 50
+            bottom_pad = grid.add_widget(row=2, col=0, row_span=1)
+            bottom_pad.height_max = 10
+            top_pad = grid.add_widget(row=0, col=0, row_span=1)
+            top_pad.height_max = 10
 
             # Main plot :
-            self.wc = grid.add_view(row=0, col=1, border_color=color)
+            self.wc = grid.add_view(row=1, col=1, border_color='white')
         # Ignore axis :
         else:
             self.wc = self.canvas.central_widget.add_view()
 
     def set_camera(self, camera):
         """Set a camera and link all objects inside."""
-        # Set camera to the main widget :
-        self.wc.camera = camera
         # Link transformations with axis :
-        if self._axis:
-            self.xaxis.link_view(self.wc)
+        self.wc.camera = camera
+        if hasattr(self, 'yaxis'):
             self.yaxis.link_view(self.wc)
-
-    def set_info(self, title=None, xlabel=None, ylabel=None):
-        """Set title and labels for the axis of the canvas."""
-        # Set label / title only for grid axis :
-        if self._axis:
-            # X-label :
-            if xlabel is not None:
-                self.xaxis.axis.axis_label = xlabel
-                self.xaxis.update()
-            # Y-label :
-            if ylabel is not None:
-                self.yaxis.axis.axis_label = ylabel
-                self.yaxis.update()
-            self.canvas.update()
-        else:
-            raise ValueError("For defining infos, you must use an axis canvas")
 
     def visible_axis(self, visible=True):
         """Display or hide the axis."""
         self._axis = visible
-        self.xaxis.visible = visible
         self.yaxis.visible = visible
         self._rpad.visible = visible

@@ -191,7 +191,7 @@ class BrainUserMethods(object):
         config : string
             File name of the configuration file.
         """
-        self._fcn_loadConfig('', filename=config)
+        self._fcn_load_config('', filename=config)
 
     def save_config(self, config):
         """Save a configuration file.
@@ -201,7 +201,7 @@ class BrainUserMethods(object):
         config : string
             File name of the configuration file.
         """
-        self._fcn_saveConfig('', filename=config)
+        self._fcn_save_config('', filename=config)
 
     # =========================================================================
     # =========================================================================

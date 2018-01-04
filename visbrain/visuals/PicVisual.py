@@ -164,7 +164,7 @@ class PicVisual(visuals.Visual):
                 q += 2
         # Repeat indices for each map :
         select = np.zeros((self.n, nr, nc), dtype=int)
-        l = index.shape[0]
+        l = index.shape[0]  # noqa
         idx = np.zeros((self.n * l, 3), dtype=np.uint32)
         for k in range(self.n):
             idx[k * l:(k + 1) * l, :] = index + k * (nr * nc)

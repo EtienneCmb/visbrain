@@ -5,14 +5,13 @@ import vispy.scene.cameras as viscam
 
 from .interface import UiInit, UiElements
 from .visuals import Visuals
-from .tools import Tools
 from ..pyqt_module import PyQtModule
 from ..utils import (FixedCam, color2vb, MouseEventControl)
 from ..io import ReadSleepData
 from ..config import PROFILER
 
 
-class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements, Tools,
+class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
             MouseEventControl):
     """Visualize and edit sleep data.
 
@@ -49,16 +48,9 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements, Tools,
     axis : bool | False
         Specify if each axis have to contains its own axis. Be carefull
         with this option, the rendering can be much slower.
-    line : string | 'gl'
-        Specify the line rendering. Use 'gl' for the default line (fast) or
-        'agg' for smooth lines. This option might not works on some
-        plateforms.
-    hedit : bool | False
-        Enable the drag and drop hypnogram edition.
     href : list | ['art', 'wake', 'rem', 'n1', 'n2', 'n3']
         List of sleep stages. This list can be used to changed the display
         order into the GUI.
-    ..versionadded:: 0.3.4
     preload : bool | True
         Preload data into memory. For large datasets, turn this parameter to
         True.
@@ -84,8 +76,7 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements, Tools,
 
     def __init__(self, data=None, hypno=None, config_file=None,
                  annotations=None, channels=None, sf=None, downsample=100.,
-                 axis=False, line='gl', hedit=False,
-                 href=['art', 'wake', 'rem', 'n1', 'n2', 'n3'],
+                 axis=True, href=['art', 'wake', 'rem', 'n1', 'n2', 'n3'],
                  preload=True, use_mne=False, kwargs_mne={}, verbose=None):
         """Init."""
         PyQtModule.__init__(self, verbose=verbose, icon='sleep_icon.svg')
@@ -110,9 +101,7 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements, Tools,
         self._annot_mark = np.array([])
         self._hconvinv = {v: k for k, v in self._hconv.items()}
         self._ax = axis
-        self._enabhypedit = hedit
         # ---------- Default line width ----------
-        self._linemeth = line
         self._lw = 1.
         self._lwhyp = 2
         self._defwin = 30.
@@ -161,10 +150,6 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements, Tools,
         PROFILER("Initialize visual elements", as_type='title')
         Visuals.__init__(self)
 
-        # ====================== TOOLS ======================
-        Tools.__init__(self)
-        PROFILER("Initialize tools")
-
         # ====================== FUNCTIONS ON LOAD ======================
         self._fcns_on_creation()
         PROFILER("Functions on creation")
@@ -189,9 +174,10 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements, Tools,
     def _set_default_state(self):
         """Set the default window state."""
         # ================= TAB =================
-        self.toolBox.setCurrentIndex(1)
-        self.toolBox_2.setCurrentIndex(0)
         self._DetectionTab.setCurrentIndex(0)
+        self._stacked_panels.setCurrentIndex(0)
+        self._stacked_tools.setCurrentIndex(0)
+        self._stacked_detections.setCurrentIndex(0)
 
     def _cam_creation(self):
         """Create a set of cameras."""
@@ -218,19 +204,20 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements, Tools,
 
     def _fcns_on_creation(self):
         """Applied on creation."""
-        self._fcn_sliderMove()
+        self._fcn_grid_toggle()
+        self._fcn_slider_move()
         self._chanChecks[0].setChecked(True)
         self._hypLabel.setVisible(self.menuDispHypno.isChecked())
-        self._fcn_chanViz()
-        self._fcn_chanSymAmp()
-        self._fcn_infoUpdate()
-        self._fcn_Hypno2Score()
+        self._fcn_chan_viz()
+        self._fcn_chan_sym_amp()
+        self._fcn_info_update()
+        self._fcn_hypno_to_score()
         # Set objects visible :
         self._SpecW.setVisible(True)
         self._HypW.setVisible(True)
         self._TimeAxisW.setVisible(True)
         # File to load :
         if self._config_file is not None:  # Config file
-            self.loadConfig(filename=self._config_file)
+            self._load_config(filename=self._config_file)
         if self._annot_file is not None:   # Annotation file
-            self.loadAnnotationTable(filename=self._annot_file)
+            self._load_annotation_table(filename=self._annot_file)

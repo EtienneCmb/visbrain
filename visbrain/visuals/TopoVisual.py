@@ -98,7 +98,7 @@ class TopoMesh(object):
         self._interp = .1
         self._pix = 64
         csize = int(self._pix / self._interp) if self._interp else self._pix
-        l = csize / 2
+        l = csize / 2  # noqa
 
         # ======================== NODES ========================
         # Main topoplot node :
@@ -306,7 +306,7 @@ class TopoMesh(object):
             grid = self._grid_interpolation(grid)
         csize = max(self._pix, grid.shape[0])
         # Variables :
-        l = csize / 2
+        l = csize / 2  # noqa
         y, x = np.ogrid[-l:l, -l:l]
         mask = x**2 + y**2 < l**2
         nmask = np.invert(mask)

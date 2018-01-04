@@ -13,7 +13,7 @@ class UiInfo(object):
         """Init."""
         pass
 
-    def _fcn_infoUpdate(self):
+    def _fcn_info_update(self):
         """Complete the table sleep info."""
         table = self._infoTable
         # Get sleep stats :

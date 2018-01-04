@@ -20,8 +20,7 @@ Here's the list of currently supported modules :
 * :ref:`CSObj`
 * :ref:`ImageObj`
 * :ref:`TFObj`
-* :ref:`SpecObj`
-* :ref:`MTObj`
+* :ref:`HypnoObj`
 
 Each object inherit to the following methods :
 
@@ -334,67 +333,41 @@ Time-frequency map object
 
 .. currentmodule:: visbrain.objects
 
-.. autoclass:: TimeFrequencyMapObj
+.. autoclass:: TimeFrequencyObj
   :members: set_data
 
     .. rubric:: Methods
 
     .. autosummary::
-        ~TimeFrequencyMapObj.set_data
+        ~TimeFrequencyObj.set_data
 
-.. include:: generated/visbrain.objects.TimeFrequencyMapObj.examples
+.. include:: generated/visbrain.objects.TimeFrequencyObj.examples
 .. raw:: html
 
     <div style='clear:both'></div>
 
 
-.. _SpecObj:
+.. _HypnoObj:
 
-Spectrogram object
-------------------
+Hypnogram object
+----------------
 
-.. figure::  picture/picobjects/pic_spec_obj.png
+.. figure::  picture/picobjects/pic_hypno_obj.png
    :align:   center
 
-   Spectrogram object example
+   Hypnogram object example
 
 .. currentmodule:: visbrain.objects
 
-.. autoclass:: SpectrogramObj
-  :members: set_data
+.. autoclass:: HypnogramObj
+  :members: set_stage
 
     .. rubric:: Methods
 
     .. autosummary::
-        ~SpectrogramObj.set_data
+        ~HypnogramObj.set_stage
 
-.. include:: generated/visbrain.objects.SpectrogramObj.examples
-.. raw:: html
-
-    <div style='clear:both'></div>
-
-
-.. _MTObj:
-
-Multi-taper object
-------------------
-
-.. figure::  picture/picobjects/pic_spec_obj.png
-   :align:   center
-
-   Multi-taper object example
-
-.. currentmodule:: visbrain.objects
-
-.. autoclass:: MultiTaperObj
-  :members: set_data
-
-    .. rubric:: Methods
-
-    .. autosummary::
-        ~MultiTaperObj.set_data
-
-.. include:: generated/visbrain.objects.MultiTaperObj.examples
+.. include:: generated/visbrain.objects.HypnogramObj.examples
 .. raw:: html
 
     <div style='clear:both'></div>

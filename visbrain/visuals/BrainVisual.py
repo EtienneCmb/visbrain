@@ -48,7 +48,7 @@ void main() {
         }
         else if ($a_sulcus == 1.)
         {
-        v_color = vec4(.5, .5, .5, 1.);
+            v_color = vec4(.5, .5, .5, 1.);
         }
     }
     else if ($a_mask == 1.)

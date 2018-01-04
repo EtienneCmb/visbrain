@@ -6,7 +6,7 @@ import numpy as np
 from vispy import scene
 import vispy.visuals.transforms as vist
 
-from ..utils import array2colormap, wrap_properties, color2vb
+from ..utils import array2colormap, wrap_properties, color2vb, FixedCam
 from .volume_obj import _Volume
 
 logger = logging.getLogger('visbrain')
@@ -177,15 +177,9 @@ class CrossSecObj(_Volume):
 
     def _get_camera(self):
         """Get the camera."""
-        cam = scene.cameras.PanZoomCamera(rect=(-1.5, -2., 3., 3.))
-        cam.viewbox_mouse_event = self._mouse_pos
+        # cam = scene.cameras.PanZoomCamera(rect=(-1.5, -2., 3., 3.))
+        cam = FixedCam(rect=(-1.5, -2., 3., 3.))
         return cam
-
-    def _mouse_pos(self, event):
-        if event.type == 'mouse_wheel':
-            pass
-        elif event.type == 'mouse_press':
-            logger.info("Mouse press not configured for cross-sections")
 
     def update(self):
         """Update the root node."""
@@ -251,6 +245,43 @@ class CrossSecObj(_Volume):
         self._im_axial.set_location([sl[1], sl[0]], limits=sh[[1, 0]])
         self._loc_node.visible = True
         self.update()
+
+    def _mouse_to_pos(self, pos):
+        """Convert mouse position to pos."""
+        sh = np.array(self._sh)
+        csize = self.canvas.canvas.size
+        rect = (-1.5, -2., 3., 3.)
+        idx_xy = None
+        # Canvas -> camera conversion :
+        x = +(pos[0] * rect[2] / csize[0]) + rect[0]
+        y = -(pos[1] * rect[3] / csize[1]) - rect[1]
+        if (-1. <= x <= 0.) and (1. <= y):
+            idx_xy, sl_z = [1, 2], self.sagittal
+            x_off, x_lim, y_off, y_lim, y_inv = 1., 0., -1., 0., 1.
+        elif (0. <= x <= 1.) and (1. <= y):
+            idx_xy, sl_z = [0, 2], self.coronal
+            x_off, x_lim, y_off, y_lim, y_inv = 0., 0., -1., 0., 1.
+        elif (-1. <= x <= 1.) and (y <= 1.):
+            idx_xy, sl_z = [1, 0], self.axial
+            x_off, x_lim, y_off, y_lim, y_inv = 1., 1., 1., 1., -1.
+        # Camera -> pos conversion :
+        if idx_xy is None:  # out of picture
+            return None
+        pic = sh[idx_xy]
+        sl_x = (rect[2] * (+x + x_off) * pic[0]) / ((1. + x_lim) * rect[2])
+        sl_y = (rect[3] * (y_inv * y + y_off) * pic[1]) / \
+            ((1. + y_lim) * rect[3])
+        sl_xyz = np.array([sl_z] * 3)
+        sl_xyz[idx_xy] = [sl_x, sl_y]
+        return self.slice_to_pos(sl_xyz)
+
+    def _on_mouse_press(self):
+        def on_mouse_press(event):
+            """Mouse move."""
+            pos = self._mouse_to_pos(event.pos)
+            if pos is not None:
+                self.localize_source(pos)
+        return on_mouse_press
 
     # ----------- SAGITTAL -----------
     @property

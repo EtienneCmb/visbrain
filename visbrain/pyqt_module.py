@@ -6,8 +6,8 @@ import logging
 
 from .utils import set_widget_size, set_log_level
 from .config import PROFILER, CONFIG
-from .io import (is_faulthandler_installed, get_data_path, path_to_tmp,
-                 clean_tmp)
+from .io import (get_data_path, path_to_tmp,
+                 clean_tmp, path_to_visbrain_data)
 
 sip.setdestroyonexit(False)
 logger = logging.getLogger('visbrain')
@@ -32,8 +32,9 @@ class PyQtModule(object):
         """Init."""
         # Log level and profiler creation (if verbose='debug')
         set_log_level(verbose)
+        path_to_visbrain_data()
         self._create_tmp_folder()
-        if (logger.level == 10) and is_faulthandler_installed():
+        if logger.level == 10:
             import faulthandler
             faulthandler.enable()
             logger.debug("Faulthandler enabled")

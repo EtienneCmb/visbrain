@@ -64,7 +64,7 @@ class VisbrainCanvas(object):
                  tick_font_size=10., name=None, x_height_max=80,
                  y_width_max=80, axis_label_margin=50, tick_label_margin=5,
                  rpad=20., bgcolor='white', add_cbar=False, cargs={}, xargs={},
-                 yargs={}, cbargs={}, show=False, camera=None):
+                 yargs={}, cbargs={}, show=False, camera=None, shortcuts={}):
         """Init."""
         self._axis = axis
         self._title = title
@@ -358,10 +358,10 @@ class SceneObj(object):
         logger.info("Scene creation")
         PROFILER('Scene creation')
         # Create the canvas and the grid :
-        self._canvas = scene.SceneCanvas(keys='interactive', show=False,
-                                         title='Object scene',
-                                         bgcolor=color2vb(bgcolor), **kwargs)
-        self._grid = self._canvas.central_widget.add_grid(margin=10)
+        self.canvas = scene.SceneCanvas(keys='interactive', show=False,
+                                        title='Object scene',
+                                        bgcolor=color2vb(bgcolor), **kwargs)
+        self._grid = self.canvas.central_widget.add_grid(margin=10)
         # Padding at (0, 0) :
         _rpad = self._grid.add_widget(row=0, col=0, row_span=1)
         _rpad.width_max = 20
@@ -569,13 +569,13 @@ class SceneObj(object):
                       autocrop=autocrop, unit=unit, region=region,
                       bgcolor=bgcolor, transparent=transparent)
         self._gl_uniform_transforms()
-        write_fig_canvas(saveas, self._canvas,
-                         widget=self._canvas.central_widget, **kwargs)
+        write_fig_canvas(saveas, self.canvas,
+                         widget=self.canvas.central_widget, **kwargs)
 
     def preview(self):
         """Previsualize the result."""
         self._gl_uniform_transforms()
-        self._canvas.show(visible=True)
+        self.canvas.show(visible=True)
         if PROFILER and logger.level == 1:
             logger.profiler("PARENT TREE \n%s" % self._grid.describe_tree())
             logger.profiler(" ")

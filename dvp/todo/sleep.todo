@@ -1,27 +1,3 @@
-Bug
-	+5 Affichage du spectrograme en entier si zooming + changement de paramètre, à cause du vecteur fréquence
-	+5 Fqe échantillonage pas puissance de puissance de 2
-	+5 Changer importance de ELAN
-	+5 Symbol -1 (Artefact) + symbol +/- dans les shortcuts
-	+5 Bug dans re-referencement : les keys changent donc détection bug
-	+4 Bug que je vois passer de temps en temps mais difficile à localiser : quand on lance detection, parfois il y a un "impossible d'aller à l'emplacement... NoneType"
-	+3 Bug dans le reréférencement pour de larges données: RAM de l'ordi?
-	+5 Pour les fichiers Brainvision / EDF : downsampling lors de la lecture des données au chargment
-	+5 SEGMENTATION ERROR: à l fermeture, l'interface bug (fait bugger ipython). Continuous array? Voir modifs pyqt5, dernière ligne
-	+5 Peut-être il faut vider la mémoire après downsampling: essais avec gc collect ne change rien
-	+5 La barre de progres sur les detections ne s'affiche qu'en cas de bug de mon côté (valeur à 24 % qui est la valeur définie dans designer)
-	+5 Convertir window
-	+4 Screenshot page complète mais par PyQt (pas vispy canvas)
-	+5 Bug quand aucun spindle détecté (à reproduire sur small + th=2. + wavelet)
-	+5 Bug d'affichage avec l'option REM only: à la ligne data[(np.where(np.logical_or(hypno < 1, hypno == 4)))] = 0
-	+5 Spindles et REM report ne suivent plus les coordonnées (y,) lors de l'édition de l'hypno
-	+5 Affichage lent au démarrage provient des labels ajouter au canvas directement. Les mettre en dehors permettrait de résoudre aussi par la même occasion la perte de l'affichage en zooming. Par contre, en drag la gestion des couleurs plus dure...
-	+5 Spectrograme décalé
-	+5 Peak detection ne s'affiche pas sur windows. Ca doit venir du set_gl_state, où de la superposition de données. Ce qui est byzarre c'est que ça marche sur l'hypnograme. Solution non esthétique : sur chaque panel, rajouter un objet de type marker contenant les pics du signal.
-	+5 Autre idée pour la peak detection: si ça trouve, windows ne gère pas bien le RGBA avec vispy. Virer l'alpha partout où il y a les color2vb
-	+5 Axis y hypnograme chez raphael semble merder. Byzarre?
-	+4 Si l'hypnograme est vide, il faut le cacher + cacher onglet info
-
 Etienne
 	-5 Voir si je pourrai pas implémenter ma propre class GridLines qui serait peut-être plus facile à paramétrer + transformation non-linéaires
 	-5 Clean des fillLocationTable pour peaks
@@ -37,69 +13,20 @@ Etienne
 	+5 Permettre de changer l'ordre des états de sommeil
 	+5 Permettre à l'utilisateur d'enregistrer ses propres settings et de les charger
 	+5 Faire une méthode delete() pour détection
-	+5 Améliorer détection de peaks (enlever la class + version scipy)
-	+3 Spectrogramme en ondelettes ? Non car nécessiterai un fenêtrage a posteriori
-	+5 Améliorer le départ d'un hypno vide
-	+3 Grilles peu lisibles
-	+5 Table nombre / densité sur toutes les detections
-	+5 Améliorer la gestion des amplitudes + bouton auto
-	+5 Ajouter un bouton (radio) link qui link min/max anplitude
-	+5 Faire une couleur par état d'hypno
-	+4 Tableau Locations start / duration / stage + header electrode et type
-	+5 Scoring avancer fenêtre par fenêtre + (a / w / 1 / 2 / 3 / r) et ajout de points
-	+5 Test de mémoire et tracking des données (URGENT quand on passera en données réelles)
-	+5 Couleur spindles / REM devrait fitter avec l'hypno (self._spin, self._rem)
-	+4 Possibilité de sort sur scoring table (en fonction du time start)
-	+4 Ajouter des frames descriptifs en haut des tabs
-	+5 Bouger detection dans un autre panel + uiDetection
-	+5 Spindles REM peu lisibles car trop de marqueurs (afficher seulement démarrage/fin)
-	+5 Changement de couleur des Qlabel en fonction position curseur et slider
-	+5 A l'exportation, proposer un nom
-	+5 Changer filtrage
-	+4 Lookahead ça m'étonnerai que ce soit des secondes.
-	+4 Filtrage: la complexité ici c'est que le filtrage doit être appliqué partout sans duplication de données
-	+4 Label bold
-	+4 Indicator devrait être un carré transparent ou dont le fond est vide
-	+4 Chargement des fichiers (manque chargement hypno + test sur fichiers réels)
-	+4 Afficher et pouvoir modifier l'amplitude de chaque channel
-	+5 Nombre de fenêtre
-	+5 Ajouter texte à hypnogram
 
 Raph
-	- Improve REM detect using MNE-Python function
-	- Suppression menu contextuel Settings > Clean hypnogram
-	- Spindles: write_fig_spindles à faire en version Cli?
-	- Spindles: calcul amplitude peak a peak (rejet d'artefact) et fréquence moyenne ?
-	- Spindles: rajouter colonnes power, fréquence dans location table
-	- Detection : améliorer calcul idx_start, idx_stop, duration en utilisant les fonctions d'étienne
+	-3 Improve REM detect using MNE-Python function
+	-2 Spindles: calcul amplitude peak a peak (rejet d'artefact) et fréquence moyenne ?
+	-2 Spindles: rajouter colonnes power, fréquence dans location table
 	-2 Scorage automatique du sommeil à partir propriete spectrale + detection auto
+	+4 Detection : améliorer calcul idx_start, idx_stop, duration en utilisant les fonctions d'étienne
+	+5 Paramètre _PanHypColor en input de write_fig_hyp
+	+5 Add new parameters in load / save config
 	+5 Mettre à jour doc BrainVision et fonction batch
 	+5 Améliorer chargement hypno (oversampling + downsampling)
 	+5 Fonction cli_write_fig_hyp aussi pour hypno format .txt
 	+5 Fonction cli_compute_stats
 	+5 Convert annotation BrainVision (.vmrk) to MNE
-	+5 Refaire fonction lecture BrainVision pour lire directement le header file (*.vhdr) et etre consistent avec MNE
-	+4 Transferer fileconvert.py -> visbrain.io/read_sleep
-	+4 Regrouper fonctions de fileconvert.py dans une classe Sleep.io ?
-	+3 Lecture fichier .cnt (ANT ASA) / .egi
-	+4 Détailler doc + article comment importer à partir de mne.io
-	+5 Bug header file BrainVision marker file et sampling rate (if power of 2)
-	+5 Possibilite de loader un fichier de config qui contient tout un set de paramètres de display pre-enregistrés
-	+4 Afficher la vraie heure dans figure save_hypnoToFig
-	+4 Test méthode REMs de JB
-	+4 Import fichier micromed (*.trc)
-	+5 Bug brainvision header version
-	+5 Mettre à jour doc
-	+5 Screenshots (et topoplot !): sinon je les fait mais ils seront noirs...
-	+3 Ajout collaborateur
-	+5 Bug dans le nombre de slow-waves détectées
-	+5 Minimum duration sur REM
-	+3 Ce serait cool d'ajouter quelque fonctionnalités de Sleepviz
-	+5 Choix des couleurs de l'hypno
-	+5 Intégration de la REM détection
-	+5 Intégration de la Spindle détection
-	+5 Chargement hypnogram
-	+4 Calcul statistiques de sommeil
 
 Commun
 	-5 What's new popup window avec les nouveautés de la release
@@ -108,10 +35,3 @@ Commun
 	+5 Téléchargement de la doc en pdf via la GUI
 	+5 Ajouter collaborateurs
 	+4 Ajout option de bipolarisation / re-referencement dans un menu ou panel Tools
-	+5 Indicateur temporel + stage
-	+2 Possibilité de scorer un hypnogramme en temps réel
-	+3 Fréquence de down-sampling pour ELAN à modifier quand chargement sera bon (pour le moment, fixe à 100hz)
-	+4 Panel info avec des infos sur l'enregistrement EEG et les statistiques de sommeil
-	+4 Possibilité d'afficher une grid sur les channels pour voir la seconde (important pour distinguer spindles, KCs, etc)
-	+3 Modifier les unités de la règle en bas pour que ça affiche en minutes ? ( / 60)
-	+4 Augmenter la hauteur du panel "Visible channels"

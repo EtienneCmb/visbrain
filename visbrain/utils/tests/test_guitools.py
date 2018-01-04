@@ -38,7 +38,7 @@ class TestGuitools(object):
     @pytest.mark.skip('Too much app creation => segmentation fault')
     def test_color2json(self):
         """Test function color2json."""
-        app = QtWidgets.QApplication([])
+        app = QtWidgets.QApplication([])  # noqa
         line = QtWidgets.QLineEdit()
         line.setText('green')
         color2json(line)
@@ -80,7 +80,7 @@ class TestGuitools(object):
     @pytest.mark.skip('Too much app creation => segmentation fault')
     def test_disconnect_all(self):
         """Test function disconnect_all."""
-        app = QtWidgets.QApplication([])
+        app = QtWidgets.QApplication([])  # noqa
         f1 = self._get_connect_function()
         spin = QtWidgets.QDoubleSpinBox()
         spin.valueChanged.connect(f1)
@@ -89,7 +89,7 @@ class TestGuitools(object):
     @pytest.mark.skip('Too much app creation => segmentation fault')
     def test_extend_combo_list(self):
         """Test function extend_combo_list."""
-        app = QtWidgets.QApplication([])
+        app = QtWidgets.QApplication([])  # noqa
         f1 = self._get_connect_function()
         cbox = QtWidgets.QComboBox()
         cbox.currentIndexChanged.connect(f1)
@@ -99,7 +99,7 @@ class TestGuitools(object):
     @pytest.mark.skip('Too much app creation => segmentation fault')
     def test_get_combo_list_index(self):
         """Test function get_combo_list_index."""
-        app = QtWidgets.QApplication([])
+        app = QtWidgets.QApplication([])  # noqa
         cbox = QtWidgets.QComboBox()
         extend_combo_list(cbox, 'NewItem1')
         extend_combo_list(cbox, 'NewItem2')
@@ -108,7 +108,7 @@ class TestGuitools(object):
     @pytest.mark.skip('Too much app creation => segmentation fault')
     def test_safely_set_cbox(self):
         """Test function safely_set_cbox."""
-        app = QtWidgets.QApplication([])
+        app = QtWidgets.QApplication([])  # noqa
         f1 = self._get_connect_function()
         cbox = QtWidgets.QComboBox()
         cbox.currentIndexChanged.connect(f1)
@@ -120,7 +120,7 @@ class TestGuitools(object):
     @pytest.mark.skip('Too much app creation => segmentation fault')
     def test_safely_set_spin(self):
         """Test function safely_set_spin."""
-        app = QtWidgets.QApplication([])
+        app = QtWidgets.QApplication([])  # noqa
         f1 = self._get_connect_function()
         spin = QtWidgets.QDoubleSpinBox()
         spin.valueChanged.connect(f1)
@@ -130,7 +130,7 @@ class TestGuitools(object):
     @pytest.mark.skip('Too much app creation => segmentation fault')
     def test_safely_set_slider(self):
         """Test function safely_set_slider."""
-        app = QtWidgets.QApplication([])
+        app = QtWidgets.QApplication([])  # noqa
         f1 = self._get_connect_function()
         slider = QtWidgets.QSlider()
         slider.valueChanged.connect(f1)
@@ -140,7 +140,7 @@ class TestGuitools(object):
     @pytest.mark.skip('Too much app creation => segmentation fault')
     def test_toggle_enable_tab(self):
         """Test function toggle_enable_tab."""
-        app = QtWidgets.QApplication([])
+        app = QtWidgets.QApplication([])  # noqa
         _translate = QtCore.QCoreApplication.translate
         tab = QtWidgets.QTabWidget()
         tab_2 = QtWidgets.QWidget()

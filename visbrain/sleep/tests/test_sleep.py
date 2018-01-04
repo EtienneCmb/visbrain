@@ -20,12 +20,29 @@ if not os.path.isfile(sleep_file):
 onset = np.array([100, 2000, 5000])
 
 # Create Sleep application :
-sp = Sleep(data=sleep_file, hypno=hypno_file, axis=True, hedit=True,
-           annotations=onset)
+sp = Sleep(data=sleep_file, hypno=hypno_file, axis=True, annotations=onset)
 
 
 class TestSleep(_TestVisbrain):
     """Test sleep.py."""
+
+    ###########################################################################
+    #                                TOOLS
+    ###########################################################################
+    def test_reference_switch(self):
+        """Test function reference_switch."""
+        for k in [2]:  # range(3)
+            sp._ToolsRefMeth.setCurrentIndex(k)
+            sp._fcn_ref_switch()
+            sp._fcn_ref_apply()
+        sp._fcn_ref_chan_ignore()
+
+    def test_signal_processing(self):
+        """Test function signal_processing."""
+        sp._fcn_sig_processing()
+        sp._SigMean.setChecked(True)
+        sp._SigTrend.setChecked(True)
+        sp._fcn_sig_processing()
 
     ###########################################################################
     #                                    GUI
@@ -35,18 +52,18 @@ class TestSleep(_TestVisbrain):
         sp._ToolDetectChan.setCurrentIndex(2)  # Select CZ channel
         for k in range(6):
             sp._ToolDetectType.setCurrentIndex(k)
-            sp._fcn_applyDetection()
+            sp._fcn_apply_detection()
 
     def test_ui_annotations(self):
         """Test method for annotations."""
         # Add annotations :
-        sp._fcn_annotateAdd('', xlim=(10, 20), txt='Annotation1')
-        sp._fcn_annotateAdd('', xlim=(20, 30), txt='Annotation2')
-        sp._fcn_annotateAdd('', xlim=(5, 15), txt='Annotation3')
+        sp._fcn_annotate_add('', xlim=(10, 20), txt='Annotation1')
+        sp._fcn_annotate_add('', xlim=(20, 30), txt='Annotation2')
+        sp._fcn_annotate_add('', xlim=(5, 15), txt='Annotation3')
         # Remove annotation :
-        sp._fcn_annotateRm()
+        sp._fcn_annotate_rm()
         # Go to :
-        sp._fcn_annotateGoto()
+        sp._fcn_annotate_goto()
 
     ###########################################################################
     #                                SAVE
@@ -58,76 +75,76 @@ class TestSleep(_TestVisbrain):
 
     def test_save_hyp_figure(self):
         """Test saving hypnogram figure."""
-        sp.saveHypFig(filename=self.to_tmp_dir('black_and_white.png'))
-        sp.saveHypFig(filename=self.to_tmp_dir('black_and_white.png'),
-                      ascolor=True)
+        sp._save_hyp_fig(filename=self.to_tmp_dir('black_and_white.png'))
+        sp._save_hyp_fig(filename=self.to_tmp_dir('black_and_white.png'),
+                         ascolor=True)
 
     def test_save_info_table(self):
         """Test saving info table."""
-        sp.saveInfoTable(filename=self.to_tmp_dir('info_table.txt'))
-        sp.saveInfoTable(filename=self.to_tmp_dir('info_table.csv'))
+        sp._save_info_table(filename=self.to_tmp_dir('info_table.txt'))
+        sp._save_info_table(filename=self.to_tmp_dir('info_table.csv'))
 
     def test_save_scoring_table(self):
         """Test saving scoring table."""
-        sp.saveScoringTable(filename=self.to_tmp_dir('scoring_table.txt'))
-        sp.saveScoringTable(filename=self.to_tmp_dir('scoring_table.csv'))
+        sp._save_scoring_table(filename=self.to_tmp_dir('scoring_table.txt'))
+        sp._save_scoring_table(filename=self.to_tmp_dir('scoring_table.csv'))
 
     def test_save_all_detections(self):
         """Test saving all detections."""
-        sp.saveAllDetect(filename=self.to_tmp_dir('all_detections.npy'))
+        sp._save_all_detect(filename=self.to_tmp_dir('all_detections.npy'))
 
     def test_save_selected_dection(self):
         """Test saving selected dection."""
-        sp.saveSelectDetect(filename=self.to_tmp_dir('selected_detect.txt'))
-        sp.saveSelectDetect(filename=self.to_tmp_dir('selected_detect.csv'))
+        sp._save_select_detect(filename=self.to_tmp_dir('selected_detect.txt'))
+        sp._save_select_detect(filename=self.to_tmp_dir('selected_detect.csv'))
 
     def test_save_config(self):
         """Test saving config."""
-        sp.saveConfig(filename=self.to_tmp_dir('config.txt'))
+        sp._save_config(filename=self.to_tmp_dir('config.txt'))
 
     def test_save_annotations(self):
         """Test saving annotations."""
-        sp.saveAnnotationTable(filename=self.to_tmp_dir('annotations.txt'))
-        sp.saveAnnotationTable(filename=self.to_tmp_dir('annotations.csv'))
+        sp._save_annotation_table(filename=self.to_tmp_dir('annotations.txt'))
+        sp._save_annotation_table(filename=self.to_tmp_dir('annotations.csv'))
 
     ###########################################################################
     #                                LOAD
     ###########################################################################
     def test_load_hypno(self):
         """Test loading hypno."""
-        sp.loadHypno(filename=self.to_tmp_dir('hyp_data.txt'))
-        sp.loadHypno(filename=self.to_tmp_dir('hyp_data.hyp'))
+        sp._load_hypno(filename=self.to_tmp_dir('hyp_data.txt'))
+        sp._load_hypno(filename=self.to_tmp_dir('hyp_data.hyp'))
 
     def test_load_all_detections(self):
         """Test loading all detections."""
-        sp.loadDetectAll(filename=self.to_tmp_dir('all_detections.npy'))
+        sp._load_detect_all(filename=self.to_tmp_dir('all_detections.npy'))
 
     def test_load_selected_detection(self):
         """Test loading selected detection."""
-        sp.loadDetectSelect(filename=self.to_tmp_dir("selected_detect_CZ-"
-                                                     "Spindles.txt"))
-        sp.loadDetectSelect(filename=self.to_tmp_dir("selected_detect_CZ-"
-                                                     "Spindles.csv"))
+        sp._load_detect_select(filename=self.to_tmp_dir("selected_detect_CZ-"
+                                                        "Spindles.txt"))
+        sp._load_detect_select(filename=self.to_tmp_dir("selected_detect_CZ-"
+                                                        "Spindles.csv"))
 
     def test_load_annotations(self):
         """Test loading annotations."""
         # Txt :
-        sp.loadAnnotationTable(filename=self.to_tmp_dir('annotations.txt'))
+        sp._load_annotation_table(filename=self.to_tmp_dir('annotations.txt'))
         # Csv :
-        sp.loadAnnotationTable(filename=self.to_tmp_dir('annotations.csv'))
+        sp._load_annotation_table(filename=self.to_tmp_dir('annotations.csv'))
         # Onset only :
-        sp.loadAnnotationTable(filename=np.array([10., 20., 3.]))
+        sp._load_annotation_table(filename=np.array([10., 20., 3.]))
         # MNE annotations :
         from mne import Annotations
         onset = np.array([10., 20., 3.])
         durations = np.array([1., 1.5, 2.])
         annot = np.array(['Oki1', 'Okinawa', 'Okii'])
         annot = Annotations(onset, durations, annot)
-        sp.loadAnnotationTable(filename=annot)
+        sp._load_annotation_table(filename=annot)
 
     def test_load_config(self):
         """Test load config."""
-        sp.loadConfig(filename=self.to_tmp_dir('config.txt'))
+        sp._load_config(filename=self.to_tmp_dir('config.txt'))
 
     ###########################################################################
     #                             SHORTCUTS

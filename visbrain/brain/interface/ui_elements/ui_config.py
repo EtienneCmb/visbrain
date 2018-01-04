@@ -1,6 +1,6 @@
 """Enable the user to save/load the Brain config in a json file."""
 from warnings import warn
-from ....io import dialogLoad, dialogSave, save_config_json, load_config_json
+from ....io import dialog_load, dialog_save, save_config_json, load_config_json
 from ....utils import color2json
 
 
@@ -12,12 +12,12 @@ class UiConfig(object):
     #                                   SAVE
     ###########################################################################
     ###########################################################################
-    def _fcn_saveConfig(self, _, filename=None):
+    def _fcn_save_config(self, _, filename=None):
         """Save the configuration."""
         # Get the name of the file to be saved :
         if filename is None:
-            filename = dialogSave(self, 'Save config File', 'config',
-                                  "Text file (*.txt);;All files (*.*)")
+            filename = dialog_save(self, 'Save config File', 'config',
+                                   "Text file (*.txt);;All files (*.*)")
         if filename:
             config = {}
 
@@ -120,11 +120,11 @@ class UiConfig(object):
     #                                   LOAD
     ###########################################################################
     ###########################################################################
-    def _fcn_loadConfig(self, _, filename=None):
+    def _fcn_load_config(self, _, filename=None):
         """Load the configuration."""
         if not filename:
-            filename = dialogLoad(self, 'Load config File', 'config',
-                                  "Text file (*.txt);;All files (*.*)")
+            filename = dialog_load(self, 'Load config File', 'config',
+                                   "Text file (*.txt);;All files (*.*)")
         if filename:
             config = load_config_json(filename)
 

@@ -26,13 +26,14 @@ class UiPanels(object):
         self._font = QtGui.QFont()
         self._font.setBold(True)
         self._addspace = '   '
+        self._pan_pick.currentIndexChanged.connect(self._fcn_pan_pick)
 
         # =====================================================================
         # MAIN GRID :
         # =====================================================================
         self._chanGrid = QtWidgets.QGridLayout()
         self._chanGrid.setContentsMargins(-1, -1, -1, 6)
-        self._chanGrid.setSpacing(3)
+        self._chanGrid.setSpacing(2)
         self._chanGrid.setObjectName(_fromUtf8("_chanGrid"))
         self.gridLayout_21.addLayout(self._chanGrid, 0, 0, 1, 1)
         PROFILER("Channel grid", level=2)
@@ -41,11 +42,13 @@ class UiPanels(object):
         # CHANNELS
         # =====================================================================
         # Create check buttons and panels for every channel :
-        self._fcn_chanCheckAndWCreate()
-        self._PanChanSelectAll.clicked.connect(self._fcn_SelectAllchan)
-        self._PanChanDeselectAll.clicked.connect(self._fcn_DeselectAllchan)
-        self._PanAmpAuto.clicked.connect(self._fcn_chanAutoAmp)
-        self._PanAmpSym.clicked.connect(self._fcn_chanSymAmp)
+        self._fcn_chan_check_and_create_w()
+        self._PanChanSelectAll.clicked.connect(self._fcn_select_all_chan)
+        self._PanChanDeselectAll.clicked.connect(self._fcn_deselect_all_chan)
+        self._PanAmpAuto.clicked.connect(self._fcn_chan_auto_amp)
+        self._PanAmpSym.clicked.connect(self._fcn_chan_sym_amp)
+        self._channels_lw.valueChanged.connect(self._fcn_chan_set_lw)
+        self._channels_alias.clicked.connect(self._fcn_chan_antialias)
         PROFILER("Channel canvas, widgets and buttons", level=2)
 
         # =====================================================================
@@ -54,23 +57,19 @@ class UiPanels(object):
         # Save all current amplitudes :
         self._PanAllAmpMax.setValue(100.)
         self._ylims = np.zeros((len(self), 2), dtype=np.float32)
-        self._fcn_updateAmpInfo()
-        self._PanAllAmpMin.valueChanged.connect(self._fcn_allAmp)
-        self._PanAllAmpMax.valueChanged.connect(self._fcn_allAmp)
+        self._fcn_update_amp_info()
+        self._PanAllAmpMin.valueChanged.connect(self._fcn_all_amp)
+        self._PanAllAmpMax.valueChanged.connect(self._fcn_all_amp)
         PROFILER("Channel amplitudes", level=2)
 
         # =====================================================================
         # SPECTROGRAM
         # =====================================================================
         # Main canvas for the spectrogram :
-        self._specCanvas = AxisCanvas(axis=self._ax, bgcolor=(1., 1., 1.),
-                                      y_label=None, x_label=None,
-                                      name='Spectrogram', color='black',
-                                      yargs={'text_color': 'black'},
-                                      xargs={'text_color': 'black'},
+        self._specCanvas = AxisCanvas(axis=self._ax, name='Spectrogram',
                                       fcn=[self.on_mouse_wheel])
-        self._SpecW, self._SpecLayout = self._createCompatibleW("SpecW",
-                                                                "SpecL")
+        self._SpecW, self._SpecLayout = self._create_compatible_w("SpecW",
+                                                                  "SpecL")
         self._SpecLayout.addWidget(self._specCanvas.canvas.native)
         self._chanGrid.addWidget(self._SpecW, len(self) + 1, 1, 1, 1)
         # Add label :
@@ -88,30 +87,26 @@ class UiPanels(object):
         self._PanSpecMethod.model().item(2).setEnabled(is_lspopt_installed())
         # Connect spectrogam properties :
         self._PanSpecApply.setEnabled(False)
-        self._PanSpecApply.clicked.connect(self._fcn_specSetData)
-        self._PanSpecNfft.valueChanged.connect(self._fcn_specCompat)
-        self._PanSpecStep.valueChanged.connect(self._fcn_specCompat)
-        self._PanSpecFstart.valueChanged.connect(self._fcn_specCompat)
-        self._PanSpecFend.valueChanged.connect(self._fcn_specCompat)
-        self._PanSpecCon.valueChanged.connect(self._fcn_specCompat)
-        self._PanSpecCmap.currentIndexChanged.connect(self._fcn_specCompat)
-        self._PanSpecChan.currentIndexChanged.connect(self._fcn_specCompat)
-        self._PanSpecMethod.currentIndexChanged.connect(self._fcn_specCompat)
-        self._PanSpecCmapInv.clicked.connect(self._fcn_specCompat)
-        self._PanSpecNorm.currentIndexChanged.connect(self._fcn_specCompat)
+        self._PanSpecApply.clicked.connect(self._fcn_spec_set_data)
+        self._PanSpecNfft.valueChanged.connect(self._fcn_spec_compat)
+        self._PanSpecStep.valueChanged.connect(self._fcn_spec_compat)
+        self._PanSpecFstart.valueChanged.connect(self._fcn_spec_compat)
+        self._PanSpecFend.valueChanged.connect(self._fcn_spec_compat)
+        self._PanSpecCon.valueChanged.connect(self._fcn_spec_compat)
+        self._PanSpecCmap.currentIndexChanged.connect(self._fcn_spec_compat)
+        self._PanSpecChan.currentIndexChanged.connect(self._fcn_spec_compat)
+        self._PanSpecMethod.currentIndexChanged.connect(self._fcn_spec_compat)
+        self._PanSpecCmapInv.clicked.connect(self._fcn_spec_compat)
+        self._PanSpecNorm.currentIndexChanged.connect(self._fcn_spec_compat)
         self._PanSpecInterp.currentIndexChanged.connect(self._fcn_spec_interp)
         PROFILER("Spectrogram", level=2)
 
         # =====================================================================
         # HYPNOGRAM
         # =====================================================================
-        self._hypCanvas = AxisCanvas(axis=self._ax, bgcolor=(1., 1., 1.),
-                                     y_label=None, x_label=None,
-                                     name='Hypnogram', color='black',
-                                     yargs={'text_color': 'black'},
-                                     xargs={'text_color': 'black'},
-                                     fcn=[self.on_mouse_wheel])
-        self._HypW, self._HypLayout = self._createCompatibleW("HypW", "HypL")
+        self._hypCanvas = AxisCanvas(axis=self._ax, name='Hypnogram',
+                                     fcn=[self.on_mouse_wheel], use_pad=True)
+        self._HypW, self._HypLayout = self._create_compatible_w("HypW", "HypL")
         self._HypLayout.addWidget(self._hypCanvas.canvas.native)
         self._chanGrid.addWidget(self._HypW, len(self) + 2, 1, 1, 1)
         # Add label :
@@ -128,19 +123,15 @@ class UiPanels(object):
         self._chanGrid.addWidget(self._hypLabel, len(self) + 2, 0, 1, 1)
         PROFILER("Hypnogram", level=2)
         # Connect :
-        self._PanHypnoReset.clicked.connect(self._fcn_hypnoClean)
-        self._PanHypnoLw.valueChanged.connect(self._fcn_hypnoLw)
-        self._PanHypnoColor.clicked.connect(self._fcn_hypnoColor)
+        self._PanHypnoReset.clicked.connect(self._fcn_hypno_clean)
+        self._PanHypnoLw.valueChanged.connect(self._fcn_set_hypno_lw)
+        self._PanHypnoColor.clicked.connect(self._fcn_set_hypno_color)
 
         # =====================================================================
         # TOPOPLOT
         # =====================================================================
         # Main canvas for the spectrogram :
-        self._topoCanvas = AxisCanvas(axis=self._ax, bgcolor=(1., 1., 1.),
-                                      y_label=None, x_label=None,
-                                      name='Topoplot', color='black',
-                                      yargs={'text_color': 'black'},
-                                      xargs={'text_color': 'black'})
+        self._topoCanvas = AxisCanvas(axis=False, name='Topoplot')
         self._topoLayout.addWidget(self._topoCanvas.canvas.native)
         self._topoW.setVisible(False)
         self._PanTopoCmin.setValue(-.5)
@@ -149,29 +140,27 @@ class UiPanels(object):
         self._PanTopoCmap.addItems(self._cmap_lst)
         self._PanTopoCmap.setCurrentIndex(self._cmap_lst.index('Spectral'))
         self._PanTopoCmin.setKeyboardTracking(False)
-        self._PanTopoCmin.valueChanged.connect(self._fcn_topoSettings)
+        self._PanTopoCmin.valueChanged.connect(self._fcn_topo_settings)
         self._PanTopoCmax.setKeyboardTracking(False)
-        self._PanTopoRev.clicked.connect(self._fcn_topoSettings)
-        self._PanTopoCmax.valueChanged.connect(self._fcn_topoSettings)
-        self._PanTopoCmap.currentIndexChanged.connect(self._fcn_topoSettings)
-        self._PanTopoDisp.currentIndexChanged.connect(self._fcn_topoSettings)
-        self._PanTopoFmin.valueChanged.connect(self._fcn_topoSettings)
-        self._PanTopoFmax.valueChanged.connect(self._fcn_topoSettings)
-        self._PanTopoAutoClim.clicked.connect(self._fcn_topoSettings)
-        self._PanTopoApply.clicked.connect(self._fcn_topoApply)
+        self._PanTopoRev.clicked.connect(self._fcn_topo_settings)
+        self._PanTopoCmax.valueChanged.connect(self._fcn_topo_settings)
+        self._PanTopoCmap.currentIndexChanged.connect(self._fcn_topo_settings)
+        self._PanTopoDisp.currentIndexChanged.connect(self._fcn_topo_settings)
+        self._PanTopoFmin.valueChanged.connect(self._fcn_topo_settings)
+        self._PanTopoFmax.valueChanged.connect(self._fcn_topo_settings)
+        self._PanTopoAutoClim.clicked.connect(self._fcn_topo_settings)
+        self._PanTopoApply.clicked.connect(self._fcn_topo_apply)
         PROFILER("Topoplot", level=2)
 
         # =====================================================================
         # TIME AXIS
         # =====================================================================
         # Create a unique time axis :
-        self._TimeAxis = TimeAxis(xargs={'text_color': 'black'},
-                                  x_label=None, name='TimeAxis',
-                                  bgcolor=(1., 1., 1.), color='black',
+        self._TimeAxis = TimeAxis(axis=self._ax, name='TimeAxis',
                                   indic_color=self._indicol,
                                   fcn=[self.on_mouse_wheel])
-        self._TimeAxisW, self._TimeLayout = self._createCompatibleW("TimeW",
-                                                                    "TimeL")
+        self._TimeAxisW, self._TimeLayout = self._create_compatible_w("TimeW",
+                                                                      "TimeL")
         self._TimeLayout.addWidget(self._TimeAxis.canvas.native)
         self._TimeAxisW.setMaximumHeight(400)
         self._TimeAxisW.setMinimumHeight(50)
@@ -186,8 +175,13 @@ class UiPanels(object):
     # =====================================================================
     # CHANNELS
     # =====================================================================
-    def _createCompatibleW(self, name_wiget, name_layout, visible=False):
-        """This function create a widget and a layout."""
+    def _fcn_pan_pick(self):
+        """Change the panel."""
+        idx = int(self._pan_pick.currentIndex())
+        self._stacked_panels.setCurrentIndex(idx)
+
+    def _create_compatible_w(self, name_wiget, name_layout, visible=False):
+        """Create a widget and a layout."""
         Widget = QtWidgets.QWidget(self.centralwidget)  # noqa
         Widget.setMinimumSize(QtCore.QSize(0, 0))
         Widget.setObjectName(_fromUtf8(name_wiget))
@@ -204,7 +198,7 @@ class UiPanels(object):
 
         return Widget, Layout
 
-    def _fcn_chanCheckAndWCreate(self):
+    def _fcn_chan_check_and_create_w(self):
         """Create one checkbox and one widget/layout per channel."""
         # Empty list of checkbox and widgets/layouts :
         self._chanChecks = [0] * len(self)
@@ -236,7 +230,7 @@ class UiPanels(object):
             # Add checkbox to the grid :
             self._PanChanLay.addWidget(self._chanChecks[i], i, 0, 1, 1)
             # Connect with the function :
-            self._chanChecks[i].clicked.connect(self._fcn_chanViz)
+            self._chanChecks[i].clicked.connect(self._fcn_chan_viz)
 
             # ----- LABEL/ Y-MIN / Y-MAX -----
             fact = 5.
@@ -262,12 +256,13 @@ class UiPanels(object):
             self._ymaxSpin[i].setProperty("value", int(fact * self['std'][i]))
             self._PanChanLay.addWidget(self._ymaxSpin[i], i, 4, 1, 1)
             # Connect buttons :
-            self._yminSpin[i].valueChanged.connect(self._fcn_chanAmplitude)
-            self._ymaxSpin[i].valueChanged.connect(self._fcn_chanAmplitude)
+            self._yminSpin[i].valueChanged.connect(self._fcn_chan_amplitude)
+            self._ymaxSpin[i].valueChanged.connect(self._fcn_chan_amplitude)
 
             # ============ WIDGETS / LAYOUTS ============
             # Create a widget :
-            self._chanWidget[i], self._chanLayout[i] = self._createCompatibleW(
+            (self._chanWidget[i],
+             self._chanLayout[i]) = self._create_compatible_w(
                 "_widgetChan" + k, "_LayoutChan" + k)
             self._chanGrid.addWidget(self._chanWidget[i], i, 1, 1, 1)
             # Add channel label :
@@ -280,11 +275,7 @@ class UiPanels(object):
             # ============ CANVAS ============
             # Create canvas :
             self._chanCanvas[i] = AxisCanvas(axis=self._ax,
-                                             bgcolor=(1., 1., 1.),
-                                             y_label=None, x_label=None,
-                                             name='Canvas_' + k, color='black',
-                                             yargs={'text_color': 'black'},
-                                             xargs={'text_color': 'black'},
+                                             name='Canvas_' + k,
                                              fcn=[self.on_mouse_wheel])
             # Add the canvas to the layout :
             self._chanLayout[i].addWidget(self._chanCanvas[i].canvas.native)
@@ -295,7 +286,7 @@ class UiPanels(object):
     # =====================================================================
     # AMPLITUDES
     # =====================================================================
-    def _fcn_chanAutoAmp(self):
+    def _fcn_chan_auto_amp(self):
         """Use automatic amplitudes."""
         viz = not self._PanAmpAuto.isChecked()
         # Set auto-amp :
@@ -310,11 +301,11 @@ class UiPanels(object):
         self._PanAmpSym.setEnabled(viz)
         # Finaly, update :
         if viz:
-            self._fcn_chanAmplitude()
+            self._fcn_chan_amplitude()
         else:
             self._chan.update()
 
-    def _fcn_chanSymAmp(self):
+    def _fcn_chan_sym_amp(self):
         """Use symetric amplitudes."""
         viz = not self._PanAmpSym.isChecked()
         # Hide amplitude min for all chan :
@@ -329,9 +320,9 @@ class UiPanels(object):
             self._PanAllAmpMax.setMinimum(.1)
         else:
             self._PanAllAmpMax.setMinimum(self['min'].min())
-        self._fcn_chanAmplitude()
+        self._fcn_chan_amplitude()
 
-    def _fcn_chanAmplitude(self):
+    def _fcn_chan_amplitude(self):
         """Change amplitude of each channel."""
         # Loop over spinbox and update camera rect :
         for k, (m, M) in enumerate(zip(self._yminSpin, self._ymaxSpin)):
@@ -345,14 +336,14 @@ class UiPanels(object):
                     self._ylims[k, 1] - self._ylims[k, 0])
             self._chanCam[k].rect = rect
 
-    def _fcn_allAmp(self):
+    def _fcn_all_amp(self):
         """Set all channel amplitudes."""
         for k, (m, M) in enumerate(zip(self._yminSpin, self._ymaxSpin)):
             m.setValue(self._PanAllAmpMin.value())
             M.setValue(self._PanAllAmpMax.value())
-        self._fcn_chanAmplitude()
+        self._fcn_chan_amplitude()
 
-    def _fcn_updateAmpInfo(self):
+    def _fcn_update_amp_info(self):
         """Update informations about amplitudes."""
         self._get_data_info()
         self._PanAllAmpMin.setMinimum(self['min'].min())
@@ -360,10 +351,27 @@ class UiPanels(object):
         self._PanAllAmpMax.setMinimum(self['min'].min())
         self._PanAllAmpMax.setMaximum(self['max'].max())
 
+    def _fcn_chan_set_lw(self):
+        """Set channels line-width."""
+        self._chan.width = self._channels_lw.value()
+        self._fcn_slider_move()
+
+    def _fcn_chan_antialias(self):
+        """Set anti-aliasing lines."""
+        aa = self._channels_alias.isChecked()
+        for k in range(len(self._channels)):
+            self._chan.mesh[k].antialias = aa
+            self._chan.mesh[k].update()
+        if aa:
+            self._channels_lw.setMinimum(1.5)
+        else:
+            self._channels_lw.setMinimum(1.)
+        self._fcn_chan_set_lw()
+
     # =====================================================================
     # CHANNEL SELECTION
     # =====================================================================
-    def _fcn_chanViz(self):
+    def _fcn_chan_viz(self):
         """Control visible panels of channels."""
         for i, k in enumerate(self._chanChecks):
             viz = k.isChecked()
@@ -374,40 +382,42 @@ class UiPanels(object):
                 self._chanCanvas[i].set_camera(self._chanCam[i])
         self._chan.update()
 
-    def _fcn_SelectAllchan(self):
+    def _fcn_select_all_chan(self):
         """Select all channels."""
         for k in self._chanChecks:
             k.setChecked(True)
-        self._fcn_chanViz()
+        self._fcn_chan_viz()
 
-    def _fcn_DeselectAllchan(self):
+    def _fcn_deselect_all_chan(self):
         """De-select all channels."""
         for k in self._chanChecks:
             k.setChecked(False)
-        self._fcn_chanViz()
+        self._fcn_chan_viz()
 
-    def canvas_isVisible(self, k):
+    def _canvas_is_visible(self, k):
         """Find if canvas k is visible.
 
-        Args:
-            k: int
-                Index of the canvas.
+        Parameters
+        ----------
+        k : int
+            Index of the canvas.
 
-        Return:
-            visible: bool
-                A boolean value indicating if the canvas is visible.
+        Returns
+        -------
+        visible : bool
+            A boolean value indicating if the canvas is visible.
         """
         return self._chanWidget[k].isVisible()
 
-    def canvas_setVisible(self, k, value):
+    def _canvas_set_visible(self, k, value):
         """Set the visibility of the canvas k to value.
 
-        Args:
-            k: int
-                Index of the canvas.
-
-            value: bool
-                Boolean value if the canvas has to be visible.
+        Parameters
+        ----------
+        k : int
+            Index of the canvas.
+        value : bool
+            Boolean value if the canvas has to be visible.
         """
         self._chanChecks[k].setChecked(value)
         self._chanWidget[k].setVisible(value)
@@ -417,7 +427,7 @@ class UiPanels(object):
     # =====================================================================
     # SPECTROGRAM
     # =====================================================================
-    def _fcn_specSetData(self):
+    def _fcn_spec_set_data(self):
         """Set data to the spectrogram."""
         # Get nfft and overlap :
         nfft, over = self._PanSpecNfft.value(), self._PanSpecStep.value()
@@ -447,14 +457,15 @@ class UiPanels(object):
         # Set apply button disable :
         self._PanSpecApply.setEnabled(False)
 
-    def _fcn_specCompat(self):
+    def _fcn_spec_compat(self):
         """Check compatibility between spectro parameters."""
         # Get nfft and overlap :
         nfft, _ = self._PanSpecNfft.value(), self._PanSpecStep.value()
         # Get starting / ending frequency :
         _, fend = self._PanSpecFstart.value(), self._PanSpecFend.value()  # noqa
         # Enable / disable normalization :
-        use_tf = 1 if str(self._PanSpecMethod.currentText()) == 'time-frequency' else 0
+        use_tf = 1 if str(self._PanSpecMethod.currentText()
+                          ) == 'Wavelet' else 0
         self._PanSpecNormW.setEnabled(use_tf)
 
         self._PanSpecStep.setMaximum(nfft * .99)
@@ -471,46 +482,48 @@ class UiPanels(object):
     # =====================================================================
     # HYPNOGRAM
     # =====================================================================
-    def _fcn_hypnoLw(self):
-        """Change the line width of the hypnogram"""
+    def _fcn_set_hypno_lw(self):
+        """Change the line width of the hypnogram."""
         self._hyp.width = self._PanHypnoLw.value()
         self._hyp.set_data(self._sf, self._hypno, self._time)
 
-    def _fcn_hypnoColor(self):
-        """Change the color of the hypnogram"""
+    def _fcn_set_hypno_color(self):
+        """Change the color of the hypnogram."""
         if not(self._PanHypnoColor.isChecked()):
             color = {-1: '#292824', 0: '#292824', 1: '#292824',
-                      2: '#292824', 3: '#292824', 4: '#292824'}
+                     2: '#292824', 3: '#292824', 4: '#292824'}
         else:
             color = self._hypcolor
         # Get color :
-        self._hyp.color = {k: color2vb(color=i) for k, i in zip(color.keys(),
-                                                           color.values())}
+        zp = zip(color.keys(), color.values())
+        self._hyp.color = {k: color2vb(color=i) for k, i in zp}
         # Update hypnogram
         self._hyp.set_data(self._sf, self._hypno, self._time)
 
-    def _fcn_hypnoClean(self):
+    def _fcn_hypno_clean(self):
         """Clean the hypnogram."""
         # Confirmation dialog
         reply = QtWidgets.QMessageBox.question(self, 'Message',
-                "Are you sure you want to reset the program?",
-                QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+                                               "Are you sure you want to reset"
+                                               " the program?",
+                                               QtWidgets.QMessageBox.Yes,
+                                               QtWidgets.QMessageBox.No)
 
         if reply == QtWidgets.QMessageBox.Yes:
             self._hypno = np.zeros((len(self._hyp),), dtype=np.float32)
             self._hyp.clean(self._sf, self._time)
             # Update info table :
-            self._fcn_infoUpdate()
+            self._fcn_info_update()
             # Update scoring table :
-            self._fcn_Hypno2Score()
-            self._fcn_Score2Hypno()
+            self._fcn_hypno_to_score()
+            self._fcn_score_to_hypno()
         else:
             pass
 
     # =====================================================================
     # TOPOPLOT
     # =====================================================================
-    def _fcn_topoSettings(self):
+    def _fcn_topo_settings(self):
         """Manage colormap of the topoplot."""
         # ============== TYPE ==============
         dispas = self._PanTopoDisp.currentText()
@@ -542,7 +555,7 @@ class UiPanels(object):
         # Finally, enable apply button :
         self._PanTopoApply.setEnabled(True)
 
-    def _fcn_topoApply(self):
+    def _fcn_topo_apply(self):
         """Apply topo settings."""
-        self._fcn_sliderMove()
+        self._fcn_slider_move()
         self._PanTopoApply.setEnabled(False)

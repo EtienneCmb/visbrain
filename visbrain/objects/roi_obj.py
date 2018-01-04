@@ -179,9 +179,7 @@ class RoiObj(_Volume):
             ('tal').
         """
         # Test if pandas is installed :
-        if not is_pandas_installed():
-            raise ImportError("In order to work properly, pandas package "
-                              "should be installed.")
+        is_pandas_installed(raise_error=True)
         import pandas as pd
         # _______________________ PREDEFINED _______________________
         if not isinstance(vol, np.ndarray):
@@ -219,7 +217,7 @@ class RoiObj(_Volume):
         """
         if isinstance(save_to_path, str):
             assert os.path.isdir(save_to_path)
-            assert is_pandas_installed()
+            is_pandas_installed(raise_error=True)
             import pandas as pd
             save_as = os.path.join(save_to_path, '%s.xlsx' % self.name)
             writer = pd.ExcelWriter(save_as)
@@ -257,7 +255,7 @@ class RoiObj(_Volume):
         assert isinstance(patterns, (str, list, tuple))
         df_to_use = self.ref if df is None else df
         n_rows, _ = df_to_use.shape
-        assert is_pandas_installed()
+        is_pandas_installed(raise_error=True)
         import pandas as pd
         assert isinstance(df_to_use, pd.DataFrame)
         patterns = [patterns] if isinstance(patterns, str) else patterns

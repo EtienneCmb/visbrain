@@ -79,15 +79,15 @@ The *Brain* graphical user interface is subdivided into three main parts :
 * **Colorbar canvas** (*hide by default*)
 * **Cross-sections canvas** (*hide by default*)
 
-.. note::
+.. .. note::
 
-   If you want to save the current GUI state (i.e. all buttons properties) and retrieve it later, use the menu File/Save/GUI config and File/Load/GUI config or the associated *Brain* method.
+..    If you want to save the current GUI state (i.e. all buttons properties) and retrieve it later, use the menu File/Save/GUI config and File/Load/GUI config or the associated *Brain* method.
    
-   **Examples**
-      * :ref:`sphx_glr_auto_examples_brain_13_load_gui_config.py`
+..    **Examples**
+..       * :ref:`sphx_glr_auto_examples_brain_13_load_gui_config.py`
 
-   **API**
-      * :ref:`LoadSaveConfig`
+..    **API**
+..       * :ref:`LoadSaveConfig`
 
 Settings panel tabs
 ^^^^^^^^^^^^^^^^^^^
@@ -146,18 +146,14 @@ MNI templates
 .. figure::  picture/picbrain/brain_templates.png
    :align:   center
 
-By default, *Brain* comes with three brain templates respectively B1 (with cerebellum), B2 and B3 (smoothest). But this list can be extended using those following functions :
-
-* :ref:`ConvertMeshData` : convert vertices and faces to be compatibles with *Brain*
-* :ref:`AddBrainTemplate` and :ref:`RemoveBrainTemplate` : using converted vertices and faces, add/remove the template to visbrain
+By default, *Brain* comes with three brain templates respectively B1 (with cerebellum), B2 and B3 (smoothest).
 
 Further brain templates can be downloaded `here <https://drive.google.com/open?id=0B6vtJiCQZUBvd0xfTHJqcHg2bTA>`_.
 
 .. note::
    
    **Examples**
-      * :ref:`sphx_glr_auto_examples_brain_11_convert_mesh_data.py`
-      * :ref:`sphx_glr_auto_examples_brain_02_add_brain_template.py`
+      * :ref:`sphx_glr_auto_examples_brain_02_brain_using_vertices.py`
 
    **API**
       * :ref:`BrainClass`
@@ -204,7 +200,6 @@ Both methods use a **radius** parameter and only vertices with an euclidian dist
    **Examples**
       * :ref:`sphx_glr_auto_examples_brain_03_sources.py`
       * :ref:`sphx_glr_auto_examples_brain_08_screenshot.py`
-      * :ref:`sphx_glr_auto_examples_brain_12_colorbar_control.py`
 
    **API**
       * :ref:`CortProj`
@@ -286,8 +281,6 @@ Cross-sections correspond to an axial, sagittal and coronal slice of the volume 
       * :ref:`sphx_glr_auto_examples_brain_00_brain_control.py`
       * :ref:`sphx_glr_auto_examples_brain_10_add_nifti_volume.py`
 
-   **API**
-      * :ref:`VolCrossecApi`
 
 Region Of Interest (ROI)
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -305,8 +298,6 @@ If a volume is provided with corresponding labels, ROIs can be extracted and the
       * :ref:`sphx_glr_auto_examples_brain_05_region_of_interest.py`
       * :ref:`sphx_glr_auto_examples_brain_08_screenshot.py`
 
-   **API**
-      * :ref:`RoiApi`
 
 3-D volume rendering
 ^^^^^^^^^^^^^^^^^^^^
@@ -322,8 +313,6 @@ If a volume is provided with corresponding labels, ROIs can be extracted and the
       * :ref:`sphx_glr_auto_examples_brain_00_brain_control.py`
       * :ref:`sphx_glr_auto_examples_brain_10_add_nifti_volume.py`
 
-   **API**
-      * :ref:`VolCrossecApi`
 
 Colorbar control
 ~~~~~~~~~~~~~~~~
@@ -342,7 +331,6 @@ The colorbar can be controlled for individual objects including :
 .. note::
    
    **Examples**
-      * :ref:`sphx_glr_auto_examples_brain_12_colorbar_control.py`
       * :ref:`sphx_glr_auto_examples_brain_08_screenshot.py`
 
    **API**

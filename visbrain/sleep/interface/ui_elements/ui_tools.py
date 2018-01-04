@@ -11,6 +11,7 @@ class UiTools(object):
 
     def __init__(self):
         """Init."""
+        self._tool_pick.currentIndexChanged.connect(self._fcn_tool_pick)
         # Find non-eeg channels :
         self._noneeg = find_non_eeg(self._channels)
         # =====================================================================
@@ -30,31 +31,36 @@ class UiTools(object):
                 # Add checkbox to the grid :
                 self._ToolsRefIgnGrd.addWidget(box, i, 0, 1, 1)
         # Connections :
-        self._ToolsRefIgn.clicked.connect(self._fcn_refChanIgnore)
+        self._ToolsRefIgn.clicked.connect(self._fcn_ref_chan_ignore)
         self._ToolsRefLst.addItems(np.array(self._channels)[~self._noneeg])
-        self._ToolsRefMeth.currentIndexChanged.connect(self._fcn_refSwitch)
-        self._ToolsRefApply.clicked.connect(self._fcn_refApply)
-        self._fcn_refSwitch()
+        self._ToolsRefMeth.currentIndexChanged.connect(self._fcn_ref_switch)
+        self._ToolsRefApply.clicked.connect(self._fcn_ref_apply)
+        self._fcn_ref_switch()
 
         # =====================================================================
         # MEAN / TREND
         # =====================================================================
-        self._SigMean.clicked.connect(self._fcn_sigProcessing)
-        self._SigTrend.clicked.connect(self._fcn_sigProcessing)
+        self._SigMean.clicked.connect(self._fcn_sig_processing)
+        self._SigTrend.clicked.connect(self._fcn_sig_processing)
 
         # =====================================================================
         # FILTERING
         # =====================================================================
         self._SigFiltChan.addItems(self._channels)
-        self._SigFiltDisp.currentIndexChanged.connect(self._fcn_filtDispAs)
-        self._SigFiltApply.clicked.connect(self._fcn_sigProcessing)
-        self._SigFilt.clicked.connect(self._fcn_filtViz)
-        self._SigFiltBand.currentIndexChanged.connect(self._fcn_filtBand)
+        self._SigFiltDisp.currentIndexChanged.connect(self._fcn_filt_disp_as)
+        self._SigFiltApply.clicked.connect(self._fcn_sig_processing)
+        self._SigFilt.clicked.connect(self._fcn_filt_viz)
+        self._SigFiltBand.currentIndexChanged.connect(self._fcn_filt_band)
+
+    def _fcn_tool_pick(self):
+        """Change tool type."""
+        idx = int(self._tool_pick.currentIndex())
+        self._stacked_tools.setCurrentIndex(idx)
 
     # =====================================================================
     # RE-REFERENCING
     # =====================================================================
-    def _fcn_refSwitch(self):
+    def _fcn_ref_switch(self):
         """Switch between re-referencing methods."""
         idx = int(self._ToolsRefMeth.currentIndex())
         # Single channel :
@@ -65,11 +71,11 @@ class UiTools(object):
         elif idx == 2:  # Bipolarization
             self._ToolsRefSingleW.setVisible(False)
 
-    def _fcn_refChanIgnore(self):
+    def _fcn_ref_chan_ignore(self):
         """Display / hide list of channels to ignore."""
         self._ToolsRefIgnArea.setVisible(self._ToolsRefIgn.isChecked())
 
-    def _fcn_refApply(self):
+    def _fcn_ref_apply(self):
         """Apply re-referencing."""
         # By default, ingore non-eeg channel :
         to_ignore = self._noneeg
@@ -100,7 +106,7 @@ class UiTools(object):
                 to_ignore)
 
         # ____________________ Update ____________________
-        aM = np.argmax(consider)
+        a_max = np.argmax(consider)
         # Update data info :
         self._get_data_info()
 
@@ -117,8 +123,8 @@ class UiTools(object):
         self._PanSpecChan.addItems(self._channels)
         self._ToolDetectChan.addItems(self._channels)
         # Reconnect :
-        self._PanSpecChan.setCurrentIndex(aM)
-        self._ToolDetectChan.setCurrentIndex(aM)
+        self._PanSpecChan.setCurrentIndex(a_max)
+        self._ToolDetectChan.setCurrentIndex(a_max)
 
         # Update channel names :
         for num, k in enumerate(self._channels):
@@ -139,12 +145,12 @@ class UiTools(object):
                 self._PanSpecChan.model().item(num).setEnabled(k)
                 self._ToolDetectChan.model().item(num).setEnabled(k)
         if not any([k.isChecked() for k in self._chanChecks]):
-            self._chanChecks[aM].setChecked(True)
+            self._chanChecks[a_max].setChecked(True)
         # Reconnect :
-        self._PanSpecChan.currentIndexChanged.connect(self._fcn_specSetData)
+        self._PanSpecChan.currentIndexChanged.connect(self._fcn_spec_set_data)
 
         self._chan.update()
-        self._fcn_chanViz()
+        self._fcn_chan_viz()
 
         # Finally disable GroupBox :
         self._ToolsRefGrp.setEnabled(False)
@@ -152,7 +158,7 @@ class UiTools(object):
     # =====================================================================
     # DEMEAN / DETREND / FILTERING
     # =====================================================================
-    def _fcn_sigProcessing(self):
+    def _fcn_sig_processing(self):
         """Signal processing function."""
         # ========== VALUES ==========
         # Mean and trend :
@@ -171,7 +177,7 @@ class UiTools(object):
         channel = int(self._SigFiltChan.currentIndex()) - 1
         if channel >= 0:
             self._chanChecks[channel].setChecked(True)
-            self._fcn_chanViz()
+            self._fcn_chan_viz()
 
         # ========== CHANNELS ==========
         # ---- Demean / detrend ----
@@ -205,7 +211,7 @@ class UiTools(object):
 
         self._spec.update()
 
-    def _fcn_filtDispAs(self):
+    def _fcn_filt_disp_as(self):
         """Display / hide settings for amplitude / phase / power."""
         # Get current type :
         dispas = self._SigFiltDisp.currentText()
@@ -213,22 +219,22 @@ class UiTools(object):
             self._SigFiltBand.setEnabled(True)
             self._SigFiltMeth.setEnabled(True)
             self._SigFiltOrder.setEnabled(True)
-            self._fcn_filtBand()
+            self._fcn_filt_band()
         else:
             self._SigFiltBand.setEnabled(False)
             self._SigFiltMeth.setEnabled(False)
             self._SigFiltOrder.setEnabled(False)
         # Run filter :
-        self._fcn_sigProcessing()
+        self._fcn_sig_processing()
 
-    def _fcn_filtViz(self):
+    def _fcn_filt_viz(self):
         """Display / hide filtering panel."""
         viz = self._SigFilt.isChecked()
         self._SigFiltW.setEnabled(viz)
         if not viz:
-            self._fcn_sigProcessing()
+            self._fcn_sig_processing()
 
-    def _fcn_filtBand(self):
+    def _fcn_filt_band(self):
         """Configure visible [fstart, fend] for the band possibilities."""
         # Get selected band :
         filtband = str(self._SigFiltBand.currentText())

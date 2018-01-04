@@ -427,13 +427,13 @@ class Spectrogram(PrepareData):
         # Time-frequency map
         self.tf = TFmapsMesh(parent=parent)
         # Spectrogram
-        self.mesh = scene.visuals.Image(np.zeros((2, 2)),
-                                        name='spectrogram', parent=parent)
+        self.mesh = scene.visuals.Image(np.zeros((2, 2)), parent=parent,
+                                        name='Fourier transform')
         self.mesh.transform = vist.STTransform()
 
-    def set_data(self, sf, data, time, method='spectrogram', cmap='rainbow',
-                nfft=30., overlap=0.,fstart=.5, fend=20., contrast=.5,
-                interp='nearest', norm=0):
+    def set_data(self, sf, data, time, method='Fourier transform',
+                 cmap='rainbow', nfft=30., overlap=0., fstart=.5, fend=20.,
+                 contrast=.5, interp='nearest', norm=0):
         """Set data to the spectrogram.
 
         Use this method to change data, colormap, spectrogram settings, the
@@ -447,7 +447,7 @@ class Spectrogram(PrepareData):
             The data to use for the spectrogram. Must be a row vector.
         time: array_like
             The time vector.
-        method: string | 'spectrogram'
+        method: string | 'Fourier transform'
             Computation method.
         cmap : string | 'viridis'
             The matplotlib colormap to use.
@@ -474,7 +474,7 @@ class Spectrogram(PrepareData):
         nperseg = int(round(nfft * sf))
 
         # =================== TF // SPECTRO ===================
-        if method == 'time-frequency':
+        if method == 'Wavelet':
             self.tf.set_data(data, sf, f_min=fstart, f_max=fend, cmap=cmap,
                              contrast=contrast, n_window=nperseg,
                              overlap=overlap, window='hamming', norm=norm)
@@ -485,15 +485,17 @@ class Spectrogram(PrepareData):
             # =================== CONVERSION ===================
             overlap = int(round(overlap * nperseg))
 
-            if method == 'multitaper':
+            if method == 'Multitaper':
                 from lspopt import spectrogram_lspopt
                 freq, _, mesh = spectrogram_lspopt(data, fs=sf,
-                                nperseg=nperseg, c_parameter=20,
-                                noverlap=overlap)
-            elif method == 'spectrogram':
-                freq, _, mesh = scpsig.spectrogram(data, fs=sf, nperseg=nperseg,
-                                               noverlap=overlap,
-                                               window='hamming')
+                                                   nperseg=nperseg,
+                                                   c_parameter=20,
+                                                   noverlap=overlap)
+            elif method == 'Fourier transform':
+                freq, _, mesh = scpsig.spectrogram(data, fs=sf,
+                                                   nperseg=nperseg,
+                                                   noverlap=overlap,
+                                                   window='hamming')
             mesh = 20 * np.log10(mesh)
 
             # =================== FREQUENCY SELECTION ===================
@@ -528,8 +530,8 @@ class Spectrogram(PrepareData):
             self.rect = (tm, freq.min(), tM - tm, freq.max() - freq.min())
             self.freq = freq
         # Visibility :
-        self.mesh.visible = 0 if method == 'time-frequency' else 1
-        self.tf.visible = 1 if method == 'time-frequency' else 0
+        self.mesh.visible = 0 if method == 'Wavelet' else 1
+        self.tf.visible = 1 if method == 'Wavelet' else 0
 
     def clean(self):
         """Clean indicators."""
@@ -705,54 +707,6 @@ class Hypnogram(object):
         for k in self._hconvinv.keys():
             data[datac == k] = self._hconvinv[k]
         return data
-
-    def pos_to_gui(self, pos):
-        """Convert a position array.
-
-        Parameters
-        ----------
-        pos : array_like, int
-            Array of positions of shape (n_pos, 3) where the three
-            components are (time, y, z). Pos will also be converted if it's
-            a integer or float.
-
-        Returns
-        -------
-        pos : array_like, int
-            The converted position array/integer.
-        """
-        if isinstance(pos, np.ndarray):
-            y = pos[:, 1]
-            # Convert each y-value :
-            for k in range(len(y)):
-                y[k] = -self._hconv[-int(y[k])]
-            return pos.astype(np.float32)
-        elif isinstance(pos, (int, float)):
-            return -self._hconv[-int(pos)]
-
-    def pos_to_gui_inv(self, pos):
-        """Convert a position array.
-
-        Parameters
-        ----------
-        pos : array_like, int
-            Array of positions of shape (n_pos, 3) where the three
-            components are (time, y, z). Pos will also be converted if it's
-            a integer or float.
-
-        Returns
-        -------
-        pos : array_like, int
-            The converted position array/integer.
-        """
-        if isinstance(pos, np.ndarray):
-            y = pos[:, 1]
-            # Convert each y-value :
-            for k in range(len(y)):
-                y[k] = -self._hconvinv[-int(y[k])]
-            return pos.astype(np.float32)
-        elif isinstance(pos, (int, float)):
-            return -self._hconvinv[-int(pos)]
 
     def clean(self, sf, time):
         """Clean indicators."""
@@ -945,12 +899,12 @@ class CanvasShortcuts(object):
             elif event.text.lower() == 'm':  # Magnify
                 viz = self._slMagnify.isChecked()
                 self._slMagnify.setChecked(not viz)
-                self._fcn_sliderMagnify()
+                self._fcn_slider_magnify()
 
             elif event.text.lower() == 'g':  # Grid
                 viz = self._slGrid.isChecked()
                 self._slGrid.setChecked(not viz)
-                self._fcn_gridToggle()
+                self._fcn_grid_toggle()
 
             # ------------ SCORING ------------
             elif event.text.lower() == 'a':  # Art
@@ -1022,7 +976,7 @@ class CanvasShortcuts(object):
             # Set the current tab to the annotation tab :
             self.QuickSettings.setCurrentIndex(5)
             # Run annotation :
-            self._fcn_annotateAdd('', (cursor, cursor), title)
+            self._fcn_annotate_add('', (cursor, cursor), title)
 
         @canvas.events.mouse_move.connect
         def on_mouse_move(event):
@@ -1080,7 +1034,7 @@ class CanvasShortcuts(object):
                 self._chan.node[idx].transform = transform
 
         @canvas.events.mouse_wheel.connect
-        def on_mouse_wheek(event):
+        def on_mouse_wheel(event):
             pass
 
 
@@ -1092,19 +1046,19 @@ class Visuals(CanvasShortcuts):
         # =================== VARIABLES ===================
         sf, data, time = self._sf, self._data, self._time
         channels, hypno, cameras = self._channels, self._hypno, self._allCams
-        method = self._linemeth
 
         # =================== CHANNELS ===================
         self._chan = ChannelPlot(channels, time, camera=cameras[0],
-                                 method=method, color=self._chancolor,
-                                 width=self._lw, color_detection=self._indicol,
+                                 color=self._chancolor, width=self._lw,
+                                 color_detection=self._indicol,
                                  parent=self._chanCanvas,
-                                 fcn=self._fcn_sliderMove)
+                                 fcn=self._fcn_slider_move)
         PROFILER('Channels', level=1)
 
         # =================== SPECTROGRAM ===================
         # Create a spectrogram object :
-        self._spec = Spectrogram(camera=cameras[1], fcn=self._fcn_specSetData,
+        self._spec = Spectrogram(camera=cameras[1],
+                                 fcn=self._fcn_spec_set_data,
                                  parent=self._specCanvas.wc.scene)
         self._spec.set_data(sf, data[0, ...], time, cmap=self._defcmap)
         PROFILER('Spectrogram', level=1)
@@ -1142,8 +1096,7 @@ class Visuals(CanvasShortcuts):
         # Set camera properties :
         cameras[3].rect = self._topo.rect
         cameras[3].aspect = 1.
-        if not any(self._topo._keeponly):
-            self.toolBox_2.setItemEnabled(2, False)
+        self._pan_pick.model().item(3).setEnabled(any(self._topo._keeponly))
         PROFILER('Topoplot', level=1)
 
         # =================== SHORTCUTS ===================

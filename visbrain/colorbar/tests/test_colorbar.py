@@ -37,12 +37,12 @@ class TestColorbar(_TestVisbrain):
     @pytest.mark.skip('Not configured')
     def test_save_config(self):
         """Test function save_config."""
-        cb._fcn_saveCbarConfig(filename=self.to_tmp_dir('cb_config.txt'))
+        cb._fcn_save_cbar_config(filename=self.to_tmp_dir('cb_config.txt'))
 
     @pytest.mark.skip('Not configured')
     def test_load_config(self):
         """Test function load_config."""
-        cb._fcn_loadCbarConfig(filename=self.to_tmp_dir('cb_config.txt'))
+        cb._fcn_load_cbar_config(filename=self.to_tmp_dir('cb_config.txt'))
 
     @pytest.mark.skip('Not configured')
     def test_screenshot(self):

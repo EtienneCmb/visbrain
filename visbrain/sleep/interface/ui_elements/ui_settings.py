@@ -17,34 +17,34 @@ class UiSettings(object):
         self._slFrame.setMaximumHeight(100)
         # Function applied when the slider move :
         self._slOnStart = False
-        self._fcn_sliderSettings()
-        self._SlVal.valueChanged.connect(self._fcn_sliderMove)
+        self._fcn_slider_settings()
+        self._SlVal.valueChanged.connect(self._fcn_slider_move)
         # Function applied when slider's settings changed :
-        self._SigWin.valueChanged.connect(self._fcn_sliderMove)
+        self._SigWin.valueChanged.connect(self._fcn_slider_move)
         self._SigWin.setKeyboardTracking(False)
-        self._SigSlStep.valueChanged.connect(self._fcn_sliderSettings)
+        self._SigSlStep.valueChanged.connect(self._fcn_slider_settings)
         self._SigSlStep.setKeyboardTracking(False)
         # Spin box for window selection :
-        self._SlGoto.valueChanged.connect(self._fcn_sliderWinSelection)
+        self._SlGoto.valueChanged.connect(self._fcn_slider_win_selection)
         self._SlGoto.setKeyboardTracking(False)
         # Unit conversion :
-        self._slRules.currentIndexChanged.connect(self._fcn_sliderMove)
+        self._slRules.currentIndexChanged.connect(self._fcn_slider_move)
         # Grid toggle :
-        self._slGrid.clicked.connect(self._fcn_gridToggle)
+        self._slGrid.clicked.connect(self._fcn_grid_toggle)
         # Text format :
         self._slTxtFormat = "Window : [ {start} ; {end} ] {unit} || " + \
                             "Sleep stage : {conv}"
         # Absolute time :
-        self._slAbsTime.clicked.connect(self._fcn_sliderMove)
+        self._slAbsTime.clicked.connect(self._fcn_slider_move)
         # Magnify :
-        self._slMagnify.clicked.connect(self._fcn_sliderMagnify)
+        self._slMagnify.clicked.connect(self._fcn_slider_magnify)
         # Annotation from the navigation bar :
-        self._AnnotateRun.clicked.connect(self._fcn_annotateNav)
+        self._AnnotateRun.clicked.connect(self._fcn_annotate_nav)
 
     # =====================================================================
     # SLIDER
     # =====================================================================
-    def _fcn_sliderMove(self):
+    def _fcn_slider_move(self):
         """Function applied when the slider move."""
         # ================= INDEX =================
         # Get slider variables :
@@ -157,7 +157,7 @@ class UiSettings(object):
         self._hypYLabels[hypconv + 1].setStyleSheet("QLabel {color: " +
                                                     hypcol + ";}")
 
-    def _fcn_sliderSettings(self):
+    def _fcn_slider_settings(self):
         """Function applied to change slider settings."""
         # Get current slider value :
         sl = self._SlVal.value()
@@ -175,7 +175,7 @@ class UiSettings(object):
         self._SlVal.setValue(sl * self._SlVal.maximum() / slmax)
 
         if self._slOnStart:
-            self._fcn_sliderMove()
+            self._fcn_slider_move()
             # Update grid :
             if self.menuDispZoom.isChecked():
                 self._hyp.set_grid(self._time, step)
@@ -184,11 +184,11 @@ class UiSettings(object):
         else:
             self._slOnStart = True
 
-    def _fcn_sliderWinSelection(self):
+    def _fcn_slider_win_selection(self):
         """Move slider using window spin."""
         self._SlVal.setValue(self._SlGoto.value() / self._SigSlStep.value())
 
-    def _fcn_sliderMagnify(self):
+    def _fcn_slider_magnify(self):
         """Magnify signals."""
         # Set transformation to each node parent :
         for k in self._chan.node:
@@ -202,7 +202,7 @@ class UiSettings(object):
     # =====================================================================
     # GRID
     # =====================================================================
-    def _fcn_gridToggle(self):
+    def _fcn_grid_toggle(self):
         """Toggle grid visibility."""
         viz = self._slGrid.isChecked()
         # Toggle hypno grid :
@@ -214,7 +214,7 @@ class UiSettings(object):
     # =====================================================================
     # RULER
     # =====================================================================
-    def _get_factFromUnit(self):
+    def _get_fact_from_unit(self):
         """Get factor conversion from current selected unit."""
         unit = str(self._slRules.currentText())
         if unit == 'seconds':
@@ -247,25 +247,25 @@ class UiSettings(object):
         self._hypno[t[0]:t[1]] = stage
         self._hyp.set_stage(t[0], t[1], stage)
         # # Update info table :
-        self._fcn_infoUpdate()
+        self._fcn_info_update()
         # Update scoring table :
-        self._fcn_Hypno2Score()
-        # self._fcn_Score2Hypno()
+        self._fcn_hypno_to_score()
+        # self._fcn_score_to_hypno()
 
     # =====================================================================
     # Annotate
     # =====================================================================
-    def _fcn_annotateNav(self):
+    def _fcn_annotate_nav(self):
         """Annotate from the selected window."""
         # Set the current tab to the annotation tab :
         self.QuickSettings.setCurrentIndex(5)
         # Run annotation :
-        self._fcn_annotateAdd('')
+        self._fcn_annotate_add('')
 
     # =====================================================================
     # CLEAN / RESET GUI
     # =====================================================================
-    def _fcn_cleanGui(self):
+    def _fcn_clean_gui(self):
         """Clean the entire GUI."""
         # -------------- TABLES --------------
         # Info :
@@ -313,7 +313,7 @@ class UiSettings(object):
         self._TimeAxisW.deleteLater(), self._TimeLayout.deleteLater()
         self._timeLabel.deleteLater()
 
-    def _fcn_resetGui(self):
+    def _fcn_reset_gui(self):
         """Reset the GUI."""
         from .uiElements import uiElements
         from ...visuals import visuals

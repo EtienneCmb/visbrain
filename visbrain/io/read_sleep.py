@@ -16,7 +16,7 @@ import logging
 
 from .rw_utils import get_file_ext
 from .rw_hypno import (read_hypno, oversample_hypno)
-from .dialog import dialogLoad
+from .dialog import dialog_load
 from .mneio import mne_switch
 from .dependencies import is_mne_installed
 from ..utils import get_dsf, vispy_array
@@ -37,11 +37,11 @@ class ReadSleepData(object):
         # ========================== LOAD DATA ==========================
         # Dialog window if data is None :
         if data is None:
-            data = dialogLoad(self, "Open dataset", '',
-                              "BrainVision (*.vhdr);;EDF (*.edf);;"
-                              "GDF (*.gdf);;BDF (*.bdf);;Elan (*.eeg);;"
-                              "EGI (*.egi);;MFF (*.mff);;CNT (*.cnt);;"
-                              "Micromed (*.trc);;EEGLab (*.set);;REC (*.rec)")
+            data = dialog_load(self, "Open dataset", '',
+                               "BrainVision (*.vhdr);;EDF (*.edf);;"
+                               "GDF (*.gdf);;BDF (*.bdf);;Elan (*.eeg);;"
+                               "EGI (*.egi);;MFF (*.mff);;CNT (*.cnt);;"
+                               "Micromed (*.trc);;EEGLab (*.set);;REC (*.rec)")
             upath = os.path.split(data)[0]
         else:
             upath = ''
@@ -56,9 +56,8 @@ class ReadSleepData(object):
             sleep_ext = ['.eeg', '.vhdr', '.edf', '.trc', '.rec']
             use_mne = True if ext not in sleep_ext else use_mne
 
-            if not is_mne_installed() and use_mne:
-                raise IOError("To load the file, MNE-python should be "
-                              "installed.")
+            if use_mne:
+                is_mne_installed(raise_error=True)
 
             # ---------- LOAD THE FILE ----------
             if use_mne:  # Load using MNE functions
@@ -111,9 +110,9 @@ class ReadSleepData(object):
         # ========================== LOAD HYPNOGRAM ==========================
         # Dialog window for hypnogram :
         if hypno is None:
-            hypno = dialogLoad(self, "Open hypnogram", upath,
-                               "Elan (*.hyp);;Text file (*.txt);;"
-                               "CSV file (*.csv);;All files (*.*)")
+            hypno = dialog_load(self, "Open hypnogram", upath,
+                                "Elan (*.hyp);;Text file (*.txt);;"
+                                "CSV file (*.csv);;All files (*.*)")
             hypno = None if hypno == '' else hypno
         if isinstance(hypno, np.ndarray):  # array_like
             if len(hypno) == n:

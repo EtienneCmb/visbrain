@@ -32,23 +32,23 @@ class CbarQt(object):
 
     Parameters
     ----------
-    guiW: PyQt widget
+    gui_w: PyQt widget
         The widget for adding the GUI colorar properties.
-    vizW: PyQt widget
+    viz_w: PyQt widget
         The widget for adding the VisPy based colorbar.
     """
 
-    def __init__(self, guiW, vizW, cbobjs, parent=None, camera=None):
+    def __init__(self, gui_w, viz_w, cbobjs, parent=None, camera=None):
         """Init."""
         # --------------------------------------------------------------------
         #                          GUI COMPONENTS
         # --------------------------------------------------------------------
-        # Add colorbar properties to guiW :
+        # Add colorbar properties to gui_w :
         self.cbui = CbarForm()
-        self.cbui.setupUi(guiW)
+        self.cbui.setupUi(gui_w)
         # Add VisPy based colorbar :
         self.cbviz = CbarVisual(parent=parent)
-        vizW.addWidget(self.cbviz._canvas.native)
+        viz_w.addWidget(self.cbviz._canvas.native)
         self.cbobjs = cbobjs
         # Add items contains in the cbobs :
         self['object'].addItems(self.cbobjs.keys())
@@ -194,7 +194,7 @@ class CbarQt(object):
         self.cbobjs.select(name)
         self['object'].setCurrentIndex(idx)
 
-    def setEnabled(self, name, enable=True):
+    def setEnabled(self, name, enable=True):  # noqa
         """Deactivate an object."""
         # Get the list of all current objects :
         all_items = [self['object'].itemText(i) for i in range(
