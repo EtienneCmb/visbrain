@@ -144,19 +144,19 @@ def write_fig_hyp(hypno, sf, file=None, start_s=0, grid=False, ascolor=False,
         plt.show()
 
 
-def write_fig_spindles(data, hypno, sf, file=None, start_s=0., window_s=10.,
-                       thr=3., nrem_only=False, dpi=300):
+def write_fig_spindles(data, sf, hypno=None, file=None, start_s=0.,
+                       window_s=10., thr=3., nrem_only=False, dpi=300):
     """Show steps of the spindles detection for a specific time window.
 
     Parameters
     ----------
     data : array_like
         Data vector
-    hypno : array_like
-        Hypnogram vector
     sf : float
         The sampling frequency of displayed elements (could be the
         down-sampling frequency)
+    hypno : array_like | None
+        Hypnogram vector
     file : string | None
         Output filename (with full path). If None, the plot is displayed.
     start_s : float | 0.
@@ -171,6 +171,9 @@ def write_fig_spindles(data, hypno, sf, file=None, start_s=0., window_s=10.,
     import matplotlib.pyplot as plt
     from ..utils.sleep import spindlesdetect
     from ..utils.filtering import filt
+
+    # Define an empty hypno hypnogram if None :
+    hypno = np.zeros_like(data) if hypno is None else hypno
 
     # Run spindles detection on the selected channel
     (idx_spindles, _, _, dur, pwr, idx_start, idx_stop, hard_thr, soft_thr,
