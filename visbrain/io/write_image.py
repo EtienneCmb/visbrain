@@ -15,21 +15,21 @@ __all__ = ('write_fig_hyp', 'write_fig_spindles', 'write_fig_canvas',
            'write_fig_pyqt')
 
 
-def write_fig_hyp(file, hypno, sf, tstartsec, grid=False, ascolor=False,
+def write_fig_hyp(hypno, sf, file=None, start_s=0, grid=False, ascolor=False,
                   dpi=300, colors={-1: '#8bbf56', 0: '#56bf8b', 1: '#aabcce',
                                    2: '#405c79', 3: '#0b1c2c', 4: '#bf5656'}):
     """Export hypnogram to a high-res png figure.
 
     Parameters
     ----------
-    file : str
-        Output filename (with full path)
     hypno : array_like
         Hypnogram vector
     sf : float
         The sampling frequency of displayed elements (could be the
         down-sampling frequency)
-    tstartsec : int
+    file : string | None
+        Output filename (with full path). If None, the plot is displayed.
+    start_s : float | 0.
         Record starting time given in seconds.
     grid : bool | False
         Plot X and Y grid.
@@ -72,7 +72,7 @@ def write_fig_hyp(file, hypno, sf, tstartsec, grid=False, ascolor=False,
         xticks = np.arange(0, len(hypno), 60 * 60)
 
     xticks = np.append(xticks, len(hypno))
-    xlabels = (xticks + tstartsec).astype(int)
+    xlabels = (xticks + start_s).astype(int)
     xlabels_str = [str(datetime.timedelta(seconds=int(j)))[:-3]
                    for i, j in enumerate(xlabels)]
     xlabels_str = [s.replace('1 day, ', '') for s in xlabels_str]
@@ -136,27 +136,32 @@ def write_fig_hyp(file, hypno, sf, tstartsec, grid=False, ascolor=False,
     ax.spines['bottom'].set_smart_bounds(True)
 
     # Save as 600 dpi .png
-    plt.savefig(file, format='png', dpi=dpi, bbox_inches='tight')
-    logger.info('Image successfully saved (%s)' % file)
-    plt.close()
+    if isinstance(file, str):
+        plt.savefig(file, format='png', dpi=dpi, bbox_inches='tight')
+        logger.info('Image successfully saved (%s)' % file)
+        plt.close()
+    else:
+        plt.show()
 
 
-def write_fig_spindles(elec, hypno, sf, start_s, window_s, thr=3.,
-                       nrem_only=False, dpi=300):
+def write_fig_spindles(data, hypno, sf, file=None, start_s=0., window_s=10.,
+                       thr=3., nrem_only=False, dpi=300):
     """Show steps of the spindles detection for a specific time window.
 
     Parameters
     ----------
-    elec : array_like
+    data : array_like
         Data vector
     hypno : array_like
         Hypnogram vector
     sf : float
         The sampling frequency of displayed elements (could be the
         down-sampling frequency)
-    start_s : float
+    file : string | None
+        Output filename (with full path). If None, the plot is displayed.
+    start_s : float | 0.
         Starting point in sec of the window to plot
-    window_s : float
+    window_s : float | 10.
         Window duration in seconds
     thresh : float | 3
         Hard threshold for the spindles detection
@@ -170,7 +175,7 @@ def write_fig_spindles(elec, hypno, sf, start_s, window_s, thr=3.,
     # Run spindles detection on the selected channel
     (idx_spindles, _, _, dur, pwr, idx_start, idx_stop, hard_thr, soft_thr,
      idx_sigma, fmin, fmax, sigma_nfpow, amplitude,
-     sigma_thr) = spindlesdetect(elec, sf, thr, hypno, nrem_only,
+     sigma_thr) = spindlesdetect(data, sf, thr, hypno, nrem_only,
                                  return_full=True)
 
     # Define plotting range
@@ -178,7 +183,7 @@ def write_fig_spindles(elec, hypno, sf, start_s, window_s, thr=3.,
     x = range(start_sf, start_sf + int(window_s * sf))
 
     # Bandpass filter of the window
-    elec_filt = filt(sf, [12., 14.], elec[x], order=4)
+    elec_filt = filt(sf, [12., 14.], data[x], order=4)
 
     # Find beginning and end of spindle within the window
     idx_start_win = idx_start[(idx_start >= min(x)) & (idx_start <= max(x))]
@@ -207,7 +212,7 @@ def write_fig_spindles(elec, hypno, sf, start_s, window_s, thr=3.,
 
     # Fill Y vector
     y_sigma[idx_sigma_win - start_sf] = sigma_nfpow[idx_sigma_win]
-    y_spindles[idx_spindles_win - start_sf] = elec[idx_spindles_win]
+    y_spindles[idx_spindles_win - start_sf] = data[idx_spindles_win]
     y_wlt[idx_spindles_win - start_sf] = amplitude[idx_spindles_win]
     y_hard[idx_hard_win - start_sf] = amplitude[idx_hard_win]
 
@@ -216,7 +221,7 @@ def write_fig_spindles(elec, hypno, sf, start_s, window_s, thr=3.,
     f.subplots_adjust(hspace=0.6)
 
     # Plot original signal
-    axarr[0].plot(x, elec[x], 'darkslategrey', lw=1.5)
+    axarr[0].plot(x, data[x], 'darkslategrey', lw=1.5)
     axarr[0].plot(x, y_spindles, 'brown', lw=1.5)
     axarr[0].set_title('Original signal (' + str(window_s) + ' sec)')
     axarr[0].set_xlim([min(x), max(x)])
@@ -224,7 +229,7 @@ def write_fig_spindles(elec, hypno, sf, start_s, window_s, thr=3.,
     if sp_power.size >= 1:
         text = 'power = ' + str(np.round(sp_power, 2)) + \
             ' - duration = ' + str(sp_duration) + ' ms'
-        axarr[0].annotate(text, xy=(min(x), min(elec[x])), fontsize=9,
+        axarr[0].annotate(text, xy=(min(x), min(data[x])), fontsize=9,
                           xycoords='data')
 
     # Plot filtered signal
@@ -251,7 +256,13 @@ def write_fig_spindles(elec, hypno, sf, start_s, window_s, thr=3.,
     for ax in range(4):
         axarr[ax].axis('off')
 
-    plt.show()
+    # Save as .png
+    if isinstance(file, str):
+        plt.savefig(file, format='png', dpi=dpi, bbox_inches='tight')
+        logger.info('Image successfully saved (%s)' % file)
+        plt.close()
+    else:
+        plt.show()
 
 
 def write_fig_canvas(filename, canvas, widget=None, autocrop=False,

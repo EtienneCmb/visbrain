@@ -116,8 +116,8 @@ class UiMenu(HelpMenu):
             hypno = self._hypno.copy()
             grid = self._slGrid.isChecked()
             ascolor = self._PanHypnoColor.isChecked()
-            write_fig_hyp(filename, hypno, self._sf, self._toffset,
-                          grid=grid, ascolor=ascolor)
+            write_fig_hyp(hypno, self._sf, file=filename,
+                          start_s=self._toffset, grid=grid, ascolor=ascolor)
 
     # ______________________ STATS INFO TABLE ______________________
     def _save_info_table(self, *args, filename=None):
