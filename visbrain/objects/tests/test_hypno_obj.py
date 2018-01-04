@@ -3,10 +3,12 @@ import numpy as np
 
 from visbrain.objects.hypno_obj import HypnogramObj
 from visbrain.objects.tests._testing_objects import _TestObjects
+from visbrain.io import path_to_visbrain_data
 
 
 data = np.repeat(np.arange(6), 100) - 1.
 h_obj = HypnogramObj('hypno', data)
+hypno_file = path_to_visbrain_data('Hypnogram_excerpt2.txt')
 
 
 class TestHypnogramObj(_TestObjects):
@@ -17,6 +19,7 @@ class TestHypnogramObj(_TestObjects):
     def test_definition(self):
         """Test function definition."""
         HypnogramObj('hypno', data)
+        HypnogramObj(hypno_file)
 
     def test_set_stage(self):
         """Test set stage."""
