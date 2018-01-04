@@ -472,6 +472,26 @@ Examples demonstrating how to use objects.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="The PAC measure the degree of coupling between the phase of slow oscillations and the amplitude...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_pac_obj_thumb.png
+
+        :ref:`sphx_glr_auto_examples_objects_ex_pac_obj.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/objects/ex_pac_obj
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the roi object i.e :">
 
 .. only:: html

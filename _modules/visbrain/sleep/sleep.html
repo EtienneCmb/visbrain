@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>visbrain.sleep.sleep &mdash; visbrain 0.3.8 documentation</title>
+  <title>visbrain.sleep.sleep &mdash; visbrain 0.3.9 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="visbrain 0.3.8 documentation" href="../../../index.html"/>
+    <link rel="top" title="visbrain 0.3.9 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.8
+                0.3.9
               </div>
             
           
@@ -213,14 +213,9 @@
 <span class="sd">    axis : bool | False</span>
 <span class="sd">        Specify if each axis have to contains its own axis. Be carefull</span>
 <span class="sd">        with this option, the rendering can be much slower.</span>
-<span class="sd">    line : string | &#39;gl&#39;</span>
-<span class="sd">        Specify the line rendering. Use &#39;gl&#39; for the default line (fast) or</span>
-<span class="sd">        &#39;agg&#39; for smooth lines. This option might not works on some</span>
-<span class="sd">        plateforms.</span>
 <span class="sd">    href : list | [&#39;art&#39;, &#39;wake&#39;, &#39;rem&#39;, &#39;n1&#39;, &#39;n2&#39;, &#39;n3&#39;]</span>
 <span class="sd">        List of sleep stages. This list can be used to changed the display</span>
 <span class="sd">        order into the GUI.</span>
-<span class="sd">    ..versionadded:: 0.3.4</span>
 <span class="sd">    preload : bool | True</span>
 <span class="sd">        Preload data into memory. For large datasets, turn this parameter to</span>
 <span class="sd">        True.</span>
@@ -246,8 +241,7 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hypno</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">config_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">annotations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">downsample</span><span class="o">=</span><span class="mf">100.</span><span class="p">,</span>
-                 <span class="n">axis</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s1">&#39;gl&#39;</span><span class="p">,</span>
-                 <span class="n">href</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;art&#39;</span><span class="p">,</span> <span class="s1">&#39;wake&#39;</span><span class="p">,</span> <span class="s1">&#39;rem&#39;</span><span class="p">,</span> <span class="s1">&#39;n1&#39;</span><span class="p">,</span> <span class="s1">&#39;n2&#39;</span><span class="p">,</span> <span class="s1">&#39;n3&#39;</span><span class="p">],</span>
+                 <span class="n">axis</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">href</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;art&#39;</span><span class="p">,</span> <span class="s1">&#39;wake&#39;</span><span class="p">,</span> <span class="s1">&#39;rem&#39;</span><span class="p">,</span> <span class="s1">&#39;n1&#39;</span><span class="p">,</span> <span class="s1">&#39;n2&#39;</span><span class="p">,</span> <span class="s1">&#39;n3&#39;</span><span class="p">],</span>
                  <span class="n">preload</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">use_mne</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">kwargs_mne</span><span class="o">=</span><span class="p">{},</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
         <span class="n">PyQtModule</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="s1">&#39;sleep_icon.svg&#39;</span><span class="p">)</span>
@@ -273,7 +267,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_hconvinv</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hconv</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span> <span class="o">=</span> <span class="n">axis</span>
         <span class="c1"># ---------- Default line width ----------</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_linemeth</span> <span class="o">=</span> <span class="n">line</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_lw</span> <span class="o">=</span> <span class="mf">1.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_lwhyp</span> <span class="o">=</span> <span class="mi">2</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_defwin</span> <span class="o">=</span> <span class="mf">30.</span>
@@ -376,6 +369,7 @@
 
     <span class="k">def</span> <span class="nf">_fcns_on_creation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Applied on creation.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_grid_toggle</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_slider_move</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_chanChecks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_hypLabel</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">menuDispHypno</span><span class="o">.</span><span class="n">isChecked</span><span class="p">())</span>
@@ -428,7 +422,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.3.8',
+            VERSION:'0.3.9',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>7. Objects &mdash; visbrain 0.3.8 documentation</title>
+  <title>7. Objects &mdash; visbrain 0.3.9 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="visbrain 0.3.8 documentation" href="index.html"/>
+    <link rel="top" title="visbrain 0.3.9 documentation" href="index.html"/>
         <link rel="up" title="Documentation" href="documentation.html"/>
         <link rel="next" title="Examples" href="auto_examples/index.html"/>
         <link rel="prev" title="6. Figure" href="figure.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.8
+                0.3.9
               </div>
             
           
@@ -160,6 +160,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#examples-using-visbrain-objects-timefrequencyobj">7.13.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.TimeFrequencyObj</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#hypnogram-object">7.14. Hypnogram object</a></li>
 </ul>
 </li>
 </ul>
@@ -249,6 +250,7 @@
 <li><a class="reference internal" href="#csobj"><span class="std std-ref">Cross-section object</span></a></li>
 <li><a class="reference internal" href="#imageobj"><span class="std std-ref">Image object</span></a></li>
 <li><a class="reference internal" href="#tfobj"><span class="std std-ref">Time-frequency map object</span></a></li>
+<li><a class="reference internal" href="#hypnoobj"><span class="std std-ref">Hypnogram object</span></a></li>
 </ul>
 <p>Each object inherit to the following methods :</p>
 <table border="1" class="longtable docutils">
@@ -270,13 +272,13 @@
 </table>
 <dl class="method">
 <dt id="visbrain.objects.VisbrainObject.describe_tree">
-<code class="descclassname">VisbrainObject.</code><code class="descname">describe_tree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/visbrain_obj.html#VisbrainObject.describe_tree"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/visbrain_obj.py#L119-L121"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.VisbrainObject.describe_tree" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">VisbrainObject.</code><code class="descname">describe_tree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/visbrain_obj.html#VisbrainObject.describe_tree"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/visbrain_obj.py#L160-L162"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.VisbrainObject.describe_tree" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tree description.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="visbrain.objects.VisbrainObject.preview">
-<code class="descclassname">VisbrainObject.</code><code class="descname">preview</code><span class="sig-paren">(</span><em>bgcolor='white'</em>, <em>axis=False</em>, <em>xyz=False</em>, <em>show=True</em>, <em>obj=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/visbrain_obj.html#VisbrainObject.preview"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/visbrain_obj.py#L91-L117"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.VisbrainObject.preview" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">VisbrainObject.</code><code class="descname">preview</code><span class="sig-paren">(</span><em>bgcolor='white'</em>, <em>axis=False</em>, <em>xyz=False</em>, <em>show=True</em>, <em>obj=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/visbrain_obj.html#VisbrainObject.preview"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/visbrain_obj.py#L132-L158"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.VisbrainObject.preview" title="Permalink to this definition">¶</a></dt>
 <dd><p>Previsualize the result.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -311,7 +313,7 @@ object.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.VisbrainObject.screenshot">
-<code class="descclassname">VisbrainObject.</code><code class="descname">screenshot</code><span class="sig-paren">(</span><em>saveas</em>, <em>print_size=None</em>, <em>dpi=300.0</em>, <em>unit='centimeter'</em>, <em>factor=None</em>, <em>region=None</em>, <em>autocrop=False</em>, <em>bgcolor=None</em>, <em>transparent=False</em>, <em>obj=None</em>, <em>line_width=1.0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/visbrain_obj.html#VisbrainObject.screenshot"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/visbrain_obj.py#L123-L182"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.VisbrainObject.screenshot" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">VisbrainObject.</code><code class="descname">screenshot</code><span class="sig-paren">(</span><em>saveas</em>, <em>print_size=None</em>, <em>dpi=300.0</em>, <em>unit='centimeter'</em>, <em>factor=None</em>, <em>region=None</em>, <em>autocrop=False</em>, <em>bgcolor=None</em>, <em>transparent=False</em>, <em>obj=None</em>, <em>line_width=1.0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/visbrain_obj.html#VisbrainObject.screenshot"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/visbrain_obj.py#L164-L223"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.VisbrainObject.screenshot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Take a screeshot of the scene.</p>
 <p>By default, the rendered canvas will have the size of your screen.
 The screenshot() method provides two ways to increase to exported image
@@ -540,31 +542,35 @@ to link all cameras.</p>
 
 <div class="section" id="examples-using-visbrain-objects-sceneobj">
 <h3>7.1.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.SceneObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-sceneobj" title="Permalink to this headline">¶</a></h3>
-<div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the brain object i.e :"><div class="figure" id="id2">
+<div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the brain object i.e :"><div class="figure" id="id6">
 <img alt="_images/sphx_glr_ex_brain_obj_thumb.png" src="_images/sphx_glr_ex_brain_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_brain_obj.html#sphx-glr-auto-examples-objects-ex-brain-obj-py"><span class="std std-ref">Brain object</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Illustration of the main functionalities and inputs of the connctivity object."><div class="figure" id="id3">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Illustration of the main functionalities and inputs of the connctivity object."><div class="figure" id="id7">
 <img alt="_images/sphx_glr_ex_connectivity_obj_thumb.png" src="_images/sphx_glr_ex_connectivity_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_connectivity_obj.html#sphx-glr-auto-examples-objects-ex-connectivity-obj-py"><span class="std std-ref">Connectivity object</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Illustration and main functionalities and inputs of the cross-section object."><div class="figure" id="id4">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Illustration and main functionalities and inputs of the cross-section object."><div class="figure" id="id8">
 <img alt="_images/sphx_glr_ex_cross_section_obj_thumb.png" src="_images/sphx_glr_ex_cross_section_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_cross_section_obj.html#sphx-glr-auto-examples-objects-ex-cross-section-obj-py"><span class="std std-ref">Cross-section object</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram."><div class="figure" id="id5">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram."><div class="figure" id="id9">
 <img alt="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" src="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_im_tf_spec_obj.html#sphx-glr-auto-examples-objects-ex-im-tf-spec-obj-py"><span class="std std-ref">Image, time-frequency map and spectrogram objects</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the roi object i.e :"><div class="figure" id="id6">
+</div><div class="sphx-glr-thumbcontainer" tooltip="The PAC measure the degree of coupling between the phase of slow oscillations and the amplitude..."><div class="figure" id="id10">
+<img alt="_images/sphx_glr_ex_pac_obj_thumb.png" src="_images/sphx_glr_ex_pac_obj_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_pac_obj.html#sphx-glr-auto-examples-objects-ex-pac-obj-py"><span class="std std-ref">Phase-Amplitude Coupling (PAC)  object</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the roi object i.e :"><div class="figure" id="id11">
 <img alt="_images/sphx_glr_ex_roi_object_thumb.png" src="_images/sphx_glr_ex_roi_object_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_roi_object.html#sphx-glr-auto-examples-objects-ex-roi-object-py"><span class="std std-ref">Region Of Interest (ROI) object</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the source object i.e :"><div class="figure" id="id7">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the source object i.e :"><div class="figure" id="id12">
 <img alt="_images/sphx_glr_ex_source_obj_thumb.png" src="_images/sphx_glr_ex_source_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_source_obj.html#sphx-glr-auto-examples-objects-ex-source-obj-py"><span class="std std-ref">Source object</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Illustration of the main functionalities and inputs of the volume object."><div class="figure" id="id8">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Illustration of the main functionalities and inputs of the volume object."><div class="figure" id="id13">
 <img alt="_images/sphx_glr_ex_volume_obj_thumb.png" src="_images/sphx_glr_ex_volume_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_volume_obj.html#sphx-glr-auto-examples-objects-ex-volume-obj-py"><span class="std std-ref">Volume object</span></a></span></p>
 </div>
@@ -572,7 +578,7 @@ to link all cameras.</p>
 </div>
 <div class="section" id="brain-object">
 <span id="brainobj"></span><h2>7.2. Brain object<a class="headerlink" href="#brain-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id9">
+<div class="figure align-center" id="id14">
 <img alt="_images/pic_brain_obj.png" src="_images/pic_brain_obj.png" />
 <p class="caption"><span class="caption-text">Brain object example</span></p>
 </div>
@@ -929,59 +935,59 @@ respectively describing the (azimuth, elevation).</p>
 
 <div class="section" id="examples-using-visbrain-objects-brainobj">
 <h3>7.2.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.BrainObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-brainobj" title="Permalink to this headline">¶</a></h3>
-<div class="sphx-glr-thumbcontainer" tooltip="Control the brain i.e the brain template to use, the transparency and the hemisphere."><div class="figure" id="id10">
+<div class="sphx-glr-thumbcontainer" tooltip="Control the brain i.e the brain template to use, the transparency and the hemisphere."><div class="figure" id="id15">
 <img alt="_images/sphx_glr_00_brain_control_thumb.png" src="_images/sphx_glr_00_brain_control_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/00_brain_control.html#sphx-glr-auto-examples-brain-00-brain-control-py"><span class="std std-ref">Brain control</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to define a custom brain template using your own vertices and faces..."><div class="figure" id="id11">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to define a custom brain template using your own vertices and faces..."><div class="figure" id="id16">
 <img alt="_images/sphx_glr_02_brain_using_vertices_thumb.png" src="_images/sphx_glr_02_brain_using_vertices_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/02_brain_using_vertices.html#sphx-glr-auto-examples-brain-02-brain-using-vertices-py"><span class="std std-ref">Define a brain template using vertices and faces</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Add sources to the scene. This script also illustrate most of the controls for sources. Each so..."><div class="figure" id="id12">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Add sources to the scene. This script also illustrate most of the controls for sources. Each so..."><div class="figure" id="id17">
 <img alt="_images/sphx_glr_03_sources_thumb.png" src="_images/sphx_glr_03_sources_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/03_sources.html#sphx-glr-auto-examples-brain-03-sources-py"><span class="std std-ref">Add deep sources</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to display Region Of Interest (ROI)."><div class="figure" id="id13">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to display Region Of Interest (ROI)."><div class="figure" id="id18">
 <img alt="_images/sphx_glr_05_region_of_interest_thumb.png" src="_images/sphx_glr_05_region_of_interest_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/05_region_of_interest.html#sphx-glr-auto-examples-brain-05-region-of-interest-py"><span class="std std-ref">Add Region of interest (ROI)</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Offline rendering of selected canvas."><div class="figure" id="id14">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Offline rendering of selected canvas."><div class="figure" id="id19">
 <img alt="_images/sphx_glr_08_screenshot_thumb.png" src="_images/sphx_glr_08_screenshot_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/08_screenshot.html#sphx-glr-auto-examples-brain-08-screenshot-py"><span class="std std-ref">Screenshot example</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Add vectors to the scene. This example demonstrate the two methods to defined vectors :"><div class="figure" id="id15">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Add vectors to the scene. This example demonstrate the two methods to defined vectors :"><div class="figure" id="id20">
 <img alt="_images/sphx_glr_11_add_vectors_thumb.png" src="_images/sphx_glr_11_add_vectors_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/11_add_vectors.html#sphx-glr-auto-examples-brain-11-add-vectors-py"><span class="std std-ref">Add vectors</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Parcellize the brain surface using .annot files. This example use Nibabel to read the .annot fi..."><div class="figure" id="id16">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Parcellize the brain surface using .annot files. This example use Nibabel to read the .annot fi..."><div class="figure" id="id21">
 <img alt="_images/sphx_glr_12_parcellize_thumb.png" src="_images/sphx_glr_12_parcellize_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/12_parcellize.html#sphx-glr-auto-examples-brain-12-parcellize-py"><span class="std std-ref">Parcellize brain surface</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the brain object i.e :"><div class="figure" id="id17">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the brain object i.e :"><div class="figure" id="id22">
 <img alt="_images/sphx_glr_ex_brain_obj_thumb.png" src="_images/sphx_glr_ex_brain_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_brain_obj.html#sphx-glr-auto-examples-objects-ex-brain-obj-py"><span class="std std-ref">Brain object</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Illustration of the main functionalities and inputs of the connctivity object."><div class="figure" id="id18">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Illustration of the main functionalities and inputs of the connctivity object."><div class="figure" id="id23">
 <img alt="_images/sphx_glr_ex_connectivity_obj_thumb.png" src="_images/sphx_glr_ex_connectivity_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_connectivity_obj.html#sphx-glr-auto-examples-objects-ex-connectivity-obj-py"><span class="std std-ref">Connectivity object</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the roi object i.e :"><div class="figure" id="id19">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the roi object i.e :"><div class="figure" id="id24">
 <img alt="_images/sphx_glr_ex_roi_object_thumb.png" src="_images/sphx_glr_ex_roi_object_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_roi_object.html#sphx-glr-auto-examples-objects-ex-roi-object-py"><span class="std std-ref">Region Of Interest (ROI) object</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Display a conjunction map from a nii.gz file (NiBabel required)."><div class="figure" id="id20">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Display a conjunction map from a nii.gz file (NiBabel required)."><div class="figure" id="id25">
 <img alt="_images/sphx_glr_conjunction_map_thumb.png" src="_images/sphx_glr_conjunction_map_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/pysurfer/conjunction_map.html#sphx-glr-auto-examples-pysurfer-conjunction-map-py"><span class="std std-ref">Display conjunction map</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Display fMRI activations from a nii.gz file (NiBabel required)."><div class="figure" id="id21">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Display fMRI activations from a nii.gz file (NiBabel required)."><div class="figure" id="id26">
 <img alt="_images/sphx_glr_fmri_activation_thumb.png" src="_images/sphx_glr_fmri_activation_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/pysurfer/fmri_activation.html#sphx-glr-auto-examples-pysurfer-fmri-activation-py"><span class="std std-ref">Display fMRI activation</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Plot MEG inverse solution."><div class="figure" id="id22">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Plot MEG inverse solution."><div class="figure" id="id27">
 <img alt="_images/sphx_glr_meg_inverse_solution_thumb.png" src="_images/sphx_glr_meg_inverse_solution_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/pysurfer/meg_inverse_solution.html#sphx-glr-auto-examples-pysurfer-meg-inverse-solution-py"><span class="std std-ref">Plot MEG inverse solution</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Plot vector-valued MEG inverse solution."><div class="figure" id="id23">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Plot vector-valued MEG inverse solution."><div class="figure" id="id28">
 <img alt="_images/sphx_glr_vector_based_meg_inverse_thumb.png" src="_images/sphx_glr_vector_based_meg_inverse_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/pysurfer/vector_based_meg_inverse.html#sphx-glr-auto-examples-pysurfer-vector-based-meg-inverse-py"><span class="std std-ref">Plot vector-valued MEG inverse solution</span></a></span></p>
 </div>
@@ -989,7 +995,7 @@ respectively describing the (azimuth, elevation).</p>
 </div>
 <div class="section" id="colorbar-object">
 <span id="colorbarobj"></span><h2>7.3. Colorbar object<a class="headerlink" href="#colorbar-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id24">
+<div class="figure align-center" id="id29">
 <img alt="_images/pic_cbar_obj.png" src="_images/pic_cbar_obj.png" />
 <p class="caption"><span class="caption-text">Colorbar object example</span></p>
 </div>
@@ -1119,19 +1125,19 @@ using the over parameter.</p>
 
 <div class="section" id="examples-using-visbrain-objects-colorbarobj">
 <h3>7.3.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.ColorbarObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-colorbarobj" title="Permalink to this headline">¶</a></h3>
-<div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the brain object i.e :"><div class="figure" id="id25">
+<div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the brain object i.e :"><div class="figure" id="id30">
 <img alt="_images/sphx_glr_ex_brain_obj_thumb.png" src="_images/sphx_glr_ex_brain_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_brain_obj.html#sphx-glr-auto-examples-objects-ex-brain-obj-py"><span class="std std-ref">Brain object</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram."><div class="figure" id="id26">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram."><div class="figure" id="id31">
 <img alt="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" src="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_im_tf_spec_obj.html#sphx-glr-auto-examples-objects-ex-im-tf-spec-obj-py"><span class="std std-ref">Image, time-frequency map and spectrogram objects</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the roi object i.e :"><div class="figure" id="id27">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the roi object i.e :"><div class="figure" id="id32">
 <img alt="_images/sphx_glr_ex_roi_object_thumb.png" src="_images/sphx_glr_ex_roi_object_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_roi_object.html#sphx-glr-auto-examples-objects-ex-roi-object-py"><span class="std std-ref">Region Of Interest (ROI) object</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the source object i.e :"><div class="figure" id="id28">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the source object i.e :"><div class="figure" id="id33">
 <img alt="_images/sphx_glr_ex_source_obj_thumb.png" src="_images/sphx_glr_ex_source_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_source_obj.html#sphx-glr-auto-examples-objects-ex-source-obj-py"><span class="std std-ref">Source object</span></a></span></p>
 </div>
@@ -1139,7 +1145,7 @@ using the over parameter.</p>
 </div>
 <div class="section" id="source-object">
 <span id="sourceobj"></span><h2>7.4. Source object<a class="headerlink" href="#source-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id29">
+<div class="figure align-center" id="id34">
 <img alt="_images/pic_source_obj.png" src="_images/pic_source_obj.png" />
 <p class="caption"><span class="caption-text">Source object example</span></p>
 </div>
@@ -1510,55 +1516,55 @@ False) to show or hide all of the sources.</p>
 
 <div class="section" id="examples-using-visbrain-objects-sourceobj">
 <h3>7.4.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.SourceObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-sourceobj" title="Permalink to this headline">¶</a></h3>
-<div class="sphx-glr-thumbcontainer" tooltip="Add sources to the scene. This script also illustrate most of the controls for sources. Each so..."><div class="figure" id="id30">
+<div class="sphx-glr-thumbcontainer" tooltip="Add sources to the scene. This script also illustrate most of the controls for sources. Each so..."><div class="figure" id="id35">
 <img alt="_images/sphx_glr_03_sources_thumb.png" src="_images/sphx_glr_03_sources_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/03_sources.html#sphx-glr-auto-examples-brain-03-sources-py"><span class="std std-ref">Add deep sources</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Display and customize connectivity. To this end, we define some deep sources and connect them."><div class="figure" id="id31">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Display and customize connectivity. To this end, we define some deep sources and connect them."><div class="figure" id="id36">
 <img alt="_images/sphx_glr_04_connectivity_thumb.png" src="_images/sphx_glr_04_connectivity_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/04_connectivity.html#sphx-glr-auto-examples-brain-04-connectivity-py"><span class="std std-ref">Connect deep sources</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to display Region Of Interest (ROI)."><div class="figure" id="id32">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to display Region Of Interest (ROI)."><div class="figure" id="id37">
 <img alt="_images/sphx_glr_05_region_of_interest_thumb.png" src="_images/sphx_glr_05_region_of_interest_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/05_region_of_interest.html#sphx-glr-auto-examples-brain-05-region-of-interest-py"><span class="std std-ref">Add Region of interest (ROI)</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display time-series attached to sources. The time-series can th..."><div class="figure" id="id33">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display time-series attached to sources. The time-series can th..."><div class="figure" id="id38">
 <img alt="_images/sphx_glr_06_add_time_series_thumb.png" src="_images/sphx_glr_06_add_time_series_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/06_add_time_series.html#sphx-glr-auto-examples-brain-06-add-time-series-py"><span class="std std-ref">Add time series</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display small pictures attached to sources. The pictures can th..."><div class="figure" id="id34">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display small pictures attached to sources. The pictures can th..."><div class="figure" id="id39">
 <img alt="_images/sphx_glr_07_add_pictures_thumb.png" src="_images/sphx_glr_07_add_pictures_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/07_add_pictures.html#sphx-glr-auto-examples-brain-07-add-pictures-py"><span class="std std-ref">Add pictures</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Offline rendering of selected canvas."><div class="figure" id="id35">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Offline rendering of selected canvas."><div class="figure" id="id40">
 <img alt="_images/sphx_glr_08_screenshot_thumb.png" src="_images/sphx_glr_08_screenshot_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/08_screenshot.html#sphx-glr-auto-examples-brain-08-screenshot-py"><span class="std std-ref">Screenshot example</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Add multiple source&#x27;s and connectivity object to the scene."><div class="figure" id="id36">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Add multiple source&#x27;s and connectivity object to the scene."><div class="figure" id="id41">
 <img alt="_images/sphx_glr_09_add_multiple_objects_thumb.png" src="_images/sphx_glr_09_add_multiple_objects_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/09_add_multiple_objects.html#sphx-glr-auto-examples-brain-09-add-multiple-objects-py"><span class="std std-ref">Add multiple objects to the scene</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Import a custom Nifti volume that can be then used in the cross-section or volume tab. To this ..."><div class="figure" id="id37">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Import a custom Nifti volume that can be then used in the cross-section or volume tab. To this ..."><div class="figure" id="id42">
 <img alt="_images/sphx_glr_10_add_nifti_volume_thumb.png" src="_images/sphx_glr_10_add_nifti_volume_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/10_add_nifti_volume.html#sphx-glr-auto-examples-brain-10-add-nifti-volume-py"><span class="std std-ref">Add Nifti volume</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Add vectors to the scene. This example demonstrate the two methods to defined vectors :"><div class="figure" id="id38">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Add vectors to the scene. This example demonstrate the two methods to defined vectors :"><div class="figure" id="id43">
 <img alt="_images/sphx_glr_11_add_vectors_thumb.png" src="_images/sphx_glr_11_add_vectors_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/11_add_vectors.html#sphx-glr-auto-examples-brain-11-add-vectors-py"><span class="std std-ref">Add vectors</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the brain object i.e :"><div class="figure" id="id39">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the brain object i.e :"><div class="figure" id="id44">
 <img alt="_images/sphx_glr_ex_brain_obj_thumb.png" src="_images/sphx_glr_ex_brain_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_brain_obj.html#sphx-glr-auto-examples-objects-ex-brain-obj-py"><span class="std std-ref">Brain object</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Illustration of the main functionalities and inputs of the connctivity object."><div class="figure" id="id40">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Illustration of the main functionalities and inputs of the connctivity object."><div class="figure" id="id45">
 <img alt="_images/sphx_glr_ex_connectivity_obj_thumb.png" src="_images/sphx_glr_ex_connectivity_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_connectivity_obj.html#sphx-glr-auto-examples-objects-ex-connectivity-obj-py"><span class="std std-ref">Connectivity object</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the roi object i.e :"><div class="figure" id="id41">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the roi object i.e :"><div class="figure" id="id46">
 <img alt="_images/sphx_glr_ex_roi_object_thumb.png" src="_images/sphx_glr_ex_roi_object_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_roi_object.html#sphx-glr-auto-examples-objects-ex-roi-object-py"><span class="std std-ref">Region Of Interest (ROI) object</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the source object i.e :"><div class="figure" id="id42">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the source object i.e :"><div class="figure" id="id47">
 <img alt="_images/sphx_glr_ex_source_obj_thumb.png" src="_images/sphx_glr_ex_source_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_source_obj.html#sphx-glr-auto-examples-objects-ex-source-obj-py"><span class="std std-ref">Source object</span></a></span></p>
 </div>
@@ -1566,7 +1572,7 @@ False) to show or hide all of the sources.</p>
 </div>
 <div class="section" id="connectivity-object">
 <span id="connectobj"></span><h2>7.5. Connectivity object<a class="headerlink" href="#connectivity-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id43">
+<div class="figure align-center" id="id48">
 <img alt="_images/pic_connect_obj.png" src="_images/pic_connect_obj.png" />
 <p class="caption"><span class="caption-text">Connectivity object example</span></p>
 </div>
@@ -1685,15 +1691,15 @@ strong connections will be more opaque than weaker connections.</p>
 
 <div class="section" id="examples-using-visbrain-objects-connectobj">
 <h3>7.5.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.ConnectObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-connectobj" title="Permalink to this headline">¶</a></h3>
-<div class="sphx-glr-thumbcontainer" tooltip="Display and customize connectivity. To this end, we define some deep sources and connect them."><div class="figure" id="id44">
+<div class="sphx-glr-thumbcontainer" tooltip="Display and customize connectivity. To this end, we define some deep sources and connect them."><div class="figure" id="id49">
 <img alt="_images/sphx_glr_04_connectivity_thumb.png" src="_images/sphx_glr_04_connectivity_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/04_connectivity.html#sphx-glr-auto-examples-brain-04-connectivity-py"><span class="std std-ref">Connect deep sources</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Add multiple source&#x27;s and connectivity object to the scene."><div class="figure" id="id45">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Add multiple source&#x27;s and connectivity object to the scene."><div class="figure" id="id50">
 <img alt="_images/sphx_glr_09_add_multiple_objects_thumb.png" src="_images/sphx_glr_09_add_multiple_objects_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/09_add_multiple_objects.html#sphx-glr-auto-examples-brain-09-add-multiple-objects-py"><span class="std std-ref">Add multiple objects to the scene</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Illustration of the main functionalities and inputs of the connctivity object."><div class="figure" id="id46">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Illustration of the main functionalities and inputs of the connctivity object."><div class="figure" id="id51">
 <img alt="_images/sphx_glr_ex_connectivity_obj_thumb.png" src="_images/sphx_glr_ex_connectivity_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_connectivity_obj.html#sphx-glr-auto-examples-objects-ex-connectivity-obj-py"><span class="std std-ref">Connectivity object</span></a></span></p>
 </div>
@@ -1701,7 +1707,7 @@ strong connections will be more opaque than weaker connections.</p>
 </div>
 <div class="section" id="vector-object">
 <span id="vectorobj"></span><h2>7.6. Vector object<a class="headerlink" href="#vector-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id47">
+<div class="figure align-center" id="id52">
 <img alt="_images/pic_vector_obj.png" src="_images/pic_vector_obj.png" />
 <p class="caption"><span class="caption-text">Vector object example</span></p>
 </div>
@@ -1846,11 +1852,11 @@ not None).</p>
 
 <div class="section" id="examples-using-visbrain-objects-vectorobj">
 <h3>7.6.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.VectorObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-vectorobj" title="Permalink to this headline">¶</a></h3>
-<div class="sphx-glr-thumbcontainer" tooltip="Add vectors to the scene. This example demonstrate the two methods to defined vectors :"><div class="figure" id="id48">
+<div class="sphx-glr-thumbcontainer" tooltip="Add vectors to the scene. This example demonstrate the two methods to defined vectors :"><div class="figure" id="id53">
 <img alt="_images/sphx_glr_11_add_vectors_thumb.png" src="_images/sphx_glr_11_add_vectors_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/11_add_vectors.html#sphx-glr-auto-examples-brain-11-add-vectors-py"><span class="std std-ref">Add vectors</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Plot vector-valued MEG inverse solution."><div class="figure" id="id49">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Plot vector-valued MEG inverse solution."><div class="figure" id="id54">
 <img alt="_images/sphx_glr_vector_based_meg_inverse_thumb.png" src="_images/sphx_glr_vector_based_meg_inverse_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/pysurfer/vector_based_meg_inverse.html#sphx-glr-auto-examples-pysurfer-vector-based-meg-inverse-py"><span class="std std-ref">Plot vector-valued MEG inverse solution</span></a></span></p>
 </div>
@@ -1858,7 +1864,7 @@ not None).</p>
 </div>
 <div class="section" id="time-series-3d-object">
 <span id="ts3dobj"></span><h2>7.7. Time-series 3D object<a class="headerlink" href="#time-series-3d-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id50">
+<div class="figure align-center" id="id55">
 <img alt="_images/pic_ts_obj.png" src="_images/pic_ts_obj.png" />
 <p class="caption"><span class="caption-text">3-D time-series object example</span></p>
 </div>
@@ -1957,7 +1963,7 @@ of shape (n_sources,).</p>
 
 <div class="section" id="examples-using-visbrain-objects-timeseries3dobj">
 <h3>7.7.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.TimeSeries3DObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-timeseries3dobj" title="Permalink to this headline">¶</a></h3>
-<div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display time-series attached to sources. The time-series can th..."><div class="figure" id="id51">
+<div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display time-series attached to sources. The time-series can th..."><div class="figure" id="id56">
 <img alt="_images/sphx_glr_06_add_time_series_thumb.png" src="_images/sphx_glr_06_add_time_series_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/06_add_time_series.html#sphx-glr-auto-examples-brain-06-add-time-series-py"><span class="std std-ref">Add time series</span></a></span></p>
 </div>
@@ -1965,7 +1971,7 @@ of shape (n_sources,).</p>
 </div>
 <div class="section" id="pictures-3d-object">
 <span id="pic3dobj"></span><h2>7.8. Pictures 3D object<a class="headerlink" href="#pictures-3d-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id52">
+<div class="figure align-center" id="id57">
 <img alt="_images/pic_picture_obj.png" src="_images/pic_picture_obj.png" />
 <p class="caption"><span class="caption-text">3-D pictures object example</span></p>
 </div>
@@ -2069,7 +2075,7 @@ of shape (n_sources,).</p>
 
 <div class="section" id="examples-using-visbrain-objects-picture3dobj">
 <h3>7.8.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.Picture3DObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-picture3dobj" title="Permalink to this headline">¶</a></h3>
-<div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display small pictures attached to sources. The pictures can th..."><div class="figure" id="id53">
+<div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display small pictures attached to sources. The pictures can th..."><div class="figure" id="id58">
 <img alt="_images/sphx_glr_07_add_pictures_thumb.png" src="_images/sphx_glr_07_add_pictures_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/07_add_pictures.html#sphx-glr-auto-examples-brain-07-add-pictures-py"><span class="std std-ref">Add pictures</span></a></span></p>
 </div>
@@ -2077,7 +2083,7 @@ of shape (n_sources,).</p>
 </div>
 <div class="section" id="region-of-interest-object">
 <span id="roiobj"></span><h2>7.9. Region Of Interest object<a class="headerlink" href="#region-of-interest-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id54">
+<div class="figure align-center" id="id59">
 <img alt="_images/pic_roi_obj.png" src="_images/pic_roi_obj.png" />
 <p class="caption"><span class="caption-text">Region Of Interest object example</span></p>
 </div>
@@ -2321,15 +2327,15 @@ inspect every columns in the DataFrame.</p>
 
 <div class="section" id="examples-using-visbrain-objects-roiobj">
 <h3>7.9.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.RoiObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-roiobj" title="Permalink to this headline">¶</a></h3>
-<div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to display Region Of Interest (ROI)."><div class="figure" id="id55">
+<div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to display Region Of Interest (ROI)."><div class="figure" id="id60">
 <img alt="_images/sphx_glr_05_region_of_interest_thumb.png" src="_images/sphx_glr_05_region_of_interest_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/05_region_of_interest.html#sphx-glr-auto-examples-brain-05-region-of-interest-py"><span class="std std-ref">Add Region of interest (ROI)</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Offline rendering of selected canvas."><div class="figure" id="id56">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Offline rendering of selected canvas."><div class="figure" id="id61">
 <img alt="_images/sphx_glr_08_screenshot_thumb.png" src="_images/sphx_glr_08_screenshot_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/08_screenshot.html#sphx-glr-auto-examples-brain-08-screenshot-py"><span class="std std-ref">Screenshot example</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the roi object i.e :"><div class="figure" id="id57">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the roi object i.e :"><div class="figure" id="id62">
 <img alt="_images/sphx_glr_ex_roi_object_thumb.png" src="_images/sphx_glr_ex_roi_object_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_roi_object.html#sphx-glr-auto-examples-objects-ex-roi-object-py"><span class="std std-ref">Region Of Interest (ROI) object</span></a></span></p>
 </div>
@@ -2337,7 +2343,7 @@ inspect every columns in the DataFrame.</p>
 </div>
 <div class="section" id="volume-object">
 <span id="volumeobj"></span><h2>7.10. Volume object<a class="headerlink" href="#volume-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id58">
+<div class="figure align-center" id="id63">
 <img alt="_images/pic_vol_obj.png" src="_images/pic_vol_obj.png" />
 <p class="caption"><span class="caption-text">Volume object example</span></p>
 </div>
@@ -2436,15 +2442,15 @@ ignored. The name input can also be the path to an nii.gz file.</p>
 
 <div class="section" id="examples-using-visbrain-objects-volumeobj">
 <h3>7.10.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.VolumeObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-volumeobj" title="Permalink to this headline">¶</a></h3>
-<div class="sphx-glr-thumbcontainer" tooltip="Control the cross-section panel and the volume using a Nifti file. The nibabel package should a..."><div class="figure" id="id59">
+<div class="sphx-glr-thumbcontainer" tooltip="Control the cross-section panel and the volume using a Nifti file. The nibabel package should a..."><div class="figure" id="id64">
 <img alt="_images/sphx_glr_01_cross_sections_and_volume_thumb.png" src="_images/sphx_glr_01_cross_sections_and_volume_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/01_cross_sections_and_volume.html#sphx-glr-auto-examples-brain-01-cross-sections-and-volume-py"><span class="std std-ref">Cross-sections and volume control</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Import a custom Nifti volume that can be then used in the cross-section or volume tab. To this ..."><div class="figure" id="id60">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Import a custom Nifti volume that can be then used in the cross-section or volume tab. To this ..."><div class="figure" id="id65">
 <img alt="_images/sphx_glr_10_add_nifti_volume_thumb.png" src="_images/sphx_glr_10_add_nifti_volume_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/10_add_nifti_volume.html#sphx-glr-auto-examples-brain-10-add-nifti-volume-py"><span class="std std-ref">Add Nifti volume</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Illustration of the main functionalities and inputs of the volume object."><div class="figure" id="id61">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Illustration of the main functionalities and inputs of the volume object."><div class="figure" id="id66">
 <img alt="_images/sphx_glr_ex_volume_obj_thumb.png" src="_images/sphx_glr_ex_volume_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_volume_obj.html#sphx-glr-auto-examples-objects-ex-volume-obj-py"><span class="std std-ref">Volume object</span></a></span></p>
 </div>
@@ -2452,13 +2458,13 @@ ignored. The name input can also be the path to an nii.gz file.</p>
 </div>
 <div class="section" id="cross-section-object">
 <span id="csobj"></span><h2>7.11. Cross-section object<a class="headerlink" href="#cross-section-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id62">
+<div class="figure align-center" id="id67">
 <img alt="_images/pic_cs_obj.png" src="_images/pic_cs_obj.png" />
 <p class="caption"><span class="caption-text">Cross-section object example</span></p>
 </div>
 <dl class="class">
 <dt id="visbrain.objects.CrossSecObj">
-<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">CrossSecObj</code><span class="sig-paren">(</span><em>name</em>, <em>vol=None</em>, <em>hdr=None</em>, <em>section=(0</em>, <em>0</em>, <em>0)</em>, <em>interpolation='bilinear'</em>, <em>text_size=15.0</em>, <em>text_color='white'</em>, <em>text_bold=True</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>preload=True</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/crossec_obj.html#CrossSecObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/crossec_obj.py#L66-L344"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.CrossSecObj" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">CrossSecObj</code><span class="sig-paren">(</span><em>name</em>, <em>vol=None</em>, <em>hdr=None</em>, <em>section=(0</em>, <em>0</em>, <em>0)</em>, <em>interpolation='bilinear'</em>, <em>text_size=15.0</em>, <em>text_color='white'</em>, <em>text_bold=True</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>preload=True</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/crossec_obj.html#CrossSecObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/crossec_obj.py#L66-L375"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.CrossSecObj" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a Cross-sections object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2551,7 +2557,7 @@ availables interpolation methods.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.CrossSecObj.localize_source">
-<code class="descname">localize_source</code><span class="sig-paren">(</span><em>xyz</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/crossec_obj.html#CrossSecObj.localize_source"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/crossec_obj.py#L231-L253"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.CrossSecObj.localize_source" title="Permalink to this definition">¶</a></dt>
+<code class="descname">localize_source</code><span class="sig-paren">(</span><em>xyz</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/crossec_obj.html#CrossSecObj.localize_source"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/crossec_obj.py#L225-L247"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.CrossSecObj.localize_source" title="Permalink to this definition">¶</a></dt>
 <dd><p>Center the cross-sections arround a source location.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2570,7 +2576,7 @@ array.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.CrossSecObj.set_data">
-<code class="descname">set_data</code><span class="sig-paren">(</span><em>section=(0</em>, <em>0</em>, <em>0)</em>, <em>clim=None</em>, <em>cmap=None</em>, <em>vmin=None</em>, <em>under=None</em>, <em>vmax=None</em>, <em>over=None</em>, <em>update=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/crossec_obj.html#CrossSecObj.set_data"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/crossec_obj.py#L199-L217"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.CrossSecObj.set_data" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_data</code><span class="sig-paren">(</span><em>section=(0</em>, <em>0</em>, <em>0)</em>, <em>clim=None</em>, <em>cmap=None</em>, <em>vmin=None</em>, <em>under=None</em>, <em>vmax=None</em>, <em>over=None</em>, <em>update=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/crossec_obj.html#CrossSecObj.set_data"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/crossec_obj.py#L193-L211"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.CrossSecObj.set_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set data to the cross-section.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2590,15 +2596,15 @@ array.</p>
 
 <div class="section" id="examples-using-visbrain-objects-crosssecobj">
 <h3>7.11.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.CrossSecObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-crosssecobj" title="Permalink to this headline">¶</a></h3>
-<div class="sphx-glr-thumbcontainer" tooltip="Control the cross-section panel and the volume using a Nifti file. The nibabel package should a..."><div class="figure" id="id63">
+<div class="sphx-glr-thumbcontainer" tooltip="Control the cross-section panel and the volume using a Nifti file. The nibabel package should a..."><div class="figure" id="id68">
 <img alt="_images/sphx_glr_01_cross_sections_and_volume_thumb.png" src="_images/sphx_glr_01_cross_sections_and_volume_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/01_cross_sections_and_volume.html#sphx-glr-auto-examples-brain-01-cross-sections-and-volume-py"><span class="std std-ref">Cross-sections and volume control</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Import a custom Nifti volume that can be then used in the cross-section or volume tab. To this ..."><div class="figure" id="id64">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Import a custom Nifti volume that can be then used in the cross-section or volume tab. To this ..."><div class="figure" id="id69">
 <img alt="_images/sphx_glr_10_add_nifti_volume_thumb.png" src="_images/sphx_glr_10_add_nifti_volume_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/brain/10_add_nifti_volume.html#sphx-glr-auto-examples-brain-10-add-nifti-volume-py"><span class="std std-ref">Add Nifti volume</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Illustration and main functionalities and inputs of the cross-section object."><div class="figure" id="id65">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Illustration and main functionalities and inputs of the cross-section object."><div class="figure" id="id70">
 <img alt="_images/sphx_glr_ex_cross_section_obj_thumb.png" src="_images/sphx_glr_ex_cross_section_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_cross_section_obj.html#sphx-glr-auto-examples-objects-ex-cross-section-obj-py"><span class="std std-ref">Cross-section object</span></a></span></p>
 </div>
@@ -2606,7 +2612,7 @@ array.</p>
 </div>
 <div class="section" id="image-object">
 <span id="imageobj"></span><h2>7.12. Image object<a class="headerlink" href="#image-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id66">
+<div class="figure align-center" id="id71">
 <img alt="_images/pic_image_obj.png" src="_images/pic_image_obj.png" />
 <p class="caption"><span class="caption-text">Image object example</span></p>
 </div>
@@ -2724,7 +2730,7 @@ images.</p>
 
 <div class="section" id="examples-using-visbrain-objects-imageobj">
 <h3>7.12.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.ImageObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-imageobj" title="Permalink to this headline">¶</a></h3>
-<div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram."><div class="figure" id="id67">
+<div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram."><div class="figure" id="id72">
 <img alt="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" src="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_im_tf_spec_obj.html#sphx-glr-auto-examples-objects-ex-im-tf-spec-obj-py"><span class="std std-ref">Image, time-frequency map and spectrogram objects</span></a></span></p>
 </div>
@@ -2732,13 +2738,13 @@ images.</p>
 </div>
 <div class="section" id="time-frequency-map-object">
 <span id="tfobj"></span><h2>7.13. Time-frequency map object<a class="headerlink" href="#time-frequency-map-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id68">
+<div class="figure align-center" id="id73">
 <img alt="_images/pic_tf_obj.png" src="_images/pic_tf_obj.png" />
 <p class="caption"><span class="caption-text">Time-frequency map object example</span></p>
 </div>
 <dl class="class">
 <dt id="visbrain.objects.TimeFrequencyObj">
-<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">TimeFrequencyObj</code><span class="sig-paren">(</span><em>name</em>, <em>data=None</em>, <em>sf=1.0</em>, <em>method='fourier'</em>, <em>nperseg=256</em>, <em>f_min=1.0</em>, <em>f_max=160.0</em>, <em>f_step=1.0</em>, <em>baseline=None</em>, <em>norm=None</em>, <em>n_window=None</em>, <em>overlap=0.0</em>, <em>window=None</em>, <em>c_parameter=20</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>under='gray'</em>, <em>vmax=None</em>, <em>over='red'</em>, <em>interpolation='nearest'</em>, <em>max_pts=-1</em>, <em>parent=None</em>, <em>transform=None</em>, <em>verbose=None</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/tf_obj.html#TimeFrequencyObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/tf_obj.py#L13-L175"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.TimeFrequencyObj" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">TimeFrequencyObj</code><span class="sig-paren">(</span><em>name</em>, <em>data=None</em>, <em>sf=1.0</em>, <em>method='fourier'</em>, <em>nperseg=256</em>, <em>f_min=1.0</em>, <em>f_max=160.0</em>, <em>f_step=1.0</em>, <em>baseline=None</em>, <em>norm=None</em>, <em>n_window=None</em>, <em>overlap=0.0</em>, <em>window=None</em>, <em>c_parameter=20</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>under='gray'</em>, <em>vmax=None</em>, <em>over='red'</em>, <em>interpolation='nearest'</em>, <em>max_pts=-1</em>, <em>parent=None</em>, <em>transform=None</em>, <em>verbose=None</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/tf_obj.html#TimeFrequencyObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/tf_obj.py#L13-L174"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.TimeFrequencyObj" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the time-frequency map (or spectrogram).</p>
 <p>The time-frequency decomposition can be assessed using :</p>
 <blockquote>
@@ -2872,11 +2878,11 @@ images.</p>
 </table>
 <p class="rubric">Examples</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <span class="n">TimeFrequencyMapObj</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <span class="n">TimeFrequencyObj</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">n</span><span class="p">,</span> <span class="n">sf</span> <span class="o">=</span> <span class="mi">512</span><span class="p">,</span> <span class="mi">256</span>  <span class="c1"># number of time-points and sampling frequency</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">/</span> <span class="n">sf</span>  <span class="c1"># time vector</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mf">25.</span> <span class="o">*</span> <span class="n">time</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tf</span> <span class="o">=</span> <span class="n">TimeFrequencyMapObj</span><span class="p">(</span><span class="s1">&#39;tf&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tf</span> <span class="o">=</span> <span class="n">TimeFrequencyObj</span><span class="p">(</span><span class="s1">&#39;tf&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tf</span><span class="o">.</span><span class="n">preview</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -2896,7 +2902,7 @@ images.</p>
 </div></blockquote>
 <dl class="method">
 <dt id="visbrain.objects.TimeFrequencyObj.set_data">
-<code class="descname">set_data</code><span class="sig-paren">(</span><em>data</em>, <em>sf=1.0</em>, <em>method='fourier'</em>, <em>nperseg=256</em>, <em>f_min=1.0</em>, <em>f_max=160.0</em>, <em>f_step=1.0</em>, <em>baseline=None</em>, <em>norm=None</em>, <em>n_window=None</em>, <em>overlap=0.0</em>, <em>window=None</em>, <em>c_parameter=20</em>, <em>clim=None</em>, <em>cmap='viridis'</em>, <em>vmin=None</em>, <em>under=None</em>, <em>vmax=None</em>, <em>over=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/tf_obj.html#TimeFrequencyObj.set_data"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/tf_obj.py#L116-L175"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.TimeFrequencyObj.set_data" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_data</code><span class="sig-paren">(</span><em>data</em>, <em>sf=1.0</em>, <em>method='fourier'</em>, <em>nperseg=256</em>, <em>f_min=1.0</em>, <em>f_max=160.0</em>, <em>f_step=1.0</em>, <em>baseline=None</em>, <em>norm=None</em>, <em>n_window=None</em>, <em>overlap=0.0</em>, <em>window=None</em>, <em>c_parameter=20</em>, <em>clim=None</em>, <em>cmap='viridis'</em>, <em>vmin=None</em>, <em>under=None</em>, <em>vmax=None</em>, <em>over=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/tf_obj.html#TimeFrequencyObj.set_data"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/tf_obj.py#L116-L174"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.TimeFrequencyObj.set_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute TF and set data to the ImageObj.</p>
 </dd></dl>
 
@@ -2904,12 +2910,135 @@ images.</p>
 
 <div class="section" id="examples-using-visbrain-objects-timefrequencyobj">
 <h3>7.13.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.TimeFrequencyObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-timefrequencyobj" title="Permalink to this headline">¶</a></h3>
-<div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram."><div class="figure" id="id69">
+<div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram."><div class="figure" id="id74">
 <img alt="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" src="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_im_tf_spec_obj.html#sphx-glr-auto-examples-objects-ex-im-tf-spec-obj-py"><span class="std std-ref">Image, time-frequency map and spectrogram objects</span></a></span></p>
 </div>
 </div><div style='clear:both'></div></div>
 </div>
+<div class="section" id="hypnogram-object">
+<span id="hypnoobj"></span><h2>7.14. Hypnogram object<a class="headerlink" href="#hypnogram-object" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-center" id="id75">
+<img alt="_images/pic_hypno_obj.png" src="_images/pic_hypno_obj.png" />
+<p class="caption"><span class="caption-text">Hypnogram object example</span></p>
+</div>
+<dl class="class">
+<dt id="visbrain.objects.HypnogramObj">
+<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">HypnogramObj</code><span class="sig-paren">(</span><em>name</em>, <em>data=None</em>, <em>time=None</em>, <em>art=-1</em>, <em>wake=0</em>, <em>n1=1</em>, <em>n2=2</em>, <em>n3=3</em>, <em>rem=4</em>, <em>art_visual=1</em>, <em>wake_visual=0</em>, <em>rem_visual=-1</em>, <em>n1_visual=-2</em>, <em>n2_visual=-3</em>, <em>n3_visual=-4</em>, <em>art_color='#8bbf56'</em>, <em>wake_color='#56bf8b'</em>, <em>rem_color='#bf5656'</em>, <em>n1_color='#aabcce'</em>, <em>n2_color='#405c79'</em>, <em>n3_color='#0b1c2c'</em>, <em>line_width=2.0</em>, <em>antialias=False</em>, <em>unicolor=False</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/hypno_obj.html#HypnogramObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/hypno_obj.py#L12-L117"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.HypnogramObj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hypnogram object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
+<blockquote>
+<div><p>Name of the hypnogram object or path to a <a href="#id2"><span class="problematic" id="id3">*</span></a>.txt or <a href="#id4"><span class="problematic" id="id5">*</span></a>.csv file.</p>
+</div></blockquote>
+<p><strong>data</strong> : array_like</p>
+<blockquote>
+<div><p>Array of data of shape (n_pts,).</p>
+</div></blockquote>
+<p><strong>time</strong> : array_like | None</p>
+<blockquote>
+<div><p>Array of time points of shape (n_pts,)</p>
+</div></blockquote>
+<p><strong>art, wake, rem, n1, n2, n3 :</strong></p>
+<blockquote>
+<div><p>Stage identification inside the data array.</p>
+</div></blockquote>
+<p><strong>art_visual, wake_visual, rem_visual, n1_visual, n2_visual, n3_visual :</strong></p>
+<blockquote>
+<div><p>Stage order when plotting.</p>
+</div></blockquote>
+<p><strong>art_color, wake_color, rem_color, n1_color, n2_color, n3_color :</strong></p>
+<blockquote>
+<div><p>Stage color.</p>
+</div></blockquote>
+<p><strong>line_width</strong> : float | 2.</p>
+<blockquote>
+<div><p>Line with of the hypnogram.</p>
+</div></blockquote>
+<p><strong>antialias</strong> : bool | False</p>
+<blockquote>
+<div><p>Use anti-aliasing line.</p>
+</div></blockquote>
+<p><strong>unicolor</strong> : bool | False</p>
+<blockquote>
+<div><p>Use a uni black color for the hypnogram.</p>
+</div></blockquote>
+<p><strong>transform</strong> : VisPy.visuals.transforms | None</p>
+<blockquote>
+<div><p>VisPy transformation to set to the parent node.</p>
+</div></blockquote>
+<p><strong>parent</strong> : VisPy.parent | None</p>
+<blockquote>
+<div><p>Hypnogram object parent.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : string</p>
+<blockquote>
+<div><p>Verbosity level.</p>
+</div></blockquote>
+<p><strong>kw</strong> : dict | {}</p>
+<blockquote class="last">
+<div><p>Optional arguments are used to control the colorbar
+(See <a class="reference internal" href="#visbrain.objects.ColorbarObj" title="visbrain.objects.ColorbarObj"><code class="xref py py-class docutils literal"><span class="pre">ColorbarObj</span></code></a>).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <span class="n">HypnogramObj</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">6</span><span class="p">),</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h_obj</span> <span class="o">=</span> <span class="n">HypnogramObj</span><span class="p">(</span><span class="s1">&#39;hypno&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h_obj</span><span class="o">.</span><span class="n">preview</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.HypnogramObj.set_stage" title="visbrain.objects.HypnogramObj.set_stage"><code class="xref py py-obj docutils literal"><span class="pre">set_stage</span></code></a>(stage,&nbsp;idx_start,&nbsp;idx_end)</td>
+<td>Set stage.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<dl class="method">
+<dt id="visbrain.objects.HypnogramObj.set_stage">
+<code class="descname">set_stage</code><span class="sig-paren">(</span><em>stage</em>, <em>idx_start</em>, <em>idx_end</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/hypno_obj.html#HypnogramObj.set_stage"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/hypno_obj.py#L82-L95"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.HypnogramObj.set_stage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set stage.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>stage</strong> : str, int</p>
+<blockquote>
+<div><p>Stage to define. Should either be a string (e.g ‘art’, ‘rem’…) or
+an integer.</p>
+</div></blockquote>
+<p><strong>idx_start</strong> : int</p>
+<blockquote>
+<div><p>Index where the stage begin.</p>
+</div></blockquote>
+<p><strong>idx_end</strong> : int</p>
+<blockquote class="last">
+<div><p>Index where the stage finish.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<div style='clear:both'></div></div>
 </div>
 
 
@@ -2956,7 +3085,7 @@ images.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.3.8',
+            VERSION:'0.3.9',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

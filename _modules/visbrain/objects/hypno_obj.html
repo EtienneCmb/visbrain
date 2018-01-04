@@ -1,0 +1,348 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>visbrain.objects.hypno_obj &mdash; visbrain 0.3.9 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="visbrain 0.3.9 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="../../../_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../community.html">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../documentation.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>visbrain.objects.hypno_obj</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for visbrain.objects.hypno_obj</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Hypnogram object.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">vispy</span> <span class="k">import</span> <span class="n">scene</span>
+
+<span class="kn">from</span> <span class="nn">.visbrain_obj</span> <span class="k">import</span> <span class="n">VisbrainObject</span>
+<span class="kn">from</span> <span class="nn">..visuals</span> <span class="k">import</span> <span class="n">Hypnogram</span>
+<span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">read_hypno</span>
+
+
+<div class="viewcode-block" id="HypnogramObj"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.HypnogramObj">[docs]</a><span class="k">class</span> <span class="nc">HypnogramObj</span><span class="p">(</span><span class="n">VisbrainObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Hypnogram object.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name : string</span>
+<span class="sd">        Name of the hypnogram object or path to a *.txt or *.csv file.</span>
+<span class="sd">    data : array_like</span>
+<span class="sd">        Array of data of shape (n_pts,).</span>
+<span class="sd">    time : array_like | None</span>
+<span class="sd">        Array of time points of shape (n_pts,)</span>
+<span class="sd">    art, wake, rem, n1, n2, n3 :</span>
+<span class="sd">        Stage identification inside the data array.</span>
+<span class="sd">    art_visual, wake_visual, rem_visual, n1_visual, n2_visual, n3_visual :</span>
+<span class="sd">        Stage order when plotting.</span>
+<span class="sd">    art_color, wake_color, rem_color, n1_color, n2_color, n3_color :</span>
+<span class="sd">        Stage color.</span>
+<span class="sd">    line_width : float | 2.</span>
+<span class="sd">        Line with of the hypnogram.</span>
+<span class="sd">    antialias : bool | False</span>
+<span class="sd">        Use anti-aliasing line.</span>
+<span class="sd">    unicolor : bool | False</span>
+<span class="sd">        Use a uni black color for the hypnogram.</span>
+<span class="sd">    transform : VisPy.visuals.transforms | None</span>
+<span class="sd">        VisPy transformation to set to the parent node.</span>
+<span class="sd">    parent : VisPy.parent | None</span>
+<span class="sd">        Hypnogram object parent.</span>
+<span class="sd">    verbose : string</span>
+<span class="sd">        Verbosity level.</span>
+<span class="sd">    kw : dict | {}</span>
+<span class="sd">        Optional arguments are used to control the colorbar</span>
+<span class="sd">        (See :class:`ColorbarObj`).</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; from visbrain.objects import HypnogramObj</span>
+<span class="sd">    &gt;&gt;&gt; data = np.repeat(np.arange(6), 100) - 1.</span>
+<span class="sd">    &gt;&gt;&gt; h_obj = HypnogramObj(&#39;hypno&#39;, data)</span>
+<span class="sd">    &gt;&gt;&gt; h_obj.preview(axis=True)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">wake</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n2</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                 <span class="n">n3</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">rem</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">art_visual</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">wake_visual</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rem_visual</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">n1_visual</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">n2_visual</span><span class="o">=-</span><span class="mi">3</span><span class="p">,</span> <span class="n">n3_visual</span><span class="o">=-</span><span class="mi">4</span><span class="p">,</span> <span class="n">art_color</span><span class="o">=</span><span class="s1">&#39;#8bbf56&#39;</span><span class="p">,</span>
+                 <span class="n">wake_color</span><span class="o">=</span><span class="s1">&#39;#56bf8b&#39;</span><span class="p">,</span> <span class="n">rem_color</span><span class="o">=</span><span class="s1">&#39;#bf5656&#39;</span><span class="p">,</span> <span class="n">n1_color</span><span class="o">=</span><span class="s1">&#39;#aabcce&#39;</span><span class="p">,</span>
+                 <span class="n">n2_color</span><span class="o">=</span><span class="s1">&#39;#405c79&#39;</span><span class="p">,</span> <span class="n">n3_color</span><span class="o">=</span><span class="s1">&#39;#0b1c2c&#39;</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span>
+                 <span class="n">antialias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unicolor</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="c1"># Load *.txt, *.csv and *.hyp files :</span>
+        <span class="n">file</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;.hyp&#39;</span><span class="p">]:</span>
+            <span class="n">data</span><span class="p">,</span> <span class="n">sf</span> <span class="o">=</span> <span class="n">read_hypno</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">time</span> <span class="o">=</span> <span class="n">file</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span> <span class="o">/</span> <span class="n">sf</span>
+        <span class="c1"># Initialize VisbrainObject and Hypnogram visuam creation :</span>
+        <span class="n">VisbrainObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">line</span> <span class="o">=</span> <span class="n">Hypnogram</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">art</span><span class="p">,</span> <span class="n">wake</span><span class="p">,</span> <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">n3</span><span class="p">,</span> <span class="n">rem</span><span class="p">,</span>
+                              <span class="n">art_visual</span><span class="p">,</span> <span class="n">wake_visual</span><span class="p">,</span> <span class="n">rem_visual</span><span class="p">,</span> <span class="n">n1_visual</span><span class="p">,</span>
+                              <span class="n">n2_visual</span><span class="p">,</span> <span class="n">n3_visual</span><span class="p">,</span> <span class="n">art_color</span><span class="p">,</span> <span class="n">wake_color</span><span class="p">,</span>
+                              <span class="n">rem_color</span><span class="p">,</span> <span class="n">n1_color</span><span class="p">,</span> <span class="n">n2_color</span><span class="p">,</span> <span class="n">n3_color</span><span class="p">,</span>
+                              <span class="n">line_width</span><span class="p">,</span> <span class="n">antialias</span><span class="p">,</span> <span class="n">unicolor</span><span class="p">,</span>
+                              <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">t_min</span><span class="p">,</span> <span class="n">t_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">line</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">line</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="n">d_min</span><span class="p">,</span> <span class="n">d_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">line</span><span class="o">.</span><span class="n">min_visual</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">line</span><span class="o">.</span><span class="n">max_visual</span><span class="p">()</span>
+        <span class="n">rect</span> <span class="o">=</span> <span class="p">(</span><span class="n">t_min</span><span class="p">,</span> <span class="n">d_min</span> <span class="o">-</span> <span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="n">t_max</span> <span class="o">-</span> <span class="n">t_min</span><span class="p">,</span> <span class="n">d_max</span> <span class="o">-</span> <span class="n">d_min</span> <span class="o">+</span> <span class="mf">1.</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">scene</span><span class="o">.</span><span class="n">cameras</span><span class="o">.</span><span class="n">PanZoomCamera</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="n">rect</span><span class="p">)</span>
+
+<div class="viewcode-block" id="HypnogramObj.set_stage"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.HypnogramObj.set_stage">[docs]</a>    <span class="k">def</span> <span class="nf">set_stage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stage</span><span class="p">,</span> <span class="n">idx_start</span><span class="p">,</span> <span class="n">idx_end</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set stage.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        stage : str, int</span>
+<span class="sd">            Stage to define. Should either be a string (e.g &#39;art&#39;, &#39;rem&#39;...) or</span>
+<span class="sd">            an integer.</span>
+<span class="sd">        idx_start : int</span>
+<span class="sd">            Index where the stage begin.</span>
+<span class="sd">        idx_end : int</span>
+<span class="sd">            Index where the stage finish.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">line</span><span class="o">.</span><span class="n">set_stage</span><span class="p">(</span><span class="n">stage</span><span class="p">,</span> <span class="n">idx_start</span><span class="p">,</span> <span class="n">idx_end</span><span class="p">)</span></div>
+
+    <span class="c1"># ----------- LINE_WIDTH -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">line_width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the line_width value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">line</span><span class="o">.</span><span class="n">_line_width</span>
+
+    <span class="nd">@line_width</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">line_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set line_width value.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">line</span><span class="o">.</span><span class="n">line_width</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="c1"># ----------- UNICOLOR -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">unicolor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the unicolor value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">line</span><span class="o">.</span><span class="n">_unicolor</span>
+
+    <span class="nd">@unicolor</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">unicolor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set unicolor value.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">line</span><span class="o">.</span><span class="n">unicolor</span> <span class="o">=</span> <span class="n">value</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.3.9',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

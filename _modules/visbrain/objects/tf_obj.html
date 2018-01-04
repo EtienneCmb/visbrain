@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>visbrain.objects.tf_obj &mdash; visbrain 0.3.8 documentation</title>
+  <title>visbrain.objects.tf_obj &mdash; visbrain 0.3.9 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="visbrain 0.3.8 documentation" href="../../../index.html"/>
+    <link rel="top" title="visbrain 0.3.9 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.8
+                0.3.9
               </div>
             
           
@@ -252,11 +252,11 @@
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; import numpy as np</span>
-<span class="sd">    &gt;&gt;&gt; from visbrain.objects import TimeFrequencyMapObj</span>
+<span class="sd">    &gt;&gt;&gt; from visbrain.objects import TimeFrequencyObj</span>
 <span class="sd">    &gt;&gt;&gt; n, sf = 512, 256  # number of time-points and sampling frequency</span>
 <span class="sd">    &gt;&gt;&gt; time = np.arange(n) / sf  # time vector</span>
 <span class="sd">    &gt;&gt;&gt; data = np.sin(2 * np.pi * 25. * time) + np.random.rand(n)</span>
-<span class="sd">    &gt;&gt;&gt; tf = TimeFrequencyMapObj(&#39;tf&#39;, data, sf)</span>
+<span class="sd">    &gt;&gt;&gt; tf = TimeFrequencyObj(&#39;tf&#39;, data, sf)</span>
 <span class="sd">    &gt;&gt;&gt; tf.preview(axis=True)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -299,7 +299,6 @@
         <span class="n">noverlap</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">overlap</span> <span class="o">*</span> <span class="n">nperseg</span><span class="p">))</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nperseg</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c_parameter</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
-        <span class="c1">#  args :</span>
 
         <span class="c1"># Update color arguments :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_update_cbar_args</span><span class="p">(</span><span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span> <span class="n">over</span><span class="p">)</span>
@@ -374,7 +373,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.3.8',
+            VERSION:'0.3.9',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

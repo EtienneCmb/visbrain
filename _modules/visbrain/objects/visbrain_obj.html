@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>visbrain.objects.visbrain_obj &mdash; visbrain 0.3.8 documentation</title>
+  <title>visbrain.objects.visbrain_obj &mdash; visbrain 0.3.9 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="visbrain 0.3.8 documentation" href="../../../index.html"/>
+    <link rel="top" title="visbrain 0.3.9 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.8
+                0.3.9
               </div>
             
           
@@ -171,7 +171,7 @@
 <span class="kn">import</span> <span class="nn">vispy.visuals.transforms</span> <span class="k">as</span> <span class="nn">vist</span>
 
 <span class="kn">from</span> <span class="nn">.scene_obj</span> <span class="k">import</span> <span class="n">VisbrainCanvas</span>
-<span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">write_fig_canvas</span>
+<span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">write_fig_canvas</span><span class="p">,</span> <span class="n">dialog_save</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">color2vb</span><span class="p">,</span> <span class="n">set_log_level</span><span class="p">,</span> <span class="n">merge_cameras</span>
 <span class="kn">from</span> <span class="nn">..config</span> <span class="k">import</span> <span class="n">CONFIG</span>
 <span class="kn">from</span> <span class="nn">..visuals</span> <span class="k">import</span> <span class="n">CbarBase</span>
@@ -179,12 +179,51 @@
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">_VisbrainObj</span><span class="p">(</span><span class="n">CbarBase</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">_VisbrainShortcuts</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Add shortcuts to a canvas.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key_press</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">events</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;mouse_release&#39;</span><span class="p">,</span> <span class="s1">&#39;mouse_double_click&#39;</span><span class="p">,</span> <span class="s1">&#39;mouse_move&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;mouse_press&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">set_shortcuts_to_canvas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">canvas</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set shortcuts to a VisbrainCanvas.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">canvas</span><span class="p">,</span> <span class="n">VisbrainCanvas</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span> <span class="o">=</span> <span class="n">canvas</span>
+        <span class="n">ce</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">events</span>  <span class="c1"># noqa</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_on_&#39;</span> <span class="o">+</span> <span class="n">k</span><span class="p">):</span>
+                <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;ce.</span><span class="si">%s</span><span class="s1">.connect(self._on_</span><span class="si">%s</span><span class="s1">())&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
+        <span class="c1"># Key-pressed :</span>
+
+        <span class="k">def</span> <span class="nf">_save_canvas</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+            <span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QWidget</span>
+            <span class="n">ext</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="s1">&#39;tiff&#39;</span><span class="p">,</span> <span class="s1">&#39;jpg&#39;</span><span class="p">]</span>
+            <span class="n">_ext</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> file (*.</span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">ext</span><span class="p">]</span>
+            <span class="n">_ext</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;All files (*.*)&#39;</span><span class="p">]</span>
+            <span class="n">saveas</span> <span class="o">=</span> <span class="n">dialog_save</span><span class="p">(</span><span class="n">QWidget</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Export the scene&#39;</span><span class="p">,</span>
+                                 <span class="n">default</span><span class="o">=</span><span class="s1">&#39;canvas.png&#39;</span><span class="p">,</span> <span class="n">allext</span><span class="o">=</span><span class="n">_ext</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">saveas</span><span class="p">:</span>
+                <span class="n">write_fig_canvas</span><span class="p">(</span><span class="n">saveas</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">canvas</span><span class="p">,</span>
+                                 <span class="n">widget</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">central_widget</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key_press</span><span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_save_canvas</span>
+
+        <span class="k">def</span> <span class="nf">_fcn_key_press</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Key pressed.&quot;&quot;&quot;</span>
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">text</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_press</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">key_press</span><span class="p">[</span><span class="n">event</span><span class="o">.</span><span class="n">text</span><span class="p">](</span><span class="n">event</span><span class="p">)</span>
+        <span class="n">ce</span><span class="o">.</span><span class="n">key_press</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">_fcn_key_press</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">_VisbrainObj</span><span class="p">(</span><span class="n">CbarBase</span><span class="p">,</span> <span class="n">_VisbrainShortcuts</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Class for VisbrainObjects and CombineObjects.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
         <span class="n">CbarBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="n">_VisbrainShortcuts</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cbar_data</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_default_cblabel</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_minmax</span> <span class="o">=</span> <span class="kc">None</span>
@@ -220,6 +259,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_node</span> <span class="o">=</span> <span class="n">vispy</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_csize</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># canvas size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shortcuts</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="c1"># Name :</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">name</span>
@@ -247,8 +287,9 @@
             <span class="n">camera</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_camera</span><span class="p">()</span>
         <span class="n">canvas</span> <span class="o">=</span> <span class="n">VisbrainCanvas</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span>
                                 <span class="n">bgcolor</span><span class="o">=</span><span class="n">color2vb</span><span class="p">(</span><span class="n">bgcolor</span><span class="p">),</span> <span class="n">camera</span><span class="o">=</span><span class="n">camera</span><span class="p">,</span>
-                                <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                                <span class="n">shortcuts</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_shortcuts</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_csize</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_shortcuts_to_canvas</span><span class="p">(</span><span class="n">canvas</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">scene</span>
         <span class="k">return</span> <span class="n">canvas</span>
@@ -572,7 +613,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.3.8',
+            VERSION:'0.3.9',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

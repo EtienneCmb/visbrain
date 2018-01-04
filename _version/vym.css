@@ -1,0 +1,170 @@
+html { 
+    font-family:arial,sans-serif; 
+}
+
+body { 
+    margin:0; 
+    padding:10px; 
+    font-family:arial,
+    sans-serif; 
+    align:center;  
+    background-color:#ffffff; 
+}
+
+a, a:visited, a:link, a:active { 
+    color:#666666; 
+    text-decoration:none; 
+}
+
+a:hover { 
+    text-decoration:underline; 
+}
+
+/* VYM specific elements*/
+
+.vym-header{ 
+    width:96%; 
+    padding:2%; 
+    margin-bottom:10px; 
+    border:solid 1px black; 
+    background-color:#f0f0f0; 
+    text-align:center; 
+    vertical-align:center;
+    font-size: 2em;
+}
+.vym-toc{
+    background-color: #F9F9F9;
+    border: 1px solid #AAAAAA;
+    font-size: 95%;
+    padding: 5px
+}
+.vym-toc-title{
+    background-color: #F9F9F9;
+    font-size: 100%;
+}
+.vym-toc-branch-0{ text-indent: 0em; }
+.vym-toc-branch-1{ text-indent: 1em; }
+.vym-toc-branch-2{ text-indent: 2em; }
+.vym-toc-branch-3{ text-indent: 3em; }
+.vym-toc-branch-4{ text-indent: 4em; }
+.vym-toc-branch-5{ text-indent: 5em; }
+.vym-toc-branch-6{ text-indent: 6em; }
+.vym-toc-branch-7{ text-indent: 7em; }
+.vym-toc-branch-8{ text-indent: 8em; }
+.vym-toc-branch-9{ text-indent: 9em; }
+.vym-toc-number{ }
+.vym-toc-text{ }
+.vym-imagemap{
+    width:96%; 
+    padding:2%; 
+    margin-bottom:10px; 
+    border: 0px; 
+    text-align:center; 
+    vertical-align:center;
+}
+.imagemap{
+    border: 0px; 
+}
+.vym-BoxBottom { 
+    padding:10px; 
+    font-size:0.7em; 
+    border:solid 1px black; 
+    margin:0; 
+    background-color:#f0f0f0; 
+}
+.vym-BoxBottomR		
+{ 
+    padding-top:1em; 
+    color:#676767; 
+    text-align:right; 
+}
+.vym-footer { 
+    width:100%; 
+    border:1;
+}
+.vym-footerL { font-size:0.7em; color:#676767; text-align:left; }
+.vym-footerC { font-size:0.7em; color:#676767; text-align:center; }
+.vym-footerR { font-size:0.7em; color:#676767; text-align:right; }
+
+.vym-url {} 
+
+.vym-branch-0 { 
+}
+.vym-branch-1{
+}
+.vym-branch-2{
+    font-size: small;
+    font-weight: normal;
+}
+.vym-branch-3{
+    font-size: small;
+    font-weight: normal;
+}
+.vym-branch-4{
+    font-size: small;
+    font-weight: normal;
+}
+.vym-branch-5{
+    font-size: small;
+    font-weight: normal;
+}
+.vym-branch-6{
+    font-size: small;
+    font-weight: normal;
+}
+.vym-branch-7{
+    font-size: small;
+    font-weight: normal;
+}
+
+.vym-branch-8{
+    font-size: small;
+    font-weight: normal;
+}
+.vym-branch-9{
+    font-size: small;
+    font-weight: normal;
+}
+.vym-note { 
+    width:80%; 
+    border: solid 1px black; 
+    border-radius: 0.6em 0.6em 0.6em 0.6em;
+    border-color: #000000;
+    background-color: #eeeeee; 
+    font-size: small;
+    font-weight: normal;
+    overflow: auto;
+    padding: 0em 1em;
+}
+
+.vym-note-flag {
+    vertical-align:top;
+    width:30px;
+    height:30px;
+    background-image: url("flags/flag-note.png");
+    background-repeat: no-repeat;
+    background-position: left top;
+}
+
+.vym-note-paragraph { 
+    margin-top: 0px;
+    margin-bottom: 1em;
+}
+
+.vym-fixed-note-paragraph { 
+    margin: 0;
+}
+.standardflag { 
+    margin-left: 5px; 
+}
+
+.vym-list-ul-0 {
+    list-style-type: none;
+    list-style-position: inside;
+}
+
+.vym-list-ul-1 {
+    list-style-type: none;
+    list-style-position: outside;
+}
+
