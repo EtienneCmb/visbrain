@@ -2,7 +2,8 @@
 import numpy as np
 
 from visbrain.utils.mesh import (convert_meshdata, vispy_array, volume_to_mesh,
-                                 mesh_edges, smoothing_matrix)
+                                 mesh_edges, smoothing_matrix,
+                                 laplacian_smoothing)
 
 
 class TestMesh(object):
@@ -65,3 +66,9 @@ class TestMesh(object):
         self._creation()
         vertices = np.array([1, 3])
         smoothing_matrix(vertices, mesh_edges(self.faces))
+
+    def test_laplacian_smoothing(self):
+        """Test function laplacian_smoothing."""
+        self._creation()
+        laplacian_smoothing(self.vertices, self.faces)
+        laplacian_smoothing(self.vertices, self.faces, n_neighbors=3)
