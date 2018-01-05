@@ -196,16 +196,6 @@ class BrainObj(VisbrainObject):
         """Get the path where datasets are stored."""
         return get_data_path(folder='templates')
 
-    def _get_all_available_templates(self):
-        """Get all available brain templates (e.g defaults and downloadable."""
-        b_def = self._get_default_templates()
-        b_down = self._get_downloadable_templates()
-        b_installed = get_files_in_data('templates')
-        b_tmp = get_files_in_data('tmp')
-        b_all = list(set(b_def + b_down + b_installed + b_tmp))
-        b_all.sort()
-        return b_all
-
     def _get_default_templates(self):
         """Get the default list of brain templates."""
         return ['B1', 'B2', 'B3']
