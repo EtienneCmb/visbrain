@@ -38,6 +38,13 @@ class TestBrainObj(_TestObjects):
         b_obj.set_data(name)
         b_obj.clean()
 
+    def test_get_template_list(self):
+        """Test function get_template_list."""
+        b_obj._get_template_path()
+        b_obj._get_default_templates()
+        b_obj._get_downloadable_templates()
+        b_obj._add_downloadable_templates()
+
     def test_rotation(self):
         """Test function rotation."""
         # Test fixed rotations :
@@ -97,8 +104,7 @@ class TestBrainObj(_TestObjects):
         b_obj.parcellize(file_1, hemisphere='left')
         select = ['insula', 'paracentral', 'precentral']
         data = np.arange(len(select))
-        b_obj.parcellize(file_2, hemisphere='right', select=select, data=data,
-                         cmap='Spectral_r')
+        b_obj.parcellize(file_2, select=select, data=data, cmap='Spectral_r')
 
     def test_projection(self):
         """Test cortical projection and repartition."""
