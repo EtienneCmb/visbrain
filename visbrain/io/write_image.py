@@ -44,8 +44,9 @@ def write_fig_hyp(data, sf, file=None, start_s=0, grid=False, ascolor=False,
     import matplotlib.pyplot as plt
     import datetime
 
+    # Internal copy :
     hypno = data.copy()
-    
+
     # Downsample to get one value per second
     sf = int(sf)
     hypno = hypno[::sf]
