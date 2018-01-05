@@ -19,8 +19,8 @@ class TestWriteImage(_TestVisbrain):
         sf = 1.
         file = self.to_tmp_dir('hypno_write_fig_hyp.png')
         file_color = self.to_tmp_dir('hypno_write_fig_hyp_color.png')
-        write_fig_hyp(hypno.copy(), sf, file=file)
-        write_fig_hyp(hypno.copy(), sf, file=file_color, ascolor=True)
+        write_fig_hyp(hypno, sf, file=file)
+        write_fig_hyp(hypno, sf, file=file_color, ascolor=True)
 
     @pytest.mark.xfail(reason="Failed if display not correctly configured",
                        run=True, strict=False)

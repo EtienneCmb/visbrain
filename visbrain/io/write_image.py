@@ -15,14 +15,14 @@ __all__ = ('write_fig_hyp', 'write_fig_spindles', 'write_fig_canvas',
            'write_fig_pyqt')
 
 
-def write_fig_hyp(hypno, sf, file=None, start_s=0, grid=False, ascolor=False,
+def write_fig_hyp(data, sf, file=None, start_s=0, grid=False, ascolor=False,
                   dpi=300, colors={-1: '#8bbf56', 0: '#56bf8b', 1: '#aabcce',
                                    2: '#405c79', 3: '#0b1c2c', 4: '#bf5656'}):
     """Export hypnogram to a high-res png figure.
 
     Parameters
     ----------
-    hypno : array_like
+    data : array_like
         Hypnogram vector
     sf : float
         The sampling frequency of displayed elements (could be the
@@ -44,6 +44,8 @@ def write_fig_hyp(hypno, sf, file=None, start_s=0, grid=False, ascolor=False,
     import matplotlib.pyplot as plt
     import datetime
 
+    hypno = data.copy()
+    
     # Downsample to get one value per second
     sf = int(sf)
     hypno = hypno[::sf]
