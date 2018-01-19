@@ -157,8 +157,9 @@ class Topo(PyQtModule, UiInit, UiElements):
         if isinstance(c_connect, np.ndarray):
             assert c_connect.shape == (len(topo), len(topo))
             xyz = topo._xyz[topo._keeponly]
-            self.connect = ConnectObj('TopoConnect', xyz, c_connect, cmap=cmap,
-                                      select=c_select, line_width=c_linewidth,
+            self.connect = ConnectObj('TopoConnect', xyz, c_connect,
+                                      cmap=c_cmap, select=c_select,
+                                      line_width=c_linewidth,
                                       parent=topo.node_chan)
         self[name] = topo
         # Create a PanZoom camera :
