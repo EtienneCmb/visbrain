@@ -8,7 +8,7 @@ from PyQt5 import QtWidgets
 from ....utils import HelpMenu
 from ....io import (dialog_save, dialog_load, write_fig_hyp, write_csv,
                     write_txt, write_hypno_txt, write_hypno_hyp, read_hypno,
-                    annotations_to_array, oversample_hypno)
+                    annotations_to_array, oversample_hypno, save_config_json)
 
 
 class UiMenu(HelpMenu):
@@ -203,56 +203,54 @@ class UiMenu(HelpMenu):
     # ______________________ SLEEP GUI CONFIG ______________________
     def _save_config(self, *args, filename=None):
         """Save a config file (*.txt) containing several display parameters."""
-        import json
         if filename is None:
             filename = dialog_save(self, 'Save config File', 'config',
-                                   "Text file (*.txt);;All files (*.*)")
+                                   "JSON file (*.json);;Text file (*.txt)")
         if filename:
-            with open(filename, 'w') as f:
-                config = {}
-                # Get channels visibility / amplitude :
-                viz, amp = [], []
-                for i, k in enumerate(self._chanChecks):
-                    viz.append(k.isChecked())
-                    amp.append(self._ymaxSpin[i].value())
-                config['Channel_Names'] = self._channels
-                config['Channel_Visible'] = viz
-                config['Channel_Amplitude'] = amp
-                # config['AllAmpMin'] = self._PanAllAmpMin.value()
-                # config['AllAmpMax'] = self._PanAllAmpMax.value()
-                config['SymAmp'] = self._PanAmpSym.isChecked()
-                config['AutoAmp'] = self._PanAmpAuto.isChecked()
-                # Spectrogram :
-                config['Spec_Visible'] = self.menuDispSpec.isChecked()
-                config['Spec_Method'] = self._PanSpecMethod.currentIndex()
-                config['Spec_Length'] = self._PanSpecNfft.value()
-                config['Spec_Overlap'] = self._PanSpecStep.value()
-                config['Spec_Cmap'] = self._PanSpecCmap.currentIndex()
-                config['Spec_CmapInv'] = self._PanSpecCmapInv.isChecked()
-                config['Spec_Chan'] = self._PanSpecChan.currentIndex()
-                config['Spec_Fstart'] = self._PanSpecFstart.value()
-                config['Spec_Fend'] = self._PanSpecFend.value()
-                config['Spec_Con'] = self._PanSpecCon.value()
-                config['Spec_Interp'] = self._PanSpecInterp.currentIndex()
-                # Hypnogram/time axis/navigation/topo/indic/zoom :
-                config['Hyp_Visible'] = self.menuDispHypno.isChecked()
-                config['Time_Visible'] = self.menuDispTimeax.isChecked()
-                config['Topo_Visible'] = self.menuDispTopo.isChecked()
-                config['Nav_Visible'] = self.menuDispNavbar.isChecked()
-                config['Indic_Visible'] = self.menuDispIndic.isChecked()
-                config['Zoom_Visible'] = self.menuDispZoom.isChecked()
-                config['Hyp_Lw'] = self._PanHypnoLw.value()
-                config['Hyp_Color'] = self._PanHypnoColor.isChecked()
-                # Navigation bar properties :
-                config['Slider'] = self._SlVal.value()
-                config['Step'] = self._SigSlStep.value()
-                config['Window'] = self._SigWin.value()
-                config['Goto'] = self._SlGoto.value()
-                config['Magnify'] = self._slMagnify.isChecked()
-                config['AbsTime'] = self._slAbsTime.isChecked()
-                config['Grid'] = self._slGrid.isChecked()
-                config['Unit'] = self._slRules.currentIndex()
-                json.dump(config, f)
+            config = {}
+            # Get channels visibility / amplitude :
+            viz, amp = [], []
+            for i, k in enumerate(self._chanChecks):
+                viz.append(k.isChecked())
+                amp.append(self._ymaxSpin[i].value())
+            config['Channel_Names'] = self._channels
+            config['Channel_Visible'] = viz
+            config['Channel_Amplitude'] = amp
+            # config['AllAmpMin'] = self._PanAllAmpMin.value()
+            # config['AllAmpMax'] = self._PanAllAmpMax.value()
+            config['SymAmp'] = self._PanAmpSym.isChecked()
+            config['AutoAmp'] = self._PanAmpAuto.isChecked()
+            # Spectrogram :
+            config['Spec_Visible'] = self.menuDispSpec.isChecked()
+            config['Spec_Method'] = self._PanSpecMethod.currentIndex()
+            config['Spec_Length'] = self._PanSpecNfft.value()
+            config['Spec_Overlap'] = self._PanSpecStep.value()
+            config['Spec_Cmap'] = self._PanSpecCmap.currentIndex()
+            config['Spec_CmapInv'] = self._PanSpecCmapInv.isChecked()
+            config['Spec_Chan'] = self._PanSpecChan.currentIndex()
+            config['Spec_Fstart'] = self._PanSpecFstart.value()
+            config['Spec_Fend'] = self._PanSpecFend.value()
+            config['Spec_Con'] = self._PanSpecCon.value()
+            config['Spec_Interp'] = self._PanSpecInterp.currentIndex()
+            # Hypnogram/time axis/navigation/topo/indic/zoom :
+            config['Hyp_Visible'] = self.menuDispHypno.isChecked()
+            config['Time_Visible'] = self.menuDispTimeax.isChecked()
+            config['Topo_Visible'] = self.menuDispTopo.isChecked()
+            config['Nav_Visible'] = self.menuDispNavbar.isChecked()
+            config['Indic_Visible'] = self.menuDispIndic.isChecked()
+            config['Zoom_Visible'] = self.menuDispZoom.isChecked()
+            config['Hyp_Lw'] = self._PanHypnoLw.value()
+            config['Hyp_Color'] = self._PanHypnoColor.isChecked()
+            # Navigation bar properties :
+            config['Slider'] = self._SlVal.value()
+            config['Step'] = self._SigSlStep.value()
+            config['Window'] = self._SigWin.value()
+            config['Goto'] = self._SlGoto.value()
+            config['Magnify'] = self._slMagnify.isChecked()
+            config['AbsTime'] = self._slAbsTime.isChecked()
+            config['Grid'] = self._slGrid.isChecked()
+            config['Unit'] = self._slRules.currentIndex()
+            save_config_json(filename, config)
 
     # ______________________ ANNOTATION TABLE ______________________
     def _save_annotation_table(self, *args, filename=None):

@@ -20,10 +20,10 @@ def save_config_json(filename, config):
         to_unicode = unicode
     except NameError:
         to_unicode = str
-
+        
     if filename:
         with io.open(filename, 'w', encoding='utf8') as f:
-            str_ = json.dump(config, indent=4, sort_keys=True,
+            str_ = json.dumps(config, indent=4, sort_keys=True,
                                 separators=(',', ': '), # Pretty printing
                                 ensure_ascii=False)
             f.write(to_unicode(str_))
