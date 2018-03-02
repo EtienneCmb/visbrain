@@ -42,7 +42,7 @@ dependencies:
         echo "Conda env already set up.";
       fi;
     - conda install -n circleenv --yes numpy scipy pip;
-    - pip install codecov pytest pytest-cov pytest-travis-fold;
+    - pip install pytest pytest-travis-fold;
     - pip install mne nibabel pandas openpyxl tensorpac;
     - pip install git+https://github.com/hbldh/lspopt.git#egg=lspopt;
     - ls -al /home/ubuntu/miniconda3;
@@ -58,6 +58,4 @@ dependencies:
 
 test:
   override:
-    - py.test --cov;
-  post:
-    - codecov;
+    - py.test;
