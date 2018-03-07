@@ -887,13 +887,16 @@ class CanvasShortcuts(object):
                     self._SlGoto.value() - self._SigSlStep.value())
 
             # ------------ AMPLITUDE ------------
-            elif event.text == '-':  # Decrease amplitude
-                self._PanAmpSym.setChecked(True)
-                self._PanAllAmpMax.setValue(self._PanAllAmpMax.value() + 5.)
-
-            elif event.text == '+':  # Decrease amplitude
-                self._PanAmpSym.setChecked(True)
-                self._PanAllAmpMax.setValue(self._PanAllAmpMax.value() - 5.)
+            elif event.text in ['-', '+']:  # Decrease / increase amplitude
+                delta = 2.5
+                sign = 2 * ['-', '+'].index(event.text) - 1
+                if self._PanAmpSym.isChecked():  # Symetric amplitudes :
+                    val_sym = self._PanAllAmpMax.value() - 2 * sign * delta
+                    self._PanAllAmpMax.setValue(val_sym)
+                else:  # non-symetrical amplitudes
+                    for m, M in zip(self._yminSpin, self._ymaxSpin):
+                        m.setValue(m.value() + sign * delta)
+                        M.setValue(M.value() - sign * delta)
 
             # ------------  GRID/MAGNIFY ------------
             elif event.text.lower() == 'm':  # Magnify
