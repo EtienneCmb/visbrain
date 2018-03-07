@@ -212,8 +212,8 @@ def read_hypno_txt(path):
     assert os.path.isfile(header)
 
     # Load header file
-    labels = np.genfromtxt(header, dtype=str, delimiter=" ", usecols=0)
-    values = np.genfromtxt(header, dtype=float, delimiter=" ", usecols=1)
+    labels = np.genfromtxt(header, dtype=str, delimiter=" ", usecols=0, encoding='utf-8')
+    values = np.genfromtxt(header, dtype=float, delimiter=" ", usecols=1, encoding='utf-8')
     desc = {label: row for label, row in zip(labels, values)}
 
     # Get sampling frequency of hypnogram
@@ -221,7 +221,7 @@ def read_hypno_txt(path):
 
     # Load hypnogram file
     hyp = np.genfromtxt(path, delimiter='\n', usecols=[0],
-                        dtype=None, skip_header=0)
+                        dtype=None, skip_header=0, encoding='utf-8')
 
     if not np.issubdtype(hyp.dtype, np.integer):
         hyp = np.char.decode(hyp)
