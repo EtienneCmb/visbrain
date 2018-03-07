@@ -242,7 +242,7 @@ def sleep_switch(file, ext, downsample):
     path = file + ext
 
     if ext == '.vhdr':  # BrainVision
-        return read_eeg(path, downsample)
+        return read_bva(path, downsample)
 
     if ext == '.eeg':  # Elan
         return read_elan(path, downsample)
@@ -422,7 +422,7 @@ def read_trc(path, downsample):
     return sf, downsample, dsf, data[:, ::dsf], chan, n, start_time, None
 
 
-def read_eeg(path, downsample, read_markers=False):
+def read_bva(path, downsample, read_markers=False):
     """Read data from a BrainVision (*.vhdr) file.
 
     Poor man's version of https: // gist.github.com / breuderink / 6266871
@@ -463,9 +463,7 @@ def read_eeg(path, downsample, read_markers=False):
 
     # Read header
     ent = np.genfromtxt(path, delimiter='\n', usecols=[0],
-                        dtype=None, skip_header=0)
-
-    ent = np.char.decode(ent, "utf-8")
+                        dtype=None, skip_header=0, encoding='utf-8')
 
     for item in ent:
         if 'DataFile=' in item:
@@ -506,9 +504,8 @@ def read_eeg(path, downsample, read_markers=False):
     # Read marker file (if present) to extract recording time
     if os.path.isfile(marker_path):
         vmrk = np.genfromtxt(marker_path, delimiter='\n', usecols=[0],
-                             dtype=None, skip_header=0)
+                             dtype=None, skip_header=0, encoding='utf-8')
 
-        vmrk = np.char.decode(vmrk)
         # Read start-time
         for item in vmrk:
             if 'New Segment' in item:

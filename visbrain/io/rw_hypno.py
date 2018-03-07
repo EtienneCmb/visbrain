@@ -173,9 +173,7 @@ def read_hypno_hyp(path):
         The hypnogram original sampling frequency (Hz)
     """
     hyp = np.genfromtxt(path, delimiter='\n', usecols=[0],
-                        dtype=None, skip_header=0)
-
-    hyp = np.char.decode(hyp)
+                        dtype=None, skip_header=0, encoding='utf-8')
 
     # Get sampling frequency of hypnogram
     sf_hyp = 1 / float(hyp[0].split()[1])
