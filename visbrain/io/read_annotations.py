@@ -31,7 +31,7 @@ def annotations_to_array(annotations, default_txt='enter annotations'):
     elif isinstance(annotations, str):  # 'file.txt'
         # Get starting/ending/annotation :
         start, end, text = np.genfromtxt(annotations, delimiter=',',
-                                         dtype=str).T
+                                         dtype=str, encoding='utf-8').T
     elif isinstance(annotations, (np.ndarray, list)):  # array of annotations
         annotations = np.asarray(annotations)
         if (annotations.ndim == 1):

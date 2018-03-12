@@ -413,7 +413,8 @@ class UiMenu(HelpMenu):
             # Get channel / method from file name :
             (chan, meth) = filename.split('_')[-1].split('.')[0].split('-')
             # Load the file :
-            (st, end) = np.genfromtxt(filename, delimiter=',')[3::, 0:2].T
+            (st, end) = np.genfromtxt(filename,
+                                      delimiter=',', encoding='utf-8')[3::, 0:2].T
             # Sort by starting index :
             idxsort = np.argsort(st)
             st, end = st[idxsort], end[idxsort]
