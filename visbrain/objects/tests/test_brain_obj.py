@@ -43,7 +43,7 @@ class TestBrainObj(_TestObjects):
         b_obj._get_template_path()
         b_obj._get_default_templates()
         b_obj._get_downloadable_templates()
-        b_obj._add_downloadable_templates()
+        b_obj._add_downloadable_templates('white')
 
     def test_rotation(self):
         """Test function rotation."""

@@ -1,7 +1,7 @@
-numpy>=1.13
+numpy>=1.14.0
 scipy
 vispy>=0.5.2
-matplotlib>=1.5.5
+matplotlib>=1.5.5,<2.2.0
 pyqt5
 pillow
 Click
