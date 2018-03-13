@@ -226,7 +226,6 @@ def read_hypno_txt(path):
                         dtype=None, skip_header=0, encoding='utf-8')
 
     if not np.issubdtype(hyp.dtype, np.integer):
-        hyp = np.char.decode(hyp)
         hypno = np.array([s for s in hyp if s.lstrip('-').isdigit()],
                          dtype=int)
     else:
