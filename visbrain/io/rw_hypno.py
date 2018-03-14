@@ -130,12 +130,13 @@ def read_hypno(path):
     ----------
     path : string
         Filename (with full path) to hypnogram file.
+    time : array_like | None
+        The time vector (used to interpolate Excel files).
 
     Returns
     -------
     hypno : array_like
         The hypnogram vector in its original length.
-
     sf_hyp: float
         The hypnogram original sampling frequency (Hz)
     """
