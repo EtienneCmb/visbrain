@@ -154,7 +154,7 @@ class UiSettings(object):
         # ================= HYPNO LABELS =================
         for k in self._hypYLabels:
             k.setStyleSheet("QLabel")
-        self._hypYLabels[hypconv + 1].setStyleSheet("QLabel {color: " +
+        self._hypYLabels[hypconv + 2].setStyleSheet("QLabel {color: " +
                                                     hypcol + ";}")
 
     def _fcn_slider_settings(self):
