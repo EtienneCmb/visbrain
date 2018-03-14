@@ -6,8 +6,9 @@
 - read_hypno_hyp : load *.hyp hypnogram data
 - read_hypno_txt : load *.txt hypnogram data
 """
-import numpy as np
 import os
+import logging
+import numpy as np
 
 from ..utils import vispy_array, transient
 from ..io import is_pandas_installed, is_xlrd_installed
@@ -15,6 +16,8 @@ from ..io import is_pandas_installed, is_xlrd_installed
 __all__ = ('oversample_hypno', 'write_hypno_txt', 'write_hypno_hyp',
            'write_hypno_xlsx', 'read_hypno', 'read_hypno_hyp',
            'read_hypno_txt', 'read_hypno_xlsx')
+
+logger = logging.getLogger('visbrain')
 
 
 def oversample_hypno(hypno, n):
@@ -180,6 +183,8 @@ def read_hypno(path, time=None):
         hypno, sf_hyp = read_hypno_txt(path)
     elif ext == '.xlsx':  # Excel
         hypno, sf_hyp = read_hypno_xlsx(path, time=time)
+
+    logger.info("Hypnogram successfully loaded (%s)" % path)
 
     return vispy_array(hypno), sf_hyp
 
