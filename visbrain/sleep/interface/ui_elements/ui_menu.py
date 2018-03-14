@@ -7,8 +7,9 @@ from PyQt5 import QtWidgets
 
 from ....utils import HelpMenu
 from ....io import (dialog_save, dialog_load, write_fig_hyp, write_csv,
-                    write_txt, write_hypno_txt, write_hypno_hyp, read_hypno,
-                    annotations_to_array, oversample_hypno, save_config_json)
+                    write_txt, write_hypno_txt, write_hypno_hyp,
+                    write_hypno_xlsx, read_hypno, annotations_to_array,
+                    oversample_hypno, save_config_json)
 
 
 class UiMenu(HelpMenu):
@@ -92,8 +93,9 @@ class UiMenu(HelpMenu):
     def saveHypData(self, *args, filename=None):  # noqa
         """Save the hypnogram data either in a hyp or txt file."""
         if filename is None:
-            filename = dialog_save(self, 'Save File', 'hypno', "Text file ""(*"
-                                   ".txt);;Elan file (*.hyp);;All files (*.*)")
+            filename = dialog_save(self, 'Save File', 'hypno', "Text file (*."
+                                   "txt);;Elan file (*.hyp);;Excel file (*."
+                                   "xlsx);;All files (*.*)")
         if filename:
             file, ext = os.path.splitext(filename)
 
@@ -102,6 +104,8 @@ class UiMenu(HelpMenu):
                 write_hypno_hyp(filename, self._hypno, self._sfori, self._N)
             elif ext == '.txt':
                 write_hypno_txt(filename, self._hypno, self._sfori, self._N, 1)
+            elif ext == '.xlsx':
+                write_hypno_xlsx(filename, self._hypno, self._time)
             else:
                 raise ValueError("Not a valid extension")
 
