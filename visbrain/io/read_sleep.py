@@ -69,7 +69,7 @@ class ReadSleepData(object):
                 args = sleep_switch(file, ext, downsample)
             # Get output arguments :
             (sf, downsample, dsf, data, channels, n, offset, annot) = args
-            info = ("File successfully loaded (%s):"
+            info = ("Data successfully loaded (%s):"
                     "\n- Sampling-frequency : %.2fHz"
                     "\n- Number of time points (before down-sampling): %i"
                     "\n- Down-sampling frequency : %.2fHz"
@@ -121,7 +121,7 @@ class ReadSleepData(object):
                 raise ValueError("Then length of the hypnogram must be the "
                                  "same as raw data")
         if isinstance(hypno, str):  # (*.hyp / *.txt / *.csv)
-            hypno, _ = read_hypno(hypno)
+            hypno, _ = read_hypno(hypno, time=time)
             # Oversample then downsample :
             hypno = oversample_hypno(hypno, self._N)[::dsf]
             PROFILER("Hypnogram file loaded", level=1)

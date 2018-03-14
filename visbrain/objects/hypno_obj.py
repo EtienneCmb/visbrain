@@ -61,8 +61,11 @@ class HypnogramObj(VisbrainObject):
         """Init."""
         # Load *.txt, *.csv and *.hyp files :
         file, ext = os.path.splitext(name)
-        if ext in ['.csv', '.txt', '.hyp']:
-            data, sf = read_hypno(name)
+        if ext in ['.csv', '.txt', '.hyp', '.xlsx']:
+            if (ext == '.xlsx') and (time is None):
+                raise ValueError("The `time` input should not be None with "
+                                 "excel files. Use a NumPy array instead.")
+            data, sf = read_hypno(name, time=time)
             name, time = os.path.split(name)[1], np.arange(len(data)) / sf
         # Initialize VisbrainObject and Hypnogram visuam creation :
         VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)

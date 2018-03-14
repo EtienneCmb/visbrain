@@ -7,8 +7,9 @@ from PyQt5 import QtWidgets
 
 from ....utils import HelpMenu
 from ....io import (dialog_save, dialog_load, write_fig_hyp, write_csv,
-                    write_txt, write_hypno_txt, write_hypno_hyp, read_hypno,
-                    annotations_to_array, oversample_hypno, save_config_json)
+                    write_txt, write_hypno_txt, write_hypno_hyp,
+                    write_hypno_xlsx, read_hypno, annotations_to_array,
+                    oversample_hypno, save_config_json)
 
 
 class UiMenu(HelpMenu):
@@ -92,18 +93,19 @@ class UiMenu(HelpMenu):
     def saveHypData(self, *args, filename=None):  # noqa
         """Save the hypnogram data either in a hyp or txt file."""
         if filename is None:
-            filename = dialog_save(self, 'Save File', 'hypno', "Text file ""(*"
-                                   ".txt);;Elan file (*.hyp);;All files (*.*)")
+            filename = dialog_save(self, 'Save File', 'hypno', "Text file (*."
+                                   "txt);;Elan file (*.hyp);;Excel file (*."
+                                   "xlsx);;All files (*.*)")
         if filename:
             file, ext = os.path.splitext(filename)
 
             # Switch between differents types :
             if ext == '.hyp':
-                write_hypno_hyp(filename, self._hypno, self._sf, self._sfori,
-                                self._N)
+                write_hypno_hyp(filename, self._hypno, self._sfori, self._N)
             elif ext == '.txt':
-                write_hypno_txt(filename, self._hypno, self._sf, self._sfori,
-                                self._N, 1)
+                write_hypno_txt(filename, self._hypno, self._sfori, self._N, 1)
+            elif ext == '.xlsx':
+                write_hypno_xlsx(filename, self._hypno, self._time)
             else:
                 raise ValueError("Not a valid extension")
 
@@ -294,7 +296,7 @@ class UiMenu(HelpMenu):
                                    "All files (*.*)")
         if filename:
             # Load the hypnogram :
-            self._hypno, _ = read_hypno(filename)
+            self._hypno, _ = read_hypno(filename, time=self._time)
             self._hypno = oversample_hypno(self._hypno, self._N)[::self._dsf]
             self._hyp.set_data(self._sf, self._hypno, self._time)
             # Update info table :
