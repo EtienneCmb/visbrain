@@ -15,6 +15,8 @@ matrix:
       os: linux
     - env: TEST=examples
       os: linux
+    # - env: TEST=examples
+    #   os: linux
     # - env: TEST=standard
     #   os: osx
     #   language: generic
