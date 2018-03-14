@@ -3,8 +3,8 @@ import numpy as np
 
 from visbrain.tests._tests_visbrain import _TestVisbrain
 from visbrain.io.rw_hypno import (oversample_hypno, write_hypno_txt,
-                                  write_hypno_hyp, read_hypno, read_hypno_hyp,
-                                  read_hypno_txt)
+                                  write_hypno_hyp, write_hypno_xlsx,
+                                  read_hypno, read_hypno_hyp, read_hypno_txt)
 
 
 class TestRwHypno(_TestVisbrain):
@@ -31,13 +31,23 @@ class TestRwHypno(_TestVisbrain):
         hyp = self._get_hypno()
         write_hypno_hyp(self.to_tmp_dir('hyp.hyp'), hyp, 1000., 5000)
 
+    def test_write_hypno_xlsx(self):
+        """Test function write_hypno_xlsx."""
+        hyp = self._get_hypno()
+        time = np.arange(len(hyp)) / 100.
+        write_hypno_xlsx(self.to_tmp_dir('hyp.xlsx'), hyp, time)
+
     def test_read_hypno(self):
         """Test function read_hypno."""
         # TXT version :
         hyp_txt, sf_txt = read_hypno(self.to_tmp_dir('hyp.txt'))
         # HYP version :
         hyp_hyp, sf_hyp = read_hypno(self.to_tmp_dir('hyp.hyp'))
+        # XLSX version :
+        time = np.arange(len(self._get_hypno())) / 100.
+        hyp_xlsx, sf_xlsx = read_hypno(self.to_tmp_dir('hyp.xlsx'), time=time)
         assert np.array_equal(hyp_txt, hyp_hyp)
+        assert np.array_equal(hyp_txt, hyp_xlsx)
         assert sf_txt == sf_hyp
 
     def test_read_hypno_hyp(self):
