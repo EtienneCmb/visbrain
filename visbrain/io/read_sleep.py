@@ -69,7 +69,7 @@ class ReadSleepData(object):
                 args = sleep_switch(file, ext, downsample)
             # Get output arguments :
             (sf, downsample, dsf, data, channels, n, offset, annot) = args
-            info = ("File successfully loaded (%s):"
+            info = ("Data successfully loaded (%s):"
                     "\n- Sampling-frequency : %.2fHz"
                     "\n- Number of time points (before down-sampling): %i"
                     "\n- Down-sampling frequency : %.2fHz"
