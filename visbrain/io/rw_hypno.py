@@ -47,7 +47,7 @@ def oversample_hypno(hypno, n):
     return hypno.astype(int)
 
 
-def write_hypno_txt(filename, hypno, sf, sfori, n, window=1.):
+def write_hypno_txt(filename, hypno, sfori, n, window=1.):
     """Save hypnogram in txt file format (txt).
 
     Header is in file filename_description.txt
@@ -58,8 +58,6 @@ def write_hypno_txt(filename, hypno, sf, sfori, n, window=1.):
         Filename (with full path) of the file to save
     hypno : array_like
         Hypnogram array, same length as data
-    sf : float
-        Sampling frequency of the data (after downsampling)
     sfori : int
         Original sampling rate of the raw data
     n : int
@@ -84,7 +82,7 @@ def write_hypno_txt(filename, hypno, sf, sfori, n, window=1.):
     np.savetxt(descript, hdr, fmt='%s')
 
 
-def write_hypno_hyp(filename, hypno, sf, sfori, n):
+def write_hypno_hyp(filename, hypno, sfori, n):
     """Save hypnogram in Elan file format (hyp).
 
     Parameters
@@ -101,7 +99,6 @@ def write_hypno_hyp(filename, hypno, sf, sfori, n):
         Original number of points in the raw data
     """
     # Check data format
-    sf = int(sf)
     hypno = hypno.astype(int)
     hypno[hypno == 4] = 5
     step = int(hypno.shape / np.round(n / sfori))
