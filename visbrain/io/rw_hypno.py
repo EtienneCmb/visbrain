@@ -1,10 +1,21 @@
 """write/Read hypnogram data.
 
-- write_hypno_txt : as text file
-- write_hypno_hyp : as hyp file
-- read_hypno : read either *.hyp or *.txt hypnogram data
-- read_hypno_hyp : load *.hyp hypnogram data
-- read_hypno_txt : load *.txt hypnogram data
+Write hypnogram data
+--------------------
+-> write_hypno
+    -> Export either using time code
+        -> .txt, .csv, .xlsx
+    -> Export using one sample per second
+        -> .txt, .hyp
+
+Read hypnogram data
+-------------------
+-> read_hypno
+    -> detect_hypno_version
+        -> Sample :
+            -> .txt, .csv, .xlsx
+        -> Tieme :
+            -> .txt, .hyp
 """
 import os
 import logging
@@ -210,8 +221,7 @@ def _write_hypno_txt_sample(filename, hypno, window=1.):
         base)[0] + '_description.txt')
 
     # Save hypno
-    step = int(hypno.shape / np.round(n / sfori))
-    np.savetxt(filename, hypno[::step].astype(int), fmt='%s')
+    np.savetxt(filename, hypno, fmt='%s')
 
     # Save header file
     hdr = np.array([['time ' + str(window)], ['W 0'], ['N1 1'], ['N2 2'],
