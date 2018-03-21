@@ -7,8 +7,7 @@ from PyQt5 import QtWidgets
 
 from ....utils import HelpMenu
 from ....io import (dialog_save, dialog_load, write_fig_hyp, write_csv,
-                    write_txt, write_hypno_txt, write_hypno_hyp,
-                    write_hypno_xlsx, read_hypno, annotations_to_array,
+                    write_txt, write_hypno, read_hypno, annotations_to_array,
                     oversample_hypno, save_config_json)
 
 
@@ -90,30 +89,33 @@ class UiMenu(HelpMenu):
     ###########################################################################
 
     # ______________________ HYPNOGRAM ______________________
-    def saveHypData(self, *args, filename=None):  # noqa
+    def saveHypData(self, *args, filename=None, reply=None):  # noqa
         """Save the hypnogram data either in a hyp or txt file."""
         # Define default filename for the hypnogram :
         if not isinstance(self._file, str):
             hyp_file = 'hypno'
         else:
             hyp_file = os.path.basename(self._file) + '_hypno'
+        # Version switch :
+        if reply is None:
+            msg = "Save only the timing "
+            reply = QtWidgets.QMessageBox.question(self, 'Message', msg,
+                                                   QtWidgets.QMessageBox.Yes,
+                                                   QtWidgets.QMessageBox.No)
+        if reply == QtWidgets.QMessageBox.No:  # v1 = sample
+            dialog_ext = "Text file (*.txt);;Elan file (*.hyp)"
+            version = 'sample'
+        else:  # v2 = time
+            dialog_ext = ("Text file (*.txt);;Csv file (*.csv);;Excel file "
+                          "(*.xlsx)")
+            version = 'time'
         # Open dialog window :
         if filename is None:
-            filename = dialog_save(self, 'Save File', hyp_file, "Text file (*."
-                                   "txt);;Elan file (*.hyp);;Excel file (*."
-                                   "xlsx);;All files (*.*)")
+            filename = dialog_save(self, 'Save File', hyp_file, dialog_ext +
+                                   ";;All files (*.*)")
         if filename:
-            file, ext = os.path.splitext(filename)
-
-            # Switch between differents types :
-            if ext == '.hyp':
-                write_hypno_hyp(filename, self._hypno, self._sfori, self._N)
-            elif ext == '.txt':
-                write_hypno_txt(filename, self._hypno, self._sfori, self._N, 1)
-            elif ext == '.xlsx':
-                write_hypno_xlsx(filename, self._hypno, self._time)
-            else:
-                raise ValueError("Not a valid extension")
+            write_hypno(filename, self._hypno, version=version, sf=self._sfori,
+                        npts=self._N, window=1.)
 
     def _save_hyp_fig(self, *args, filename=None, **kwargs):
         """Save a 600 dpi .png figure of the hypnogram."""
