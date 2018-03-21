@@ -13,9 +13,7 @@ import numpy as np
 from ..utils import vispy_array, transient
 from ..io import is_pandas_installed, is_xlrd_installed
 
-__all__ = ('oversample_hypno', 'write_hypno_txt', 'write_hypno_hyp',
-           'write_hypno_xlsx', 'read_hypno', 'read_hypno_hyp',
-           'read_hypno_txt', 'read_hypno_xlsx')
+__all__ = ('oversample_hypno', 'write_hypno', 'read_hypno')
 
 logger = logging.getLogger('visbrain')
 
