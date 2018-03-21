@@ -92,8 +92,14 @@ class UiMenu(HelpMenu):
     # ______________________ HYPNOGRAM ______________________
     def saveHypData(self, *args, filename=None):  # noqa
         """Save the hypnogram data either in a hyp or txt file."""
+        # Define default filename for the hypnogram :
+        if not isinstance(self._file, str):
+            hyp_file = 'hypno'
+        else:
+            hyp_file = os.path.basename(self._file) + '_hypno'
+        # Open dialog window :
         if filename is None:
-            filename = dialog_save(self, 'Save File', 'hypno', "Text file (*."
+            filename = dialog_save(self, 'Save File', hyp_file, "Text file (*."
                                    "txt);;Elan file (*.hyp);;Excel file (*."
                                    "xlsx);;All files (*.*)")
         if filename:
