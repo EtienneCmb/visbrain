@@ -194,7 +194,7 @@ def write_hypno(filename, hypno, version='time', sf=100., npts=1, window=1.,
         elif ext == '.xlsx':
             import pandas as pd
             writer = pd.ExcelWriter(filename)
-            df.to_excel(writer, sheet_name='Data', index=False)
+            df.to_excel(writer, sheet_name='Data', index=False, header=False)
             writer.save()
     logger.info("Hypnogram saved (%s)" % filename)
 
