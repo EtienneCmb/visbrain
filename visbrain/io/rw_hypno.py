@@ -33,13 +33,28 @@ def hypno_time_to_sample(df, npts):
     ----------
     df : pandas.DataFrame
         The data frame that contains timing.
+    npts : int, array_like
+        Number of time points in the final hypnogram. Alternatively, if npts is
+        an array it will be interprated as the time vector.
+
+    Returns
+    -------
+    hypno : array_like
+        Hypnogram data of shape (npts,).
+    time : array_like
+        Time vector of shape (npts,).
+    sf_hyp : float
+        Sampling frequency of the hypnogram.
     """
     # Replace text by numerical values :
     to_replace = ['Wake', 'N1', 'N2', 'N3', 'REM', 'Art']
     values = [0, 1, 2, 3, 4, -1]
     df.replace(to_replace, values, inplace=True)
-    # Compute time verctor and sampling frequency :
-    time = np.arange(npts) * float(df['Time'].iloc[-1]) / (npts - 1)
+    # Compute time vector and sampling frequency :
+    if isinstance(npts, np.ndarray):
+        time = npts.copy()
+    elif isinstance(npts, int):
+        time = np.arange(npts) * float(df['Time'].iloc[-1]) / (npts - 1)
     sf_hyp = 1. / (time[1] - time[0])
     # Find closest time index :
     index = np.abs(time.reshape(-1, 1) - np.array(df['Time']).reshape(1, -1))

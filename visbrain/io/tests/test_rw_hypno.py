@@ -23,9 +23,11 @@ class TestRwHypno(_TestVisbrain):
         # Sample -> time :
         df = hypno_sample_to_time(hyp, time)
         # Time -> sample :
-        hyp_new, time_new, sf_new = hypno_time_to_sample(df, len(hyp))
+        hyp_new, time_new, sf_new = hypno_time_to_sample(df.copy(), len(hyp))
+        hyp_new_2, _, _ = hypno_time_to_sample(df.copy(), time)
         # Test :
         np.testing.assert_array_equal(hyp, hyp_new)
+        np.testing.assert_array_equal(hyp_new, hyp_new_2)
         np.testing.assert_array_almost_equal(time, time_new)
         assert sf == sf_new
 
