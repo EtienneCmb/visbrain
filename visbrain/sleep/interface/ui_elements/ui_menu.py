@@ -116,8 +116,11 @@ class UiMenu(HelpMenu):
             filename = dialog_save(self, 'Save File', hyp_file, dialog_ext +
                                    ";;All files (*.*)")
         if filename:
+            info = {'Duration_sec': self._time[-1]}
+            if isinstance(self._file, str):
+                info['Datafile'] = self._file
             write_hypno(filename, self._hypno, version=version, sf=self._sfori,
-                        npts=self._N, window=1.)
+                        npts=self._N, time=self._time, info=info)
 
     def _save_hyp_fig(self, *args, filename=None, **kwargs):
         """Save a 600 dpi .png figure of the hypnogram."""
