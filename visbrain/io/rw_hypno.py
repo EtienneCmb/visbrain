@@ -123,10 +123,15 @@ def oversample_hypno(hypno, n):
     return hypno.astype(int)
 
 
-def write_hypno_txt(filename, hypno, sfori, n, window=1.):
-    """Save hypnogram in txt file format (txt).
+###############################################################################
+###############################################################################
+#                               WRITE HYPNO
+###############################################################################
+###############################################################################
 
-    Header is in file filename_description.txt
+def write_hypno(filename, hypno, version='time', sf=100., npts=1, window=1.,
+                time=None, info=None):
+    """Save hypnogram data.
 
     Parameters
     ----------
@@ -138,6 +143,21 @@ def write_hypno_txt(filename, hypno, sfori, n, window=1.):
         Original sampling rate of the raw data
     n : int
         Original number of points in the raw data
+    window : float | 1
+        Time window (second) of each point in the hypno
+        Default is one value per second
+        (e.g. window = 30 = 1 value per 30 second)
+def _write_hypno_txt_sample(filename, hypno, window=1.):
+    """Save hypnogram in txt file format (txt).
+
+    Header is in file filename_description.txt
+
+    Parameters
+    ----------
+    filename : str
+        Filename (with full path) of the file to save
+    hypno : array_like
+        Hypnogram array, same length as data
     window : float | 1
         Time window (second) of each point in the hypno
         Default is one value per second
@@ -158,7 +178,7 @@ def write_hypno_txt(filename, hypno, sfori, n, window=1.):
     np.savetxt(descript, hdr, fmt='%s')
 
 
-def write_hypno_hyp(filename, hypno, sfori, n):
+def _write_hypno_hyp_sample(filename, hypno, sf=100., npts=1):
     """Save hypnogram in Elan file format (hyp).
 
     Parameters
@@ -167,25 +187,20 @@ def write_hypno_hyp(filename, hypno, sfori, n):
         Filename (with full path) of the file to save
     hypno : array_like
         Hypnogram array, same length as data
-    sf : int
-        Sampling frequency of the data (after downsampling)
-    sfori : int
+    sf : float | 100.
         Original sampling rate of the raw data
-    n : int
+    npts : int | 1
         Original number of points in the raw data
     """
-    # Check data format
-    hypno = hypno.astype(int)
     hypno[hypno == 4] = 5
-    step = int(hypno.shape / np.round(n / sfori))
 
     hdr = np.array([['time_base 1.000000'],
-                    ['sampling_period ' + str(np.round(1 / sfori, 8))],
-                    ['epoch_nb ' + str(int(n / sfori))],
+                    ['sampling_period ' + str(np.round(1 / sf, 8))],
+                    ['epoch_nb ' + str(int(npts / sf))],
                     ['epoch_list']]).flatten()
 
     # Save
-    export = np.append(hdr, hypno[::step].astype(str))
+    export = np.append(hdr, hypno.astype(str))
     np.savetxt(filename, export, fmt='%s')
 
 
