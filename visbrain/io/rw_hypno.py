@@ -139,14 +139,57 @@ def write_hypno(filename, hypno, version='time', sf=100., npts=1, window=1.,
         Filename (with full path) of the file to save
     hypno : array_like
         Hypnogram array, same length as data
-    sfori : int
+    sf : float | 100.
         Original sampling rate of the raw data
-    n : int
+    npts : int | 1
         Original number of points in the raw data
     window : float | 1
         Time window (second) of each point in the hypno
         Default is one value per second
         (e.g. window = 30 = 1 value per 30 second)
+    time : array_like | None
+        The time vector.
+    info : dict | None
+        Additional informations to add to the file (prepend with *).
+    """
+    # Checking :
+    assert isinstance(filename, str)
+    assert isinstance(hypno, np.ndarray)
+    assert version in ['time', 'sample']
+    # Extract file extension :
+    _, ext = os.path.splitext(filename)
+    # Switch between time and sample version :
+    if version is 'sample':  # v1 = sample
+        # Take a down-sample version of the hypno :
+        step = int(hypno.shape / np.round(npts / sf))
+        hypno = hypno[::step].astype(int)
+        # Export :
+        if ext == '.txt':
+            _write_hypno_txt_sample(filename, hypno, window=window)
+        elif ext == '.hyp':
+            _write_hypno_hyp_sample(filename, hypno, sf=sf, npts=npts)
+    elif version is 'time':  # v2 = time
+        # Get the DataFrame :
+        df = hypno_sample_to_time(hypno, time)
+        if isinstance(info, dict):
+            import pandas as pd
+            info = {'*' + k: i for k, i in info.items()}
+            df_info = pd.DataFrame({'Stage': list(info.keys()),
+                                    'Time': list(info.values())})
+            df = df_info.append(df)
+        # Export :
+        if ext == '.txt':
+            np.savetxt(filename, df.values, fmt='%s')
+        elif ext == '.csv':
+            df.to_csv(filename, header=None, index=None, sep=' ', mode='a')
+        elif ext == '.xlsx':
+            import pandas as pd
+            writer = pd.ExcelWriter(filename)
+            df.to_excel(writer, sheet_name='Data', index=False)
+            writer.save()
+    logger.info("Hypnogram saved (%s)" % filename)
+
+
 def _write_hypno_txt_sample(filename, hypno, window=1.):
     """Save hypnogram in txt file format (txt).
 
