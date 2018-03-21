@@ -98,7 +98,9 @@ class UiMenu(HelpMenu):
             hyp_file = os.path.basename(self._file) + '_hypno'
         # Version switch :
         if reply is None:
-            msg = "Save only the timing "
+            msg = ("Save the timing of the hynogram (Yes)? If No, the "
+                   "hypnogram is exported by default with one value per second"
+                   " and a jitter may occured due to down-sampling.")
             reply = QtWidgets.QMessageBox.question(self, 'Message', msg,
                                                    QtWidgets.QMessageBox.Yes,
                                                    QtWidgets.QMessageBox.No)
