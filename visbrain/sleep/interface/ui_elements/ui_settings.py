@@ -62,7 +62,7 @@ class UiSettings(object):
         hypref = int(self._hypno[t[0]])
         hypconv = self._hconv[hypref]
         hypcol = self._hypcolor[hypconv]
-        stage = str(self._hypYLabels[hypconv + 1].text())
+        stage = str(self._hypYLabels[hypconv + 2].text())
 
         # ================= MESH UPDATES =================
         # ---------------------------------------
