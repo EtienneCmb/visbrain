@@ -2,7 +2,8 @@
 import numpy as np
 
 from visbrain.tests._tests_visbrain import _TestVisbrain
-from visbrain.io.rw_hypno import (oversample_hypno, write_hypno_txt,
+from visbrain.io.rw_hypno import (hypno_time_to_sample, hypno_sample_to_time,
+                                  oversample_hypno, write_hypno_txt,
                                   write_hypno_hyp, write_hypno_xlsx,
                                   read_hypno, read_hypno_hyp, read_hypno_txt)
 
@@ -13,6 +14,20 @@ class TestRwHypno(_TestVisbrain):
     @staticmethod
     def _get_hypno():
         return np.array([-1, 4, 2, 3, 0])
+
+    def test_hypno_conversion(self):
+        """Test conversion functions."""
+        hyp = np.array([-1, -1, 4, 4, 2, 2, 3, 3, 0, 0, 0, 0, 1, 1, 1, -1, -1])
+        sf = 100.
+        time = np.arange(len(hyp)) / sf
+        # Sample -> time :
+        df = hypno_sample_to_time(hyp, time)
+        # Time -> sample :
+        hyp_new, time_new, sf_new = hypno_time_to_sample(df, len(hyp))
+        # Test :
+        np.testing.assert_array_equal(hyp, hyp_new)
+        np.testing.assert_array_almost_equal(time, time_new)
+        assert sf == sf_new
 
     def test_oversample_hypno(self):
         """Test function oversample_hypno."""

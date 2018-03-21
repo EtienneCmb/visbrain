@@ -20,6 +20,62 @@ __all__ = ('oversample_hypno', 'write_hypno_txt', 'write_hypno_hyp',
 logger = logging.getLogger('visbrain')
 
 
+###############################################################################
+###############################################################################
+#                              HYPNO CONVERSION
+###############################################################################
+###############################################################################
+
+def hypno_time_to_sample(df, npts):
+    """Convert the hypnogram from a defined timings to a number of samples.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        The data frame that contains timing.
+    """
+    # Replace text by numerical values :
+    to_replace = ['Wake', 'N1', 'N2', 'N3', 'REM', 'Art']
+    values = [0, 1, 2, 3, 4, -1]
+    df.replace(to_replace, values, inplace=True)
+    # Compute time verctor and sampling frequency :
+    time = np.arange(npts) * float(df['Time'].iloc[-1]) / (npts - 1)
+    sf_hyp = 1. / (time[1] - time[0])
+    # Find closest time index :
+    index = np.abs(time.reshape(-1, 1) - np.array(df['Time']).reshape(1, -1))
+    index = np.r_[0, index.argmin(0) + 1]
+    # Fill the hypnogram :
+    hypno = np.zeros((len(time),), dtype=int)
+    for k in range(len(index) - 1):
+        hypno[index[k]:index[k + 1]] = df['Stage'][k]
+    return hypno, time, sf_hyp
+
+
+def hypno_sample_to_time(hypno, time):
+    """Convert the hypnogram from a number of samples to a defined timings.
+
+    Parameters
+    ----------
+    hypno : array_like
+        Hypnogram data.
+    time : array_like
+        The time vector.
+
+    Returns
+    -------
+    df : pandas.DataFrame
+        The data frame that contains all of the transient timings.
+    """
+    # Test if panda is installed :
+    is_pandas_installed(True)
+    import pandas as pd
+    # Transient detection :
+    _, tr, stages = transient(hypno, time)
+    # Save the hypnogram :
+    items = np.array(['Wake', 'N1', 'N2', 'N3', 'REM', 'Art'])
+    return pd.DataFrame({'Stage': items[stages], 'Time': tr[:, 1]})
+
+
 def oversample_hypno(hypno, n):
     """Oversample hypnogram.
 
