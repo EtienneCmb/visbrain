@@ -245,29 +245,11 @@ def _write_hypno_hyp_sample(filename, hypno, sf=100., npts=1):
     np.savetxt(filename, export, fmt='%s')
 
 
-def write_hypno_xlsx(filename, hypno, time):
-    """Save hypnogram in xlsx file format (xlsx).
-
-    Parameters
-    ----------
-    filename : str
-        Filename (with full path) of the file to save
-    hypno : array_like
-        Hypnogram array, same length as data
-    time : array_like
-        The time vector.
-    """
-    # Test if panda is installed :
-    is_pandas_installed(True)
-    import pandas as pd
-    # Transient detection :
-    _, tr, stages = transient(hypno, time)
-    # Save the hypnogram :
-    items = np.array(['Wake', 'N1', 'N2', 'N3', 'REM', 'Art'])
-    df = pd.DataFrame({'Stage': items[stages], 'Time': tr[:, 1]})
-    writer = pd.ExcelWriter(filename)
-    df.to_excel(writer, sheet_name='Data', index=False)
-    writer.save()
+###############################################################################
+###############################################################################
+#                                 READ HYPNO
+###############################################################################
+###############################################################################
 
 
 def read_hypno(path, time=None):
