@@ -170,7 +170,7 @@ def write_hypno(filename, hypno, version='time', sf=100., npts=1, window=1.,
     # Switch between time and sample version :
     if version is 'sample':  # v1 = sample
         # Take a down-sample version of the hypno :
-        step = int(hypno.shape / np.round(npts / sf))
+        step = int(len(hypno) / np.round(npts / sf))
         hypno = hypno[::step].astype(int)
         # Export :
         if ext == '.txt':
