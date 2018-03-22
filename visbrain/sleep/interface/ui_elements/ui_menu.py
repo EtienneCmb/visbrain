@@ -98,9 +98,13 @@ class UiMenu(HelpMenu):
             hyp_file = os.path.basename(self._file) + '_hypno'
         # Version switch :
         if reply is None:
-            msg = ("Save the timing of the hynogram (Yes)? If No, the "
-                   "hypnogram is exported by default with one value per second"
-                   " and a jitter may occured due to down-sampling.")
+            msg = ("Since release 0.4, hypnogram are exported using stage "
+                   "duration rather than point-per-second. This new format "
+                   "avoids potential errors caused by downsampling and "
+                   "confusion in the values assigned to each sleep stage. "
+                   "Click 'Yes' to use the new format and 'No' to use the old "
+                   "format. For more information, visit the doc at "
+                   "visbrain.org/sleep")
             reply = QtWidgets.QMessageBox.question(self, 'Message', msg,
                                                    QtWidgets.QMessageBox.Yes,
                                                    QtWidgets.QMessageBox.No)
