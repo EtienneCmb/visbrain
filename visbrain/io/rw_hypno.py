@@ -188,17 +188,17 @@ def write_hypno(filename, hypno, version='time', sf=100., npts=1, window=1.,
         # Get the DataFrame :
         df = hypno_sample_to_time(hypno, time)
         if isinstance(info, dict):
+            is_pandas_installed(True)
             import pandas as pd
             info = {'*' + k: i for k, i in info.items()}
             df_info = pd.DataFrame({'Stage': list(info.keys()),
                                     'Time': list(info.values())})
             df = df_info.append(df)
-        # Export :
-        if ext == '.txt':
-            np.savetxt(filename, df.values, fmt='%s')
-        elif ext == '.csv':
+        if ext in ['.txt', '.csv']:
             df.to_csv(filename, header=None, index=None, sep=' ', mode='a')
         elif ext == '.xlsx':
+            is_pandas_installed(True)
+            is_xlrd_installed(True)
             import pandas as pd
             writer = pd.ExcelWriter(filename)
             df.to_excel(writer, sheet_name='Data', index=False, header=False)
