@@ -403,45 +403,6 @@ def _read_hypno_txt_sample(path):
     return hypno, sf_hyp
 
 
-def read_hypno_xlsx(path, time=None):
-    """Read excel files (.xlsx) hypnogram.
-
-    Parameters
-    ----------
-    path : str
-        Filename(with full path) to hypnogram (.xlsx)
-    time : array_like | None
-        The time vector used for interpolation.
-
-    Returns
-    -------
-    hypno : array_like
-        The hypnogram vector in its original length.
-    sf_hyp : float
-        The hypnogram original sampling frequency (Hz)
-    """
-    # Test if panda and xlrd (used to import Excel files) are installed :
-    is_pandas_installed(True)
-    is_xlrd_installed(True)
-    import pandas as pd
-    assert isinstance(time, np.ndarray)
-    df = pd.read_excel(path)
-    # Replace text by numerical values :
-    to_replace = ['Wake', 'N1', 'N2', 'N3', 'REM', 'Art']
-    values = [0, 1, 2, 3, 4, -1]
-    df.replace(to_replace, values, inplace=True)
-    # Compute sampling frequency :
-    sf_hyp = 1. / (time[1] - time[0])
-    # Find closest time index :
-    index = np.abs(time.reshape(-1, 1) - np.array(df['Time']).reshape(1, -1))
-    index = np.r_[0, index.argmin(0) + 1]
-    # Fill the hypnogram :
-    hypno = -1 * np.zeros((len(time),), dtype=int)
-    for k in range(len(index) - 1):
-        hypno[index[k]:index[k + 1]] = df['Stage'][k]
-    return hypno, sf_hyp
-
-
 def swap_hyp_values(hypno, desc):
     """Swap values in hypnogram vector.
 
