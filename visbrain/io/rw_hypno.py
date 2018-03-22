@@ -195,7 +195,7 @@ def write_hypno(filename, hypno, version='time', sf=100., npts=1, window=1.,
                                     'Time': list(info.values())})
             df = df_info.append(df)
         if ext in ['.txt', '.csv']:
-            df.to_csv(filename, header=None, index=None, sep=' ', mode='a')
+            df.to_csv(filename, header=None, index=None, sep='\t', mode='a')
         elif ext == '.xlsx':
             is_pandas_installed(True)
             is_xlrd_installed(True)
@@ -311,7 +311,7 @@ def read_hypno(filename, time=None):
             hypno, sf_hyp = _read_hypno_txt_sample(filename)
         else:  # v2
             import pandas as pd
-            df = pd.read_csv(filename, sep=' ', header=None,
+            df = pd.read_csv(filename, sep='\t', header=None,
                              names=['Stage', 'Time'])
             hypno, _, sf_hyp = hypno_time_to_sample(df, len(time))
     elif ext == '.xlsx':  # v2 = Excel
