@@ -305,7 +305,8 @@ class UiMenu(HelpMenu):
         # Get filename :
         if filename is None:
             filename = dialog_load(self, 'Load hypnogram File', 'hypno',
-                                   "Text file (*.txt);;Elan file (*.hyp);;"
+                                   "Text file (*.txt);;CSV file (*.csv);;"
+                                   "Elan file (*.hyp);;Excel file (*.xlsx);;"
                                    "All files (*.*)")
         if filename:
             # Load the hypnogram :
