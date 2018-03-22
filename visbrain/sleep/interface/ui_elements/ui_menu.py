@@ -101,7 +101,7 @@ class UiMenu(HelpMenu):
             msg = ("Since release 0.4, hypnogram are exported using stage "
                    "duration rather than point-per-second. This new format "
                    "avoids potential errors caused by downsampling and "
-                   "confusion in the values assigned to each sleep stage. "
+                   "confusion in the values assigned to each sleep stage. \n\n"
                    "Click 'Yes' to use the new format and 'No' to use the old "
                    "format. For more information, visit the doc at "
                    "visbrain.org/sleep")
