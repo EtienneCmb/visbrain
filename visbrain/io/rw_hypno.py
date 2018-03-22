@@ -269,7 +269,7 @@ def _write_hypno_hyp_sample(filename, hypno, sf=100., npts=1):
 ###############################################################################
 
 
-def read_hypno(path, time=None):
+def read_hypno(filename, time=None):
     """Load hypnogram file.
 
     Sleep stages in the hypnogram should be scored as follow
@@ -284,7 +284,7 @@ def read_hypno(path, time=None):
 
     Parameters
     ----------
-    path : string
+    filename : string
         Filename (with full path) to hypnogram file.
     time : array_like | None
         The time vector (used to interpolate Excel files).
@@ -297,25 +297,34 @@ def read_hypno(path, time=None):
         The hypnogram original sampling frequency (Hz)
     """
     # Test if file exist :
-    assert os.path.isfile(path)
+    assert os.path.isfile(filename)
 
     # Extract file extension :
-    file, ext = os.path.splitext(path)
+    file, ext = os.path.splitext(filename)
 
     # Load the hypnogram :
-    if ext == '.hyp':  # ELAN
-        hypno, sf_hyp = read_hypno_hyp(path)
-    elif ext in ['.txt', '.csv']:  # TXT / CSV
-        hypno, sf_hyp = read_hypno_txt(path)
-    elif ext == '.xlsx':  # Excel
-        hypno, sf_hyp = read_hypno_xlsx(path, time=time)
+    if ext == '.hyp':  # v1 = ELAN
+        hypno, sf_hyp = _read_hypno_hyp_sample(filename)
+    elif ext in ['.txt', '.csv']:  # [v1, v2] = TXT / CSV
+        header = os.path.splitext(filename)[0] + '_description.txt'
+        if os.path.isfile(header):  # if there's a header -> v1
+            hypno, sf_hyp = _read_hypno_txt_sample(filename)
+        else:  # v2
+            import pandas as pd
+            df = pd.read_csv(filename, sep=' ', header=None,
+                             names=['Stage', 'Time'])
+            hypno, _, sf_hyp = hypno_time_to_sample(df, len(time))
+    elif ext == '.xlsx':  # v2 = Excel
+        import pandas as pd
+        df = pd.read_excel(filename, header=None, names=['Stage', 'Time'])
+        hypno, _, sf_hyp = hypno_time_to_sample(df, len(time))
 
-    logger.info("Hypnogram successfully loaded (%s)" % path)
+    logger.info("Hypnogram successfully loaded (%s)" % filename)
 
     return vispy_array(hypno), sf_hyp
 
 
-def read_hypno_hyp(path):
+def _read_hypno_hyp_sample(path):
     """Read Elan hypnogram (hyp).
 
     Parameters
@@ -347,7 +356,7 @@ def read_hypno_hyp(path):
     return hypno, sf_hyp
 
 
-def read_hypno_txt(path):
+def _read_hypno_txt_sample(path):
     """Read text files (.txt / .csv) hypnogram.
 
     Parameters
@@ -377,7 +386,7 @@ def read_hypno_txt(path):
     desc = {label: row for label, row in zip(labels, values)}
 
     # Get sampling frequency of hypnogram
-    sf_hyp = 1 / float(desc['time'])
+    sf_hyp = 1. / float(desc['time'])
 
     # Load hypnogram file
     hyp = np.genfromtxt(path, delimiter='\n', usecols=[0],
