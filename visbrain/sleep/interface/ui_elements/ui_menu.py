@@ -302,9 +302,14 @@ class UiMenu(HelpMenu):
 
     def _load_hypno(self, *args, filename=None):
         """Load a hypnogram."""
+        # Define default filename for the hypnogram :
+        if not isinstance(self._file, str):
+            hyp_file = 'hypno'
+        else:
+            hyp_file = os.path.basename(self._file) + '_hypno'
         # Get filename :
         if filename is None:
-            filename = dialog_load(self, 'Load hypnogram File', 'hypno',
+            filename = dialog_load(self, 'Load hypnogram File', hyp_file,
                                    "Text file (*.txt);;CSV file (*.csv);;"
                                    "Elan file (*.hyp);;Excel file (*.xlsx);;"
                                    "All files (*.*)")
