@@ -63,19 +63,22 @@ def hypno_time_to_sample(df, npts):
     to_replace = ['Wake', 'N1', 'N2', 'N3', 'REM', 'Art']
     values = [0, 1, 2, 3, 4, -1]
     df.replace(to_replace, values, inplace=True)
+    # Get stages and time index :
+    stages = np.array(df['Stage']).astype(str)
+    time_idx = np.array(df['Time']).astype(float)
     # Compute time vector and sampling frequency :
     if isinstance(npts, np.ndarray):
         time = npts.copy()
     elif isinstance(npts, int):
-        time = np.arange(npts) * float(df['Time'].iloc[-1]) / (npts - 1)
+        time = np.arange(npts) * time_idx[-1] / (npts - 1)
     sf_hyp = 1. / (time[1] - time[0])
     # Find closest time index :
-    index = np.abs(time.reshape(-1, 1) - np.array(df['Time']).reshape(1, -1))
+    index = np.abs(time.reshape(-1, 1) - time_idx.reshape(1, -1))
     index = np.r_[0, index.argmin(0) + 1]
     # Fill the hypnogram :
     hypno = np.zeros((len(time),), dtype=int)
     for k in range(len(index) - 1):
-        hypno[index[k]:index[k + 1]] = df['Stage'][k]
+        hypno[index[k]:index[k + 1]] = stages[k]
     return hypno, time, sf_hyp
 
 
