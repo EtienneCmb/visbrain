@@ -123,7 +123,7 @@ def oversample_hypno(hypno, n):
         The hypnogram of shape (n,)
     """
     # Get the repetition number :
-    rep_nb = float(np.floor(n / len(hypno)))
+    rep_nb = int(np.round(n / len(hypno)))
 
     # Repeat hypnogram :
     hypno = np.repeat(hypno, rep_nb)
@@ -132,9 +132,8 @@ def oversample_hypno(hypno, n):
     # Check size
     if npts < n:
         hypno = np.append(hypno, hypno[-1] * np.ones((n - npts)))
-    elif n > npts:
-        raise ValueError("The length of the hypnogram  vector must "
-                         "be " + str(n) + " (Currently : " + str(npts) + ".")
+    elif npts > n:
+        hypno = hypno[0:n]
 
     return hypno.astype(int)
 
