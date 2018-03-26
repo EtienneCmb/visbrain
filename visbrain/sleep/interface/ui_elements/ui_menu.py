@@ -120,7 +120,7 @@ class UiMenu(HelpMenu):
             filename = dialog_save(self, 'Save File', hyp_file, dialog_ext +
                                    ";;All files (*.*)")
         if filename:
-            info = {'Duration_sec': self._time[-1]}
+            info = {'Duration_sec': self._N * 1 / self._sfori}
             if isinstance(self._file, str):
                 info['Datafile'] = self._file
             write_hypno(filename, self._hypno, version=version, sf=self._sfori,
