@@ -70,8 +70,14 @@ class TestSleep(_TestVisbrain):
     ###########################################################################
     def test_save_hyp_data(self):
         """Test saving hypnogram data."""
-        sp.saveHypData(filename=self.to_tmp_dir('hyp_data.txt'))
-        sp.saveHypData(filename=self.to_tmp_dir('hyp_data.hyp'))
+        from PyQt5 import QtWidgets
+        yes = QtWidgets.QMessageBox.Yes
+        no = QtWidgets.QMessageBox.No
+        sp.saveHypData(filename=self.to_tmp_dir('hyp_data.txt'), reply=yes)
+        sp.saveHypData(filename=self.to_tmp_dir('hyp_data.csv'), reply=yes)
+        sp.saveHypData(filename=self.to_tmp_dir('hyp_data.xlsx'), reply=yes)
+        sp.saveHypData(filename=self.to_tmp_dir('hyp_data.txt'), reply=no)
+        sp.saveHypData(filename=self.to_tmp_dir('hyp_data.hyp'), reply=no)
 
     def test_save_hyp_figure(self):
         """Test saving hypnogram figure."""

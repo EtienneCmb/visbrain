@@ -1,10 +1,21 @@
 """write/Read hypnogram data.
 
-- write_hypno_txt : as text file
-- write_hypno_hyp : as hyp file
-- read_hypno : read either *.hyp or *.txt hypnogram data
-- read_hypno_hyp : load *.hyp hypnogram data
-- read_hypno_txt : load *.txt hypnogram data
+Write hypnogram data
+--------------------
+-> write_hypno
+    -> Export either using time code
+        -> .txt, .csv, .xlsx
+    -> Export using one sample per second
+        -> .txt, .hyp
+
+Read hypnogram data
+-------------------
+-> read_hypno
+    -> detect_hypno_version
+        -> Sample :
+            -> .txt, .csv, .xlsx
+        -> Tieme :
+            -> .txt, .hyp
 """
 import os
 import logging
@@ -13,11 +24,87 @@ import numpy as np
 from ..utils import vispy_array, transient
 from ..io import is_pandas_installed, is_xlrd_installed
 
-__all__ = ('oversample_hypno', 'write_hypno_txt', 'write_hypno_hyp',
-           'write_hypno_xlsx', 'read_hypno', 'read_hypno_hyp',
-           'read_hypno_txt', 'read_hypno_xlsx')
+__all__ = ('oversample_hypno', 'write_hypno', 'read_hypno')
 
 logger = logging.getLogger('visbrain')
+
+
+###############################################################################
+###############################################################################
+#                              HYPNO CONVERSION
+###############################################################################
+###############################################################################
+
+def hypno_time_to_sample(df, npts):
+    """Convert the hypnogram from a defined timings to a number of samples.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        The data frame that contains timing.
+    npts : int, array_like
+        Number of time points in the final hypnogram. Alternatively, if npts is
+        an array it will be interprated as the time vector.
+
+    Returns
+    -------
+    hypno : array_like
+        Hypnogram data of shape (npts,).
+    time : array_like
+        Time vector of shape (npts,).
+    sf_hyp : float
+        Sampling frequency of the hypnogram.
+    """
+    # Drop lines that contains * :
+    drop_rows = np.char.find(np.array(df['Stage']).astype(str), '*')
+    df = df.iloc[drop_rows.astype(bool)]
+    df.is_copy = False  # avoid pandas warning
+    # Replace text by numerical values :
+    to_replace = ['Wake', 'N1', 'N2', 'N3', 'REM', 'Art']
+    values = [0, 1, 2, 3, 4, -1]
+    df.replace(to_replace, values, inplace=True)
+    # Get stages and time index :
+    stages = np.array(df['Stage']).astype(str)
+    time_idx = np.array(df['Time']).astype(float)
+    # Compute time vector and sampling frequency :
+    if isinstance(npts, np.ndarray):
+        time = npts.copy()
+    elif isinstance(npts, int):
+        time = np.arange(npts) * time_idx[-1] / (npts - 1)
+    sf_hyp = 1. / (time[1] - time[0])
+    # Find closest time index :
+    index = np.abs(time.reshape(-1, 1) - time_idx.reshape(1, -1))
+    index = np.r_[0, index.argmin(0) + 1]
+    # Fill the hypnogram :
+    hypno = np.zeros((len(time),), dtype=int)
+    for k in range(len(index) - 1):
+        hypno[index[k]:index[k + 1]] = stages[k]
+    return hypno, time, sf_hyp
+
+
+def hypno_sample_to_time(hypno, time):
+    """Convert the hypnogram from a number of samples to a defined timings.
+
+    Parameters
+    ----------
+    hypno : array_like
+        Hypnogram data.
+    time : array_like
+        The time vector.
+
+    Returns
+    -------
+    df : pandas.DataFrame
+        The data frame that contains all of the transient timings.
+    """
+    # Test if panda is installed :
+    is_pandas_installed(True)
+    import pandas as pd
+    # Transient detection :
+    _, tr, stages = transient(hypno, time)
+    # Save the hypnogram :
+    items = np.array(['Wake', 'N1', 'N2', 'N3', 'REM', 'Art'])
+    return pd.DataFrame({'Stage': items[stages], 'Time': tr[:, 1]})
 
 
 def oversample_hypno(hypno, n):
@@ -36,7 +123,7 @@ def oversample_hypno(hypno, n):
         The hypnogram of shape (n,)
     """
     # Get the repetition number :
-    rep_nb = float(np.floor(n / len(hypno)))
+    rep_nb = int(np.round(n / len(hypno)))
 
     # Repeat hypnogram :
     hypno = np.repeat(hypno, rep_nb)
@@ -45,14 +132,80 @@ def oversample_hypno(hypno, n):
     # Check size
     if npts < n:
         hypno = np.append(hypno, hypno[-1] * np.ones((n - npts)))
-    elif n > npts:
-        raise ValueError("The length of the hypnogram  vector must "
-                         "be " + str(n) + " (Currently : " + str(npts) + ".")
+    elif npts > n:
+        hypno = hypno[0:n]
 
     return hypno.astype(int)
 
 
-def write_hypno_txt(filename, hypno, sfori, n, window=1.):
+###############################################################################
+###############################################################################
+#                               WRITE HYPNO
+###############################################################################
+###############################################################################
+
+def write_hypno(filename, hypno, version='time', sf=100., npts=1, window=1.,
+                time=None, info=None):
+    """Save hypnogram data.
+
+    Parameters
+    ----------
+    filename : str
+        Filename (with full path) of the file to save
+    hypno : array_like
+        Hypnogram array, same length as data
+    sf : float | 100.
+        Original sampling rate of the raw data
+    npts : int | 1
+        Original number of points in the raw data
+    window : float | 1
+        Time window (second) of each point in the hypno
+        Default is one value per second
+        (e.g. window = 30 = 1 value per 30 second)
+    time : array_like | None
+        The time vector.
+    info : dict | None
+        Additional informations to add to the file (prepend with *).
+    """
+    # Checking :
+    assert isinstance(filename, str)
+    assert isinstance(hypno, np.ndarray)
+    assert version in ['time', 'sample']
+    # Extract file extension :
+    _, ext = os.path.splitext(filename)
+    # Switch between time and sample version :
+    if version is 'sample':  # v1 = sample
+        # Take a down-sample version of the hypno :
+        step = int(len(hypno) / np.round(npts / sf))
+        hypno = hypno[::step].astype(int)
+        # Export :
+        if ext == '.txt':
+            _write_hypno_txt_sample(filename, hypno, window=window)
+        elif ext == '.hyp':
+            _write_hypno_hyp_sample(filename, hypno, sf=sf, npts=npts)
+    elif version is 'time':  # v2 = time
+        # Get the DataFrame :
+        df = hypno_sample_to_time(hypno, time)
+        if isinstance(info, dict):
+            is_pandas_installed(True)
+            import pandas as pd
+            info = {'*' + k: i for k, i in info.items()}
+            df_info = pd.DataFrame({'Stage': list(info.keys()),
+                                    'Time': list(info.values())})
+            df = df_info.append(df)
+        if ext in ['.txt', '.csv']:
+            df.to_csv(filename, header=None, index=None, sep='\t', mode='a')
+        elif ext == '.xlsx':
+            is_pandas_installed(True)
+            is_xlrd_installed(True)
+            import pandas as pd
+            writer = pd.ExcelWriter(filename)
+            df.to_excel(writer, sheet_name='Data', index=False, header=False)
+            writer.save()
+    logger.info("Hypnogram saved (%s)" % filename)
+
+
+def _write_hypno_txt_sample(filename, hypno, window=1.):
     """Save hypnogram in txt file format (txt).
 
     Header is in file filename_description.txt
@@ -63,10 +216,6 @@ def write_hypno_txt(filename, hypno, sfori, n, window=1.):
         Filename (with full path) of the file to save
     hypno : array_like
         Hypnogram array, same length as data
-    sfori : int
-        Original sampling rate of the raw data
-    n : int
-        Original number of points in the raw data
     window : float | 1
         Time window (second) of each point in the hypno
         Default is one value per second
@@ -78,8 +227,7 @@ def write_hypno_txt(filename, hypno, sfori, n, window=1.):
         base)[0] + '_description.txt')
 
     # Save hypno
-    step = int(hypno.shape / np.round(n / sfori))
-    np.savetxt(filename, hypno[::step].astype(int), fmt='%s')
+    np.savetxt(filename, hypno, fmt='%s')
 
     # Save header file
     hdr = np.array([['time ' + str(window)], ['W 0'], ['N1 1'], ['N2 2'],
@@ -87,7 +235,7 @@ def write_hypno_txt(filename, hypno, sfori, n, window=1.):
     np.savetxt(descript, hdr, fmt='%s')
 
 
-def write_hypno_hyp(filename, hypno, sfori, n):
+def _write_hypno_hyp_sample(filename, hypno, sf=100., npts=1):
     """Save hypnogram in Elan file format (hyp).
 
     Parameters
@@ -96,54 +244,31 @@ def write_hypno_hyp(filename, hypno, sfori, n):
         Filename (with full path) of the file to save
     hypno : array_like
         Hypnogram array, same length as data
-    sf : int
-        Sampling frequency of the data (after downsampling)
-    sfori : int
+    sf : float | 100.
         Original sampling rate of the raw data
-    n : int
+    npts : int | 1
         Original number of points in the raw data
     """
-    # Check data format
-    hypno = hypno.astype(int)
     hypno[hypno == 4] = 5
-    step = int(hypno.shape / np.round(n / sfori))
 
     hdr = np.array([['time_base 1.000000'],
-                    ['sampling_period ' + str(np.round(1 / sfori, 8))],
-                    ['epoch_nb ' + str(int(n / sfori))],
+                    ['sampling_period ' + str(np.round(1 / sf, 8))],
+                    ['epoch_nb ' + str(int(npts / sf))],
                     ['epoch_list']]).flatten()
 
     # Save
-    export = np.append(hdr, hypno[::step].astype(str))
+    export = np.append(hdr, hypno.astype(str))
     np.savetxt(filename, export, fmt='%s')
 
 
-def write_hypno_xlsx(filename, hypno, time):
-    """Save hypnogram in xlsx file format (xlsx).
-
-    Parameters
-    ----------
-    filename : str
-        Filename (with full path) of the file to save
-    hypno : array_like
-        Hypnogram array, same length as data
-    time : array_like
-        The time vector.
-    """
-    # Test if panda is installed :
-    is_pandas_installed(True)
-    import pandas as pd
-    # Transient detection :
-    _, tr, stages = transient(hypno, time)
-    # Save the hypnogram :
-    items = np.array(['Wake', 'N1', 'N2', 'N3', 'REM', 'Art'])
-    df = pd.DataFrame({'Stage': items[stages], 'Time': tr[:, 1]})
-    writer = pd.ExcelWriter(filename)
-    df.to_excel(writer, sheet_name='Data', index=False)
-    writer.save()
+###############################################################################
+###############################################################################
+#                                 READ HYPNO
+###############################################################################
+###############################################################################
 
 
-def read_hypno(path, time=None):
+def read_hypno(filename, time=None):
     """Load hypnogram file.
 
     Sleep stages in the hypnogram should be scored as follow
@@ -158,7 +283,7 @@ def read_hypno(path, time=None):
 
     Parameters
     ----------
-    path : string
+    filename : string
         Filename (with full path) to hypnogram file.
     time : array_like | None
         The time vector (used to interpolate Excel files).
@@ -171,25 +296,34 @@ def read_hypno(path, time=None):
         The hypnogram original sampling frequency (Hz)
     """
     # Test if file exist :
-    assert os.path.isfile(path)
+    assert os.path.isfile(filename)
 
     # Extract file extension :
-    file, ext = os.path.splitext(path)
+    file, ext = os.path.splitext(filename)
 
     # Load the hypnogram :
-    if ext == '.hyp':  # ELAN
-        hypno, sf_hyp = read_hypno_hyp(path)
-    elif ext in ['.txt', '.csv']:  # TXT / CSV
-        hypno, sf_hyp = read_hypno_txt(path)
-    elif ext == '.xlsx':  # Excel
-        hypno, sf_hyp = read_hypno_xlsx(path, time=time)
+    if ext == '.hyp':  # v1 = ELAN
+        hypno, sf_hyp = _read_hypno_hyp_sample(filename)
+    elif ext in ['.txt', '.csv']:  # [v1, v2] = TXT / CSV
+        header = os.path.splitext(filename)[0] + '_description.txt'
+        if os.path.isfile(header):  # if there's a header -> v1
+            hypno, sf_hyp = _read_hypno_txt_sample(filename)
+        else:  # v2
+            import pandas as pd
+            df = pd.read_csv(filename, sep='\t', header=None,
+                             names=['Stage', 'Time'])
+            hypno, _, sf_hyp = hypno_time_to_sample(df, len(time))
+    elif ext == '.xlsx':  # v2 = Excel
+        import pandas as pd
+        df = pd.read_excel(filename, header=None, names=['Stage', 'Time'])
+        hypno, _, sf_hyp = hypno_time_to_sample(df, len(time))
 
-    logger.info("Hypnogram successfully loaded (%s)" % path)
+    logger.info("Hypnogram successfully loaded (%s)" % filename)
 
     return vispy_array(hypno), sf_hyp
 
 
-def read_hypno_hyp(path):
+def _read_hypno_hyp_sample(path):
     """Read Elan hypnogram (hyp).
 
     Parameters
@@ -221,7 +355,7 @@ def read_hypno_hyp(path):
     return hypno, sf_hyp
 
 
-def read_hypno_txt(path):
+def _read_hypno_txt_sample(path):
     """Read text files (.txt / .csv) hypnogram.
 
     Parameters
@@ -251,7 +385,7 @@ def read_hypno_txt(path):
     desc = {label: row for label, row in zip(labels, values)}
 
     # Get sampling frequency of hypnogram
-    sf_hyp = 1 / float(desc['time'])
+    sf_hyp = 1. / float(desc['time'])
 
     # Load hypnogram file
     hyp = np.genfromtxt(path, delimiter='\n', usecols=[0],
@@ -265,45 +399,6 @@ def read_hypno_txt(path):
 
     hypno = swap_hyp_values(hypno, desc)
 
-    return hypno, sf_hyp
-
-
-def read_hypno_xlsx(path, time=None):
-    """Read excel files (.xlsx) hypnogram.
-
-    Parameters
-    ----------
-    path : str
-        Filename(with full path) to hypnogram (.xlsx)
-    time : array_like | None
-        The time vector used for interpolation.
-
-    Returns
-    -------
-    hypno : array_like
-        The hypnogram vector in its original length.
-    sf_hyp : float
-        The hypnogram original sampling frequency (Hz)
-    """
-    # Test if panda and xlrd (used to import Excel files) are installed :
-    is_pandas_installed(True)
-    is_xlrd_installed(True)
-    import pandas as pd
-    assert isinstance(time, np.ndarray)
-    df = pd.read_excel(path)
-    # Replace text by numerical values :
-    to_replace = ['Wake', 'N1', 'N2', 'N3', 'REM', 'Art']
-    values = [0, 1, 2, 3, 4, -1]
-    df.replace(to_replace, values, inplace=True)
-    # Compute sampling frequency :
-    sf_hyp = 1. / (time[1] - time[0])
-    # Find closest time index :
-    index = np.abs(time.reshape(-1, 1) - np.array(df['Time']).reshape(1, -1))
-    index = np.r_[0, index.argmin(0) + 1]
-    # Fill the hypnogram :
-    hypno = -1 * np.zeros((len(time),), dtype=int)
-    for k in range(len(index) - 1):
-        hypno[index[k]:index[k + 1]] = df['Stage'][k]
     return hypno, sf_hyp
 
 

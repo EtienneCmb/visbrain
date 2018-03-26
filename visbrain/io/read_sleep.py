@@ -102,7 +102,7 @@ class ReadSleepData(object):
         self._N = n
         self._dsf = dsf
         self._sfori = float(sf)
-        self._toffset = offset.hour * 3600 + offset.minute * 60 + \
+        self._toffset = offset.hour * 3600. + offset.minute * 60. + \
             offset.second
         time = np.arange(n)[::dsf] / sf
         self._sf = float(downsample) if downsample is not None else float(sf)
