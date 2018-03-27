@@ -25,5 +25,7 @@ install:
   # ------------------- VISBRAIN -------------------
   - pip install -e .
 
+build: false  # Not a C# project, build stuff at the test step instead.
+
 test_script:
   - py.test
