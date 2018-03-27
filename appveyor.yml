@@ -1,5 +1,8 @@
 build: false
 
+cache:
+  #- packages
+
 environment:
   matrix:
     - PYTHON_VERSION: 3.6
@@ -24,8 +27,6 @@ install:
   - pip install git+https://github.com/hbldh/lspopt.git#egg=lspopt
   # ------------------- VISBRAIN -------------------
   - pip install -e .
-
-build: false  # Not a C# project, build stuff at the test step instead.
 
 test_script:
   - py.test
