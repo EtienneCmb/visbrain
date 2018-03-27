@@ -56,4 +56,3 @@ dependencies:
 test:
   override:
     - py.test;
-      timeout: 1500
