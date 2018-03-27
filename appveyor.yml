@@ -3,6 +3,9 @@ build: false
 cache:
   #- packages
 
+platform:
+    -x64
+
 environment:
   matrix:
     - PYTHON_VERSION: 3.6
