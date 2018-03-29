@@ -302,7 +302,10 @@ def read_edf(path, downsample):
     start_time = start_time.time()
 
     # Keep only data channels (e.g excludes marker chan)
-    freqs = np.unique(edf.hdr['n_samples_per_record'])
+    
+    # freqs is sample freq. Not samples per record. kdl changed 307 to 308
+    #freqs = np.unique(edf.hdr['n_samples_per_record'])
+    freqs = np.unique(edf.hdr['n_samples_per_record'])/edf.hdr['record_length']
     sf = freqs.max()
 
     if len(freqs) != 1:
