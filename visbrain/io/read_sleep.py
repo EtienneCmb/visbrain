@@ -15,7 +15,7 @@ from warnings import warn
 import logging
 
 from .rw_utils import get_file_ext
-from .rw_hypno import (read_hypno, oversample_hypno)
+from .rw_hypno import (read_hypno, oversample_hypno, read_hypno_edf)
 from .dialog import dialog_load
 from .mneio import mne_switch
 from .dependencies import is_mne_installed
@@ -112,7 +112,7 @@ class ReadSleepData(object):
         if hypno is None:
             hypno = dialog_load(self, "Open hypnogram", upath,
                                 "Elan (*.hyp);;Text file (*.txt);;"
-                                "CSV file (*.csv);;All files (*.*)")
+                                "CSV file (*.csv);;EDF+ file(*.edf);;All files (*.*)")
             hypno = None if hypno == '' else hypno
         if isinstance(hypno, np.ndarray):  # array_like
             if len(hypno) == n:
