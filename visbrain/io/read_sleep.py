@@ -15,7 +15,7 @@ from warnings import warn
 import logging
 
 from .rw_utils import get_file_ext
-from .rw_hypno import (read_hypno, oversample_hypno)
+from .rw_hypno import (read_hypno, oversample_hypno, read_hypno_edf)
 from .dialog import dialog_load
 from .mneio import mne_switch
 from .dependencies import is_mne_installed
@@ -112,7 +112,7 @@ class ReadSleepData(object):
         if hypno is None:
             hypno = dialog_load(self, "Open hypnogram", upath,
                                 "Elan (*.hyp);;Text file (*.txt);;"
-                                "CSV file (*.csv);;All files (*.*)")
+                                "CSV file (*.csv);;EDF+ file(*.edf);;All files (*.*)")
             hypno = None if hypno == '' else hypno
         if isinstance(hypno, np.ndarray):  # array_like
             if len(hypno) == n:
@@ -120,8 +120,11 @@ class ReadSleepData(object):
             else:
                 raise ValueError("Then length of the hypnogram must be the "
                                  "same as raw data")
-        if isinstance(hypno, str):  # (*.hyp / *.txt / *.csv)
-            hypno, _ = read_hypno(hypno)
+        if isinstance(hypno, str):  # (*.hyp / *.txt / *.csv / *.edf)
+            if hypno[-3:] == 'edf':
+                hypno, _ = read_hypno_edf(hypno, file)   # file is path to polysomnograph file
+            else:
+                hypno, _ = read_hypno(hypno)
             # Oversample then downsample :
             hypno = oversample_hypno(hypno, self._N)[::dsf]
             PROFILER("Hypnogram file loaded", level=1)

@@ -287,3 +287,101 @@ def swap_hyp_values(hypno, desc):
         hypno_s[hypno == desc['REM']] = 4
 
     return hypno_s
+
+def read_hypno_edf(hypno,file):
+    """This function is developed to read hypnogram files which are formatted according 
+       to EDF+ specifications (see https://www.edfplus.info/specs/index.html).
+       The function was specifically developed to read and plot hypnograms which are
+       part of the Physionet Sleep Database (see https://physionet.org/pn4/sleep-edfx/). 
+       The Physionet Sleep Database contains 61 polysomnograms (PSGs) with accompanying hypnograms.
+       The Physionet polysomnogram files are using edf format, while the hypnograms use
+       EDF+. When using EDF+ for hypnograms, the data records contain Timestamped Annotation
+       Lists (TALs). Each TAL consists of an onset, a duration, and a sleep stage.
+       The following assumptions have been made:
+       - the scoring period for the hypnogram is equal to the number of seconds per data record as 
+         given by header information of the accompanying polysomnogram file
+       - all EDF+ hypnogram files use the same scoring for sleep stages which are in the function
+         converted to the values used by Visbrain:
+           EDF+ score                value used by Visbrain
+         Sleep stage ?                      -1
+         Movement time                      -1
+         Sleep stage W                       0
+         Sleep stage 1                       1
+         Sleep stage 2                       2
+         Sleep stage 3                       3
+         Sleep stage 4                       3
+         Sleep stage R                       4
+         
+    The Physionet hypnogram files (EDF+) sometimes cover a slightly longer total period than the 
+    polysomnograph files, where the score for the last part is set to "Sleep stage ?". This function
+    will only read the hypnogram files so that only the time period of the polysomnograph is covered.  
+    
+    The function will check whether the hypnogram file is the appropriate accompanying file to the
+    polysomnogranph file by comparing the "subjcet_id" as well as the "recording_id" of the two files.
+    """
+
+    with open(file + '.edf', 'rb') as f:                                 # open edf data file
+        hdr1 = {}
+        assert f.tell() == 0
+        assert f.read(8) == b'0       '
+
+        # recording info
+        hdr1['subject_id'] = f.read(80).decode('utf-8').strip()   # read patient info
+        hdr1['recording_id'] = f.read(80).decode('utf-8').strip() # read recording date and time
+
+        f.seek(68,1)
+        hdr1['n_records'] = int(f.read(8))
+        hdr1['record_length'] = float(f.read(8))  # in seconds 
+        end_file = str(int(hdr1['n_records']*hdr1['record_length']) )
+
+    with open(hypno, 'rb') as f:                                 # open edf hypnogram file
+        hdr2 = {}
+        assert f.tell() == 0
+        assert f.read(8) == b'0       '
+
+        # recording info
+        hdr2['subject_id'] = f.read(80).decode('utf-8').strip()   # read patient info
+        hdr2['recording_id'] = f.read(80).decode('utf-8').strip() # read recording date and time
+
+        # compare the patient info and recording date of the two files
+        
+        if not (hdr1['subject_id'] == hdr2['subject_id'] and hdr1['recording_id'] == hdr2['recording_id']):
+            print('\nPROGRAM EXIT: HYPNOGRAM FILE DOES NOT MATCH POLYSOMNOGRAPH FILE')
+            import sys
+            sys.exit()
+
+        f.seek(16,1)                                              # skip records not required
+        hdr2['header_n_bytes'] = int(f.read(8))                   # read bytes in header of hypnogram file    
+
+        f.seek(hdr2['header_n_bytes'])                            # go to the end of the header info```
+
+        data_hypno = f.read().decode('utf-8')                     # read the data
+        
+    time = hdr1['record_length']                    # number of secs per data record used for score period
+    data_hypno_spl = data_hypno.split('\x00')
+    ln = len(data_hypno_spl)
+    tr = {'Sleep stage ?':-1,'Movement time':-1,'Sleep stage W':0,'Sleep stage 1':1,'Sleep stage 2':2,
+      'Sleep stage 3':3,'Sleep stage 4':3,'Sleep stage R':4}
+    hypno_s = []
+    for i in range(ln):
+        in_start = data_hypno_spl[i].find('\x15')
+        if in_start == -1:
+            continue
+        else:
+            in_stop = data_hypno_spl[i].find('\x14')
+            onset = data_hypno_spl[i][1:in_start]
+            duration = data_hypno_spl[i][in_start+1:in_stop]
+            
+            if int(onset)+int(duration) >= int(end_file):
+                duration =  str(int(end_file) - int(onset))
+
+            sleepstage = data_hypno_spl[i][in_stop+1:-1]
+
+            nr = int(int(duration)/30)
+            entry = [tr[sleepstage]]*nr
+            hypno_s.extend(entry)
+            
+    hypno_s = np.array(hypno_s)
+    sf_hyp = 1 / time
+    return hypno_s, sf_hyp
+            
