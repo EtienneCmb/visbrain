@@ -123,9 +123,7 @@ def mne_plot_source_estimation(sbj, sbj_dir, fwd_file, stc_file=None,
         from visbrain import Brain
         brain = Brain(brain_obj=b_obj, source_obj=s_obj)
         # Remove all brain templates except the one of the subject :
-        brain._brain_template.disconnect()
-        brain._brain_template.clear()
-        brain._brain_template.addItems([b_obj.name])
+        brain._brain_template.setEnabled(False)
         # By default, display colorbar if activation :
         if isinstance(active_data, np.ndarray):
             brain.menuDispCbar.setChecked(True)
