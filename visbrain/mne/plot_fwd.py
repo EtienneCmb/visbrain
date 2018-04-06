@@ -50,7 +50,7 @@ def mne_plot_source_estimation(sbj, sbj_dir, fwd_file, stc_file=None,
     b_obj : BrainObj
         A predefined `BrainObj` (if `show=False`)
     s_obj : SourceObj
-        A predefined `SourceObj` (if `show=False`)
+        A predefined `SourceObj`, hide by default (if `show=False`)
     """
     # Test that mne is installed and import :
     is_mne_installed(raise_error=True)
@@ -110,8 +110,7 @@ def mne_plot_source_estimation(sbj, sbj_dir, fwd_file, stc_file=None,
     from visbrain.objects import BrainObj, SourceObj, SceneObj
     b_obj = BrainObj(sbj + '_brain', vertices=vertices, faces=faces,
                      **kw_brain_obj)
-    s_obj = SourceObj(sbj + '_src', sources, **kw_source_obj)
-    s_obj.visible = False
+    s_obj = SourceObj(sbj + '_src', sources, visible=False, **kw_source_obj)
     # Add data to the BrainObj if needed :
     if isinstance(active_data, np.ndarray):
         logger.info("Add active data between "
