@@ -111,6 +111,7 @@ def mne_plot_source_estimation(sbj, sbj_dir, fwd_file, stc_file=None,
     b_obj = BrainObj(sbj + '_brain', vertices=vertices, faces=faces,
                      **kw_brain_obj)
     s_obj = SourceObj(sbj + '_src', sources, **kw_source_obj)
+    s_obj.visible = False
     # Add data to the BrainObj if needed :
     if isinstance(active_data, np.ndarray):
         logger.info("Add active data between "
