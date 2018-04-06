@@ -119,8 +119,14 @@ def mne_plot_source_estimation(sbj, sbj_dir, fwd_file, stc_file=None,
                              **kw_activation)
     # Return either a scene or a BrainObj and SourceObj :
     if show:  # Display inside the Brain GUI
+        # Define a Brain instance :
         from visbrain import Brain
-        Brain(brain_obj=b_obj, source_obj=s_obj).show()
+        brain = Brain(brain_obj=b_obj, source_obj=s_obj)
+        # Remove all brain templates except the one of the subject :
+        brain._brain_template.disconnect()
+        brain._brain_template.clear()
+        brain._brain_template.addItems([b_obj.name])
+        brain.show()
     elif show is 'scene':  # return a SceneObj
         logger.info('Define a unique scene for the Brain and Source objects')
         sc = SceneObj()
