@@ -126,6 +126,10 @@ def mne_plot_source_estimation(sbj, sbj_dir, fwd_file, stc_file=None,
         brain._brain_template.disconnect()
         brain._brain_template.clear()
         brain._brain_template.addItems([b_obj.name])
+        # By default, display colorbar if activation :
+        if isinstance(active_data, np.ndarray):
+            brain.menuDispCbar.setChecked(True)
+            brain._fcn_menu_disp_cbar()
         brain.show()
     elif show is 'scene':  # return a SceneObj
         logger.info('Define a unique scene for the Brain and Source objects')
