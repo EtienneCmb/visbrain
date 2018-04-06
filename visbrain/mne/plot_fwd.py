@@ -97,6 +97,7 @@ def mne_plot_source_estimation(sbj, sbj_dir, fwd_file, stc_file=None,
         active_data = active_vert = None
     # Concatenate vertices, faces and sources :
     vertices = np.concatenate(mesh)
+    lr_index = np.r_[np.ones((len(mesh[0]),)), np.zeros((len(mesh[1]),))]
     sources = np.concatenate(sources)
     # Get faces :
     if len(hemi_idx) == 1:
@@ -109,7 +110,7 @@ def mne_plot_source_estimation(sbj, sbj_dir, fwd_file, stc_file=None,
     logger.info('Define a Brain and Source objects')
     from visbrain.objects import BrainObj, SourceObj, SceneObj
     b_obj = BrainObj(sbj + '_brain', vertices=vertices, faces=faces,
-                     **kw_brain_obj)
+                     lr_index=lr_index.astype(bool), **kw_brain_obj)
     s_obj = SourceObj(sbj + '_src', sources, visible=False, **kw_source_obj)
     # Add data to the BrainObj if needed :
     if isinstance(active_data, np.ndarray):
