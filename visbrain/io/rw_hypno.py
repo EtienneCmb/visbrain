@@ -453,7 +453,7 @@ def swap_hyp_values(hypno, desc):
 
     return hypno_s
 
-def read_hypno_edf(hypno, file_path):
+def read_hypno_edf(hypno_file_path, data_file_path):
     """This function is developed to read hypnogram files which are formatted according 
        to EDF+ specifications (see https://www.edfplus.info/specs/index.html).
        The function was specifically developed to read and plot hypnograms which are
@@ -486,19 +486,19 @@ def read_hypno_edf(hypno, file_path):
     
     Parameters
     ----------
-    file_path : str
-        Filename(with full path) to hypnogram(.txt)
+    data_file_path : str
+        Filename(with full path) to data(.edf)
+
+    hypno_file_path: str
+        Filename(with full path) to corresponding hypnogram(.edf)
 
     Returns
     -------
-    hypno : array_like
-        The hypnogram vector in its original length.
-    sf_hyp : float
-        The hypnogram original sampling frequency (Hz)
+
 
     """
 
-    with open(file_path + '.edf', 'rb') as f:                    # open edf data file
+    with open(data_file_path + '.edf', 'rb') as f:                # open edf data file
         hdr1 = {}
         assert f.tell() == 0
         assert f.read(8) == b'0       '
@@ -512,7 +512,7 @@ def read_hypno_edf(hypno, file_path):
         hdr1['record_length'] = float(f.read(8))  # in seconds 
         end_file = str(int(hdr1['n_records']*hdr1['record_length']) )
 
-    with open(hypno, 'rb') as f:                                 # open edf hypnogram file
+    with open(hypno_file_path, 'rb') as f:                        # open edf hypnogram file
         hdr2 = {}
         assert f.tell() == 0
         assert f.read(8) == b'0       '
