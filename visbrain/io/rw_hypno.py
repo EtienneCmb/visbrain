@@ -453,7 +453,7 @@ def swap_hyp_values(hypno, desc):
 
     return hypno_s
 
-def read_hypno_edf(hypno,file):
+def read_hypno_edf(hypno, file_path):
     """This function is developed to read hypnogram files which are formatted according 
        to EDF+ specifications (see https://www.edfplus.info/specs/index.html).
        The function was specifically developed to read and plot hypnograms which are
@@ -483,9 +483,22 @@ def read_hypno_edf(hypno,file):
     
     The function will check whether the hypnogram file is the appropriate accompanying file to the
     polysomnogranph file by comparing the "subjcet_id" as well as the "recording_id" of the two files.
+    
+    Parameters
+    ----------
+    file_path : str
+        Filename(with full path) to hypnogram(.txt)
+
+    Returns
+    -------
+    hypno : array_like
+        The hypnogram vector in its original length.
+    sf_hyp : float
+        The hypnogram original sampling frequency (Hz)
+
     """
 
-    with open(file + '.edf', 'rb') as f:                                 # open edf data file
+    with open(file_path + '.edf', 'rb') as f:                    # open edf data file
         hdr1 = {}
         assert f.tell() == 0
         assert f.read(8) == b'0       '
