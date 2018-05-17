@@ -371,7 +371,7 @@ class BrainObj(VisbrainObject):
         self._default_cblabel = "Activation"
         # ============================= METHOD =============================
         if isinstance(data, np.ndarray) and isinstance(vertices, np.ndarray):
-            logger.info("Add data to secific vertices.")
+            logger.info("Add data to specific vertices.")
             assert (data.ndim == 1) and (vertices.ndim == 1)
             assert smoothing_steps is None or isinstance(smoothing_steps, int)
             # Get smoothed vertices // data :

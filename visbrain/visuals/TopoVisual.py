@@ -298,8 +298,8 @@ class TopoMesh(object):
         ymin, ymax = pos_y.min(), pos_y.max()
         xi = np.linspace(xmin, xmax, self._pix)
         yi = np.linspace(ymin, ymax, self._pix)
-        Xi, Yi = np.meshgrid(xi, yi)
-        grid = self._griddata(pos_x, pos_y, data, Xi, Yi)
+        xh, yi = np.meshgrid(xi, yi)
+        grid = self._griddata(pos_x, pos_y, data, xh, yi)
 
         # =================== INTERPOLATION ===================
         if self._interp is not None:
@@ -437,15 +437,15 @@ class TopoMesh(object):
         # Load the coordinates template :
         path = os.path.join(get_data_path(), 'topo', 'eegref.npz')
         file = np.load(path)
-        nameRef, xyzRef = file['chan'], file['xyz']
+        name_ref, xyz_ref = file['chan'], file['xyz']
         keeponly = np.ones((len(chan)), dtype=bool)
         # Find and load xyz coordinates :
         xyz = np.zeros((len(chan), 3), dtype=np.float32)
         for num, k in enumerate(chan):
             # Find if the channel is present :
-            idx = np.where(nameRef == k.lower())[0]
+            idx = np.where(name_ref == k.lower())[0]
             if idx.size:
-                xyz[num, 0:2] = np.array(xyzRef[idx[0], :])
+                xyz[num, 0:2] = np.array(xyz_ref[idx[0], :])
             else:
                 keeponly[num] = False
 
