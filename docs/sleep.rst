@@ -355,10 +355,17 @@ The subject was awake from 0 to 500 seconds, then fell in N1 sleep between 500 t
 
 The main advantages of using such an encoding format for the hypnogram is that it avoids any confusion related to the values used for each sleep stage, and drastically compress the hypnogram file length without loosing any information. Please note that the software contains command-line functions to convert between point-per-second and stage-duration encoding.
 
+.. tip::
+  If you want to add any relevant informations / comment to the hypnogram, you can do so by adding lines preceded by an asterisk directly within the file. Sleep will not read any line in the hypnogram that starts with an asterisk mark. For example, you can add the name of the scorer::
+    * Scorer: John
+    * Date: 05/17/2018
+    **Wake**                500
+    **N1**                  750
+
 Elan .hyp format
 ++++++++++++++++
 
-Sleep will create a single .hyp file with 4 header rows and the values presented above for the sleep stages, with the exception that the value assigned to REM sleep will be 5 for compatibility with Elan hypnogram reader.
+Alternatively, if you prefer point-per-second encoding, you can save your data in .hyp format, which can be read with any text editor. Sleep will create a single .hyp file with 4 header rows and the values presented above for the sleep stages, with the exception that the value assigned to REM sleep will be 5 for compatibility with Elan hypnogram reader.
 
 .. ----------------------------------------------------------------------------
 ..                              LOAD FILES
@@ -368,7 +375,7 @@ Load your files
 ~~~~~~~~~~~~~~~
 
 .. important::
-   There is no international gold standard for the hypnogram format yet and each lab can have its own format. To overcome problems caused by different sampling rate of hypnogram files and/or different values assigned to each sleep stages, Sleep requires that you specify these parameters in a .txt file. This text file should be in the same directory as the original hypnogram file and be named: *HYPNOFILENAME_description.txt*. Checkout this `example <https://drive.google.com/file/d/0B6vtJiCQZUBvYUFnQS1HWHhjSkE/view?usp=sharing>`_.
+   If your data are encoded in point-per-second, it is important that Sleep knows which value is associated with each sleep stage (e.g. 2 = N2 sleep, 4 = REM sleep). To do that, you need to create a simple text file in the same directory as the original hypnogram file,  named: *HYPNOFILENAME_description.txt*. Checkout this `example <https://drive.google.com/file/d/0B6vtJiCQZUBvYUFnQS1HWHhjSkE/view?usp=sharing>`_.
 
    **This text file should contain the following information :**
 
@@ -487,7 +494,7 @@ It is possible to manually load raw data and pass them as inputs arguments Sleep
 Time-frequency
 ~~~~~~~~~~~~~~
 
-There are currently three methods implemented in Sleep to compute the time-frequency (i.e. spectrogram) of the recording.
+There are currently three time-frequency methods implemented in Sleep to compute the spectrogram of the recording.
 
 =================   ===================================     ============================================
 Name                Method                                  Dependency
@@ -618,6 +625,10 @@ Perform a peak detection.
        * *Lookahead* : minimum distance between two peaks.
        * *Display* : display either maximum / minimum / maximum & minimum
 
+
+.. important::
+  Please note that the software does not yet allow to automatically score sleep stages. However, if you are interested to collaborate and / or implement your own algorithm, please feel free to contact us.
+
 .. ----------------------------------------------------------------------------
 ..                              GUI CONFIG
 .. ----------------------------------------------------------------------------
@@ -634,7 +645,12 @@ Alternatively, if you want to use a configuration when running :class:`Sleep`, y
   # Import the Sleep module:
   from visbrain import Sleep
 
-  Sleep(config_file='pathto/myconfig.txt')
+  Sleep(config_file='pathto/myconfig.json')
+
+
+.. tip::
+  Configuration file are encoded in JSON format, which can be easily read and modified using any text editor.
+
 
 .. ----------------------------------------------------------------------------
 ..                              ANNOTATIONS
@@ -789,7 +805,7 @@ Publications
 -------------
 
 Please reference Sleep using its dedicated article in `Frontiers in Neuroinformatics <http://journal.frontiersin.org/article/10.3389/fninf.2017.00060/full>`_.
-Please let us know if you used or plan to use Sleep in any upcoming publications !
+Please let us know if you used or plan to use Sleep in any upcoming publications!
 
 Bibtex entry :
 
