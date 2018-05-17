@@ -14,7 +14,7 @@ __all__ = ['mne_plot_source_estimation']
 
 
 def mne_plot_source_estimation(sbj, sbj_dir, fwd_file, stc_file=None,
-                               hemisphere='both', parc='aparc',
+                               hemisphere='both', parc='aparc', n_tp=0,
                                kw_brain_obj={}, kw_source_obj={},
                                kw_activation={}, show=True):
     """Plot source estimation.
@@ -34,6 +34,8 @@ def mne_plot_source_estimation(sbj, sbj_dir, fwd_file, stc_file=None,
         The hemisphere to plot.
     parc : string | 'aparc'
         The parcellation to use, e.g., ‘aparc’ or ‘aparc.a2009s’.
+    n_tp : int | 0
+        Time instant in which you want to see the activation.
     kw_brain_obj : dict | {}
         Additional inputs to pass to the `BrainObj` class.
     kw_source_obj : dict | {}
@@ -83,7 +85,6 @@ def mne_plot_source_estimation(sbj, sbj_dir, fwd_file, stc_file=None,
     if isinstance(stc_file, str) and os.path.isfile(stc_file):
         # Get active data :
         data = mne.read_source_estimate(stc_file).data
-        n_tp = 12
         active_data = np.abs(data[:, n_tp] / data[:, n_tp].max())
         # fwd_src contains the source spaces, the first 2 are the cortex
         # (left and right hemi, the others are related to the substructures)
