@@ -4,8 +4,6 @@ import os
 from setuptools import setup
 
 __version__ = "0.3.9"
-__authors__ = "Etienne Combrisson"
-__maintainer__ = "Etienne Combrisson"
 NAME = 'visbrain'
 AUTHOR = "Visbrain developpers"
 MAINTAINER = "Etienne Combrisson"
@@ -18,6 +16,7 @@ URL = 'http://visbrain.org/'
 DOWNLOAD_URL = "https://github.com/EtienneCmb/visbrain/archive/" + \
                "v" + __version__ + ".tar.gz"
 # Data path :
+HERE = os.path.abspath(os.path.dirname(__file__))
 PACKAGE_DATA = {'visbrain.data.templates': ['B1.npz', 'B2.npz', 'B3.npz'],
                 'visbrain.data.roi': ['aal.npz', 'brodmann.npz',
                                       'talairach.npz'],
@@ -28,7 +27,7 @@ PACKAGE_DATA = {'visbrain.data.templates': ['B1.npz', 'B2.npz', 'B3.npz'],
 
 def read(fname):
     """Read README and LICENSE."""
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+    return open(os.path.join(HERE, fname), 'rb').read().decode('utf8')
 
 
 setup(
