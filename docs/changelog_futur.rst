@@ -6,6 +6,16 @@ Changelog and future directions
 Changelog
 ---------
 
+v0.4.0
+^^^^^^
+
+Sleep
+~~~~~
+
+* New default export format for the hypnogram: instead of being encoded with one value per second, hypnogram files are now
+encoded with a dictionnary-like format specifying the duration of each sleep stage.
+
+
 v0.3.8
 ^^^^^^
 
