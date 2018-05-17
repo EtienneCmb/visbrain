@@ -92,9 +92,9 @@ class UiSettings(object):
             # Set preprocessed sleep data :
             self._topo.set_sleep_topo(data)
             # Update title :
-            fm, fM = self._PanTopoFmin.value(), self._PanTopoFmax.value()
+            fm, fh = self._PanTopoFmin.value(), self._PanTopoFmax.value()
             dispas = self._PanTopoDisp.currentText()
-            txt = 'Mean ' + dispas + ' in\n[' + str(fm) + ';' + str(fM) + 'hz]'
+            txt = 'Mean ' + dispas + ' in\n[' + str(fm) + ';' + str(fh) + 'hz]'
             self._topoTitle.setText(txt)
             self._topoTitle.setStyleSheet("QLabel {color: " +
                                           hypcol + ";}")
