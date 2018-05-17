@@ -33,12 +33,12 @@ Main features
     * Take screenshot with controllable dpi
     * Save the GUI state (*channels, amplitude, panels, checkbox*...)
 * **Load standard electro-physiological files**
-    * Default supported files : **.vhdr** (BrainVision V1 and V2), **.edf** (European Data Format), **.trc** (Micromed), **.eeg** (ELAN)
-    * Pass raw data, or use MNE-python to load other `non natively supported files <https://martinos.org/mne/dev/manual/io.html#importing-eeg-data>`_
-    * Supported extensions for hypnogram files : **.txt**, **.csv**, **.hyp** or raw data.
+    * Default supported files : European Data Format, BrainVision, Micromed, Elan
+    * Pass raw data or use MNE-python to load other `file formats <https://martinos.org/mne/dev/manual/io.html#importing-eeg-data>`_
+    * Supported extensions for hypnogram files : **.txt**, **.csv**, **.xlsx**, **.hyp**.
 * **Display**
     * Polysomnographic data (e.g. EEG, EOG, EMG)
-    * Time-frequency (a.k.a. spectrogram)
+    * Time-frequency (=spectrogram)
     * Hypnogram
     * Topographic map
 * **Hypnogram**
@@ -78,28 +78,31 @@ GUI description
 Components
 ^^^^^^^^^^
 
-The :class:`Sleep` interface is divided into 4 main parts:
+The :class:`Sleep` GUI is divided into 4 main parts:
 
 .. figure::  picture/picsleep/sleep_main_parts.png
    :align:   center
 
 
-* **Menu** : The contextual menu allows to perform several functions such as the loading and saving of data files,
-hypnogram files, screenshots, GUI configuration.. It is also useful to control the visbility of each panel,
-display a list of shortcuts, or open the documentation.
-* **Main window** :
+**Menu** :
+The contextual menu allows to perform several functions such as the loading and saving of data files, hypnogram files, screenshots, GUI configuration.. It is also useful to control the visbility of each panel, display a list of shortcuts, or open the documentation.
+
+**Main window** :
     * Polysomnographic data
     * Spectrogram (= time-frequency) of the whole recording
     * Hypnogram
     * Topoplot (*hidden by default*)
-* **Navigation bar** : The navigation bar provides several tools to navigate easily through the data.
+
+**Navigation bar** :
     * *Go to* : go to the time location of your choice
     * *Window* : length of the displayed time window
     * *Slider step* : step between each consecutive window
     * *Rule* : display unit in second, minute or hours
     * *Grid* : display the grid on the hypnogram and channel plot
     * *Magnify* : apply a zoom on the signal (e.g. useful to examine short events such as spindles). Alternatively, you can use CTRL + click at any time to zoom on a specific signal and time point.
-* **Settings panel** : The setting panels is where most of the (advanced) functions of the software are! Among other things, you can control which channel to display, adjust the amplitudes, customize the spectrogram and hypnogram, compute the duration of each sleep stage, add annotations to the recording, and perform a bunch of semi-automatic detection (spindles, K-complexes...). See the section :ref:`sleep_settings_panel` for a description of each tab.
+
+**Settings panel** :
+The setting panels is where most of the (advanced) functions of the software are! Among other things, you can control which channel to display, adjust the amplitudes, customize the spectrogram and hypnogram, compute the duration of each sleep stage, add annotations to the recording, and perform a bunch of semi-automatic detection (spindles, K-complexes...). See the section :ref:`sleep_settings_panel` for a description of each tab.
 
 .. _sleep_settings_panel:
 
@@ -299,10 +302,9 @@ If MNE-python is installed, this list is extended to (see `also <https://martino
  * **.cnt**
  * **.vhdr** (*BrainVision files can be loaded using either the native library of Sleep or using MNE*)
 
- Note that once MNE-python is installed, the loading of these file formats is transparent for users. It means that you can load these file formats directly using Sleep graphical user interface or command-line, without any additional steps. We therefore **strongly recommand** to `install MNE-python <https://martinos.org/mne/stable/index.html>`_.
+Note that once MNE-python is installed, the loading of these file formats is transparent for users. It means that you can load these file formats directly using Sleep graphical user interface or command-line, without any additional steps. We therefore **strongly recommand** to `install MNE-python <https://martinos.org/mne/stable/index.html>`_.
 
-.. tip::
-   If you have a file format that is currently not supported, :class:`Sleep` also provide the ability to directly pass raw data (NumPy array). Please click see this example of how to `to load a Matlab file <http://visbrain.org/auto_examples/sleep/load_matlab.html#sphx-glr-auto-examples-sleep-load-matlab-py>`_ and then pass the data directly to Sleep.
+If you have a file format that is currently not supported, :class:`Sleep` also provide the ability to directly pass raw data (NumPy array). Please click see this example of how to `to load a Matlab file <http://visbrain.org/auto_examples/sleep/load_matlab.html#sphx-glr-auto-examples-sleep-load-matlab-py>`_ and then pass the data directly to Sleep.
 
 .. note::
    If you are having trouble with the loading of .edf files, we recommand installing `MNE-python <https://martinos.org/mne/stable/index.html>`_ and then loading your data using the following command::
@@ -311,30 +313,35 @@ If MNE-python is installed, this list is extended to (see `also <https://martino
 
   This will force the loading of the .edf files using MNE, which can generally handle more cases and exceptions than the native EDF library implemented in :class:`Sleep`.
 
-.. important::
-   By default, data are automatically downsampled to 100 Hz upon loading. If the sampling frequency of your recording is a power of two (e.g. 256, 512 Hz), we recommand to change this default value to 128 Hz using the following command::
+.. caution::
+   By default, data are **automatically downsampled to 100 Hz** upon loading. If the sampling frequency of your recording is a power of two (e.g. 256, 512 Hz), we recommand to change the default downsampling value to 128 Hz using the following command::
+
     Sleep(data='mydata.edf', hypno='myhypno.csv', downsample=128).show()
 
 Hypnogram
 ^^^^^^^^^
 
-One of the main objective of Sleep is to facilitate the sharing of sleep data acros laboratories. This involves being able to accomodate for a variety of hypnogram format (unfortunately, there is no current gold standard on how to save hypnogram data). Here's the list of supported extensions for hypnogram files :
+One of the main objective of Sleep is to **facilitate the sharing of data** across laboratories. This involves being able to accomodate for a variety of hypnogram format (unfortunately, there is no current gold standard on how to save hypnogram data). Here's the list of supported extensions for hypnogram files :
 
 * **.txt**
 * **.csv**
+* **.xlsx**
 * **.hyp** (`ELAN <http://elan.lyon.inserm.fr>`_)
 
-.. caution::
-   Please note that Sleep uses the guidelines of *Iber et al. 2007* for sleep stage nomenclature, i.e. Wake, N1, N2, N3, REM and Artefact. If your hypnogram includes both NREM-S3 and NREM-S4 sleep stages you can add “N4” categories with the corresponding values in the description file. However, keep in mind that S3 and S4 will be merged into N3 during the import to the Sleep module. That also means that if you load and then save your hypnogram in Sleep, you will loose differentiation between S3 and S4 so be sure not to overwrite your original file!
+.. warning::
+   Please note that Sleep uses the guidelines of *Iber et al. 2007* for sleep stage nomenclature (Wake, N1, N2, N3, REM and Artefact). If your hypnogram includes both NREM-S3 and NREM-S4 sleep stages you can add “N4” categories with the corresponding values in the description file. However, keep in mind that S3 and S4 will be merged into N3 during the import to the Sleep module. That also means that if you load and then save your hypnogram in Sleep, you will loose differentiation between S3 and S4 so be sure not to overwrite your original file!
 
 
 Save hypnogram
 ^^^^^^^^^^^^^^
 
 .. important::
-  Since release 0.4, hypnogram are exported using stage duration rather than point-per-second. This new format avoids potential errors caused by downsampling and confusion in the values assigned to each sleep stage (which can drastically differ between two labs). However, for retro-compatibility, we still allow user to save and load hypnogram in point-per-second format.
+  Since release v0.4, the default hypnogram export format uses stage duration rather than point-per-second encoding. This format avoids potential errors caused by downsampling and confusion in the values assigned to each sleep stage (which can drastically differ between two labs, e.g. N2 sleep can be encoded with the value 2 in one lab, and -2 in another lab). However, for retro-compatibility, we still allow user to save and load hypnogram in point-per-second format. Please see the image below to see the difference between stage-duration and point-per-second encoding.
 
-By default, Sleep will save your hypnogram in .csv, using the following encoding:
+.. figure::  picture/picsleep/hypno_encoding.png
+   :align:   center
+
+By default, Sleep will save your hypnogram in .txt, using the stage-duration encoding:
 
 ==============          =================
 Stage                    Duration
@@ -346,36 +353,32 @@ Stage                    Duration
 **N2**                  3200
 ...                     ...
 **REM**                 30018
-**Awakened**            30100
+**Wake**                30100
 ==============          =================
 
 **How to read the example above?**
 
 The subject was awake from 0 to 500 seconds, then fell in N1 sleep between 500 to 750 seconds, then in N2 sleep between 750 to 2000 seconds, then in N3 sleep and so on. The subject was awakened in REM sleep, and the recording was stopped shortly after. The total duration of the recording (in seconds) corresponds to the last value of the hypnogram, in that case 30100 seconds.
 
-The main advantages of using such an encoding format for the hypnogram is that it avoids any confusion related to the values used for each sleep stage, and drastically compress the hypnogram file length without loosing any information. Please note that the software contains command-line functions to convert between point-per-second and stage-duration encoding.
+The main advantages of using such an encoding format for the hypnogram is that it avoids any confusion related to the values used for each sleep stage, and drastically reduces the hypnogram file length without loosing any information. Please note that the software contains command-line functions to convert between point-per-second and stage-duration encoding.
 
 .. tip::
-  If you want to add any relevant informations / comment to the hypnogram, you can do so by adding lines preceded by an asterisk directly within the file. Sleep will not read any line in the hypnogram that starts with an asterisk mark. For example, you can add the name of the scorer::
-    * Scorer: John
-    * Date: 05/17/2018
-    **Wake**                500
-    **N1**                  750
+  If you want to add any relevant informations / comments to the hypnogram, you can do so by adding lines preceded by an asterisk directly within the text file. Sleep will not read any line in the hypnogram that starts with an asterisk mark. For example, you can add the name of the scorer::
+
+    *Scorer  John
+    *Date    05_17_2018
+    Wake     500
+    N1       750
+
 
 Elan .hyp format
 ++++++++++++++++
 
 Alternatively, if you prefer point-per-second encoding, you can save your data in .hyp format, which can be read with any text editor. Sleep will create a single .hyp file with 4 header rows and the values presented above for the sleep stages, with the exception that the value assigned to REM sleep will be 5 for compatibility with Elan hypnogram reader.
 
-.. ----------------------------------------------------------------------------
-..                              LOAD FILES
-.. ----------------------------------------------------------------------------
-
-Load your files
-~~~~~~~~~~~~~~~
 
 .. important::
-   If your data are encoded in point-per-second, it is important that Sleep knows which value is associated with each sleep stage (e.g. 2 = N2 sleep, 4 = REM sleep). To do that, you need to create a simple text file in the same directory as the original hypnogram file,  named: *HYPNOFILENAME_description.txt*. Checkout this `example <https://drive.google.com/file/d/0B6vtJiCQZUBvYUFnQS1HWHhjSkE/view?usp=sharing>`_.
+   If your hypnogram was created using another software, and is encoded in point-per-second, it is important that Sleep knows which value is associated with each sleep stage (e.g. 2 = N2 sleep, 4 = REM sleep). To do that, you need to create a simple text file in the same directory as the original hypnogram file,  named: *HYPNOFILENAME_description.txt*. Checkout this `example <https://drive.google.com/file/d/0B6vtJiCQZUBvYUFnQS1HWHhjSkE/view?usp=sharing>`_.
 
    **This text file should contain the following information :**
 
@@ -391,6 +394,13 @@ Load your files
    Artefact      \-1     The value assigned to Artefact in the hypnogram is \-1
    ==========    ======  ======================================================
 
+
+.. ----------------------------------------------------------------------------
+..                              LOAD FILES
+.. ----------------------------------------------------------------------------
+
+Load your files
+~~~~~~~~~~~~~~~
 
 There are four ways to load datasets into Sleep:
 
@@ -455,7 +465,7 @@ Finally, it is possible to load several other file formats using `MNE Python pac
   # data = 'myegifile.egi'
   # - EEGLab
   # data = 'myeeglabfile.set'
-  # Now, pass all the arguments to the Sleep module :
+  # Now, pass all the data to the Sleep module :
   Sleep(data=data).show()
 
 .. _loadfromraw:
@@ -494,7 +504,7 @@ It is possible to manually load raw data and pass them as inputs arguments Sleep
 Time-frequency
 ~~~~~~~~~~~~~~
 
-There are currently three time-frequency methods implemented in Sleep to compute the spectrogram of the recording.
+There are currently three time-frequency methods implemented in Sleep.
 
 =================   ===================================     ============================================
 Name                Method                                  Dependency
@@ -521,7 +531,7 @@ Multitaper          Multitaper-based Wigner spectrogram     `lspopt <https://git
 Hypnogram scoring
 ~~~~~~~~~~~~~~~~~
 
-Sleep offers two possibilities to score the hypnogram, i.e. during the :ref:`navigation` using shortcuts or using the :ref:`scoretable`.
+Sleep offers two possibilities to score the hypnogram: using shortcuts or using the :ref:`scoretable`.
 
 .. figure::  picture/picsleep/sleep_scoring.png
    :align:   center
@@ -533,7 +543,7 @@ Sleep offers two possibilities to score the hypnogram, i.e. during the :ref:`nav
 Navigation
 ^^^^^^^^^^
 
-This is probably the most useful editing method. While you are navigating across time, simply press on your keyboard to insert a sleep stage. Use the key below :
+This is probably the most useful editing method. While you are scrolling through your data, simply press on your keyboard to insert a sleep stage. Use the key below :
 
 ==============          =================
 Keys                    Description
@@ -546,7 +556,7 @@ w                       Wake stage
 r                       REM stage
 ==============          =================
 
-After pressing one of those keys, data coming from the next window will be prompted automatically so that you can continue scoring.
+After pressing one of those keys, the software will automatically scroll through to the next epoch so that you can continue scoring.
 
 .. warning::
    If no canvas are selected the shortcuts might not work. Simply click on a canvas (on a channel / spectrogram / hypnogram) before starting to score to avoid this issue.

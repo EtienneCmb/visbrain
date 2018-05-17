@@ -9,12 +9,18 @@ Changelog
 v0.4.0
 ^^^^^^
 
+Visbrain
+~~~~~~~~
+
+* Fixed compatibility with numpy and pip
+
 Sleep
 ~~~~~
 
-* New default export format for the hypnogram: instead of being encoded with one value per second, hypnogram files are now
-encoded with a dictionnary-like format specifying the duration of each sleep stage.
-
+* Hypnogram is now exported as a .txt file with stage-duration encoding.
+* .xlsx now supported for hypnogram
+* Fixed warning in UTF-8 file loading
+* Improved JSON saving for configuration file
 
 v0.3.8
 ^^^^^^
