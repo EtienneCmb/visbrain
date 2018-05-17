@@ -14,7 +14,7 @@ __all__ = ['mne_plot_source_estimation']
 
 
 def mne_plot_source_estimation(sbj, sbj_dir, fwd_file, stc_file=None,
-                               hemisphere='both', parc='aparc', n_tp=0,
+                               hemisphere='both', parc='aparc', active_data=0,
                                kw_brain_obj={}, kw_source_obj={},
                                kw_activation={}, show=True):
     """Plot source estimation.
@@ -34,8 +34,11 @@ def mne_plot_source_estimation(sbj, sbj_dir, fwd_file, stc_file=None,
         The hemisphere to plot.
     parc : string | 'aparc'
         The parcellation to use, e.g., ‘aparc’ or ‘aparc.a2009s’.
-    n_tp : int | 0
-        Time instant in which you want to see the activation.
+    active_data : array_like, int | 0
+        The data to set to vertices. If an stc file is provided and if
+        `active_data` is an integer, it describes the time instant in which you
+        want to see the activation. Otherwise, `active_data` must be an array
+        with the same same shape as the number of active vertices.
     kw_brain_obj : dict | {}
         Additional inputs to pass to the `BrainObj` class.
     kw_source_obj : dict | {}
@@ -76,20 +79,34 @@ def mne_plot_source_estimation(sbj, sbj_dir, fwd_file, stc_file=None,
         s_ = head_to_mni(sources_, sbj, mri_head_t, subjects_dir=sbj_dir)
         mesh.append(m_)
         sources.append(s_)
+    # Get active vertices :
+    # fwd_src contains the source spaces, the first 2 are the cortex
+    # (left and right hemi, the others are related to the substructures)
+    if len(hemi_idx) == 1:
+        active_vert = fwd_src[hemi_idx[0]]['vertno']
+    else:
+        active_left = fwd_src[0]['vertno']
+        active_right = fwd_src[1]['vertno'] + mesh[0].shape[0]
+        active_vert = np.r_[active_left, active_right]
+    logger.info('%i active vertices detected ' % len(active_vert))
     # Add data to the mesh :
-    if isinstance(stc_file, str) and os.path.isfile(stc_file):
+    if isinstance(active_data, np.ndarray):
+        if len(active_data) != len(active_vert):
+            logger.error("The length of `active data` (%i) must be the same "
+                         "the length of the number of active vertices "
+                         "(%i)" % (len(active_data), len(active_vert)))
+            active_data = active_vert = None
+        else:
+            logger.info("Array of active data used.")
+    elif isinstance(stc_file, str) and isinstance(active_data, int):
         # Get active data :
+        assert os.path.isfile(stc_file)
+        n_tp = active_data
         data = mne.read_source_estimate(stc_file).data
         active_data = np.abs(data[:, n_tp] / data[:, n_tp].max())
-        # fwd_src contains the source spaces, the first 2 are the cortex
-        # (left and right hemi, the others are related to the substructures)
-        if len(hemi_idx) == 1:
-            active_vert = fwd_src[hemi_idx[0]]['vertno']
-        else:
-            active_left = fwd_src[0]['vertno']
-            active_right = fwd_src[1]['vertno'] + mesh[0].shape[0]
-            active_vert = np.r_[active_left, active_right]
+        logger.info("Time instant %i used for activation" % n_tp)
     else:
+        logger.info("No active data detected.")
         active_data = active_vert = None
     # Concatenate vertices, faces and sources :
     vertices = np.concatenate(mesh)
