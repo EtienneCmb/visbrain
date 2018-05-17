@@ -57,8 +57,7 @@ def mne_plot_source_estimation(sbj, sbj_dir, fwd_file, stc_file=None,
     # Test that mne is installed and import :
     is_mne_installed(raise_error=True)
     import mne
-    from mne.transforms import apply_trans, invert_transform
-    from mne.source_space import _read_talxfm
+    from mne.source_space import head_to_mni
     hemi_idx = {'left': [0], 'right': [1], 'both': [0, 1]}[hemisphere]
     # Read the forward solution :
     fwd = mne.read_forward_solution(fwd_file)
@@ -67,20 +66,16 @@ def mne_plot_source_estimation(sbj, sbj_dir, fwd_file, stc_file=None,
     fwd_src = fwd['src']
     # Get the MRI (surface RAS)-> head matrix
     mri_head_t = fwd['mri_head_t']
-    head_mri_t = invert_transform(mri_head_t)  # head -> MRI (surface RAS)
-    # Take point locations in MRI space and convert to MNI coordinates :
-    trans = _read_talxfm(sbj, sbj_dir)['trans']
-    mesh, sources, fact = [], [], 1000
+    # Head to MNI conversion
+    logger.info("Head to MNI conversion")
+    mesh, sources = [], []
     for hemi in hemi_idx:
-        # Transform vertices :
-        _mesh_mri = apply_trans(head_mri_t, fwd_src[hemi]['rr'])
-        _mesh_mni = apply_trans(trans, _mesh_mri * fact)
-        mesh.append(_mesh_mni)
-        # Transform sources :
-        _src = fwd_src[hemi]['rr'][fwd_src[hemi]['vertno']]
-        _src_space_mri_ras = apply_trans(head_mri_t, _src)
-        _src_space_coo_mni = apply_trans(trans, _src_space_mri_ras * fact)
-        sources.append(_src_space_coo_mni)
+        vert_ = fwd_src[hemi]['rr']
+        sources_ = fwd_src[hemi]['rr'][fwd_src[hemi]['vertno']]
+        m_ = head_to_mni(vert_, sbj, mri_head_t, subjects_dir=sbj_dir)
+        s_ = head_to_mni(sources_, sbj, mri_head_t, subjects_dir=sbj_dir)
+        mesh.append(m_)
+        sources.append(s_)
     # Add data to the mesh :
     if isinstance(stc_file, str) and os.path.isfile(stc_file):
         # Get active data :
