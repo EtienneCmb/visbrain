@@ -171,10 +171,11 @@ class BrainObj(VisbrainObject):
 
     def _search_in_path(self):
         """Specify where to find brain templates."""
-        _vb_path = path_to_visbrain_data(folder='templates')
+        _vb_path = path_to_visbrain_data()
+        _vb_path_tmp = path_to_visbrain_data(folder='templates')
         _data_path = get_data_path(folder='templates')
         _tmp_path = path_to_tmp(folder='templates')
-        return _vb_path, _data_path, _tmp_path
+        return _vb_path, _vb_path_tmp, _data_path, _tmp_path
 
     def _load_brain_template(self, name):
         """Load the brain template."""
