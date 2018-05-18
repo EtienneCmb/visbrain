@@ -27,8 +27,7 @@ install:
   - "activate testenv"
   - "python -m pip install --upgrade pip"
   # Install dependencies :
-  - "pip install mne nibabel setuptools PyOpenGL PyOpenGL_accelerate pandas openpyxl tensorpac xlrd"
-  - "pip install pytest==3.3.2"
+  - "pip install mne nibabel setuptools PyOpenGL PyOpenGL_accelerate pytest pandas openpyxl tensorpac xlrd"
   - "pip install git+https://github.com/hbldh/lspopt.git#egg=lspopt"
   - "dir"
   # ------------------- VISBRAIN -------------------
