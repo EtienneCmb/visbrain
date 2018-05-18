@@ -6,6 +6,22 @@ Changelog and future directions
 Changelog
 ---------
 
+v0.4.0
+^^^^^^
+
+Visbrain
+~~~~~~~~
+
+* Fixed compatibility with numpy and pip
+
+Sleep
+~~~~~
+
+* Hypnogram is now exported as a .txt file with stage-duration encoding.
+* .xlsx now supported for hypnogram
+* Fixed warning in UTF-8 file loading
+* Improved JSON saving for configuration file
+
 v0.3.8
 ^^^^^^
 
