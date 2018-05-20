@@ -64,10 +64,10 @@ def mne_switch(file, ext, downsample, preload=True, **kwargs):
     dsf, downsample = get_dsf(downsample, sf)
     channels = raw.info['ch_names']
     data = raw._data
-    
-    data = (data.T/raw._raw_extras[0]['units']).T  # kdl added this line to change values 
-                                                   # in Volt (MNE) to microVolt (Visbrain)     
-    
+
+    # Conversion Volt (MNE) to microVolt (Visbrain) :
+    data = (data.T / raw._raw_extras[0]['units']).T
+
     n = data.shape[1]
     start_time = datetime.time(0, 0, 0)  # raw.info['meas_date']
     anot = raw.annotations
