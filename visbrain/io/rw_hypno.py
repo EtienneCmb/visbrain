@@ -456,6 +456,10 @@ def _read_hypno_edf_sample(hypno_file_path, data_file_path):
     sf_hyp : float
         The hypnogram original sampling frequency (Hz)
     """
+    if not isinstance(data_file_path, str):
+        raise IOError("Reading EDF+ need the path to the data file.")
+    data_file_path, _ = os.path.splitext(data_file_path)
+
     with open(data_file_path + '.edf', 'rb') as f:  # open edf data file
         hdr1 = {}
         assert f.tell() == 0
@@ -520,7 +524,7 @@ def _read_hypno_edf_sample(hypno_file_path, data_file_path):
             entry = [tr[sleepstage]] * nr
             hypno_s.extend(entry)
 
-    hypno_s = np.array(hypno_s)
+    hypno_s = np.array(hypno_s).astype(int)
     sf_hyp = 1. / time
     return hypno_s, sf_hyp
 
