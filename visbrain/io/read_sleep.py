@@ -112,7 +112,8 @@ class ReadSleepData(object):
         if hypno is None:
             hypno = dialog_load(self, "Open hypnogram", upath,
                                 "Elan (*.hyp);;Text file (*.txt);;"
-                                "CSV file (*.csv);;EDF+ file(*.edf);;All files (*.*)")
+                                "CSV file (*.csv);;EDF+ file(*.edf);"
+                                ";All files (*.*)")
             hypno = None if hypno == '' else hypno
         if isinstance(hypno, np.ndarray):  # array_like
             if len(hypno) == n:
@@ -302,10 +303,8 @@ def read_edf(path, downsample):
     start_time = start_time.time()
 
     # Keep only data channels (e.g excludes marker chan)
-    
-    #freqs = np.unique(edf.hdr['n_samples_per_record'])
-    # freqs is sample freq. Not samples per record. kdl changed 306 to 308
-    freqs = np.unique(edf.hdr['n_samples_per_record'])/edf.hdr['record_length']
+    freqs = np.unique(edf.hdr['n_samples_per_record']) / edf.hdr[
+        'record_length']
     sf = freqs.max()
 
     if len(freqs) != 1:
