@@ -15,7 +15,7 @@ from warnings import warn
 import logging
 
 from .rw_utils import get_file_ext
-from .rw_hypno import (read_hypno, oversample_hypno, read_hypno_edf)
+from .rw_hypno import (read_hypno, oversample_hypno)
 from .dialog import dialog_load
 from .mneio import mne_switch
 from .dependencies import is_mne_installed
