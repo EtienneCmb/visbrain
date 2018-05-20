@@ -268,7 +268,7 @@ def _write_hypno_hyp_sample(filename, hypno, sf=100., npts=1):
 ###############################################################################
 
 
-def read_hypno(filename, time=None):
+def read_hypno(filename, time=None, datafile=None):
     """Load hypnogram file.
 
     Sleep stages in the hypnogram should be scored as follow
@@ -287,6 +287,8 @@ def read_hypno(filename, time=None):
         Filename (with full path) to hypnogram file.
     time : array_like | None
         The time vector (used to interpolate Excel files).
+    datafile : string | None
+        Filename (with full path) to the data file.
 
     Returns
     -------
