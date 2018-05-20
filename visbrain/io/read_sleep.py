@@ -589,9 +589,7 @@ def read_elan(path, downsample):
 
     # Read .ent file
     ent = np.genfromtxt(header, delimiter='\n', usecols=[0],
-                        dtype=None, skip_header=0)
-
-    ent = np.char.decode(ent)
+                        dtype=None, skip_header=0, encoding='utf-8')
 
     # eeg file version
     eeg_version = ent[0]
