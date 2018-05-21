@@ -1,10 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
-from setuptools import setup, find_packages
-import pip
-from pip.req import parse_requirements
-from optparse import Option
+from setuptools import setup
 
 __version__ = "0.3.9"
 NAME = 'visbrain'
@@ -19,6 +16,7 @@ URL = 'http://visbrain.org/'
 DOWNLOAD_URL = "https://github.com/EtienneCmb/visbrain/archive/" + \
                "v" + __version__ + ".tar.gz"
 # Data path :
+HERE = os.path.abspath(os.path.dirname(__file__))
 PACKAGE_DATA = {'visbrain.data.templates': ['B1.npz', 'B2.npz', 'B3.npz'],
                 'visbrain.data.roi': ['aal.npz', 'brodmann.npz',
                                       'talairach.npz'],
@@ -29,53 +27,51 @@ PACKAGE_DATA = {'visbrain.data.templates': ['B1.npz', 'B2.npz', 'B3.npz'],
 
 def read(fname):
     """Read README and LICENSE."""
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
-
-
-options = Option('--workaround')
-options.skip_requirements_regex = None
-REQ_FILE = './requirements.txt'
-# Hack for old pip versions: Versions greater than 1.x
-# have a required parameter "sessions" in parse_requierements
-if pip.__version__.startswith('1.'):
-    install_reqs = parse_requirements(REQ_FILE, options=options)
-else:
-    from pip.download import PipSession  # pylint:disable=E0611
-    options.isolated_mode = False
-    install_reqs = parse_requirements(REQ_FILE,  # pylint:disable=E1123
-                                      options=options,
-                                      session=PipSession)
-
-REQS = [str(ir.req) for ir in install_reqs]
+    return open(os.path.join(HERE, fname), 'rb').read().decode('utf8')
 
 
 setup(
+    # DESCRIPTION
     name=NAME,
     version=__version__,
-    packages=find_packages(),
-    package_dir={'visbrain': 'visbrain'},
-    package_data=PACKAGE_DATA,
-    include_package_data=True,
     description=DESCRIPTION,
     long_description=read('README.rst'),
-    platforms='any',
-    setup_requires=['numpy', 'pytest-runner'],
-    tests_require=['pytest'],
-    install_requires=REQS,
-    dependency_links=[],
+    keywords=KEYWORDS,
+    license=read('LICENSE'),
     author=AUTHOR,
     maintainer=MAINTAINER,
     author_email=EMAIL,
     url=URL,
     download_url=DOWNLOAD_URL,
-    license=read('LICENSE'),
-    keywords=KEYWORDS,
+    # PACKAGE / DATA
+    packages=['visbrain'],
+    package_dir={'visbrain': 'visbrain'},
+    package_data=PACKAGE_DATA,
+    include_package_data=True,
+    platforms='any',
+    setup_requires=['numpy', 'pytest-runner'],
+    tests_require=['pytest'],
+    install_requires=[
+        "numpy>=1.13",
+        "scipy",
+        "vispy>=0.5.2",
+        "matplotlib>=1.5.5",
+        "pyqt5",
+        "pillow",
+        "Click"
+    ],
+    dependency_links=[],
     classifiers=["Development Status :: 3 - Alpha",
                  'Intended Audience :: Science/Research',
                  'Intended Audience :: Education',
                  'Intended Audience :: Developers',
                  'Topic :: Scientific/Engineering :: Visualization',
+                 "Programming Language :: Python :: 3 :: Only",
                  "Programming Language :: Python :: 3.5"
+                 "Operating System :: MacOS",
+                 "Operating System :: POSIX :: Linux",
+                 "Operating System :: Microsoft :: Windows",
+                 "Natural Language :: English"
                  ],
     entry_points='''
         [console_scripts]

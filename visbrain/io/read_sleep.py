@@ -69,7 +69,7 @@ class ReadSleepData(object):
                 args = sleep_switch(file, ext, downsample)
             # Get output arguments :
             (sf, downsample, dsf, data, channels, n, offset, annot) = args
-            info = ("File successfully loaded (%s):"
+            info = ("Data successfully loaded (%s):"
                     "\n- Sampling-frequency : %.2fHz"
                     "\n- Number of time points (before down-sampling): %i"
                     "\n- Down-sampling frequency : %.2fHz"
@@ -102,7 +102,7 @@ class ReadSleepData(object):
         self._N = n
         self._dsf = dsf
         self._sfori = float(sf)
-        self._toffset = offset.hour * 3600 + offset.minute * 60 + \
+        self._toffset = offset.hour * 3600. + offset.minute * 60. + \
             offset.second
         time = np.arange(n)[::dsf] / sf
         self._sf = float(downsample) if downsample is not None else float(sf)
@@ -111,8 +111,9 @@ class ReadSleepData(object):
         # Dialog window for hypnogram :
         if hypno is None:
             hypno = dialog_load(self, "Open hypnogram", upath,
-                                "Elan (*.hyp);;Text file (*.txt);;"
-                                "CSV file (*.csv);;All files (*.*)")
+                                "Text file (*.txt);;Elan (*.hyp);;"
+                                "CSV file (*.csv);;EDF+ file(*.edf);"
+                                ";All files (*.*)")
             hypno = None if hypno == '' else hypno
         if isinstance(hypno, np.ndarray):  # array_like
             if len(hypno) == n:
@@ -121,7 +122,7 @@ class ReadSleepData(object):
                 raise ValueError("Then length of the hypnogram must be the "
                                  "same as raw data")
         if isinstance(hypno, str):  # (*.hyp / *.txt / *.csv)
-            hypno, _ = read_hypno(hypno)
+            hypno, _ = read_hypno(hypno, time=time, datafile=file)
             # Oversample then downsample :
             hypno = oversample_hypno(hypno, self._N)[::dsf]
             PROFILER("Hypnogram file loaded", level=1)
@@ -242,7 +243,7 @@ def sleep_switch(file, ext, downsample):
     path = file + ext
 
     if ext == '.vhdr':  # BrainVision
-        return read_eeg(path, downsample)
+        return read_bva(path, downsample)
 
     if ext == '.eeg':  # Elan
         return read_elan(path, downsample)
@@ -302,7 +303,8 @@ def read_edf(path, downsample):
     start_time = start_time.time()
 
     # Keep only data channels (e.g excludes marker chan)
-    freqs = np.unique(edf.hdr['n_samples_per_record'])
+    freqs = np.unique(edf.hdr['n_samples_per_record']) / edf.hdr[
+        'record_length']
     sf = freqs.max()
 
     if len(freqs) != 1:
@@ -422,7 +424,7 @@ def read_trc(path, downsample):
     return sf, downsample, dsf, data[:, ::dsf], chan, n, start_time, None
 
 
-def read_eeg(path, downsample, read_markers=False):
+def read_bva(path, downsample, read_markers=False):
     """Read data from a BrainVision (*.vhdr) file.
 
     Poor man's version of https: // gist.github.com / breuderink / 6266871
@@ -463,9 +465,7 @@ def read_eeg(path, downsample, read_markers=False):
 
     # Read header
     ent = np.genfromtxt(path, delimiter='\n', usecols=[0],
-                        dtype=None, skip_header=0)
-
-    ent = np.char.decode(ent, "utf-8")
+                        dtype=None, skip_header=0, encoding='utf-8')
 
     for item in ent:
         if 'DataFile=' in item:
@@ -506,9 +506,8 @@ def read_eeg(path, downsample, read_markers=False):
     # Read marker file (if present) to extract recording time
     if os.path.isfile(marker_path):
         vmrk = np.genfromtxt(marker_path, delimiter='\n', usecols=[0],
-                             dtype=None, skip_header=0)
+                             dtype=None, skip_header=0, encoding='utf-8')
 
-        vmrk = np.char.decode(vmrk)
         # Read start-time
         for item in vmrk:
             if 'New Segment' in item:
@@ -590,9 +589,7 @@ def read_elan(path, downsample):
 
     # Read .ent file
     ent = np.genfromtxt(header, delimiter='\n', usecols=[0],
-                        dtype=None, skip_header=0)
-
-    ent = np.char.decode(ent)
+                        dtype=None, skip_header=0, encoding='utf-8')
 
     # eeg file version
     eeg_version = ent[0]

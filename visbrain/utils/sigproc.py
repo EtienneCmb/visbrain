@@ -31,19 +31,19 @@ def normalize(x, tomin=0., tomax=1.):
     """
     if x.size:
         x = np.float32(x)
-        xm, xM = np.float32(x.min()), np.float32(x.max())
-        if xm != xM:
-            coef = (tomax - tomin) / (xM - xm)
-            np.subtract(x, xM, out=x)
+        xm, xh = np.float32(x.min()), np.float32(x.max())
+        if xm != xh:
+            coef = (tomax - tomin) / (xh - xm)
+            np.subtract(x, xh, out=x)
             np.multiply(x, coef, out=x)
             np.add(x, tomax, out=x)
             return x
-            # return tomax - (((tomax - tomin) * (xM - x)) / (xM-xm))
+            # return tomax - (((tomax - tomin) * (xh - x)) / (xh-xm))
         else:
             logger.debug("Normalization has been ignored because minimum and "
                          "maximum are both equal to " + str(xm))
             np.multiply(x, tomax, out=x)
-            np.divide(x, xM, out=x)
+            np.divide(x, xh, out=x)
             return x
     else:
         return x

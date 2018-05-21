@@ -171,10 +171,11 @@ class BrainObj(VisbrainObject):
 
     def _search_in_path(self):
         """Specify where to find brain templates."""
-        _vb_path = path_to_visbrain_data(folder='templates')
+        _vb_path = path_to_visbrain_data()
+        _vb_path_tmp = path_to_visbrain_data(folder='templates')
         _data_path = get_data_path(folder='templates')
         _tmp_path = path_to_tmp(folder='templates')
-        return _vb_path, _data_path, _tmp_path
+        return _vb_path, _vb_path_tmp, _data_path, _tmp_path
 
     def _load_brain_template(self, name):
         """Load the brain template."""
@@ -195,16 +196,6 @@ class BrainObj(VisbrainObject):
     def _get_template_path(self):
         """Get the path where datasets are stored."""
         return get_data_path(folder='templates')
-
-    def _get_all_available_templates(self):
-        """Get all available brain templates (e.g defaults and downloadable."""
-        b_def = self._get_default_templates()
-        b_down = self._get_downloadable_templates()
-        b_installed = get_files_in_data('templates')
-        b_tmp = get_files_in_data('tmp')
-        b_all = list(set(b_def + b_down + b_installed + b_tmp))
-        b_all.sort()
-        return b_all
 
     def _get_default_templates(self):
         """Get the default list of brain templates."""
@@ -381,7 +372,7 @@ class BrainObj(VisbrainObject):
         self._default_cblabel = "Activation"
         # ============================= METHOD =============================
         if isinstance(data, np.ndarray) and isinstance(vertices, np.ndarray):
-            logger.info("Add data to secific vertices.")
+            logger.info("Add data to specific vertices.")
             assert (data.ndim == 1) and (vertices.ndim == 1)
             assert smoothing_steps is None or isinstance(smoothing_steps, int)
             # Get smoothed vertices // data :

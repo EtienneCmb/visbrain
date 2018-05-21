@@ -60,6 +60,8 @@ class VectorObj(VisbrainObject):
     arrow_coef : float | 1.
         Use this coefficient to define longer arrows. Must be a float superior
         to 1.
+    arrow_norm : tuple | (5., 20.)
+        Control arrow length for arrows defined using vertices and normals.
     antialias : bool | False
         Use smoothed lines.
     cmap : string | 'viridis'
@@ -107,9 +109,9 @@ class VectorObj(VisbrainObject):
     def __init__(self, name, arrows, data=None, inferred_data=False,
                  select=None, color='black', dynamic=None, line_width=5.,
                  arrow_size=10., arrow_type='stealth', arrow_coef=1.,
-                 antialias=False, cmap='viridis', clim=None, vmin=None,
-                 under='gray', vmax=None, over='red', transform=None,
-                 parent=None, verbose=None, _z=-10., **kw):
+                 arrow_norm=(5., 20.), antialias=False, cmap='viridis',
+                 clim=None, vmin=None, under='gray', vmax=None, over='red',
+                 transform=None, parent=None, verbose=None, _z=-10., **kw):
         """Init."""
         # Init Visbrain object base class and SourceProjection :
         VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)
@@ -135,9 +137,10 @@ class VectorObj(VisbrainObject):
             if inferred_data:
                 data = np.linalg.norm(arrow_end - arrow_start, axis=1)
         elif arrows.dtype == ARROW_DTYPES[1]:  # (vertices, normals)
+            assert len(arrow_norm) == 2
             norm = np.ones(n_arrows) if not isinstance(
                 data, np.ndarray) else data.copy()
-            norm = normalize(norm, 5., 20.).reshape(-1, 1)
+            norm = normalize(norm, arrow_norm[0], arrow_norm[1]).reshape(-1, 1)
             arrow_start = arrows['vertices']
             arrow_end = arrow_start + norm * arrows['normals']
         else:

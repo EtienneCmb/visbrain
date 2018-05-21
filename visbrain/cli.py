@@ -95,7 +95,7 @@ def cli_fig_hyp(hypno, grid, color, outfile, dpi):
         hypno = oversample_hypno(hypno, mult)
         sf_hyp = 1
     # Create figure
-    write_fig_hyp(outfile, hypno, sf=sf_hyp, tstartsec=0, grid=grid,
+    write_fig_hyp(hypno, sf=sf_hyp, file=outfile, start_s=0., grid=grid,
                   ascolor=color, dpi=dpi)
     print('Hypnogram figure saved to:', outfile)
 
