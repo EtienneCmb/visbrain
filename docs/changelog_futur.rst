@@ -18,7 +18,8 @@ Sleep
 ~~~~~
 
 * Hypnogram is now exported as a .txt file with stage-duration encoding.
-* .xlsx now supported for hypnogram
+* .xlsx and EDF+ are now supported for hypnogram
+* Better gestion of units when loading with MNE
 * Fixed warning in UTF-8 file loading
 * Improved JSON saving for configuration file
 

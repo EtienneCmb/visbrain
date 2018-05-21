@@ -326,6 +326,7 @@ One of the main objective of Sleep is to **facilitate the sharing of data** acro
 * **.txt**
 * **.csv**
 * **.xlsx**
+* **.edf** (EDF+)
 * **.hyp** (`ELAN <http://elan.lyon.inserm.fr>`_)
 
 .. warning::

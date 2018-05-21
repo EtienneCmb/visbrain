@@ -67,8 +67,11 @@ def mne_switch(file, ext, downsample, preload=True, **kwargs):
     data = raw._data
 
     # Conversion Volt (MNE) to microVolt (Visbrain) :
-    units = raw._raw_extras[0]['units'][0:data.shape[0]]
-    data /= np.array(units).reshape(-1, 1)
+    try:
+        units = raw._raw_extras[0]['units'][0:data.shape[0]]
+        data /= np.array(units).reshape(-1, 1)
+    except:
+        pass
 
     n = data.shape[1]
     start_time = datetime.time(0, 0, 0)  # raw.info['meas_date']
