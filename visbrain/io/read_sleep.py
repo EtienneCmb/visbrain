@@ -111,8 +111,9 @@ class ReadSleepData(object):
         # Dialog window for hypnogram :
         if hypno is None:
             hypno = dialog_load(self, "Open hypnogram", upath,
-                                "Elan (*.hyp);;Text file (*.txt);;"
-                                "CSV file (*.csv);;All files (*.*)")
+                                "Text file (*.txt);;Elan (*.hyp);;"
+                                "CSV file (*.csv);;EDF+ file(*.edf);"
+                                ";All files (*.*)")
             hypno = None if hypno == '' else hypno
         if isinstance(hypno, np.ndarray):  # array_like
             if len(hypno) == n:
@@ -121,7 +122,7 @@ class ReadSleepData(object):
                 raise ValueError("Then length of the hypnogram must be the "
                                  "same as raw data")
         if isinstance(hypno, str):  # (*.hyp / *.txt / *.csv)
-            hypno, _ = read_hypno(hypno, time=time)
+            hypno, _ = read_hypno(hypno, time=time, datafile=file)
             # Oversample then downsample :
             hypno = oversample_hypno(hypno, self._N)[::dsf]
             PROFILER("Hypnogram file loaded", level=1)
@@ -302,7 +303,8 @@ def read_edf(path, downsample):
     start_time = start_time.time()
 
     # Keep only data channels (e.g excludes marker chan)
-    freqs = np.unique(edf.hdr['n_samples_per_record'])
+    freqs = np.unique(edf.hdr['n_samples_per_record']) / edf.hdr[
+        'record_length']
     sf = freqs.max()
 
     if len(freqs) != 1:
@@ -587,9 +589,7 @@ def read_elan(path, downsample):
 
     # Read .ent file
     ent = np.genfromtxt(header, delimiter='\n', usecols=[0],
-                        dtype=None, skip_header=0)
-
-    ent = np.char.decode(ent)
+                        dtype=None, skip_header=0, encoding='utf-8')
 
     # eeg file version
     eeg_version = ent[0]

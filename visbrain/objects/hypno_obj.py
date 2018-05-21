@@ -20,6 +20,8 @@ class HypnogramObj(VisbrainObject):
         Array of data of shape (n_pts,).
     time : array_like | None
         Array of time points of shape (n_pts,)
+    datafile : string | None
+        Path to the data file.
     art, wake, rem, n1, n2, n3 :
         Stage identification inside the data array.
     art_visual, wake_visual, rem_visual, n1_visual, n2_visual, n3_visual :
@@ -51,21 +53,22 @@ class HypnogramObj(VisbrainObject):
     >>> h_obj.preview(axis=True)
     """
 
-    def __init__(self, name, data=None, time=None, art=-1, wake=0, n1=1, n2=2,
-                 n3=3, rem=4, art_visual=1, wake_visual=0, rem_visual=-1,
-                 n1_visual=-2, n2_visual=-3, n3_visual=-4, art_color='#8bbf56',
-                 wake_color='#56bf8b', rem_color='#bf5656', n1_color='#aabcce',
-                 n2_color='#405c79', n3_color='#0b1c2c', line_width=2.,
-                 antialias=False, unicolor=False, transform=None, parent=None,
-                 verbose=None, **kw):
+    def __init__(self, name, data=None, time=None, datafile=None, art=-1,
+                 wake=0, n1=1, n2=2, n3=3, rem=4, art_visual=1, wake_visual=0,
+                 rem_visual=-1, n1_visual=-2, n2_visual=-3, n3_visual=-4,
+                 art_color='#8bbf56', wake_color='#56bf8b',
+                 rem_color='#bf5656', n1_color='#aabcce', n2_color='#405c79',
+                 n3_color='#0b1c2c', line_width=2., antialias=False,
+                 unicolor=False, transform=None, parent=None, verbose=None,
+                 **kw):
         """Init."""
         # Load *.txt, *.csv and *.hyp files :
         file, ext = os.path.splitext(name)
-        if ext in ['.csv', '.txt', '.hyp', '.xlsx']:
+        if ext in ['.csv', '.txt', '.hyp', '.xlsx', '.edf']:
             if (ext == '.xlsx') and (time is None):
                 raise ValueError("The `time` input should not be None with "
                                  "excel files. Use a NumPy array instead.")
-            data, sf = read_hypno(name, time=time)
+            data, sf = read_hypno(name, time=time, datafile=datafile)
             name, time = os.path.split(name)[1], np.arange(len(data)) / sf
         # Initialize VisbrainObject and Hypnogram visuam creation :
         VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)
