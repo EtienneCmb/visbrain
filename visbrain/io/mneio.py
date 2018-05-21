@@ -1,5 +1,6 @@
 """Utility functions for MNE."""
 import datetime
+import numpy as np
 from ..utils import get_dsf
 
 __all__ = ['mne_switch']
@@ -66,7 +67,8 @@ def mne_switch(file, ext, downsample, preload=True, **kwargs):
     data = raw._data
 
     # Conversion Volt (MNE) to microVolt (Visbrain) :
-    data = (data.T / raw._raw_extras[0]['units']).T
+    units = raw._raw_extras[0]['units'][0:data.shape[0]]
+    data /= np.array(units).reshape(-1, 1)
 
     n = data.shape[1]
     start_time = datetime.time(0, 0, 0)  # raw.info['meas_date']
