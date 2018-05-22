@@ -2,9 +2,6 @@ general:
   branches:
     ignore:
       - gh-pages
-    only:
-      - master
-      - develop
 
 
 machine:
@@ -58,4 +55,5 @@ dependencies:
 
 test:
   override:
-    - py.test;
+    - py.test:
+        timeout: 1500

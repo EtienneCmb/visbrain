@@ -49,8 +49,7 @@ setup(
     package_data=PACKAGE_DATA,
     include_package_data=True,
     platforms='any',
-    setup_requires=['numpy', 'pytest-runner'],
-    tests_require=['pytest'],
+    setup_requires=['numpy'],
     install_requires=[
         "numpy>=1.13",
         "scipy",
