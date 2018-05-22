@@ -66,7 +66,7 @@ setup(
                  'Intended Audience :: Developers',
                  'Topic :: Scientific/Engineering :: Visualization',
                  "Programming Language :: Python :: 3 :: Only",
-                 "Programming Language :: Python :: 3.5"
+                 "Programming Language :: Python :: 3.5",
                  "Operating System :: MacOS",
                  "Operating System :: POSIX :: Linux",
                  "Operating System :: Microsoft :: Windows",
