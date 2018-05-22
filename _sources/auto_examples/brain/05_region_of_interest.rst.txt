@@ -74,7 +74,7 @@ project the source's activity on it.
 
     """Select the colorbar of the ROI
     """
-    vb.cbar_select('ROI')
+    vb.cbar_select('roi')
 
     """Eventualy, take a screenshot
     """

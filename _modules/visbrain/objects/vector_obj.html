@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>visbrain.objects.vector_obj &mdash; visbrain 0.3.9 documentation</title>
+  <title>visbrain.objects.vector_obj &mdash; visbrain 0.4.0 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="visbrain 0.3.9 documentation" href="../../../index.html"/>
+    <link rel="top" title="visbrain 0.4.0 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.9
+                0.4.0
               </div>
             
           
@@ -225,6 +225,8 @@
 <span class="sd">    arrow_coef : float | 1.</span>
 <span class="sd">        Use this coefficient to define longer arrows. Must be a float superior</span>
 <span class="sd">        to 1.</span>
+<span class="sd">    arrow_norm : tuple | (5., 20.)</span>
+<span class="sd">        Control arrow length for arrows defined using vertices and normals.</span>
 <span class="sd">    antialias : bool | False</span>
 <span class="sd">        Use smoothed lines.</span>
 <span class="sd">    cmap : string | &#39;viridis&#39;</span>
@@ -272,9 +274,9 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">arrows</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">inferred_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span>
                  <span class="n">arrow_size</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">arrow_type</span><span class="o">=</span><span class="s1">&#39;stealth&#39;</span><span class="p">,</span> <span class="n">arrow_coef</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
-                 <span class="n">antialias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_z</span><span class="o">=-</span><span class="mf">10.</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+                 <span class="n">arrow_norm</span><span class="o">=</span><span class="p">(</span><span class="mf">5.</span><span class="p">,</span> <span class="mf">20.</span><span class="p">),</span> <span class="n">antialias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span>
+                 <span class="n">clim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span>
+                 <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_z</span><span class="o">=-</span><span class="mf">10.</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
         <span class="c1"># Init Visbrain object base class and SourceProjection :</span>
         <span class="n">VisbrainObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
@@ -300,9 +302,10 @@
             <span class="k">if</span> <span class="n">inferred_data</span><span class="p">:</span>
                 <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">arrow_end</span> <span class="o">-</span> <span class="n">arrow_start</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">arrows</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">ARROW_DTYPES</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>  <span class="c1"># (vertices, normals)</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">arrow_norm</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
             <span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_arrows</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
                 <span class="n">data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="k">else</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-            <span class="n">norm</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">norm</span><span class="p">,</span> <span class="mf">5.</span><span class="p">,</span> <span class="mf">20.</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">norm</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">norm</span><span class="p">,</span> <span class="n">arrow_norm</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">arrow_norm</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">arrow_start</span> <span class="o">=</span> <span class="n">arrows</span><span class="p">[</span><span class="s1">&#39;vertices&#39;</span><span class="p">]</span>
             <span class="n">arrow_end</span> <span class="o">=</span> <span class="n">arrow_start</span> <span class="o">+</span> <span class="n">norm</span> <span class="o">*</span> <span class="n">arrows</span><span class="p">[</span><span class="s1">&#39;normals&#39;</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
@@ -450,7 +453,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.3.9',
+            VERSION:'0.4.0',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

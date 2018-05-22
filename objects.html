@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>7. Objects &mdash; visbrain 0.3.9 documentation</title>
+  <title>7. Objects &mdash; visbrain 0.4.0 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="visbrain 0.3.9 documentation" href="index.html"/>
+    <link rel="top" title="visbrain 0.4.0 documentation" href="index.html"/>
         <link rel="up" title="Documentation" href="documentation.html"/>
         <link rel="next" title="Examples" href="auto_examples/index.html"/>
         <link rel="prev" title="6. Figure" href="figure.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.9
+                0.4.0
               </div>
             
           
@@ -584,7 +584,7 @@ to link all cameras.</p>
 </div>
 <dl class="class">
 <dt id="visbrain.objects.BrainObj">
-<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">BrainObj</code><span class="sig-paren">(</span><em>name</em>, <em>vertices=None</em>, <em>faces=None</em>, <em>normals=None</em>, <em>lr_index=None</em>, <em>hemisphere='both'</em>, <em>translucent=True</em>, <em>sulcus=False</em>, <em>invert_normals=False</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>_scale=1.0</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L21-L725"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">BrainObj</code><span class="sig-paren">(</span><em>name</em>, <em>vertices=None</em>, <em>faces=None</em>, <em>normals=None</em>, <em>lr_index=None</em>, <em>hemisphere='both'</em>, <em>translucent=True</em>, <em>sulcus=False</em>, <em>invert_normals=False</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>_scale=1.0</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L21-L716"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a brain object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -684,7 +684,7 @@ hemisphere.</p>
 </div></blockquote>
 <dl class="method">
 <dt id="visbrain.objects.BrainObj.add_activation">
-<code class="descname">add_activation</code><span class="sig-paren">(</span><em>data=None</em>, <em>vertices=None</em>, <em>smoothing_steps=20</em>, <em>file=None</em>, <em>hemisphere=None</em>, <em>hide_under=None</em>, <em>n_contours=None</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>under='gray'</em>, <em>over='red'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.add_activation"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L334-L447"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.add_activation" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_activation</code><span class="sig-paren">(</span><em>data=None</em>, <em>vertices=None</em>, <em>smoothing_steps=20</em>, <em>file=None</em>, <em>hemisphere=None</em>, <em>hide_under=None</em>, <em>n_contours=None</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>under='gray'</em>, <em>over='red'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.add_activation"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L325-L438"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.add_activation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add activation to the brain template.</p>
 <p>This method can be used for :</p>
 <blockquote>
@@ -760,7 +760,7 @@ instead.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.BrainObj.get_parcellates">
-<code class="descname">get_parcellates</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.get_parcellates"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L552-L566"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.get_parcellates" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_parcellates</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.get_parcellates"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L543-L557"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.get_parcellates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the list of supported parcellates names and index.</p>
 <p>This method require the pandas and nibabel packages to be installed.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -779,7 +779,7 @@ instead.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.BrainObj.parcellize">
-<code class="descname">parcellize</code><span class="sig-paren">(</span><em>file</em>, <em>select=None</em>, <em>hemisphere=None</em>, <em>data=None</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>under='gray'</em>, <em>vmax=None</em>, <em>over='red'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.parcellize"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L449-L550"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.parcellize" title="Permalink to this definition">¶</a></dt>
+<code class="descname">parcellize</code><span class="sig-paren">(</span><em>file</em>, <em>select=None</em>, <em>hemisphere=None</em>, <em>data=None</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>under='gray'</em>, <em>vmax=None</em>, <em>over='red'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.parcellize"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L440-L541"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.parcellize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parcellize the brain surface using a .annot file.</p>
 <p>This method require the nibabel package to be installed.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -833,7 +833,7 @@ instead.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.BrainObj.project_sources">
-<code class="descname">project_sources</code><span class="sig-paren">(</span><em>s_obj</em>, <em>project='modulation'</em>, <em>radius=10.0</em>, <em>contribute=False</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>under='black'</em>, <em>vmax=None</em>, <em>over='red'</em>, <em>mask_color=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.project_sources"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L295-L332"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.project_sources" title="Permalink to this definition">¶</a></dt>
+<code class="descname">project_sources</code><span class="sig-paren">(</span><em>s_obj</em>, <em>project='modulation'</em>, <em>radius=10.0</em>, <em>contribute=False</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>under='black'</em>, <em>vmax=None</em>, <em>over='red'</em>, <em>mask_color=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.project_sources"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L286-L323"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.project_sources" title="Permalink to this definition">¶</a></dt>
 <dd><p>Project source’s activity or repartition onto the brain object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -894,7 +894,7 @@ the color of the masked sources is going to be used.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.BrainObj.rotate">
-<code class="descname">rotate</code><span class="sig-paren">(</span><em>fixed=None</em>, <em>scale_factor=None</em>, <em>custom=None</em>, <em>margin=1.08</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.rotate"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L253-L287"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.rotate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">rotate</code><span class="sig-paren">(</span><em>fixed=None</em>, <em>scale_factor=None</em>, <em>custom=None</em>, <em>margin=1.08</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.rotate"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L244-L278"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.rotate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Rotate the brain using predefined rotations or a custom one.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1713,7 +1713,7 @@ strong connections will be more opaque than weaker connections.</p>
 </div>
 <dl class="class">
 <dt id="visbrain.objects.VectorObj">
-<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">VectorObj</code><span class="sig-paren">(</span><em>name</em>, <em>arrows</em>, <em>data=None</em>, <em>inferred_data=False</em>, <em>select=None</em>, <em>color='black'</em>, <em>dynamic=None</em>, <em>line_width=5.0</em>, <em>arrow_size=10.0</em>, <em>arrow_type='stealth'</em>, <em>arrow_coef=1.0</em>, <em>antialias=False</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>under='gray'</em>, <em>vmax=None</em>, <em>over='red'</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>_z=-10.0</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/vector_obj.html#VectorObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/vector_obj.py#L18-L233"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.VectorObj" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">VectorObj</code><span class="sig-paren">(</span><em>name</em>, <em>arrows</em>, <em>data=None</em>, <em>inferred_data=False</em>, <em>select=None</em>, <em>color='black'</em>, <em>dynamic=None</em>, <em>line_width=5.0</em>, <em>arrow_size=10.0</em>, <em>arrow_type='stealth'</em>, <em>arrow_coef=1.0</em>, <em>arrow_norm=(5.0</em>, <em>20.0)</em>, <em>antialias=False</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>under='gray'</em>, <em>vmax=None</em>, <em>over='red'</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>_z=-10.0</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/vector_obj.html#VectorObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/vector_obj.py#L18-L236"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.VectorObj" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a vector object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1783,6 +1783,10 @@ or ‘inhibitor_round’.</p>
 <blockquote>
 <div><p>Use this coefficient to define longer arrows. Must be a float superior
 to 1.</p>
+</div></blockquote>
+<p><strong>arrow_norm</strong> : tuple | (5., 20.)</p>
+<blockquote>
+<div><p>Control arrow length for arrows defined using vertices and normals.</p>
 </div></blockquote>
 <p><strong>antialias</strong> : bool | False</p>
 <blockquote>
@@ -2924,7 +2928,7 @@ images.</p>
 </div>
 <dl class="class">
 <dt id="visbrain.objects.HypnogramObj">
-<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">HypnogramObj</code><span class="sig-paren">(</span><em>name</em>, <em>data=None</em>, <em>time=None</em>, <em>art=-1</em>, <em>wake=0</em>, <em>n1=1</em>, <em>n2=2</em>, <em>n3=3</em>, <em>rem=4</em>, <em>art_visual=1</em>, <em>wake_visual=0</em>, <em>rem_visual=-1</em>, <em>n1_visual=-2</em>, <em>n2_visual=-3</em>, <em>n3_visual=-4</em>, <em>art_color='#8bbf56'</em>, <em>wake_color='#56bf8b'</em>, <em>rem_color='#bf5656'</em>, <em>n1_color='#aabcce'</em>, <em>n2_color='#405c79'</em>, <em>n3_color='#0b1c2c'</em>, <em>line_width=2.0</em>, <em>antialias=False</em>, <em>unicolor=False</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/hypno_obj.html#HypnogramObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/hypno_obj.py#L12-L117"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.HypnogramObj" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">HypnogramObj</code><span class="sig-paren">(</span><em>name</em>, <em>data=None</em>, <em>time=None</em>, <em>datafile=None</em>, <em>art=-1</em>, <em>wake=0</em>, <em>n1=1</em>, <em>n2=2</em>, <em>n3=3</em>, <em>rem=4</em>, <em>art_visual=1</em>, <em>wake_visual=0</em>, <em>rem_visual=-1</em>, <em>n1_visual=-2</em>, <em>n2_visual=-3</em>, <em>n3_visual=-4</em>, <em>art_color='#8bbf56'</em>, <em>wake_color='#56bf8b'</em>, <em>rem_color='#bf5656'</em>, <em>n1_color='#aabcce'</em>, <em>n2_color='#405c79'</em>, <em>n3_color='#0b1c2c'</em>, <em>line_width=2.0</em>, <em>antialias=False</em>, <em>unicolor=False</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/hypno_obj.html#HypnogramObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/hypno_obj.py#L12-L123"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.HypnogramObj" title="Permalink to this definition">¶</a></dt>
 <dd><p>Hypnogram object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2941,6 +2945,10 @@ images.</p>
 <p><strong>time</strong> : array_like | None</p>
 <blockquote>
 <div><p>Array of time points of shape (n_pts,)</p>
+</div></blockquote>
+<p><strong>datafile</strong> : string | None</p>
+<blockquote>
+<div><p>Path to the data file.</p>
 </div></blockquote>
 <p><strong>art, wake, rem, n1, n2, n3 :</strong></p>
 <blockquote>
@@ -3011,7 +3019,7 @@ images.</p>
 </div></blockquote>
 <dl class="method">
 <dt id="visbrain.objects.HypnogramObj.set_stage">
-<code class="descname">set_stage</code><span class="sig-paren">(</span><em>stage</em>, <em>idx_start</em>, <em>idx_end</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/hypno_obj.html#HypnogramObj.set_stage"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/hypno_obj.py#L82-L95"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.HypnogramObj.set_stage" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_stage</code><span class="sig-paren">(</span><em>stage</em>, <em>idx_start</em>, <em>idx_end</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/hypno_obj.html#HypnogramObj.set_stage"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/hypno_obj.py#L88-L101"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.HypnogramObj.set_stage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set stage.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -3085,7 +3093,7 @@ an integer.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.3.9',
+            VERSION:'0.4.0',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>visbrain.objects.hypno_obj &mdash; visbrain 0.3.9 documentation</title>
+  <title>visbrain.objects.hypno_obj &mdash; visbrain 0.4.0 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="visbrain 0.3.9 documentation" href="../../../index.html"/>
+    <link rel="top" title="visbrain 0.4.0 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.9
+                0.4.0
               </div>
             
           
@@ -185,6 +185,8 @@
 <span class="sd">        Array of data of shape (n_pts,).</span>
 <span class="sd">    time : array_like | None</span>
 <span class="sd">        Array of time points of shape (n_pts,)</span>
+<span class="sd">    datafile : string | None</span>
+<span class="sd">        Path to the data file.</span>
 <span class="sd">    art, wake, rem, n1, n2, n3 :</span>
 <span class="sd">        Stage identification inside the data array.</span>
 <span class="sd">    art_visual, wake_visual, rem_visual, n1_visual, n2_visual, n3_visual :</span>
@@ -216,19 +218,23 @@
 <span class="sd">    &gt;&gt;&gt; h_obj.preview(axis=True)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">wake</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n2</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-                 <span class="n">n3</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">rem</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">art_visual</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">wake_visual</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rem_visual</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
-                 <span class="n">n1_visual</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">n2_visual</span><span class="o">=-</span><span class="mi">3</span><span class="p">,</span> <span class="n">n3_visual</span><span class="o">=-</span><span class="mi">4</span><span class="p">,</span> <span class="n">art_color</span><span class="o">=</span><span class="s1">&#39;#8bbf56&#39;</span><span class="p">,</span>
-                 <span class="n">wake_color</span><span class="o">=</span><span class="s1">&#39;#56bf8b&#39;</span><span class="p">,</span> <span class="n">rem_color</span><span class="o">=</span><span class="s1">&#39;#bf5656&#39;</span><span class="p">,</span> <span class="n">n1_color</span><span class="o">=</span><span class="s1">&#39;#aabcce&#39;</span><span class="p">,</span>
-                 <span class="n">n2_color</span><span class="o">=</span><span class="s1">&#39;#405c79&#39;</span><span class="p">,</span> <span class="n">n3_color</span><span class="o">=</span><span class="s1">&#39;#0b1c2c&#39;</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span>
-                 <span class="n">antialias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unicolor</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">datafile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">wake</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n2</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n3</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">rem</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">art_visual</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">wake_visual</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                 <span class="n">rem_visual</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n1_visual</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">n2_visual</span><span class="o">=-</span><span class="mi">3</span><span class="p">,</span> <span class="n">n3_visual</span><span class="o">=-</span><span class="mi">4</span><span class="p">,</span>
+                 <span class="n">art_color</span><span class="o">=</span><span class="s1">&#39;#8bbf56&#39;</span><span class="p">,</span> <span class="n">wake_color</span><span class="o">=</span><span class="s1">&#39;#56bf8b&#39;</span><span class="p">,</span>
+                 <span class="n">rem_color</span><span class="o">=</span><span class="s1">&#39;#bf5656&#39;</span><span class="p">,</span> <span class="n">n1_color</span><span class="o">=</span><span class="s1">&#39;#aabcce&#39;</span><span class="p">,</span> <span class="n">n2_color</span><span class="o">=</span><span class="s1">&#39;#405c79&#39;</span><span class="p">,</span>
+                 <span class="n">n3_color</span><span class="o">=</span><span class="s1">&#39;#0b1c2c&#39;</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span> <span class="n">antialias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">unicolor</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
         <span class="c1"># Load *.txt, *.csv and *.hyp files :</span>
         <span class="n">file</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;.hyp&#39;</span><span class="p">]:</span>
-            <span class="n">data</span><span class="p">,</span> <span class="n">sf</span> <span class="o">=</span> <span class="n">read_hypno</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-            <span class="n">name</span><span class="p">,</span> <span class="n">time</span> <span class="o">=</span> <span class="n">file</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span> <span class="o">/</span> <span class="n">sf</span>
+        <span class="k">if</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;.hyp&#39;</span><span class="p">,</span> <span class="s1">&#39;.xlsx&#39;</span><span class="p">,</span> <span class="s1">&#39;.edf&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ext</span> <span class="o">==</span> <span class="s1">&#39;.xlsx&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The `time` input should not be None with &quot;</span>
+                                 <span class="s2">&quot;excel files. Use a NumPy array instead.&quot;</span><span class="p">)</span>
+            <span class="n">data</span><span class="p">,</span> <span class="n">sf</span> <span class="o">=</span> <span class="n">read_hypno</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">,</span> <span class="n">datafile</span><span class="o">=</span><span class="n">datafile</span><span class="p">)</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">time</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">name</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span> <span class="o">/</span> <span class="n">sf</span>
         <span class="c1"># Initialize VisbrainObject and Hypnogram visuam creation :</span>
         <span class="n">VisbrainObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">line</span> <span class="o">=</span> <span class="n">Hypnogram</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">art</span><span class="p">,</span> <span class="n">wake</span><span class="p">,</span> <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">n3</span><span class="p">,</span> <span class="n">rem</span><span class="p">,</span>
@@ -316,7 +322,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.3.9',
+            VERSION:'0.4.0',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>2. Sleep &mdash; visbrain 0.3.9 documentation</title>
+  <title>2. Sleep &mdash; visbrain 0.4.0 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="visbrain 0.3.9 documentation" href="index.html"/>
+    <link rel="top" title="visbrain 0.4.0 documentation" href="index.html"/>
         <link rel="up" title="Documentation" href="documentation.html"/>
         <link rel="next" title="3. Signal" href="signal.html"/>
         <link rel="prev" title="1.3.1. Main Brain class inputs" href="brainAPI.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.9
+                0.4.0
               </div>
             
           
@@ -227,7 +227,7 @@
 <dd><ul class="first last">
 <li>Modular and responsive GUI</li>
 <li>Take screenshot with controllable dpi</li>
-<li>Save the GUI state (<em>buttons, sliders, checkbox</em>…)</li>
+<li>Save the GUI state (<em>channels, amplitude, panels, checkbox</em>…)</li>
 </ul>
 </dd>
 </dl>
@@ -235,9 +235,9 @@
 <li><dl class="first docutils">
 <dt><strong>Load standard electro-physiological files</strong></dt>
 <dd><ul class="first last">
-<li>Default supported files : <strong>.vhdr</strong> (BrainVision V1 and V2), <strong>.edf</strong> (European Data Format), <strong>.trc</strong> (Micromed), <strong>.eeg</strong> (ELAN)</li>
-<li>Pass raw data, or use MNE-python to load other <a class="reference external" href="https://martinos.org/mne/dev/manual/io.html#importing-eeg-data">non natively supported files</a></li>
-<li>Supported extensions for hypnogram files : <strong>.txt</strong>, <strong>.csv</strong>, <strong>.hyp</strong> or raw data.</li>
+<li>Default supported files : European Data Format, BrainVision, Micromed, Elan</li>
+<li>Pass raw data or use MNE-python to load other <a class="reference external" href="https://martinos.org/mne/dev/manual/io.html#importing-eeg-data">file formats</a></li>
+<li>Supported extensions for hypnogram files : <strong>.txt</strong>, <strong>.csv</strong>, <strong>.xlsx</strong>, <strong>.hyp</strong>.</li>
 </ul>
 </dd>
 </dl>
@@ -246,7 +246,7 @@
 <dt><strong>Display</strong></dt>
 <dd><ul class="first last">
 <li>Polysomnographic data (e.g. EEG, EOG, EMG)</li>
-<li>Time-frequency (a.k.a. spectrogram)</li>
+<li>Time-frequency (=spectrogram)</li>
 <li>Hypnogram</li>
 <li>Topographic map</li>
 </ul>
@@ -301,24 +301,23 @@
 <h3>2.1.5. GUI description<a class="headerlink" href="#gui-description" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="components">
 <h4>2.1.5.1. Components<a class="headerlink" href="#components" title="Permalink to this headline">¶</a></h4>
-<p>The <code class="xref py py-class docutils literal"><span class="pre">Sleep</span></code> interface is divided into N parts :</p>
-<ul class="simple">
-<li><strong>Menu</strong> : load and save files (GUI configuration, screenshot…), control which object to display / hide, open the documentation…</li>
-<li><dl class="first docutils">
-<dt><strong>Canvas</strong> :</dt>
-<dd><ul class="first last">
-<li>One individual canvas per channel</li>
-<li>One canvas for the time-frequency</li>
-<li>One canvas for the hypnogram</li>
-<li>One canvas for the time axis</li>
-<li>One canvas for the topoplot (<em>hidden by default</em>)</li>
+<p>The <code class="xref py py-class docutils literal"><span class="pre">Sleep</span></code> GUI is divided into 4 main parts:</p>
+<div class="figure align-center">
+<img alt="_images/sleep_main_parts.png" src="_images/sleep_main_parts.png" />
+</div>
+<p><strong>Menu</strong> :
+The contextual menu allows to perform several functions such as the loading and saving of data files, hypnogram files, screenshots, GUI configuration.. It is also useful to control the visbility of each panel, display a list of shortcuts, or open the documentation.</p>
+<dl class="docutils">
+<dt><strong>Main window</strong> :</dt>
+<dd><ul class="first last simple">
+<li>Polysomnographic data</li>
+<li>Spectrogram (= time-frequency) of the whole recording</li>
+<li>Hypnogram</li>
+<li>Topoplot (<em>hidden by default</em>)</li>
 </ul>
 </dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><strong>Ruler</strong> :</dt>
-<dd><ul class="first last">
+<dt><strong>Navigation bar</strong> :</dt>
+<dd><ul class="first last simple">
 <li><em>Go to</em> : go to the time location of your choice</li>
 <li><em>Window</em> : length of the displayed time window</li>
 <li><em>Slider step</em> : step between each consecutive window</li>
@@ -328,13 +327,12 @@
 </ul>
 </dd>
 </dl>
-</li>
-<li><strong>Settings panel</strong> : for all setting controls, functions to run… See the section <a class="reference internal" href="#sleep-settings-panel"><span class="std std-ref">Settings panel tabs</span></a> for a description of each tab.</li>
-</ul>
+<p><strong>Settings panel</strong> :
+The setting panels is where most of the (advanced) functions of the software are! Among other things, you can control which channel to display, adjust the amplitudes, customize the spectrogram and hypnogram, compute the duration of each sleep stage, add annotations to the recording, and perform a bunch of semi-automatic detection (spindles, K-complexes…). See the section <a class="reference internal" href="#sleep-settings-panel"><span class="std std-ref">Settings panel tabs</span></a> for a description of each tab.</p>
 </div>
 <div class="section" id="settings-panel-tabs">
 <span id="sleep-settings-panel"></span><h4>2.1.5.2. Settings panel tabs<a class="headerlink" href="#settings-panel-tabs" title="Permalink to this headline">¶</a></h4>
-<p>Sleep provide five settings tabs :</p>
+<p>There are five settings tabs :</p>
 <ul class="simple">
 <li><a class="reference internal" href="#paneltab"><span class="std std-ref">Panels</span></a> : manage channel, time-frequency, hypnogram and topographic map</li>
 <li><a class="reference internal" href="#toolstab"><span class="std std-ref">Tools</span></a> : signal processing tools (<em>e.g filtering, re-referencing</em>)</li>
@@ -357,8 +355,8 @@
 <li><dl class="first docutils">
 <dt>Show / hide channels :</dt>
 <dd><ul class="first last">
-<li>Select channels of your choice by clicking on the corresponding checkbox</li>
-<li>Display / hide all channels</li>
+<li>Select the channels to display by clicking on the corresponding checkbox</li>
+<li>Alternatively, you can click on display / hide all channels</li>
 </ul>
 </dd>
 </dl>
@@ -382,7 +380,7 @@
 <dt><em>Time-frequency</em></dt>
 <dd><ul class="first last">
 <li><dl class="first docutils">
-<dt>Manage the time-frequency of the full recording</dt>
+<dt>Customize the spectrogram</dt>
 <dd><ul class="first last">
 <li>Channel on which to compute the time-frequency</li>
 <li>Computation method (see <a class="reference internal" href="#time-frequency"><span class="std std-ref">Time-frequency</span></a>)</li>
@@ -401,10 +399,9 @@
 <dt><em>Hypnogram</em></dt>
 <dd><ul class="first last">
 <li><dl class="first docutils">
-<dt>Manage the hypnogram</dt>
+<dt>Customize the hypnogram</dt>
 <dd><ul class="first last">
-<li>Width and color of hypnogram line</li>
-<li>Reset to an empty one</li>
+<li>line width and line color</li>
 </ul>
 </dd>
 </dl>
@@ -417,7 +414,7 @@
 <dt><em>Topoplot</em></dt>
 <dd><ul class="first last">
 <li><dl class="first docutils">
-<dt>Manage the topographic map (topoplot) of the current window</dt>
+<dt>Customize the topographic map (topoplot)</dt>
 <dd><ul class="first last">
 <li>Show / hide topoplot</li>
 <li>Display either the filtered signal, the amplitude or the power in specific frequency band</li>
@@ -444,7 +441,7 @@
 <dt>Signal processing (<em>apply in real time</em>)</dt>
 <dd><ul class="first last">
 <li>Apply de-meaning and de-trending</li>
-<li>filtering* and re-referencing which are applied directly on the signal and spectrogram (see image below).</li>
+<li>filtering* and re-referencing which are applied directly on the signal and spectrogram (see image above)</li>
 </ul>
 </dd>
 </dl>
@@ -453,7 +450,7 @@
 <dt>Re-referencing</dt>
 <dd><ul class="first last">
 <li>Common average</li>
-<li>Bipolarization (for intra-cranial EEG data)</li>
+<li>Bipolarization (useful for intra-cranial EEG data)</li>
 </ul>
 </dd>
 </dl>
@@ -481,14 +478,14 @@
 <li><dl class="first docutils">
 <dt>Sleep statistics (<em>All values are expressed in minutes</em>):</dt>
 <dd><ul class="first last">
-<li>Time in Bed (TIB) : total duration of the hypnogram.</li>
-<li>Total Dark Time (TDT) : duration of the hypnogram from beginning to last period of sleep.</li>
-<li>Sleep Period Time (SPT) : duration from first to last period of sleep.</li>
+<li>Time in Bed (TIB) : total duration of the hypnogram</li>
+<li>Total Dark Time (TDT) : duration of the hypnogram from beginning to last period of sleep</li>
+<li>Sleep Period Time (SPT) : duration from first to last period of sleep</li>
 <li>Wake After Sleep Onset (WASO) : duration of wake periods within SPT</li>
-<li>Sleep Efficiency (SE) : TST / TDT * 100 (%).</li>
-<li>Total Sleep Time (TST) : SPT - WASO.</li>
-<li>W, N1, N2, N3 and REM : sleep stages duration.</li>
-<li>Latencies : latencies of sleep stages from the beginning of the record.</li>
+<li>Sleep Efficiency (SE) : TST / TDT * 100 (%)</li>
+<li>Total Sleep Time (TST) : SPT - WASO</li>
+<li>W, N1, N2, N3 and REM : sleep stages duration</li>
+<li>Latencies : latencies of sleep stages from the beginning of the record</li>
 </ul>
 </dd>
 </dl>
@@ -497,18 +494,18 @@
 </div>
 <div class="section" id="scoring">
 <span id="scoringtab"></span><h5>2.1.5.2.4. Scoring<a class="headerlink" href="#scoring" title="Permalink to this headline">¶</a></h5>
-<p>This tab contains the scoring table, i.e. where each stage start and finish. For further informations about how to score your hypnogram see <a class="reference internal" href="#hypnogram-scoring"><span class="std std-ref">Hypnogram scoring</span></a></p>
+<p>This tab contains the scoring table, i.e. where each stage start and finish. For further informations about how to score your hypnogram see <a class="reference internal" href="#hypnogram-scoring"><span class="std std-ref">Hypnogram scoring</span></a>.</p>
 </div>
 <div class="section" id="detections">
 <span id="detectiontab"></span><h5>2.1.5.2.5. Detections<a class="headerlink" href="#detections" title="Permalink to this headline">¶</a></h5>
-<p>Perform semi-automatic detection. For a full tutorial see <a class="reference internal" href="#apply-detection"><span class="std std-ref">Apply semi-automatic detection</span></a></p>
+<p>Perform semi-automatic detection of phasic events, such as sleep spindles, K-complexes, rapid eye movements…For a full tutorial see <a class="reference internal" href="#apply-detection"><span class="std std-ref">Apply semi-automatic detection</span></a>.</p>
 </div>
 <div class="section" id="annotations">
 <span id="annotationtab"></span><h5>2.1.5.2.6. Annotations<a class="headerlink" href="#annotations" title="Permalink to this headline">¶</a></h5>
 <p>Add and edit annotations (annotations are defined by a start and end point, as well as an optional text marker). To quickly add annotations:</p>
 <ul class="simple">
 <li>Use the <em>Annotate</em> button in the ruler to annotate the entire window</li>
-<li>Double click (with left mouse button) on a canvas to add an annotation starting and finishing at the mouse cursor location.</li>
+<li>Double click (with left mouse button) on a channel to add an annotation starting and finishing at the mouse cursor location.</li>
 </ul>
 <p>If you want to import / export annotations, see the <a class="reference internal" href="#import-annotation"><span class="std std-ref">Import, add and save annotations</span></a></p>
 </div>
@@ -620,10 +617,10 @@
 <h2>2.2. Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="supported-files-and-format">
 <h3>2.2.1. Supported files and format<a class="headerlink" href="#supported-files-and-format" title="Permalink to this headline">¶</a></h3>
-<p>Sleep support by default several data formats for both electrophysiological and hypnogram data.</p>
+<p><code class="xref py py-class docutils literal"><span class="pre">Sleep</span></code> natively supports several file formats for both electrophysiological and hypnogram data.</p>
 <div class="section" id="data-files">
 <h4>2.2.1.1. Data files<a class="headerlink" href="#data-files" title="Permalink to this headline">¶</a></h4>
-<p>Here’s the list of natively supported file formats :</p>
+<p>Here’s the list of natively supported file formats:</p>
 <ul class="simple">
 <li><strong>.vhdr</strong> (BrainVision version 1 and 2)</li>
 <li><strong>.edf</strong> (European Data Format)</li>
@@ -642,32 +639,109 @@
 <li><strong>.vhdr</strong> (<em>BrainVision files can be loaded using either the native library of Sleep or using MNE</em>)</li>
 </ul>
 </div></blockquote>
+<p>Note that once MNE-python is installed, the loading of these file formats is transparent for users. It means that you can load these file formats directly using Sleep graphical user interface or command-line, without any additional steps. We therefore <strong>strongly recommand</strong> to <a class="reference external" href="https://martinos.org/mne/stable/index.html">install MNE-python</a>.</p>
+<p>If you have a file format that is currently not supported, <code class="xref py py-class docutils literal"><span class="pre">Sleep</span></code> also provide the ability to directly pass raw data (NumPy array). Please click see this example of how to <a class="reference external" href="http://visbrain.org/auto_examples/sleep/load_matlab.html#sphx-glr-auto-examples-sleep-load-matlab-py">to load a Matlab file</a> and then pass the data directly to Sleep.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">If MNE-python is installed on your computer, the loading of these file formats is transparent for users. It means that you can load these file formats directly using Sleep graphical user interface or command-line, without any additional steps. We therefore strongly recommand to <a class="reference external" href="https://martinos.org/mne/stable/index.html">install MNE-python</a>.</p>
+<blockquote>
+<div><p>If you are having trouble with the loading of .edf files, we recommand installing <a class="reference external" href="https://martinos.org/mne/stable/index.html">MNE-python</a> and then loading your data using the following command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Sleep</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;mydata.edf&#39;</span><span class="p">,</span> <span class="n">hypno</span><span class="o">=</span><span class="s1">&#39;myhypno.csv&#39;</span><span class="p">,</span> <span class="n">use_mne</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
 </div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">If you have a file format that is currently not supported, <code class="xref py py-class docutils literal"><span class="pre">Sleep</span></code> also provide the ability to directly pass raw data (NumPy array). Please click see this example of how to <a class="reference external" href="http://visbrain.org/auto_examples/sleep/load_matlab.html#sphx-glr-auto-examples-sleep-load-matlab-py">to load a Matlab</a> file and then pass the data directly to Sleep.</p>
+</div></blockquote>
+<p class="last">This will force the loading of the .edf files using MNE, which can generally handle more cases and exceptions than the native EDF library implemented in <code class="xref py py-class docutils literal"><span class="pre">Sleep</span></code>.</p>
 </div>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">Sleep applies an automatic downsampling to (100 Hz by default) upon loading. You can change this value with the “downsample” argument of Sleep.</p>
+<div class="admonition caution">
+<p class="first admonition-title">Caution</p>
+<p>By default, data are <strong>automatically downsampled to 100 Hz</strong> upon loading. If the sampling frequency of your recording is a power of two (e.g. 256, 512 Hz), we recommand to change the default downsampling value to 128 Hz using the following command:</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">Sleep</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;mydata.edf&#39;</span><span class="p">,</span> <span class="n">hypno</span><span class="o">=</span><span class="s1">&#39;myhypno.csv&#39;</span><span class="p">,</span> <span class="n">downsample</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="hypnogram">
 <h4>2.2.1.2. Hypnogram<a class="headerlink" href="#hypnogram" title="Permalink to this headline">¶</a></h4>
-<p>Here’s the list of supported extensions for hypnogram files :</p>
+<p>One of the main objective of Sleep is to <strong>facilitate the sharing of data</strong> across laboratories. This involves being able to accomodate for a variety of hypnogram format (unfortunately, there is no current gold standard on how to save hypnogram data). Here’s the list of supported extensions for hypnogram files :</p>
 <ul class="simple">
 <li><strong>.txt</strong></li>
 <li><strong>.csv</strong></li>
+<li><strong>.xlsx</strong></li>
+<li><strong>.edf</strong> (EDF+)</li>
 <li><strong>.hyp</strong> (<a class="reference external" href="http://elan.lyon.inserm.fr">ELAN</a>)</li>
 </ul>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p>There is no international gold standard for the hypnogram format yet and each lab can have its own format. To overcome problems caused by different sampling rate of hypnogram files and/or different values assigned to each sleep stages, Sleep requires that you specify these parameters in a .txt file. This text file should be in the same directory as the original hypnogram file and be named: <em>HYPNOFILENAME_description.txt</em>. Checkout this <a class="reference external" href="https://drive.google.com/file/d/0B6vtJiCQZUBvYUFnQS1HWHhjSkE/view?usp=sharing">example</a>.</p>
-<p><strong>This text file should contain the following information :</strong></p>
+<p class="last">Please note that Sleep uses the guidelines of <em>Iber et al. 2007</em> for sleep stage nomenclature (Wake, N1, N2, N3, REM and Artefact). If your hypnogram includes both NREM-S3 and NREM-S4 sleep stages you can add “N4” categories with the corresponding values in the description file. However, keep in mind that S3 and S4 will be merged into N3 during the import to the Sleep module. That also means that if you load and then save your hypnogram in Sleep, you will loose differentiation between S3 and S4 so be sure not to overwrite your original file!</p>
+</div>
+</div>
+<div class="section" id="save-hypnogram">
+<h4>2.2.1.3. Save hypnogram<a class="headerlink" href="#save-hypnogram" title="Permalink to this headline">¶</a></h4>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Since release v0.4, the default hypnogram export format uses stage duration rather than point-per-second encoding. This format avoids potential errors caused by downsampling and confusion in the values assigned to each sleep stage (which can drastically differ between two labs, e.g. N2 sleep can be encoded with the value 2 in one lab, and -2 in another lab). However, for retro-compatibility, we still allow user to save and load hypnogram in point-per-second format. Please see the image below to see the difference between stage-duration and point-per-second encoding.</p>
+</div>
+<div class="figure align-center">
+<img alt="_images/hypno_encoding.png" src="_images/hypno_encoding.png" />
+</div>
+<p>By default, Sleep will save your hypnogram in .txt, using the stage-duration encoding:</p>
 <table border="1" class="docutils">
+<colgroup>
+<col width="45%" />
+<col width="55%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Stage</th>
+<th class="head">Duration</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><strong>Wake</strong></td>
+<td>500</td>
+</tr>
+<tr class="row-odd"><td><strong>N1</strong></td>
+<td>750</td>
+</tr>
+<tr class="row-even"><td><strong>N2</strong></td>
+<td>2000</td>
+</tr>
+<tr class="row-odd"><td><strong>N3</strong></td>
+<td>3000</td>
+</tr>
+<tr class="row-even"><td><strong>N2</strong></td>
+<td>3200</td>
+</tr>
+<tr class="row-odd"><td>…</td>
+<td>…</td>
+</tr>
+<tr class="row-even"><td><strong>REM</strong></td>
+<td>30018</td>
+</tr>
+<tr class="row-odd"><td><strong>Wake</strong></td>
+<td>30100</td>
+</tr>
+</tbody>
+</table>
+<p><strong>How to read the example above?</strong></p>
+<p>The subject was awake from 0 to 500 seconds, then fell in N1 sleep between 500 to 750 seconds, then in N2 sleep between 750 to 2000 seconds, then in N3 sleep and so on. The subject was awakened in REM sleep, and the recording was stopped shortly after. The total duration of the recording (in seconds) corresponds to the last value of the hypnogram, in that case 30100 seconds.</p>
+<p>The main advantages of using such an encoding format for the hypnogram is that it avoids any confusion related to the values used for each sleep stage, and drastically reduces the hypnogram file length without loosing any information. Please note that the software contains command-line functions to convert between point-per-second and stage-duration encoding.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p>If you want to add any relevant informations / comments to the hypnogram, you can do so by adding lines preceded by an asterisk directly within the text file. Sleep will not read any line in the hypnogram that starts with an asterisk mark. For example, you can add the name of the scorer:</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="o">*</span><span class="n">Scorer</span>  <span class="n">John</span>
+<span class="o">*</span><span class="n">Date</span>    <span class="mi">05</span><span class="n">_17_2018</span>
+<span class="n">Wake</span>     <span class="mi">500</span>
+<span class="n">N1</span>       <span class="mi">750</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="elan-hyp-format">
+<h5>2.2.1.3.1. Elan .hyp format<a class="headerlink" href="#elan-hyp-format" title="Permalink to this headline">¶</a></h5>
+<p>Alternatively, if you prefer point-per-second encoding, you can save your data in .hyp format, which can be read with any text editor. Sleep will create a single .hyp file with 4 header rows and the values presented above for the sleep stages, with the exception that the value assigned to REM sleep will be 5 for compatibility with Elan hypnogram reader.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p>If your hypnogram was created using another software, and is encoded in point-per-second, it is important that Sleep knows which value is associated with each sleep stage (e.g. 2 = N2 sleep, 4 = REM sleep). To do that, you need to create a simple text file in the same directory as the original hypnogram file,  named: <em>HYPNOFILENAME_description.txt</em>. Checkout this <a class="reference external" href="https://drive.google.com/file/d/0B6vtJiCQZUBvYUFnQS1HWHhjSkE/view?usp=sharing">example</a>.</p>
+<p><strong>This text file should contain the following information :</strong></p>
+<table border="1" class="last docutils">
 <colgroup>
 <col width="14%" />
 <col width="9%" />
@@ -710,50 +784,7 @@
 </tr>
 </tbody>
 </table>
-<p class="last">Please note that Sleep uses the guidelines of <em>Iber et al. 2007</em> for sleep stage nomenclature, i.e. Wake, N1, N2, N3, REM and Artefact. If your hypnogram includes both NREM-S3 and NREM-S4 sleep stages you can add “N4” categories with the corresponding values in the description file. However, keep in mind that S3 and S4 will be merged into N3 during the import to the Sleep module. That also means that if you load and then save your hypnogram in Sleep, you will loose differentiation between S3 and S4 so be sure not to overwrite your original file!</p>
 </div>
-</div>
-<div class="section" id="save-hypnogram">
-<h4>2.2.1.3. Save hypnogram<a class="headerlink" href="#save-hypnogram" title="Permalink to this headline">¶</a></h4>
-<p>By default, Sleep will save your hypnogram with a sampling rate of 1 value per second, and with the following values assigned to each sleep stages:</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="45%" />
-<col width="55%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Stage</th>
-<th class="head">Value</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td><strong>Wake</strong></td>
-<td>0</td>
-</tr>
-<tr class="row-odd"><td><strong>N1</strong></td>
-<td>1</td>
-</tr>
-<tr class="row-even"><td><strong>N2</strong></td>
-<td>2</td>
-</tr>
-<tr class="row-odd"><td><strong>N3</strong></td>
-<td>3</td>
-</tr>
-<tr class="row-even"><td><strong>REM</strong></td>
-<td>4</td>
-</tr>
-<tr class="row-odd"><td><strong>Art</strong></td>
-<td>-1  (optional)</td>
-</tr>
-</tbody>
-</table>
-<div class="section" id="elan-hyp-format">
-<h5>2.2.1.3.1. Elan .hyp format<a class="headerlink" href="#elan-hyp-format" title="Permalink to this headline">¶</a></h5>
-<p>Sleep will create a single .hyp file with 4 header rows and the values presented above for the sleep stages, with the exception that the value assigned to REM sleep will be 5 for compatibility with Elan hypnogram reader.</p>
-</div>
-<div class="section" id="txt-format">
-<h5>2.2.1.3.2. .txt format<a class="headerlink" href="#txt-format" title="Permalink to this headline">¶</a></h5>
-<p>Sleep will automatically create a HYPNOFILENAME_description.txt with the appropriate parameters (time, sleep stages values), therefore making it easy to reload it later.</p>
 </div>
 </div>
 </div>
@@ -806,7 +837,7 @@
 <span class="c1"># data = &#39;myegifile.egi&#39;</span>
 <span class="c1"># - EEGLab</span>
 <span class="c1"># data = &#39;myeeglabfile.set&#39;</span>
-<span class="c1"># Now, pass all the arguments to the Sleep module :</span>
+<span class="c1"># Now, pass all the data to the Sleep module :</span>
 <span class="n">Sleep</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -838,7 +869,7 @@
 </div>
 <div class="section" id="time-frequency">
 <span id="id2"></span><h3>2.2.3. Time-frequency<a class="headerlink" href="#time-frequency" title="Permalink to this headline">¶</a></h3>
-<p>There are currently three methods implemented in Sleep to compute the time-frequency (i.e. spectrogram) of the recording.</p>
+<p>There are currently three time-frequency methods implemented in Sleep.</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="18%" />
@@ -877,14 +908,14 @@
 </div>
 <div class="section" id="hypnogram-scoring">
 <span id="id4"></span><h3>2.2.4. Hypnogram scoring<a class="headerlink" href="#hypnogram-scoring" title="Permalink to this headline">¶</a></h3>
-<p>Sleep offers two possibilities to score the hypnogram, i.e. during the <a class="reference internal" href="#navigation"><span class="std std-ref">Navigation</span></a> using shortcuts or using the <a class="reference internal" href="#scoretable"><span class="std std-ref">Scoring table</span></a>.</p>
+<p>Sleep offers two possibilities to score the hypnogram: using shortcuts or using the <a class="reference internal" href="#scoretable"><span class="std std-ref">Scoring table</span></a>.</p>
 <div class="figure align-center" id="id13">
 <img alt="_images/sleep_scoring.png" src="_images/sleep_scoring.png" />
 <p class="caption"><span class="caption-text">Hypnogram scoring.</span></p>
 </div>
 <div class="section" id="navigation">
 <span id="id5"></span><h4>2.2.4.1. Navigation<a class="headerlink" href="#navigation" title="Permalink to this headline">¶</a></h4>
-<p>This is probably the most useful editing method. While you are navigating across time, simply press on your keyboard to insert a sleep stage. Use the key below :</p>
+<p>This is probably the most useful editing method. While you are scrolling through your data, simply press on your keyboard to insert a sleep stage. Use the key below :</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="45%" />
@@ -916,7 +947,7 @@
 </tr>
 </tbody>
 </table>
-<p>After pressing one of those keys, data coming from the next window will be prompted automatically so that you can continue scoring.</p>
+<p>After pressing one of those keys, the software will automatically scroll through to the next epoch so that you can continue scoring.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">If no canvas are selected the shortcuts might not work. Simply click on a canvas (on a channel / spectrogram / hypnogram) before starting to score to avoid this issue.</p>
@@ -1000,6 +1031,10 @@
 </li>
 </ul>
 </div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Please note that the software does not yet allow to automatically score sleep stages. However, if you are interested to collaborate and / or implement your own algorithm, please feel free to contact us.</p>
+</div>
 </div>
 </div>
 <div class="section" id="load-and-save-the-gui-configuration">
@@ -1010,8 +1045,12 @@ Alternatively, if you want to use a configuration when running <code class="xref
 <span class="c1"># Import the Sleep module:</span>
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Sleep</span>
 
-<span class="n">Sleep</span><span class="p">(</span><span class="n">config_file</span><span class="o">=</span><span class="s1">&#39;pathto/myconfig.txt&#39;</span><span class="p">)</span>
+<span class="n">Sleep</span><span class="p">(</span><span class="n">config_file</span><span class="o">=</span><span class="s1">&#39;pathto/myconfig.json&#39;</span><span class="p">)</span>
 </pre></div>
+</div>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">Configuration file are encoded in JSON format, which can be easily read and modified using any text editor.</p>
 </div>
 </div>
 <div class="section" id="import-add-and-save-annotations">
@@ -1350,7 +1389,7 @@ to last period of sleep.</li>
 <div class="section" id="publications">
 <h2>2.5. Publications<a class="headerlink" href="#publications" title="Permalink to this headline">¶</a></h2>
 <p>Please reference Sleep using its dedicated article in <a class="reference external" href="http://journal.frontiersin.org/article/10.3389/fninf.2017.00060/full">Frontiers in Neuroinformatics</a>.
-Please let us know if you used or plan to use Sleep in any upcoming publications !</p>
+Please let us know if you used or plan to use Sleep in any upcoming publications!</p>
 <p>Bibtex entry :</p>
 <div class="highlight-latex"><div class="highlight"><pre><span></span>@ARTICLE<span class="nb">{</span>10.3389/fninf.2017.00060,
  AUTHOR=<span class="nb">{</span>Combrisson, Etienne and Vallat, Raphael and Eichenlaub, Jean-Baptiste and O&#39;Reilly, Christian and Lajnef, Tarek and Guillot, Aymeric and Ruby, Perrine M. and Jerbi, Karim<span class="nb">}</span>,
@@ -1413,7 +1452,7 @@ Please let us know if you used or plan to use Sleep in any upcoming publications
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.3.9',
+            VERSION:'0.4.0',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>visbrain.topo.topo &mdash; visbrain 0.3.9 documentation</title>
+  <title>visbrain.topo.topo &mdash; visbrain 0.4.0 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="visbrain 0.3.9 documentation" href="../../../index.html"/>
+    <link rel="top" title="visbrain 0.4.0 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.9
+                0.4.0
               </div>
             
           
@@ -179,10 +179,10 @@
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Topo&#39;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Topo"><a class="viewcode-back" href="../../../topo.html#visbrain.topo.topo.Topo">[docs]</a><span class="k">class</span> <span class="nc">Topo</span><span class="p">(</span><span class="n">PyQtModule</span><span class="p">,</span> <span class="n">UiInit</span><span class="p">,</span> <span class="n">UiElements</span><span class="p">):</span>
+<div class="viewcode-block" id="Topo"><a class="viewcode-back" href="../../../topo.html#visbrain.Topo">[docs]</a><span class="k">class</span> <span class="nc">Topo</span><span class="p">(</span><span class="n">PyQtModule</span><span class="p">,</span> <span class="n">UiInit</span><span class="p">,</span> <span class="n">UiElements</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Display topographic representation.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Topo.__init__"><a class="viewcode-back" href="../../../generated/visbrain.Topo.html#visbrain.topo.topo.Topo.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
         <span class="n">PyQtModule</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">to_describe</span><span class="o">=</span><span class="s1">&#39;_grid&#39;</span><span class="p">,</span>
                             <span class="n">icon</span><span class="o">=</span><span class="s1">&#39;topo_icon.svg&#39;</span><span class="p">,</span> <span class="n">show_settings</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -191,7 +191,7 @@
 
         <span class="c1"># ====================== App creation ======================</span>
         <span class="n">UiInit</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="n">UiElements</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+        <span class="n">UiElements</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the object name.&quot;&quot;&quot;</span>
@@ -201,7 +201,7 @@
         <span class="sd">&quot;&quot;&quot;Set the object name.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_topos</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
-<div class="viewcode-block" id="Topo.add_topoplot"><a class="viewcode-back" href="../../../topo.html#visbrain.topo.topo.Topo.add_topoplot">[docs]</a>    <span class="k">def</span> <span class="nf">add_topoplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">c_connect</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="Topo.add_topoplot"><a class="viewcode-back" href="../../../topo.html#visbrain.Topo.add_topoplot">[docs]</a>    <span class="k">def</span> <span class="nf">add_topoplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">c_connect</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                      <span class="n">c_select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">c_cmap</span><span class="o">=</span><span class="s1">&#39;inferno&#39;</span><span class="p">,</span> <span class="n">c_linewidth</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span>
                      <span class="n">system</span><span class="o">=</span><span class="s1">&#39;cartesian&#39;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;degree&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                      <span class="n">title_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">title_size</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span> <span class="n">line_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>
@@ -322,8 +322,9 @@
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c_connect</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
             <span class="k">assert</span> <span class="n">c_connect</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">topo</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">topo</span><span class="p">))</span>
             <span class="n">xyz</span> <span class="o">=</span> <span class="n">topo</span><span class="o">.</span><span class="n">_xyz</span><span class="p">[</span><span class="n">topo</span><span class="o">.</span><span class="n">_keeponly</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">connect</span> <span class="o">=</span> <span class="n">ConnectObj</span><span class="p">(</span><span class="s1">&#39;TopoConnect&#39;</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">c_connect</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
-                                      <span class="n">select</span><span class="o">=</span><span class="n">c_select</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="n">c_linewidth</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">connect</span> <span class="o">=</span> <span class="n">ConnectObj</span><span class="p">(</span><span class="s1">&#39;TopoConnect&#39;</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">c_connect</span><span class="p">,</span>
+                                      <span class="n">cmap</span><span class="o">=</span><span class="n">c_cmap</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="n">c_select</span><span class="p">,</span>
+                                      <span class="n">line_width</span><span class="o">=</span><span class="n">c_linewidth</span><span class="p">,</span>
                                       <span class="n">parent</span><span class="o">=</span><span class="n">topo</span><span class="o">.</span><span class="n">node_chan</span><span class="p">)</span>
         <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">topo</span>
         <span class="c1"># Create a PanZoom camera :</span>
@@ -336,7 +337,7 @@
         <span class="c1"># Add the topoplot to the subplot :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_topoGrid</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Topo.add_shared_colorbar"><a class="viewcode-back" href="../../../topo.html#visbrain.topo.topo.Topo.add_shared_colorbar">[docs]</a>    <span class="k">def</span> <span class="nf">add_shared_colorbar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="Topo.add_shared_colorbar"><a class="viewcode-back" href="../../../topo.html#visbrain.Topo.add_shared_colorbar">[docs]</a>    <span class="k">def</span> <span class="nf">add_shared_colorbar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                             <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">cblabel</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
                             <span class="n">cbtxtsz</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span> <span class="n">cbtxtsh</span><span class="o">=</span><span class="mf">2.3</span><span class="p">,</span> <span class="n">txtcolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>
                             <span class="n">txtsz</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span> <span class="n">txtsh</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span> <span class="n">width</span><span class="o">=.</span><span class="mi">17</span><span class="p">,</span> <span class="n">border</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bw</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span>
@@ -464,7 +465,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.3.9',
+            VERSION:'0.4.0',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

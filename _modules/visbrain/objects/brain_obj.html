@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>visbrain.objects.brain_obj &mdash; visbrain 0.3.9 documentation</title>
+  <title>visbrain.objects.brain_obj &mdash; visbrain 0.4.0 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="visbrain 0.3.9 documentation" href="../../../index.html"/>
+    <link rel="top" title="visbrain 0.4.0 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.9
+                0.4.0
               </div>
             
           
@@ -336,10 +336,11 @@
 
     <span class="k">def</span> <span class="nf">_search_in_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Specify where to find brain templates.&quot;&quot;&quot;</span>
-        <span class="n">_vb_path</span> <span class="o">=</span> <span class="n">path_to_visbrain_data</span><span class="p">(</span><span class="n">folder</span><span class="o">=</span><span class="s1">&#39;templates&#39;</span><span class="p">)</span>
+        <span class="n">_vb_path</span> <span class="o">=</span> <span class="n">path_to_visbrain_data</span><span class="p">()</span>
+        <span class="n">_vb_path_tmp</span> <span class="o">=</span> <span class="n">path_to_visbrain_data</span><span class="p">(</span><span class="n">folder</span><span class="o">=</span><span class="s1">&#39;templates&#39;</span><span class="p">)</span>
         <span class="n">_data_path</span> <span class="o">=</span> <span class="n">get_data_path</span><span class="p">(</span><span class="n">folder</span><span class="o">=</span><span class="s1">&#39;templates&#39;</span><span class="p">)</span>
         <span class="n">_tmp_path</span> <span class="o">=</span> <span class="n">path_to_tmp</span><span class="p">(</span><span class="n">folder</span><span class="o">=</span><span class="s1">&#39;templates&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">_vb_path</span><span class="p">,</span> <span class="n">_data_path</span><span class="p">,</span> <span class="n">_tmp_path</span>
+        <span class="k">return</span> <span class="n">_vb_path</span><span class="p">,</span> <span class="n">_vb_path_tmp</span><span class="p">,</span> <span class="n">_data_path</span><span class="p">,</span> <span class="n">_tmp_path</span>
 
     <span class="k">def</span> <span class="nf">_load_brain_template</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Load the brain template.&quot;&quot;&quot;</span>
@@ -360,16 +361,6 @@
     <span class="k">def</span> <span class="nf">_get_template_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the path where datasets are stored.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">get_data_path</span><span class="p">(</span><span class="n">folder</span><span class="o">=</span><span class="s1">&#39;templates&#39;</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">_get_all_available_templates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get all available brain templates (e.g defaults and downloadable.&quot;&quot;&quot;</span>
-        <span class="n">b_def</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_default_templates</span><span class="p">()</span>
-        <span class="n">b_down</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_downloadable_templates</span><span class="p">()</span>
-        <span class="n">b_installed</span> <span class="o">=</span> <span class="n">get_files_in_data</span><span class="p">(</span><span class="s1">&#39;templates&#39;</span><span class="p">)</span>
-        <span class="n">b_tmp</span> <span class="o">=</span> <span class="n">get_files_in_data</span><span class="p">(</span><span class="s1">&#39;tmp&#39;</span><span class="p">)</span>
-        <span class="n">b_all</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">b_def</span> <span class="o">+</span> <span class="n">b_down</span> <span class="o">+</span> <span class="n">b_installed</span> <span class="o">+</span> <span class="n">b_tmp</span><span class="p">))</span>
-        <span class="n">b_all</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">b_all</span>
 
     <span class="k">def</span> <span class="nf">_get_default_templates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the default list of brain templates.&quot;&quot;&quot;</span>
@@ -546,7 +537,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_default_cblabel</span> <span class="o">=</span> <span class="s2">&quot;Activation&quot;</span>
         <span class="c1"># ============================= METHOD =============================</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Add data to secific vertices.&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Add data to specific vertices.&quot;</span><span class="p">)</span>
             <span class="k">assert</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">vertices</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
             <span class="k">assert</span> <span class="n">smoothing_steps</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">smoothing_steps</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
             <span class="c1"># Get smoothed vertices // data :</span>
@@ -924,7 +915,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.3.9',
+            VERSION:'0.4.0',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
