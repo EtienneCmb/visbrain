@@ -1,7 +1,7 @@
 .. image:: https://travis-ci.org/EtienneCmb/visbrain.svg?branch=master
     :target: https://travis-ci.org/EtienneCmb/visbrain
 
-.. image:: image:: https://ci.appveyor.com/api/projects/status/fdxhhmpagms1so8l/branch/master?svg=true
+.. image:: https://ci.appveyor.com/api/projects/status/fdxhhmpagms1so8l/branch/master?svg=true
     :target: https://ci.appveyor.com/project/EtienneCmb/visbrain/branch/master
 
 .. image:: https://circleci.com/gh/EtienneCmb/visbrain/tree/master.svg?style=svg
