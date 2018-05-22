@@ -78,7 +78,7 @@ def hypno_time_to_sample(df, npts):
     # Fill the hypnogram :
     hypno = np.zeros((len(time),), dtype=int)
     for k in range(len(index) - 1):
-        hypno[index[k]:index[k + 1]] = stages[k]
+        hypno[index[k]:index[k + 1]] = int(stages[k])
     return hypno, time, sf_hyp
 
 
