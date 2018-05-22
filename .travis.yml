@@ -11,15 +11,15 @@ matrix:
   include:
     - env: TEST=standard
       os: linux
-    - env: TEST=minimal
+    - env: TEST=flake
       os: linux
-    - env: TEST=examples
-      os: linux
+    # - env: TEST=examples
+    #   os: linux
     # - env: TEST=standard
     #   os: osx
     #   language: generic
   allow_failures:
-    - env: TEST=minimal
+    - env: TEST=flake
 
 
 before_install:
@@ -46,11 +46,11 @@ install:
     - source activate testenv
     # Install dependencies :
     - if [ "${TEST}" == "standard" ]; then
-        pip install codecov pytest pytest-cov pytest-sugar pytest-travis-fold openpyxl;
+        pip install codecov pytest pytest-cov pytest-sugar pytest-travis-fold openpyxl xlrd;
         pip install mne nibabel pandas tensorpac;
         pip install git+https://github.com/hbldh/lspopt.git#egg=lspopt;
       fi;
-    - if [ "${TEST}" == "minimal" ]; then
+    - if [ "${TEST}" == "flake" ]; then
         pip install flake8 pep8-naming;
       fi;
     # - pip install PyOpenGL PyOpenGL_accelerate
@@ -69,7 +69,7 @@ before_script:
 script:
     - if [[ "${TEST}" == "standard" ]]; then
           py.test --cov;
-      elif [[ "${TEST}" == "minimal" ]]; then
+      elif [[ "${TEST}" == "flake" ]]; then
           flake8;
       elif [[ "${TEST}" == "examples" ]]; then
           make examples;

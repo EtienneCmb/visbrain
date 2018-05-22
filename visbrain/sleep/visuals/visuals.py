@@ -517,17 +517,17 @@ class Spectrogram(PrepareData):
             self.mesh.interpolation = interp
 
             # =================== TRANSFORM ===================
-            tm, tM = time.min(), time.max()
+            tm, th = time.min(), time.max()
             # Re-scale the mesh for fitting in time / frequency :
             fact = (freq.max() - freq.min()) / len(freq)
-            sc = (tM / mesh.shape[1], fact, 1)
+            sc = (th / mesh.shape[1], fact, 1)
             tr = [0., freq.min(), 0.]
             self.mesh.transform.translate = tr
             self.mesh.transform.scale = sc
             # Update object :
             self.mesh.update()
             # Get camera rectangle :
-            self.rect = (tm, freq.min(), tM - tm, freq.max() - freq.min())
+            self.rect = (tm, freq.min(), th - tm, freq.max() - freq.min())
             self.freq = freq
         # Visibility :
         self.mesh.visible = 0 if method == 'Wavelet' else 1
@@ -887,13 +887,16 @@ class CanvasShortcuts(object):
                     self._SlGoto.value() - self._SigSlStep.value())
 
             # ------------ AMPLITUDE ------------
-            elif event.text == '-':  # Decrease amplitude
-                self._PanAmpSym.setChecked(True)
-                self._PanAllAmpMax.setValue(self._PanAllAmpMax.value() + 5.)
-
-            elif event.text == '+':  # Decrease amplitude
-                self._PanAmpSym.setChecked(True)
-                self._PanAllAmpMax.setValue(self._PanAllAmpMax.value() - 5.)
+            elif event.text in ['-', '+']:  # Decrease / increase amplitude
+                delta = 2.5
+                sign = 2 * ['-', '+'].index(event.text) - 1
+                if self._PanAmpSym.isChecked():  # Symetric amplitudes :
+                    val_sym = self._PanAllAmpMax.value() - 2 * sign * delta
+                    self._PanAllAmpMax.setValue(val_sym)
+                else:  # non-symetrical amplitudes
+                    for m, M in zip(self._yminSpin, self._ymaxSpin):
+                        m.setValue(m.value() + sign * delta)
+                        M.setValue(M.value() - sign * delta)
 
             # ------------  GRID/MAGNIFY ------------
             elif event.text.lower() == 'm':  # Magnify
@@ -971,8 +974,8 @@ class CanvasShortcuts(object):
                 val = self._SlVal.value()
                 step = self._SigSlStep.value()
                 win = self._SigWin.value()
-                tm, tM = (val * step, val * step + win)
-                cursor = tm + ((tM - tm) * event.pos[0] / canvas.size[0])
+                tm, th = (val * step, val * step + win)
+                cursor = tm + ((th - tm) * event.pos[0] / canvas.size[0])
             # Set the current tab to the annotation tab :
             self.QuickSettings.setCurrentIndex(5)
             # Run annotation :
@@ -993,15 +996,15 @@ class CanvasShortcuts(object):
                 val = self._SlVal.value()
                 step = self._SigSlStep.value()
                 win = self._SigWin.value()
-                tm, tM = (val * step, val * step + win)
+                tm, th = (val * step, val * step + win)
                 # Convert cursor in time position :
-                cursor = tm + ((tM - tm) * event.pos[0] / canvas.size[0])
+                cursor = tm + ((th - tm) * event.pos[0] / canvas.size[0])
                 # Enable/Disable magnify :
                 if self._slMagnify.isChecked():
                     for i, k in self._chan:
                         self._chan.node[i].transform.center = (cursor, 0.)
                         k.update()
-                    tm, tM = self._time.min(), self._time.max()
+                    tm, th = self._time.min(), self._time.max()
             # Set time position to the cursor text :
             cursor = np.round(cursor * 1000.) / 1000.
             self._txtCursor.setText('Cursor : ' + str(cursor) + ' sec')
@@ -1026,8 +1029,8 @@ class CanvasShortcuts(object):
                 val = self._SlVal.value()
                 step = self._SigSlStep.value()
                 win = self._SigWin.value()
-                tm, tM = (val * step, val * step + win)
-                cursor = tm + ((tM - tm) * event.pos[0] / canvas.size[0])
+                tm, th = (val * step, val * step + win)
+                cursor = tm + ((th - tm) * event.pos[0] / canvas.size[0])
                 # Build transformation :
                 kwargs = {'center': (cursor, 0.), 'radii': (3, 15), 'mag': 10}
                 transform = vist.nonlinear.Magnify1DTransform(**kwargs)

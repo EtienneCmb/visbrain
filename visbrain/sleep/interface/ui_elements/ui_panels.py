@@ -114,7 +114,7 @@ class UiPanels(object):
         layout = QtWidgets.QVBoxLayout(self._hypLabel)
         layout.setContentsMargins(0, 0, 0, 0)
         self._hypYLabels = []
-        for k in self._href + ['']:
+        for k in [''] + self._href + ['']:
             label = QtWidgets.QLabel()
             label.setText(self._addspace + k)
             label.setFont(self._font)

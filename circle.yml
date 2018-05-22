@@ -2,9 +2,6 @@ general:
   branches:
     ignore:
       - gh-pages
-    only:
-      - master
-      - develop
 
 
 machine:
@@ -42,8 +39,8 @@ dependencies:
         echo "Conda env already set up.";
       fi;
     - conda install -n circleenv --yes numpy scipy pip;
-    - pip install codecov pytest pytest-cov pytest-travis-fold;
-    - pip install mne nibabel pandas openpyxl tensorpac;
+    - pip install pytest pytest-travis-fold;
+    - pip install mne nibabel pandas openpyxl tensorpac xlrd;
     - pip install git+https://github.com/hbldh/lspopt.git#egg=lspopt;
     - ls -al /home/ubuntu/miniconda3;
     - ls -al /home/ubuntu/miniconda3/bin;
@@ -58,6 +55,5 @@ dependencies:
 
 test:
   override:
-    - py.test --cov;
-  post:
-    - codecov;
+    - py.test:
+        timeout: 1500

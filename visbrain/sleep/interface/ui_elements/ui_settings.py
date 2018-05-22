@@ -62,7 +62,7 @@ class UiSettings(object):
         hypref = int(self._hypno[t[0]])
         hypconv = self._hconv[hypref]
         hypcol = self._hypcolor[hypconv]
-        stage = str(self._hypYLabels[hypconv + 1].text())
+        stage = str(self._hypYLabels[hypconv + 2].text())
 
         # ================= MESH UPDATES =================
         # ---------------------------------------
@@ -92,9 +92,9 @@ class UiSettings(object):
             # Set preprocessed sleep data :
             self._topo.set_sleep_topo(data)
             # Update title :
-            fm, fM = self._PanTopoFmin.value(), self._PanTopoFmax.value()
+            fm, fh = self._PanTopoFmin.value(), self._PanTopoFmax.value()
             dispas = self._PanTopoDisp.currentText()
-            txt = 'Mean ' + dispas + ' in\n[' + str(fm) + ';' + str(fM) + 'hz]'
+            txt = 'Mean ' + dispas + ' in\n[' + str(fm) + ';' + str(fh) + 'hz]'
             self._topoTitle.setText(txt)
             self._topoTitle.setStyleSheet("QLabel {color: " +
                                           hypcol + ";}")
@@ -154,7 +154,7 @@ class UiSettings(object):
         # ================= HYPNO LABELS =================
         for k in self._hypYLabels:
             k.setStyleSheet("QLabel")
-        self._hypYLabels[hypconv + 1].setStyleSheet("QLabel {color: " +
+        self._hypYLabels[hypconv + 2].setStyleSheet("QLabel {color: " +
                                                     hypcol + ";}")
 
     def _fcn_slider_settings(self):

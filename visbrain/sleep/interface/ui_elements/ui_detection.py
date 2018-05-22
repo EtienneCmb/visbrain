@@ -309,11 +309,11 @@ class UiDetection(object):
         # Clean table :
         self._DetectLocations.setRowCount(0)
         # Get starting index:
-        staInd, endInd = index[:, 0], index[:, 1]
+        sta_ind, end_ind = index[:, 0], index[:, 1]
         # Define the length of the table:
-        self._DetectLocations.setRowCount(min(len(staInd), len(duration)))
+        self._DetectLocations.setRowCount(min(len(sta_ind), len(duration)))
         # Fill the table :
-        for num, (k, j, i) in enumerate(zip(staInd, endInd, duration)):
+        for num, (k, j, i) in enumerate(zip(sta_ind, end_ind, duration)):
             # Starting :
             self._DetectLocations.setItem(num, 0, QtWidgets.QTableWidgetItem(
                 str(self._time[k])))

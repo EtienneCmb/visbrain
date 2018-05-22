@@ -66,7 +66,7 @@ vb = Brain(brain_obj=b_obj, source_obj=s_obj, roi_obj=roi_obj)
 
 """Select the colorbar of the ROI
 """
-vb.cbar_select('ROI')
+vb.cbar_select('roi')
 
 """Eventualy, take a screenshot
 """

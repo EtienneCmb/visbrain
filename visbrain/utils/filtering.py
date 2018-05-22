@@ -236,7 +236,7 @@ def welch_power(x, freqs, sf, window_s=10, norm=True):
     xpow = np.zeros((len(freqs) - 1, n_epoch), dtype=np.float)
 
     for i in np.arange(0, len(x), window_s * sf):
-        f, Pxx_spec = welch(x[int(i):int(i + window_s * sf)], sf,
+        f, pxx_spec = welch(x[int(i):int(i + window_s * sf)], sf,
                             nperseg=sf * (1. / freq_spacing),
                             scaling='spectrum')
         epoch = int(i / (window_s * sf))
@@ -244,7 +244,7 @@ def welch_power(x, freqs, sf, window_s=10, norm=True):
         for num, k in enumerate(freqs[:-1]):
             fmin = np.abs(f - k).argmin()
             fmax = np.abs(f - freqs[num + 1]).argmin()
-            xpow[num, epoch] = np.mean(Pxx_spec[fmin:fmax])
+            xpow[num, epoch] = np.mean(pxx_spec[fmin:fmax])
 
     # Normalize by the band sum :
     if norm:

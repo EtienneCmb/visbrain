@@ -7,8 +7,8 @@ from PyQt5 import QtWidgets
 
 from ....utils import HelpMenu
 from ....io import (dialog_save, dialog_load, write_fig_hyp, write_csv,
-                    write_txt, write_hypno_txt, write_hypno_hyp, read_hypno,
-                    annotations_to_array, oversample_hypno)
+                    write_txt, write_hypno, read_hypno, annotations_to_array,
+                    oversample_hypno, save_config_json)
 
 
 class UiMenu(HelpMenu):
@@ -89,23 +89,42 @@ class UiMenu(HelpMenu):
     ###########################################################################
 
     # ______________________ HYPNOGRAM ______________________
-    def saveHypData(self, *args, filename=None):  # noqa
+    def saveHypData(self, *args, filename=None, reply=None):  # noqa
         """Save the hypnogram data either in a hyp or txt file."""
+        # Define default filename for the hypnogram :
+        if not isinstance(self._file, str):
+            hyp_file = 'hypno'
+        else:
+            hyp_file = os.path.basename(self._file) + '_hypno'
+        # Version switch :
+        if reply is None:
+            msg = ("Since release 0.4, hypnogram are exported using stage "
+                   "duration rather than point-per-second. This new format "
+                   "avoids potential errors caused by downsampling and "
+                   "confusion in the values assigned to each sleep stage. \n\n"
+                   "Click 'Yes' to use the new format and 'No' to use the old "
+                   "format. For more information, visit the doc at "
+                   "visbrain.org/sleep")
+            reply = QtWidgets.QMessageBox.question(self, 'Message', msg,
+                                                   QtWidgets.QMessageBox.Yes,
+                                                   QtWidgets.QMessageBox.No)
+        if reply == QtWidgets.QMessageBox.No:  # v1 = sample
+            dialog_ext = "Text file (*.txt);;Elan file (*.hyp)"
+            version = 'sample'
+        else:  # v2 = time
+            dialog_ext = ("Text file (*.txt);;Csv file (*.csv);;Excel file "
+                          "(*.xlsx)")
+            version = 'time'
+        # Open dialog window :
         if filename is None:
-            filename = dialog_save(self, 'Save File', 'hypno', "Text file ""(*"
-                                   ".txt);;Elan file (*.hyp);;All files (*.*)")
+            filename = dialog_save(self, 'Save File', hyp_file, dialog_ext +
+                                   ";;All files (*.*)")
         if filename:
-            file, ext = os.path.splitext(filename)
-
-            # Switch between differents types :
-            if ext == '.hyp':
-                write_hypno_hyp(filename, self._hypno, self._sf, self._sfori,
-                                self._N)
-            elif ext == '.txt':
-                write_hypno_txt(filename, self._hypno, self._sf, self._sfori,
-                                self._N, 1)
-            else:
-                raise ValueError("Not a valid extension")
+            info = {'Duration_sec': self._N * 1 / self._sfori}
+            if isinstance(self._file, str):
+                info['Datafile'] = self._file
+            write_hypno(filename, self._hypno, version=version, sf=self._sfori,
+                        npts=self._N, time=self._time, info=info)
 
     def _save_hyp_fig(self, *args, filename=None, **kwargs):
         """Save a 600 dpi .png figure of the hypnogram."""
@@ -116,8 +135,8 @@ class UiMenu(HelpMenu):
             hypno = self._hypno.copy()
             grid = self._slGrid.isChecked()
             ascolor = self._PanHypnoColor.isChecked()
-            write_fig_hyp(filename, hypno, self._sf, self._toffset,
-                          grid=grid, ascolor=ascolor)
+            write_fig_hyp(hypno, self._sf, file=filename,
+                          start_s=self._toffset, grid=grid, ascolor=ascolor)
 
     # ______________________ STATS INFO TABLE ______________________
     def _save_info_table(self, *args, filename=None):
@@ -203,56 +222,54 @@ class UiMenu(HelpMenu):
     # ______________________ SLEEP GUI CONFIG ______________________
     def _save_config(self, *args, filename=None):
         """Save a config file (*.txt) containing several display parameters."""
-        import json
         if filename is None:
             filename = dialog_save(self, 'Save config File', 'config',
-                                   "Text file (*.txt);;All files (*.*)")
+                                   "JSON file (*.json);;Text file (*.txt)")
         if filename:
-            with open(filename, 'w') as f:
-                config = {}
-                # Get channels visibility / amplitude :
-                viz, amp = [], []
-                for i, k in enumerate(self._chanChecks):
-                    viz.append(k.isChecked())
-                    amp.append(self._ymaxSpin[i].value())
-                config['Channel_Names'] = self._channels
-                config['Channel_Visible'] = viz
-                config['Channel_Amplitude'] = amp
-                # config['AllAmpMin'] = self._PanAllAmpMin.value()
-                # config['AllAmpMax'] = self._PanAllAmpMax.value()
-                config['SymAmp'] = self._PanAmpSym.isChecked()
-                config['AutoAmp'] = self._PanAmpAuto.isChecked()
-                # Spectrogram :
-                config['Spec_Visible'] = self.menuDispSpec.isChecked()
-                config['Spec_Method'] = self._PanSpecMethod.currentIndex()
-                config['Spec_Length'] = self._PanSpecNfft.value()
-                config['Spec_Overlap'] = self._PanSpecStep.value()
-                config['Spec_Cmap'] = self._PanSpecCmap.currentIndex()
-                config['Spec_CmapInv'] = self._PanSpecCmapInv.isChecked()
-                config['Spec_Chan'] = self._PanSpecChan.currentIndex()
-                config['Spec_Fstart'] = self._PanSpecFstart.value()
-                config['Spec_Fend'] = self._PanSpecFend.value()
-                config['Spec_Con'] = self._PanSpecCon.value()
-                config['Spec_Interp'] = self._PanSpecInterp.currentIndex()
-                # Hypnogram/time axis/navigation/topo/indic/zoom :
-                config['Hyp_Visible'] = self.menuDispHypno.isChecked()
-                config['Time_Visible'] = self.menuDispTimeax.isChecked()
-                config['Topo_Visible'] = self.menuDispTopo.isChecked()
-                config['Nav_Visible'] = self.menuDispNavbar.isChecked()
-                config['Indic_Visible'] = self.menuDispIndic.isChecked()
-                config['Zoom_Visible'] = self.menuDispZoom.isChecked()
-                config['Hyp_Lw'] = self._PanHypnoLw.value()
-                config['Hyp_Color'] = self._PanHypnoColor.isChecked()
-                # Navigation bar properties :
-                config['Slider'] = self._SlVal.value()
-                config['Step'] = self._SigSlStep.value()
-                config['Window'] = self._SigWin.value()
-                config['Goto'] = self._SlGoto.value()
-                config['Magnify'] = self._slMagnify.isChecked()
-                config['AbsTime'] = self._slAbsTime.isChecked()
-                config['Grid'] = self._slGrid.isChecked()
-                config['Unit'] = self._slRules.currentIndex()
-                json.dump(config, f)
+            config = {}
+            # Get channels visibility / amplitude :
+            viz, amp = [], []
+            for i, k in enumerate(self._chanChecks):
+                viz.append(k.isChecked())
+                amp.append(self._ymaxSpin[i].value())
+            config['Channel_Names'] = self._channels
+            config['Channel_Visible'] = viz
+            config['Channel_Amplitude'] = amp
+            # config['AllAmpMin'] = self._PanAllAmpMin.value()
+            # config['AllAmpMax'] = self._PanAllAmpMax.value()
+            config['SymAmp'] = self._PanAmpSym.isChecked()
+            config['AutoAmp'] = self._PanAmpAuto.isChecked()
+            # Spectrogram :
+            config['Spec_Visible'] = self.menuDispSpec.isChecked()
+            config['Spec_Method'] = self._PanSpecMethod.currentIndex()
+            config['Spec_Length'] = self._PanSpecNfft.value()
+            config['Spec_Overlap'] = self._PanSpecStep.value()
+            config['Spec_Cmap'] = self._PanSpecCmap.currentIndex()
+            config['Spec_CmapInv'] = self._PanSpecCmapInv.isChecked()
+            config['Spec_Chan'] = self._PanSpecChan.currentIndex()
+            config['Spec_Fstart'] = self._PanSpecFstart.value()
+            config['Spec_Fend'] = self._PanSpecFend.value()
+            config['Spec_Con'] = self._PanSpecCon.value()
+            config['Spec_Interp'] = self._PanSpecInterp.currentIndex()
+            # Hypnogram/time axis/navigation/topo/indic/zoom :
+            config['Hyp_Visible'] = self.menuDispHypno.isChecked()
+            config['Time_Visible'] = self.menuDispTimeax.isChecked()
+            config['Topo_Visible'] = self.menuDispTopo.isChecked()
+            config['Nav_Visible'] = self.menuDispNavbar.isChecked()
+            config['Indic_Visible'] = self.menuDispIndic.isChecked()
+            config['Zoom_Visible'] = self.menuDispZoom.isChecked()
+            config['Hyp_Lw'] = self._PanHypnoLw.value()
+            config['Hyp_Color'] = self._PanHypnoColor.isChecked()
+            # Navigation bar properties :
+            config['Slider'] = self._SlVal.value()
+            config['Step'] = self._SigSlStep.value()
+            config['Window'] = self._SigWin.value()
+            config['Goto'] = self._SlGoto.value()
+            config['Magnify'] = self._slMagnify.isChecked()
+            config['AbsTime'] = self._slAbsTime.isChecked()
+            config['Grid'] = self._slGrid.isChecked()
+            config['Unit'] = self._slRules.currentIndex()
+            save_config_json(filename, config)
 
     # ______________________ ANNOTATION TABLE ______________________
     def _save_annotation_table(self, *args, filename=None):
@@ -289,14 +306,20 @@ class UiMenu(HelpMenu):
 
     def _load_hypno(self, *args, filename=None):
         """Load a hypnogram."""
+        # Define default filename for the hypnogram :
+        if not isinstance(self._file, str):
+            hyp_file = 'hypno'
+        else:
+            hyp_file = os.path.basename(self._file) + '_hypno'
         # Get filename :
         if filename is None:
-            filename = dialog_load(self, 'Load hypnogram File', 'hypno',
-                                   "Text file (*.txt);;Elan file (*.hyp);;"
+            filename = dialog_load(self, 'Load hypnogram File', hyp_file,
+                                   "Text file (*.txt);;CSV file (*.csv);;"
+                                   "Elan file (*.hyp);;Excel file (*.xlsx);;"
                                    "All files (*.*)")
         if filename:
             # Load the hypnogram :
-            self._hypno, _ = read_hypno(filename)
+            self._hypno, _ = read_hypno(filename, time=self._time)
             self._hypno = oversample_hypno(self._hypno, self._N)[::self._dsf]
             self._hyp.set_data(self._sf, self._hypno, self._time)
             # Update info table :
@@ -415,7 +438,8 @@ class UiMenu(HelpMenu):
             # Get channel / method from file name :
             (chan, meth) = filename.split('_')[-1].split('.')[0].split('-')
             # Load the file :
-            (st, end) = np.genfromtxt(filename, delimiter=',')[3::, 0:2].T
+            (st, end) = np.genfromtxt(filename, delimiter=',',
+                                      encoding='utf-8')[3::, 0:2].T
             # Sort by starting index :
             idxsort = np.argsort(st)
             st, end = st[idxsort], end[idxsort]

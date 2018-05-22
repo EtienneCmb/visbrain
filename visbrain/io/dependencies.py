@@ -2,7 +2,7 @@
 
 __all__ = ('is_mne_installed', 'is_nibabel_installed', 'is_opengl_installed',
            'is_pandas_installed', 'is_lspopt_installed',
-           'is_tensorpac_installed')
+           'is_tensorpac_installed', 'is_xlrd_installed')
 
 
 def is_mne_installed(raise_error=False):
@@ -88,4 +88,18 @@ def is_tensorpac_installed(raise_error=False):
         raise IOError("tensorpac not installed. See https://github.com/Etienne"
                       "Cmb/tensorpac#installation for installation "
                       "instructions.")
+    return is_installed
+
+
+def is_xlrd_installed(raise_error=False):
+    """Test if xlrd is installed."""
+    try:
+        import xlrd  # noqa
+        is_installed = True
+    except:
+        is_installed = False
+    # Raise error (if needed) :
+    if raise_error and not is_installed:
+        raise IOError("xlrd not installed. In a terminal, run : pip install "
+                      "xlrd")
     return is_installed

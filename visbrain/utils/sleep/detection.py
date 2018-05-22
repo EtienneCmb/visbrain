@@ -251,8 +251,8 @@ def spindlesdetect(data, sf, threshold, hypno, nrem_only, fmin=12., fmax=14.,
     # Pre-detection
     if adapt_band:
         # Find peak sigma frequency
-        f, Pxx_den = welch(data, sf)
-        mfs = f[Pxx_den == Pxx_den[np.where((f >= 11) & (f < 16))].max()][0]
+        f, pxx_den = welch(data, sf)
+        mfs = f[pxx_den == pxx_den[np.where((f >= 11) & (f < 16))].max()][0]
         fmin = mfs - 1
         fmax = mfs + 1
 
