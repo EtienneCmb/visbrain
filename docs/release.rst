@@ -1,19 +1,19 @@
-.. _ChangelogFutur:
+.. _Release:
 
-Changelog and future directions
-###############################
+Changelog
+---------
 
-v0.4.0
-^^^^^^
+Version 0.4.0
+=============
 
 Visbrain
 ~~~~~~~~
-* Fixed installation #15 
+* Fixed installation
 * Fixed compatibility with numpy and pip
 
 Brain
 ~~~~~
-* **[NEW]** [mne_plot_source_estimation](https://github.com/EtienneCmb/visbrain/blob/master/visbrain/mne/plot_fwd.py)
+* **[NEW]** `mne_plot_source_estimation <https://github.com/EtienneCmb/visbrain/blob/master/visbrain/mne/plot_fwd.py>`_
 * Fixed broken examples + templates/ folder
 
 Sleep
@@ -25,8 +25,8 @@ Sleep
 * Improved JSON saving for configuration file
 * Fixed compatibility with numpy and pip
 
-v0.3.8
-^^^^^^
+Version 0.3.8
+=============
 
 Visbrain
 ~~~~~~~~
