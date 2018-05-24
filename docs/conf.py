@@ -173,6 +173,7 @@ html_theme_options = {
     'navbar_links': [
         ("Documentation", "documentation"),
         ("Examples", "auto_examples/index"),
+        ("API", "api"),
         ("Community", "community"),
     ],
     'navbar_site_name': "Site",
