@@ -77,6 +77,7 @@ Develop mode
 ============
 
 .. code-block:: shell
+.. include:: carousel.inc
 
     git clone https://github.com/EtienneCmb/visbrain.git visbrain/
     cd visbrain/
