@@ -15,7 +15,7 @@
 Description
 -----------
 
-:class:`Sleep` is a flexible graphical user interface for visualization, analysis and scoring of polysomnographic sleep data.
+:class:`Sleep` is a flexible graphical user interface for visualization, analysis and scoring of polysomnographic sleep data and is developed in collaboration with `Raphael Vallat <https://raphaelvallat.github.io/>`_ and `Christian O Reilly <http://bluebrain.epfl.ch/page-143249-en.html>`_..
 
 .. figure::  picture/picsleep/sleep_main.png
    :align:   center
@@ -806,12 +806,6 @@ In addition to using Python script, you can also use the following command-lines
 .. _cli_visbrain_sleep_stats:
 .. click:: visbrain.cli:cli_sleep_stats
    :prog: visbrain_sleep_stats
-
-Collaborators
--------------
-
-Sleep is developed in collaboration with `Raphael Vallat <https://raphaelvallat.github.io/>`_ and `Christian O Reilly <http://bluebrain.epfl.ch/page-143249-en.html>`_.
-
 Publications
 -------------
 
