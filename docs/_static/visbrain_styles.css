@@ -1,0 +1,95 @@
+.bg-primary{
+  color: #FFF ;
+  background-color: #4D394B;
+}
+
+body {
+    font-size: 16;
+}
+a:link {  /* link */
+    color: #2e88c5;
+    font-weight: bold;
+}
+a:visited {  /* visited link */
+    color: #2e88c5;
+}
+a:hover {  /* mouse over link */
+    color: #2ecc71;
+}
+a:active {  /* selected link */
+    color: #2ecc71;
+}
+
+/*Title*/
+/*h1  {
+    background-color: powderblue;
+}
+h2  {
+    background-color: gray;
+}
+h3  {
+    background-color: orange;
+}*/
+
+/*Tables*/
+th {
+    background-color: #a69ca5;
+    color: white;
+}
+/*tr:hover {
+    background-color: #3498db;
+}*/
+/*tr:nth-child(even) {
+    background-color: #f2f2f2;
+}*/
+
+.alert-info {
+    background-color: #90CAF9;
+    font-weight: bold;
+}
+.alert-warning {
+    background-color: #FFB54A;
+    font-weight: bold;
+}
+
+
+/*Navigation bar*/
+.navbar-default .navbar-nav > li > a {
+    color: #a69ca5;
+}
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    color: #FFF;
+}
+.navbar {
+    color: red;
+    background-color: #4D394B;
+}
+.navbar-default .navbar-text {
+    color: #FFF;
+}
+/*ul.nav.nav-list {
+    color: #FFF;
+    background-color: #a69ca5;
+}*/
+
+/*Buttons*/
+.btn-primary {
+    background-color: #5e4c5d;
+    font-weight: bold;
+}
+.btn-primary:hover {
+    background-color: #4D394B;
+    font-weight: bold;
+}
+
+footer {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.carousel-caption {
+    text-shadow: 0 1px 1px rgba(0,0,0,1.0);
+    background-color: rgba(26,26,26,0.7);
+    box-shadow: 0 0 5px rgba(26,26,26,0.5);
+}
