@@ -49,9 +49,10 @@ Contents
 .. toctree::
    :maxdepth: 1
 
-   community
    documentation
    auto_examples/index.rst
+   api
+   community
    release
    citation
 
