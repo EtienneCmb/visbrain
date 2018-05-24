@@ -292,22 +292,22 @@ Here’s the list of natively supported file formats:
 * **.trc** (Micromed version 4)
 * **.eeg** (`ELAN <http://elan.lyon.inserm.fr>`_)
 
-If MNE-python is installed, this list is extended to (see `also <https://martinos.org/mne/dev/manual/io.html#importing-eeg-data>`_):
+If MNE-python is installed, this list is extended to (see `also <https://martinos.org/mne/dev/manual/io.html#importing-eeg-data>`_) :
 
- * **.bdf**
- * **.gdf**
- * **.egi**
- * **.mff**
- * **.set** (EEGLAB)
- * **.cnt**
- * **.vhdr** (*BrainVision files can be loaded using either the native library of Sleep or using MNE*)
+* **.bdf**
+* **.gdf**
+* **.egi**
+* **.mff**
+* **.set** (EEGLAB)
+* **.cnt**
+* **.vhdr** (*BrainVision files can be loaded using either the native library of Sleep or using MNE*)
 
 Note that once MNE-python is installed, the loading of these file formats is transparent for users. It means that you can load these file formats directly using Sleep graphical user interface or command-line, without any additional steps. We therefore **strongly recommand** to `install MNE-python <https://martinos.org/mne/stable/index.html>`_.
 
 If you have a file format that is currently not supported, :class:`Sleep` also provide the ability to directly pass raw data (NumPy array). Please click see this example of how to `to load a Matlab file <http://visbrain.org/auto_examples/sleep/load_matlab.html#sphx-glr-auto-examples-sleep-load-matlab-py>`_ and then pass the data directly to Sleep.
 
 .. note::
-   If you are having trouble with the loading of .edf files, we recommand installing `MNE-python <https://martinos.org/mne/stable/index.html>`_ and then loading your data using the following command::
+  If you are having trouble with the loading of .edf files, we recommand installing `MNE-python <https://martinos.org/mne/stable/index.html>`_ and then loading your data using the following command::
 
     Sleep(data='mydata.edf', hypno='myhypno.csv', use_mne=True).show()
 
