@@ -18,7 +18,7 @@ import os
 from os.path import relpath, dirname
 import sys
 
-import sphinx_rtd_theme
+import sphinx_bootstrap_theme
 from sphinx_gallery.sorting import FileNameSortKey
 from numpydoc import numpydoc, docscrape
 
@@ -157,14 +157,27 @@ todo_include_todos = True
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'sphinx_rtd_theme'
-html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+html_theme = 'bootstrap'
+html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
-    'navigation_depth': 4,
+    'globaltoc_depth': 1,
+    'bootstrap_version': "3",
+    'navbar_sidebarrel': False,
+    'navbar_pagenav': False,
+    'globaltoc_includehidden': "true",
+    'source_link_position': "Page",  #None,
+    'navbar_links': [
+        ("Documentation", "documentation"),
+        ("Examples", "auto_examples/index"),
+        ("Community", "community"),
+    ],
+    'navbar_site_name': "Site",
+    'bootswatch_theme': "sandstone",
+    'navbar_fixed_top': True,
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
@@ -206,14 +219,14 @@ html_static_path = ['_static']
 #html_use_smartypants = True
 
 # Custom sidebar templates, maps document names to template names.
-#html_sidebars = {}
+html_sidebars = {'**': ['localtoc.html', 'searchbox.html']}
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
 #html_additional_pages = {}
 
 # If false, no module index is generated.
-#html_domain_indices = True
+html_domain_indices = True
 
 # If false, no index is generated.
 #html_use_index = True
@@ -366,12 +379,12 @@ texinfo_documents = [
 # Source code links (adapted from SciPy (doc/source/conf.py))
 # -----------------------------------------------------------------------------
 
+def setup(app):
+    app.add_stylesheet("visbrain_styles.css")
 
 
 def linkcode_resolve(domain, info):
-    """
-    Determine the URL corresponding to Python object
-    """
+    """Determine the URL corresponding to Python object."""
     if domain != 'py':
         return None
 
