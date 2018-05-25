@@ -55,6 +55,7 @@ extensions = [
 #     'sphinx.ext.githubpages',
 
 autosummary_generate = True
+autodoc_default_flags = ['members', 'inherited-members', 'no-undoc-members']
 # autodoc_default_flags = ['inherited-members', 'no-undoc-members']
 
 
