@@ -1,34 +1,81 @@
 .. _API:
 
+
 API
 ===
 
 Objects
 -------
 
-Pas encore
+.. currentmodule:: visbrain.objects
 
-Brain
------
+.. autosummary::
+   :toctree: generated/
+   :template: class.rst
 
-futur
+    BrainObj
+    ColorbarObj
+    ConnectObj
+    CrossSecObj
+    HypnogramObj
+    ImageObj
+    Picture3DObj
+    RoiObj
+    SceneObj
+    SourceObj
+    TimeFrequencyObj
+    TimeSeries3DObj
+    VectorObj
+    VolumeObj
 
-Sleep
------
 
-turfu
-
-Topo
-----
-
-Soon
-
-Signals
+Modules
 -------
 
-Bientôt
+.. currentmodule:: visbrain
 
-Utils
------
+.. autosummary::
+   :toctree: generated/
+   :template: class.rst
 
-A voir
+   Brain
+   Sleep
+   Topo
+   Signal
+   Figure
+
+
+Compatibility with existing software
+------------------------------------
+
+.. currentmodule:: visbrain.mne
+
+.. autosummary::
+   :toctree: generated/
+   :template: function.rst
+
+   mne_plot_source_estimation
+
+I/O
+---
+
+.. currentmodule:: visbrain.io
+
+.. autosummary::
+   :toctree: generated/
+   :template: function.rst
+
+   download_file
+   path_to_visbrain_data
+   read_stc
+
+
+Miscellaneous
+-------------
+
+.. currentmodule:: visbrain.utils
+
+.. autosummary::
+   :toctree: generated/
+
+   generate_eeg
