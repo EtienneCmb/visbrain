@@ -3,8 +3,9 @@
 
 .. currentmodule:: {{ module }}
 
+.. :exclude-members: set_shortcuts_to_canvas, to_dict, to_kwargs, update, update_from_dict
+
 .. autoclass:: {{ objname }}
-   :exclude-members: set_shortcuts_to_canvas, to_dict, to_kwargs, update, update_from_dict
 
    {% block methods %}
 
