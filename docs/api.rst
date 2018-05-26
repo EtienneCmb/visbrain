@@ -11,7 +11,7 @@ Objects
 
 .. autosummary::
    :toctree: generated/
-   :template: class.rst
+   :template: obj_class.rst
 
     BrainObj
     ColorbarObj
@@ -36,7 +36,7 @@ Modules
 
 .. autosummary::
    :toctree: generated/
-   :template: class.rst
+   :template: qt_class.rst
 
    Brain
    Sleep
@@ -77,5 +77,6 @@ Miscellaneous
 
 .. autosummary::
    :toctree: generated/
+   :template: function.rst
 
    generate_eeg
