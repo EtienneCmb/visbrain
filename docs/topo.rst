@@ -9,7 +9,7 @@
 Description
 -----------
 
-:class:`Topo` is a GUI based module for topographic representations.
+:class:`visbrain.Topo` is a GUI based module for topographic representations.
 
 .. figure::  picture/pictopo/ex_topoplot_plotting_properties.png
    :align:   center
@@ -40,25 +40,8 @@ The :class:`Topo` module can be imported as follow :
 
     from visbrain import Topo
 
-Examples and datasets
-~~~~~~~~~~~~~~~~~~~~~
+.. include:: generated/visbrain.Topo.examples
 
-Visit this page for a set of `examples <http://visbrain.org/auto_examples/index.html#topoplot-examples>`_.
+.. raw:: html
 
-API
----
-
-Topo class
-~~~~~~~~~~
-
-.. currentmodule:: visbrain
-
-.. autoclass:: Topo
-    :members: show, add_topoplot, add_shared_colorbar
-
-    .. rubric:: Methods
-
-    .. autosummary::
-        ~Topo.show
-        ~Topo.add_topoplot
-        ~Topo.add_shared_colorbar
+    <div style='clear:both'></div>
