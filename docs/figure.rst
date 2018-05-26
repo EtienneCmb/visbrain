@@ -76,23 +76,10 @@ Example
 
    Code above : four exported figures from the Brain module are aranged in a (2, 2) grid. Then, some have a colorbar, xlabel, ylabel. Finally, there is two shared colorbars.
 
-API
----
 
-Main :class:`Figure` class inputs
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. include:: generated/visbrain.Figure.examples
 
-First, you will need to create a Figure objects with the files to load, titles, xlabels...
+.. raw:: html
 
-.. currentmodule:: visbrain
+    <div style='clear:both'></div>
 
-.. autoclass:: Figure
-  :members: show, save, colorbar_to_axis, shared_colorbar
-
-    .. rubric:: Methods
-
-    .. autosummary::
-        ~Figure.show
-        ~Figure.save
-        ~Figure.colorbar_to_axis
-        ~Figure.shared_colorbar

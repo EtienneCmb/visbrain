@@ -60,11 +60,6 @@ The *Brain* module can be imported as follow :
 
     from visbrain import Brain
 
-Examples and datasets
-~~~~~~~~~~~~~~~~~~~~~
-
-Visit this page for a set of `examples <http://visbrain.org/auto_examples/index.html#brain-examples>`_.
-
 GUI description
 ~~~~~~~~~~~~~~~
 
@@ -336,18 +331,8 @@ The colorbar can be controlled for individual objects including :
    **API**
       * :ref:`CbarApi`
 
-.. ##########################################################################
-..                                 API
-.. ##########################################################################
+.. include:: generated/visbrain.Brain.examples
 
-API
----
+.. raw:: html
 
-The user functions correspond to a bundle of functions that can be used to control Brain operations without opening the graphical interface. This can be convenient to generate a large amount of pictures.
-
-.. toctree::
-   :maxdepth: 4
-
-   brainAPI
-
-
+    <div style='clear:both'></div>

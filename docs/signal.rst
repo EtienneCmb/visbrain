@@ -58,27 +58,6 @@ To try out this module, check out the `Signal example <http://visbrain.org/auto_
 .. Components
 .. ^^^^^^^^^^
 
-API
-------
-
-Signal class
-~~~~~~~~~~~~
-
-.. currentmodule:: visbrain
-
-.. autoclass:: Signal
-    :members: show, set_xlim, set_ylim, set_signal_index, set_signal_form, screenshot
-
-    .. rubric:: Methods
-
-    .. autosummary::
-        ~visbrain.Signal.show
-        ~visbrain.Signal.set_xlim
-        ~visbrain.Signal.set_ylim
-        ~visbrain.Signal.set_signal_index
-        ~visbrain.Signal.set_signal_form
-        ~visbrain.Signal.screenshot
-
 
 Shortcuts
 ---------

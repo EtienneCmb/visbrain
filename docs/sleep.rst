@@ -66,12 +66,6 @@ The :class:`Sleep` module can be imported as follow :
     from visbrain import Sleep
 
 
-Examples and datasets
-~~~~~~~~~~~~~~~~~~~~~
-
-To try out in the absence of sleep data, please check out some `sleep example <http://visbrain.org/auto_examples/index.html#sleep-examples>`_ scripts and datasets on `Google drive <https://drive.google.com/drive/folders/0B6vtJiCQZUBvRjc3cFFYcmFIeW8?usp=sharing>`_
-
-
 GUI description
 ~~~~~~~~~~~~~~~
 
@@ -754,55 +748,10 @@ Save annotations
 
 The list of annotations can be exported (either in .txt or .csv) or loaded from the *Files* contextual menu.
 
-.. ##########################################################################
-.. ##########################################################################
-..                             COMMAND-LINE
-.. ##########################################################################
-.. ##########################################################################
 
+.. include:: generated/visbrain.Sleep.examples
 
+.. raw:: html
 
-.. ##########################################################################
-.. ##########################################################################
-..                                 API
-.. ##########################################################################
-.. ##########################################################################
+    <div style='clear:both'></div>
 
-API
----
-
-Sleep class
-~~~~~~~~~~~
-
-Here is the list of default Sleep inputs :
-
-.. currentmodule:: visbrain
-
-.. autoclass:: Sleep
-  :members: show
-
-    .. rubric:: Methods
-
-    .. autosummary::
-        ~Sleep.show
-
-Command line
-~~~~~~~~~~~~
-
-In addition to using Python script, you can also use the following command-lines from a terminal :
-
-* :ref:`cli_visbrain_sleep` : open the graphical user interface of Sleep.
-* :ref:`cli_visbrain_fig_hyp` : export a hypnogram file (**.txt**, **.csv** or **.hyp**) into a high definition colored or black and white image.
-* :ref:`cli_visbrain_sleep_stats` : Compute sleep statistics from hypnogram file and export them in csv.
-
-.. _cli_visbrain_sleep:
-.. click:: visbrain.cli:cli_sleep
-   :prog: visbrain_sleep
-
-.. _cli_visbrain_fig_hyp:
-.. click:: visbrain.cli:cli_fig_hyp
-   :prog: visbrain_fig_hyp
-
-.. _cli_visbrain_sleep_stats:
-.. click:: visbrain.cli:cli_sleep_stats
-   :prog: visbrain_sleep_stats
