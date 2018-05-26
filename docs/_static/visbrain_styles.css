@@ -20,6 +20,12 @@ a:active {  /* selected link */
     color: #2ecc71;
 }
 
+code {
+    color: #ab4642 !important;
+    background-color: #eedad9 !important;
+}
+
+
 /*Title*/
 /*h1  {
     background-color: powderblue;
