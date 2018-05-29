@@ -1,23 +1,29 @@
 .. _TopoModule:
 
-:py:class:`Topo`
-================
+Topo
+====
 
-.. figure::  picture/ico/topo_ico.png
-   :align:   center
+.. raw:: html
+
+  <div class="jumbotron">
+    <h1 class="display-3">Quick description <img alt="_images/topo_ico.png" src="_images/topo_ico.png" width="150" height="150" align="right"></h1>
+    <p class="lead">Topo is a GUI based module for topographic representations.</p>
+    <hr class="my-4">
+    <p>
+
+Checkout the API of the :class:`visbrain.Topo` class. If you need help with the :class:`Topo` module, ask your questions in the dedicated `gitter Topo chat <https://gitter.im/visbrain-python/Topo?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
+
+.. raw:: html
+
+    <img alt="_images/ex_topoplot_plotting_properties.png" src="_images/ex_topoplot_plotting_properties.png" align="center"></p>
+  </div>
+
+.. contents:: Contents
+   :local:
+   :depth: 2
 
 Description
 -----------
-
-:class:`visbrain.Topo` is a GUI based module for topographic representations.
-
-.. figure::  picture/pictopo/ex_topoplot_plotting_properties.png
-   :align:   center
-
-Help
-~~~~
-
-If you need help with the :class:`Topo` module, ask your questions in the dedicated `gitter Topo chat <https://gitter.im/visbrain-python/Topo?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
 
 Main features
 ~~~~~~~~~~~~~

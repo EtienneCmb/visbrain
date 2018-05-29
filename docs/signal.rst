@@ -1,23 +1,34 @@
 .. _SignalModule:
 
-:class:`Signal`
-###############
+Signal
+######
 
-.. figure::  picture/ico/signal_ico.png
-   :align:   center
+.. raw:: html
+
+  <div class="jumbotron">
+    <h1 class="display-3">Quick description <img alt="_images/signal_ico.png" src="_images/signal_ico.png" width="150" height="150" align="right"></h1>
+    <p class="lead">Signal is a data-mining module for 1-D, 2-D and 3-D datasets. It tries to offer a convenient way to inspect datasets, locate bad trials and reveal time-frequency properties.</p>
+    <hr class="my-4">
+    <p>
+
+Checkout the API of the :class:`visbrain.Signal` class.
+
+.. raw:: html
+
+    <img alt="_images/signal_presentation.png" src="_images/signal_presentation.png" align="center"></p>
+  </div>
+
+.. contents:: Contents
+   :local:
+   :depth: 2
 
 Description
 -----------
 
-:class:`Signal` is a data-mining module for 1-D, 2-D and 3-D datasets. It tries to offer a convenient way to inspect datasets, locate bad trials and reveal time-frequency properties. It is subdivided into to two distinct components :
+The GUI of the Signal module is subdivided into to two distinct components :
 
 * **The grid** : each datasets is re-arranged into a clickable 2-D grid so that all of the time-series of a dataset are represented inside. This idea of a grid was originally present into the `VisPy examples <https://github.com/vispy/vispy/blob/master/examples/demo/gloo/realtime_signals.py>`_ and has been adapted for brain signals.
 * **The signal canvas** : the second layout display one trial at a time. This trial can either be represented as a continuous line or markers. It's also possible to compute the histogram, time-frequency map or PSD.
-
-.. figure::  picture/picsignal/signal_presentation.png
-   :align:   center
-
-   (left) continuous line, markers, histogram, time-frequency map, power spectrum density (PSD), (right) grid representation
 
 Main features
 ~~~~~~~~~~~~~
