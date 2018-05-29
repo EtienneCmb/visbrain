@@ -27,39 +27,39 @@ class Brain(PyQtModule, UiInit, UiElements, Visuals, BrainCbar,
     By default the Brain module display a standard MNI brain. Then, this brain
     can interact with several objects :
 
-        * Brain (brain_obj)
-        * Sources (source_obj)
-        * Connectivity (connect_obj)
-        * Time-series (time_series_obj)
-        * Pictures (picture_obj)
-        * Vectors (vector_obj)
-        * Volume (vol_obj)
-        * Cross-sections (cross_sec_obj)
-        * Region Of Interest (roi_obj)
+        * Brain (:class:`visbrain.objects.BrainObj`)
+        * Sources (:class:`visbrain.objects.SourceObj`)
+        * Connectivity (:class:`visbrain.objects.ConnectObj`)
+        * Time-series (:class:`visbrain.objects.TimeSeries3DObj`)
+        * Pictures (:class:`visbrain.objects.Picture3DObj`)
+        * Vectors (:class:`visbrain.objects.VectorObj`)
+        * Volume (:class:`visbrain.objects.VolumeObj`)
+        * Cross-sections (:class:`visbrain.objects.CrossSecObj`)
+        * Region Of Interest (:class:`visbrain.objects.RoiObj`)
 
     Alternatively, if an other brain template is needed, a brain object
     (BrainObj) can also be used (see brain_obj).
 
     Parameters
     ----------
-    brain_obj : BrainObj | None
+    brain_obj : :class:`visbrain.objects.BrainObj` | None
         A brain object.
-    vol_obj : VolumeObj | None
+    vol_obj : :class:`visbrain.objects.VolumeObj` | None
         A volume object.
-    cross_sec_obj : CrossSecObj | None
+    cross_sec_obj : :class:`visbrain.objects.CrossSecObj` | None
         A cross-sections object.
-    roi_obj : RoiObj | None
+    roi_obj : :class:`visbrain.objects.RoiObj` | None
         A Region Of Interest (ROI) object.
-    source_obj : SourceObj | None
-        An object (or list of objects) of type source (SourceObj).
-    connect_obj : ConnectObj | None
-        An object (or list of objects) of type connectivity (ConnectObj).
-    time_series_obj : TimeSeries3DObj | None
-        An object (or list of objects) of type time-series (TimeSeries3DObj).
-    picture_obj : Picture3DObj | None
-        An object (or list of objects) of type pictures (Picture3DObj).
-    vector_obj : VectorObj | None
-        An object (or list of objects) of type vector (VectorObj).
+    source_obj : :class:`visbrain.objects.SourceObj` | None
+        An object (or list of objects) of type source.
+    connect_obj : :class:`visbrain.objects.ConnectObj` | None
+        An object (or list of objects) of type connectivity.
+    time_series_obj : :class:`visbrain.objects.TimeSeries3DObj` | None
+        An object (or list of objects) of type time-series.
+    picture_obj : :class:`visbrain.objects.Picture3DObj` | None
+        An object (or list of objects) of type pictures.
+    vector_obj : :class:`visbrain.objects.VectorObj` | None
+        An object (or list of objects) of type vector.
     project_radius : float | 10.
         The projection radius to use.
     project_type : {'activity', 'repartition'}

@@ -29,7 +29,7 @@ def mne_plot_source_estimation(sbj, sbj_dir, fwd_file, stc_file=None,
         The file name of the forward solution, which should end with -fwd.fif
         or -fwd.fif.gz.
     stc_file : string | None
-        Path to the *.stc inverse solution file.
+        Path to the .stc inverse solution file.
     hemisphere : {'left', 'both', 'right'}
         The hemisphere to plot.
     parc : string | 'aparc'
@@ -40,22 +40,27 @@ def mne_plot_source_estimation(sbj, sbj_dir, fwd_file, stc_file=None,
         want to see the activation. Otherwise, `active_data` must be an array
         with the same same shape as the number of active vertices.
     kw_brain_obj : dict | {}
-        Additional inputs to pass to the `BrainObj` class.
+        Additional inputs to pass to the :class:`visbrain.objects.BrainObj`
+        class.
     kw_source_obj : dict | {}
-        Additional inputs to pass to the `SourceObj` class.
+        Additional inputs to pass to the :class:`visbrain.objects.SourceObj`
+        class.
     kw_activation : dict | {}
-        Additional inputs to pass to the `BrainObj.add_activation` method.
+        Additional inputs to pass to the
+        :class:`visbrain.objects.BrainObj.add_activation` method.
     show : bool | False
-        If True, the window of the `Brain` module is automatically displayed.
-        If False, a BrainObj and a SourceObj are returned. Finally, if 'scene'
-        a SceneObj is returned.
+        If True, the window of the :class:`visbrain.Brain` module is
+        automatically displayed. If False, a :class:`visbrain.objects.BrainObj`
+        and a :class:`visbrain.objects.SourceObj` are returned. Finally, if
+        'scene'a :class:`visbrain.objects.SceneObj` is returned.
 
     Returns
     -------
     b_obj : BrainObj
-        A predefined `BrainObj` (if `show=False`)
+        A predefined :class:`visbrain.objects.BrainObj` (if `show=False`)
     s_obj : SourceObj
-        A predefined `SourceObj`, hide by default (if `show=False`)
+        A predefined :class:`visbrain.objects.SourceObj`, hide by default (if
+        `show=False`)
     """
     # Test that mne is installed and import :
     is_mne_installed(raise_error=True)
