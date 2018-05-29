@@ -26,22 +26,21 @@
 .. ^ Title 5
 .. + Title 6
 
-Visbrain documentation
-######################
-
-Visbrain is an open-source python 3 package dedicated to brain signals visualization. It is based on top of VisPy and PyQt and is distributed under the 3-Clause BSD license.
-
-.. include:: carousel.inc
-
 .. raw:: html
 
-  <button type="button" class="btn btn-primary">Primary</button>
-  <button type="button" class="btn btn-secondary">Secondary</button>
-  <button type="button" class="btn btn-success">Success</button>
-  <button type="button" class="btn btn-info">Info</button>
-  <button type="button" class="btn btn-warning">Warning</button>
-  <button type="button" class="btn btn-danger">Danger</button>
-  <button type="button" class="btn btn-link">Link</button>
+  <div class="jumbotron">
+    <h1 class="display-3">Visbrain documentation</h1>
+    <p class="lead">A multi-purpose GPU-accelerated open-source suite for brain data visualization.</p>
+    <hr class="my-4">
+    <p>Visbrain is an open-source <a href="https://www.python.org/">Python 3</a> package dedicated to brain signals visualization. It is based on top of <a href="http://vispy.org/">VisPy</a> and <a href="https://riverbankcomputing.com/software/pyqt/intro">PyQt</a> and is distributed under the 3-Clause BSD license.</p>
+    <p class="lead" align="center">
+      <a class="btn btn-primary btn-lg" href="documentation.html" role="button" style="color:white">Learn more</a>
+      <a class="btn btn-success btn-lg" href="introduction.html#install-visbrain" role="button" style="color:white">Install</a>
+    </p>
+  </div>
+
+
+.. include:: carousel.inc
 
 Contents
 ********
@@ -58,9 +57,9 @@ Contents
 
 
 Index
-#####
+*****
 
 * :ref:`genindex`
-.. * :ref:`search`
-.. * :ref:`modindex`
+* :ref:`search`
+* :ref:`modindex`
 

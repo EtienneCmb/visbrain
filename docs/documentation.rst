@@ -16,13 +16,12 @@ Documentation
         <div id="collapse_intro" class="panel-collapse collapse in">
           <div class="panel-body">
 
-[NEW PART TO VISBRAIN INTRO]
-
 .. toctree::
     :maxdepth: 1
     :numbered:
 
     introduction
+    tutorial
 
 
 .. ------------------ VISBRAIN OBJECT ------------------
