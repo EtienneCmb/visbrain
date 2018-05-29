@@ -4,6 +4,13 @@
 API
 ===
 
+.. contents::
+   :local:
+   :depth: 2
+
+.. _API_objects:
+
+
 Objects
 -------
 
@@ -29,8 +36,8 @@ Objects
     VolumeObj
 
 
-Modules
--------
+GUI based modules
+-----------------
 
 .. currentmodule:: visbrain
 
@@ -79,6 +86,15 @@ Miscellaneous
    :template: function.rst
 
    generate_eeg
+   tal2mni
+   mni2tal
+   rereferencing
+   bipolarization
+   commonaverage
+   convert_meshdata
+   volume_to_mesh
+   color2vb
+   array2colormap
 
 Command line
 ------------
