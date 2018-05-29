@@ -1,10 +1,26 @@
 .. _SleepModule:
 
-:py:class:`Sleep`
-=================
+Sleep
+=====
 
-.. figure::  picture/ico/sleep_ico.png
-   :align:   center
+.. raw:: html
+
+  <div class="jumbotron">
+    <h1 class="display-3">Quick description <img alt="_images/sleep_ico.png" src="_images/sleep_ico.png" width="150" height="150" align="right"></h1>
+    <p class="lead">Sleep is a flexible graphical user interface for visualization, analysis and scoring of polysomnographic sleep data and is developed in collaboration with <a href="https://raphaelvallat.github.io/">Raphael Vallat</a> and <a href="http://bluebrain.epfl.ch/page-143249-en.html">Christian O Reilly</a></p>
+    <hr class="my-4">
+    <p>
+
+Checkout the API of the :class:`visbrain.Sleep` class. If you need help with the :class:`Sleep` module, ask your questions in the dedicated `gitter Sleep chat <https://gitter.im/visbrain-python/Sleep?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
+
+.. raw:: html
+
+    <img alt="_images/sleep_main.png" src="_images/sleep_main.png" align="center"></p>
+  </div>
+
+.. contents:: Contents
+   :local:
+   :depth: 2
 
 .. ##########################################################################
 .. ##########################################################################
@@ -14,16 +30,6 @@
 
 Description
 -----------
-
-:class:`Sleep` is a flexible graphical user interface for visualization, analysis and scoring of polysomnographic sleep data and is developed in collaboration with `Raphael Vallat <https://raphaelvallat.github.io/>`_ and `Christian O Reilly <http://bluebrain.epfl.ch/page-143249-en.html>`_..
-
-.. figure::  picture/picsleep/sleep_main.png
-   :align:   center
-
-Help
-~~~~
-
-If you need help with the :class:`Sleep` module, ask your questions in the dedicated `gitter Sleep chat <https://gitter.im/visbrain-python/Sleep?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
 
 Main features
 ~~~~~~~~~~~~~

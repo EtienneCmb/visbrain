@@ -1,10 +1,26 @@
 .. _BrainModule:
 
-:class:`Brain`
-==============
+Brain
+=====
 
-.. figure::  picture/ico/brain_ico.png
-   :align:   center
+.. raw:: html
+
+  <div class="jumbotron">
+    <h1 class="display-3">Quick description <img alt="_images/brain_ico.png" src="_images/brain_ico.png" width="150" height="150" align="right"></h1>
+    <p class="lead">Brain is a flexible graphical user interface for 3D visualizations on an MNI brain. It can be use to display deep sources, connectivity, region of interest etc.</p>
+    <hr class="my-4">
+    <p>
+
+Checkout the API of the :class:`visbrain.Brain` class. If you need help with the *Brain* module, ask your questions in the dedicated `gitter Brain chat <https://gitter.im/visbrain-python/Brain?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
+
+.. raw:: html
+
+    <img alt="_images/brain_description.png" src="_images/brain_description.png" align="center"></p>
+  </div>
+
+.. contents:: Contents
+   :local:
+   :depth: 2
 
 .. ##########################################################################
 ..                                 DESCRIPTION
