@@ -173,7 +173,7 @@ html_theme_options = {
     'source_link_position': "nav",
     'navbar_links': [
         ("Documentation", "documentation"),
-        ("Tutorial", "tutorial"),
+        ("FAQ", "faq"),
         ("Examples", "auto_examples/index"),
         ("API", "api"),
         ("Community", "community"),
