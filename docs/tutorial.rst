@@ -1,21 +1,21 @@
 .. _Tuto:
 
-.. raw:: html
-
-  <div class="jumbotron">
-
 Tutorial
 ********
 
 .. raw:: html
 
-    <p class="lead">Learn how to use Visbrain <b>#nodeepshit</b></p>
+  <div class="jumbotron">
+    <h1 class="display-3">#nodeepshit</h1>
+    <p class="lead">Learn how to use Visbrain</p>
     <hr>
   </div>
 
-.. ###########################################################################
+
+General
+-------
+
 .. ----------------------------- IMPORT -----------------------------
-.. ###########################################################################
 .. raw:: html
 
     <div class="panel-group">
@@ -34,25 +34,34 @@ Visbrain works with python files (i.e **.py**) and is currently **not working** 
 
     import visbrain
 
-
-
-.. ###########################################################################
-.. ----------------------------- SINGLE OBJECT -----------------------------
-.. ###########################################################################
 .. raw:: html
 
           </div>
         </div>
       </div>
+    </div>
 
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h2 class="panel-title">
-          <a data-toggle="collapse" href="#collapse_objects">How to display individual Visbrain objects?</a>
-        </h2>
-      </div>
-      <div id="collapse_objects" class="panel-collapse collapse">
-        <div class="panel-body">
+.. ############################################################################
+.. ############################################################################
+..                                  OBJECTS
+.. ############################################################################
+.. ############################################################################
+
+Objects
+-------
+
+.. ----------------------------- SINGLE OBJECT -----------------------------
+.. raw:: html
+
+    <div class="panel-group">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h2 class="panel-title">
+            <a data-toggle="collapse" href="#collapse_objects">How to display individual Visbrain objects?</a>
+          </h2>
+        </div>
+        <div id="collapse_objects" class="panel-collapse collapse">
+          <div class="panel-body">
 
 In Visbrain, objects are elementary visualization bricks. **One object = one visualization type**. Objects can be imported from :class:`visbrain.objects`. For example :
 
@@ -76,9 +85,7 @@ Checkout the :ref:`API_objects` part of the API. Then, each object has a `.previ
    :align:   center
 
 
-.. ###########################################################################
 .. ----------------------------- COMBINE OBJECTS -----------------------------
-.. ###########################################################################
 .. raw:: html
 
           </div>
@@ -131,8 +138,7 @@ Objects can be combined in a scene (see :class:`visbrain.objects.SceneObj`) to c
 
 .. raw:: html
 
-    <h3>How to stack several objects inside the same panel</h3>
-
+    <h3>How to stack several objects inside the same panel?</h3>
 
 .. code-block:: python
 
@@ -164,6 +170,118 @@ Objects can be combined in a scene (see :class:`visbrain.objects.SceneObj`) to c
 
 .. figure::  picture/pictuto/tuto_2-2.png
    :align:   center
+
+.. raw:: html
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+.. ############################################################################
+.. ############################################################################
+..                                    BRAIN
+.. ############################################################################
+.. ############################################################################
+
+
+Brain
+-----
+
+.. raw:: html
+
+    <div class="panel-group">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h2 class="panel-title">
+            <a data-toggle="collapse" href="#collapse_vertices">How to use my own brain template?</a>
+          </h2>
+        </div>
+        <div id="collapse_vertices" class="panel-collapse collapse">
+          <div class="panel-body">
+
+The :class:`visbrain.objects.BrainObj` comes with several brain templates (i.e B1, B2, B3 etc.). This is relevant for intracranial data but not always for EEG/MEG data. In that case, you can specify your own vertices and faces and define a new brain template.
+
+.. code-block:: python
+
+  from visbrain import Brain
+  from visbrain.objects import BrainObj
+
+  vertices = ...  # the array of vertices
+  faces = ...  # the array of faces
+
+  # Sometimes you can also have the normals to faces but visbrain usually have
+  # a better visual output when computing normals itself.
+  # Now, define a brain object :
+  b_obj = BrainObj('Custom', vertices=vert, faces=faces)
+
+  # Then, pass your brain object as an input and use it inside the GUI :
+  Brain(brain_obj=b_obj).show()
+
+  # Note : you can also save your template if you want to reload it later
+  # checkout the visbrain.objects.BrainObj.save method :
+  b_obj.save()
+
+  # After being saved, your template can be reloaded using :
+  b_obj = BrainObj('Custom')
+
+For further details, checkout this example : :ref:`sphx_glr_auto_examples_brain_02_brain_using_vertices.py`
+
+
+.. raw:: html
+
+          </div>
+        </div>
+      </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h2 class="panel-title">
+          <a data-toggle="collapse" href="#collapse_export">How to export figures without opening the graphical user interface?</a>
+        </h2>
+      </div>
+      <div id="collapse_export" class="panel-collapse collapse">
+        <div class="panel-body">
+
+.. raw:: html
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+Sleep
+-----
+
+
+.. raw:: html
+
+    <div class="panel-group">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h2 class="panel-title">
+            <a data-toggle="collapse" href="#collapse_sleep_extension">My data extension is not supported :( what can I do?</a>
+          </h2>
+        </div>
+        <div id="collapse_sleep_extension" class="panel-collapse collapse">
+          <div class="panel-body">
+
+Two strategies :
+
+* You already have a function to load your data as a NumPy array. In that case :
+
+.. code-block:: python
+
+  from visbrain import Sleep
+
+  data = ...        # NumPy array of shape (n_channels, n_time_points)
+  channels = [...]  # List of channel names. Could be None
+  hypno = ...       # NumPy array of shape (n_time_points,). Could be None
+
+  Sleep(data=data, hypno=hypno, channels=channels).show()
+
+* Submit a pull request to the `Visbrain Github <https://github.com/EtienneCmb/visbrain>`_
 
 
 .. raw:: html
