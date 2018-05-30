@@ -17,6 +17,7 @@ import inspect
 import os
 from os.path import relpath, dirname
 import sys
+from datetime import date
 
 import sphinx_bootstrap_theme
 from sphinx_gallery.sorting import FileNameSortKey
@@ -51,7 +52,7 @@ extensions = [
     'sphinx_click.ext',
     'numpydoc',
 ]
-    # , 'sphinx.ext.napoleon'
+# , 'sphinx.ext.napoleon'
 #     'sphinx.ext.githubpages',
 
 autosummary_generate = True
@@ -65,18 +66,18 @@ sphinx_gallery_conf = {
     'examples_dirs': '../examples',
     'sphinx_gallery': None,
     'reference_url': {
-            'visbrain': None,
-            'matplotlib': 'http://matplotlib.org',
-            'numpy': 'http://docs.scipy.org/doc/numpy',
-            'scipy': 'http://docs.scipy.org/doc/scipy/reference',
-            },
+        'visbrain': None,
+        'matplotlib': 'http://matplotlib.org',
+        'numpy': 'http://docs.scipy.org/doc/numpy',
+        'scipy': 'http://docs.scipy.org/doc/scipy/reference',
+    },
     'gallery_dirs': 'auto_examples',
     'backreferences_dir': 'generated',
     'default_thumb_file': 'picture/visbrain.png',
     'within_subsection_order': FileNameSortKey,
     'doc_module': ('visbrain'),
     # 'thumbnail_size': (100, 100),
-    }
+}
 
 numpydoc_show_class_members = False
 numpydoc_class_members_toctree = False
@@ -97,7 +98,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'visbrain'
-copyright = '2017, Etienne Combrisson'
+td = date.today()
+copyright = 'Last updated on %s' % td.isoformat()
 author = 'Etienne Combrisson'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -160,18 +162,15 @@ todo_include_todos = True
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 html_theme = 'bootstrap'
-html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
-    'globaltoc_depth': 1,
     'bootstrap_version': "3",
     'navbar_sidebarrel': False,
     'navbar_pagenav': False,
-    'globaltoc_includehidden': "true",
-    'source_link_position': "Page",  #None,
+    'source_link_position': "nav",
     'navbar_links': [
         ("Documentation", "documentation"),
         ("Tutorial", "tutorial"),
@@ -179,13 +178,13 @@ html_theme_options = {
         ("API", "api"),
         ("Community", "community"),
     ],
-    'navbar_site_name': "Site",
+    'navbar_class': "navbar",
     'bootswatch_theme': "sandstone",
     'navbar_fixed_top': True,
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
-#html_theme_path = []
+html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
 
 # The name for this set of Sphinx documents.
 # "<project> v<release> documentation" by default.
@@ -216,7 +215,7 @@ html_static_path = ['_static']
 # If not None, a 'Last updated on:' timestamp is inserted at every page
 # bottom, using the given strftime format.
 # The empty string is equivalent to '%b %d, %Y'.
-#html_last_updated_fmt = None
+html_last_updated_fmt = None
 
 # If true, SmartyPants will be used to convert quotes and dashes to
 # typographically correct entities.
@@ -239,10 +238,10 @@ html_domain_indices = True
 #html_split_index = False
 
 # If true, links to the reST sources are added to the pages.
-#html_show_sourcelink = True
+html_show_sourcelink = False
 
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
-#html_show_sphinx = True
+html_show_sphinx = False
 
 # If true, "(C) Copyright ..." is shown in the HTML footer. Default is True.
 #html_show_copyright = True
@@ -276,17 +275,17 @@ htmlhelp_basename = 'visbraindoc'
 # -- Options for LaTeX output ---------------------------------------------
 
 latex_elements = {
-# The paper size ('letterpaper' or 'a4paper').
-#'papersize': 'letterpaper',
+    # The paper size ('letterpaper' or 'a4paper').
+    #'papersize': 'letterpaper',
 
-# The font size ('10pt', '11pt' or '12pt').
-#'pointsize': '10pt',
+    # The font size ('10pt', '11pt' or '12pt').
+    #'pointsize': '10pt',
 
-# Additional stuff for the LaTeX preamble.
-#'preamble': '',
+    # Additional stuff for the LaTeX preamble.
+    #'preamble': '',
 
-# Latex figure (float) alignment
-#'figure_align': 'htbp',
+    # Latex figure (float) alignment
+    #'figure_align': 'htbp',
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
