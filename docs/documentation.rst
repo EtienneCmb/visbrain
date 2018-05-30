@@ -21,7 +21,7 @@ Documentation
     :numbered:
 
     introduction
-    tutorial
+    faq
 
 
 .. ------------------ VISBRAIN OBJECT ------------------

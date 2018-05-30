@@ -1,13 +1,13 @@
-.. _Tuto:
+.. _FAQ:
 
-Tutorial
-********
+FAQ
+***
 
 .. raw:: html
 
   <div class="jumbotron">
     <h1 class="display-3">#nodeepshit</h1>
-    <p class="lead">Learn how to use Visbrain</p>
+    <p class="lead">Frequently asked questions</p>
     <hr>
   </div>
 
