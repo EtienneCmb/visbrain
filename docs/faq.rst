@@ -28,11 +28,36 @@ General
         <div id="collapse_import" class="panel-collapse collapse">
           <div class="panel-body">
 
-Visbrain works with python files (i.e **.py**) and is currently **not working** inside Jupyter notebooks. Inside a **.py** file, Visbrain can be imported as follow :
+.. code-block:: python
+
+    import visbrain                                   # import the full package
+    from visbrain import Brain, Sleep                 # import modules
+    from visbrain.objects import BrainObj, SourceObj  # import objects
+
+.. ----------------------------- JUPYTER -----------------------------
+.. raw:: html
+
+          </div>
+        </div>
+      </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h2 class="panel-title">
+          <a data-toggle="collapse" href="#collapse_jupyter">Can I use visbrain inside the Jupyter notebook?</a>
+        </h2>
+      </div>
+      <div id="collapse_jupyter" class="panel-collapse collapse">
+        <div class="panel-body">
+
+Well, to be honest, the following trick doesn't work on every system and you could be forced to use Visbrain inside Python script (.py) instead of notebooks (.ipynb). Try to start your notebook with the following cell :
+
 
 .. code-block:: python
 
-    import visbrain
+    import matplotlib
+    matplotlib.use("Qt5Agg")
+
 
 .. raw:: html
 
