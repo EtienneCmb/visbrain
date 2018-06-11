@@ -314,7 +314,7 @@ def read_hypno(filename, time=None, datafile=None):
             hypno, sf_hyp = _read_hypno_txt_sample(filename)
         else:  # v2
             import pandas as pd
-            df = pd.read_csv(filename, sep='\t', header=None,
+            df = pd.read_csv(filename, delim_whitespace=True, header=None,
                              names=['Stage', 'Time'])
             hypno, _, sf_hyp = hypno_time_to_sample(df, len(time))
     elif ext == '.xlsx':  # v2 = Excel
