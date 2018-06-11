@@ -15,18 +15,81 @@ FAQ
 General
 -------
 
-.. ----------------------------- IMPORT -----------------------------
+.. ----------------------------- PYTHON -----------------------------
 .. raw:: html
 
     <div class="panel-group">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h2 class="panel-title">
-            <a data-toggle="collapse" href="#collapse_import">How to import and use visbrain?</a>
+            <a data-toggle="collapse" href="#collapse_python">How can I start with Python and Visbrain?</a>
           </h2>
         </div>
-        <div id="collapse_import" class="panel-collapse collapse">
+        <div id="collapse_python" class="panel-collapse collapse">
           <div class="panel-body">
+
+If you're not a Python user or if you've never used Python, this section is for you.
+To install Python, you should try `Anaconda <https://conda.io/docs/index.html>`_ which can be used to manage Python packages and requirement. Then, open a command line window (or terminal) and run :
+
+.. code-block:: bash
+
+    conda install pip
+
+Once pip is installed, you should be able to install Visbrain. In the terminal, run the following command :
+
+.. code-block:: bash
+
+    pip install visbrain
+
+And you should be ready to write your first python script. In your file explorer, create a new file, for example *py_script.py*. Open your file in a notepad like application (or an editor like `Atom <https://atom.io/>`_ or `Sublime Text <https://www.sublimetext.com/>`_). Then, paste the following python code :
+
+
+.. code-block:: python
+
+    # Import only the Brain module from visbrain
+    from visbrain import Brain
+    # Open Brain :
+    Brain().show()
+
+Finally, inside your terminal navigate to your folder where the *py_script.py* is located and run it using the following command :
+
+.. code-block:: bash
+
+    python py_script.py
+
+.. ----------------------------- HELP -----------------------------
+.. raw:: html
+
+          </div>
+        </div>
+      </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h2 class="panel-title">
+          <a data-toggle="collapse" href="#collapse_help">Help me I'm lost :(</a>
+        </h2>
+      </div>
+      <div id="collapse_help" class="panel-collapse collapse">
+        <div class="panel-body">
+
+Checkout the :ref:`community` tab, we provide several Gitter chat rooms where you asked your questions.
+
+.. ----------------------------- IMPORT -----------------------------
+.. raw:: html
+
+          </div>
+        </div>
+      </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h2 class="panel-title">
+          <a data-toggle="collapse" href="#collapse_import">How to import and use visbrain?</a>
+        </h2>
+      </div>
+      <div id="collapse_import" class="panel-collapse collapse">
+        <div class="panel-body">
 
 .. code-block:: python
 
@@ -50,7 +113,7 @@ General
       <div id="collapse_jupyter" class="panel-collapse collapse">
         <div class="panel-body">
 
-Well, to be honest, the following trick doesn't work on every system and you could be forced to use Visbrain inside Python script (.py) instead of notebooks (.ipynb). Try to start your notebook with the following cell :
+Well, to be honest, the following trick doesn't work on every system and you could be forced to use Visbrain inside Python script (.py) or `ipython <https://ipython.org/>`_ instead of notebooks (.ipynb). Try to start your notebook with the following cell :
 
 
 .. code-block:: python
