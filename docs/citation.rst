@@ -3,6 +3,9 @@
 Cite Visbrain
 =============
 
+Cite Sleep
+----------
+
 Please reference Sleep using its dedicated article in `Frontiers in Neuroinformatics <http://journal.frontiersin.org/article/10.3389/fninf.2017.00060/full>`_.
 Please let us know if you used or plan to use Sleep in any upcoming publications!
 
