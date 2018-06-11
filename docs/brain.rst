@@ -26,36 +26,74 @@ Checkout the API of the :class:`visbrain.Brain` class. If you need help with the
 ..                                 DESCRIPTION
 .. ##########################################################################
 
-Description
------------
-
 Main features
 ~~~~~~~~~~~~~
 
-* **GUI**
-   * Modular and responsive GUI
-   * Take screenshot with controllable dpi
-   * Save the GUI state (*buttons, sliders, checkbox*...)
-* **Main brain templates**
-   * Zoom, translate and rotate the brain
-   * Control the brain appearance, transparency, hemisphere...
-   * Import custom templates
-* **Sources**
-   * Add sources to the scene (EEG, MEG, intra-cranial...)
-   * Control
-   * Connect those sources (*Connectivity* with several color properties)
-   * Project source's activity onto the surface
-* **Volume**
-   * *Brain* comes by default with the Brodmann and AAL volume
-   * Import nifti files
-   * *Cross-sections*
-      * Display brain sections
-      * Localize sources using the *cross-sections*
-   * 3-D volume using several rendering methods
-   * *Region Of Interest* (ROI)
-      * Display ROI
-      * Add custom ROI templates
-      * Project source's activity on ROI
+.. raw:: html
+
+    <div class="grid-container">
+        <div class="grid-item">
+            <div class="alert alert-dismissible alert-primary">
+              <b>Graphical User Interface</b>
+              <ul>
+                <li>Modular and responsive GUI</li>
+                <li>Take screenshot with controllable dpi</li>
+                <li>Save the GUI state (buttons, sliders, checkbox...)</li>
+              </ul>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="alert alert-dismissible alert-primary">
+              <b>Main brain templates</b>
+              <ul>
+                <li>Zoom, translate and rotate the brain</li>
+                <li>Control the brain appearance, transparency, hemisphere...</li>
+                <li>Import custom templates</li>
+              </ul>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="alert alert-dismissible alert-primary">
+              <b>Sources</b>
+              <ul>
+                <li>Add sources to the scene (EEG, MEG, intra-cranial...)</li>
+                <li>Connect those sources (Connectivity with several color properties)</li>
+                <li>Project source's activity onto the surface</li>
+                <li>Localize source's location using either the Brodmann atlas, the Automated Anatomical Labeling (AAL) or any custom atlas.</li>
+              </ul>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="alert alert-dismissible alert-primary">
+              <b>Region Of Interest</b>
+              <ul>
+                <li>Display ROI inside translucent MNI brain</li>
+                <li>Define and use custom ROI</li>
+                <li>Project source's activity onto ROI</li>
+              </ul>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="alert alert-dismissible alert-primary">
+              <b>Cross-sections</b>
+              <ul>
+                <li>Display brain sections</li>
+                <li>Localize sources in the cross section</li>
+                <li>Use a nifti file</li>
+              </ul>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="alert alert-dismissible alert-primary">
+              <b>Others</b>
+              <ul>
+                <li>Display volumes</li>
+                <li>Display time-series, pictures etc.</li>
+                <li>Display vectors</li>
+              </ul>
+            </div>
+        </div>
+    </div>
 
 Import and use Brain
 ~~~~~~~~~~~~~~~~~~~~
@@ -137,9 +175,6 @@ CTRL + q                Exit
 .. ##########################################################################
 ..                                 TUTORIAL
 .. ##########################################################################
-
-Tutorial
---------
 
 MNI templates
 ~~~~~~~~~~~~~

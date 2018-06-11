@@ -22,8 +22,8 @@ Checkout the API of the :class:`visbrain.Signal` class.
    :local:
    :depth: 2
 
-Description
------------
+GUI Description
+~~~~~~~~~~~~~~~
 
 The GUI of the Signal module is subdivided into to two distinct components :
 
@@ -33,19 +33,42 @@ The GUI of the Signal module is subdivided into to two distinct components :
 Main features
 ~~~~~~~~~~~~~
 
-* **Grid disposition**
-    * 2-D and 3-D datasets are disposed into a grid for an overview of an entire dataset
-    * Zoom, translate and double click on a signal to enlarge it
-* **Signal inspection**
-    * Plot one time-series at a time
-    * Navigate across all of the time-series present in the dataset
-    * Change the plotting form (continuous line, markers, histogram, time-frequency map, power spectrum density (PSD))
-    * Load and export annotated trials
-* **Tools**
-    * De-trending and de-meaning
-    * Filtering (lowpass, highpass, bandpass, bandstop)
-    * Extract the amplitude, phase or power in specific frequency bands
-    * Take a screenshot (of the entire window, or the grid canvas only or of the signal canvas only)
+.. raw:: html
+
+    <div class="grid-container">
+        <div class="grid-item">
+            <div class="alert alert-dismissible alert-primary">
+              <b>Grid disposition</b>
+              <ul>
+                <li>2-D and 3-D datasets are disposed into a grid for an overview of an entire dataset</li>
+                <li>Zoom, translate and double click on a signal to enlarge it</li>
+              </ul>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="alert alert-dismissible alert-primary">
+              <b>Signal inspection</b>
+              <ul>
+                <li>Plot one time-series at a time</li>
+                <li>Navigate across all of the time-series present in the dataset</li>
+                <li>Change the plotting form (continuous line, markers, histogram, time-frequency map, power spectrum density (PSD))</li>
+                <li>Load and export annotated trials</li>
+              </ul>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="alert alert-dismissible alert-primary">
+              <b>Tools</b>
+              <ul>
+                <li>De-trending and de-meaning</li>
+                <li>Filtering (lowpass, highpass, bandpass, bandstop)</li>
+                <li>Extract the amplitude, phase or power in specific frequency bands</li>
+                <li>Take a screenshot (of the entire window, or the grid canvas only or of the signal canvas only)</li>
+              </ul>
+            </div>
+        </div>
+    </div>
+
 
 Import and use Signal
 ~~~~~~~~~~~~~~~~~~~~~
@@ -57,21 +80,8 @@ The :class:`Signal` module can be imported as follow :
     from visbrain import Signal
 
 
-Examples and datasets
-~~~~~~~~~~~~~~~~~~~~~
-
-To try out this module, check out the `Signal example <http://visbrain.org/auto_examples/index.html#signal-examples>`_ scripts.
-
-
-.. GUI description
-.. ~~~~~~~~~~~~~~~
-
-.. Components
-.. ^^^^^^^^^^
-
-
 Shortcuts
----------
+~~~~~~~~~
 
 * go = Grid canvas only
 * so = Signal canvas only

@@ -7,7 +7,7 @@ Sleep
 
   <div class="jumbotron">
     <h1 class="display-3">Quick description <img alt="_images/sleep_ico.png" src="_images/sleep_ico.png" width="150" height="150" align="right"></h1>
-    <p class="lead">Sleep is a flexible graphical user interface for visualization, analysis and scoring of polysomnographic sleep data and is developed in collaboration with <a href="https://raphaelvallat.github.io/">Raphael Vallat</a> and <a href="http://bluebrain.epfl.ch/page-143249-en.html">Christian O Reilly</a></p>
+    <p class="lead">Sleep is a flexible graphical user interface for visualization, analysis and scoring of polysomnographic sleep data and is developed in collaboration with <a href="https://raphaelvallat.github.io/">Raphael Vallat</a> and <a href="http://bluebrain.epfl.ch/page-143249-en.html">Christian O Reilly</a>. If you use Sleep, please cite the article in <a href="http://journal.frontiersin.org/article/10.3389/fninf.2017.00060/full">Frontiers in Neuroinformatics</a>.</p>
     <hr class="my-4">
     <p>
 
@@ -28,38 +28,76 @@ Checkout the API of the :class:`visbrain.Sleep` class. If you need help with the
 .. ##########################################################################
 .. ##########################################################################
 
-Description
------------
-
 Main features
 ~~~~~~~~~~~~~
 
-* **Graphical User Interface (GUI)**
-    * Modular and responsive GUI
-    * Take screenshot with controllable dpi
-    * Save the GUI state (*channels, amplitude, panels, checkbox*...)
-* **Load standard electro-physiological files**
-    * Default supported files : European Data Format, BrainVision, Micromed, Elan
-    * Pass raw data or use MNE-python to load other `file formats <https://martinos.org/mne/dev/manual/io.html#importing-eeg-data>`_
-    * Supported extensions for hypnogram files : **.txt**, **.csv**, **.xlsx**, **.hyp**.
-* **Display**
-    * Polysomnographic data (e.g. EEG, EOG, EMG)
-    * Time-frequency (=spectrogram)
-    * Hypnogram
-    * Topographic map
-* **Hypnogram**
-    * Load, edit and save
-    * Real-time computation of sleep statistics
-    * Export high-quality hypnogram figure
-* **Signal processing**
-    * De-meaning / de-trending
-    * Filtering
-    * Re-referencing to a reference channel or common average
-    * Bipolarization
-* **Semi-automatic events detections**
-    * Spindles, K-complexes, slow waves, rapid eye movements, muscle twitches and peaks (*each detection comes with additional and controllable parameters*)
-    * Can be performed either on single or multiple channels
-    * Detections are reported on the hypnogram and inside a table
+
+.. raw:: html
+
+    <div class="grid-container">
+        <div class="grid-item">
+            <div class="alert alert-dismissible alert-primary">
+              <b>Graphical User Interface (GUI)</b>
+              <ul>
+                <li>Modular and responsive GUI</li>
+                <li>Take screenshot with controllable dpi</li>
+                <li>Save the GUI state (channels, amplitude, panels, checkbox...)</li>
+              </ul>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="alert alert-dismissible alert-primary">
+              <b>Load standard electro-physiological files</b>
+              <ul>
+                <li>Default supported files : European Data Format, BrainVision, Micromed, Elan</li>
+                <li>Pass raw data or use MNE-python to load other <a href="https://martinos.org/mne/dev/manual/io.html#importing-eeg-data">file formats</a></li>
+                <li>Supported extensions for hypnogram files : .txt, .csv, .xlsx, .hyp.</li>
+              </ul>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="alert alert-dismissible alert-primary">
+              <b>Display</b>
+              <ul>
+                <li>Polysomnographic data (e.g. EEG, EOG, EMG)</li>
+                <li>Time-frequency (=spectrogram)</li>
+                <li>Hypnogram</li>
+                <li>Topographic map</li>
+              </ul>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="alert alert-dismissible alert-primary">
+              <b>Hypnogram</b>
+              <ul>
+                <li>Load, edit and save</li>
+                <li>Real-time computation of sleep statistics</li>
+                <li>Export high-quality hypnogram figure</li>
+              </ul>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="alert alert-dismissible alert-primary">
+              <b>Signal processing</b>
+              <ul>
+                <li>De-meaning / de-trending</li>
+                <li>Filtering</li>
+                <li>Re-referencing to a reference channel or common average</li>
+                <li>Bipolarization</li>
+              </ul>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="alert alert-dismissible alert-primary">
+              <b>Semi-automatic events detections</b>
+              <ul>
+                <li>Spindles, K-complexes, slow waves, rapid eye movements, muscle twitches and peaks (each detection comes with additional and controllable parameters)</li>
+                <li>Can be performed either on single or multiple channels</li>
+                <li>Detections are reported on the hypnogram and inside a table</li>
+              </ul>
+            </div>
+        </div>
+    </div>
 
 
 Import and use sleep
@@ -269,9 +307,6 @@ CTRL + q                Close the window
 ..                                 TUTORIAL
 .. ##########################################################################
 .. ##########################################################################
-
-Tutorial
---------
 
 .. ----------------------------------------------------------------------------
 ..                              SUPPORTED FILES

@@ -22,20 +22,34 @@ Checkout the API of the :class:`visbrain.Topo` class. If you need help with the 
    :local:
    :depth: 2
 
-Description
------------
-
 Main features
 ~~~~~~~~~~~~~
 
-* **Display topographic map**
-    * Find coordinates according to channel names
-    * Add connectivity edges
-    * Support multiple coordinate systems
-    * Highly controllable colorbar
-* **Grid representation**
-    * Display topoplot into a highly controllable grid.
-    * Add either one colorbar per topoplot or one shared colorbar across topoplot
+.. raw:: html
+
+    <div class="grid-container">
+        <div class="grid-item">
+            <div class="alert alert-dismissible alert-primary">
+              <b>Display topographic map</b>
+              <ul>
+                <li>Find coordinates according to channel names</li>
+                <li>Add connectivity edges</li>
+                <li>Support multiple coordinate systems</li>
+                <li>Highly controllable colorbar</li>
+              </ul>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="alert alert-dismissible alert-primary">
+              <b>Grid representation</b>
+              <ul>
+                <li>Display topoplot into a highly controllable grid.</li>
+                <li>Add either one colorbar per topoplot or one shared colorbar across topoplot</li>
+              </ul>
+            </div>
+        </div>
+    </div>
+
 
 Import and use Topo
 ~~~~~~~~~~~~~~~~~~~
