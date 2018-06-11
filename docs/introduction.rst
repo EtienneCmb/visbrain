@@ -1,12 +1,34 @@
 .. _Introduction:
 
-Install Visbrain
-================
+Presentation
+============
+
+Quick description
+-----------------
+
+Visbrain is an open-source `Python 3 <https://www.python.org/>`_ package, distributed under the 3-Clause BSD license and is dedicated to brain signals visualization.
+
+Visbrain is under heavy development and many functionalities are frequently added to the package, such as bug fixing, documentation improvements etc.
+
+Visbrain use VisPy to render graphics. Taken from their website :
+
+.. raw:: html
+
+    <blockquote class="blockquote">
+      <p class="mb-0">VisPy is a high-performance interactive 2D/3D data visualization library leveraging the computational power of modern Graphics Processing Units (GPUs) through the OpenGL library to display very large datasets.</p>
+      <footer class="blockquote-footer">VisPy website : <a href="http://vispy.org">http://vispy.org</a></footer>
+    </blockquote>
+
+
+
+Structure
+---------
+
+Installation
+============
 
 Dependencies
 ------------
-
-Here's the list of visbrain's dependencies :
 
 ===============================================================               ===========     =========================================
 Package                                                                       Version         Purpose
@@ -25,10 +47,10 @@ PyQt5 can be installed using either **pip install pyqt5** or **conda install pyq
 
     pip install pandas PyOpenGL PyOpenGL_accelerate
 
-Installation
-------------
+Regular installation
+--------------------
 
-Install Visbrain :
+Run the following command in a terminal :
 
 .. code-block:: shell
 
