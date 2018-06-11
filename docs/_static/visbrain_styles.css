@@ -57,7 +57,19 @@ th {
     background-color: #FFB54A;
     font-weight: bold;
 }
-
+.alert-primary {
+    background-color: #5e4c5d;
+    color: #FFF;
+}
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  padding: 10px;
+}
+.grid-item {
+  padding: 20px;
+  text-align: left;
+}
 
 /*Navigation bar*/
 .navbar-default .navbar-nav > li > a {
