@@ -60,6 +60,9 @@ The :class:`Topo` module can be imported as follow :
 
     from visbrain import Topo
 
+Examples
+~~~~~~~~
+
 .. include:: generated/visbrain.Topo.examples
 
 .. raw:: html

@@ -789,6 +789,8 @@ Save annotations
 
 The list of annotations can be exported (either in .txt or .csv) or loaded from the *Files* contextual menu.
 
+Examples
+~~~~~~~~
 
 .. include:: generated/visbrain.Sleep.examples
 

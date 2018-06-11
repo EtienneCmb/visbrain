@@ -101,3 +101,12 @@ CTRL + d                Display / hide setting panel
 CTRL + n                Take a screenshot
 CTRL + q                Close Sleep graphical interface
 ======================  =======================================================
+
+Examples
+~~~~~~~~
+
+.. include:: generated/visbrain.Signal.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

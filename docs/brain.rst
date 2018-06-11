@@ -348,6 +348,9 @@ The colorbar can be controlled for individual objects including :
    **Examples**
       * :ref:`sphx_glr_auto_examples_brain_08_screenshot.py`
 
+Examples
+~~~~~~~~
+
 .. include:: generated/visbrain.Brain.examples
 
 .. raw:: html
