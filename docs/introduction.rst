@@ -43,5 +43,4 @@ If you want to install visbrain in develop mode :
 
     git clone https://github.com/EtienneCmb/visbrain.git visbrain/
     cd visbrain/
-    pip install -r requirements.txt
     python setup.py develop 
