@@ -169,7 +169,10 @@ html_theme = 'bootstrap'
 html_theme_options = {
     'bootstrap_version': "3",
     'navbar_sidebarrel': False,
-    'navbar_pagenav': False,
+    'navbar_pagenav': True,
+    'navbar_pagenav_name': "Page",
+    'globaltoc_depth': -1,
+    'globaltoc_includehidden': "true",
     'source_link_position': "nav",
     'navbar_links': [
         ("Documentation", "documentation"),
