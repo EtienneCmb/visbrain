@@ -17,7 +17,7 @@ Documentation
           <div class="panel-body">
 
 .. toctree::
-    :maxdepth: 1
+    :maxdepth: 2
     :numbered:
 
     introduction
