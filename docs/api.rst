@@ -8,6 +8,23 @@ API
    :local:
    :depth: 2
 
+
+GUI based modules
+-----------------
+
+.. currentmodule:: visbrain
+
+.. autosummary::
+   :toctree: generated/
+   :template: qt_class.rst
+
+   Brain
+   Sleep
+   Topo
+   Signal
+   Figure
+
+
 .. _API_objects:
 
 
@@ -34,23 +51,6 @@ Objects
     TimeSeries3DObj
     VectorObj
     VolumeObj
-
-
-GUI based modules
------------------
-
-.. currentmodule:: visbrain
-
-.. autosummary::
-   :toctree: generated/
-   :template: qt_class.rst
-
-   Brain
-   Sleep
-   Topo
-   Signal
-   Figure
-
 
 Compatibility with existing software
 ------------------------------------
