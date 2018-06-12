@@ -3,6 +3,17 @@
 Changelog
 ---------
 
+Version 0.4.1
+=============
+
+Brain
+~~~~~
+* Fix path to brain templates
+
+Sleep
+~~~~~
+* Fix loading hypnogram with spaces instead of tabs
+
 Version 0.4.0
 =============
 
