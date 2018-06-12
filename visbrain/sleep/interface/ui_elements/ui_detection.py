@@ -202,7 +202,7 @@ class UiDetection(object):
         ############################################################
         # LINE REPORT :
         ############################################################
-        self._loc_line_report()
+        self._loc_line_report(select=True)
 
         # Activate the save detections menu and activate detection tab :
         self._check_detect_menu()
@@ -210,7 +210,7 @@ class UiDetection(object):
         # Finally, hide progress bar :
         self._ToolDetectProgress.hide()
 
-    def _loc_line_report(self, *args, refresh=True):
+    def _loc_line_report(self, *args, refresh=True, select=False):
         """Update line report."""
         self._detect.build_line(self._data)
         chans = self._detect.nonzero()
@@ -235,6 +235,9 @@ class UiDetection(object):
         # Reconnect table :
         self._DetectChanSw.currentIndexChanged.connect(
             self._fcn_run_switch_location)
+        # Select the last detected event :
+        if refresh and select:
+            self._DetectChanSw.setCurrentIndex(self._DetectChanSw.count() - 1)
 
     # =====================================================================
     # FILL LOCATION TABLE
