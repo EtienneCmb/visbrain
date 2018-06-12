@@ -5,18 +5,17 @@
     <footer>
         <div class="container">
             <ul class="list-inline">
-                <li><a href="genindex.html">Index</a></li>
+                <li><a href="{{ pathto('genindex.html', 1) }}">Index</a></li>
                 <li>·</li>
                 <li><a href="https://github.com/EtienneCmb/visbrain">Github</a></li>
                 <li>·</li>
-                <li><a href="release.html">What's New?</a></li>
+                <li><a href="{{ pathto('release.html', 1) }}">What's New?</a></li>
                 <li>·</li>
-                <li><a href="citation.html">Cite Visbrain</a></li>
+                <li><a href="{{ pathto('citation.html', 1) }}">Cite Visbrain</a></li>
             </ul>
          </div>
         <div class="container">
             <img src="{{ pathto('_static/baniere.png', 1) }}" alt="Ban" height="80">
-            <!-- <img src="_static/baniere.png" alt="Ban" height="80"> -->
         </div>
         <p>&copy; Copyright {{ copyright }}.</p>
     </footer>
