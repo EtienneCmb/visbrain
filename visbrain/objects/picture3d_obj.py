@@ -104,7 +104,7 @@ class Picture3DObj(VisbrainObject):
 
         # _______________________ IMAGE _______________________
         self._pic = PicMesh(data, xyz, pic_width, pic_height, translate,
-                            select)
+                            select, **self.to_kwargs())
         self._pic.transform = tr
         self._pic.parent = self._node
 
