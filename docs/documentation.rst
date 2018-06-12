@@ -21,7 +21,6 @@ Documentation
     :numbered:
 
     introduction
-    faq
 
 
 .. ------------------ VISBRAIN OBJECT ------------------
@@ -41,6 +40,11 @@ Documentation
         <div class="panel-body">
 
 
+.. toctree::
+    :maxdepth: 2
+    :numbered:
+
+    objects
 
 
 .. ------------------ BRAIN MODULE ------------------
