@@ -15,7 +15,7 @@ Checkout the list and API of available :ref:`API_objects`.
 
 .. raw:: html
 
-    <img alt="_images/ex_brain_obj.png" src="_images/ex_brain_obj.png" align="center"></p>
+    <img alt="_images/ex_brain_obj.png" src="_images/ex_combine_obj.png" align="center"></p>
   </div>
 
 .. contents:: Contents
