@@ -8,8 +8,10 @@ This example illustrate
 import numpy as np
 
 from visbrain.objects import (BrainObj, ColorbarObj, SceneObj, SourceObj,
-                              ImageObj, RoiObj, CrossSecObj, ConnectObj)
+                              ImageObj, RoiObj, CrossSecObj, ConnectObj,
+                              TimeSeries3DObj, Picture3DObj)
 from visbrain.io import download_file
+from visbrain.utils import generate_eeg
 
 """Get the path to Visbrain data and download deep sources
 """
@@ -52,27 +54,27 @@ sc = SceneObj(camera_state=CAM_STATE, size=(1400, 1000))
 # sc.add_to_subplot(cs_brod, row=2, col=2, col_span=2, row_span=2,
 #                   title='Cross-sections')
 
-# print("""
-# ===============================================================================
-#                            Region Of Interest (ROI)
-# ===============================================================================
-# """)
-# roi_aal = RoiObj('aal')
-# roi_aal.select_roi(select=[29, 30], unique_color=True, smooth=11)
-# CAM_STATE_ROI = dict(scale_factor=200 * 100, distance=800 * 100, azimuth=0,
-#                      elevation=90)
-# sc.add_to_subplot(roi_aal, row=0, col=1,
-#                   title='Region Of Interest (ROI)', camera_state=CAM_STATE_ROI)
+# # print("""
+# # ===============================================================================
+# #                            Region Of Interest (ROI)
+# # ===============================================================================
+# # """)
+# # roi_aal = RoiObj('aal')
+# # roi_aal.select_roi(select=[29, 30], unique_color=True, smooth=11)
+# # CAM_STATE_ROI = dict(scale_factor=200 * 100, distance=800 * 100, azimuth=0,
+# #                      elevation=90)
+# # sc.add_to_subplot(roi_aal, row=0, col=1,
+# #                   title='Region Of Interest (ROI)', camera_state=CAM_STATE_ROI)
 
-print("""
-=============================================================================
-                                    Sources
-=============================================================================
-""")
-s_obj = SourceObj('FirstSources', xyz, data=data)
-s_obj.color_sources(data=data, cmap='Spectral_r')
-sc.add_to_subplot(s_obj, row=0, col=2, title='Sources')
-sc.add_to_subplot(BrainObj('B3'), use_this_cam=True, row=0, col=2)
+# print("""
+# =============================================================================
+#                                     Sources
+# =============================================================================
+# """)
+# s_obj = SourceObj('FirstSources', xyz, data=data)
+# s_obj.color_sources(data=data, cmap='Spectral_r')
+# sc.add_to_subplot(s_obj, row=0, col=2, row_span=2, title='Sources')
+# sc.add_to_subplot(BrainObj('B3'), use_this_cam=True, row=0, col=2)
 
 
 # print("""
@@ -89,5 +91,31 @@ sc.add_to_subplot(BrainObj('B3'), use_this_cam=True, row=0, col=2)
 # sc.add_to_subplot(c_count, row=1, col=1, title='3D connectivity')
 # sc.add_to_subplot(s_obj_c, row=1, col=1)
 # sc.add_to_subplot(BrainObj('B3'), use_this_cam=True, row=1, col=1)
+
+
+print("""
+# =============================================================================
+#                               3D Time-series
+# =============================================================================
+""")
+ts, _ = generate_eeg(n_pts=100, n_channels=xyz.shape[0])
+select = np.zeros((xyz.shape[0],), dtype=bool)
+select[slice(0, 100, 10)] = True
+ts_obj = TimeSeries3DObj('TS3D', ts, xyz, select=select, color='pink',
+                         ts_amp=24.)
+sc.add_to_subplot(ts_obj, row=0, col=3, title='3D time series')
+sc.add_to_subplot(BrainObj('B2'), use_this_cam=True, row=0, col=3)
+
+
+print("""
+# =============================================================================
+#                               3D Pictures
+# =============================================================================
+""")
+pic = np.random.rand(xyz.shape[0], 20, 20)
+pic_obj = Picture3DObj('PIC', pic, xyz, select=select, pic_width=21.,
+                       pic_height=21., cmap='viridis')
+sc.add_to_subplot(pic_obj, row=1, col=3, title='3D time series')
+sc.add_to_subplot(BrainObj('B2'), use_this_cam=True, row=1, col=3)
 
 sc.preview()
