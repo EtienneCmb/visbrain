@@ -381,7 +381,12 @@ class SceneObj(object):
             Tuple of two integers to get the subplot of the grid.
         """
         assert len(rowcol) == 2
-        return self._grid[(rowcol[0] + 1, rowcol[1] + 1)]
+        # Get the index of the subplot :
+        idx_sub = self._grid.layout_array[rowcol[0] + 1, rowcol[1] + 1]
+        # Find if there's multiple subplots with the same index :
+        (i_row, i_col) = np.where(self._grid.layout_array == idx_sub)
+        sl = (slice(i_row[0], i_row[-1] + 1), slice(i_col[0], i_col[-1] + 1))
+        return self._grid[sl]
 
     def _gl_uniform_transforms(self):
         """Check that transforms are uniforms inside the grid."""
