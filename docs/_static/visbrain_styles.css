@@ -1,8 +1,4 @@
-.bg-primary{
-  color: #FFF ;
-  background-color: #4D394B;
-}
-
+/* ############################ FONT ############################*/
 body {
     font-size: 16;
 }
@@ -19,14 +15,12 @@ a:hover {  /* mouse over link */
 a:active {  /* selected link */
     color: #2ecc71;
 }
-
 code {
     color: #ab4642 !important;
     background-color: #eedad9 !important;
 }
 
-
-/*Title*/
+/* ############################ TITLES ############################*/
 /*h1  {
     background-color: powderblue;
 }
@@ -37,7 +31,13 @@ h3  {
     background-color: orange;
 }*/
 
-/*Tables*/
+/* ############################ COLORS ############################*/
+.bg-primary{
+  color: #FFF ;
+  background-color: #4D394B;
+}
+
+/* ############################ TABLE ############################*/
 th {
     background-color: #a69ca5;
     color: white;
@@ -49,6 +49,17 @@ th {
     background-color: #f2f2f2;
 }*/
 
+/* ############################ BUTTONS ############################*/
+.btn-primary {
+    background-color: #5e4c5d;
+    font-weight: bold;
+}
+.btn-primary:hover {
+    background-color: #4D394B;
+    font-weight: bold;
+}
+
+/* ############################ ALERT ############################*/
 .alert-info {
     background-color: #90CAF9;
     font-weight: bold;
@@ -61,6 +72,8 @@ th {
     background-color: #5e4c5d;
     color: #FFF;
 }
+
+/* ############################ GRID ############################*/
 .grid-container {
   display: grid;
   grid-template-columns: auto auto auto;
@@ -71,7 +84,7 @@ th {
   text-align: left;
 }
 
-/*Navigation bar*/
+/* ############################ NAVIGATION BAR ############################*/
 .navbar-default .navbar-nav > li > a {
     color: #a69ca5;
 }
@@ -90,22 +103,14 @@ th {
     background-color: #a69ca5;
 }*/
 
-/*Buttons*/
-.btn-primary {
-    background-color: #5e4c5d;
-    font-weight: bold;
-}
-.btn-primary:hover {
-    background-color: #4D394B;
-    font-weight: bold;
-}
-
+/* ############################ FOOTER ############################*/
 footer {
     text-align: center;
     margin-left: auto;
     margin-right: auto;
 }
 
+/* ############################ CAROUSEL ############################*/
 .carousel-caption {
     text-shadow: 0 1px 1px rgba(0,0,0,1.0);
     background-color: rgba(26,26,26,0.7);
