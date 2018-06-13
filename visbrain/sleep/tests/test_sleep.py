@@ -219,3 +219,21 @@ class TestSleep(_TestVisbrain):
         """Test mouse release."""
         self._mouse_event(sp._chanCanvas[0].canvas, etype='mouse_release',
                           pos=(50, 100))
+
+    ###########################################################################
+    #                             CUSTOM DETECTION
+    ###########################################################################
+
+    def test_replace_detections(self):
+        """Test function replace_detections."""
+        meth_names = ('spindle', 'sw', 'kc', 'rem', 'mt', 'peak')
+        def fcn(data, sf, hypno):  # noqa
+            return np.array([[0, 100], [200, 300]])
+        # Replace detection :
+        for k in meth_names:
+            sp.replace_detections(k, fcn)
+        # Re-run detections :
+        sp._ToolDetectChan.setCurrentIndex(2)  # Select CZ channel
+        for k in range(6):
+            sp._ToolDetectType.setCurrentIndex(k)
+            sp._fcn_apply_detection()
