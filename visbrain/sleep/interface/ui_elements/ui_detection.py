@@ -5,6 +5,7 @@ import logging
 
 from ....utils import (remdetect, spindlesdetect, slowwavedetect, kcdetect,
                        peakdetect, mtdetect)
+from ....utils.sleep.event import _events_to_index
 
 logger = logging.getLogger('visbrain')
 
@@ -143,7 +144,27 @@ class UiDetection(object):
                 def fcn(data, sf, hypno):  # noqa
                     return peakdetect(sf, data, self._time, look, 1., disp,
                                       'auto')
-        return fcn
+
+        def fcn_check(data, sf, hypno):
+            """Wrap fcn with type checking."""
+            assert isinstance(data, np.ndarray)
+            idx = fcn(data, sf, hypno)
+            idx = np.asarray(idx)
+            if not idx.size:
+                return idx
+            # Check indices shape and format to (n_events, 2) :
+            if (idx.ndim == 2) and (idx.shape[1] == 2):  # (n_events, 2)
+                return idx
+            elif (idx.ndim == 1) and (idx.dtype == bool):  # boolean array
+                assert len(idx) == self._N
+                idx = np.arange(self._N)[idx][::self._dsf]
+                return _events_to_index(idx)
+            else:
+                raise ValueError("Return indices should either be an (n_events"
+                                 ", 2) array or a boolean array of shape "
+                                 "(%i,)." % self._N)
+
+        return fcn_check
 
     # -------------- Run detection (only on selected channels) --------------
     def _fcn_apply_detection(self):
@@ -165,7 +186,7 @@ class UiDetection(object):
             # Run detection :
             index = fcn(self._data[k, :], self._sf, self._hypno)
             nb = index.shape[0]
-            dty = nb / (self._N / self._sf / 60.)
+            dty = nb / (len(self._time) / self._sf / 60.)
             # dur = (index[:, 1] - index[:, 0]) * (1000. / self._sf)
 
             logger.info(("Perform %s detection on channel %s. %i events "

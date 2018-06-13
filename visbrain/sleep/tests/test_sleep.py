@@ -227,11 +227,20 @@ class TestSleep(_TestVisbrain):
     def test_replace_detections(self):
         """Test function replace_detections."""
         meth_names = ('spindle', 'sw', 'kc', 'rem', 'mt', 'peak')
-        def fcn(data, sf, hypno):  # noqa
+        def fcn_1(data, sf, hypno):  # noqa
+            """(n_events, 2) array."""
             return np.array([[0, 100], [200, 300]])
+        def fcn_2(data, sf, hypno):  # noqa
+            """(n_time_points,) boolean vector."""
+            vec = np.zeros((sp._N,), dtype=bool)
+            vec[0:100] = True
+            return vec
         # Replace detection :
-        for k in meth_names:
-            sp.replace_detections(k, fcn)
+        for i, k in enumerate(meth_names):
+            if i % 2 == 0:
+                sp.replace_detections(k, fcn_1)
+            else:
+                sp.replace_detections(k, fcn_2)
         # Re-run detections :
         sp._ToolDetectChan.setCurrentIndex(2)  # Select CZ channel
         for k in range(6):

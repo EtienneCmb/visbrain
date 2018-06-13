@@ -185,11 +185,15 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
                 * The sampling frequency
                 * A vector array for the hypnogram of shape (n_time_points,)
 
-            Then, the function should return indices of relevant events. Those
-            indices should be an array of shape (n_events, 2) where `n_events`
-            describe the number of detected events. The first and second
-            columns of the array respectively describe where detected events
-            start and finished.
+            Then, the function should return indices of relevant events.
+            Returned indices should either be :
+
+                *  An array of shape (n_events, 2) where `n_events` describe
+                   the number of detected events. The first and second columns
+                   of the array respectively describe where detected events
+                   start and finished.
+                * A boolean vector of shape (n_time_points,) where True values
+                  refer to detected events.
 
         Examples
         --------
