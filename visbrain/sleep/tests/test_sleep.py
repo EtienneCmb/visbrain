@@ -101,6 +101,8 @@ class TestSleep(_TestVisbrain):
 
     def test_save_selected_dection(self):
         """Test saving selected dection."""
+        # Force to select the first (spindles) detection :
+        sp._DetectChanSw.setCurrentIndex(0)
         sp._save_select_detect(filename=self.to_tmp_dir('selected_detect.txt'))
         sp._save_select_detect(filename=self.to_tmp_dir('selected_detect.csv'))
 
