@@ -5,6 +5,20 @@ __all__ = ('is_mne_installed', 'is_nibabel_installed', 'is_opengl_installed',
            'is_tensorpac_installed', 'is_xlrd_installed')
 
 
+def _check_version(v_user, v_compare):
+    """Compare package versions.
+
+    Parameters
+    ----------
+    v_user : string
+        Package version for the user.
+    v_compare : string
+        Package version to compare.
+    """
+    from distutils.version import LooseVersion
+    return LooseVersion(v_user) >= LooseVersion(v_compare)
+
+
 def is_mne_installed(raise_error=False):
     """Test if MNE is installed."""
     try:
@@ -28,8 +42,8 @@ def is_nibabel_installed(raise_error=False):
         is_installed = False
     # Raise error (if needed) :
     if raise_error and not is_installed:
-        raise IOError("nibabel not installed. See https://github.com/nipy/"
-                      "nibabel for installation instructions.")
+        raise IOError("nibabel not installed. See https://github.com/"
+                      "nipy/nibabel for installation instructions.")
     return is_installed
 
 
