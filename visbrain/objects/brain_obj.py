@@ -474,7 +474,7 @@ class BrainObj(VisbrainObject):
         # Select conversion :
         if select is None:
             logger.info("Select all parcellates")
-            select = u_idx
+            select = labels
         # Manage color if data is an array :
         if isinstance(data, (np.ndarray, list, tuple)):
             data = np.asarray(data)
