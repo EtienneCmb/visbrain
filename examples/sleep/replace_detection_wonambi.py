@@ -8,7 +8,7 @@ with those implemented inside wonambi.
 This example uses the wonambi package. See
 https://wonambi-python.github.io/installation.html for a detailed installation.
 
-.. note::
+.. warning::
 
     After running this script, just go to the Detection panel and run the
     selected detection by clicking on Apply. The software will automatically
@@ -19,6 +19,10 @@ Required dataset at :
 https://www.dropbox.com/s/bj1ra95rbksukro/sleep_edf.zip?dl=1
 
 """
+###############################################################################
+# Load your file and create an instance of Sleep
+###############################################################################
+
 import os
 import numpy as np
 
@@ -28,24 +32,29 @@ from visbrain.io import download_file, path_to_visbrain_data
 from wonambi.detect.spindle import DetectSpindle, detect_Moelle2011
 from wonambi.detect.slowwave import DetectSlowWave, detect_Massimini2004
 
-###############################################################################
-#                               LOAD YOUR FILE
-###############################################################################
+# Get data path and where to save it :
 current_path = path_to_visbrain_data()
 target_path = os.path.join(current_path, 'sleep_data', 'edf')
 
+# Download the file :
 download_file('sleep_edf.zip', unzip=True, to_path=target_path)
 
-dfile = os.path.join(target_path, 'excerpt2.edf')
-hfile = os.path.join(target_path, 'Hypnogram_excerpt2.txt')
-cfile = os.path.join(target_path, 'excerpt2_config.txt')
+# Get data path :
+dfile = os.path.join(target_path, 'excerpt2.edf')            # data
+hfile = os.path.join(target_path, 'Hypnogram_excerpt2.txt')  # hypnogram
+cfile = os.path.join(target_path, 'excerpt2_config.txt')     # GUI config
 
+# Define an instance of Sleep :
+sp = Sleep(data=dfile, hypno=hfile, config_file=cfile)
 
 ###############################################################################
-#                             DEFINE NEW METHODS
+# Define new methods
 ###############################################################################
 
-# ------------------------- SPINDLES -------------------------
+###############################################################################
+# Spindle function
+# ~~~~~~~~~~~~~~~~
+
 # Define a DetectSpindle instance :
 opts_spin = DetectSpindle('Moelle2011')
 # Define the function to replace :
@@ -63,7 +72,10 @@ def fcn_spindle(data, sf, time, hypno):  # noqa
     indices *= sf
     return indices.astype(int)
 
-# ------------------------- SLOW-WAVES -------------------------
+###############################################################################
+# Slow-waves function
+# ~~~~~~~~~~~~~~~~~~~
+
 # Define a DetectSlowWave instance :
 opts_sw = DetectSlowWave('Massimini2004')
 # Define the function to replace :
@@ -82,10 +94,10 @@ def fcn_slowwave(data, sf, time, hypno):  # noqa
     return indices.astype(int)
 
 ###############################################################################
-#                         REPLACE EXISTING METHODS
+# Replace existing methods
 ###############################################################################
-# Define an instance of Sleep :
-sp = Sleep(data=dfile, hypno=hfile, config_file=cfile)
+# Now we use the :class:`visbrain.Sleep.replace_detections` method to overwrite
+# existing spindles and slow-waves detections.
 
 # Replace the spindle detection function :
 sp.replace_detections('spindle', fcn_spindle)
