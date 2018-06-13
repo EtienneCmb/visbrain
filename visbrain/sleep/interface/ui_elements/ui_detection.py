@@ -201,8 +201,8 @@ class UiDetection(object):
             self._ToolDetectTable.setItem(0, 1, QtWidgets.QTableWidgetItem(
                 str(round(dty, 2))))
         else:
-            warn("\nNo " + method + " detected on channel " + self._channels[
-                 k] + ". Try to decrease the threshold")
+            logger.error("No %s detected on channel %s. Adjust "
+                         "parameters." % (method, self._channels[k]))
 
         ############################################################
         # LINE REPORT :
