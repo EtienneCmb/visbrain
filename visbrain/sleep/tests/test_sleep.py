@@ -227,15 +227,15 @@ class TestSleep(_TestVisbrain):
     def test_replace_detections(self):
         """Test function replace_detections."""
         meth_names = ('spindle', 'sw', 'kc', 'rem', 'mt', 'peak')
-        def fcn_1(data, sf, hypno):  # noqa
+        def fcn_1(data, sf, time, hypno):  # noqa
             """(n_events, 2) array."""
             return np.array([[0, 100], [200, 300]])
-        def fcn_2(data, sf, hypno):  # noqa
+        def fcn_2(data, sf, time, hypno):  # noqa
             """(n_time_points,) boolean vector."""
             vec = np.zeros((len(sp._time),), dtype=bool)
             vec[0:100] = True
             return vec
-        def fcn_3(data, sf, hypno):  # noqa
+        def fcn_3(data, sf, time, hypno):  # noqa
             """Consecutive indices."""
             return np.arange(100)
         # Replace detection :

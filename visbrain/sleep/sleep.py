@@ -182,7 +182,8 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
             input :
 
                 * A vector array of data of shape (n_time_points,)
-                * The sampling frequency
+                * The sampling frequency (float)
+                * The time vector of shape (n_time_points,)
                 * A vector array for the hypnogram of shape (n_time_points,)
 
             Then, the function should return indices of relevant events.

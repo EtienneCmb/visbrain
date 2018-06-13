@@ -105,7 +105,7 @@ class UiDetection(object):
             if method == 'REM':
                 th = self._ToolRemTh.value()
                 rem_only = self._ToolRemOnly.isChecked()
-                def fcn(data, sf, hypno):  # noqa
+                def fcn(data, sf, time, hypno):  # noqa
                     return remdetect(data, sf, hypno, rem_only, th)
             elif method == 'Spindles':
                 thr = self._ToolSpinTh.value()
@@ -114,12 +114,12 @@ class UiDetection(object):
                 tmin = self._ToolSpinTmin.value()
                 tmax = self._ToolSpinTmax.value()
                 nrem_only = self._ToolSpinRemOnly.isChecked()
-                def fcn(data, sf, hypno):  # noqa
+                def fcn(data, sf, time, hypno):  # noqa
                     return spindlesdetect(data, sf, thr, hypno, nrem_only,
                                           fmin, fmax, tmin, tmax)
             elif method == 'Slow waves':
                 thr = self._ToolWaveTh.value()
-                def fcn(data, sf, hypno):  # noqa
+                def fcn(data, sf, time, hypno):  # noqa
                     return slowwavedetect(data, sf, thr)
             elif method == 'K-complexes':
                 proba_thr = self._ToolKCProbTh.value()
@@ -129,26 +129,26 @@ class UiDetection(object):
                 min_amp = self._ToolKCMinAmp.value()
                 max_amp = self._ToolKCMaxAmp.value()
                 nrem_only = self._ToolKCNremOnly.isChecked()
-                def fcn(data, sf, hypno):  # noqa
+                def fcn(data, sf, time, hypno):  # noqa
                     return kcdetect(data, sf, proba_thr, amp_thr, hypno,
                                     nrem_only, tmin, tmax, min_amp, max_amp)
             elif method == 'Muscle twitches':
                 th = self._ToolMTTh.value()
                 rem_only = self._ToolMTOnly.isChecked()
-                def fcn(data, sf, hypno):  # noqa
+                def fcn(data, sf, time, hypno):  # noqa
                     return mtdetect(data, sf, th, hypno, rem_only)
             elif method == 'Peaks':
                 look = int(self._ToolPeakLook.value() * self._sf)
                 _disp = self._ToolPeakMinMax.currentIndex()
                 disp = ['max', 'min', 'minmax'][_disp]
-                def fcn(data, sf, hypno):  # noqa
+                def fcn(data, sf, time, hypno):  # noqa
                     return peakdetect(sf, data, self._time, look, 1., disp,
                                       'auto')
 
-        def fcn_check(data, sf, hypno):
+        def fcn_check(data, sf, time, hypno):
             """Wrap fcn with type checking."""
             assert isinstance(data, np.ndarray)
-            idx = fcn(data, sf, hypno)
+            idx = fcn(data, sf, time, hypno)
             idx = np.asarray(idx)
             if not idx.size:
                 return idx
@@ -186,7 +186,7 @@ class UiDetection(object):
                 self._ToolDetectProgress.show()
 
             # Run detection :
-            index = fcn(self._data[k, :], self._sf, self._hypno)
+            index = fcn(self._data[k, :], self._sf, self._time, self._hypno)
             nb = index.shape[0]
             dty = nb / (len(self._time) / self._sf / 60.)
             # dur = (index[:, 1] - index[:, 0]) * (1000. / self._sf)
