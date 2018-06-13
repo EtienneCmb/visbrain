@@ -2,14 +2,14 @@
 Replace detection algorithm : basic example
 ===========================================
 
-This example illustrate how to replace the default detection algorithm.
+This example illustrates how to replace the default detection algorithm.
 
 .. note::
 
-    Once your methods come to replace those included by default, in the GUI, go
-    to Detection > Settings / Detection type > Type and select the detection
-    type to run. BTW, the console should confirm that you're using your method
-    and not the one included by default.
+    After running this script, just go to the Detection panel and run the
+    selected detection by clicking on Apply. The software will automatically
+    use your new detection algorithm. The Python console should confirm that
+    you're using the new method and not the default method.
 
 Required dataset at :
 https://www.dropbox.com/s/bj1ra95rbksukro/sleep_edf.zip?dl=1
@@ -40,8 +40,9 @@ cfile = os.path.join(target_path, 'excerpt2_config.txt')
 def fcn_spindle(data, sf, time, hypno):  # noqa
     """New spindle detection function.
 
-    This function do not intend to perform any signal processing. It just
-    highlights samples between [0, 100], [200, 300] and [400, 500].
+    This function does NOT perform a real spindle detection. It's purpose is to
+    show how to replace the default detection behavior by a custom function.
+    It just highlights samples between [0, 100], [200, 300] and [400, 500].
     """
     indices = np.array([[0, 100],
                        [200, 300],
@@ -51,12 +52,14 @@ def fcn_spindle(data, sf, time, hypno):  # noqa
 def fcn_rem(data, sf, time, hypno):  # noqa
     """New REM detection function.
 
-    This function doesn't claim to really detect REM events. But it performs a
-    basic thresholding and return boolean values of data that are than the
-    threshold.
+    This function does NOT perform a real REM detection. It illustrates how to
+    replace the default detection behavior by a basic thresholding function.
+    Note that the function returns a boolean array indicating samples that are
+    above a specific threshold.
     """
     mean_data = np.mean(data)
     std_data = np.std(data)
+    # Threshold is mean + 3 * STD
     return data > mean_data + 3. * std_data
 
 

@@ -2,18 +2,18 @@
 Replace detection with wonambi algorithm
 ========================================
 
-This example illustrate how to replace the default spindle detection algorithm
+This example illustrates how to replace the default spindle detection algorithm
 with those implemented inside wonambi.
 
-This example use the wonambi package. See
+This example uses the wonambi package. See
 https://wonambi-python.github.io/installation.html for a detailed installation.
 
 .. note::
 
-    Once your methods come to replace those included by default, in the GUI, go
-    to Detection > Settings / Detection type > Type and select the detection
-    type to run. BTW, the console should confirm that you're using your method
-    and not the one included by default.
+    After running this script, just go to the Detection panel and run the
+    selected detection by clicking on Apply. The software will automatically
+    use your new detection algorithm. The Python console should confirm that
+    you're using the new method and not the default method.
 
 Required dataset at :
 https://www.dropbox.com/s/bj1ra95rbksukro/sleep_edf.zip?dl=1
@@ -68,7 +68,7 @@ def fcn_spindle(data, sf, time, hypno):  # noqa
 opts_sw = DetectSlowWave('Massimini2004')
 # Define the function to replace :
 def fcn_slowwave(data, sf, time, hypno):  # noqa
-    """New fcn_slowwave detection function.
+    """New slowwave detection function.
 
     See : https://wonambi-python.github.io/api/wonambi.detect.slowwave.html
     for an exhaustive list of implemented detections inside wonambi.
@@ -92,5 +92,5 @@ sp.replace_detections('spindle', fcn_spindle)
 # Replace the slow-wave detection function :
 sp.replace_detections('sw', fcn_slowwave)
 
-# Finally, open Sleep :
+# Finally, open the graphical user interface :
 sp.show()
