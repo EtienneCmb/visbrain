@@ -17,6 +17,10 @@
 .. image:: https://badge.fury.io/py/visbrain.svg
   :target: https://badge.fury.io/py/visbrain
 
+.. raw:: html
+
+  <br>
+
 .. Levels :
 .. # Main title
 .. * Tile 1

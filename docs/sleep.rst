@@ -675,6 +675,17 @@ Perform a peak detection.
 .. important::
   Please note that the software does not yet allow to automatically score sleep stages. However, if you are interested to collaborate and / or implement your own algorithm, please feel free to contact us.
 
+
+Use your own detections in Sleep
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Sleep lets you replace default detection algorithms with your own using the :class:`visbrain.Sleep.replace_detections` method.
+
+
+.. figure::  picture/picsleep/sleep_return_indices.png
+   :align:   center
+
+
 .. ----------------------------------------------------------------------------
 ..                              GUI CONFIG
 .. ----------------------------------------------------------------------------
