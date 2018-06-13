@@ -1,14 +1,16 @@
 """Main class for sleep tools managment."""
 import numpy as np
-from warnings import warn
 from PyQt5 import QtWidgets, QtCore
 import logging
 
 from ....utils import (remdetect, spindlesdetect, slowwavedetect, kcdetect,
                        peakdetect, mtdetect)
-from ....utils.sleep.event import _events_to_index
 
 logger = logging.getLogger('visbrain')
+
+
+USER_METHOD = {'Spindles': 'spindle', 'Slow waves': 'sw', 'K-complexes': 'kc',
+               'REM': 'rem', 'Muscle twitches': 'mt', 'Peaks': 'peak'}
 
 
 class UiDetection(object):
@@ -57,7 +59,10 @@ class UiDetection(object):
     def _fcn_switch_detection(self):
         """Switch between detection types (show / hide panels)."""
         idx = int(self._ToolDetectType.currentIndex())
+        method = str(self._ToolDetectType.currentText())
         self._stacked_detections.setCurrentIndex(idx)
+        enable = USER_METHOD[method] not in self._custom_detections.keys()
+        self._stacked_detections.setEnabled(enable)
 
     # =====================================================================
     # RUN DETECTION
