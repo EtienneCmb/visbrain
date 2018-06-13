@@ -28,8 +28,8 @@ def is_nibabel_installed(raise_error=False):
         is_installed = False
     # Raise error (if needed) :
     if raise_error and not is_installed:
-        raise IOError("nibabel not installed. See https://github.com/nipy/"
-                      "nibabel for installation instructions.")
+        raise IOError("nibabel>=2.3 not installed. See https://github.com/"
+                      "nipy/nibabel for installation instructions.")
     return is_installed
 
 
