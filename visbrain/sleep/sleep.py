@@ -194,6 +194,8 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
                    start and finished.
                 * A boolean vector of shape (n_time_points,) where True values
                   refer to detected events.
+                * An array which contains consecutive indices of detected
+                  events.
 
         Examples
         --------

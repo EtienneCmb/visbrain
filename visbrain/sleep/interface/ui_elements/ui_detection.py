@@ -155,14 +155,16 @@ class UiDetection(object):
             # Check indices shape and format to (n_events, 2) :
             if (idx.ndim == 2) and (idx.shape[1] == 2):  # (n_events, 2)
                 return idx
-            elif (idx.ndim == 1) and (idx.dtype == bool):  # boolean array
-                assert len(idx) == self._N
-                idx = np.arange(self._N)[idx][::self._dsf]
+            elif idx.ndim == 1:  # 1d vector
+                if idx.dtype == bool:  # boolean array
+                    assert len(idx) == len(data)
+                    idx = np.arange(len(data))[idx]
                 return _events_to_index(idx)
             else:
                 raise ValueError("Return indices should either be an (n_events"
                                  ", 2) array or a boolean array of shape "
-                                 "(%i,)." % self._N)
+                                 "(n_time_points,) or an array with "
+                                 "consecutive detected events.")
 
         return fcn_check
 

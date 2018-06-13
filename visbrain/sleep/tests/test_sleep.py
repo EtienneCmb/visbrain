@@ -232,15 +232,20 @@ class TestSleep(_TestVisbrain):
             return np.array([[0, 100], [200, 300]])
         def fcn_2(data, sf, hypno):  # noqa
             """(n_time_points,) boolean vector."""
-            vec = np.zeros((sp._N,), dtype=bool)
+            vec = np.zeros((len(sp._time),), dtype=bool)
             vec[0:100] = True
             return vec
+        def fcn_3(data, sf, hypno):  # noqa
+            """Consecutive indices."""
+            return np.arange(100)
         # Replace detection :
         for i, k in enumerate(meth_names):
-            if i % 2 == 0:
+            if i in [0, 1]:
                 sp.replace_detections(k, fcn_1)
-            else:
+            elif i in [2, 3]:
                 sp.replace_detections(k, fcn_2)
+            elif i in [4, 5]:
+                sp.replace_detections(k, fcn_3)
         # Re-run detections :
         sp._ToolDetectChan.setCurrentIndex(2)  # Select CZ channel
         for k in range(6):
