@@ -75,17 +75,10 @@ def kcdetect(data, sf, proba_thr, amp_thr, hypno, nrem_only, tmin, tmax,
     Returns
     -------
     idx_kc : array_like
-        Indices of detected K-complexes
-    number : int
-        Number of detected K-complexes
-    density : float
-        Number of K-complexes per minutes of data
-    duration_ms : float
-        Duration (ms) of each K-complex detected
+        Indices of detected K-complexes of shape (n_events, 2)
     """
     # Find if hypnogram is loaded :
     hyploaded = True if np.unique(hypno).size > 1 and nrem_only else False
-    length = max(data.shape)
 
     # PRE DETECTION
     # Compute delta band power using wavelet
@@ -111,87 +104,79 @@ def kcdetect(data, sf, proba_thr, amp_thr, hypno, nrem_only, tmin, tmax,
     # Find threshold-crossing indices of soft threshold
     idx_zc_soft = _events_to_index(idx_soft).flatten()
 
-    if idx_hard.size > 0:
-        # Initialize K-complexes index vector
-        idx_kc = np.array([], dtype=int)
-        # Fill gap between events separated by less than min_distance_ms
-        idx_hard = _events_distance_fill(idx_hard, min_distance_ms, sf)
-        # Get where K-complex start / end :
-        idx_start, idx_stop = _events_to_index(idx_hard).T
+    if idx_hard.size == 0:
+        return np.array([], dtype=int)
 
-        # Find true beginning / end using soft threshold
-        for s in idx_start:
-            d = s - idx_zc_soft
-            soft_beg = d[d > 0].min()
-            soft_end = np.abs(d[d < 0]).min()
-            idx_kc = np.append(idx_kc, np.arange(s - soft_beg, s + soft_end))
+    # Initialize K-complexes index vector
+    idx_kc = np.array([], dtype=int)
+    # Fill gap between events separated by less than min_distance_ms
+    idx_hard = _events_distance_fill(idx_hard, min_distance_ms, sf)
+    # Get where K-complex start / end :
+    idx_start, idx_stop = _events_to_index(idx_hard).T
 
-        # Check if spindles are present in range_spin_sec
-        idx_spin = spindlesdetect(data, sf, spindles_thresh, hypno, False)[0]
-        idx_start, idx_stop = _events_to_index(idx_kc).T
-        spin_bool = np.array([], dtype=np.bool)
+    # Find true beginning / end using soft threshold
+    for s in idx_start:
+        d = s - idx_zc_soft
+        soft_beg = d[d > 0].min()
+        soft_end = np.abs(d[d < 0]).min()
+        idx_kc = np.append(idx_kc, np.arange(s - soft_beg, s + soft_end))
 
-        for idx, val in enumerate(idx_start):
-            step = 0.5 * range_spin_sec * sf
-            is_spin = np.in1d(np.arange(val - step, val + step, 1),
-                              idx_spin, assume_unique=True)
-            spin_bool = np.append(spin_bool, any(is_spin))
+    # Check if spindles are present in range_spin_sec
+    idx_spin = spindlesdetect(data, sf, spindles_thresh, hypno, False)[0]
+    idx_start, idx_stop = _events_to_index(idx_kc).T
+    spin_bool = np.array([], dtype=np.bool)
 
-        kc_spin = np.where(spin_bool)[0]
-        idx_kc_spin = _index_to_events(np.c_[idx_start, idx_stop][kc_spin])
+    for idx, val in enumerate(idx_start):
+        step = 0.5 * range_spin_sec * sf
+        is_spin = np.in1d(np.arange(val - step, val + step, 1),
+                          idx_spin, assume_unique=True)
+        spin_bool = np.append(spin_bool, any(is_spin))
 
-        # Compute probability
-        proba = np.zeros(shape=data.shape)
-        proba[idx_kc] += 0.1
-        proba[idx_no_delta] += 0.1
-        proba[idx_loc_delta] += 0.1
-        proba[idx_kc_spin] += 0.1
+    kc_spin = np.where(spin_bool)[0]
+    idx_kc_spin = _index_to_events(np.c_[idx_start, idx_stop][kc_spin])
 
-        if hyploaded:
-            proba[hypno == -1] += -0.1
-            proba[hypno == 0] += -0.2
-            proba[hypno == 1] += 0
-            proba[hypno == 2] += 0.1
-            proba[hypno == 3] += -0.1
-            proba[hypno == 4] += -0.2
+    # Compute probability
+    proba = np.zeros(shape=data.shape)
+    proba[idx_kc] += 0.1
+    proba[idx_no_delta] += 0.1
+    proba[idx_loc_delta] += 0.1
+    proba[idx_kc_spin] += 0.1
 
-        # Smooth and normalize probability vector
-        proba = proba / 0.5 if hyploaded else proba / 0.4
-        proba = smoothing(proba, sf)
-        # Keep only proba >= proba_thr (user defined threshold)
-        idx_kc = np.intersect1d(idx_kc, np.where(proba >= proba_thr)[0], True)
+    if hyploaded:
+        proba[hypno == -1] += -0.1
+        proba[hypno == 0] += -0.2
+        proba[hypno == 1] += 0
+        proba[hypno == 2] += 0.1
+        proba[hypno == 3] += -0.1
+        proba[hypno == 4] += -0.2
 
-        if idx_kc.size > 0:
-            # MORPHOLOGICAL CRITERIA
-            idx_start, idx_stop = _events_to_index(idx_kc).T
-            duration_ms = (idx_stop - idx_start) * (1000 / sf)
+    # Smooth and normalize probability vector
+    proba = proba / 0.5 if hyploaded else proba / 0.4
+    proba = smoothing(proba, sf)
+    # Keep only proba >= proba_thr (user defined threshold)
+    idx_kc = np.intersect1d(idx_kc, np.where(proba >= proba_thr)[0], True)
 
-            # Remove events with bad duration
-            good_dur = np.where(np.logical_and(duration_ms > tmin,
-                                               duration_ms < tmax))[0]
-            idx_kc = _index_to_events(np.c_[idx_start, idx_stop][good_dur])
+    if idx_kc.size == 0:
+        return np.array([], dtype=int)
 
-            # Remove events with bad amplitude
-            idx_start, idx_stop = _events_to_index(idx_kc).T
-            amp = np.zeros(shape=idx_start.size)
-            for i, (start, stop) in enumerate(zip(idx_start, idx_stop)):
-                amp[i] = np.ptp(data[start:stop])
-            good_amp = np.where(np.logical_and(amp > kc_min_amp,
-                                               amp < kc_max_amp))[0]
-            idx_kc = _index_to_events(np.c_[idx_start, idx_stop][good_amp])
+    # Morphological criteria
+    idx_start, idx_stop = _events_to_index(idx_kc).T
+    duration_ms = (idx_stop - idx_start) * (1000 / sf)
 
-            # Compute number, duration, density
-            idx_start, idx_stop = _events_to_index(idx_kc).T
-            number = idx_start.size
-            duration_ms = (idx_stop - idx_start) * (1000 / sf)
-            density = number / (length / sf / 60.)
-            return idx_kc, number, density, duration_ms
+    # Remove events with bad duration
+    good_dur = np.where(np.logical_and(duration_ms > tmin,
+                                       duration_ms < tmax))[0]
+    idx_kc = _index_to_events(np.c_[idx_start, idx_stop][good_dur])
 
-        else:
-            return np.array([], dtype=int), 0., 0., np.array([], dtype=int)
+    # Remove events with bad amplitude
+    idx_start, idx_stop = _events_to_index(idx_kc).T
+    amp = np.zeros(shape=idx_start.size)
+    for i, (start, stop) in enumerate(zip(idx_start, idx_stop)):
+        amp[i] = np.ptp(data[start:stop])
+    good_amp = np.where(np.logical_and(amp > kc_min_amp,
+                                       amp < kc_max_amp))[0]
 
-    else:
-        return np.array([], dtype=int), 0., 0., np.array([], dtype=int)
+    return np.c_[idx_start, idx_stop][good_amp]
 
 
 ###########################################################################
@@ -238,15 +223,7 @@ def spindlesdetect(data, sf, threshold, hypno, nrem_only, fmin=12., fmax=14.,
     Returns
     -------
     idx_spindles : array_like
-        Indices of detected spindles
-    number : int
-        Number of detected spindles
-    density : float
-        Number of spindles per minutes of data
-    duration_ms : float
-        Duration (ms) of each spindles detected
-    power
-
+        Indices of detected spindles of shape (n_events, 2)
     """
     # Pre-detection
     if adapt_band:
@@ -330,11 +307,12 @@ def spindlesdetect(data, sf, threshold, hypno, nrem_only, fmin=12., fmax=14.,
         good_dur = np.where(np.logical_and(duration_ms > tmin,
                                            duration_ms < tmax))[0]
 
-        idx_spindles = _index_to_events(np.c_[idx_start, idx_stop][good_dur])
+        if idx_spindles.size == 0:
+            return np.array([], dtype=int)
 
-        if idx_spindles.size:
+        if return_full:
             # Compute number, duration, density
-            idx_start, idx_stop = _events_to_index(idx_spindles).T
+            idx_start, idx_stop = np.c_[idx_start, idx_stop][good_dur].T
             number = idx_start.size
             duration_ms = (idx_stop - idx_start) * (1000 / sf)
             density = number / (length / sf / 60.)
@@ -348,31 +326,11 @@ def spindlesdetect(data, sf, threshold, hypno, nrem_only, fmin=12., fmax=14.,
             # Normalize by dividing by the mean
             normalization(pwrs, norm=2)
 
-            if return_full:
-                return (idx_spindles, number, density, duration_ms, pwrs,
-                        idx_start, idx_stop, hard_thr, soft_thr, idx_sigma,
-                        fmin, fmax, sigma_nfpow, amplitude, sigma_thr)
-            else:
-                return idx_spindles, number, density, duration_ms, pwrs
-
+            return (idx_spindles, number, density, duration_ms, pwrs,
+                    idx_start, idx_stop, hard_thr, soft_thr, idx_sigma,
+                    fmin, fmax, sigma_nfpow, amplitude, sigma_thr)
         else:
-            empty = np.array([], dtype=int)
-            if return_full:
-                return (empty, 0., 0., empty, np.array([]), empty, empty,
-                        hard_thr, soft_thr, idx_sigma, fmin, fmax, sigma_nfpow,
-                        amplitude, sigma_thr)
-            else:
-                return empty, 0., 0., empty, np.array([])
-
-    else:
-        if return_full:
-            return np.array([], dtype=int), 0., 0., np.array([], dtype=int), \
-                np.array([]), np.array([], dtype=int), \
-                np.array([], dtype=int), hard_thr, soft_thr, idx_sigma, fmin, \
-                fmax, sigma_nfpow, amplitude, sigma_thr
-        else:
-            return np.array([], dtype=int), 0., 0., np.array([], dtype=int),\
-                np.array([])
+            return np.c_[idx_start, idx_stop][good_dur]
 
 
 ###########################################################################
@@ -416,13 +374,7 @@ def remdetect(data, sf, hypno, rem_only, threshold, tmin=300, tmax=800,
     Returns
     -------
     idx_rem: array_like
-        Indices of detected REMs
-    number: int
-        Number of detected REMs
-    density: float
-        Number of REMs per minute
-    duration_ms: float
-        Duration (ms) of each REM detected
+        Indices of detected REMs of shape (n_events, 2)
     """
     # Compute relative beta power
     freqs = np.array([0.5, 4., 8., 12, 40])
@@ -439,9 +391,6 @@ def remdetect(data, sf, hypno, rem_only, threshold, tmin=300, tmax=800,
     if rem_only and 4 in hypno:
         idx_zero = np.where(hypno < 4)[0]
         deriv[idx_zero] = np.nan
-        length = max(data.shape) - idx_zero.size
-    else:
-        length = max(data.shape)
 
     # Define hard and soft thresholds
     hard_thr = np.nanmean(deriv) + threshold * np.nanstd(deriv)
@@ -454,52 +403,42 @@ def remdetect(data, sf, hypno, rem_only, threshold, tmin=300, tmax=800,
     # Find threshold-crossing indices of soft threshold
     idx_zc_soft = _events_to_index(idx_soft).flatten()
 
-    if idx_hard.size > 0:
-        # Initialize rem vector
-        idx_rem = np.array([], dtype=int)
+    if idx_hard.size == 0:
+        return np.array([], dtype=int)
 
-        # Keep only period with low relative beta power (i.e. remove artefact)
-        idx_hard = np.intersect1d(idx_hard, idx_beta, True)
+    # Initialize rem vector
+    idx_rem = np.array([], dtype=int)
 
-        # Fill gap between events separated by less than min_distance_ms
-        idx_hard = _events_distance_fill(idx_hard, min_distance_ms, sf)
+    # Keep only period with low relative beta power (i.e. remove artefact)
+    idx_hard = np.intersect1d(idx_hard, idx_beta, True)
 
-        # Get where spindles start / end :
-        idx_start, idx_stop = _events_to_index(idx_hard).T
+    # Fill gap between events separated by less than min_distance_ms
+    idx_hard = _events_distance_fill(idx_hard, min_distance_ms, sf)
 
-        # Find true beginning / end using soft threshold
-        for s in idx_start:
-            d = s - idx_zc_soft
-            # Find distance to nearest soft threshold crossing before start
-            soft_beg = d[d > 0].min()
-            # Find distance to nearest soft threshold crossing after end
-            soft_end = np.abs(d[d < 0]).min()
-            idx_rem = np.append(idx_rem, np.arange(
-                s - soft_beg, s + soft_end))
+    # Get where spindles start / end :
+    idx_start, idx_stop = _events_to_index(idx_hard).T
 
-        # Fill gap between events separated by less than min_distance_ms
-        idx_rem = _events_distance_fill(idx_rem, min_distance_ms, sf)
+    # Find true beginning / end using soft threshold
+    for s in idx_start:
+        d = s - idx_zc_soft
+        # Find distance to nearest soft threshold crossing before start
+        soft_beg = d[d > 0].min()
+        # Find distance to nearest soft threshold crossing after end
+        soft_end = np.abs(d[d < 0]).min()
+        idx_rem = np.append(idx_rem, np.arange(s - soft_beg, s + soft_end))
 
-        # Get duration
-        idx_start, idx_stop = _events_to_index(idx_rem).T
-        duration_ms = (idx_stop - idx_start) * (1000 / sf)
+    # Fill gap between events separated by less than min_distance_ms
+    idx_rem = _events_distance_fill(idx_rem, min_distance_ms, sf)
 
-        # Remove events with bad duration
-        good_dur = np.where(np.logical_and(duration_ms > tmin,
-                                           duration_ms < tmax))[0]
+    # Get duration
+    idx_start, idx_stop = _events_to_index(idx_rem).T
+    duration_ms = (idx_stop - idx_start) * (1000 / sf)
 
-        idx_rem = _index_to_events(np.c_[idx_start, idx_stop][good_dur])
+    # Remove events with bad duration
+    good_dur = np.where(np.logical_and(duration_ms > tmin,
+                                       duration_ms < tmax))[0]
 
-        # Compute number, duration, density
-        idx_start, idx_stop = _events_to_index(idx_rem).T
-        number = idx_start.size
-        duration_ms = (idx_stop - idx_start) * (1000 / sf)
-        density = number / (length / sf / 60.)
-
-        return idx_rem, number, density, duration_ms
-
-    else:
-        return np.array([], dtype=int), 0., 0., np.array([], dtype=int)
+    return np.c_[idx_start, idx_stop][good_dur]
 
 
 ###########################################################################
@@ -537,13 +476,7 @@ def slowwavedetect(data, sf, threshold, min_amp=70., max_amp=400., tmin=1000.,
     Returns
     -------
     idx_sw : array_like
-        Indices of slow waves
-    number : int
-        Number of detected slow-wave
-    density: float
-        Number of slow waves per minute
-    duration_ms : float
-        Duration (ms) of each slow wave period detected
+        Indices of slow waves of shape (n_events, 2)
     """
     filt_fmax = np.minimum(45, sf / 2.0 - 0.75)  # protect Nyquist
     data_filt = filt(sf, [.1, filt_fmax], data)
@@ -556,34 +489,26 @@ def slowwavedetect(data, sf, threshold, min_amp=70., max_amp=400., tmin=1000.,
     # Normalized power criteria
     idx_sw = np.where(delta_nfpow > threshold)[0]
 
-    if idx_sw.size:
-        # Get where slow waves start / end :
-        idx_start, idx_stop = _events_to_index(idx_sw).T
-        duration_ms = (idx_stop - idx_start) * (1000 / sf)
+    if idx_sw.size == 0:
+        return np.array([], dtype=int)
 
-        # Check amplitude and duration
-        amp = np.zeros(shape=idx_start.shape)
-        for idx, (start, stop) in enumerate(zip(idx_start, idx_stop)):
-            amp[idx] = np.ptp(data[start:stop])
-        good_amp = np.where(np.logical_and(amp > min_amp, amp < max_amp))[0]
-        good_dur = np.where(duration_ms > tmin)[0]
-        good_event = np.intersect1d(good_amp, good_dur, True)
-        idx_sw = _index_to_events(np.c_[idx_start, idx_stop][good_event])
+    # Get where slow waves start / end :
+    idx_start, idx_stop = _events_to_index(idx_sw).T
+    duration_ms = (idx_stop - idx_start) * (1000 / sf)
 
-        if idx_sw.size:
-            # Export info
-            idx_start, idx_stop = _events_to_index(idx_sw).T
-            number = idx_start.size
-            duration_ms = (idx_stop - idx_start) * (1000 / sf)
-            density = number / (len(data) / sf / 60.)
+    # Check amplitude and duration
+    amp = np.zeros(shape=idx_start.shape)
+    for idx, (start, stop) in enumerate(zip(idx_start, idx_stop)):
+        amp[idx] = np.ptp(data[start:stop])
+    good_amp = np.where(np.logical_and(amp > min_amp, amp < max_amp))[0]
+    good_dur = np.where(duration_ms > tmin)[0]
+    good_event = np.intersect1d(good_amp, good_dur, True)
+    idx_sw = np.c_[idx_start, idx_stop][good_event]
 
-            return idx_sw, number, density, duration_ms
+    if idx_sw.size == 0:
+        return np.array([], dtype=int)
 
-        else:
-            return np.array([], dtype=int), 0., 0., np.array([], dtype=int)
-
-    else:
-        return np.array([], dtype=int), 0., 0., np.array([], dtype=int)
+    return idx_sw
 
 
 ###########################################################################
@@ -632,13 +557,7 @@ def mtdetect(data, sf, threshold, hypno, rem_only, fmin=0., fmax=50.,
     Returns
     -------
     idx_mt : array_like
-        Indices of MTs
-    number : int
-        Number of detected MTs
-    density : float
-        Number of MTs per minutes of data
-    duration_ms : float
-        Duration (ms) of each MT detected
+        Indices of MTs of shape (n_events, 2)
     """
     # PRE DETECTION
     # Morlet envelope
@@ -652,9 +571,6 @@ def mtdetect(data, sf, threshold, hypno, rem_only, fmin=0., fmax=50.,
     if rem_only and 4 in hypno:
         idx_zero = np.where(hypno < 4)[0]
         amplitude[idx_zero] = np.nan
-        length = max(data.shape) - idx_zero.size
-    else:
-        length = max(data.shape)
 
     # Define hard threshold
     hard_thr = np.nanmean(amplitude) + threshold * np.nanstd(amplitude)
@@ -662,45 +578,38 @@ def mtdetect(data, sf, threshold, hypno, rem_only, fmin=0., fmax=50.,
     with np.errstate(divide='ignore', invalid='ignore'):
         idx_hard = np.where(amplitude > hard_thr)[0]
 
-    if idx_hard.size:
-        # Keep only MT in period with low relative delta power
-        idx_hard = np.setdiff1d(idx_hard, idx_high_delta, True)
+    if idx_hard.size == 0:
+        return np.array([], dtype=int)
 
-        # Fill gap between events separated by less than min_distance_ms
-        idx_hard = _events_distance_fill(idx_hard, min_distance_ms, sf)
+    # Keep only MT in period with low relative delta power
+    idx_hard = np.setdiff1d(idx_hard, idx_high_delta, True)
 
-        # MORPHOLOGICAL CRITERIA
-        idx_start, idx_stop = _events_to_index(idx_hard).T
-        duration_ms = (idx_stop - idx_start) * (1000 / sf)
+    # Fill gap between events separated by less than min_distance_ms
+    idx_hard = _events_distance_fill(idx_hard, min_distance_ms, sf)
 
-        # Remove events with bad duration
-        good_dur = np.where(np.logical_and(duration_ms > tmin,
-                                           duration_ms < tmax))[0]
-        idx_mt = _index_to_events(np.c_[idx_start, idx_stop][good_dur])
+    # MORPHOLOGICAL CRITERIA
+    idx_start, idx_stop = _events_to_index(idx_hard).T
+    duration_ms = (idx_stop - idx_start) * (1000 / sf)
 
-        # Remove events with bad amplitude
-        idx_start, idx_stop = _events_to_index(idx_mt).T
-        amp = np.zeros(shape=idx_start.size)
-        for i, (start, stop) in enumerate(zip(idx_start, idx_stop)):
-            amp[i] = np.ptp(data[start:stop])
-        good_amp = np.where(np.logical_and(amp > min_amp,
-                                           amp < max_amp))[0]
-        idx_mt = _index_to_events(np.c_[idx_start, idx_stop][good_amp])
+    # Remove events with bad duration
+    good_dur = np.where(np.logical_and(duration_ms > tmin,
+                                       duration_ms < tmax))[0]
+    idx_mt = _index_to_events(np.c_[idx_start, idx_stop][good_dur])
 
-        # Compute number, duration, density
-        if idx_mt.size:
-            idx_start, idx_stop = _events_to_index(idx_mt).T
-            number = idx_start.size
-            duration_ms = (idx_stop - idx_start) * (1000 / sf)
-            density = number / (length / sf / 60.)
+    # Remove events with bad amplitude
+    idx_start, idx_stop = _events_to_index(idx_mt).T
+    amp = np.zeros(shape=idx_start.size)
+    for i, (start, stop) in enumerate(zip(idx_start, idx_stop)):
+        amp[i] = np.ptp(data[start:stop])
+    good_amp = np.where(np.logical_and(amp > min_amp,
+                                       amp < max_amp))[0]
+    idx_mt = np.c_[idx_start, idx_stop][good_amp]
 
-            return idx_mt, number, density, duration_ms
+    # Compute number, duration, density
+    if idx_mt.size == 0:
+        return np.array([], dtype=int)
 
-        else:
-            return np.array([], dtype=int), 0., 0., np.array([], dtype=int)
-
-    else:
-        return np.array([], dtype=int), 0., 0., np.array([], dtype=int)
+    return idx_mt
 
 
 ###########################################################################
@@ -755,11 +664,7 @@ def peakdetect(sf, y_axis, x_axis=None, lookahead=200, delta=1., get='max',
     Returns
     -------
     index : array_like
-        A row vector containing the index of maximum / minimum.
-    number : int
-        Number of peaks.
-    density : float
-        Density of peaks.
+        A vector containing peak indices of shape (n_events, 2)
     """
     # ============== CHECK DATA ==============
     if x_axis is None:
@@ -861,9 +766,7 @@ def peakdetect(sf, y_axis, x_axis=None, lookahead=200, delta=1., get='max',
             index = np.array(min_peaks)
         elif get == 'minmax':
             index = np.vstack((min_peaks, max_peaks))
-        number = len(index)
-        density = number / (len(y_axis) / sf / 60.)
 
-        return index, number, density
+        return np.c_[index, index]
     else:
-        return np.array([]), 0., 0.
+        return np.array([])
