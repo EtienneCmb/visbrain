@@ -13,11 +13,14 @@ Changelog
 New features
 ~~~~~~~~~~~~
 
+* You can now :ref:`replace_detection` using the :class:`visbrain.Sleep.replace_detections` method.
+
 Bug fixes
 ~~~~~~~~~
 
-* colorbar control of Picture3DObj object
-* add multiple objects to scene with *row_span* and / or *col_span* > 1 
+* :class:`visbrain.objects.BrainObj.parcellize` using nibabel >= 2.3
+* colorbar control of :class:`visbrain.objects.Picture3DObj` object
+* add multiple objects to the :class:`visbrain.objects.SceneObj` with *row_span* and / or *col_span* > 1 
 * path to brain templates
 * loading hypnogram with spaces instead of tabs
 
