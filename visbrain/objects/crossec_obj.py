@@ -116,7 +116,7 @@ class CrossSecObj(_Volume):
                  preload=True, **kw):
         """Init."""
         # __________________________ VOLUME __________________________
-        kw['cmap'] = kw.get('cmap', 'gist_stern')
+        kw['cmap'] = kw.get('cmap', 'bone')
         _Volume.__init__(self, name, parent, transform, verbose, **kw)
         self._sagittal = 0
         self._coronal = 0
