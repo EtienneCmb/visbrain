@@ -213,16 +213,16 @@ class CrossSecObj(_Volume):
         self.axial = section[2]
         self._update = False
 
-    def _set_section(self, im_visual, image, section, pos, nb):
+    def _set_section(self, im_visual, image, pos, nb, dim):
         # Get colormap elements and get RgBA image :
         kw = self.to_kwargs()
         kw['clim'] = (image.min(), image.max())
         im_rgba = array2colormap(image, **kw)
         # Set image and text :
         im_visual.image.set_data(im_rgba)
-        txt = 'Slice %i | Position %.2f'
+        txt = '%s=%.2f'
         text = self._txt.text.copy()
-        text[nb] = txt % (section, pos)
+        text[nb] = txt % (dim, pos)
         self._txt.text = text
         self.update()
 
@@ -300,8 +300,8 @@ class CrossSecObj(_Volume):
         if val_cond or self._update:
             if value <= self._sh[0]:
                 pos = self.slice_to_pos(value, axis=0)
-                self._set_section(self._im_sagit, self._vol[value, ...],
-                                  value, pos, 0)
+                self._set_section(self._im_sagit, self._vol[value, ...], pos,
+                                  0, 'x')
                 self._sagittal = value
             else:
                 logger.error("Cannot take sagittal section %s. Max across "
@@ -321,7 +321,7 @@ class CrossSecObj(_Volume):
             if value <= self._sh[1]:
                 pos = self.slice_to_pos(value, axis=1)
                 self._set_section(self._im_coron, self._vol[:, value, :],
-                                  value, pos, 1)
+                                  pos, 1, 'y')
                 self._coronal = value
             else:
                 logger.error("Cannot take coronal section %s. Max across "
@@ -341,7 +341,7 @@ class CrossSecObj(_Volume):
             if value <= self._sh[2]:
                 pos = self.slice_to_pos(value, axis=2)
                 self._set_section(self._im_axial, self._vol[..., value],
-                                  value, pos, 2)
+                                  pos, 2, 'z')
                 self._axial = value
             else:
                 logger.error("Cannot take axial section %s. Max across "
