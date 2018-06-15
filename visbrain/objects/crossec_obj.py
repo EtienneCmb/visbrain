@@ -74,8 +74,9 @@ class CrossSecObj(_Volume):
     vol : array_like | None
         The volume to use for the cross-section. Sould be an array with three
         dimensions.
-    section : tuple | (0, 0, 0)
-        The section to take (sagittal, coronal and axial slices).
+    section : tuple | None
+        The section to take (sagittal, coronal and axial slices). Must be a
+        tuple of integers.
     interpolation : string | 'nearest'
         Interpolation method for the image. See vispy.scene.visuals.Image for
         availables interpolation methods.
@@ -109,7 +110,7 @@ class CrossSecObj(_Volume):
     ###########################################################################
     ###########################################################################
 
-    def __init__(self, name, vol=None, hdr=None, section=(0, 0, 0),
+    def __init__(self, name, vol=None, hdr=None, section=None,
                  interpolation='bilinear', text_size=15., text_color='white',
                  text_bold=True, transform=None, parent=None, verbose=None,
                  preload=True, **kw):
@@ -190,7 +191,7 @@ class CrossSecObj(_Volume):
         self._im_axial.update()
         self._txt.update()
 
-    def set_data(self, section=(0, 0, 0), clim=None, cmap=None, vmin=None,
+    def set_data(self, section=None, clim=None, cmap=None, vmin=None,
                  under=None, vmax=None, over=None, update=False):
         """Set data to the cross-section.
 
