@@ -200,6 +200,8 @@ class CrossSecObj(_Volume):
         section : tuple | (0, 0, 0)
             The section to take (sagittal, coronal and axial slices).
         """
+        if section is None:
+            section = [int(k) for k in self.pos_to_slice([0., 0., 0.])]
         assert len(section) == 3 and all([k <= i for k, i in zip(section,
                                                                  self._sh)])
         self._section = section
