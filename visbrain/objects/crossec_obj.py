@@ -214,6 +214,7 @@ class CrossSecObj(_Volume):
     def _set_section(self, im_visual, image, section, pos, nb):
         # Get colormap elements and get RgBA image :
         kw = self.to_kwargs()
+        kw['clim'] = (image.min(), image.max())
         im_rgba = array2colormap(image, **kw)
         # Set image and text :
         im_visual.image.set_data(im_rgba)
