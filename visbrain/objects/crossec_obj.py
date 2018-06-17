@@ -173,19 +173,19 @@ class CrossSecObj(_Volume):
 
     def _define_transformation(self):
         sh = self._sh
-        r90 = vist.MatrixTransform()
-        r90.rotate(90, (0, 0, 1))
+        rz90 = vist.MatrixTransform()
+        rz90.rotate(90, (0, 0, 1))
         rx180 = vist.MatrixTransform()
         rx180.rotate(180, (1, 0, 0))
         # Sagittal transformation :
         norm_sagit = vist.STTransform(scale=(1. / sh[1], 1. / sh[2], 1.),
                                       translate=(-1., 0., 0.))
-        tf_sagit = vist.ChainTransform([norm_sagit, r90, rx180])
+        tf_sagit = vist.ChainTransform([norm_sagit, rz90, rx180])
         self._im_sagit.transform = tf_sagit
         # Coronal transformation :
         norm_coron = vist.STTransform(scale=(1. / sh[0], 1. / sh[2], 1.),
                                       translate=(0., 0., 0.))
-        tf_coron = vist.ChainTransform([norm_coron, r90, rx180])
+        tf_coron = vist.ChainTransform([norm_coron, rz90, rx180])
         self._im_coron.transform = tf_coron
         # Axial transformation :
         norm_axis = vist.STTransform(scale=(2. / sh[1], 2. / sh[0], 1.),
@@ -195,8 +195,8 @@ class CrossSecObj(_Volume):
 
     def _get_camera(self):
         """Get the camera."""
-        # cam = scene.cameras.PanZoomCamera(rect=(-1.5, -2., 3., 3.))
-        cam = FixedCam(rect=(-1.5, -2., 3., 3.))
+        cam = scene.cameras.PanZoomCamera(rect=(-1.5, -2., 3., 3.))
+        # cam = FixedCam(rect=(-1.5, -2., 3., 3.))
         return cam
 
     def _get_bg_cmap(self, clim=None):
