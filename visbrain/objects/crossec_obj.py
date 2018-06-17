@@ -6,7 +6,7 @@ import numpy as np
 from vispy import scene
 import vispy.visuals.transforms as vist
 
-from ..utils import array2colormap, wrap_properties, color2vb, FixedCam
+from ..utils import cmap_to_glsl, wrap_properties, color2vb, FixedCam
 from .volume_obj import _Volume
 
 logger = logging.getLogger('visbrain')
@@ -24,7 +24,7 @@ class _ImageSection(object):
         self.node = scene.Node(name='Node_', parent=parent)
         self.loc_node = scene.Node(name='LocNode_', parent=loc_parent)
         self.image = scene.visuals.Image(name='Im_' + name, parent=self.node,
-                                         **_im)
+                                         cmap='grays', **_im)
         pos = np.zeros((10, 3))
         self.markers = scene.visuals.Markers(pos=pos, name='Mark_' + name,
                                              parent=self.loc_node, **_mark)
@@ -110,13 +110,12 @@ class CrossSecObj(_Volume):
     ###########################################################################
     ###########################################################################
 
-    def __init__(self, name, vol=None, hdr=None, section=None,
+    def __init__(self, name, vol=None, hdr=None, section=None, contrast=.3,
                  interpolation='bilinear', text_size=15., text_color='white',
                  text_bold=True, transform=None, parent=None, verbose=None,
                  preload=True, **kw):
         """Init."""
         # __________________________ VOLUME __________________________
-        kw['cmap'] = kw.get('cmap', 'bone')
         _Volume.__init__(self, name, parent, transform, verbose, **kw)
         self._sagittal = 0
         self._coronal = 0
@@ -147,6 +146,8 @@ class CrossSecObj(_Volume):
         if preload:
             self(name, vol, hdr)
             self.set_data(section=section, **kw)
+            self.contrast = contrast
+            self._on_key_pressed()
 
     def __call__(self, name, vol=None, hdr=None):
         """Change the volume object."""
@@ -182,6 +183,11 @@ class CrossSecObj(_Volume):
         cam = FixedCam(rect=(-1.5, -2., 3., 3.))
         return cam
 
+    def _get_bg_cmap(self, clim=None):
+        """Get the default background colormap."""
+        limits = (self._vol.min(), self._vol.max())
+        return cmap_to_glsl(limits=limits, clim=clim, cmap='Greys_r')
+
     def update(self):
         """Update the root node."""
         self._im_node.update()
@@ -214,12 +220,8 @@ class CrossSecObj(_Volume):
         self._update = False
 
     def _set_section(self, im_visual, image, pos, nb, dim):
-        # Get colormap elements and get RgBA image :
-        kw = self.to_kwargs()
-        kw['clim'] = (image.min(), image.max())
-        im_rgba = array2colormap(image, **kw)
         # Set image and text :
-        im_visual.image.set_data(im_rgba)
+        im_visual.image.set_data(image)
         txt = '%s=%.2f'
         text = self._txt.text.copy()
         text[nb] = txt % (dim, pos)
@@ -287,6 +289,15 @@ class CrossSecObj(_Volume):
                 self.localize_source(pos)
         return on_mouse_press
 
+    def _on_key_pressed(self):
+        def plus(event):  # noqa
+            self.contrast += .1
+
+        def minus(event):  # noqa
+            self.contrast -= .1
+        self.key_press['+'] = plus
+        self.key_press['-'] = minus
+
     # ----------- SAGITTAL -----------
     @property
     def sagittal(self):
@@ -346,6 +357,23 @@ class CrossSecObj(_Volume):
             else:
                 logger.error("Cannot take axial section %s. Max across "
                              "third dimension is %s." % (value, self._sh[2]))
+
+    # ----------- CONTRAST -----------
+    @property
+    def contrast(self):
+        """Get the contrast value."""
+        return self._contrast
+
+    @contrast.setter
+    def contrast(self, value):
+        """Set contrast value."""
+        assert 0. <= value < 1.
+        clim = (self._vol.min() * (1. + value), self._vol.max() * (1. - value))
+        cmap = self._get_bg_cmap(clim=clim)
+        self._im_sagit.image.cmap = cmap
+        self._im_coron.image.cmap = cmap
+        self._im_axial.image.cmap = cmap
+        self._contrast = value
 
     # ----------- INTERPOLATION -----------
     @property
