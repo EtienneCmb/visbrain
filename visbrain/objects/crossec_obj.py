@@ -18,14 +18,24 @@ class _ImageSection(object):
     This class instantiate an image, markers and line for source location.
     """
 
-    def __init__(self, name, parent=None, loc_parent=None, _im={}, _mark={},
-                 _line={}):
+    def __init__(self, name, parent=None, loc_parent=None, act_parent=None,
+                 _im={}, _mark={}, _line={}):
         """Init."""
+        # Background image :
         self.node = scene.Node(name='Node_', parent=parent)
-        self.loc_node = scene.Node(name='LocNode_', parent=loc_parent)
+        self.act_node = scene.Node(name='ActNode_', parent=act_parent)
         self.image = scene.visuals.Image(name='Im_' + name, parent=self.node,
                                          cmap='grays', **_im)
+        # Activation :
+        cmap = cmap_to_glsl(cmap='Spectral_r')
+        self.image_act = scene.visuals.Image(name='ImAct_' + name,
+                                             parent=self.act_node,
+                                             cmap='viridis', **_im)
+        self.image_act.cmap = cmap
+        # self.act_node.visible = False
+        # Location :
         pos = np.zeros((10, 3))
+        self.loc_node = scene.Node(name='LocNode_', parent=loc_parent)
         self.markers = scene.visuals.Markers(pos=pos, name='Mark_' + name,
                                              parent=self.loc_node, **_mark)
         self.line = scene.visuals.Line(name='Line_' + name, connect='segments',
@@ -47,6 +57,7 @@ class _ImageSection(object):
         self.node.update()
         self.loc_node.update()
         self.image.update()
+        self.image_act.update()
         self.markers.update()
         self.line.update()
 
@@ -60,6 +71,7 @@ class _ImageSection(object):
     def transform(self, value):
         """Set transform value."""
         self.node.transform = value
+        self.act_node.transform = value
         self.loc_node.transform = value
 
 
@@ -121,13 +133,16 @@ class CrossSecObj(_Volume):
         self._coronal = 0
         self._axial = 0
         # __________________________ PARENTS __________________________
+        self._act_node = scene.Node(name='Act_', parent=self._node)
         self._im_node = scene.Node(name='Im_', parent=self._node)
         self._loc_node = scene.Node(name='Loc_', parent=self._node)
+        self._act_node.visible = False
         self._loc_node.visible = False
 
         # __________________________ TRANSFORMATION __________________________
         # Define three images (Sagittal, Coronal, Axial), markers and line :
         kwi = dict(parent=self._im_node, loc_parent=self._loc_node,
+                   act_parent=self._act_node,
                    _im=dict(interpolation=interpolation), _mark=dict(size=20.),
                    _line=dict(width=3., color='white'))
         self._im_sagit = _ImageSection('Sagit', **kwi)
