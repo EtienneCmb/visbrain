@@ -7,6 +7,7 @@ from vispy import scene
 import vispy.visuals.transforms as vist
 
 from ..utils import cmap_to_glsl, wrap_properties, color2vb, FixedCam
+from ..io import read_nifti
 from .volume_obj import _Volume
 
 logger = logging.getLogger('visbrain')
@@ -233,6 +234,33 @@ class CrossSecObj(_Volume):
         self.coronal = section[1]
         self.axial = section[2]
         self._update = False
+
+    def set_activation(self, data, xyz=None, **kwargs):
+        """"""
+        vol, _, hdr = read_nifti(data)
+        vol, hdr = self._check_volume(vol, hdr)
+        fact = [k / i for k, i in zip(self._vol.shape, vol.shape)]
+
+        if xyz is None:
+            xyz = (self._sagittal, self._coronal, self._axial)
+            xyz = self.pos_to_slice(xyz)
+        sl = self.pos_to_slice(xyz, hdr=hdr)
+        self.localize_source(xyz)
+
+        # Sagittal :
+        tf_sagit = vist.STTransform(scale=(fact[2], fact[1], 1.))
+        self._im_sagit.image_act.transform = tf_sagit
+        self._im_sagit.image_act.set_data(vol[sl[0], ...])
+        # Coronal :
+        tf_coron = vist.STTransform(scale=(fact[2], fact[0], 1.))
+        self._im_coron.image_act.set_data(vol[:, sl[1], :])
+        self._im_coron.image_act.transform = tf_coron
+        # Axial :
+        tf_axial = vist.STTransform(scale=(fact[1], fact[0], 1.))
+        self._im_axial.image_act.set_data(vol[..., sl[2]])
+        self._im_axial.image_act.transform = tf_axial
+        self._act_node.visible = True
+        self.update()
 
     def _set_section(self, im_visual, image, pos, nb, dim):
         # Set image and text :
