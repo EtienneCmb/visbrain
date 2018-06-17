@@ -118,7 +118,7 @@ def color2tuple(color, astype=np.float32, rmalpha=True, roundto=2):
 
 def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
                    vmax=None, under='dimgray', over='darkred',
-                   faces_render=False):
+                   translucent=None, faces_render=False):
     """Transform an array of data into colormap (array of RGBA).
 
     Parameters
@@ -179,6 +179,12 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
     # ================== Apply colormap ==================
     # Apply colormap to x :
     x_cmap = np.array(sc.to_rgba(x, alpha=alpha))
+
+    # ================== Transparency ==================
+    if translucent is not None:
+        assert (len(translucent) == 2) and (translucent[0] < translucent[1])
+        trans_x = np.logical_and(translucent[0] <= x, x <= translucent[1])
+        x_cmap[..., -1] = np.invert(trans_x)
 
     # ================== Colormap (under, over) ==================
     if (vmin is not None) and (under is not None):
