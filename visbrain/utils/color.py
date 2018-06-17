@@ -7,6 +7,8 @@ string / faces into RBGA colors, defining the basic colormap object...)
 
 import numpy as np
 
+from vispy.color.colormap import Colormap
+
 from matplotlib import cm
 import matplotlib.colors as mplcol
 from warnings import warn
@@ -14,9 +16,9 @@ from warnings import warn
 from .sigproc import normalize
 
 
-__all__ = ('color2vb', 'array2colormap', 'dynamic_color', 'color2faces',
-           'type_coloring', 'mpl_cmap', 'color2tuple', 'mpl_cmap_index'
-           )
+__all__ = ('color2vb', 'array2colormap', 'cmap_to_glsl', 'dynamic_color',
+           'color2faces', 'type_coloring', 'mpl_cmap', 'color2tuple',
+           'mpl_cmap_index')
 
 
 def color2vb(color=None, default=(1., 1., 1.), length=1, alpha=1.0,
@@ -194,6 +196,31 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
                                       (1, 1, 3)), (0, 2, 1))
 
     return x_cmap.astype(np.float32)
+
+
+def cmap_to_glsl(limits=None, n_colors=256, **kwargs):
+    """Get a glsl colormap.
+
+    Parameters
+    ----------
+    limits : tuple | None
+        Color limits for the object. Must be a tuple of two floats.
+    n_colors : int | 256
+        Number of levels for the colormap.
+    kwarg : dict | None
+        Additional inputs to pass to the array2colormap function.
+
+    Returns
+    -------
+    cmap : vispy.color.Colormap
+        VisPy colormap instance.
+    """
+    if limits is None:
+        limits = (0., 1.)
+    assert len(limits) == 2
+    # Color transform :
+    vec = np.linspace(limits[0], limits[1], n_colors)
+    return Colormap(array2colormap(vec, **kwargs))
 
 
 def dynamic_color(color, x, dynamic=(0., 1.)):

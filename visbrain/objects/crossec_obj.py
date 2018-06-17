@@ -74,8 +74,9 @@ class CrossSecObj(_Volume):
     vol : array_like | None
         The volume to use for the cross-section. Sould be an array with three
         dimensions.
-    section : tuple | (0, 0, 0)
-        The section to take (sagittal, coronal and axial slices).
+    section : tuple | None
+        The section to take (sagittal, coronal and axial slices). Must be a
+        tuple of integers.
     interpolation : string | 'nearest'
         Interpolation method for the image. See vispy.scene.visuals.Image for
         availables interpolation methods.
@@ -109,13 +110,13 @@ class CrossSecObj(_Volume):
     ###########################################################################
     ###########################################################################
 
-    def __init__(self, name, vol=None, hdr=None, section=(0, 0, 0),
+    def __init__(self, name, vol=None, hdr=None, section=None,
                  interpolation='bilinear', text_size=15., text_color='white',
                  text_bold=True, transform=None, parent=None, verbose=None,
                  preload=True, **kw):
         """Init."""
         # __________________________ VOLUME __________________________
-        kw['cmap'] = kw.get('cmap', 'gist_stern')
+        kw['cmap'] = kw.get('cmap', 'bone')
         _Volume.__init__(self, name, parent, transform, verbose, **kw)
         self._sagittal = 0
         self._coronal = 0
@@ -190,7 +191,7 @@ class CrossSecObj(_Volume):
         self._im_axial.update()
         self._txt.update()
 
-    def set_data(self, section=(0, 0, 0), clim=None, cmap=None, vmin=None,
+    def set_data(self, section=None, clim=None, cmap=None, vmin=None,
                  under=None, vmax=None, over=None, update=False):
         """Set data to the cross-section.
 
@@ -199,6 +200,8 @@ class CrossSecObj(_Volume):
         section : tuple | (0, 0, 0)
             The section to take (sagittal, coronal and axial slices).
         """
+        if section is None:
+            section = [int(k) for k in self.pos_to_slice([0., 0., 0.])]
         assert len(section) == 3 and all([k <= i for k, i in zip(section,
                                                                  self._sh)])
         self._section = section
@@ -210,15 +213,16 @@ class CrossSecObj(_Volume):
         self.axial = section[2]
         self._update = False
 
-    def _set_section(self, im_visual, image, section, pos, nb):
+    def _set_section(self, im_visual, image, pos, nb, dim):
         # Get colormap elements and get RgBA image :
         kw = self.to_kwargs()
+        kw['clim'] = (image.min(), image.max())
         im_rgba = array2colormap(image, **kw)
         # Set image and text :
         im_visual.image.set_data(im_rgba)
-        txt = 'Slice %i | Position %.2f'
+        txt = '%s=%.2f'
         text = self._txt.text.copy()
-        text[nb] = txt % (section, pos)
+        text[nb] = txt % (dim, pos)
         self._txt.text = text
         self.update()
 
@@ -296,8 +300,8 @@ class CrossSecObj(_Volume):
         if val_cond or self._update:
             if value <= self._sh[0]:
                 pos = self.slice_to_pos(value, axis=0)
-                self._set_section(self._im_sagit, self._vol[value, ...],
-                                  value, pos, 0)
+                self._set_section(self._im_sagit, self._vol[value, ...], pos,
+                                  0, 'x')
                 self._sagittal = value
             else:
                 logger.error("Cannot take sagittal section %s. Max across "
@@ -317,7 +321,7 @@ class CrossSecObj(_Volume):
             if value <= self._sh[1]:
                 pos = self.slice_to_pos(value, axis=1)
                 self._set_section(self._im_coron, self._vol[:, value, :],
-                                  value, pos, 1)
+                                  pos, 1, 'y')
                 self._coronal = value
             else:
                 logger.error("Cannot take coronal section %s. Max across "
@@ -337,7 +341,7 @@ class CrossSecObj(_Volume):
             if value <= self._sh[2]:
                 pos = self.slice_to_pos(value, axis=2)
                 self._set_section(self._im_axial, self._vol[..., value],
-                                  value, pos, 2)
+                                  pos, 2, 'z')
                 self._axial = value
             else:
                 logger.error("Cannot take axial section %s. Max across "
