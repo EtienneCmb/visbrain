@@ -47,7 +47,7 @@ class _ImageSection(object):
         # Set marker :
         center.append(offset)
         self.markers.set_data(pos=np.array(center).reshape(1, -1),
-                              face_color='red')
+                              face_color='red', edge_color='white')
         # Set line :
         pos = np.array([[0, center[1]], [limits[0], center[1]],
                         [center[0], 0], [center[0], limits[1]]])
