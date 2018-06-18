@@ -19,21 +19,19 @@ class _ImageSection(object):
     This class instantiate an image, markers and line for source location.
     """
 
-    def __init__(self, name, parent=None, loc_parent=None, act_parent=None,
-                 _im={}, _mark={}, _line={}):
+    def __init__(self, name, parent=None, loc_parent=None, _im={}, _mark={},
+                 _line={}):
         """Init."""
         # Background image :
         self.node = scene.Node(name='Node_', parent=parent)
-        self.act_node = scene.Node(name='ActNode_', parent=act_parent)
         self.image = scene.visuals.Image(name='Im_' + name, parent=self.node,
                                          cmap='grays', **_im)
         # Activation :
-        cmap = cmap_to_glsl(cmap='Spectral_r')
         self.image_act = scene.visuals.Image(name='ImAct_' + name,
-                                             parent=self.act_node,
+                                             parent=self.node,
                                              cmap='viridis', **_im)
-        self.image_act.cmap = cmap
-        # self.act_node.visible = False
+        self.image_act.visible = False
+        self.image_act.set_gl_state('translucent', depth_test=False)
         # Location :
         pos = np.zeros((10, 3))
         self.loc_node = scene.Node(name='LocNode_', parent=loc_parent)
@@ -72,7 +70,6 @@ class _ImageSection(object):
     def transform(self, value):
         """Set transform value."""
         self.node.transform = value
-        self.act_node.transform = value
         self.loc_node.transform = value
 
 
@@ -90,9 +87,9 @@ class CrossSecObj(_Volume):
     section : tuple | None
         The section to take (sagittal, coronal and axial slices). Must be a
         tuple of integers.
-    interpolation : string | 'nearest'
+    interpolation : string | 'bilinear'
         Interpolation method for the image. See vispy.scene.visuals.Image for
-        availables interpolation methods.
+        availables interpolation methods. Use 'nearest' for no interpolation.
     text_size : float | 15.
         Text size to use.
     text_color : string/tuple | 'white'
@@ -123,7 +120,7 @@ class CrossSecObj(_Volume):
     ###########################################################################
     ###########################################################################
 
-    def __init__(self, name, vol=None, hdr=None, section=None, contrast=.3,
+    def __init__(self, name, vol=None, hdr=None, section=None, contrast=.1,
                  interpolation='bilinear', text_size=15., text_color='white',
                  text_bold=True, transform=None, parent=None, verbose=None,
                  preload=True, **kw):
@@ -133,17 +130,15 @@ class CrossSecObj(_Volume):
         self._sagittal = 0
         self._coronal = 0
         self._axial = 0
+        self._act_vol, self._act_hdr, self._is_act = None, None, False
         # __________________________ PARENTS __________________________
-        self._act_node = scene.Node(name='Act_', parent=self._node)
         self._im_node = scene.Node(name='Im_', parent=self._node)
         self._loc_node = scene.Node(name='Loc_', parent=self._node)
-        self._act_node.visible = False
         self._loc_node.visible = False
 
         # __________________________ TRANSFORMATION __________________________
         # Define three images (Sagittal, Coronal, Axial), markers and line :
         kwi = dict(parent=self._im_node, loc_parent=self._loc_node,
-                   act_parent=self._act_node,
                    _im=dict(interpolation=interpolation), _mark=dict(size=20.),
                    _line=dict(width=3., color='white'))
         self._im_sagit = _ImageSection('Sagit', **kwi)
