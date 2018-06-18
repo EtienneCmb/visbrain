@@ -130,7 +130,7 @@ class VisbrainObject(_VisbrainObj):
         return canvas
 
     def preview(self, bgcolor='white', axis=False, xyz=False, show=True,
-                obj=None, **kwargs):
+                obj=None, size=(1200, 800), **kwargs):
         """Previsualize the result.
 
         Parameters
@@ -144,10 +144,13 @@ class VisbrainObject(_VisbrainObj):
         obj : VisbrainObj | None
             Pass a Visbrain object if you want to use the camera of an other
             object.
+        size : tuple | (1200, 800)
+            Default size of the window.
         kwargs : dict | {}
             Optional arguments are passed to the VisbrainCanvas class.
         """
         parent_bck = self._node.parent
+        kwargs['cargs'] = {'size': size}
         canvas = self._get_parent(bgcolor, axis, show, obj, **kwargs)
         if xyz:
             vispy.scene.visuals.XYZAxis(parent=canvas.wc.scene)
