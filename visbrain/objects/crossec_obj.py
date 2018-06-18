@@ -230,12 +230,27 @@ class CrossSecObj(_Volume):
         self.axial = section[2]
         self._update = False
 
-    def set_activation(self, data, xyz=None, **kwargs):
+    def set_activation(self, data=None, xyz=None, translucent=(None, .5),
+                       **kwargs):
         """"""
-        vol, _, hdr = read_nifti(data)
-        vol, hdr = self._check_volume(vol, hdr)
+        if data is None:
+            vol, hdr = self._act_vol, self._act_hdr
+        else:
+            # Load the nifti volume :
+            vol, _, hdr = read_nifti(data)
+            vol, hdr = self._check_volume(vol, hdr)
+            limits = (vol.min(), vol.max())
+            # Colormap definition :
+            kwargs['cmap'] = kwargs.get('cmap', 'Spectral_r')
+            cmap = cmap_to_glsl(limits=limits, translucent=translucent,
+                                **kwargs)
+            self._im_sagit.image_act.cmap = cmap
+            self._im_coron.image_act.cmap = cmap
+            self._im_axial.image_act.cmap = cmap
         fact = [k / i for k, i in zip(self._vol.shape, vol.shape)]
+        self._act_vol, self._act_hdr = vol, hdr
 
+        # Set section :
         if xyz is None:
             xyz = (self._sagittal, self._coronal, self._axial)
             xyz = self.pos_to_slice(xyz)
@@ -254,7 +269,11 @@ class CrossSecObj(_Volume):
         tf_axial = vist.STTransform(scale=(fact[1], fact[0], 1.))
         self._im_axial.image_act.set_data(vol[..., sl[2]])
         self._im_axial.image_act.transform = tf_axial
-        self._act_node.visible = True
+
+        self._im_sagit.image_act.visible = True
+        self._im_coron.image_act.visible = True
+        self._im_axial.image_act.visible = True
+        self._is_act = True
         self.update()
 
     def _set_section(self, im_visual, image, pos, nb, dim):
@@ -324,7 +343,10 @@ class CrossSecObj(_Volume):
             """Mouse move."""
             pos = self._mouse_to_pos(event.pos)
             if pos is not None:
-                self.localize_source(pos)
+                if self._is_act:
+                    self.set_activation(xyz=pos)
+                else:
+                    self.localize_source(pos)
         return on_mouse_press
 
     def _on_key_pressed(self):
