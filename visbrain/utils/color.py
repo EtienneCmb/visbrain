@@ -146,6 +146,13 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
         the over parameter bellow.
     over : tuple/string | 'darkred'
         Matplotlib color for values over vmax.
+    translucent : tuple | None
+        Set a specific range translucent. With f_1 and f_2 two floats, if
+        translucent is :
+
+            * (f_1, f_2) : values between f_1 and f_2 are set to translucent
+            * (None, f_2) x <= f_2 are set to translucent
+            * (f_1, None) f_1 <= x are set to translucent
     faces_render : boll | False
         Precise if the render should be applied to faces
 
@@ -159,12 +166,8 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
     x = np.asarray(x)
 
     # Check clim :
-    if clim is None:
-        clim = (None, None)
-    else:
-        clim = list(clim)
-        if len(clim) is not 2:
-            raise ValueError("The length of the clim must be 2: (min, max)")
+    clim = (None, None) if clim is None else list(clim)
+    assert len(clim) == 2
 
     # ---------------------------
     # Check alpha :
@@ -184,8 +187,14 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
 
     # ================== Transparency ==================
     if translucent is not None:
-        assert (len(translucent) == 2) and (translucent[0] < translucent[1])
-        trans_x = np.logical_and(translucent[0] <= x, x <= translucent[1])
+        assert len(translucent) == 2
+        is_num = [isinstance(k, (int, float)) for k in translucent]
+        if all(is_num):
+            trans_x = np.logical_and(translucent[0] <= x, x <= translucent[1])
+        elif is_num == [True, False]:
+            trans_x = translucent[0] <= x
+        elif is_num == [False, True]:
+            trans_x = x <= translucent[1]
         x_cmap[..., -1] = np.invert(trans_x)
 
     # ================== Colormap (under, over) ==================
