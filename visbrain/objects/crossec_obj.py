@@ -6,7 +6,8 @@ import numpy as np
 from vispy import scene
 import vispy.visuals.transforms as vist
 
-from ..utils import array2colormap, wrap_properties, color2vb, FixedCam
+from ..utils import cmap_to_glsl, wrap_properties, color2vb, FixedCam
+from ..io import read_nifti
 from .volume_obj import _Volume
 
 logger = logging.getLogger('visbrain')
@@ -21,11 +22,19 @@ class _ImageSection(object):
     def __init__(self, name, parent=None, loc_parent=None, _im={}, _mark={},
                  _line={}):
         """Init."""
+        # Background image :
         self.node = scene.Node(name='Node_', parent=parent)
-        self.loc_node = scene.Node(name='LocNode_', parent=loc_parent)
         self.image = scene.visuals.Image(name='Im_' + name, parent=self.node,
-                                         **_im)
+                                         cmap='grays', **_im)
+        # Activation :
+        self.image_act = scene.visuals.Image(name='ImAct_' + name,
+                                             parent=self.node,
+                                             cmap='viridis', **_im)
+        self.image_act.visible = False
+        self.image_act.set_gl_state('translucent', depth_test=False)
+        # Location :
         pos = np.zeros((10, 3))
+        self.loc_node = scene.Node(name='LocNode_', parent=loc_parent)
         self.markers = scene.visuals.Markers(pos=pos, name='Mark_' + name,
                                              parent=self.loc_node, **_mark)
         self.line = scene.visuals.Line(name='Line_' + name, connect='segments',
@@ -36,7 +45,7 @@ class _ImageSection(object):
         # Set marker :
         center.append(offset)
         self.markers.set_data(pos=np.array(center).reshape(1, -1),
-                              face_color='red')
+                              face_color='red', edge_color='white')
         # Set line :
         pos = np.array([[0, center[1]], [limits[0], center[1]],
                         [center[0], 0], [center[0], limits[1]]])
@@ -47,6 +56,7 @@ class _ImageSection(object):
         self.node.update()
         self.loc_node.update()
         self.image.update()
+        self.image_act.update()
         self.markers.update()
         self.line.update()
 
@@ -77,9 +87,9 @@ class CrossSecObj(_Volume):
     section : tuple | None
         The section to take (sagittal, coronal and axial slices). Must be a
         tuple of integers.
-    interpolation : string | 'nearest'
+    interpolation : string | 'bilinear'
         Interpolation method for the image. See vispy.scene.visuals.Image for
-        availables interpolation methods.
+        availables interpolation methods. Use 'nearest' for no interpolation.
     text_size : float | 15.
         Text size to use.
     text_color : string/tuple | 'white'
@@ -110,17 +120,17 @@ class CrossSecObj(_Volume):
     ###########################################################################
     ###########################################################################
 
-    def __init__(self, name, vol=None, hdr=None, section=None,
+    def __init__(self, name, vol=None, hdr=None, section=None, contrast=.1,
                  interpolation='bilinear', text_size=15., text_color='white',
                  text_bold=True, transform=None, parent=None, verbose=None,
                  preload=True, **kw):
         """Init."""
         # __________________________ VOLUME __________________________
-        kw['cmap'] = kw.get('cmap', 'bone')
         _Volume.__init__(self, name, parent, transform, verbose, **kw)
         self._sagittal = 0
         self._coronal = 0
         self._axial = 0
+        self._act_vol, self._act_hdr, self._is_act = None, None, False
         # __________________________ PARENTS __________________________
         self._im_node = scene.Node(name='Im_', parent=self._node)
         self._loc_node = scene.Node(name='Loc_', parent=self._node)
@@ -147,6 +157,8 @@ class CrossSecObj(_Volume):
         if preload:
             self(name, vol, hdr)
             self.set_data(section=section, **kw)
+            self.contrast = contrast
+            self._on_key_pressed()
 
     def __call__(self, name, vol=None, hdr=None):
         """Change the volume object."""
@@ -156,19 +168,19 @@ class CrossSecObj(_Volume):
 
     def _define_transformation(self):
         sh = self._sh
-        r90 = vist.MatrixTransform()
-        r90.rotate(90, (0, 0, 1))
+        rz90 = vist.MatrixTransform()
+        rz90.rotate(90, (0, 0, 1))
         rx180 = vist.MatrixTransform()
         rx180.rotate(180, (1, 0, 0))
         # Sagittal transformation :
         norm_sagit = vist.STTransform(scale=(1. / sh[1], 1. / sh[2], 1.),
                                       translate=(-1., 0., 0.))
-        tf_sagit = vist.ChainTransform([norm_sagit, r90, rx180])
+        tf_sagit = vist.ChainTransform([norm_sagit, rz90, rx180])
         self._im_sagit.transform = tf_sagit
         # Coronal transformation :
         norm_coron = vist.STTransform(scale=(1. / sh[0], 1. / sh[2], 1.),
                                       translate=(0., 0., 0.))
-        tf_coron = vist.ChainTransform([norm_coron, r90, rx180])
+        tf_coron = vist.ChainTransform([norm_coron, rz90, rx180])
         self._im_coron.transform = tf_coron
         # Axial transformation :
         norm_axis = vist.STTransform(scale=(2. / sh[1], 2. / sh[0], 1.),
@@ -178,9 +190,14 @@ class CrossSecObj(_Volume):
 
     def _get_camera(self):
         """Get the camera."""
-        # cam = scene.cameras.PanZoomCamera(rect=(-1.5, -2., 3., 3.))
-        cam = FixedCam(rect=(-1.5, -2., 3., 3.))
+        cam = scene.cameras.PanZoomCamera(rect=(-1.5, -2., 3., 3.))
+        # cam = FixedCam(rect=(-1.5, -2., 3., 3.))
         return cam
+
+    def _get_bg_cmap(self, clim=None):
+        """Get the default background colormap."""
+        limits = (self._vol.min(), self._vol.max())
+        return cmap_to_glsl(limits=limits, clim=clim, cmap='Greys_r')
 
     def update(self):
         """Update the root node."""
@@ -213,13 +230,55 @@ class CrossSecObj(_Volume):
         self.axial = section[2]
         self._update = False
 
+    def set_activation(self, data=None, xyz=None, translucent=(None, .5),
+                       **kwargs):
+        """"""
+        if data is None:
+            vol, hdr = self._act_vol, self._act_hdr
+        else:
+            # Load the nifti volume :
+            vol, _, hdr = read_nifti(data)
+            vol, hdr = self._check_volume(vol, hdr)
+            limits = (vol.min(), vol.max())
+            # Colormap definition :
+            kwargs['cmap'] = kwargs.get('cmap', 'Spectral_r')
+            cmap = cmap_to_glsl(limits=limits, translucent=translucent,
+                                **kwargs)
+            self._im_sagit.image_act.cmap = cmap
+            self._im_coron.image_act.cmap = cmap
+            self._im_axial.image_act.cmap = cmap
+        fact = [k / i for k, i in zip(self._vol.shape, vol.shape)]
+        self._act_vol, self._act_hdr = vol, hdr
+
+        # Set section :
+        if xyz is None:
+            xyz = (self._sagittal, self._coronal, self._axial)
+            xyz = self.pos_to_slice(xyz)
+        sl = self.pos_to_slice(xyz, hdr=hdr)
+        self.localize_source(xyz)
+
+        # Sagittal :
+        tf_sagit = vist.STTransform(scale=(fact[2], fact[1], 1.))
+        self._im_sagit.image_act.transform = tf_sagit
+        self._im_sagit.image_act.set_data(vol[sl[0], ...])
+        # Coronal :
+        tf_coron = vist.STTransform(scale=(fact[2], fact[0], 1.))
+        self._im_coron.image_act.set_data(vol[:, sl[1], :])
+        self._im_coron.image_act.transform = tf_coron
+        # Axial :
+        tf_axial = vist.STTransform(scale=(fact[1], fact[0], 1.))
+        self._im_axial.image_act.set_data(vol[..., sl[2]])
+        self._im_axial.image_act.transform = tf_axial
+
+        self._im_sagit.image_act.visible = True
+        self._im_coron.image_act.visible = True
+        self._im_axial.image_act.visible = True
+        self._is_act = True
+        self.update()
+
     def _set_section(self, im_visual, image, pos, nb, dim):
-        # Get colormap elements and get RgBA image :
-        kw = self.to_kwargs()
-        kw['clim'] = (image.min(), image.max())
-        im_rgba = array2colormap(image, **kw)
         # Set image and text :
-        im_visual.image.set_data(im_rgba)
+        im_visual.image.set_data(image)
         txt = '%s=%.2f'
         text = self._txt.text.copy()
         text[nb] = txt % (dim, pos)
@@ -284,8 +343,20 @@ class CrossSecObj(_Volume):
             """Mouse move."""
             pos = self._mouse_to_pos(event.pos)
             if pos is not None:
-                self.localize_source(pos)
+                if self._is_act:
+                    self.set_activation(xyz=pos)
+                else:
+                    self.localize_source(pos)
         return on_mouse_press
+
+    def _on_key_pressed(self):
+        def plus(event):  # noqa
+            self.contrast += .1
+
+        def minus(event):  # noqa
+            self.contrast -= .1
+        self.key_press['+'] = plus
+        self.key_press['-'] = minus
 
     # ----------- SAGITTAL -----------
     @property
@@ -346,6 +417,23 @@ class CrossSecObj(_Volume):
             else:
                 logger.error("Cannot take axial section %s. Max across "
                              "third dimension is %s." % (value, self._sh[2]))
+
+    # ----------- CONTRAST -----------
+    @property
+    def contrast(self):
+        """Get the contrast value."""
+        return self._contrast
+
+    @contrast.setter
+    def contrast(self, value):
+        """Set contrast value."""
+        assert 0. <= value < 1.
+        clim = (self._vol.min() * (1. + value), self._vol.max() * (1. - value))
+        cmap = self._get_bg_cmap(clim=clim)
+        self._im_sagit.image.cmap = cmap
+        self._im_coron.image.cmap = cmap
+        self._im_axial.image.cmap = cmap
+        self._contrast = value
 
     # ----------- INTERPOLATION -----------
     @property

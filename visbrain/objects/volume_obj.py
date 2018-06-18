@@ -116,26 +116,30 @@ class _Volume(VisbrainObject):
         """Get the list of installed volumes."""
         return get_files_in_folders(*self._search_in_path(), file=file)
 
-    def slice_to_pos(self, sl, axis=None):
+    def slice_to_pos(self, sl, axis=None, hdr=None):
         """Return the position from slice in the volume space."""
         single_val = isinstance(axis, int) and isinstance(sl, int)
         if single_val:
             val = sl
             sl = [0.] * 3
             sl[axis] = val
-        assert len(sl) == 3 and isinstance(self._hdr, MatrixTransform)
-        pos = self._hdr.map(sl)[0:-1]
+        if hdr is None:
+            hdr = self._hdr
+        assert len(sl) == 3 and isinstance(hdr, MatrixTransform)
+        pos = hdr.map(sl)[0:-1]
         return pos[axis] if single_val else pos
 
-    def pos_to_slice(self, pos, axis=None):
+    def pos_to_slice(self, pos, axis=None, hdr=None):
         """Return the slice from position."""
         single_val = isinstance(axis, int) and isinstance(pos, int)
         if single_val:
             val = pos
             pos = [0.] * 3
             pos[axis] = val
-        assert len(pos) == 3 and isinstance(self._hdr, MatrixTransform)
-        sl = np.round(self._hdr.imap(pos)).astype(int)[0:-1]
+        if hdr is None:
+            hdr = self._hdr
+        assert len(pos) == 3 and isinstance(hdr, MatrixTransform)
+        sl = np.round(hdr.imap(pos)).astype(int)[0:-1]
         return sl[axis] if single_val else sl
 
     @staticmethod
