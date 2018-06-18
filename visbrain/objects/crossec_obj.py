@@ -140,15 +140,15 @@ class CrossSecObj(_Volume):
         # Define three images (Sagittal, Coronal, Axial), markers and line :
         kwi = dict(parent=self._im_node, loc_parent=self._loc_node,
                    _im=dict(interpolation=interpolation), _mark=dict(size=20.),
-                   _line=dict(width=3., color='white'))
+                   _line=dict(width=2., color='white'))
         self._im_sagit = _ImageSection('Sagit', **kwi)
         self._im_coron = _ImageSection('Coron', **kwi)
         self._im_axial = _ImageSection('Axial', **kwi)
         # Add text (sagit, coron, axial, left, right) :
-        txt_pos = np.array([[-.99, -.1, 0.], [.01, -.1, 0.], [-.99, -1.99, 0.],
-                            [.9, -.2, 0.], [0.1, .9, 0.], [.9, -1.8, 0.],
-                            [0.9, .9, 0.]])
-        txt = ['Text'] * 3 + ['L'] * 2 + ['R'] * 2
+        txt_pos = np.array([[0., -.1, 0.], [0., -.2, 0.], [0., -.3, 0.],  [0., -.4, 0.],
+                            [-.1, -.1, 0.], [0.1, .9, 0.],    # L
+                            [-.1, -.9, 0.], [0.9, .9, 0.]])   # R
+        txt = ['File = ' + self._name] + [''] * 3 + ['L'] * 2 + ['R'] * 2
         self._txt = scene.visuals.Text(text=txt, pos=txt_pos, anchor_x='left',
                                        color=color2vb(text_color),
                                        font_size=text_size, anchor_y='bottom',
@@ -183,15 +183,15 @@ class CrossSecObj(_Volume):
         tf_coron = vist.ChainTransform([norm_coron, rz90, rx180])
         self._im_coron.transform = tf_coron
         # Axial transformation :
-        norm_axis = vist.STTransform(scale=(2. / sh[1], 2. / sh[0], 1.),
+        norm_axis = vist.STTransform(scale=(1. / sh[1], 1. / sh[0], 1.),
                                      translate=(-1., 0., 0.))
         tf_axial = vist.ChainTransform([norm_axis, rx180])
         self._im_axial.transform = tf_axial
 
     def _get_camera(self):
         """Get the camera."""
-        cam = scene.cameras.PanZoomCamera(rect=(-1.5, -2., 3., 3.))
-        # cam = FixedCam(rect=(-1.5, -2., 3., 3.))
+        cam = scene.cameras.PanZoomCamera(rect=(-1.5, -1., 3., 2.))
+        # cam = FixedCam(rect=(-1.5, -1., 3., 2.))
         return cam
 
     def _get_bg_cmap(self, clim=None):
@@ -279,7 +279,7 @@ class CrossSecObj(_Volume):
     def _set_section(self, im_visual, image, pos, nb, dim):
         # Set image and text :
         im_visual.image.set_data(image)
-        txt = '%s=%.2f'
+        txt = '%s = %.2f'
         text = self._txt.text.copy()
         text[nb] = txt % (dim, pos)
         self._txt.text = text
@@ -313,25 +313,24 @@ class CrossSecObj(_Volume):
         """Convert mouse position to pos."""
         sh = np.array(self._sh)
         csize = self.canvas.canvas.size
-        rect = (-1.5, -2., 3., 3.)
-        idx_xy = None
+        rect = (-1.5, -1., 3., 1.)
         # Canvas -> camera conversion :
         x = +(pos[0] * rect[2] / csize[0]) + rect[0]
         y = -(pos[1] * rect[3] / csize[1]) - rect[1]
-        if (-1. <= x <= 0.) and (1. <= y):
+        if (-1. <= x <= 0.) and (.5 <= y <= 1.):
             idx_xy, sl_z = [1, 2], self.sagittal
-            x_off, x_lim, y_off, y_lim, y_inv = 1., 0., -1., 0., 1.
-        elif (0. <= x <= 1.) and (1. <= y):
+            x_off, y_off, y_lim, y_inv = 1., -1., 0., 2.
+        elif (0. <= x <= 1.) and (.5 <= y <= 1.):
             idx_xy, sl_z = [0, 2], self.coronal
-            x_off, x_lim, y_off, y_lim, y_inv = 0., 0., -1., 0., 1.
-        elif (-1. <= x <= 1.) and (y <= 1.):
+            x_off, y_off, y_lim, y_inv = 0., -1., 0., 2.
+        elif (-1. <= x <= 0.) and (0 <= y <= .5):
             idx_xy, sl_z = [1, 0], self.axial
-            x_off, x_lim, y_off, y_lim, y_inv = 1., 1., 1., 1., -1.
-        # Camera -> pos conversion :
-        if idx_xy is None:  # out of picture
+            x_off, y_off, y_lim, y_inv = 1., .5, -.5, -1.
+        else:
             return None
+        # Camera -> pos conversion :
         pic = sh[idx_xy]
-        sl_x = (rect[2] * (+x + x_off) * pic[0]) / ((1. + x_lim) * rect[2])
+        sl_x = (rect[2] * (x + x_off) * pic[0]) / rect[2]
         sl_y = (rect[3] * (y_inv * y + y_off) * pic[1]) / \
             ((1. + y_lim) * rect[3])
         sl_xyz = np.array([sl_z] * 3)
@@ -372,7 +371,7 @@ class CrossSecObj(_Volume):
             if value <= self._sh[0]:
                 pos = self.slice_to_pos(value, axis=0)
                 self._set_section(self._im_sagit, self._vol[value, ...], pos,
-                                  0, 'x')
+                                  1, 'x')
                 self._sagittal = value
             else:
                 logger.error("Cannot take sagittal section %s. Max across "
@@ -392,7 +391,7 @@ class CrossSecObj(_Volume):
             if value <= self._sh[1]:
                 pos = self.slice_to_pos(value, axis=1)
                 self._set_section(self._im_coron, self._vol[:, value, :],
-                                  pos, 1, 'y')
+                                  pos, 2, 'y')
                 self._coronal = value
             else:
                 logger.error("Cannot take coronal section %s. Max across "
@@ -412,7 +411,7 @@ class CrossSecObj(_Volume):
             if value <= self._sh[2]:
                 pos = self.slice_to_pos(value, axis=2)
                 self._set_section(self._im_axial, self._vol[..., value],
-                                  pos, 2, 'z')
+                                  pos, 3, 'z')
                 self._axial = value
             else:
                 logger.error("Cannot take axial section %s. Max across "
