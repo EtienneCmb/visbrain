@@ -129,13 +129,13 @@ class VisbrainObject(_VisbrainObj):
             self._node.parent = canvas.wc.scene
         return canvas
 
-    def preview(self, bgcolor='white', axis=False, xyz=False, show=True,
+    def preview(self, bgcolor='black', axis=False, xyz=False, show=True,
                 obj=None, size=(1200, 800), **kwargs):
         """Previsualize the result.
 
         Parameters
         ----------
-        bgcolor : array_like/string/tuple | 'white'
+        bgcolor : array_like/string/tuple | 'black'
             Background color for the preview.
         axis : bool | False
             Add x and y axis with ticks.
