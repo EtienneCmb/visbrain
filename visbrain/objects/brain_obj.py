@@ -474,7 +474,9 @@ class BrainObj(VisbrainObject):
         # Select conversion :
         if select is None:
             logger.info("Select all parcellates")
-            select = u_idx
+            select = labels.tolist()
+            if 'Unknown' in select:
+                select.pop(select.index('Unknown'))
         # Manage color if data is an array :
         if isinstance(data, (np.ndarray, list, tuple)):
             data = np.asarray(data)
@@ -495,8 +497,7 @@ class BrainObj(VisbrainObject):
             if select.dtype != int:
                 logger.info('Search parcellates using labels')
                 select_str = select.copy()
-                select = []
-                bad_select = []
+                select, bad_select = [], []
                 for k in select_str:
                     label_idx = np.where(labels == k)[0]
                     if label_idx.size:
@@ -504,9 +505,10 @@ class BrainObj(VisbrainObject):
                     else:
                         roi_labs.append('%s (ignored)' % k)
                         bad_select.append(k)
-                logger.warning("%s ignored. Use `get_parcellates` method to "
-                               "get the list of available "
-                               "parcellates" % ', '.join(bad_select))
+                if len(bad_select):
+                    logger.warning("%s ignored. Use `get_parcellates` method "
+                                   "to get the list of available "
+                                   "parcellates" % ', '.join(bad_select))
                 select = np.array(select).ravel()
         if not select.size:
             raise ValueError("No parcellates found")

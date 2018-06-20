@@ -7,6 +7,8 @@ string / faces into RBGA colors, defining the basic colormap object...)
 
 import numpy as np
 
+from vispy.color.colormap import Colormap
+
 from matplotlib import cm
 import matplotlib.colors as mplcol
 from warnings import warn
@@ -14,9 +16,9 @@ from warnings import warn
 from .sigproc import normalize
 
 
-__all__ = ('color2vb', 'array2colormap', 'dynamic_color', 'color2faces',
-           'type_coloring', 'mpl_cmap', 'color2tuple', 'mpl_cmap_index'
-           )
+__all__ = ('color2vb', 'array2colormap', 'cmap_to_glsl', 'dynamic_color',
+           'color2faces', 'type_coloring', 'mpl_cmap', 'color2tuple',
+           'mpl_cmap_index')
 
 
 def color2vb(color=None, default=(1., 1., 1.), length=1, alpha=1.0,
@@ -118,7 +120,7 @@ def color2tuple(color, astype=np.float32, rmalpha=True, roundto=2):
 
 def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
                    vmax=None, under='dimgray', over='darkred',
-                   faces_render=False):
+                   translucent=None, faces_render=False):
     """Transform an array of data into colormap (array of RGBA).
 
     Parameters
@@ -144,6 +146,13 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
         the over parameter bellow.
     over : tuple/string | 'darkred'
         Matplotlib color for values over vmax.
+    translucent : tuple | None
+        Set a specific range translucent. With f_1 and f_2 two floats, if
+        translucent is :
+
+            * (f_1, f_2) : values between f_1 and f_2 are set to translucent
+            * (None, f_2) x <= f_2 are set to translucent
+            * (f_1, None) f_1 <= x are set to translucent
     faces_render : boll | False
         Precise if the render should be applied to faces
 
@@ -157,12 +166,8 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
     x = np.asarray(x)
 
     # Check clim :
-    if clim is None:
-        clim = (None, None)
-    else:
-        clim = list(clim)
-        if len(clim) is not 2:
-            raise ValueError("The length of the clim must be 2: (min, max)")
+    clim = (None, None) if clim is None else list(clim)
+    assert len(clim) == 2
 
     # ---------------------------
     # Check alpha :
@@ -188,12 +193,65 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
         over = color2vb(over)  # if isinstance(over, str) else over
         x_cmap[x > vmax, :] = over
 
+    # ================== Transparency ==================
+    x_cmap = _transclucent_cmap(x, x_cmap, translucent)
+
     # Faces render (repeat the color to other dimensions):
     if faces_render:
         x_cmap = np.transpose(np.tile(x_cmap[..., np.newaxis],
                                       (1, 1, 3)), (0, 2, 1))
 
     return x_cmap.astype(np.float32)
+
+
+def _transclucent_cmap(x, x_cmap, translucent):
+    """Sub function to define transparency."""
+    if translucent is not None:
+        is_num = [isinstance(k, (int, float)) for k in translucent]
+        assert len(translucent) == 2 and any(is_num)
+        if all(is_num):                # (f_1, f_2)
+            trans_x = np.logical_and(translucent[0] <= x, x <= translucent[1])
+        elif is_num == [True, False]:  # (f_1, None)
+            trans_x = translucent[0] <= x
+        elif is_num == [False, True]:  # (None, f_2)
+            trans_x = x <= translucent[1]
+        x_cmap[..., -1] = np.invert(trans_x)
+    return x_cmap
+
+
+def cmap_to_glsl(limits=None, n_colors=256, color=None, **kwargs):
+    """Get a glsl colormap.
+
+    Parameters
+    ----------
+    limits : tuple | None
+        Color limits for the object. Must be a tuple of two floats.
+    n_colors : int | 256
+        Number of levels for the colormap.
+    color : string | None
+        Use a unique color for the colormap.
+    kwarg : dict | None
+        Additional inputs to pass to the array2colormap function.
+
+    Returns
+    -------
+    cmap : vispy.color.Colormap
+        VisPy colormap instance.
+    """
+    if limits is None:
+        limits = (0., 1.)
+    assert len(limits) == 2
+    # Color transform :
+    vec = np.linspace(limits[0], limits[1], n_colors)
+    if color is None:  # colormap
+        cmap = Colormap(array2colormap(vec, **kwargs))
+    else:              # uniform color
+        translucent = kwargs.get('translucent', None)
+        rep_col = color2vb(color, length=n_colors)
+        cmap_trans = _transclucent_cmap(vec, rep_col, translucent)
+        cmap = Colormap(cmap_trans)
+
+    return cmap
 
 
 def dynamic_color(color, x, dynamic=(0., 1.)):
