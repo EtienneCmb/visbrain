@@ -1,4 +1,6 @@
 """Top level Sleep class."""
+import logging
+
 import numpy as np
 
 import vispy.scene.cameras as viscam
@@ -9,6 +11,8 @@ from ..pyqt_module import PyQtModule
 from ..utils import (FixedCam, color2vb, MouseEventControl)
 from ..io import ReadSleepData
 from ..config import PROFILER
+
+logger = logging.getLogger('visbrain')
 
 
 class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
@@ -134,6 +138,8 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
         self._remsym = 'triangle_down'
         self._mtsym = 'star'
         self._peaksym = 'disc'
+        # ---------- Custom detections ----------
+        self._custom_detections = {}
         # Get some data info (min / max / std / mean)
         self._get_data_info()
         PROFILER("Data info")
@@ -161,6 +167,56 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
     def __getitem__(self, key):
         """Return corresponding data info."""
         return self._datainfo[key]
+
+    def replace_detections(self, dtype, method):
+        """Replace the default detection methods.
+
+        Parameters
+        ----------
+        dtype : string
+            Name of the method to replace. Should be 'spindle', 'sw' (slow
+            waves), 'kc' (k-complexes), 'rem' (rapid eye movements), 'mt'
+            (muscle twitches) or 'peak'.
+        method : function
+            Function to replace the detection. The function should take as an
+            input :
+
+                * A vector array of data of shape (n_time_points,)
+                * The sampling frequency (float)
+                * The time vector of shape (n_time_points,)
+                * A vector array for the hypnogram of shape (n_time_points,)
+
+            Then, the function should return indices of relevant events.
+            Returned indices should either be :
+
+                *  An array of shape (n_events, 2) where `n_events` describe
+                   the number of detected events. The first and second columns
+                   of the array respectively describe where detected events
+                   start and finished.
+                * A boolean vector of shape (n_time_points,) where True values
+                  refer to detected events.
+                * An array which contains consecutive indices of detected
+                  events.
+
+        Examples
+        --------
+        >>> def method(data, sf, hypno):
+        >>>     # Do stuff
+        >>>     indices = ...
+        >>>     return indices
+        """
+        # Type checking :
+        meth_names = ('spindle', 'sw', 'kc', 'rem', 'mt', 'peak')
+        if dtype not in meth_names:
+            raise ValueError("dtype should be a string. Choose between "
+                             "%s" % ', '.join(meth_names))
+        assert hasattr(method, '__call__')
+        # Save the method :
+        self._custom_detections[dtype] = method
+        logger.info("Method for %s detection has been successfully "
+                    "replaced" % dtype)
+        # Set stack detections enable / disable :
+        self._fcn_switch_detection()
 
     ###########################################################################
     # SUB-FONCTIONS

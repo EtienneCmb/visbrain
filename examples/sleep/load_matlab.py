@@ -14,10 +14,13 @@ import numpy as np
 from scipy.io import loadmat
 
 from visbrain import Sleep
-from visbrain.io import download_file
+from visbrain.io import download_file, path_to_visbrain_data
 
-current_path = os.getcwd()
-target_path = os.path.join(current_path, 'data', 'matlab')
+###############################################################################
+#                               LOAD YOUR FILE
+###############################################################################
+current_path = path_to_visbrain_data()
+target_path = os.path.join(current_path, 'sleep_data', 'matlab')
 
 # Download matlab file :
 download_file("sleep_matlab.zip", unzip=True, to_path=target_path)
@@ -31,4 +34,5 @@ raw_sf = float(mat['sf'])
 raw_channels = np.concatenate(mat['channels'].flatten()).tolist()
 raw_hypno = mat['hypno'].flatten()
 
+# Open the GUI :
 Sleep(data=raw_data, sf=raw_sf, channels=raw_channels, hypno=raw_hypno).show()
