@@ -65,7 +65,7 @@ roi_obj.select_roi([4, 6])
 vol_obj = VolumeObj('aal')
 # Cross-sections :
 cs_obj = CrossSecObj('aal')
-cs_obj.set_data((50, 60, 70))
+cs_obj.cut_coords((50, 60, 70))
 
 # ---------------- Application  ----------------
 vb = Brain(source_obj=[s_obj1, s_obj2], connect_obj=[c_obj, c_obj2],
