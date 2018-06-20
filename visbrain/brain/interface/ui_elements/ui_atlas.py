@@ -73,9 +73,9 @@ class UiAtlas(object):
         # Set (min, max) for sliders :
         self._fcn_crossec_sl_limits()
         # Sagittal, coronal and axial slider :
-        self._csSagit.setValue(self.cross_sec._section[0])
-        self._csCoron.setValue(self.cross_sec._section[1])
-        self._csAxial.setValue(self.cross_sec._section[2])
+        self._csSagit.setValue(self.cross_sec._bgd._sagittal)
+        self._csCoron.setValue(self.cross_sec._bgd._coronal)
+        self._csAxial.setValue(self.cross_sec._bgd._axial)
         self._csSagit.sliderMoved.connect(self._fcn_crossec_move)
         self._csCoron.sliderMoved.connect(self._fcn_crossec_move)
         self._csAxial.sliderMoved.connect(self._fcn_crossec_move)
@@ -259,8 +259,8 @@ class UiAtlas(object):
         dy = min(max(0, self._csCoron.value()), self.cross_sec._vol.shape[1])
         dz = min(max(0, self._csAxial.value()), self.cross_sec._vol.shape[2])
         # Get selected colormap :
-        cmap = str(self._csCmap.currentText())
-        self.cross_sec.set_data((dx, dy, dz), cmap=cmap, update=update)
+        sl = self.cross_sec.slice_to_pos((dx, dy, dz))
+        self.cross_sec.cut_coords(sl)
 
     def _fcn_crossec_cmap(self):
         """Change cross-sections colormap."""
