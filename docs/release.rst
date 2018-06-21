@@ -14,6 +14,12 @@ New features
 ~~~~~~~~~~~~
 
 * You can now :ref:`replace_detection` using the :class:`visbrain.Sleep.replace_detections` method.
+* Add activations (:class:`visbrain.objects.CrossSecObj.set_activation`) and highlight multiple sources (:class:`visbrain.objects.CrossSecObj.highlight_sources`) inside the :class:`visbrain.objects.CrossSecObj`
+
+Improvements
+~~~~~~~~~~~~
+
+* :class:`visbrain.objects.CrossSecObj` : much faster + colormap computed onto th GPU + superposition of multiple mask + keyboard interactions
 
 Bug fixes
 ~~~~~~~~~
