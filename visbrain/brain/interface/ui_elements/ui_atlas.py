@@ -144,10 +144,13 @@ class UiAtlas(object):
         # _____________________ TEMPLATE _____________________
         template = str(self._brain_template.currentText())
         hemisphere = str(self._brain_hemi.currentText())
-        self.atlas.set_data(name=template, hemisphere=hemisphere)
-        self.atlas.scale = self._gl_scale
-        self.atlas.reset_camera()
-        self.atlas.rotate('top')
+        if self.atlas.name != template:
+            self.atlas.set_data(name=template, hemisphere=hemisphere)
+            self.atlas.scale = self._gl_scale
+            self.atlas.reset_camera()
+            self.atlas.rotate('top')
+        if self.atlas.hemisphere != hemisphere:
+            self.atlas.hemisphere = hemisphere
 
     def _fcn_brain_hemisphere(self):
         """Change the hemisphere."""
