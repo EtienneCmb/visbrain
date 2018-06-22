@@ -85,6 +85,24 @@ Checkout the :ref:`community` tab, we provide several Gitter chat rooms where yo
     <div class="panel panel-default">
       <div class="panel-heading">
         <h2 class="panel-title">
+          <a data-toggle="collapse" href="#collapse_use_mne">I made my analysis with MNE-Python. Can I use visbrain to visualize my results?</a>
+        </h2>
+      </div>
+      <div id="collapse_use_mne" class="panel-collapse collapse">
+        <div class="panel-body">
+
+Yes, we provide a set of functions to help you with the compatibility with MNE-Python. Checkout :py:mod:`visbrain.mne`:
+
+.. ----------------------------- IMPORT -----------------------------
+.. raw:: html
+
+          </div>
+        </div>
+      </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h2 class="panel-title">
           <a data-toggle="collapse" href="#collapse_import">How to import and use visbrain?</a>
         </h2>
       </div>

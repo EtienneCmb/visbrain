@@ -12,6 +12,8 @@ API
 GUI based modules
 -----------------
 
+:py:mod:`visbrain`:
+
 .. currentmodule:: visbrain
 
 .. autosummary::
@@ -26,12 +28,16 @@ GUI based modules
 
 
 .. _API_objects:
-
-
 Objects
 -------
 
+:py:mod:`visbrain.objects`:
+
 .. currentmodule:: visbrain.objects
+
+.. automodule:: visbrain.objects
+   :no-members:
+   :no-inherited-members:
 
 .. autosummary::
    :toctree: generated/
@@ -55,18 +61,34 @@ Objects
 Compatibility with existing software
 ------------------------------------
 
+MNE-python
+~~~~~~~~~~
+
+:py:mod:`visbrain.mne`:
+
 .. currentmodule:: visbrain.mne
+
+.. automodule:: visbrain.mne
+   :no-members:
+   :no-inherited-members:
 
 .. autosummary::
    :toctree: generated/
    :template: function.rst
 
    mne_plot_source_estimation
+   mne_plot_source_space
 
 I/O
 ---
 
+:py:mod:`visbrain.io`:
+
 .. currentmodule:: visbrain.io
+
+.. automodule:: visbrain.io
+   :no-members:
+   :no-inherited-members:
 
 .. autosummary::
    :toctree: generated/
@@ -79,7 +101,13 @@ I/O
 Miscellaneous
 -------------
 
+:py:mod:`visbrain.utils`:
+
 .. currentmodule:: visbrain.utils
+
+.. automodule:: visbrain.utils
+   :no-members:
+   :no-inherited-members:
 
 .. autosummary::
    :toctree: generated/
