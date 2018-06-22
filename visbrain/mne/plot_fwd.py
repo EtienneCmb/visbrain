@@ -13,6 +13,23 @@ logger = logging.getLogger('visbrain')
 __all__ = ['mne_plot_source_estimation']
 
 
+def _extract_arrays_from_src(src, hemisphere='both'):
+    """Get vertices, faces, active vertices and sources from SourceSpace."""
+    logger.debug("Loading vert, faces, activ and sources from src structure.")
+    _l_nb, _r_nb = src[0]['rr'].shape[0], src[1]['rr'].shape[0]
+    _f_off = [0, src[0]['tris'].max() + 1]
+    _act_off = [0, _l_nb]
+    _hemi = {'left': [0], 'right': [1], 'both': [0, 1]}[hemisphere]
+    # Get vertices and faces :
+    vertices = np.vstack([src[k]['rr'] for k in [0, 1]])
+    faces = np.vstack([src[k]['tris'] + _f_off[k] for k in [0, 1]])
+    lr_index = np.r_[np.ones((_l_nb,)), np.zeros((_r_nb))].astype(bool)
+    # Get active vertex and sources :
+    activ = np.hstack([src[k]['vertno'] + _act_off[k] for k in _hemi])
+    sources = np.vstack([src[k]['rr'][src[k]['vertno']] for k in _hemi])
+    return vertices, faces, lr_index, activ, sources
+
+
 def mne_plot_source_estimation(sbj, sbj_dir, fwd_file, stc_file=None,
                                hemisphere='both', parc='aparc', active_data=0,
                                kw_brain_obj={}, kw_source_obj={},
