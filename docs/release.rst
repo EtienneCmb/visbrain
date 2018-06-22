@@ -15,11 +15,12 @@ New features
 
 * You can now :ref:`replace_detection` using the :class:`visbrain.Sleep.replace_detections` method.
 * Add activations (:class:`visbrain.objects.CrossSecObj.set_activation`) and highlight multiple sources (:class:`visbrain.objects.CrossSecObj.highlight_sources`) inside the :class:`visbrain.objects.CrossSecObj`
+* Plot MNE sources :class:`visbrain.mne.mne_plot_source_space`
 
 Improvements
 ~~~~~~~~~~~~
 
-* :class:`visbrain.objects.CrossSecObj` : much faster + colormap computed onto th GPU + superposition of multiple mask + keyboard interactions
+* :class:`visbrain.objects.CrossSecObj` : much faster + colormap computed onto the GPU + superposition of multiple mask + keyboard interactions
 
 Bug fixes
 ~~~~~~~~~
@@ -29,6 +30,8 @@ Bug fixes
 * add multiple objects to the :class:`visbrain.objects.SceneObj` with *row_span* and / or *col_span* > 1 
 * path to brain templates
 * loading hypnogram with spaces instead of tabs
+* Fix :class:`visbrain.mne.mne_plot_source_estimation` with left and right hemispheres
+* Fix activations that disappear using :class:`visbrain.Brain.brain_control`
 
 0.4.0
 -----
@@ -36,7 +39,7 @@ Bug fixes
 New features
 ~~~~~~~~~~~~
 
-* `mne_plot_source_estimation <https://github.com/EtienneCmb/visbrain/blob/master/visbrain/mne/plot_fwd.py>`_ 
+* Plot MNE estimated sources :class:`visbrain.mne.mne_plot_source_estimation`
 
 Improvements
 ~~~~~~~~~~~~
