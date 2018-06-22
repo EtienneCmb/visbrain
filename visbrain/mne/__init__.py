@@ -1,1 +1,1 @@
-from .plot_fwd import *
+from .plot_mne import *
