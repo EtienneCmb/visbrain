@@ -163,14 +163,6 @@ class Signal(PyQtModule, UiInit, UiElements, Visuals):
         Visuals.__init__(self, data, time, sf, axis, grid_titles, grid_color,
                          grid_shape, grid_parent, signal_parent)
 
-        # ==================== CAMERA ====================
-        grid_rect = (0, 0, 1, 1)
-        sig_rect = self._signal.rect
-        cb_rect = (-.05, -2, .8, 4.)
-        self._grid_canvas.camera = viscam.PanZoomCamera(rect=grid_rect)
-        self._signal_canvas.camera = viscam.PanZoomCamera(rect=sig_rect)
-        self._signal_canvas.wc_cbar.camera = viscam.PanZoomCamera(rect=cb_rect)
-
         # ==================== UI INIT ====================
         self._fix_elements_limits()
         # ------------- Signal -------------
