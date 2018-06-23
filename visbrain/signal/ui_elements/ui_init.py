@@ -3,6 +3,7 @@ import numpy as np
 from PyQt5 import QtWidgets
 from warnings import warn
 
+import vispy.scene.cameras as viscam
 from vispy import app
 
 from ..gui import Ui_MainWindow
@@ -134,13 +135,22 @@ class UiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas):
         super(UiInit, self).__init__(None)
         self.setupUi(self)
 
+        # Cameras :
+        grid_rect = (0, 0, 1, 1)
+        cb_rect = (-.05, -2, .8, 4.)
+        cam_signal = viscam.PanZoomCamera()
+        cam_grid = viscam.PanZoomCamera(rect=grid_rect)
+        cam_cbar = viscam.PanZoomCamera(rect=cb_rect)
+
         # Canvas creation :
         cargs = {'size': (800, 600)}
         self._grid_canvas = VisbrainCanvas(axis=False, name='Grid',
-                                           cargs=cargs, **kwargs)
+                                           cargs=cargs, camera=cam_grid,
+                                           **kwargs)
         self._signal_canvas = VisbrainCanvas(axis=True, name='Signal',
                                              cargs=cargs, add_cbar=True,
-                                             **kwargs)
+                                             camera=cam_signal, **kwargs)
+        self._signal_canvas.wc_cbar.camera = cam_cbar
 
         # Add canvas to layout :
         self._GridLayout.addWidget(self._grid_canvas.canvas.native)
