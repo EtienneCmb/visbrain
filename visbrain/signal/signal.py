@@ -2,8 +2,6 @@
 import os
 import numpy as np
 
-import vispy.scene.cameras as viscam
-
 from .ui_elements import UiElements, UiInit
 from .visuals import Visuals
 from ..utils import (safely_set_cbox, color2tuple, color2vb, mpl_cmap,
