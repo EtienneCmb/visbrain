@@ -404,10 +404,10 @@ class BrainObj(VisbrainObject):
             assert os.path.isfile(file)
             logger.info("Add overlay to the {} brain template "
                         "({})".format(self._name, file))
-            is_nibabel_installed(raise_error=True)
-            import nibabel as nib
+            from visbrain.io import read_nifti
             # Load data using Nibabel :
-            sc = nib.load(file).get_data().ravel(order="F")
+            sc, _, _ = read_nifti(file)
+            sc = sc.ravel(order="F")
             hemisphere = 'both' if len(sc) == len(self.mesh) else hemisphere
             # Hemisphere :
             hemisphere, idx = self._hemisphere_from_file(hemisphere, file)
