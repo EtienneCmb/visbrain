@@ -513,7 +513,7 @@ It is possible to manually load raw data and pass them as inputs arguments Sleep
 
 .. code-block:: python
 
-	from scipy.io import loadmat
+    from scipy.io import loadmat
     # Import the Sleep module from visbrain:
     from visbrain import Sleep
     # Load your dataset :
@@ -680,11 +680,56 @@ Perform a peak detection.
 Use your own detections in Sleep
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Sleep lets you replace default detection algorithms with your own using the :class:`visbrain.Sleep.replace_detections` method.
+Sleep lets you replace default detection algorithms with your own. To do it, you have to provide a function with predefined inputs and outputs.
 
+Prototype of the function
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Here's a prototype of a function to replace *Sleep* spindle detections :
+
+.. code-block:: python
+
+  def my_custom_spindle_detection(data, sf, time, hypno):
+      """Use your own spindle detection
+
+      Parameters
+      ----------
+      data : np.ndarray
+          Data of one unique channel (i.e shape (n_time_pts,))
+      sf : float
+           The sampling frequency (512., 1024. etc.)
+      time : np.ndarray
+          The time vector (i.e shape (n_time_pts,))
+      hypno : np.ndarray
+          The hypnogram (i.e shape (n_time_pts,))
+
+      Returns
+      -------
+      indexes : np.ndarray
+          indexes of detected events.
+      """
+      pass
+
+Format of returned indexes
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Several formats of returned indexes are supported :
+
+* **(Start, Stop)** : an array of shape *(n_dected_events, 2)* where *2* describes the index where each event start and finish.
+* **Boolean vector** : a boolean vector of shape *(n_time_pts,)* where each *True* value refers to a time point that belong to a detected event.
+* **Consecutive indexes** : an array which only contains consecutive indexes of detected events.
+
+Those three formats of returned indexes are summarized in the figure bellow.
 
 .. figure::  picture/picsleep/sleep_return_indices.png
    :align:   center
+
+   Supported indexes format returned by a custom detection algorithm.
+
+Replace Sleep detection
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Once your function has proper inputs and outputs, use the :class:`visbrain.Sleep.replace_detections` method to replace the detection of *Sleep* with your own.
 
 
 .. ----------------------------------------------------------------------------
