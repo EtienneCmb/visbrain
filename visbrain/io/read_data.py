@@ -80,6 +80,8 @@ def read_nifti(path, hdr_as_array=False):
     # Get the data and affine transformation ::
     vol = img.get_data()
     affine = img.affine
+    # Replace NaNs with 0. :
+    vol[np.isnan(vol)] = 0.
     # Define the transformation :
     if hdr_as_array:
         transform = affine
