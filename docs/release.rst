@@ -33,6 +33,7 @@ Bug fixes
 * Fix :class:`visbrain.mne.mne_plot_source_estimation` with left and right hemispheres
 * Fix activations that disappear using :class:`visbrain.Brain.brain_control`
 * Fix x and y axis update inside :class:`visbrain.Signal`
+* Reading Nifti files with NaN values
 
 0.4.0
 -----
