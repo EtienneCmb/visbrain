@@ -63,6 +63,7 @@ def _plt_src(name, kw_brain_obj, active_data, active_vert, sources,
         sc.add_to_subplot(b_obj, use_this_cam=True)
         return sc
     else:  # return the BrainObj and SourceObj
+        s_obj.visible_obj = True
         return b_obj, s_obj
 
 
