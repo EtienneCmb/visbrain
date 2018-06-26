@@ -389,7 +389,45 @@ Two strategies :
 
 * Submit a pull request to the `Visbrain Github <https://github.com/EtienneCmb/visbrain>`_
 
+.. ----------------------------- AUTO SCORING -----------------------------
+.. raw:: html
 
+          </div>
+        </div>
+      </div>
+
+    <div class="panel-group">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h2 class="panel-title">
+            <a data-toggle="collapse" href="#collapse_auto_scoring">Can Sleep automatically detect sleep stages for me?</a>
+          </h2>
+        </div>
+        <div id="collapse_auto_scoring" class="panel-collapse collapse">
+          <div class="panel-body">
+
+Sleep does not yet provide a function to automatically detect and score the sleep stages. However, Sleep can make the tedious process of manually scoring the sleep stages easier for you, by automatically detecting microstructural events such as spindles, slow waves or rapid eye movements. In addition, the multiple customizable parameters of the spectrogram can be very useful to visually detect period of deep sleep, wakefulness, movements...
+
+.. ----------------------------- CUSTOM DETECTION -----------------------------
+.. raw:: html
+
+          </div>
+        </div>
+      </div>
+
+    <div class="panel-group">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h2 class="panel-title">
+            <a data-toggle="collapse" href="#collapse_custom_detection">I would rather use my own spindles detection algoritm than the one implemented in Sleep. Is it possible?</a>
+          </h2>
+        </div>
+        <div id="collapse_custom_detection" class="panel-collapse collapse">
+          <div class="panel-body">
+
+Yes! Sleep offers the possibility to implement your own detection algorithm. Please see the Sleep documentation for further details.
+
+.. ----------------------------- END -----------------------------
 .. raw:: html
 
           </div>
