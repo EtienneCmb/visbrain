@@ -14,6 +14,7 @@ This example illustrates how to replace the default detection algorithm.
 Required dataset at :
 https://www.dropbox.com/s/bj1ra95rbksukro/sleep_edf.zip?dl=1
 
+.. image:: ../../picture/picsleep/ex_replace_detection_basic.png
 """
 ###############################################################################
 # Load your file and create an instance of Sleep

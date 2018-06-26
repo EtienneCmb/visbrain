@@ -18,6 +18,7 @@ https://wonambi-python.github.io/installation.html for a detailed installation.
 Required dataset at :
 https://www.dropbox.com/s/bj1ra95rbksukro/sleep_edf.zip?dl=1
 
+.. image:: ../../picture/picsleep/ex_replace_detection_wonambi.png
 """
 ###############################################################################
 # Load your file and create an instance of Sleep

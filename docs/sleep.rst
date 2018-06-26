@@ -680,7 +680,7 @@ Perform a peak detection.
 Use your own detections in Sleep
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Sleep lets you replace default detection algorithms with your own. To do it, you have to provide a function with predefined inputs and outputs.
+*Sleep* offers the possibility to replace the native detection algorithms with your own detection algorithms. To do it, you have to provide a function with predefined inputs and outputs.
 
 Prototype of the function
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -710,26 +710,26 @@ Here's a prototype of a function to replace *Sleep* spindle detections :
       """
       pass
 
-Format of returned indexes
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+Function output
+^^^^^^^^^^^^^^^
 
-Several formats of returned indexes are supported :
+For your convenience, *Sleep* accepts several possible output formats for your custom detection :
 
 * **(Start, Stop)** : an array of shape *(n_dected_events, 2)* where *2* describes the index where each event start and finish.
 * **Boolean vector** : a boolean vector of shape *(n_time_pts,)* where each *True* value refers to a time point that belong to a detected event.
 * **Consecutive indexes** : an array which only contains consecutive indexes of detected events.
 
-Those three formats of returned indexes are summarized in the figure bellow.
+It means that your function will work as long as you are able to return any one of these three possible vectors. Since it is very likely that your home-made detection function already return one of those, implementing it in *Sleep* should be fairly easy! A graphical representation of these output formats is displayed below:
 
 .. figure::  picture/picsleep/sleep_return_indices.png
    :align:   center
 
-   Supported indexes format returned by a custom detection algorithm.
+   Supported output format of the custom detection algorithm.
 
 Replace Sleep detection
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-Once your function has proper inputs and outputs, use the :class:`visbrain.Sleep.replace_detections` method to replace the detection of *Sleep* with your own.
+Once your function has proper inputs and outputs, simply use the :class:`visbrain.Sleep.replace_detections` method to replace the detection of *Sleep* with your own. Please visit the Examples section to see some concrete examples.
 
 
 .. ----------------------------------------------------------------------------
@@ -740,7 +740,7 @@ Load and save the GUI configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 From the *Files > Save* contextual menu, you can save the GUI configuration. This will save the state of all buttons and properties inside :class:`Sleep`. Then, you can recharge the GUI configuration using *Files > Load > GUI config*.
-Alternatively, if you want to use a configuration when running :class:`Sleep`, you can use the *config_file* argument to directly pass the path to a configuration file.
+Alternatively, if you want to use a configuration when running :class:`Sleep`, you can use the *config_file* argument to directly pass the path to a configuration file. Note that configuration file are encoded in JSON format, which can be easily read and modified using any text editor.
 
 .. code-block:: python
 
@@ -749,10 +749,6 @@ Alternatively, if you want to use a configuration when running :class:`Sleep`, y
   from visbrain import Sleep
 
   Sleep(config_file='pathto/myconfig.json')
-
-
-.. tip::
-  Configuration file are encoded in JSON format, which can be easily read and modified using any text editor.
 
 
 .. ----------------------------------------------------------------------------
@@ -854,4 +850,3 @@ Examples
 .. raw:: html
 
     <div style='clear:both'></div>
-
