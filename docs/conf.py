@@ -81,6 +81,7 @@ sphinx_gallery_conf = {
 
 numpydoc_show_class_members = False
 numpydoc_class_members_toctree = False
+numpydoc_use_blockquotes = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
