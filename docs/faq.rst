@@ -75,7 +75,7 @@ Finally, inside your terminal navigate to your folder where the *py_script.py* i
 
 Checkout the :ref:`community` tab, we provide several Gitter chat rooms where you asked your questions.
 
-.. ----------------------------- IMPORT -----------------------------
+.. ----------------------------- MNE -----------------------------
 .. raw:: html
 
           </div>
@@ -175,7 +175,7 @@ In Visbrain, objects are elementary visualization bricks. **One object = one vis
 * :class:`visbrain.objects.HypnogramObj` : plot an hypnogram
 * :class:`visbrain.objects.TimeFrequencyObj` : plot a time-frequency map
 
-Checkout the :ref:`API_objects` part of the API. Then, each object has a `.preview()` method to be displayed.
+Checkout the :py:mod:`visbrain.objects` part of the API. Then, each object has a `.preview()` method to be displayed.
 
 .. code-block:: python
 
@@ -425,7 +425,8 @@ Sleep does not yet provide a function to automatically detect and score the slee
         <div id="collapse_custom_detection" class="panel-collapse collapse">
           <div class="panel-body">
 
-Yes! Sleep offers the possibility to implement your own detection algorithm. Please see the Sleep documentation for further details.
+            Yes! Sleep offers the possibility to implement your own detection algorithm. Please see the <a href="sleep.html#use-your-own-detections-in-sleep">Sleep documentation</a> for further details.
+
 
 .. ----------------------------- END -----------------------------
 .. raw:: html
