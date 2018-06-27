@@ -1,0 +1,33 @@
+visbrain.objects.ColorbarObj
+============================
+
+.. currentmodule:: visbrain.objects
+
+.. autoclass:: ColorbarObj
+   :exclude-members: __init__, set_shortcuts_to_canvas, to_dict, to_kwargs, update, update_from_dict, describe_tree
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree: ColorbarObj
+   
+      ~ColorbarObj.__init__
+      ~ColorbarObj.describe_tree
+      ~ColorbarObj.preview
+      ~ColorbarObj.screenshot
+      ~ColorbarObj.set_shortcuts_to_canvas
+      ~ColorbarObj.to_dict
+      ~ColorbarObj.to_kwargs
+      ~ColorbarObj.update
+      ~ColorbarObj.update_from_dict
+   
+   
+
+.. include:: visbrain.objects.ColorbarObj.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

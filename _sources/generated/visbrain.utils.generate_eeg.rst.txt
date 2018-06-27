@@ -1,0 +1,12 @@
+visbrain.utils.generate_eeg
+===========================
+
+.. currentmodule:: visbrain.utils
+
+.. autofunction:: generate_eeg
+
+.. include:: visbrain.utils.generate_eeg.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

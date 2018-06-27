@@ -1,4 +1,8 @@
+.. note::
+    :class: sphx-glr-download-link-note
 
+    Click :ref:`here <sphx_glr_download_auto_examples_sleep_load_rec.py>` to download the full example code
+.. rst-class:: sphx-glr-example-title
 
 .. _sphx_glr_auto_examples_sleep_load_rec.py:
 
@@ -11,32 +15,48 @@ This example demonstrate how to load a .rec file.
 Required dataset at :
 https://www.dropbox.com/s/hc18bgn2hlnmiph/sleep_edf.zip?dl=1
 
+.. image:: ../../picture/picsleep/ex_load_rec.png
+
 
 
 .. code-block:: python
 
-
-    from visbrain import Sleep
-    from visbrain.io import download_file
     import os
 
-    current_path = os.getcwd()
-    target_path = os.path.join(current_path, 'data', 'rec')
+    from visbrain import Sleep
+    from visbrain.io import download_file, path_to_visbrain_data
+
+
+LOAD YOUR FILE
+##############################################################################
+
+
+
+.. code-block:: python
+
+    current_path = path_to_visbrain_data()
+    target_path = os.path.join(current_path, 'sleep_data', 'rec')
 
     # Download the rec file :
-    download_file('sleep_rec.zip', unzip=True, to_path=target_path, remove_archive=True)
+    download_file('sleep_rec.zip', unzip=True, to_path=target_path,
+                  remove_archive=True)
 
     dfile = os.path.join(target_path, '1.rec')
 
+    # Open the GUI :
     Sleep(data=dfile).show()
 
 **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
+.. _sphx_glr_download_auto_examples_sleep_load_rec.py:
+
 
 .. only :: html
 
  .. container:: sphx-glr-footer
+    :class: sphx-glr-footer-example
+
 
 
   .. container:: sphx-glr-download

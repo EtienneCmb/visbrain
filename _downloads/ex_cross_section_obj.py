@@ -17,7 +17,7 @@ print("""
 # =============================================================================
 """)
 cs_brod = CrossSecObj('brodmann', interpolation='nearest',
-                      section=(70, 80, 90))
+                      coords=(70., 80., 90.))
 cs_brod.localize_source((-10., -15., 20.))
 sc.add_to_subplot(cs_brod, row=0, col=0, title='Brodmann area')
 
@@ -27,7 +27,7 @@ print("""
 # =============================================================================
 """)
 path = download_file('GG-853-GM-0.7mm.nii.gz')
-cs_cust = CrossSecObj(path, section=(90, 80, 100), cmap='gist_stern')
+cs_cust = CrossSecObj(path, coords=(0., 0., 0.), cmap='gist_stern')
 sc.add_to_subplot(cs_cust, row=0, col=1, title='Nii.gz file')
 
 sc.preview()

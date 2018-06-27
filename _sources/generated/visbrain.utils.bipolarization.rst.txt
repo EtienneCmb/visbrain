@@ -1,0 +1,12 @@
+visbrain.utils.bipolarization
+=============================
+
+.. currentmodule:: visbrain.utils
+
+.. autofunction:: bipolarization
+
+.. include:: visbrain.utils.bipolarization.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

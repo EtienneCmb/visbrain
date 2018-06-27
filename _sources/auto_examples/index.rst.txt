@@ -335,6 +335,139 @@ Examples demonstrating how to open and configure the Colorbar editor.
 
     <div style='clear:both'></div>
 
+EEG/MEG Examples
+----------------
+
+EEG/MEG examples (reproduction of MNE and PySurfer examples).
+
+.. contents:: Contents
+   :local:
+   :depth: 2
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Display a conjunction map from a nii.gz file (NiBabel required).">
+
+.. only:: html
+
+    .. figure:: /auto_examples/eeg_meg/images/thumb/sphx_glr_conjunction_map_thumb.png
+
+        :ref:`sphx_glr_auto_examples_eeg_meg_conjunction_map.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/eeg_meg/conjunction_map
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Display fMRI activations from a nii.gz file (NiBabel required).">
+
+.. only:: html
+
+    .. figure:: /auto_examples/eeg_meg/images/thumb/sphx_glr_fmri_activation_thumb.png
+
+        :ref:`sphx_glr_auto_examples_eeg_meg_fmri_activation.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/eeg_meg/fmri_activation
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Plot source estimation.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/eeg_meg/images/thumb/sphx_glr_forward_solution_thumb.png
+
+        :ref:`sphx_glr_auto_examples_eeg_meg_forward_solution.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/eeg_meg/forward_solution
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Plot MEG inverse solution.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/eeg_meg/images/thumb/sphx_glr_meg_inverse_solution_thumb.png
+
+        :ref:`sphx_glr_auto_examples_eeg_meg_meg_inverse_solution.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/eeg_meg/meg_inverse_solution
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Plot from a .fif file using the :class:`visbrain.mne.mne_plot_source_space` function">
+
+.. only:: html
+
+    .. figure:: /auto_examples/eeg_meg/images/thumb/sphx_glr_source_space_thumb.png
+
+        :ref:`sphx_glr_auto_examples_eeg_meg_source_space.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/eeg_meg/source_space
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Plot vector-valued MEG inverse solution.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/eeg_meg/images/thumb/sphx_glr_vector_based_meg_inverse_thumb.png
+
+        :ref:`sphx_glr_auto_examples_eeg_meg_vector_based_meg_inverse.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/eeg_meg/vector_based_meg_inverse
+.. raw:: html
+
+    <div style='clear:both'></div>
+
 Figure Examples
 ---------------
 
@@ -409,6 +542,26 @@ Examples demonstrating how to use objects.
    :hidden:
 
    /auto_examples/objects/ex_brain_obj
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the feasibility to combine multiple objects in the same scene.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_combine_objects_thumb.png
+
+        :ref:`sphx_glr_auto_examples_objects_ex_combine_objects.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/objects/ex_combine_objects
 
 .. raw:: html
 
@@ -549,99 +702,6 @@ Examples demonstrating how to use objects.
    :hidden:
 
    /auto_examples/objects/ex_volume_obj
-.. raw:: html
-
-    <div style='clear:both'></div>
-
-Pysurfer Examples
------------------
-
-Reproduction of PySurfer examples.
-
-.. contents:: Contents
-   :local:
-   :depth: 2
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Display a conjunction map from a nii.gz file (NiBabel required).">
-
-.. only:: html
-
-    .. figure:: /auto_examples/pysurfer/images/thumb/sphx_glr_conjunction_map_thumb.png
-
-        :ref:`sphx_glr_auto_examples_pysurfer_conjunction_map.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/pysurfer/conjunction_map
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Display fMRI activations from a nii.gz file (NiBabel required).">
-
-.. only:: html
-
-    .. figure:: /auto_examples/pysurfer/images/thumb/sphx_glr_fmri_activation_thumb.png
-
-        :ref:`sphx_glr_auto_examples_pysurfer_fmri_activation.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/pysurfer/fmri_activation
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Plot MEG inverse solution.">
-
-.. only:: html
-
-    .. figure:: /auto_examples/pysurfer/images/thumb/sphx_glr_meg_inverse_solution_thumb.png
-
-        :ref:`sphx_glr_auto_examples_pysurfer_meg_inverse_solution.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/pysurfer/meg_inverse_solution
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Plot vector-valued MEG inverse solution.">
-
-.. only:: html
-
-    .. figure:: /auto_examples/pysurfer/images/thumb/sphx_glr_vector_based_meg_inverse_thumb.png
-
-        :ref:`sphx_glr_auto_examples_pysurfer_vector_based_meg_inverse.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/pysurfer/vector_based_meg_inverse
 .. raw:: html
 
     <div style='clear:both'></div>
@@ -802,8 +862,28 @@ Examples demonstrating how to use the Signal module.
 Sleep Examples
 --------------
 
-Examples demonstrating how to load files in Sleep.
+Examples demonstrating how to use Sleep and how to load files.
 
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to open Sleep.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/sleep/images/thumb/sphx_glr_basic_sleep_thumb.png
+
+        :ref:`sphx_glr_auto_examples_sleep_basic_sleep.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/sleep/basic_sleep
 
 .. raw:: html
 
@@ -924,6 +1004,46 @@ Examples demonstrating how to load files in Sleep.
    :hidden:
 
    /auto_examples/sleep/load_using_mne
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrates how to replace the default detection algorithm.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/sleep/images/thumb/sphx_glr_replace_detection_basic_thumb.png
+
+        :ref:`sphx_glr_auto_examples_sleep_replace_detection_basic.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/sleep/replace_detection_basic
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrates how to replace the default spindle detection algorithm with those impl...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/sleep/images/thumb/sphx_glr_replace_detection_wonambi_thumb.png
+
+        :ref:`sphx_glr_auto_examples_sleep_replace_detection_wonambi.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/sleep/replace_detection_wonambi
 .. raw:: html
 
     <div style='clear:both'></div>
@@ -1062,6 +1182,7 @@ Examples demonstrating how to display and configure topographic plot.
 .. only :: html
 
  .. container:: sphx-glr-footer
+    :class: sphx-glr-footer-gallery
 
 
   .. container:: sphx-glr-download

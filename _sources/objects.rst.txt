@@ -3,371 +3,97 @@
 Objects
 =======
 
-Visbrain's objects are small pieces that can be used to accomplish basic visualizations or can be pass to other Visbrain modules (like :ref:`BrainModule`).
-
-Here's the list of currently supported modules :
-
-* :ref:`SceneObj`
-* :ref:`BrainObj`
-* :ref:`ColorbarObj`
-* :ref:`SourceObj`
-* :ref:`ConnectObj`
-* :ref:`VectorObj`
-* :ref:`TS3DObj`
-* :ref:`Pic3DObj`
-* :ref:`RoiObj`
-* :ref:`VolumeObj`
-* :ref:`CSObj`
-* :ref:`ImageObj`
-* :ref:`TFObj`
-* :ref:`HypnoObj`
-
-Each object inherit to the following methods :
-
-.. currentmodule:: visbrain.objects
-
-.. autosummary::
-    ~VisbrainObject.describe_tree
-    ~VisbrainObject.preview
-    ~VisbrainObject.screenshot
-
-.. automethod:: VisbrainObject.describe_tree
-.. automethod:: VisbrainObject.preview
-.. automethod:: VisbrainObject.screenshot
-
-.. _SceneObj:
-
-Scene object
-------------
-
-.. currentmodule:: visbrain.objects
-
-.. autoclass:: SceneObj
-  :members: add_to_subplot, link
-
-    .. rubric:: Methods
-
-    .. autosummary::
-        ~SceneObj.add_to_subplot
-        ~SceneObj.link
-
-.. include:: generated/visbrain.objects.SceneObj.examples
 .. raw:: html
 
-    <div style='clear:both'></div>
+  <div class="jumbotron">
+    <h1 class="display-3">Quick description</h1>
+    <p class="lead">Objects are highly customizable elementary visualization bricks that can either be used independently for superpose in a scene.</p>
+    <hr class="my-4">
+    <p>
 
-.. _BrainObj:
+Checkout the list and API of available objects :py:mod:`visbrain.objects`.
 
-Brain object
-------------
-
-.. figure::  picture/picobjects/pic_brain_obj.png
-   :align:   center
-
-   Brain object example
-
-.. currentmodule:: visbrain.objects
-
-.. autoclass:: BrainObj
-  :members: set_data, rotate, project_sources, add_activation, get_parcellates, parcellize
-
-    .. rubric:: Methods
-
-    .. autosummary::
-        ~BrainObj.set_data
-        ~BrainObj.rotate
-        ~BrainObj.project_sources
-        ~BrainObj.add_activation
-        ~BrainObj.get_parcellates
-        ~BrainObj.parcellize
-
-.. include:: generated/visbrain.objects.BrainObj.examples
 .. raw:: html
 
-    <div style='clear:both'></div>
+    <img alt="_images/ex_combine_obj.png" src="_images/ex_combine_obj.png" align="center"></p>
+  </div>
 
-.. _ColorbarObj:
+.. contents:: Contents
+   :local:
+   :depth: 2
 
-Colorbar object
----------------
+Description
+-----------
 
-.. figure::  picture/picobjects/pic_cbar_obj.png
-   :align:   center
+Objects have multiple use cases :
 
-   Colorbar object example
+* Preview objects independently
+* Embedded object inside subplot
+* Pass objects to modules (e.g inside the :ref:`BrainModule`)
 
-.. currentmodule:: visbrain.objects
+Import objects
+^^^^^^^^^^^^^^
 
-.. autoclass:: ColorbarObj
+Objects can be imported as follow :
 
-.. include:: generated/visbrain.objects.ColorbarObj.examples
-.. raw:: html
+.. code-block:: python
 
-    <div style='clear:both'></div>
+    from visbrain.objects import *
 
-.. _SourceObj:
+Object definition
+^^^^^^^^^^^^^^^^^
 
-Source object
--------------
+All objects have a similar definition i.e `Obj(name)` where name is the object name that you want to use. Note that for some objects, this `name` input can also sometimes be used to load a default file (e.g `BrainObj('B1')` or a specific custom file (e.g `CrossSecObj('full_path/my_nifti_file.nii.qz')`, `HypnogramObj('full_path/my_hypnogram.txt')`).
 
-.. figure::  picture/picobjects/pic_source_obj.png
-   :align:   center
+Once defined, each object contains methods for extended controls and customizations. Checkout the API to see implemented methods relative to each :class:`visbrain.objects`.
 
-   Source object example
+Finally, each object inherits a method `preview` to visualize the result. Bellow, a small example where a source object is defined and plotted.
 
-.. currentmodule:: visbrain.objects
+.. code-block:: python
 
-.. autoclass:: SourceObj
-  :members: analyse_sources, color_sources, set_visible_sources, fit_to_vertices, project_sources
+    import numpy as np
+    from visbrain.objects import SourceObj  # Import a source object
 
-    .. rubric:: Methods
+    # Define 100 random 3D (x, y, z) coordinates :
+    xyz = np.random.rand(100, 3)
 
-    .. autosummary::
-        ~SourceObj.analyse_sources
-        ~SourceObj.color_sources
-        ~SourceObj.set_visible_sources
-        ~SourceObj.fit_to_vertices
-        ~SourceObj.project_sources
+    # Define a source object :
+    s_obj = SourceObj('obj_name', xyz, color='green', symbol='square',
+                      edge_color='white')
 
-.. include:: generated/visbrain.objects.SourceObj.examples
-.. raw:: html
+    # Object preview with a black background:
+    s_obj.preview(bgcolor='black')
 
-    <div style='clear:both'></div>
+Embedded objects to create a complex scene
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. _ConnectObj:
+Similarly to matplotlib, a scene is a way to arrange objects either by superimposing them or by putting them in different rows and columns. Note that only 3D objects can be superimposed.
 
-Connectivity object
--------------------
+A scene can be imported from :class:`visbrain.objects` and defined as follow :
 
-.. figure::  picture/picobjects/pic_connect_obj.png
-   :align:   center
 
-   Connectivity object example
+.. code-block:: python
 
-.. currentmodule:: visbrain.objects
+    import numpy as np
+    from visbrain.objects import BrainObj, SceneObj, SourceObj
 
-.. autoclass:: ConnectObj
+    # Define a source and a brain objects :
+    b_obj_1 = BrainObj('white', translucent=False)
+    b_obj_2 = BrainObj('B1')
+    s_obj = SourceObj('my_sources', 50 * np.random.uniform(-1, 1, (100, 3)))
 
-.. include:: generated/visbrain.objects.ConnectObj.examples
-.. raw:: html
+    # Define a scene with a black background:
+    sc = SceneObj(bgcolor='black')
 
-    <div style='clear:both'></div>
+    # Add the first brain object to the scene :
+    sc.add_to_subplot(b_obj_1, row=0, col=0)
 
-.. _VectorObj:
+    # Add the source and the first brain object to same subplot :
+    sc.add_to_subplot(b_obj_2, row=0, col=1)
+    sc.add_to_subplot(s_obj, row=0, col=1)
 
-Vector object
--------------
+    # Finally, display the scene :
+    sc.preview()
 
-.. figure::  picture/picobjects/pic_vector_obj.png
-   :align:   center
 
-   Vector object example
-
-.. currentmodule:: visbrain.objects
-
-.. autoclass:: VectorObj
-
-.. include:: generated/visbrain.objects.VectorObj.examples
-.. raw:: html
-
-    <div style='clear:both'></div>
-
-.. _TS3DObj:
-
-Time-series 3D object
----------------------
-
-.. figure::  picture/picobjects/pic_ts_obj.png
-   :align:   center
-
-   3-D time-series object example
-
-.. currentmodule:: visbrain.objects
-
-.. autoclass:: TimeSeries3DObj
-
-.. include:: generated/visbrain.objects.TimeSeries3DObj.examples
-.. raw:: html
-
-    <div style='clear:both'></div>
-
-.. _Pic3DObj:
-
-Pictures 3D object
-------------------
-
-.. figure::  picture/picobjects/pic_picture_obj.png
-   :align:   center
-
-   3-D pictures object example
-
-.. currentmodule:: visbrain.objects
-
-.. autoclass:: Picture3DObj
-
-.. include:: generated/visbrain.objects.Picture3DObj.examples
-.. raw:: html
-
-    <div style='clear:both'></div>
-
-.. _RoiObj:
-
-Region Of Interest object
--------------------------
-
-.. figure::  picture/picobjects/pic_roi_obj.png
-   :align:   center
-
-   Region Of Interest object example
-
-.. currentmodule:: visbrain.objects
-
-.. autoclass:: RoiObj
-  :members: get_labels, where_is, select_roi, localize_sources, save, remove
-
-    .. rubric:: Methods
-
-    .. autosummary::
-        ~RoiObj.get_labels
-        ~RoiObj.where_is
-        ~RoiObj.select_roi
-        ~RoiObj.localize_sources
-        ~RoiObj.project_sources
-        ~RoiObj.save
-        ~RoiObj.remove
-
-.. include:: generated/visbrain.objects.RoiObj.examples
-.. raw:: html
-
-    <div style='clear:both'></div>
-
-.. _VolumeObj:
-
-Volume object
--------------
-
-.. figure::  picture/picobjects/pic_vol_obj.png
-   :align:   center
-
-   Volume object example
-
-.. currentmodule:: visbrain.objects
-
-.. autoclass:: VolumeObj
-  :members: __call__, set_data
-
-    .. rubric:: Methods
-
-    .. autosummary::
-        ~VolumeObj.__call__
-        ~VolumeObj.set_data
-
-.. include:: generated/visbrain.objects.VolumeObj.examples
-.. raw:: html
-
-    <div style='clear:both'></div>
-
-
-.. _CSObj:
-
-Cross-section object
---------------------
-
-.. figure::  picture/picobjects/pic_cs_obj.png
-   :align:   center
-
-   Cross-section object example
-
-.. currentmodule:: visbrain.objects
-
-.. autoclass:: CrossSecObj
-  :members: __call__, set_data, localize_source
-
-    .. rubric:: Methods
-
-    .. autosummary::
-        ~CrossSecObj.__call__
-        ~CrossSecObj.set_data
-        ~CrossSecObj.localize_source
-
-.. include:: generated/visbrain.objects.CrossSecObj.examples
-.. raw:: html
-
-    <div style='clear:both'></div>
-
-.. _ImageObj:
-
-Image object
-------------
-
-.. figure::  picture/picobjects/pic_image_obj.png
-   :align:   center
-
-   Image object example
-
-.. currentmodule:: visbrain.objects
-
-.. autoclass:: ImageObj
-  :members: set_data
-
-    .. rubric:: Methods
-
-    .. autosummary::
-        ~ImageObj.set_data
-
-.. include:: generated/visbrain.objects.ImageObj.examples
-.. raw:: html
-
-    <div style='clear:both'></div>
-
-
-.. _TFObj:
-
-Time-frequency map object
--------------------------
-
-.. figure::  picture/picobjects/pic_tf_obj.png
-   :align:   center
-
-   Time-frequency map object example
-
-.. currentmodule:: visbrain.objects
-
-.. autoclass:: TimeFrequencyObj
-  :members: set_data
-
-    .. rubric:: Methods
-
-    .. autosummary::
-        ~TimeFrequencyObj.set_data
-
-.. include:: generated/visbrain.objects.TimeFrequencyObj.examples
-.. raw:: html
-
-    <div style='clear:both'></div>
-
-
-.. _HypnoObj:
-
-Hypnogram object
-----------------
-
-.. figure::  picture/picobjects/pic_hypno_obj.png
-   :align:   center
-
-   Hypnogram object example
-
-.. currentmodule:: visbrain.objects
-
-.. autoclass:: HypnogramObj
-  :members: set_stage
-
-    .. rubric:: Methods
-
-    .. autosummary::
-        ~HypnogramObj.set_stage
-
-.. include:: generated/visbrain.objects.HypnogramObj.examples
-.. raw:: html
-
-    <div style='clear:both'></div>
+This is a non-exhaustive example. You definitively should take a look at the :class:`visbrain.objects.SceneObj`

@@ -1,0 +1,38 @@
+visbrain.objects.SourceObj
+==========================
+
+.. currentmodule:: visbrain.objects
+
+.. autoclass:: SourceObj
+   :exclude-members: __init__, set_shortcuts_to_canvas, to_dict, to_kwargs, update, update_from_dict, describe_tree
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree: SourceObj
+   
+      ~SourceObj.__init__
+      ~SourceObj.analyse_sources
+      ~SourceObj.color_sources
+      ~SourceObj.describe_tree
+      ~SourceObj.fit_to_vertices
+      ~SourceObj.preview
+      ~SourceObj.project_sources
+      ~SourceObj.screenshot
+      ~SourceObj.set_shortcuts_to_canvas
+      ~SourceObj.set_visible_sources
+      ~SourceObj.to_dict
+      ~SourceObj.to_kwargs
+      ~SourceObj.update
+      ~SourceObj.update_from_dict
+   
+   
+
+.. include:: visbrain.objects.SourceObj.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

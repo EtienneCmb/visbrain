@@ -1,4 +1,8 @@
+.. note::
+    :class: sphx-glr-download-link-note
 
+    Click :ref:`here <sphx_glr_download_auto_examples_brain_06_add_time_series.py>` to download the full example code
+.. rst-class:: sphx-glr-example-title
 
 .. _sphx_glr_auto_examples_brain_06_add_time_series.py:
 
@@ -72,10 +76,14 @@ https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
 **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
+.. _sphx_glr_download_auto_examples_brain_06_add_time_series.py:
+
 
 .. only :: html
 
  .. container:: sphx-glr-footer
+    :class: sphx-glr-footer-example
+
 
 
   .. container:: sphx-glr-download

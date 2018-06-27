@@ -1,4 +1,8 @@
+.. note::
+    :class: sphx-glr-download-link-note
 
+    Click :ref:`here <sphx_glr_download_auto_examples_sleep_load_elan.py>` to download the full example code
+.. rst-class:: sphx-glr-example-title
 
 .. _sphx_glr_auto_examples_sleep_load_elan.py:
 
@@ -19,10 +23,18 @@ https://www.dropbox.com/s/95xvdqivpgk90hg/sleep_elan.zip?dl=1
 
     import os
     from visbrain import Sleep
-    from visbrain.io import download_file
+    from visbrain.io import download_file, path_to_visbrain_data
 
-    current_path = os.getcwd()
-    target_path = os.path.join(current_path, 'data', 'elan')
+
+LOAD YOUR FILE
+##############################################################################
+
+
+
+.. code-block:: python
+
+    current_path = path_to_visbrain_data()
+    target_path = os.path.join(current_path, 'sleep_data', 'elan')
 
     # Download dataset :
     download_file("sleep_elan.zip", unzip=True, to_path=target_path)
@@ -30,15 +42,20 @@ https://www.dropbox.com/s/95xvdqivpgk90hg/sleep_elan.zip?dl=1
     dfile = os.path.join(target_path, 'sub-02.eeg')
     hfile = os.path.join(target_path, 'sub-02.hyp')
 
+    # Open the GUI :
     Sleep(data=dfile, hypno=hfile).show()
 
 **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
+.. _sphx_glr_download_auto_examples_sleep_load_elan.py:
+
 
 .. only :: html
 
  .. container:: sphx-glr-footer
+    :class: sphx-glr-footer-example
+
 
 
   .. container:: sphx-glr-download

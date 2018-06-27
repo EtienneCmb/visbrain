@@ -1,0 +1,12 @@
+visbrain.utils.mni2tal
+======================
+
+.. currentmodule:: visbrain.utils
+
+.. autofunction:: mni2tal
+
+.. include:: visbrain.utils.mni2tal.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

@@ -1,4 +1,8 @@
+.. note::
+    :class: sphx-glr-download-link-note
 
+    Click :ref:`here <sphx_glr_download_auto_examples_brain_02_brain_using_vertices.py>` to download the full example code
+.. rst-class:: sphx-glr-example-title
 
 .. _sphx_glr_auto_examples_brain_02_brain_using_vertices.py:
 
@@ -45,7 +49,7 @@ vertices and faces.
       GUI is closed.
     """
     # b_obj.save()
-    b_obj = BrainObj('Custom')
+    # b_obj = BrainObj('Custom')
 
     """Define the GUI and pass the brain template
     """
@@ -58,10 +62,14 @@ vertices and faces.
 **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
+.. _sphx_glr_download_auto_examples_brain_02_brain_using_vertices.py:
+
 
 .. only :: html
 
  .. container:: sphx-glr-footer
+    :class: sphx-glr-footer-example
+
 
 
   .. container:: sphx-glr-download

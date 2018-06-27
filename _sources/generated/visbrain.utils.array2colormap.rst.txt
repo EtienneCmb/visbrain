@@ -1,0 +1,12 @@
+visbrain.utils.array2colormap
+=============================
+
+.. currentmodule:: visbrain.utils
+
+.. autofunction:: array2colormap
+
+.. include:: visbrain.utils.array2colormap.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

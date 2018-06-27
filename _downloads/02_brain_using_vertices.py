@@ -37,7 +37,7 @@ b_obj = BrainObj('Custom', vertices=vert, faces=faces, normals=norms)
   GUI is closed.
 """
 # b_obj.save()
-b_obj = BrainObj('Custom')
+# b_obj = BrainObj('Custom')
 
 """Define the GUI and pass the brain template
 """

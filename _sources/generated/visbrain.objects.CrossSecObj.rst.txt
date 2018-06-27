@@ -1,0 +1,42 @@
+visbrain.objects.CrossSecObj
+============================
+
+.. currentmodule:: visbrain.objects
+
+.. autoclass:: CrossSecObj
+   :exclude-members: __init__, set_shortcuts_to_canvas, to_dict, to_kwargs, update, update_from_dict, describe_tree
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree: CrossSecObj
+   
+      ~CrossSecObj.__init__
+      ~CrossSecObj.cut_coords
+      ~CrossSecObj.describe_tree
+      ~CrossSecObj.highlight_sources
+      ~CrossSecObj.list
+      ~CrossSecObj.localize_source
+      ~CrossSecObj.pos_to_slice
+      ~CrossSecObj.preview
+      ~CrossSecObj.remove
+      ~CrossSecObj.save
+      ~CrossSecObj.screenshot
+      ~CrossSecObj.set_activation
+      ~CrossSecObj.set_shortcuts_to_canvas
+      ~CrossSecObj.slice_to_pos
+      ~CrossSecObj.to_dict
+      ~CrossSecObj.to_kwargs
+      ~CrossSecObj.update
+      ~CrossSecObj.update_from_dict
+   
+   
+
+.. include:: visbrain.objects.CrossSecObj.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

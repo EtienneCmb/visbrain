@@ -1,0 +1,44 @@
+visbrain.objects.RoiObj
+=======================
+
+.. currentmodule:: visbrain.objects
+
+.. autoclass:: RoiObj
+   :exclude-members: __init__, set_shortcuts_to_canvas, to_dict, to_kwargs, update, update_from_dict, describe_tree
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree: RoiObj
+   
+      ~RoiObj.__init__
+      ~RoiObj.describe_tree
+      ~RoiObj.get_labels
+      ~RoiObj.list
+      ~RoiObj.localize_sources
+      ~RoiObj.pos_to_slice
+      ~RoiObj.preview
+      ~RoiObj.project_sources
+      ~RoiObj.remove
+      ~RoiObj.save
+      ~RoiObj.screenshot
+      ~RoiObj.select_roi
+      ~RoiObj.set_data
+      ~RoiObj.set_shortcuts_to_canvas
+      ~RoiObj.slice_to_pos
+      ~RoiObj.to_dict
+      ~RoiObj.to_kwargs
+      ~RoiObj.update
+      ~RoiObj.update_from_dict
+      ~RoiObj.where_is
+   
+   
+
+.. include:: visbrain.objects.RoiObj.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

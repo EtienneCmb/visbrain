@@ -1,0 +1,151 @@
+/* ############################ FONT ############################*/
+body {
+    font-size: 16;
+}
+a:link {  /* link */
+    color: #2e88c5;
+    font-weight: bold;
+}
+a:visited {  /* visited link */
+    color: #2e88c5;
+}
+a:hover {  /* mouse over link */
+    color: #2ecc71;
+}
+a:active {  /* selected link */
+    color: #2ecc71;
+}
+code {
+    color: #ab4642 !important;
+    background-color: #eedad9 !important;
+}
+
+/* ############################ TITLES ############################*/
+/*h1  {
+    background-color: powderblue;
+}
+h2  {
+    background-color: gray;
+}
+h3  {
+    background-color: orange;
+}*/
+
+/* ############################ COLORS ############################*/
+.bg-primary{
+  color: #FFF ;
+  background-color: #4D394B;
+}
+
+/* ############################ RUBRIC ############################*/
+.rubric {
+    color: #FFF;
+    background-color: #4b4d39;
+    padding: 10px 10px 10px 10px;
+    border-radius: 10px;
+    box-shadow: 10px 10px 20px -10px black;
+}
+
+dt:target, span.highlighted {
+    padding: 10px 10px 10px 10px;
+    border-radius: 10px;
+}
+
+/* ############################ TABLE ############################*/
+th {
+    background-color: rgb(180, 180, 180);
+    color: white;
+    /*border-radius: 10px;*/
+}
+/*tr:hover {
+    background-color: #3498db;
+}*/
+/*tr:nth-child(even) {
+    background-color: #f2f2f2;
+}*/
+
+/* ############################ BUTTONS ############################*/
+.btn-primary {
+    background-color: #5e4c5d;
+    font-weight: bold;
+}
+.btn-primary:hover {
+    background-color: #4D394B;
+    font-weight: bold;
+}
+
+/* ############################ ALERT ############################*/
+.alert-info {
+    color: black;
+    background-color: #c7e4fc;
+}
+.alert-warning {
+    color: black;
+    background-color: #fedfb2;
+}
+.alert-primary {
+    background-color: #4b4d39;
+    color: #FFF;
+    border-radius: 10px;
+}
+
+/* ############################ GRID ############################*/
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  padding: 10px;
+}
+.grid-item {
+  padding: 20px;
+  text-align: left;
+}
+
+/* ############################ NAVIGATION BAR ############################*/
+.navbar-default .navbar-nav > li > a {
+    color: #a69ca5;
+}
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    color: #FFF;
+}
+.navbar {
+    color: red;
+    background-color: #4D394B;
+}
+.navbar-default .navbar-text {
+    color: #FFF;
+}
+/*ul.nav.nav-list {
+    color: #FFF;
+    background-color: #a69ca5;
+}*/
+
+/* ############################ FOOTER ############################*/
+footer {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ############################ CAROUSEL ############################*/
+.carousel-caption {
+    text-shadow: 0 1px 1px rgba(0,0,0,1.0);
+    background-color: rgba(26,26,26,0.7);
+    box-shadow: 0 0 5px rgba(26,26,26,0.5);
+    border-radius: 10px;
+}
+.carousel-control.left {
+    border-radius: 5px;
+}
+.carousel-control.right {
+    border-radius: 5px;
+}
+.carousel-inner {
+    border-radius: 5px;
+}
+
+
+/* ############################ TOPICS ############################*/
+.topic {
+    background-color: #EEEEEC;
+    border-radius: 10px;
+}

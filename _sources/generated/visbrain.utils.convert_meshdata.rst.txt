@@ -1,0 +1,12 @@
+visbrain.utils.convert_meshdata
+===============================
+
+.. currentmodule:: visbrain.utils
+
+.. autofunction:: convert_meshdata
+
+.. include:: visbrain.utils.convert_meshdata.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

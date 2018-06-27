@@ -1,0 +1,12 @@
+visbrain.utils.commonaverage
+============================
+
+.. currentmodule:: visbrain.utils
+
+.. autofunction:: commonaverage
+
+.. include:: visbrain.utils.commonaverage.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

@@ -1,0 +1,12 @@
+visbrain.utils.volume_to_mesh
+=============================
+
+.. currentmodule:: visbrain.utils
+
+.. autofunction:: volume_to_mesh
+
+.. include:: visbrain.utils.volume_to_mesh.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

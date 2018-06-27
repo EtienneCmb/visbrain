@@ -1,0 +1,44 @@
+visbrain.objects.BrainObj
+=========================
+
+.. currentmodule:: visbrain.objects
+
+.. autoclass:: BrainObj
+   :exclude-members: __init__, set_shortcuts_to_canvas, to_dict, to_kwargs, update, update_from_dict, describe_tree
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree: BrainObj
+   
+      ~BrainObj.__init__
+      ~BrainObj.add_activation
+      ~BrainObj.clean
+      ~BrainObj.describe_tree
+      ~BrainObj.get_parcellates
+      ~BrainObj.list
+      ~BrainObj.parcellize
+      ~BrainObj.preview
+      ~BrainObj.project_sources
+      ~BrainObj.remove
+      ~BrainObj.reset_camera
+      ~BrainObj.rotate
+      ~BrainObj.save
+      ~BrainObj.screenshot
+      ~BrainObj.set_data
+      ~BrainObj.set_shortcuts_to_canvas
+      ~BrainObj.to_dict
+      ~BrainObj.to_kwargs
+      ~BrainObj.update
+      ~BrainObj.update_from_dict
+   
+   
+
+.. include:: visbrain.objects.BrainObj.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

@@ -1,0 +1,12 @@
+visbrain.io.download_file
+=========================
+
+.. currentmodule:: visbrain.io
+
+.. autofunction:: download_file
+
+.. include:: visbrain.io.download_file.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

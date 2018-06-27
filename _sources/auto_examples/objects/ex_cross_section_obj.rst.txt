@@ -1,4 +1,8 @@
+.. note::
+    :class: sphx-glr-download-link-note
 
+    Click :ref:`here <sphx_glr_download_auto_examples_objects_ex_cross_section_obj.py>` to download the full example code
+.. rst-class:: sphx-glr-example-title
 
 .. _sphx_glr_auto_examples_objects_ex_cross_section_obj.py:
 
@@ -25,7 +29,7 @@ Illustration and main functionalities and inputs of the cross-section object.
     # =============================================================================
     """)
     cs_brod = CrossSecObj('brodmann', interpolation='nearest',
-                          section=(70, 80, 90))
+                          coords=(70., 80., 90.))
     cs_brod.localize_source((-10., -15., 20.))
     sc.add_to_subplot(cs_brod, row=0, col=0, title='Brodmann area')
 
@@ -35,7 +39,7 @@ Illustration and main functionalities and inputs of the cross-section object.
     # =============================================================================
     """)
     path = download_file('GG-853-GM-0.7mm.nii.gz')
-    cs_cust = CrossSecObj(path, section=(90, 80, 100), cmap='gist_stern')
+    cs_cust = CrossSecObj(path, coords=(0., 0., 0.), cmap='gist_stern')
     sc.add_to_subplot(cs_cust, row=0, col=1, title='Nii.gz file')
 
     sc.preview()
@@ -43,10 +47,14 @@ Illustration and main functionalities and inputs of the cross-section object.
 **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
+.. _sphx_glr_download_auto_examples_objects_ex_cross_section_obj.py:
+
 
 .. only :: html
 
  .. container:: sphx-glr-footer
+    :class: sphx-glr-footer-example
+
 
 
   .. container:: sphx-glr-download

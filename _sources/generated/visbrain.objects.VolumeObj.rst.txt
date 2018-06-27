@@ -1,0 +1,39 @@
+visbrain.objects.VolumeObj
+==========================
+
+.. currentmodule:: visbrain.objects
+
+.. autoclass:: VolumeObj
+   :exclude-members: __init__, set_shortcuts_to_canvas, to_dict, to_kwargs, update, update_from_dict, describe_tree
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree: VolumeObj
+   
+      ~VolumeObj.__init__
+      ~VolumeObj.describe_tree
+      ~VolumeObj.list
+      ~VolumeObj.pos_to_slice
+      ~VolumeObj.preview
+      ~VolumeObj.remove
+      ~VolumeObj.save
+      ~VolumeObj.screenshot
+      ~VolumeObj.set_data
+      ~VolumeObj.set_shortcuts_to_canvas
+      ~VolumeObj.slice_to_pos
+      ~VolumeObj.to_dict
+      ~VolumeObj.to_kwargs
+      ~VolumeObj.update
+      ~VolumeObj.update_from_dict
+   
+   
+
+.. include:: visbrain.objects.VolumeObj.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

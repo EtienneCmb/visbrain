@@ -1,0 +1,12 @@
+visbrain.utils.rereferencing
+============================
+
+.. currentmodule:: visbrain.utils
+
+.. autofunction:: rereferencing
+
+.. include:: visbrain.utils.rereferencing.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

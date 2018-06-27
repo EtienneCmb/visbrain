@@ -1,307 +1,966 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>2. Sleep &mdash; visbrain 0.4.0 documentation</title>
-  
 
-  
-  
-    <link rel="shortcut icon" href="_static/favicon.ico"/>
-  
-  
-  
-
-  
-
-  
-  
-    
-
-  
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>1. Sleep &#8212; visbrain 0.4.1 documentation</title>
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
-  
+    <link rel="stylesheet" href="_static/visbrain_styles.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1. Topo" href="topo.html" />
+    <link rel="prev" title="1. Brain" href="brain.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
 
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="visbrain 0.4.0 documentation" href="index.html"/>
-        <link rel="up" title="Documentation" href="documentation.html"/>
-        <link rel="next" title="3. Signal" href="signal.html"/>
-        <link rel="prev" title="1.3.1. Main Brain class inputs" href="brainAPI.html"/> 
+  </head><body>
 
-  
-  <script src="_static/js/modernizr.min.js"></script>
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html"><span><img src="_static/visbrain_128x128.png"></span>
+          visbrain</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4.1</b></span>
+      </div>
 
-</head>
-
-<body class="wy-body-for-nav" role="document">
-
-   
-  <div class="wy-grid-for-nav">
-
-    
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
-
-          
-            <a href="index.html" class="icon icon-home"> visbrain
-          
-
-          
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
             
-            <img src="_static/visbrain_128x128.png" class="logo" />
-          
-          </a>
-
-          
-            
-            
-              <div class="version">
-                0.4.0
-              </div>
-            
-          
-
-          
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
+                <li><a href="documentation.html">Documentation</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="auto_examples/index.html">Examples</a></li>
+                <li><a href="api.html">API</a></li>
+                <li><a href="community.html">Community</a></li>
             
             
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="documentation.html">Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="introduction.html">1. Presentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="introduction.html#quick-description">1.1. Quick description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="introduction.html#structure">1.2. Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#installation">2. Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="introduction.html#dependencies">2.1. Dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="introduction.html#regular-installation">2.2. Regular installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="introduction.html#develop-mode">2.3. Develop mode</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="objects.html">1. Objects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="objects.html#description">1.1. Description</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="objects.html#import-objects">1.1.1. Import objects</a></li>
+<li class="toctree-l4"><a class="reference internal" href="objects.html#object-definition">1.1.2. Object definition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="objects.html#embedded-objects-to-create-a-complex-scene">1.1.3. Embedded objects to create a complex scene</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="brain.html">1. Brain</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="brain.html#main-features">1.1. Main features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brain.html#import-and-use-brain">1.2. Import and use Brain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brain.html#gui-description">1.3. GUI description</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="brain.html#components">1.3.1. Components</a></li>
+<li class="toctree-l4"><a class="reference internal" href="brain.html#settings-panel-tabs">1.3.2. Settings panel tabs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="brain.html#shortcuts">1.3.3. Shortcuts</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="brain.html#mni-templates">1.4. MNI templates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brain.html#sources">1.5. Sources</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="brain.html#cortical-projection-and-repartition">1.5.1. Cortical projection and repartition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="brain.html#connect-sources">1.5.2. Connect sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="brain.html#attach-time-series-and-or-pictures">1.5.3. Attach time-series and/or pictures</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="brain.html#volume">1.6. Volume</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="brain.html#cross-sections">1.6.1. Cross-sections</a></li>
+<li class="toctree-l4"><a class="reference internal" href="brain.html#region-of-interest-roi">1.6.2. Region Of Interest (ROI)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="brain.html#d-volume-rendering">1.6.3. 3-D volume rendering</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="brain.html#colorbar-control">1.7. Colorbar control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brain.html#examples">1.8. Examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="brain.html#examples-using-visbrain-brain">1.8.1. Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.Brain</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">1. Sleep</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#main-features">1.1. Main features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#import-and-use-sleep">1.2. Import and use sleep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gui-description">1.3. GUI description</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#components">1.3.1. Components</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#settings-panel-tabs">1.3.2. Settings panel tabs</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#panels">1.3.2.1. Panels</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#tools">1.3.2.2. Tools</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#infos">1.3.2.3. Infos</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#scoring">1.3.2.4. Scoring</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#detections">1.3.2.5. Detections</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#annotations">1.3.2.6. Annotations</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#shortcuts">1.3.3. Shortcuts</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#supported-files-and-format">1.4. Supported files and format</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#data-files">1.4.1. Data files</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hypnogram">1.4.2. Hypnogram</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#save-hypnogram">1.4.3. Save hypnogram</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#elan-hyp-format">1.4.3.1. Elan .hyp format</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#load-your-files">1.5. Load your files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#load-file-from-the-gui">1.5.1. Load file from the GUI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#load-file-from-path">1.5.2. Load file from path</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#load-file-using-mne-python">1.5.3. Load file using MNE-Python</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#load-file-from-raw-data">1.5.4. Load file from raw data</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#time-frequency">1.6. Time-frequency</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hypnogram-scoring">1.7. Hypnogram scoring</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#navigation">1.7.1. Navigation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scoring-table">1.7.2. Scoring table</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#apply-semi-automatic-detection">1.8. Apply semi-automatic detection</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#spindles-detection">1.8.1. Spindles detection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#peaks-detection">1.8.2. Peaks detection</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#use-your-own-detections-in-sleep">1.9. Use your own detections in Sleep</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#prototype-of-the-function">1.9.1. Prototype of the function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#function-output">1.9.2. Function output</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#replace-sleep-detection">1.9.3. Replace Sleep detection</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#load-and-save-the-gui-configuration">1.10. Load and save the GUI configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#import-add-and-save-annotations">1.11. Import, add and save annotations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#import-annotations">1.11.1. Import annotations</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#annotations-in-a-text-file">1.11.1.1. Annotations in a text file</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#using-mne-python-annotations">1.11.1.2. Using MNE-Python annotations</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#define-only-markers">1.11.1.3. Define only markers</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#add-new-annotations">1.11.2. Add new annotations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#save-annotations">1.11.3. Save annotations</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#examples">1.12. Examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#examples-using-visbrain-sleep">1.12.1. Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.Sleep</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="topo.html">1. Topo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="topo.html#main-features">1.1. Main features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="topo.html#import-and-use-topo">1.2. Import and use Topo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="topo.html#examples">1.3. Examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="topo.html#examples-using-visbrain-topo">1.3.1. Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.Topo</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="signal.html">1. Signal</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="signal.html#gui-description">1.1. GUI Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="signal.html#main-features">1.2. Main features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="signal.html#import-and-use-signal">1.3. Import and use Signal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="signal.html#shortcuts">1.4. Shortcuts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="signal.html#examples">1.5. Examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="signal.html#examples-using-visbrain-signal">1.5.1. Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.Signal</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="figure.html">1. <code class="docutils literal notranslate"><span class="pre">Figure</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="figure.html#description">1.1. Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="figure.html#example">1.2. Example</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="figure.html#examples-using-visbrain-figure">1.2.1. Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.Figure</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#objects">Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#brain">Brain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#sleep">Sleep</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/index.html#brain-examples">Brain Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/brain/00_brain_control.html">Brain control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/brain/01_cross_sections_and_volume.html">Cross-sections and volume control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/brain/02_brain_using_vertices.html">Define a brain template using vertices and faces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/brain/03_sources.html">Add deep sources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/brain/04_connectivity.html">Connect deep sources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/brain/05_region_of_interest.html">Add Region of interest (ROI)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/brain/06_add_time_series.html">Add time series</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/brain/07_add_pictures.html">Add pictures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/brain/08_screenshot.html">Screenshot example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/brain/09_add_multiple_objects.html">Add multiple objects to the scene</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_examples/brain/09_add_multiple_objects.html#sources">SOURCES</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_examples/brain/09_add_multiple_objects.html#connectivity">CONNECTIVITY</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/brain/10_add_nifti_volume.html">Add Nifti volume</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/brain/11_add_vectors.html">Add vectors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/brain/12_parcellize.html">Parcellize brain surface</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/index.html#colorbar-examples">Colorbar Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/colorbar/00_open_editor.html">Open the colorbar editor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/colorbar/01_load_existing_config.html">Load an existing colorbar configuration file</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/index.html#eeg-meg-examples">EEG/MEG Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/eeg_meg/conjunction_map.html">Display conjunction map</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/eeg_meg/fmri_activation.html">Display fMRI activation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/eeg_meg/forward_solution.html">Plot forward solution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/eeg_meg/meg_inverse_solution.html">Plot MEG inverse solution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/eeg_meg/source_space.html">Plot source space</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_examples/eeg_meg/source_space.html#load-fif-file-in-the-mne-python-dataset">Load .fif file in the MNE-python dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_examples/eeg_meg/source_space.html#active-data">Active data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_examples/eeg_meg/source_space.html#additional-inputs">Additional inputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_examples/eeg_meg/source_space.html#get-the-brain-and-source-objects">Get the brain and source objects</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_examples/eeg_meg/source_space.html#pass-the-brain-and-source-objects-to-the-visbrain-brain-module">Pass the brain and source objects to the <code class="docutils literal notranslate"><span class="pre">visbrain.Brain</span></code> module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/eeg_meg/vector_based_meg_inverse.html">Plot vector-valued MEG inverse solution</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/index.html#figure-examples">Figure Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/figure/0_GeneratePictures.html">Generate pictures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/figure/1_LayoutExample.html">Page layout example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/index.html#objects-examples">Objects examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/objects/ex_brain_obj.html">Brain object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/objects/ex_combine_objects.html">Combine multiple objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/objects/ex_connectivity_obj.html">Connectivity object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/objects/ex_cross_section_obj.html">Cross-section object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/objects/ex_im_tf_spec_obj.html">Image, time-frequency map and spectrogram objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/objects/ex_pac_obj.html">Phase-Amplitude Coupling (PAC)  object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/objects/ex_roi_object.html">Region Of Interest (ROI) object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/objects/ex_source_obj.html">Source object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/objects/ex_volume_obj.html">Volume object</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/index.html#signal-examples">Signal Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/signal/00_1d_signal.html">Plot a 1D signal</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_examples/signal/00_1d_signal.html#shortcuts">Shortcuts</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/signal/01_2d_signals.html">Plot a 2D array of data</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_examples/signal/01_2d_signals.html#shortcuts">Shortcuts</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/signal/02_3d_signals.html">Plot a 3D array of data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/signal/03_interface_customization.html">Interface customization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/signal/04_annotations.html">Import, save and add annotations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/signal/05_screenshot.html">Screenshot tutorial</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/signal/06_butterfly.html">Butterfly plot</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/index.html#sleep-examples">Sleep Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/sleep/basic_sleep.html">Basic configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/sleep/load_brainvision.html">Load a BrainVision file</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_examples/sleep/load_brainvision.html#load-your-file">LOAD YOUR FILE</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/sleep/load_edf.html">Load EDF file</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_examples/sleep/load_edf.html#load-your-file">LOAD YOUR FILE</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/sleep/load_elan.html">Load ELAN files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_examples/sleep/load_elan.html#load-your-file">LOAD YOUR FILE</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/sleep/load_matlab.html">Load a Matlab file</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_examples/sleep/load_matlab.html#load-your-file">LOAD YOUR FILE</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/sleep/load_rec.html">Load REC files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_examples/sleep/load_rec.html#load-your-file">LOAD YOUR FILE</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/sleep/load_using_mne.html">Load a file using MNE-python</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_examples/sleep/load_using_mne.html#load-your-file">LOAD YOUR FILE</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/sleep/replace_detection_basic.html">Replace detection algorithm : basic example</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_examples/sleep/replace_detection_basic.html#load-your-file-and-create-an-instance-of-sleep">Load your file and create an instance of Sleep</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_examples/sleep/replace_detection_basic.html#define-new-methods">Define new methods</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="auto_examples/sleep/replace_detection_basic.html#spindle-function">Spindle function</a></li>
+<li class="toctree-l5"><a class="reference internal" href="auto_examples/sleep/replace_detection_basic.html#rapid-eye-movement-function">Rapid eye movement function</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="auto_examples/sleep/replace_detection_basic.html#replace-existing-methods">Replace existing methods</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/sleep/replace_detection_wonambi.html">Replace detection with wonambi algorithm</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_examples/sleep/replace_detection_wonambi.html#load-your-file-and-create-an-instance-of-sleep">Load your file and create an instance of Sleep</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_examples/sleep/replace_detection_wonambi.html#define-new-methods">Define new methods</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="auto_examples/sleep/replace_detection_wonambi.html#spindle-function">Spindle function</a></li>
+<li class="toctree-l5"><a class="reference internal" href="auto_examples/sleep/replace_detection_wonambi.html#slow-waves-function">Slow-waves function</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="auto_examples/sleep/replace_detection_wonambi.html#replace-existing-methods">Replace existing methods</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/index.html#topoplot-examples">Topoplot Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/topo/00_basic_topoplot.html">Basic topoplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/topo/01_use_custom_coordinates.html">Use custom coordinates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/topo/02_grid_topoplot.html">Grid topoplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/topo/03_shared_colorbar.html">Shared colorbar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/topo/04_topoplot_plotting_properties.html">Plotting properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/topo/05_topoplot_and_connectivity.html">Connectivity</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#gui-based-modules">GUI based modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.Brain.html">visbrain.Brain</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/visbrain.Brain.html#examples-using-visbrain-brain">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.Brain</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.Sleep.html">visbrain.Sleep</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/visbrain.Sleep.html#examples-using-visbrain-sleep">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.Sleep</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.Topo.html">visbrain.Topo</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/visbrain.Topo.html#examples-using-visbrain-topo">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.Topo</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.Signal.html">visbrain.Signal</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/visbrain.Signal.html#examples-using-visbrain-signal">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.Signal</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.Figure.html">visbrain.Figure</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/visbrain.Figure.html#examples-using-visbrain-figure">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.Figure</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#objects">Objects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.objects.BrainObj.html">visbrain.objects.BrainObj</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/BrainObj/visbrain.objects.BrainObj.__init__.html">visbrain.objects.BrainObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/BrainObj/visbrain.objects.BrainObj.add_activation.html">visbrain.objects.BrainObj.add_activation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/BrainObj/visbrain.objects.BrainObj.clean.html">visbrain.objects.BrainObj.clean</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/BrainObj/visbrain.objects.BrainObj.describe_tree.html">visbrain.objects.BrainObj.describe_tree</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/BrainObj/visbrain.objects.BrainObj.get_parcellates.html">visbrain.objects.BrainObj.get_parcellates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/BrainObj/visbrain.objects.BrainObj.list.html">visbrain.objects.BrainObj.list</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/BrainObj/visbrain.objects.BrainObj.parcellize.html">visbrain.objects.BrainObj.parcellize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/BrainObj/visbrain.objects.BrainObj.preview.html">visbrain.objects.BrainObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/BrainObj/visbrain.objects.BrainObj.project_sources.html">visbrain.objects.BrainObj.project_sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/BrainObj/visbrain.objects.BrainObj.remove.html">visbrain.objects.BrainObj.remove</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/BrainObj/visbrain.objects.BrainObj.reset_camera.html">visbrain.objects.BrainObj.reset_camera</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/BrainObj/visbrain.objects.BrainObj.rotate.html">visbrain.objects.BrainObj.rotate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/BrainObj/visbrain.objects.BrainObj.save.html">visbrain.objects.BrainObj.save</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/BrainObj/visbrain.objects.BrainObj.screenshot.html">visbrain.objects.BrainObj.screenshot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/BrainObj/visbrain.objects.BrainObj.set_data.html">visbrain.objects.BrainObj.set_data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/BrainObj/visbrain.objects.BrainObj.set_shortcuts_to_canvas.html">visbrain.objects.BrainObj.set_shortcuts_to_canvas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/BrainObj/visbrain.objects.BrainObj.to_dict.html">visbrain.objects.BrainObj.to_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/BrainObj/visbrain.objects.BrainObj.to_kwargs.html">visbrain.objects.BrainObj.to_kwargs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/BrainObj/visbrain.objects.BrainObj.update.html">visbrain.objects.BrainObj.update</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/BrainObj/visbrain.objects.BrainObj.update_from_dict.html">visbrain.objects.BrainObj.update_from_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/visbrain.objects.BrainObj.html#examples-using-visbrain-objects-brainobj">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.objects.BrainObj</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.objects.ColorbarObj.html">visbrain.objects.ColorbarObj</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/ColorbarObj/visbrain.objects.ColorbarObj.__init__.html">visbrain.objects.ColorbarObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/ColorbarObj/visbrain.objects.ColorbarObj.describe_tree.html">visbrain.objects.ColorbarObj.describe_tree</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/ColorbarObj/visbrain.objects.ColorbarObj.preview.html">visbrain.objects.ColorbarObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/ColorbarObj/visbrain.objects.ColorbarObj.screenshot.html">visbrain.objects.ColorbarObj.screenshot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/ColorbarObj/visbrain.objects.ColorbarObj.set_shortcuts_to_canvas.html">visbrain.objects.ColorbarObj.set_shortcuts_to_canvas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/ColorbarObj/visbrain.objects.ColorbarObj.to_dict.html">visbrain.objects.ColorbarObj.to_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/ColorbarObj/visbrain.objects.ColorbarObj.to_kwargs.html">visbrain.objects.ColorbarObj.to_kwargs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/ColorbarObj/visbrain.objects.ColorbarObj.update.html">visbrain.objects.ColorbarObj.update</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/ColorbarObj/visbrain.objects.ColorbarObj.update_from_dict.html">visbrain.objects.ColorbarObj.update_from_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/visbrain.objects.ColorbarObj.html#examples-using-visbrain-objects-colorbarobj">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.objects.ColorbarObj</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.objects.ConnectObj.html">visbrain.objects.ConnectObj</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/ConnectObj/visbrain.objects.ConnectObj.__init__.html">visbrain.objects.ConnectObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/ConnectObj/visbrain.objects.ConnectObj.describe_tree.html">visbrain.objects.ConnectObj.describe_tree</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/ConnectObj/visbrain.objects.ConnectObj.preview.html">visbrain.objects.ConnectObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/ConnectObj/visbrain.objects.ConnectObj.screenshot.html">visbrain.objects.ConnectObj.screenshot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/ConnectObj/visbrain.objects.ConnectObj.set_shortcuts_to_canvas.html">visbrain.objects.ConnectObj.set_shortcuts_to_canvas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/ConnectObj/visbrain.objects.ConnectObj.to_dict.html">visbrain.objects.ConnectObj.to_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/ConnectObj/visbrain.objects.ConnectObj.to_kwargs.html">visbrain.objects.ConnectObj.to_kwargs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/ConnectObj/visbrain.objects.ConnectObj.update.html">visbrain.objects.ConnectObj.update</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/ConnectObj/visbrain.objects.ConnectObj.update_from_dict.html">visbrain.objects.ConnectObj.update_from_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/visbrain.objects.ConnectObj.html#examples-using-visbrain-objects-connectobj">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.objects.ConnectObj</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.objects.CrossSecObj.html">visbrain.objects.CrossSecObj</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/CrossSecObj/visbrain.objects.CrossSecObj.__init__.html">visbrain.objects.CrossSecObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/CrossSecObj/visbrain.objects.CrossSecObj.cut_coords.html">visbrain.objects.CrossSecObj.cut_coords</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/CrossSecObj/visbrain.objects.CrossSecObj.describe_tree.html">visbrain.objects.CrossSecObj.describe_tree</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/CrossSecObj/visbrain.objects.CrossSecObj.highlight_sources.html">visbrain.objects.CrossSecObj.highlight_sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/CrossSecObj/visbrain.objects.CrossSecObj.list.html">visbrain.objects.CrossSecObj.list</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/CrossSecObj/visbrain.objects.CrossSecObj.localize_source.html">visbrain.objects.CrossSecObj.localize_source</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/CrossSecObj/visbrain.objects.CrossSecObj.pos_to_slice.html">visbrain.objects.CrossSecObj.pos_to_slice</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/CrossSecObj/visbrain.objects.CrossSecObj.preview.html">visbrain.objects.CrossSecObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/CrossSecObj/visbrain.objects.CrossSecObj.remove.html">visbrain.objects.CrossSecObj.remove</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/CrossSecObj/visbrain.objects.CrossSecObj.save.html">visbrain.objects.CrossSecObj.save</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/CrossSecObj/visbrain.objects.CrossSecObj.screenshot.html">visbrain.objects.CrossSecObj.screenshot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/CrossSecObj/visbrain.objects.CrossSecObj.set_activation.html">visbrain.objects.CrossSecObj.set_activation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/CrossSecObj/visbrain.objects.CrossSecObj.set_shortcuts_to_canvas.html">visbrain.objects.CrossSecObj.set_shortcuts_to_canvas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/CrossSecObj/visbrain.objects.CrossSecObj.slice_to_pos.html">visbrain.objects.CrossSecObj.slice_to_pos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/CrossSecObj/visbrain.objects.CrossSecObj.to_dict.html">visbrain.objects.CrossSecObj.to_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/CrossSecObj/visbrain.objects.CrossSecObj.to_kwargs.html">visbrain.objects.CrossSecObj.to_kwargs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/CrossSecObj/visbrain.objects.CrossSecObj.update.html">visbrain.objects.CrossSecObj.update</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/CrossSecObj/visbrain.objects.CrossSecObj.update_from_dict.html">visbrain.objects.CrossSecObj.update_from_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/visbrain.objects.CrossSecObj.html#examples-using-visbrain-objects-crosssecobj">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.objects.CrossSecObj</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.objects.HypnogramObj.html">visbrain.objects.HypnogramObj</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/HypnogramObj/visbrain.objects.HypnogramObj.__init__.html">visbrain.objects.HypnogramObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/HypnogramObj/visbrain.objects.HypnogramObj.describe_tree.html">visbrain.objects.HypnogramObj.describe_tree</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/HypnogramObj/visbrain.objects.HypnogramObj.preview.html">visbrain.objects.HypnogramObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/HypnogramObj/visbrain.objects.HypnogramObj.screenshot.html">visbrain.objects.HypnogramObj.screenshot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/HypnogramObj/visbrain.objects.HypnogramObj.set_shortcuts_to_canvas.html">visbrain.objects.HypnogramObj.set_shortcuts_to_canvas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/HypnogramObj/visbrain.objects.HypnogramObj.set_stage.html">visbrain.objects.HypnogramObj.set_stage</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/HypnogramObj/visbrain.objects.HypnogramObj.to_dict.html">visbrain.objects.HypnogramObj.to_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/HypnogramObj/visbrain.objects.HypnogramObj.to_kwargs.html">visbrain.objects.HypnogramObj.to_kwargs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/HypnogramObj/visbrain.objects.HypnogramObj.update.html">visbrain.objects.HypnogramObj.update</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/HypnogramObj/visbrain.objects.HypnogramObj.update_from_dict.html">visbrain.objects.HypnogramObj.update_from_dict</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.objects.ImageObj.html">visbrain.objects.ImageObj</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/ImageObj/visbrain.objects.ImageObj.__init__.html">visbrain.objects.ImageObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/ImageObj/visbrain.objects.ImageObj.describe_tree.html">visbrain.objects.ImageObj.describe_tree</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/ImageObj/visbrain.objects.ImageObj.preview.html">visbrain.objects.ImageObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/ImageObj/visbrain.objects.ImageObj.screenshot.html">visbrain.objects.ImageObj.screenshot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/ImageObj/visbrain.objects.ImageObj.set_data.html">visbrain.objects.ImageObj.set_data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/ImageObj/visbrain.objects.ImageObj.set_shortcuts_to_canvas.html">visbrain.objects.ImageObj.set_shortcuts_to_canvas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/ImageObj/visbrain.objects.ImageObj.to_dict.html">visbrain.objects.ImageObj.to_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/ImageObj/visbrain.objects.ImageObj.to_kwargs.html">visbrain.objects.ImageObj.to_kwargs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/ImageObj/visbrain.objects.ImageObj.update.html">visbrain.objects.ImageObj.update</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/ImageObj/visbrain.objects.ImageObj.update_from_dict.html">visbrain.objects.ImageObj.update_from_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/visbrain.objects.ImageObj.html#examples-using-visbrain-objects-imageobj">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.objects.ImageObj</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.objects.PacmapObj.html">visbrain.objects.PacmapObj</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/PacmapObj/visbrain.objects.PacmapObj.__init__.html">visbrain.objects.PacmapObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/PacmapObj/visbrain.objects.PacmapObj.describe_tree.html">visbrain.objects.PacmapObj.describe_tree</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/PacmapObj/visbrain.objects.PacmapObj.preview.html">visbrain.objects.PacmapObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/PacmapObj/visbrain.objects.PacmapObj.screenshot.html">visbrain.objects.PacmapObj.screenshot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/PacmapObj/visbrain.objects.PacmapObj.set_data.html">visbrain.objects.PacmapObj.set_data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/PacmapObj/visbrain.objects.PacmapObj.set_shortcuts_to_canvas.html">visbrain.objects.PacmapObj.set_shortcuts_to_canvas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/PacmapObj/visbrain.objects.PacmapObj.to_dict.html">visbrain.objects.PacmapObj.to_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/PacmapObj/visbrain.objects.PacmapObj.to_kwargs.html">visbrain.objects.PacmapObj.to_kwargs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/PacmapObj/visbrain.objects.PacmapObj.update.html">visbrain.objects.PacmapObj.update</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/PacmapObj/visbrain.objects.PacmapObj.update_from_dict.html">visbrain.objects.PacmapObj.update_from_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/visbrain.objects.PacmapObj.html#examples-using-visbrain-objects-pacmapobj">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.objects.PacmapObj</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.objects.Picture3DObj.html">visbrain.objects.Picture3DObj</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/Picture3DObj/visbrain.objects.Picture3DObj.__init__.html">visbrain.objects.Picture3DObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/Picture3DObj/visbrain.objects.Picture3DObj.describe_tree.html">visbrain.objects.Picture3DObj.describe_tree</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/Picture3DObj/visbrain.objects.Picture3DObj.preview.html">visbrain.objects.Picture3DObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/Picture3DObj/visbrain.objects.Picture3DObj.screenshot.html">visbrain.objects.Picture3DObj.screenshot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/Picture3DObj/visbrain.objects.Picture3DObj.set_shortcuts_to_canvas.html">visbrain.objects.Picture3DObj.set_shortcuts_to_canvas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/Picture3DObj/visbrain.objects.Picture3DObj.to_dict.html">visbrain.objects.Picture3DObj.to_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/Picture3DObj/visbrain.objects.Picture3DObj.to_kwargs.html">visbrain.objects.Picture3DObj.to_kwargs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/Picture3DObj/visbrain.objects.Picture3DObj.update.html">visbrain.objects.Picture3DObj.update</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/Picture3DObj/visbrain.objects.Picture3DObj.update_from_dict.html">visbrain.objects.Picture3DObj.update_from_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/visbrain.objects.Picture3DObj.html#examples-using-visbrain-objects-picture3dobj">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.objects.Picture3DObj</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.objects.RoiObj.html">visbrain.objects.RoiObj</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/RoiObj/visbrain.objects.RoiObj.__init__.html">visbrain.objects.RoiObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/RoiObj/visbrain.objects.RoiObj.describe_tree.html">visbrain.objects.RoiObj.describe_tree</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/RoiObj/visbrain.objects.RoiObj.get_labels.html">visbrain.objects.RoiObj.get_labels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/RoiObj/visbrain.objects.RoiObj.list.html">visbrain.objects.RoiObj.list</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/RoiObj/visbrain.objects.RoiObj.localize_sources.html">visbrain.objects.RoiObj.localize_sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/RoiObj/visbrain.objects.RoiObj.pos_to_slice.html">visbrain.objects.RoiObj.pos_to_slice</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/RoiObj/visbrain.objects.RoiObj.preview.html">visbrain.objects.RoiObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/RoiObj/visbrain.objects.RoiObj.project_sources.html">visbrain.objects.RoiObj.project_sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/RoiObj/visbrain.objects.RoiObj.remove.html">visbrain.objects.RoiObj.remove</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/RoiObj/visbrain.objects.RoiObj.save.html">visbrain.objects.RoiObj.save</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/RoiObj/visbrain.objects.RoiObj.screenshot.html">visbrain.objects.RoiObj.screenshot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/RoiObj/visbrain.objects.RoiObj.select_roi.html">visbrain.objects.RoiObj.select_roi</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/RoiObj/visbrain.objects.RoiObj.set_data.html">visbrain.objects.RoiObj.set_data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/RoiObj/visbrain.objects.RoiObj.set_shortcuts_to_canvas.html">visbrain.objects.RoiObj.set_shortcuts_to_canvas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/RoiObj/visbrain.objects.RoiObj.slice_to_pos.html">visbrain.objects.RoiObj.slice_to_pos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/RoiObj/visbrain.objects.RoiObj.to_dict.html">visbrain.objects.RoiObj.to_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/RoiObj/visbrain.objects.RoiObj.to_kwargs.html">visbrain.objects.RoiObj.to_kwargs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/RoiObj/visbrain.objects.RoiObj.update.html">visbrain.objects.RoiObj.update</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/RoiObj/visbrain.objects.RoiObj.update_from_dict.html">visbrain.objects.RoiObj.update_from_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/RoiObj/visbrain.objects.RoiObj.where_is.html">visbrain.objects.RoiObj.where_is</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/visbrain.objects.RoiObj.html#examples-using-visbrain-objects-roiobj">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.objects.RoiObj</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.objects.SceneObj.html">visbrain.objects.SceneObj</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/SceneObj/visbrain.objects.SceneObj.__init__.html">visbrain.objects.SceneObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/SceneObj/visbrain.objects.SceneObj.add_to_subplot.html">visbrain.objects.SceneObj.add_to_subplot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/SceneObj/visbrain.objects.SceneObj.link.html">visbrain.objects.SceneObj.link</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/SceneObj/visbrain.objects.SceneObj.preview.html">visbrain.objects.SceneObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/SceneObj/visbrain.objects.SceneObj.screenshot.html">visbrain.objects.SceneObj.screenshot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/visbrain.objects.SceneObj.html#examples-using-visbrain-objects-sceneobj">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.objects.SceneObj</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.objects.SourceObj.html">visbrain.objects.SourceObj</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/SourceObj/visbrain.objects.SourceObj.__init__.html">visbrain.objects.SourceObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/SourceObj/visbrain.objects.SourceObj.analyse_sources.html">visbrain.objects.SourceObj.analyse_sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/SourceObj/visbrain.objects.SourceObj.color_sources.html">visbrain.objects.SourceObj.color_sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/SourceObj/visbrain.objects.SourceObj.describe_tree.html">visbrain.objects.SourceObj.describe_tree</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/SourceObj/visbrain.objects.SourceObj.fit_to_vertices.html">visbrain.objects.SourceObj.fit_to_vertices</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/SourceObj/visbrain.objects.SourceObj.preview.html">visbrain.objects.SourceObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/SourceObj/visbrain.objects.SourceObj.project_sources.html">visbrain.objects.SourceObj.project_sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/SourceObj/visbrain.objects.SourceObj.screenshot.html">visbrain.objects.SourceObj.screenshot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/SourceObj/visbrain.objects.SourceObj.set_shortcuts_to_canvas.html">visbrain.objects.SourceObj.set_shortcuts_to_canvas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/SourceObj/visbrain.objects.SourceObj.set_visible_sources.html">visbrain.objects.SourceObj.set_visible_sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/SourceObj/visbrain.objects.SourceObj.to_dict.html">visbrain.objects.SourceObj.to_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/SourceObj/visbrain.objects.SourceObj.to_kwargs.html">visbrain.objects.SourceObj.to_kwargs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/SourceObj/visbrain.objects.SourceObj.update.html">visbrain.objects.SourceObj.update</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/SourceObj/visbrain.objects.SourceObj.update_from_dict.html">visbrain.objects.SourceObj.update_from_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/visbrain.objects.SourceObj.html#examples-using-visbrain-objects-sourceobj">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.objects.SourceObj</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.objects.TimeFrequencyObj.html">visbrain.objects.TimeFrequencyObj</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/TimeFrequencyObj/visbrain.objects.TimeFrequencyObj.__init__.html">visbrain.objects.TimeFrequencyObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/TimeFrequencyObj/visbrain.objects.TimeFrequencyObj.describe_tree.html">visbrain.objects.TimeFrequencyObj.describe_tree</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/TimeFrequencyObj/visbrain.objects.TimeFrequencyObj.preview.html">visbrain.objects.TimeFrequencyObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/TimeFrequencyObj/visbrain.objects.TimeFrequencyObj.screenshot.html">visbrain.objects.TimeFrequencyObj.screenshot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/TimeFrequencyObj/visbrain.objects.TimeFrequencyObj.set_data.html">visbrain.objects.TimeFrequencyObj.set_data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/TimeFrequencyObj/visbrain.objects.TimeFrequencyObj.set_shortcuts_to_canvas.html">visbrain.objects.TimeFrequencyObj.set_shortcuts_to_canvas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/TimeFrequencyObj/visbrain.objects.TimeFrequencyObj.to_dict.html">visbrain.objects.TimeFrequencyObj.to_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/TimeFrequencyObj/visbrain.objects.TimeFrequencyObj.to_kwargs.html">visbrain.objects.TimeFrequencyObj.to_kwargs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/TimeFrequencyObj/visbrain.objects.TimeFrequencyObj.update.html">visbrain.objects.TimeFrequencyObj.update</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/TimeFrequencyObj/visbrain.objects.TimeFrequencyObj.update_from_dict.html">visbrain.objects.TimeFrequencyObj.update_from_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/visbrain.objects.TimeFrequencyObj.html#examples-using-visbrain-objects-timefrequencyobj">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.objects.TimeFrequencyObj</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.objects.TimeSeries3DObj.html">visbrain.objects.TimeSeries3DObj</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/TimeSeries3DObj/visbrain.objects.TimeSeries3DObj.__init__.html">visbrain.objects.TimeSeries3DObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/TimeSeries3DObj/visbrain.objects.TimeSeries3DObj.describe_tree.html">visbrain.objects.TimeSeries3DObj.describe_tree</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/TimeSeries3DObj/visbrain.objects.TimeSeries3DObj.preview.html">visbrain.objects.TimeSeries3DObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/TimeSeries3DObj/visbrain.objects.TimeSeries3DObj.screenshot.html">visbrain.objects.TimeSeries3DObj.screenshot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/TimeSeries3DObj/visbrain.objects.TimeSeries3DObj.set_shortcuts_to_canvas.html">visbrain.objects.TimeSeries3DObj.set_shortcuts_to_canvas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/TimeSeries3DObj/visbrain.objects.TimeSeries3DObj.to_dict.html">visbrain.objects.TimeSeries3DObj.to_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/TimeSeries3DObj/visbrain.objects.TimeSeries3DObj.to_kwargs.html">visbrain.objects.TimeSeries3DObj.to_kwargs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/TimeSeries3DObj/visbrain.objects.TimeSeries3DObj.update.html">visbrain.objects.TimeSeries3DObj.update</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/TimeSeries3DObj/visbrain.objects.TimeSeries3DObj.update_from_dict.html">visbrain.objects.TimeSeries3DObj.update_from_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/visbrain.objects.TimeSeries3DObj.html#examples-using-visbrain-objects-timeseries3dobj">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.objects.TimeSeries3DObj</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.objects.VectorObj.html">visbrain.objects.VectorObj</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/VectorObj/visbrain.objects.VectorObj.__init__.html">visbrain.objects.VectorObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/VectorObj/visbrain.objects.VectorObj.describe_tree.html">visbrain.objects.VectorObj.describe_tree</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/VectorObj/visbrain.objects.VectorObj.preview.html">visbrain.objects.VectorObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/VectorObj/visbrain.objects.VectorObj.screenshot.html">visbrain.objects.VectorObj.screenshot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/VectorObj/visbrain.objects.VectorObj.set_shortcuts_to_canvas.html">visbrain.objects.VectorObj.set_shortcuts_to_canvas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/VectorObj/visbrain.objects.VectorObj.to_dict.html">visbrain.objects.VectorObj.to_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/VectorObj/visbrain.objects.VectorObj.to_kwargs.html">visbrain.objects.VectorObj.to_kwargs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/VectorObj/visbrain.objects.VectorObj.update.html">visbrain.objects.VectorObj.update</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/VectorObj/visbrain.objects.VectorObj.update_from_dict.html">visbrain.objects.VectorObj.update_from_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/visbrain.objects.VectorObj.html#examples-using-visbrain-objects-vectorobj">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.objects.VectorObj</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.objects.VolumeObj.html">visbrain.objects.VolumeObj</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/VolumeObj/visbrain.objects.VolumeObj.__init__.html">visbrain.objects.VolumeObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/VolumeObj/visbrain.objects.VolumeObj.describe_tree.html">visbrain.objects.VolumeObj.describe_tree</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/VolumeObj/visbrain.objects.VolumeObj.list.html">visbrain.objects.VolumeObj.list</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/VolumeObj/visbrain.objects.VolumeObj.pos_to_slice.html">visbrain.objects.VolumeObj.pos_to_slice</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/VolumeObj/visbrain.objects.VolumeObj.preview.html">visbrain.objects.VolumeObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/VolumeObj/visbrain.objects.VolumeObj.remove.html">visbrain.objects.VolumeObj.remove</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/VolumeObj/visbrain.objects.VolumeObj.save.html">visbrain.objects.VolumeObj.save</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/VolumeObj/visbrain.objects.VolumeObj.screenshot.html">visbrain.objects.VolumeObj.screenshot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/VolumeObj/visbrain.objects.VolumeObj.set_data.html">visbrain.objects.VolumeObj.set_data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/VolumeObj/visbrain.objects.VolumeObj.set_shortcuts_to_canvas.html">visbrain.objects.VolumeObj.set_shortcuts_to_canvas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/VolumeObj/visbrain.objects.VolumeObj.slice_to_pos.html">visbrain.objects.VolumeObj.slice_to_pos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/VolumeObj/visbrain.objects.VolumeObj.to_dict.html">visbrain.objects.VolumeObj.to_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/VolumeObj/visbrain.objects.VolumeObj.to_kwargs.html">visbrain.objects.VolumeObj.to_kwargs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/VolumeObj/visbrain.objects.VolumeObj.update.html">visbrain.objects.VolumeObj.update</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/VolumeObj/visbrain.objects.VolumeObj.update_from_dict.html">visbrain.objects.VolumeObj.update_from_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/visbrain.objects.VolumeObj.html#examples-using-visbrain-objects-volumeobj">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.objects.VolumeObj</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#compatibility-with-existing-software">Compatibility with existing software</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.html#mne-python">MNE-python</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/visbrain.mne.mne_plot_source_estimation.html">visbrain.mne.mne_plot_source_estimation</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/visbrain.mne.mne_plot_source_estimation.html#examples-using-visbrain-mne-mne-plot-source-estimation">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.mne.mne_plot_source_estimation</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="generated/visbrain.mne.mne_plot_source_space.html">visbrain.mne.mne_plot_source_space</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/visbrain.mne.mne_plot_source_space.html#examples-using-visbrain-mne-mne-plot-source-space">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.mne.mne_plot_source_space</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#i-o">I/O</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.io.download_file.html">visbrain.io.download_file</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/visbrain.io.download_file.html#examples-using-visbrain-io-download-file">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.io.download_file</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.io.path_to_visbrain_data.html">visbrain.io.path_to_visbrain_data</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/visbrain.io.path_to_visbrain_data.html#examples-using-visbrain-io-path-to-visbrain-data">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.io.path_to_visbrain_data</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.io.read_stc.html">visbrain.io.read_stc</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/visbrain.io.read_stc.html#examples-using-visbrain-io-read-stc">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.io.read_stc</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#miscellaneous">Miscellaneous</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.utils.generate_eeg.html">visbrain.utils.generate_eeg</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/visbrain.utils.generate_eeg.html#examples-using-visbrain-utils-generate-eeg">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.utils.generate_eeg</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.utils.tal2mni.html">visbrain.utils.tal2mni</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.utils.mni2tal.html">visbrain.utils.mni2tal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.utils.rereferencing.html">visbrain.utils.rereferencing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.utils.bipolarization.html">visbrain.utils.bipolarization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.utils.commonaverage.html">visbrain.utils.commonaverage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.utils.convert_meshdata.html">visbrain.utils.convert_meshdata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.utils.volume_to_mesh.html">visbrain.utils.volume_to_mesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.utils.color2vb.html">visbrain.utils.color2vb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/visbrain.utils.array2colormap.html">visbrain.utils.array2colormap</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#command-line">Command line</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.html#visbrain-sleep">visbrain_sleep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#visbrain-fig-hyp">visbrain_fig_hyp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#visbrain-sleep-stats">visbrain_sleep_stats</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="community.html">Community</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="community.html#report-an-issue">Report an issue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="community.html#chat">Chat</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="release.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="release.html#id1">0.4.1</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="release.html#new-features">New features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="release.html#improvements">Improvements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="release.html#bug-fixes">Bug fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="release.html#id2">0.4.0</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="release.html#id3">New features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="release.html#id4">Improvements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="release.html#id5">Bug fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="release.html#id6">0.3.8</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="release.html#id7">New features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="release.html#id8">Improvements</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html">Cite Visbrain</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="citation.html#cite-sleep">Cite Sleep</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">1. Sleep</a><ul>
+<li><a class="reference internal" href="#main-features">1.1. Main features</a></li>
+<li><a class="reference internal" href="#import-and-use-sleep">1.2. Import and use sleep</a></li>
+<li><a class="reference internal" href="#gui-description">1.3. GUI description</a><ul>
+<li><a class="reference internal" href="#components">1.3.1. Components</a></li>
+<li><a class="reference internal" href="#settings-panel-tabs">1.3.2. Settings panel tabs</a><ul>
+<li><a class="reference internal" href="#panels">1.3.2.1. Panels</a></li>
+<li><a class="reference internal" href="#tools">1.3.2.2. Tools</a></li>
+<li><a class="reference internal" href="#infos">1.3.2.3. Infos</a></li>
+<li><a class="reference internal" href="#scoring">1.3.2.4. Scoring</a></li>
+<li><a class="reference internal" href="#detections">1.3.2.5. Detections</a></li>
+<li><a class="reference internal" href="#annotations">1.3.2.6. Annotations</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#shortcuts">1.3.3. Shortcuts</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#supported-files-and-format">1.4. Supported files and format</a><ul>
+<li><a class="reference internal" href="#data-files">1.4.1. Data files</a></li>
+<li><a class="reference internal" href="#hypnogram">1.4.2. Hypnogram</a></li>
+<li><a class="reference internal" href="#save-hypnogram">1.4.3. Save hypnogram</a><ul>
+<li><a class="reference internal" href="#elan-hyp-format">1.4.3.1. Elan .hyp format</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#load-your-files">1.5. Load your files</a><ul>
+<li><a class="reference internal" href="#load-file-from-the-gui">1.5.1. Load file from the GUI</a></li>
+<li><a class="reference internal" href="#load-file-from-path">1.5.2. Load file from path</a></li>
+<li><a class="reference internal" href="#load-file-using-mne-python">1.5.3. Load file using MNE-Python</a></li>
+<li><a class="reference internal" href="#load-file-from-raw-data">1.5.4. Load file from raw data</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#time-frequency">1.6. Time-frequency</a></li>
+<li><a class="reference internal" href="#hypnogram-scoring">1.7. Hypnogram scoring</a><ul>
+<li><a class="reference internal" href="#navigation">1.7.1. Navigation</a></li>
+<li><a class="reference internal" href="#scoring-table">1.7.2. Scoring table</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#apply-semi-automatic-detection">1.8. Apply semi-automatic detection</a><ul>
+<li><a class="reference internal" href="#spindles-detection">1.8.1. Spindles detection</a></li>
+<li><a class="reference internal" href="#peaks-detection">1.8.2. Peaks detection</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#use-your-own-detections-in-sleep">1.9. Use your own detections in Sleep</a><ul>
+<li><a class="reference internal" href="#prototype-of-the-function">1.9.1. Prototype of the function</a></li>
+<li><a class="reference internal" href="#function-output">1.9.2. Function output</a></li>
+<li><a class="reference internal" href="#replace-sleep-detection">1.9.3. Replace Sleep detection</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#load-and-save-the-gui-configuration">1.10. Load and save the GUI configuration</a></li>
+<li><a class="reference internal" href="#import-add-and-save-annotations">1.11. Import, add and save annotations</a><ul>
+<li><a class="reference internal" href="#import-annotations">1.11.1. Import annotations</a><ul>
+<li><a class="reference internal" href="#annotations-in-a-text-file">1.11.1.1. Annotations in a text file</a></li>
+<li><a class="reference internal" href="#using-mne-python-annotations">1.11.1.2. Using MNE-Python annotations</a></li>
+<li><a class="reference internal" href="#define-only-markers">1.11.1.3. Define only markers</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#add-new-annotations">1.11.2. Add new annotations</a></li>
+<li><a class="reference internal" href="#save-annotations">1.11.3. Save annotations</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples">1.12. Examples</a><ul>
+<li><a class="reference internal" href="#examples-using-visbrain-sleep">1.12.1. Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.Sleep</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
               
             
             
-              <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="community.html">Community</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="documentation.html">Documentation</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="brain.html">1. <code class="docutils literal"><span class="pre">Brain</span></code></a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">2. <code class="docutils literal"><span class="pre">Sleep</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#description">2.1. Description</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#help">2.1.1. Help</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#main-features">2.1.2. Main features</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#import-and-use-sleep">2.1.3. Import and use sleep</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#examples-and-datasets">2.1.4. Examples and datasets</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gui-description">2.1.5. GUI description</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#tutorial">2.2. Tutorial</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#supported-files-and-format">2.2.1. Supported files and format</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#load-your-files">2.2.2. Load your files</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#time-frequency">2.2.3. Time-frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#hypnogram-scoring">2.2.4. Hypnogram scoring</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#apply-semi-automatic-detection">2.2.5. Apply semi-automatic detection</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#load-and-save-the-gui-configuration">2.2.6. Load and save the GUI configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#import-add-and-save-annotations">2.2.7. Import, add and save annotations</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#api">2.3. API</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#sleep-class">2.3.1. Sleep class</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#command-line">2.3.2. Command line</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#collaborators">2.4. Collaborators</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#publications">2.5. Publications</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="signal.html">3. <code class="docutils literal"><span class="pre">Signal</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="topo.html">4. <code class="docutils literal"><span class="pre">Topo</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="colorbar.html">5. <code class="docutils literal"><span class="pre">Colorbar</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="figure.html">6. <code class="docutils literal"><span class="pre">Figure</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="objects.html">7. Objects</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="changelog_futur.html">Changelog and future directions</a></li>
-</ul>
+            
+<!--   <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; open</span>a
+  <script>
+      /* Open the sidenav */
+      function openNav() {
+          document.getElementById("sidebar").style.width = "100%";
+      }
+
+      /* Close/hide the sidenav */
+      function closeNav() {
+          document.getElementById("sidebar").style.width = "0";
+      }
+  </script>
+</div> -->
 
             
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
           
         </div>
-      </div>
-    </nav>
+    </div>
+  </div>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">visbrain</a>
-        
-      </nav>
-
-
-      
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
-  <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html">Docs</a> &raquo;</li>
-        
-          <li><a href="documentation.html">Documentation</a> &raquo;</li>
-        
-      <li>2. <code class="docutils literal"><span class="pre">Sleep</span></code></li>
-    
-    
-      <li class="wy-breadcrumbs-aside">
-        
-            
-            <a href="_sources/sleep.rst.txt" rel="nofollow"> View page source</a>
-          
-        
-      </li>
-    
-  </ul>
-
-  
-  <hr/>
-</div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-            
   <div class="section" id="sleep">
-<span id="sleepmodule"></span><h1>2. <code class="xref py py-class docutils literal"><span class="pre">Sleep</span></code><a class="headerlink" href="#sleep" title="Permalink to this headline">¶</a></h1>
-<div class="figure align-center">
-<img alt="_images/sleep_ico.png" src="_images/sleep_ico.png" />
-</div>
-<div class="section" id="description">
-<h2>2.1. Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
-<p><code class="xref py py-class docutils literal"><span class="pre">Sleep</span></code> is a flexible graphical user interface for visualization, analysis and scoring of polysomnographic sleep data.</p>
-<div class="figure align-center">
-<img alt="_images/sleep_main.png" src="_images/sleep_main.png" />
-</div>
-<div class="section" id="help">
-<h3>2.1.1. Help<a class="headerlink" href="#help" title="Permalink to this headline">¶</a></h3>
-<p>If you need help with the <code class="xref py py-class docutils literal"><span class="pre">Sleep</span></code> module, ask your questions in the dedicated <a class="reference external" href="https://gitter.im/visbrain-python/Sleep?utm_source=share-link&amp;utm_medium=link&amp;utm_campaign=share-link">gitter Sleep chat</a></p>
+<span id="sleepmodule"></span><h1>1. Sleep<a class="headerlink" href="#sleep" title="Permalink to this headline">¶</a></h1>
+<div class="jumbotron">
+  <h1 class="display-3">Quick description <img alt="_images/sleep_ico.png" src="_images/sleep_ico.png" width="150" height="150" align="right"></h1>
+  <p class="lead">Sleep is a flexible graphical user interface for visualization, analysis and scoring of polysomnographic sleep data and is developed in collaboration with <a href="https://raphaelvallat.github.io/">Raphael Vallat</a> and <a href="http://bluebrain.epfl.ch/page-143249-en.html">Christian O Reilly</a>. If you use Sleep, please cite the article in <a href="http://journal.frontiersin.org/article/10.3389/fninf.2017.00060/full">Frontiers in Neuroinformatics</a>.</p>
+  <hr class="my-4">
+  <p><p>Checkout the API of the <a class="reference internal" href="generated/visbrain.Sleep.html#visbrain.Sleep" title="visbrain.Sleep"><code class="xref py py-class docutils literal notranslate"><span class="pre">visbrain.Sleep</span></code></a> class. If you need help with the <code class="xref py py-class docutils literal notranslate"><span class="pre">Sleep</span></code> module, ask your questions in the dedicated <a class="reference external" href="https://gitter.im/visbrain-python/Sleep?utm_source=share-link&amp;utm_medium=link&amp;utm_campaign=share-link">gitter Sleep chat</a></p>
+  <img alt="_images/sleep_main.png" src="_images/sleep_main.png" align="center"></p>
+</div><div class="contents local topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#main-features" id="id25">Main features</a></li>
+<li><a class="reference internal" href="#import-and-use-sleep" id="id26">Import and use sleep</a></li>
+<li><a class="reference internal" href="#gui-description" id="id27">GUI description</a><ul>
+<li><a class="reference internal" href="#components" id="id28">Components</a></li>
+<li><a class="reference internal" href="#settings-panel-tabs" id="id29">Settings panel tabs</a></li>
+<li><a class="reference internal" href="#shortcuts" id="id30">Shortcuts</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#supported-files-and-format" id="id31">Supported files and format</a><ul>
+<li><a class="reference internal" href="#data-files" id="id32">Data files</a></li>
+<li><a class="reference internal" href="#hypnogram" id="id33">Hypnogram</a></li>
+<li><a class="reference internal" href="#save-hypnogram" id="id34">Save hypnogram</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#load-your-files" id="id35">Load your files</a><ul>
+<li><a class="reference internal" href="#load-file-from-the-gui" id="id36">Load file from the GUI</a></li>
+<li><a class="reference internal" href="#load-file-from-path" id="id37">Load file from path</a></li>
+<li><a class="reference internal" href="#load-file-using-mne-python" id="id38">Load file using MNE-Python</a></li>
+<li><a class="reference internal" href="#load-file-from-raw-data" id="id39">Load file from raw data</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#time-frequency" id="id40">Time-frequency</a></li>
+<li><a class="reference internal" href="#hypnogram-scoring" id="id41">Hypnogram scoring</a><ul>
+<li><a class="reference internal" href="#navigation" id="id42">Navigation</a></li>
+<li><a class="reference internal" href="#scoring-table" id="id43">Scoring table</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#apply-semi-automatic-detection" id="id44">Apply semi-automatic detection</a><ul>
+<li><a class="reference internal" href="#spindles-detection" id="id45">Spindles detection</a></li>
+<li><a class="reference internal" href="#peaks-detection" id="id46">Peaks detection</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#use-your-own-detections-in-sleep" id="id47">Use your own detections in Sleep</a><ul>
+<li><a class="reference internal" href="#prototype-of-the-function" id="id48">Prototype of the function</a></li>
+<li><a class="reference internal" href="#function-output" id="id49">Function output</a></li>
+<li><a class="reference internal" href="#replace-sleep-detection" id="id50">Replace Sleep detection</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#load-and-save-the-gui-configuration" id="id51">Load and save the GUI configuration</a></li>
+<li><a class="reference internal" href="#import-add-and-save-annotations" id="id52">Import, add and save annotations</a><ul>
+<li><a class="reference internal" href="#import-annotations" id="id53">Import annotations</a></li>
+<li><a class="reference internal" href="#add-new-annotations" id="id54">Add new annotations</a></li>
+<li><a class="reference internal" href="#save-annotations" id="id55">Save annotations</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples" id="id56">Examples</a><ul>
+<li><a class="reference internal" href="#examples-using-visbrain-sleep" id="id57">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.Sleep</span></code></a></li>
+</ul>
+</li>
+</ul>
 </div>
 <div class="section" id="main-features">
-<h3>2.1.2. Main features<a class="headerlink" href="#main-features" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li><dl class="first docutils">
-<dt><strong>Graphical User Interface (GUI)</strong></dt>
-<dd><ul class="first last">
-<li>Modular and responsive GUI</li>
-<li>Take screenshot with controllable dpi</li>
-<li>Save the GUI state (<em>channels, amplitude, panels, checkbox</em>…)</li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><strong>Load standard electro-physiological files</strong></dt>
-<dd><ul class="first last">
-<li>Default supported files : European Data Format, BrainVision, Micromed, Elan</li>
-<li>Pass raw data or use MNE-python to load other <a class="reference external" href="https://martinos.org/mne/dev/manual/io.html#importing-eeg-data">file formats</a></li>
-<li>Supported extensions for hypnogram files : <strong>.txt</strong>, <strong>.csv</strong>, <strong>.xlsx</strong>, <strong>.hyp</strong>.</li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><strong>Display</strong></dt>
-<dd><ul class="first last">
-<li>Polysomnographic data (e.g. EEG, EOG, EMG)</li>
-<li>Time-frequency (=spectrogram)</li>
-<li>Hypnogram</li>
-<li>Topographic map</li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><strong>Hypnogram</strong></dt>
-<dd><ul class="first last">
-<li>Load, edit and save</li>
-<li>Real-time computation of sleep statistics</li>
-<li>Export high-quality hypnogram figure</li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><strong>Signal processing</strong></dt>
-<dd><ul class="first last">
-<li>De-meaning / de-trending</li>
-<li>Filtering</li>
-<li>Re-referencing to a reference channel or common average</li>
-<li>Bipolarization</li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><strong>Semi-automatic events detections</strong></dt>
-<dd><ul class="first last">
-<li>Spindles, K-complexes, slow waves, rapid eye movements, muscle twitches and peaks (<em>each detection comes with additional and controllable parameters</em>)</li>
-<li>Can be performed either on single or multiple channels</li>
-<li>Detections are reported on the hypnogram and inside a table</li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</div>
+<h2><a class="toc-backref" href="#id25">1.1. Main features</a><a class="headerlink" href="#main-features" title="Permalink to this headline">¶</a></h2>
+<div class="grid-container">
+    <div class="grid-item">
+        <div class="alert alert-dismissible alert-primary">
+          <b>Graphical User Interface (GUI)</b>
+          <ul>
+            <li>Modular and responsive GUI</li>
+            <li>Take screenshot with controllable dpi</li>
+            <li>Save the GUI state (channels, amplitude, panels, checkbox...)</li>
+          </ul>
+        </div>
+    </div>
+    <div class="grid-item">
+        <div class="alert alert-dismissible alert-primary">
+          <b>Load standard electro-physiological files</b>
+          <ul>
+            <li>Default supported files : European Data Format, BrainVision, Micromed, Elan</li>
+            <li>Pass raw data or use MNE-python to load other <a href="https://martinos.org/mne/dev/manual/io.html#importing-eeg-data">file formats</a></li>
+            <li>Supported extensions for hypnogram files : .txt, .csv, .xlsx, .hyp.</li>
+          </ul>
+        </div>
+    </div>
+    <div class="grid-item">
+        <div class="alert alert-dismissible alert-primary">
+          <b>Display</b>
+          <ul>
+            <li>Polysomnographic data (e.g. EEG, EOG, EMG)</li>
+            <li>Time-frequency (=spectrogram)</li>
+            <li>Hypnogram</li>
+            <li>Topographic map</li>
+          </ul>
+        </div>
+    </div>
+    <div class="grid-item">
+        <div class="alert alert-dismissible alert-primary">
+          <b>Hypnogram</b>
+          <ul>
+            <li>Load, edit and save</li>
+            <li>Real-time computation of sleep statistics</li>
+            <li>Export high-quality hypnogram figure</li>
+          </ul>
+        </div>
+    </div>
+    <div class="grid-item">
+        <div class="alert alert-dismissible alert-primary">
+          <b>Signal processing</b>
+          <ul>
+            <li>De-meaning / de-trending</li>
+            <li>Filtering</li>
+            <li>Re-referencing to a reference channel or common average</li>
+            <li>Bipolarization</li>
+          </ul>
+        </div>
+    </div>
+    <div class="grid-item">
+        <div class="alert alert-dismissible alert-primary">
+          <b>Semi-automatic events detections</b>
+          <ul>
+            <li>Spindles, K-complexes, slow waves, rapid eye movements, muscle twitches and peaks (each detection comes with additional and controllable parameters)</li>
+            <li>Can be performed either on single or multiple channels</li>
+            <li>Detections are reported on the hypnogram and inside a table</li>
+          </ul>
+        </div>
+    </div>
+</div></div>
 <div class="section" id="import-and-use-sleep">
-<h3>2.1.3. Import and use sleep<a class="headerlink" href="#import-and-use-sleep" title="Permalink to this headline">¶</a></h3>
-<p>The <code class="xref py py-class docutils literal"><span class="pre">Sleep</span></code> module can be imported as follow :</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Sleep</span>
+<h2><a class="toc-backref" href="#id26">1.2. Import and use sleep</a><a class="headerlink" href="#import-and-use-sleep" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="xref py py-class docutils literal notranslate"><span class="pre">Sleep</span></code> module can be imported as follow :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Sleep</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="examples-and-datasets">
-<h3>2.1.4. Examples and datasets<a class="headerlink" href="#examples-and-datasets" title="Permalink to this headline">¶</a></h3>
-<p>To try out in the absence of sleep data, please check out some <a class="reference external" href="http://visbrain.org/auto_examples/index.html#sleep-examples">sleep example</a> scripts and datasets on <a class="reference external" href="https://drive.google.com/drive/folders/0B6vtJiCQZUBvRjc3cFFYcmFIeW8?usp=sharing">Google drive</a></p>
-</div>
 <div class="section" id="gui-description">
-<h3>2.1.5. GUI description<a class="headerlink" href="#gui-description" title="Permalink to this headline">¶</a></h3>
+<h2><a class="toc-backref" href="#id27">1.3. GUI description</a><a class="headerlink" href="#gui-description" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="components">
-<h4>2.1.5.1. Components<a class="headerlink" href="#components" title="Permalink to this headline">¶</a></h4>
-<p>The <code class="xref py py-class docutils literal"><span class="pre">Sleep</span></code> GUI is divided into 4 main parts:</p>
+<h3><a class="toc-backref" href="#id28">1.3.1. Components</a><a class="headerlink" href="#components" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="xref py py-class docutils literal notranslate"><span class="pre">Sleep</span></code> GUI is divided into 4 main parts:</p>
 <div class="figure align-center">
 <img alt="_images/sleep_main_parts.png" src="_images/sleep_main_parts.png" />
 </div>
@@ -331,7 +990,7 @@ The contextual menu allows to perform several functions such as the loading and 
 The setting panels is where most of the (advanced) functions of the software are! Among other things, you can control which channel to display, adjust the amplitudes, customize the spectrogram and hypnogram, compute the duration of each sleep stage, add annotations to the recording, and perform a bunch of semi-automatic detection (spindles, K-complexes…). See the section <a class="reference internal" href="#sleep-settings-panel"><span class="std std-ref">Settings panel tabs</span></a> for a description of each tab.</p>
 </div>
 <div class="section" id="settings-panel-tabs">
-<span id="sleep-settings-panel"></span><h4>2.1.5.2. Settings panel tabs<a class="headerlink" href="#settings-panel-tabs" title="Permalink to this headline">¶</a></h4>
+<span id="sleep-settings-panel"></span><h3><a class="toc-backref" href="#id29">1.3.2. Settings panel tabs</a><a class="headerlink" href="#settings-panel-tabs" title="Permalink to this headline">¶</a></h3>
 <p>There are five settings tabs :</p>
 <ul class="simple">
 <li><a class="reference internal" href="#paneltab"><span class="std std-ref">Panels</span></a> : manage channel, time-frequency, hypnogram and topographic map</li>
@@ -342,9 +1001,9 @@ The setting panels is where most of the (advanced) functions of the software are
 <li><a class="reference internal" href="#annotationtab"><span class="std std-ref">Annotations</span></a> : manage annotations</li>
 </ul>
 <div class="section" id="panels">
-<span id="paneltab"></span><h5>2.1.5.2.1. Panels<a class="headerlink" href="#panels" title="Permalink to this headline">¶</a></h5>
+<span id="paneltab"></span><h4>1.3.2.1. Panels<a class="headerlink" href="#panels" title="Permalink to this headline">¶</a></h4>
 <p>Manage channel, time-frequency, hypnogram and topographic map</p>
-<div class="figure align-center" id="id8">
+<div class="figure align-center" id="id6">
 <img alt="_images/sleep_topo.png" src="_images/sleep_topo.png" />
 <p class="caption"><span class="caption-text">The Settings panel: topoplot properties</span></p>
 </div>
@@ -430,9 +1089,9 @@ The setting panels is where most of the (advanced) functions of the software are
 </ul>
 </div>
 <div class="section" id="tools">
-<span id="toolstab"></span><h5>2.1.5.2.2. Tools<a class="headerlink" href="#tools" title="Permalink to this headline">¶</a></h5>
+<span id="toolstab"></span><h4>1.3.2.2. Tools<a class="headerlink" href="#tools" title="Permalink to this headline">¶</a></h4>
 <p>Signal processing and re-referencing tools.</p>
-<div class="figure align-center" id="id9">
+<div class="figure align-center" id="id7">
 <img alt="_images/sleep_filtering.png" src="_images/sleep_filtering.png" />
 <p class="caption"><span class="caption-text">Bandpass filter (12-14 Hz) applied on all channels.</span></p>
 </div>
@@ -458,9 +1117,9 @@ The setting panels is where most of the (advanced) functions of the software are
 </ul>
 </div>
 <div class="section" id="infos">
-<span id="infotab"></span><h5>2.1.5.2.3. Infos<a class="headerlink" href="#infos" title="Permalink to this headline">¶</a></h5>
+<span id="infotab"></span><h4>1.3.2.3. Infos<a class="headerlink" href="#infos" title="Permalink to this headline">¶</a></h4>
 <p>The Infos panel displays the recording infos (e.g. name and downsampling frequency) as well as the main sleep statistics computed with the hypnogram (see specs below). These values are adjusted in real-time when you edit the hypnogram. Sleep statistics can be exported to <strong>.csv</strong> or <strong>.txt</strong> file.</p>
-<div class="figure align-center" id="id10">
+<div class="figure align-center" id="id8">
 <img alt="_images/sleep_info.png" src="_images/sleep_info.png" />
 <p class="caption"><span class="caption-text">The Infos panel: sleep statistics and basic infos of the current recording.</span></p>
 </div>
@@ -493,15 +1152,15 @@ The setting panels is where most of the (advanced) functions of the software are
 </ul>
 </div>
 <div class="section" id="scoring">
-<span id="scoringtab"></span><h5>2.1.5.2.4. Scoring<a class="headerlink" href="#scoring" title="Permalink to this headline">¶</a></h5>
+<span id="scoringtab"></span><h4>1.3.2.4. Scoring<a class="headerlink" href="#scoring" title="Permalink to this headline">¶</a></h4>
 <p>This tab contains the scoring table, i.e. where each stage start and finish. For further informations about how to score your hypnogram see <a class="reference internal" href="#hypnogram-scoring"><span class="std std-ref">Hypnogram scoring</span></a>.</p>
 </div>
 <div class="section" id="detections">
-<span id="detectiontab"></span><h5>2.1.5.2.5. Detections<a class="headerlink" href="#detections" title="Permalink to this headline">¶</a></h5>
+<span id="detectiontab"></span><h4>1.3.2.5. Detections<a class="headerlink" href="#detections" title="Permalink to this headline">¶</a></h4>
 <p>Perform semi-automatic detection of phasic events, such as sleep spindles, K-complexes, rapid eye movements…For a full tutorial see <a class="reference internal" href="#apply-detection"><span class="std std-ref">Apply semi-automatic detection</span></a>.</p>
 </div>
 <div class="section" id="annotations">
-<span id="annotationtab"></span><h5>2.1.5.2.6. Annotations<a class="headerlink" href="#annotations" title="Permalink to this headline">¶</a></h5>
+<span id="annotationtab"></span><h4>1.3.2.6. Annotations<a class="headerlink" href="#annotations" title="Permalink to this headline">¶</a></h4>
 <p>Add and edit annotations (annotations are defined by a start and end point, as well as an optional text marker). To quickly add annotations:</p>
 <ul class="simple">
 <li>Use the <em>Annotate</em> button in the ruler to annotate the entire window</li>
@@ -511,7 +1170,7 @@ The setting panels is where most of the (advanced) functions of the software are
 </div>
 </div>
 <div class="section" id="shortcuts">
-<h4>2.1.5.3. Shortcuts<a class="headerlink" href="#shortcuts" title="Permalink to this headline">¶</a></h4>
+<h3><a class="toc-backref" href="#id30">1.3.3. Shortcuts</a><a class="headerlink" href="#shortcuts" title="Permalink to this headline">¶</a></h3>
 <p>Sleep comes with a bundle of shortcuts that can be used to speed up your productivity. If shortcuts do not work, simply left click on a canvas.</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -612,14 +1271,11 @@ The setting panels is where most of the (advanced) functions of the software are
 </table>
 </div>
 </div>
-</div>
-<div class="section" id="tutorial">
-<h2>2.2. Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="supported-files-and-format">
-<h3>2.2.1. Supported files and format<a class="headerlink" href="#supported-files-and-format" title="Permalink to this headline">¶</a></h3>
-<p><code class="xref py py-class docutils literal"><span class="pre">Sleep</span></code> natively supports several file formats for both electrophysiological and hypnogram data.</p>
+<h2><a class="toc-backref" href="#id31">1.4. Supported files and format</a><a class="headerlink" href="#supported-files-and-format" title="Permalink to this headline">¶</a></h2>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">Sleep</span></code> natively supports several file formats for both electrophysiological and hypnogram data.</p>
 <div class="section" id="data-files">
-<h4>2.2.1.1. Data files<a class="headerlink" href="#data-files" title="Permalink to this headline">¶</a></h4>
+<h3><a class="toc-backref" href="#id32">1.4.1. Data files</a><a class="headerlink" href="#data-files" title="Permalink to this headline">¶</a></h3>
 <p>Here’s the list of natively supported file formats:</p>
 <ul class="simple">
 <li><strong>.vhdr</strong> (BrainVision version 1 and 2)</li>
@@ -627,9 +1283,8 @@ The setting panels is where most of the (advanced) functions of the software are
 <li><strong>.trc</strong> (Micromed version 4)</li>
 <li><strong>.eeg</strong> (<a class="reference external" href="http://elan.lyon.inserm.fr">ELAN</a>)</li>
 </ul>
-<p>If MNE-python is installed, this list is extended to (see <a class="reference external" href="https://martinos.org/mne/dev/manual/io.html#importing-eeg-data">also</a>):</p>
-<blockquote>
-<div><ul class="simple">
+<p>If MNE-python is installed, this list is extended to (see <a class="reference external" href="https://martinos.org/mne/dev/manual/io.html#importing-eeg-data">also</a>) :</p>
+<ul class="simple">
 <li><strong>.bdf</strong></li>
 <li><strong>.gdf</strong></li>
 <li><strong>.egi</strong></li>
@@ -638,29 +1293,26 @@ The setting panels is where most of the (advanced) functions of the software are
 <li><strong>.cnt</strong></li>
 <li><strong>.vhdr</strong> (<em>BrainVision files can be loaded using either the native library of Sleep or using MNE</em>)</li>
 </ul>
-</div></blockquote>
 <p>Note that once MNE-python is installed, the loading of these file formats is transparent for users. It means that you can load these file formats directly using Sleep graphical user interface or command-line, without any additional steps. We therefore <strong>strongly recommand</strong> to <a class="reference external" href="https://martinos.org/mne/stable/index.html">install MNE-python</a>.</p>
-<p>If you have a file format that is currently not supported, <code class="xref py py-class docutils literal"><span class="pre">Sleep</span></code> also provide the ability to directly pass raw data (NumPy array). Please click see this example of how to <a class="reference external" href="http://visbrain.org/auto_examples/sleep/load_matlab.html#sphx-glr-auto-examples-sleep-load-matlab-py">to load a Matlab file</a> and then pass the data directly to Sleep.</p>
+<p>If you have a file format that is currently not supported, <code class="xref py py-class docutils literal notranslate"><span class="pre">Sleep</span></code> also provide the ability to directly pass raw data (NumPy array). Please click see this example of how to <a class="reference external" href="http://visbrain.org/auto_examples/sleep/load_matlab.html#sphx-glr-auto-examples-sleep-load-matlab-py">to load a Matlab file</a> and then pass the data directly to Sleep.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<blockquote>
-<div><p>If you are having trouble with the loading of .edf files, we recommand installing <a class="reference external" href="https://martinos.org/mne/stable/index.html">MNE-python</a> and then loading your data using the following command:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Sleep</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;mydata.edf&#39;</span><span class="p">,</span> <span class="n">hypno</span><span class="o">=</span><span class="s1">&#39;myhypno.csv&#39;</span><span class="p">,</span> <span class="n">use_mne</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<p>If you are having trouble with the loading of .edf files, we recommand installing <a class="reference external" href="https://martinos.org/mne/stable/index.html">MNE-python</a> and then loading your data using the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Sleep</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;mydata.edf&#39;</span><span class="p">,</span> <span class="n">hypno</span><span class="o">=</span><span class="s1">&#39;myhypno.csv&#39;</span><span class="p">,</span> <span class="n">use_mne</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-</div></blockquote>
-<p class="last">This will force the loading of the .edf files using MNE, which can generally handle more cases and exceptions than the native EDF library implemented in <code class="xref py py-class docutils literal"><span class="pre">Sleep</span></code>.</p>
+<p class="last">This will force the loading of the .edf files using MNE, which can generally handle more cases and exceptions than the native EDF library implemented in <code class="xref py py-class docutils literal notranslate"><span class="pre">Sleep</span></code>.</p>
 </div>
 <div class="admonition caution">
 <p class="first admonition-title">Caution</p>
 <p>By default, data are <strong>automatically downsampled to 100 Hz</strong> upon loading. If the sampling frequency of your recording is a power of two (e.g. 256, 512 Hz), we recommand to change the default downsampling value to 128 Hz using the following command:</p>
-<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">Sleep</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;mydata.edf&#39;</span><span class="p">,</span> <span class="n">hypno</span><span class="o">=</span><span class="s1">&#39;myhypno.csv&#39;</span><span class="p">,</span> <span class="n">downsample</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Sleep</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;mydata.edf&#39;</span><span class="p">,</span> <span class="n">hypno</span><span class="o">=</span><span class="s1">&#39;myhypno.csv&#39;</span><span class="p">,</span> <span class="n">downsample</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="section" id="hypnogram">
-<h4>2.2.1.2. Hypnogram<a class="headerlink" href="#hypnogram" title="Permalink to this headline">¶</a></h4>
+<h3><a class="toc-backref" href="#id33">1.4.2. Hypnogram</a><a class="headerlink" href="#hypnogram" title="Permalink to this headline">¶</a></h3>
 <p>One of the main objective of Sleep is to <strong>facilitate the sharing of data</strong> across laboratories. This involves being able to accomodate for a variety of hypnogram format (unfortunately, there is no current gold standard on how to save hypnogram data). Here’s the list of supported extensions for hypnogram files :</p>
 <ul class="simple">
 <li><strong>.txt</strong></li>
@@ -675,7 +1327,7 @@ The setting panels is where most of the (advanced) functions of the software are
 </div>
 </div>
 <div class="section" id="save-hypnogram">
-<h4>2.2.1.3. Save hypnogram<a class="headerlink" href="#save-hypnogram" title="Permalink to this headline">¶</a></h4>
+<h3><a class="toc-backref" href="#id34">1.4.3. Save hypnogram</a><a class="headerlink" href="#save-hypnogram" title="Permalink to this headline">¶</a></h3>
 <div class="admonition important">
 <p class="first admonition-title">Important</p>
 <p class="last">Since release v0.4, the default hypnogram export format uses stage duration rather than point-per-second encoding. This format avoids potential errors caused by downsampling and confusion in the values assigned to each sleep stage (which can drastically differ between two labs, e.g. N2 sleep can be encoded with the value 2 in one lab, and -2 in another lab). However, for retro-compatibility, we still allow user to save and load hypnogram in point-per-second format. Please see the image below to see the difference between stage-duration and point-per-second encoding.</p>
@@ -727,7 +1379,7 @@ The setting panels is where most of the (advanced) functions of the software are
 <div class="admonition tip">
 <p class="first admonition-title">Tip</p>
 <p>If you want to add any relevant informations / comments to the hypnogram, you can do so by adding lines preceded by an asterisk directly within the text file. Sleep will not read any line in the hypnogram that starts with an asterisk mark. For example, you can add the name of the scorer:</p>
-<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="o">*</span><span class="n">Scorer</span>  <span class="n">John</span>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span><span class="n">Scorer</span>  <span class="n">John</span>
 <span class="o">*</span><span class="n">Date</span>    <span class="mi">05</span><span class="n">_17_2018</span>
 <span class="n">Wake</span>     <span class="mi">500</span>
 <span class="n">N1</span>       <span class="mi">750</span>
@@ -735,7 +1387,7 @@ The setting panels is where most of the (advanced) functions of the software are
 </div>
 </div>
 <div class="section" id="elan-hyp-format">
-<h5>2.2.1.3.1. Elan .hyp format<a class="headerlink" href="#elan-hyp-format" title="Permalink to this headline">¶</a></h5>
+<h4>1.4.3.1. Elan .hyp format<a class="headerlink" href="#elan-hyp-format" title="Permalink to this headline">¶</a></h4>
 <p>Alternatively, if you prefer point-per-second encoding, you can save your data in .hyp format, which can be read with any text editor. Sleep will create a single .hyp file with 4 header rows and the values presented above for the sleep stages, with the exception that the value assigned to REM sleep will be 5 for compatibility with Elan hypnogram reader.</p>
 <div class="admonition important">
 <p class="first admonition-title">Important</p>
@@ -789,7 +1441,7 @@ The setting panels is where most of the (advanced) functions of the software are
 </div>
 </div>
 <div class="section" id="load-your-files">
-<h3>2.2.2. Load your files<a class="headerlink" href="#load-your-files" title="Permalink to this headline">¶</a></h3>
+<h2><a class="toc-backref" href="#id35">1.5. Load your files</a><a class="headerlink" href="#load-your-files" title="Permalink to this headline">¶</a></h2>
 <p>There are four ways to load datasets into Sleep:</p>
 <ul class="simple">
 <li><a class="reference internal" href="#loadfromgui"><span class="std std-ref">Load file from the GUI</span></a></li>
@@ -798,23 +1450,23 @@ The setting panels is where most of the (advanced) functions of the software are
 <li><a class="reference internal" href="#loadfrommne"><span class="std std-ref">Load file using MNE-Python</span></a></li>
 </ul>
 <div class="section" id="load-file-from-the-gui">
-<span id="loadfromgui"></span><h4>2.2.2.1. Load file from the GUI<a class="headerlink" href="#load-file-from-the-gui" title="Permalink to this headline">¶</a></h4>
+<span id="loadfromgui"></span><h3><a class="toc-backref" href="#id36">1.5.1. Load file from the GUI</a><a class="headerlink" href="#load-file-from-the-gui" title="Permalink to this headline">¶</a></h3>
 <p>Don’t send anything, just open the interface and you will have a popup window asking for the filename of your data and hypnogram. If you do not have a hypnogram for your data and/or wish to display only the data, just press Cancel when the hypnogram popup opens.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Import the Sleep module from visbrain :</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import the Sleep module from visbrain :</span>
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Sleep</span>
 <span class="c1"># Run the interface :</span>
 <span class="n">Sleep</span><span class="p">()</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="figure align-center" id="id11">
+<div class="figure align-center" id="id9">
 <img alt="_images/sleep_open.png" src="_images/sleep_open.png" />
 <p class="caption"><span class="caption-text">Popup window for loading your files.</span></p>
 </div>
 </div>
 <div class="section" id="load-file-from-path">
-<span id="loadfrompath"></span><h4>2.2.2.2. Load file from path<a class="headerlink" href="#load-file-from-path" title="Permalink to this headline">¶</a></h4>
+<span id="loadfrompath"></span><h3><a class="toc-backref" href="#id37">1.5.2. Load file from path</a><a class="headerlink" href="#load-file-from-path" title="Permalink to this headline">¶</a></h3>
 <p>Instead of leaving inputs arguments empty, send the path to the data :</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Import the Sleep module from visbrain :</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import the Sleep module from visbrain :</span>
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Sleep</span>
 <span class="c1"># Define where the data are located :</span>
 <span class="n">dfile</span> <span class="o">=</span> <span class="s1">&#39;/home/perso/myfile.eeg&#39;</span>
@@ -827,9 +1479,9 @@ The setting panels is where most of the (advanced) functions of the software are
 </div>
 </div>
 <div class="section" id="load-file-using-mne-python">
-<span id="loadfrommne"></span><h4>2.2.2.3. Load file using MNE-Python<a class="headerlink" href="#load-file-using-mne-python" title="Permalink to this headline">¶</a></h4>
-<p>Finally, it is possible to load several other file formats using <a class="reference external" href="http://martinos.org/mne/stable/">MNE Python package</a>. The code below shows how to load either BDF, EGI or EEGLab files and pass them to <code class="xref py py-class docutils literal"><span class="pre">Sleep</span></code>.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Import the Sleep module:</span>
+<span id="loadfrommne"></span><h3><a class="toc-backref" href="#id38">1.5.3. Load file using MNE-Python</a><a class="headerlink" href="#load-file-using-mne-python" title="Permalink to this headline">¶</a></h3>
+<p>Finally, it is possible to load several other file formats using <a class="reference external" href="http://martinos.org/mne/stable/">MNE Python package</a>. The code below shows how to load either BDF, EGI or EEGLab files and pass them to <code class="xref py py-class docutils literal notranslate"><span class="pre">Sleep</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import the Sleep module:</span>
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Sleep</span>
 <span class="c1"># - Biosemi Data Format (BDF)</span>
 <span class="n">data</span> <span class="o">=</span> <span class="s1">&#39;mybdffile.bdf&#39;</span>
@@ -843,9 +1495,9 @@ The setting panels is where most of the (advanced) functions of the software are
 </div>
 </div>
 <div class="section" id="load-file-from-raw-data">
-<span id="loadfromraw"></span><h4>2.2.2.4. Load file from raw data<a class="headerlink" href="#load-file-from-raw-data" title="Permalink to this headline">¶</a></h4>
+<span id="loadfromraw"></span><h3><a class="toc-backref" href="#id39">1.5.4. Load file from raw data</a><a class="headerlink" href="#load-file-from-raw-data" title="Permalink to this headline">¶</a></h3>
 <p>It is possible to manually load raw data and pass them as inputs arguments Sleep. The code below show how to extract raw data from a Matlab .mat file (using SciPy):</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>    <span class="kn">from</span> <span class="nn">scipy.io</span> <span class="kn">import</span> <span class="n">loadmat</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.io</span> <span class="kn">import</span> <span class="n">loadmat</span>
 <span class="c1"># Import the Sleep module from visbrain:</span>
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Sleep</span>
 <span class="c1"># Load your dataset :</span>
@@ -868,7 +1520,7 @@ The setting panels is where most of the (advanced) functions of the software are
 </div>
 </div>
 <div class="section" id="time-frequency">
-<span id="id2"></span><h3>2.2.3. Time-frequency<a class="headerlink" href="#time-frequency" title="Permalink to this headline">¶</a></h3>
+<span id="id2"></span><h2><a class="toc-backref" href="#id40">1.6. Time-frequency</a><a class="headerlink" href="#time-frequency" title="Permalink to this headline">¶</a></h2>
 <p>There are currently three time-frequency methods implemented in Sleep.</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -897,7 +1549,7 @@ The setting panels is where most of the (advanced) functions of the software are
 </tr>
 </tbody>
 </table>
-<div class="figure align-center" id="id12">
+<div class="figure align-center" id="id10">
 <img alt="_images/sleep_spectro_methods.png" src="_images/sleep_spectro_methods.png" />
 <p class="caption"><span class="caption-text">Comparison of the 3 methods on a 50 minutes recording (C3 electrode, 0.5-20 Hz).</span></p>
 </div>
@@ -907,14 +1559,14 @@ The setting panels is where most of the (advanced) functions of the software are
 </div>
 </div>
 <div class="section" id="hypnogram-scoring">
-<span id="id4"></span><h3>2.2.4. Hypnogram scoring<a class="headerlink" href="#hypnogram-scoring" title="Permalink to this headline">¶</a></h3>
+<span id="id4"></span><h2><a class="toc-backref" href="#id41">1.7. Hypnogram scoring</a><a class="headerlink" href="#hypnogram-scoring" title="Permalink to this headline">¶</a></h2>
 <p>Sleep offers two possibilities to score the hypnogram: using shortcuts or using the <a class="reference internal" href="#scoretable"><span class="std std-ref">Scoring table</span></a>.</p>
-<div class="figure align-center" id="id13">
+<div class="figure align-center" id="id11">
 <img alt="_images/sleep_scoring.png" src="_images/sleep_scoring.png" />
 <p class="caption"><span class="caption-text">Hypnogram scoring.</span></p>
 </div>
 <div class="section" id="navigation">
-<span id="id5"></span><h4>2.2.4.1. Navigation<a class="headerlink" href="#navigation" title="Permalink to this headline">¶</a></h4>
+<span id="id5"></span><h3><a class="toc-backref" href="#id42">1.7.1. Navigation</a><a class="headerlink" href="#navigation" title="Permalink to this headline">¶</a></h3>
 <p>This is probably the most useful editing method. While you are scrolling through your data, simply press on your keyboard to insert a sleep stage. Use the key below :</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -954,7 +1606,7 @@ The setting panels is where most of the (advanced) functions of the software are
 </div>
 </div>
 <div class="section" id="scoring-table">
-<span id="scoretable"></span><h4>2.2.4.2. Scoring table<a class="headerlink" href="#scoring-table" title="Permalink to this headline">¶</a></h4>
+<span id="scoretable"></span><h3><a class="toc-backref" href="#id43">1.7.2. Scoring table</a><a class="headerlink" href="#scoring-table" title="Permalink to this headline">¶</a></h3>
 <p>The Scoring panel can be used to manually edit the hypnogram values. It contains three columns:</p>
 <ul class="simple">
 <li><strong>From</strong> : specify where the stage start (<em>in minutes</em>)</li>
@@ -969,7 +1621,7 @@ The setting panels is where most of the (advanced) functions of the software are
 </div>
 </div>
 <div class="section" id="apply-semi-automatic-detection">
-<span id="apply-detection"></span><h3>2.2.5. Apply semi-automatic detection<a class="headerlink" href="#apply-semi-automatic-detection" title="Permalink to this headline">¶</a></h3>
+<span id="apply-detection"></span><h2><a class="toc-backref" href="#id44">1.8. Apply semi-automatic detection</a><a class="headerlink" href="#apply-semi-automatic-detection" title="Permalink to this headline">¶</a></h2>
 <p>The Detection panel offers several semi-automatic algorithms for the detection of sleep features such as sleep spindles, K-complexes, rapid eyes movements, slow waves, muscle twitches and peaks. All detection types shared the following parameters :</p>
 <ul class="simple">
 <li><em>Apply on</em> : choose on which channel to perform the detection<ul>
@@ -985,9 +1637,9 @@ The setting panels is where most of the (advanced) functions of the software are
 </div>
 <p>Two examples of automatic event detection are shown below.</p>
 <div class="section" id="spindles-detection">
-<h4>2.2.5.1. Spindles detection<a class="headerlink" href="#spindles-detection" title="Permalink to this headline">¶</a></h4>
+<h3><a class="toc-backref" href="#id45">1.8.1. Spindles detection</a><a class="headerlink" href="#spindles-detection" title="Permalink to this headline">¶</a></h3>
 <p>This algorithm perform a semi-automatic detection of sleep spindles which are an essential feature of N2 sleep. Sleep spindles are defined as bursts of 12-14 Hz waves that occur for at least 0.5 seconds. They are maximally visible on central electrodes.</p>
-<div class="figure align-center" id="id14">
+<div class="figure align-center" id="id12">
 <img alt="_images/sleep_spindles.png" src="_images/sleep_spindles.png" />
 <p class="caption"><span class="caption-text">Spindles detection on channel Cz.</span></p>
 </div>
@@ -1011,9 +1663,9 @@ The setting panels is where most of the (advanced) functions of the software are
 </div>
 </div>
 <div class="section" id="peaks-detection">
-<h4>2.2.5.2. Peaks detection<a class="headerlink" href="#peaks-detection" title="Permalink to this headline">¶</a></h4>
+<h3><a class="toc-backref" href="#id46">1.8.2. Peaks detection</a><a class="headerlink" href="#peaks-detection" title="Permalink to this headline">¶</a></h3>
 <p>Perform a peak detection.</p>
-<div class="figure align-center" id="id15">
+<div class="figure align-center" id="id13">
 <img alt="_images/sleep_peak.png" src="_images/sleep_peak.png" />
 <p class="caption"><span class="caption-text">Peaks detection on ECG channel.</span></p>
 </div>
@@ -1037,31 +1689,75 @@ The setting panels is where most of the (advanced) functions of the software are
 </div>
 </div>
 </div>
+<div class="section" id="use-your-own-detections-in-sleep">
+<span id="replace-detection"></span><h2><a class="toc-backref" href="#id47">1.9. Use your own detections in Sleep</a><a class="headerlink" href="#use-your-own-detections-in-sleep" title="Permalink to this headline">¶</a></h2>
+<p><em>Sleep</em> offers the possibility to replace the native detection algorithms with your own detection algorithms. To do it, you have to provide a function with predefined inputs and outputs.</p>
+<div class="section" id="prototype-of-the-function">
+<h3><a class="toc-backref" href="#id48">1.9.1. Prototype of the function</a><a class="headerlink" href="#prototype-of-the-function" title="Permalink to this headline">¶</a></h3>
+<p>Here’s a prototype of a function to replace <em>Sleep</em> spindle detections :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">my_custom_spindle_detection</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">hypno</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Use your own spindle detection</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : np.ndarray</span>
+<span class="sd">        Data of one unique channel (i.e shape (n_time_pts,))</span>
+<span class="sd">    sf : float</span>
+<span class="sd">         The sampling frequency (512., 1024. etc.)</span>
+<span class="sd">    time : np.ndarray</span>
+<span class="sd">        The time vector (i.e shape (n_time_pts,))</span>
+<span class="sd">    hypno : np.ndarray</span>
+<span class="sd">        The hypnogram (i.e shape (n_time_pts,))</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    indexes : np.ndarray</span>
+<span class="sd">        indexes of detected events.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="function-output">
+<h3><a class="toc-backref" href="#id49">1.9.2. Function output</a><a class="headerlink" href="#function-output" title="Permalink to this headline">¶</a></h3>
+<p>For your convenience, <em>Sleep</em> accepts several possible output formats for your custom detection :</p>
+<ul class="simple">
+<li><strong>(Start, Stop)</strong> : an array of shape <em>(n_dected_events, 2)</em> where <em>2</em> describes the index where each event start and finish.</li>
+<li><strong>Boolean vector</strong> : a boolean vector of shape <em>(n_time_pts,)</em> where each <em>True</em> value refers to a time point that belong to a detected event.</li>
+<li><strong>Consecutive indexes</strong> : an array which only contains consecutive indexes of detected events.</li>
+</ul>
+<p>It means that your function will work as long as you are able to return any one of these three possible vectors. Since it is very likely that your home-made detection function already return one of those, implementing it in <em>Sleep</em> should be fairly easy! A graphical representation of these output formats is displayed below:</p>
+<div class="figure align-center" id="id14">
+<img alt="_images/sleep_return_indices.png" src="_images/sleep_return_indices.png" />
+<p class="caption"><span class="caption-text">Supported output format of the custom detection algorithm.</span></p>
+</div>
+</div>
+<div class="section" id="replace-sleep-detection">
+<h3><a class="toc-backref" href="#id50">1.9.3. Replace Sleep detection</a><a class="headerlink" href="#replace-sleep-detection" title="Permalink to this headline">¶</a></h3>
+<p>Once your function has proper inputs and outputs, simply use the <a class="reference internal" href="generated/visbrain.Sleep.html#visbrain.Sleep.replace_detections" title="visbrain.Sleep.replace_detections"><code class="xref py py-class docutils literal notranslate"><span class="pre">visbrain.Sleep.replace_detections</span></code></a> method to replace the detection of <em>Sleep</em> with your own. Please visit the Examples section to see some concrete examples.</p>
+</div>
+</div>
 <div class="section" id="load-and-save-the-gui-configuration">
-<h3>2.2.6. Load and save the GUI configuration<a class="headerlink" href="#load-and-save-the-gui-configuration" title="Permalink to this headline">¶</a></h3>
-<p>From the <em>Files &gt; Save</em> contextual menu, you can save the GUI configuration. This will save the state of all buttons and properties inside <code class="xref py py-class docutils literal"><span class="pre">Sleep</span></code>. Then, you can recharge the GUI configuration using <em>Files &gt; Load &gt; GUI config</em>.
-Alternatively, if you want to use a configuration when running <code class="xref py py-class docutils literal"><span class="pre">Sleep</span></code>, you can use the <em>config_file</em> argument to directly pass the path to a configuration file.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mne</span> <span class="kn">import</span> <span class="n">io</span>
+<h2><a class="toc-backref" href="#id51">1.10. Load and save the GUI configuration</a><a class="headerlink" href="#load-and-save-the-gui-configuration" title="Permalink to this headline">¶</a></h2>
+<p>From the <em>Files &gt; Save</em> contextual menu, you can save the GUI configuration. This will save the state of all buttons and properties inside <code class="xref py py-class docutils literal notranslate"><span class="pre">Sleep</span></code>. Then, you can recharge the GUI configuration using <em>Files &gt; Load &gt; GUI config</em>.
+Alternatively, if you want to use a configuration when running <code class="xref py py-class docutils literal notranslate"><span class="pre">Sleep</span></code>, you can use the <em>config_file</em> argument to directly pass the path to a configuration file. Note that configuration file are encoded in JSON format, which can be easily read and modified using any text editor.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mne</span> <span class="kn">import</span> <span class="n">io</span>
 <span class="c1"># Import the Sleep module:</span>
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Sleep</span>
 
 <span class="n">Sleep</span><span class="p">(</span><span class="n">config_file</span><span class="o">=</span><span class="s1">&#39;pathto/myconfig.json&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition tip">
-<p class="first admonition-title">Tip</p>
-<p class="last">Configuration file are encoded in JSON format, which can be easily read and modified using any text editor.</p>
-</div>
 </div>
 <div class="section" id="import-add-and-save-annotations">
-<span id="import-annotation"></span><h3>2.2.7. Import, add and save annotations<a class="headerlink" href="#import-add-and-save-annotations" title="Permalink to this headline">¶</a></h3>
-<p><code class="xref py py-class docutils literal"><span class="pre">Sleep</span></code> provides a table for annotations. In this table, specify where the event start, finish and the associated text. Selecting a row of this table center the window around the selected time-code. This allow to quickly navigate even in large files.</p>
-<div class="figure align-center" id="id16">
+<span id="import-annotation"></span><h2><a class="toc-backref" href="#id52">1.11. Import, add and save annotations</a><a class="headerlink" href="#import-add-and-save-annotations" title="Permalink to this headline">¶</a></h2>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">Sleep</span></code> provides a table for annotations. In this table, specify where the event start, finish and the associated text. Selecting a row of this table center the window around the selected time-code. This allow to quickly navigate even in large files.</p>
+<div class="figure align-center" id="id15">
 <img alt="_images/sleep_annotations.png" src="_images/sleep_annotations.png" />
 <p class="caption"><span class="caption-text">Annotations in Sleep. All annotations are referenced in a table in the quick settings panel (left). Each annotation is then reported in the time axis as a green triangle.</span></p>
 </div>
 <div class="section" id="import-annotations">
-<h4>2.2.7.1. Import annotations<a class="headerlink" href="#import-annotations" title="Permalink to this headline">¶</a></h4>
+<h3><a class="toc-backref" href="#id53">1.11.1. Import annotations</a><a class="headerlink" href="#import-annotations" title="Permalink to this headline">¶</a></h3>
 <p>If the interface is opened, load annotations from the menu <em>Files &gt; Load &gt; Annotations</em>. Otherwise, you can use the input variable <em>annotations</em> to set the path to an existing annotation file that need to be loaded. There is several ways to define annotations :</p>
 <ul class="simple">
 <li><a class="reference internal" href="#annotations-txt"><span class="std std-ref">Annotations in a text file</span></a></li>
@@ -1069,9 +1765,9 @@ Alternatively, if you want to use a configuration when running <code class="xref
 <li><a class="reference internal" href="#annotations-mark"><span class="std std-ref">Define only markers</span></a></li>
 </ul>
 <div class="section" id="annotations-in-a-text-file">
-<span id="annotations-txt"></span><h5>2.2.7.1.1. Annotations in a text file<a class="headerlink" href="#annotations-in-a-text-file" title="Permalink to this headline">¶</a></h5>
+<span id="annotations-txt"></span><h4>1.11.1.1. Annotations in a text file<a class="headerlink" href="#annotations-in-a-text-file" title="Permalink to this headline">¶</a></h4>
 <p>Annotations can be defined in a <a class="reference external" href="https://drive.google.com/file/d/0B6vtJiCQZUBvSXpmS0FGZ1E4M1U/view?usp=sharing">csv file</a> or in a <a class="reference external" href="https://drive.google.com/file/d/0B6vtJiCQZUBvOENtTks1Z3NLam8/view?usp=sharing">txt file</a> file.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mne</span> <span class="kn">import</span> <span class="n">io</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mne</span> <span class="kn">import</span> <span class="n">io</span>
 <span class="c1"># Import the Sleep module:</span>
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Sleep</span>
 
@@ -1080,9 +1776,9 @@ Alternatively, if you want to use a configuration when running <code class="xref
 </div>
 </div>
 <div class="section" id="using-mne-python-annotations">
-<span id="annotations-mne"></span><h5>2.2.7.1.2. Using MNE-Python annotations<a class="headerlink" href="#using-mne-python-annotations" title="Permalink to this headline">¶</a></h5>
+<span id="annotations-mne"></span><h4>1.11.1.2. Using MNE-Python annotations<a class="headerlink" href="#using-mne-python-annotations" title="Permalink to this headline">¶</a></h4>
 <p>Alternatively, you can use annotations from MNE-python and pass your annotations to the <em>annotations</em> variable :</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">mne</span> <span class="kn">import</span> <span class="n">Annotations</span>
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Sleep</span>
 
@@ -1097,9 +1793,9 @@ Alternatively, if you want to use a configuration when running <code class="xref
 </div>
 </div>
 <div class="section" id="define-only-markers">
-<span id="annotations-mark"></span><h5>2.2.7.1.3. Define only markers<a class="headerlink" href="#define-only-markers" title="Permalink to this headline">¶</a></h5>
+<span id="annotations-mark"></span><h4>1.11.1.3. Define only markers<a class="headerlink" href="#define-only-markers" title="Permalink to this headline">¶</a></h4>
 <p>Annotations can be seen as the combination of a time-code and a label. If you don’t need a label to your event, you can only specify the time-code in seconds:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Sleep</span>
 
 <span class="c1"># Define the onset :</span>
@@ -1111,7 +1807,7 @@ Alternatively, if you want to use a configuration when running <code class="xref
 </div>
 </div>
 <div class="section" id="add-new-annotations">
-<h4>2.2.7.2. Add new annotations<a class="headerlink" href="#add-new-annotations" title="Permalink to this headline">¶</a></h4>
+<h3><a class="toc-backref" href="#id54">1.11.2. Add new annotations</a><a class="headerlink" href="#add-new-annotations" title="Permalink to this headline">¶</a></h3>
 <p>To add new annotations :</p>
 <ul class="simple">
 <li>From the ruler or from the <strong>Annotations</strong> tab of the quick settings panel, use the <strong>Annotate</strong> button to annotate the currently displayed window</li>
@@ -1119,366 +1815,77 @@ Alternatively, if you want to use a configuration when running <code class="xref
 </ul>
 </div>
 <div class="section" id="save-annotations">
-<h4>2.2.7.3. Save annotations<a class="headerlink" href="#save-annotations" title="Permalink to this headline">¶</a></h4>
+<h3><a class="toc-backref" href="#id55">1.11.3. Save annotations</a><a class="headerlink" href="#save-annotations" title="Permalink to this headline">¶</a></h3>
 <p>The list of annotations can be exported (either in .txt or .csv) or loaded from the <em>Files</em> contextual menu.</p>
 </div>
 </div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id56">1.12. Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="examples-using-visbrain-sleep">
+<h3><a class="toc-backref" href="#id57">1.12.1. Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.Sleep</span></code></a><a class="headerlink" href="#examples-using-visbrain-sleep" title="Permalink to this headline">¶</a></h3>
+<div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to open Sleep."><div class="figure" id="id16">
+<img alt="_images/sphx_glr_basic_sleep_thumb.png" src="_images/sphx_glr_basic_sleep_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/sleep/basic_sleep.html#sphx-glr-auto-examples-sleep-basic-sleep-py"><span class="std std-ref">Basic configuration</span></a></span></p>
 </div>
-<div class="section" id="api">
-<h2>2.3. API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="sleep-class">
-<h3>2.3.1. Sleep class<a class="headerlink" href="#sleep-class" title="Permalink to this headline">¶</a></h3>
-<p>Here is the list of default Sleep inputs :</p>
-<dl class="class">
-<dt id="visbrain.Sleep">
-<em class="property">class </em><code class="descclassname">visbrain.</code><code class="descname">Sleep</code><span class="sig-paren">(</span><em>data=None, hypno=None, config_file=None, annotations=None, channels=None, sf=None, downsample=100.0, axis=True, href=['art', 'wake', 'rem', 'n1', 'n2', 'n3'], preload=True, use_mne=False, kwargs_mne={}, verbose=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/sleep/sleep.html#Sleep"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/sleep/sleep.py#L14-L223"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Sleep" title="Permalink to this definition">¶</a></dt>
-<dd><p>Visualize and edit sleep data.</p>
-<p>Use this module to :</p>
-<blockquote>
-<div><ul class="simple">
-<li>Load and visualize polysomnographic data and spectrogram.</li>
-<li>Load, edit and save hypnogram from the interface</li>
-<li>Perform automatic events detection</li>
-<li>Further signal processing tools (de-mean, de-trend and filtering)</li>
-<li>Topographic data visualization</li>
-</ul>
-</div></blockquote>
-<p>Sleep has been developped in collaboration with Raphael Vallat.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data</strong> : string, array_like | None</p>
-<blockquote>
-<div><p>Polysomnographic data. Must either be a path to a supported file (see
-notes) or an array of raw data of shape (n_channels, n_pts). If None,
-a dialog window to load the file should appear.</p>
-</div></blockquote>
-<p><strong>hypno</strong> : array_like | None</p>
-<blockquote>
-<div><p>Hypnogram data. Should be a raw vector of shape (n_pts,)</p>
-</div></blockquote>
-<p><strong>config_file</strong> : string | None</p>
-<blockquote>
-<div><p>Path to the configuration file (.txt)</p>
-</div></blockquote>
-<p><strong>annotations</strong> : string | None</p>
-<blockquote>
-<div><p>Path to the annotation file (.txt, .csv). Alternatively, you can pass
-an annotation instance of MNE or simply an (N,) array describing
-the onset.</p>
-</div></blockquote>
-<p><strong>channels</strong> : list | None</p>
-<blockquote>
-<div><p>List of channel names. The length of this list must be n_channels.</p>
-</div></blockquote>
-<p><strong>sf</strong> : float | None</p>
-<blockquote>
-<div><p>The sampling frequency of raw data.</p>
-</div></blockquote>
-<p><strong>downsample</strong> : float | 100.</p>
-<blockquote>
-<div><p>The downsampling frequency for the data and hypnogram raw data.</p>
-</div></blockquote>
-<p><strong>axis</strong> : bool | False</p>
-<blockquote>
-<div><p>Specify if each axis have to contains its own axis. Be carefull
-with this option, the rendering can be much slower.</p>
-</div></blockquote>
-<p><strong>href</strong> : list | [‘art’, ‘wake’, ‘rem’, ‘n1’, ‘n2’, ‘n3’]</p>
-<blockquote>
-<div><p>List of sleep stages. This list can be used to changed the display
-order into the GUI.</p>
-</div></blockquote>
-<p><strong>preload</strong> : bool | True</p>
-<blockquote>
-<div><p>Preload data into memory. For large datasets, turn this parameter to
-True.</p>
-</div></blockquote>
-<p><strong>use_mne</strong> : bool | False</p>
-<blockquote>
-<div><p>Force to load the file using mne.io functions.</p>
-</div></blockquote>
-<p><strong>kwargs_mne</strong> : dict | {}</p>
-<blockquote class="last">
-<div><p>Dictionary to pass to the mne.io loading function.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<ul class="last simple">
-<li>Supported polysomnographic files : by default, Sleep support .vhdr
-(BrainVision), .eeg (Elan), .trc (Micromed) and .edf (European Data
-Format). If mne-python is installed, this default list of supported
-files is extended to .cnt, .egi, .mff, .edf, .bdf, .gdf, .set, .vhdr.</li>
-<li>Supported hypnogram files : by default, Sleep support .txt, .csv and
-.hyp hypnogram files.</li>
-</ul>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to load a BrainVision file."><div class="figure" id="id17">
+<img alt="_images/sphx_glr_load_brainvision_thumb.png" src="_images/sphx_glr_load_brainvision_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/sleep/load_brainvision.html#sphx-glr-auto-examples-sleep-load-brainvision-py"><span class="std std-ref">Load a BrainVision file</span></a></span></p>
 </div>
-<div class="deprecated">
-<p><span class="versionmodified">Deprecated since version 0.3.4: </span>Input arguments <cite>file</cite> and <cite>hypno_file</cite> has been deprecated in 0.3.4
-  release. Use instead the <cite>data</cite> and <cite>hypno</cite> inputs.</p>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#visbrain.Sleep.show" title="visbrain.Sleep.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>()</td>
-<td>Display the graphical user interface.</td>
-</tr>
-</tbody>
-</table>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to load an EDF file."><div class="figure" id="id18">
+<img alt="_images/sphx_glr_load_edf_thumb.png" src="_images/sphx_glr_load_edf_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/sleep/load_edf.html#sphx-glr-auto-examples-sleep-load-edf-py"><span class="std std-ref">Load EDF file</span></a></span></p>
 </div>
-<dl class="method">
-<dt id="visbrain.Sleep.show">
-<code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/pyqt_module.py#L75-L108"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.Sleep.show" title="Permalink to this definition">¶</a></dt>
-<dd><p>Display the graphical user interface.</p>
-</dd></dl>
-
-</dd></dl>
-
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to load an ELAN file."><div class="figure" id="id19">
+<img alt="_images/sphx_glr_load_elan_thumb.png" src="_images/sphx_glr_load_elan_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/sleep/load_elan.html#sphx-glr-auto-examples-sleep-load-elan-py"><span class="std std-ref">Load ELAN files</span></a></span></p>
 </div>
-<div class="section" id="command-line">
-<h3>2.3.2. Command line<a class="headerlink" href="#command-line" title="Permalink to this headline">¶</a></h3>
-<p>In addition to using Python script, you can also use the following command-lines from a terminal :</p>
-<ul class="simple">
-<li><a class="reference internal" href="#cli-visbrain-sleep"><span class="std std-ref">visbrain_sleep</span></a> : open the graphical user interface of Sleep.</li>
-<li><a class="reference internal" href="#cli-visbrain-fig-hyp"><span class="std std-ref">visbrain_fig_hyp</span></a> : export a hypnogram file (<strong>.txt</strong>, <strong>.csv</strong> or <strong>.hyp</strong>) into a high definition colored or black and white image.</li>
-<li><a class="reference internal" href="#cli-visbrain-sleep-stats"><span class="std std-ref">visbrain_sleep_stats</span></a> : Compute sleep statistics from hypnogram file and export them in csv.</li>
-</ul>
-<div class="section" id="visbrain-sleep">
-<span id="cli-visbrain-sleep"></span><h4>2.3.2.1. visbrain_sleep<a class="headerlink" href="#visbrain-sleep" title="Permalink to this headline">¶</a></h4>
-<p>Open the graphical user interface of Sleep.</p>
-<div class="highlight-shell"><div class="highlight"><pre><span></span>visbrain_sleep <span class="o">[</span>OPTIONS<span class="o">]</span>
-</pre></div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to load an ELAN file."><div class="figure" id="id20">
+<img alt="_images/sphx_glr_load_matlab_thumb.png" src="_images/sphx_glr_load_matlab_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/sleep/load_matlab.html#sphx-glr-auto-examples-sleep-load-matlab-py"><span class="std std-ref">Load a Matlab file</span></a></span></p>
 </div>
-<p class="rubric">Options</p>
-<dl class="option">
-<dt id="cmdoption-visbrain-sleep-d">
-<code class="descname">-d</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--data</code><code class="descclassname"> &lt;data&gt;</code><a class="headerlink" href="#cmdoption-visbrain-sleep-d" title="Permalink to this definition">¶</a></dt>
-<dd><p>Name of the  polysomnographic file to load.</p>
-</dd></dl>
-
-<dl class="option">
-<dt id="cmdoption-visbrain-sleep-h">
-<code class="descname">-h</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--hypno</code><code class="descclassname"> &lt;hypno&gt;</code><a class="headerlink" href="#cmdoption-visbrain-sleep-h" title="Permalink to this definition">¶</a></dt>
-<dd><p>Name of the hypnogram file to load.</p>
-</dd></dl>
-
-<dl class="option">
-<dt id="cmdoption-visbrain-sleep-c">
-<code class="descname">-c</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--config_file</code><code class="descclassname"> &lt;config_file&gt;</code><a class="headerlink" href="#cmdoption-visbrain-sleep-c" title="Permalink to this definition">¶</a></dt>
-<dd><p>Path to a configuration file.</p>
-</dd></dl>
-
-<dl class="option">
-<dt id="cmdoption-visbrain-sleep-a">
-<code class="descname">-a</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--annotations</code><code class="descclassname"> &lt;annotations&gt;</code><a class="headerlink" href="#cmdoption-visbrain-sleep-a" title="Permalink to this definition">¶</a></dt>
-<dd><p>Path to an annotation file.</p>
-</dd></dl>
-
-<dl class="option">
-<dt id="cmdoption-visbrain-sleep-downsample">
-<code class="descname">--downsample</code><code class="descclassname"> &lt;downsample&gt;</code><a class="headerlink" href="#cmdoption-visbrain-sleep-downsample" title="Permalink to this definition">¶</a></dt>
-<dd><p>Down-sampling frequency. Default is 100.</p>
-</dd></dl>
-
-<dl class="option">
-<dt id="cmdoption-visbrain-sleep-use-mne">
-<code class="descname">--use_mne</code><code class="descclassname"> &lt;use_mne&gt;</code><a class="headerlink" href="#cmdoption-visbrain-sleep-use-mne" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load your file using MNE-python. Default is False.</p>
-</dd></dl>
-
-<dl class="option">
-<dt id="cmdoption-visbrain-sleep-preload">
-<code class="descname">--preload</code><code class="descclassname"> &lt;preload&gt;</code><a class="headerlink" href="#cmdoption-visbrain-sleep-preload" title="Permalink to this definition">¶</a></dt>
-<dd><p>Preload data in memory. Default is True</p>
-</dd></dl>
-
-<dl class="option">
-<dt id="cmdoption-visbrain-sleep-show">
-<code class="descname">--show</code><code class="descclassname"> &lt;show&gt;</code><a class="headerlink" href="#cmdoption-visbrain-sleep-show" title="Permalink to this definition">¶</a></dt>
-<dd><p>Display GUI. Default is True</p>
-</dd></dl>
-
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to load a .rec file."><div class="figure" id="id21">
+<img alt="_images/sphx_glr_load_rec_thumb.png" src="_images/sphx_glr_load_rec_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/sleep/load_rec.html#sphx-glr-auto-examples-sleep-load-rec-py"><span class="std std-ref">Load REC files</span></a></span></p>
 </div>
-<div class="section" id="visbrain-fig-hyp">
-<span id="cli-visbrain-fig-hyp"></span><h4>2.3.2.2. visbrain_fig_hyp<a class="headerlink" href="#visbrain-fig-hyp" title="Permalink to this headline">¶</a></h4>
-<p>Create hypnogram figure from hypnogram file.</p>
-<div class="highlight-shell"><div class="highlight"><pre><span></span>visbrain_fig_hyp <span class="o">[</span>OPTIONS<span class="o">]</span>
-</pre></div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example shows how to load data using MNE-Python package. https://martinos.org/mne/stable/i..."><div class="figure" id="id22">
+<img alt="_images/sphx_glr_load_using_mne_thumb.png" src="_images/sphx_glr_load_using_mne_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/sleep/load_using_mne.html#sphx-glr-auto-examples-sleep-load-using-mne-py"><span class="std std-ref">Load a file using MNE-python</span></a></span></p>
 </div>
-<p class="rubric">Options</p>
-<dl class="option">
-<dt id="cmdoption-visbrain-fig-hyp-h">
-<code class="descname">-h</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--hypno</code><code class="descclassname"> &lt;hypno&gt;</code><a class="headerlink" href="#cmdoption-visbrain-fig-hyp-h" title="Permalink to this definition">¶</a></dt>
-<dd><p>Name of the hypnogram file to load (with extension).</p>
-</dd></dl>
-
-<dl class="option">
-<dt id="cmdoption-visbrain-fig-hyp-g">
-<code class="descname">-g</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--grid</code><code class="descclassname"> &lt;grid&gt;</code><a class="headerlink" href="#cmdoption-visbrain-fig-hyp-g" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add X and Y grids to figure. Default is False.</p>
-</dd></dl>
-
-<dl class="option">
-<dt id="cmdoption-visbrain-fig-hyp-c">
-<code class="descname">-c</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--color</code><code class="descclassname"> &lt;color&gt;</code><a class="headerlink" href="#cmdoption-visbrain-fig-hyp-c" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get colored figure. Default is False (black and white).</p>
-</dd></dl>
-
-<dl class="option">
-<dt id="cmdoption-visbrain-fig-hyp-o">
-<code class="descname">-o</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--outfile</code><code class="descclassname"> &lt;outfile&gt;</code><a class="headerlink" href="#cmdoption-visbrain-fig-hyp-o" title="Permalink to this definition">¶</a></dt>
-<dd><p>Output filename (with extension).</p>
-</dd></dl>
-
-<dl class="option">
-<dt id="cmdoption-visbrain-fig-hyp-dpi">
-<code class="descname">--dpi</code><code class="descclassname"> &lt;dpi&gt;</code><a class="headerlink" href="#cmdoption-visbrain-fig-hyp-dpi" title="Permalink to this definition">¶</a></dt>
-<dd><p>Dots per inches (resolution). Default is 300.</p>
-</dd></dl>
-
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrates how to replace the default detection algorithm."><div class="figure" id="id23">
+<img alt="_images/sphx_glr_replace_detection_basic_thumb.png" src="_images/sphx_glr_replace_detection_basic_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/sleep/replace_detection_basic.html#sphx-glr-auto-examples-sleep-replace-detection-basic-py"><span class="std std-ref">Replace detection algorithm : basic example</span></a></span></p>
 </div>
-<div class="section" id="visbrain-sleep-stats">
-<span id="cli-visbrain-sleep-stats"></span><h4>2.3.2.3. visbrain_sleep_stats<a class="headerlink" href="#visbrain-sleep-stats" title="Permalink to this headline">¶</a></h4>
-<p>Compute sleep statistics from hypnogram file and export them in csv.</p>
-<p>Sleep statistics specifications:</p>
-<ul class="simple">
-<li>Time in Bed (TIB) : total duration of the hypnogram.</li>
-<li>Total Dark Time (TDT) : duration of the hypnogram from beginning
-to last period of sleep.</li>
-<li>Sleep Period Time (SPT) : duration from first to last period of sleep.</li>
-<li>Wake After Sleep Onset (WASO) : duration of wake periods within SPT</li>
-<li>Sleep Efficiency (SE) : TST / TDT * 100 (%).</li>
-<li>Total Sleep Time (TST) : SPT - WASO.</li>
-<li>W, N1, N2, N3 and REM: sleep stages duration.</li>
-<li>% (W, … REM) : sleep stages duration expressed in percentages of TDT.</li>
-<li>Latencies: latencies of sleep stages from the beginning of the record.</li>
-</ul>
-<p>(All values except SE and percentages are expressed in minutes)</p>
-<div class="highlight-shell"><div class="highlight"><pre><span></span>visbrain_sleep_stats <span class="o">[</span>OPTIONS<span class="o">]</span>
-</pre></div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrates how to replace the default spindle detection algorithm with those impl..."><div class="figure" id="id24">
+<img alt="_images/sphx_glr_replace_detection_wonambi_thumb.png" src="_images/sphx_glr_replace_detection_wonambi_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/sleep/replace_detection_wonambi.html#sphx-glr-auto-examples-sleep-replace-detection-wonambi-py"><span class="std std-ref">Replace detection with wonambi algorithm</span></a></span></p>
 </div>
-<p class="rubric">Options</p>
-<dl class="option">
-<dt id="cmdoption-visbrain-sleep-stats-h">
-<code class="descname">-h</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--hypno</code><code class="descclassname"> &lt;hypno&gt;</code><a class="headerlink" href="#cmdoption-visbrain-sleep-stats-h" title="Permalink to this definition">¶</a></dt>
-<dd><p>Name of the hypnogram file to load (with extension).</p>
-</dd></dl>
-
-<dl class="option">
-<dt id="cmdoption-visbrain-sleep-stats-o">
-<code class="descname">-o</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--outfile</code><code class="descclassname"> &lt;outfile&gt;</code><a class="headerlink" href="#cmdoption-visbrain-sleep-stats-o" title="Permalink to this definition">¶</a></dt>
-<dd><p>Output filename (with extension - <a href="#id6"><span class="problematic" id="id7">*</span></a>.csv). If None, sleep               statistics will only be displayed and not saved into a file</p>
-</dd></dl>
-
-</div>
-</div>
-</div>
-<div class="section" id="collaborators">
-<h2>2.4. Collaborators<a class="headerlink" href="#collaborators" title="Permalink to this headline">¶</a></h2>
-<p>Sleep is developed in collaboration with <a class="reference external" href="https://raphaelvallat.github.io/">Raphael Vallat</a> and <a class="reference external" href="http://bluebrain.epfl.ch/page-143249-en.html">Christian O Reilly</a>.</p>
-</div>
-<div class="section" id="publications">
-<h2>2.5. Publications<a class="headerlink" href="#publications" title="Permalink to this headline">¶</a></h2>
-<p>Please reference Sleep using its dedicated article in <a class="reference external" href="http://journal.frontiersin.org/article/10.3389/fninf.2017.00060/full">Frontiers in Neuroinformatics</a>.
-Please let us know if you used or plan to use Sleep in any upcoming publications!</p>
-<p>Bibtex entry :</p>
-<div class="highlight-latex"><div class="highlight"><pre><span></span>@ARTICLE<span class="nb">{</span>10.3389/fninf.2017.00060,
- AUTHOR=<span class="nb">{</span>Combrisson, Etienne and Vallat, Raphael and Eichenlaub, Jean-Baptiste and O&#39;Reilly, Christian and Lajnef, Tarek and Guillot, Aymeric and Ruby, Perrine M. and Jerbi, Karim<span class="nb">}</span>,
- TITLE=<span class="nb">{</span>Sleep: An Open-Source Python Software for Visualization, Analysis, and Staging of Sleep Data<span class="nb">}</span>,
- JOURNAL=<span class="nb">{</span>Frontiers in Neuroinformatics<span class="nb">}</span>,
- VOLUME=<span class="nb">{</span>11<span class="nb">}</span>,
- PAGES=<span class="nb">{</span>60<span class="nb">}</span>,
- YEAR=<span class="nb">{</span>2017<span class="nb">}</span>,
- URL=<span class="nb">{</span>http://journal.frontiersin.org/article/10.3389/fninf.2017.00060<span class="nb">}</span>,
- DOI=<span class="nb">{</span>10.3389/fninf.2017.00060<span class="nb">}</span>,
- ISSN=<span class="nb">{</span>1662-5196<span class="nb">}</span>,
- ABSTRACT=<span class="nb">{</span>We introduce Sleep, a new Python open-source graphical user interface (GUI) dedicated to visualization, scoring and analyses of sleep data. Among its most prominent features are: 1) Dynamic display of polysomnographic data, spectrogram, hypnogram and topographic maps with several customizable parameters, 2) Implementation of several automatic detection of sleep features such as spindles, K-complexes, slow waves and rapid eye movements, 3) Implementation of practical signal processing tools such as re-referencing or filtering, and 4) Display of main descriptive statistics including publication-ready tables and figures.  The software package supports loading and reading raw EEG data from a standard file formats such as European Data Format, in addition to a range of commercial data formats. Most importantly, Sleep is built on top of the VisPy library, which provides GPU-based fast and high-level visualization. As a result, it is capable of efficiently handling and displaying large sleep datasets. Sleep is freely available (http://visbrain.org/sleep) and comes with sample datasets and an extensive documentation. Novel functionalities will continue to be added and open-science community efforts are expected to enhance the capacities of this module.<span class="nb">}</span>
-<span class="nb">}</span>
-</pre></div>
-</div>
+</div><div style='clear:both'></div></div>
 </div>
 </div>
 
 
-           </div>
-           <div class="articleComments">
-            
-           </div>
-          </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="signal.html" class="btn btn-neutral float-right" title="3. Signal" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="brainAPI.html" class="btn btn-neutral" title="1.3.1. Main Brain class inputs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
     </div>
-  
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>
-        &copy; Copyright 2017, Etienne Combrisson.
-
-    </p>
+      
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
-
-</footer>
-
+</div>
+    <hr>
+    <footer>
+        <div class="container">
+            <ul class="list-inline">
+                <li><a href="genindex.html">Index</a></li>
+                <li>·</li>
+                <li><a href="https://github.com/EtienneCmb/visbrain">Github</a></li>
+                <li>·</li>
+                <li><a href="release.html">What's New?</a></li>
+                <li>·</li>
+                <li><a href="citation.html">Cite Visbrain</a></li>
+            </ul>
+         </div>
+        <div class="container">
+            <img src="_static/baniere.png" alt="Ban" height="80">
         </div>
-      </div>
+        <p>&copy; Copyright Last updated on 2018-06-27.</p>
+    </footer>
 
-    </section>
-
-  </div>
-  
-
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'0.4.0',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
-      });
-  </script>
-   
-
-</body>
+  </body>
 </html>
