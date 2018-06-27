@@ -101,6 +101,8 @@ class TestSleep(_TestVisbrain):
 
     def test_save_selected_dection(self):
         """Test saving selected dection."""
+        # Force to select the first (spindles) detection :
+        sp._DetectChanSw.setCurrentIndex(0)
         sp._save_select_detect(filename=self.to_tmp_dir('selected_detect.txt'))
         sp._save_select_detect(filename=self.to_tmp_dir('selected_detect.csv'))
 
@@ -217,3 +219,35 @@ class TestSleep(_TestVisbrain):
         """Test mouse release."""
         self._mouse_event(sp._chanCanvas[0].canvas, etype='mouse_release',
                           pos=(50, 100))
+
+    ###########################################################################
+    #                             CUSTOM DETECTION
+    ###########################################################################
+
+    def test_replace_detections(self):
+        """Test function replace_detections."""
+        meth_names = ('spindle', 'sw', 'kc', 'rem', 'mt', 'peak')
+        def fcn_1(data, sf, time, hypno):  # noqa
+            """(n_events, 2) array."""
+            return np.array([[0, 100], [200, 300]])
+        def fcn_2(data, sf, time, hypno):  # noqa
+            """(n_time_points,) boolean vector."""
+            vec = np.zeros((len(sp._time),), dtype=bool)
+            vec[0:100] = True
+            return vec
+        def fcn_3(data, sf, time, hypno):  # noqa
+            """Consecutive indices."""
+            return np.arange(100)
+        # Replace detection :
+        for i, k in enumerate(meth_names):
+            if i in [0, 1]:
+                sp.replace_detections(k, fcn_1)
+            elif i in [2, 3]:
+                sp.replace_detections(k, fcn_2)
+            elif i in [4, 5]:
+                sp.replace_detections(k, fcn_3)
+        # Re-run detections :
+        sp._ToolDetectChan.setCurrentIndex(2)  # Select CZ channel
+        for k in range(6):
+            sp._ToolDetectType.setCurrentIndex(k)
+            sp._fcn_apply_detection()

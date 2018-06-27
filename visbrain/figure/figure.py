@@ -60,18 +60,19 @@ class Figure(object):
         independantly (must have the same length as files.)
     figsize : tuple | None
         The size of the figure. Should be a tuple of integers.
-    subspace : dict | {'left': 0., 'right': 1., 'bottom': 0., 'top': .9,
-                       'wspace': 0., 'hspace': 0.05}
-        Control margins and the distance between subplots. Use:
+    subspace : dict | {}
+        Control margins and the distance between subplots. By default :
+        {'left': 0., 'right': 1., 'bottom': 0., 'top': .9, 'wspace': 0.,
+        'hspace': 0.05}. Use:
 
-            * 'left' : The left side of the subplots of the figure
-            * 'right' : The right side of the subplots of the figure
-            * 'bottom' : The bottom of the subplots of the figure
-            * 'top' : The top of the subplots of the figure
-            * 'hspace' : The amount of height reserved for white space
+            * 'left' (default 0.): left side of subplots
+            * 'right' (default 1.): right side of subplots
+            * 'bottom' (default 0.): bottom side of subplots
+            * 'top' (default .9): top of subplots
+            * 'hspace' (default .05): amount of height reserved for white space
               between subplots, expressed as a fraction of the average axis
               height.
-            * 'wspace' : The amount of width reserved for blank space
+            * 'wspace' (default 0.): amount of width reserved for blank space
               between subplots, expressed as a fraction of the average axis
               width.
 

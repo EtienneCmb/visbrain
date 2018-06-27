@@ -1,10 +1,26 @@
 .. _SleepModule:
 
-:py:class:`Sleep`
-=================
+Sleep
+=====
 
-.. figure::  picture/ico/sleep_ico.png
-   :align:   center
+.. raw:: html
+
+  <div class="jumbotron">
+    <h1 class="display-3">Quick description <img alt="_images/sleep_ico.png" src="_images/sleep_ico.png" width="150" height="150" align="right"></h1>
+    <p class="lead">Sleep is a flexible graphical user interface for visualization, analysis and scoring of polysomnographic sleep data and is developed in collaboration with <a href="https://raphaelvallat.github.io/">Raphael Vallat</a> and <a href="http://bluebrain.epfl.ch/page-143249-en.html">Christian O Reilly</a>. If you use Sleep, please cite the article in <a href="http://journal.frontiersin.org/article/10.3389/fninf.2017.00060/full">Frontiers in Neuroinformatics</a>.</p>
+    <hr class="my-4">
+    <p>
+
+Checkout the API of the :class:`visbrain.Sleep` class. If you need help with the :class:`Sleep` module, ask your questions in the dedicated `gitter Sleep chat <https://gitter.im/visbrain-python/Sleep?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
+
+.. raw:: html
+
+    <img alt="_images/sleep_main.png" src="_images/sleep_main.png" align="center"></p>
+  </div>
+
+.. contents:: Contents
+   :local:
+   :depth: 2
 
 .. ##########################################################################
 .. ##########################################################################
@@ -12,48 +28,76 @@
 .. ##########################################################################
 .. ##########################################################################
 
-Description
------------
-
-:class:`Sleep` is a flexible graphical user interface for visualization, analysis and scoring of polysomnographic sleep data.
-
-.. figure::  picture/picsleep/sleep_main.png
-   :align:   center
-
-Help
-~~~~
-
-If you need help with the :class:`Sleep` module, ask your questions in the dedicated `gitter Sleep chat <https://gitter.im/visbrain-python/Sleep?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
-
 Main features
 ~~~~~~~~~~~~~
 
-* **Graphical User Interface (GUI)**
-    * Modular and responsive GUI
-    * Take screenshot with controllable dpi
-    * Save the GUI state (*channels, amplitude, panels, checkbox*...)
-* **Load standard electro-physiological files**
-    * Default supported files : European Data Format, BrainVision, Micromed, Elan
-    * Pass raw data or use MNE-python to load other `file formats <https://martinos.org/mne/dev/manual/io.html#importing-eeg-data>`_
-    * Supported extensions for hypnogram files : **.txt**, **.csv**, **.xlsx**, **.hyp**.
-* **Display**
-    * Polysomnographic data (e.g. EEG, EOG, EMG)
-    * Time-frequency (=spectrogram)
-    * Hypnogram
-    * Topographic map
-* **Hypnogram**
-    * Load, edit and save
-    * Real-time computation of sleep statistics
-    * Export high-quality hypnogram figure
-* **Signal processing**
-    * De-meaning / de-trending
-    * Filtering
-    * Re-referencing to a reference channel or common average
-    * Bipolarization
-* **Semi-automatic events detections**
-    * Spindles, K-complexes, slow waves, rapid eye movements, muscle twitches and peaks (*each detection comes with additional and controllable parameters*)
-    * Can be performed either on single or multiple channels
-    * Detections are reported on the hypnogram and inside a table
+
+.. raw:: html
+
+    <div class="grid-container">
+        <div class="grid-item">
+            <div class="alert alert-dismissible alert-primary">
+              <b>Graphical User Interface (GUI)</b>
+              <ul>
+                <li>Modular and responsive GUI</li>
+                <li>Take screenshot with controllable dpi</li>
+                <li>Save the GUI state (channels, amplitude, panels, checkbox...)</li>
+              </ul>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="alert alert-dismissible alert-primary">
+              <b>Load standard electro-physiological files</b>
+              <ul>
+                <li>Default supported files : European Data Format, BrainVision, Micromed, Elan</li>
+                <li>Pass raw data or use MNE-python to load other <a href="https://martinos.org/mne/dev/manual/io.html#importing-eeg-data">file formats</a></li>
+                <li>Supported extensions for hypnogram files : .txt, .csv, .xlsx, .hyp.</li>
+              </ul>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="alert alert-dismissible alert-primary">
+              <b>Display</b>
+              <ul>
+                <li>Polysomnographic data (e.g. EEG, EOG, EMG)</li>
+                <li>Time-frequency (=spectrogram)</li>
+                <li>Hypnogram</li>
+                <li>Topographic map</li>
+              </ul>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="alert alert-dismissible alert-primary">
+              <b>Hypnogram</b>
+              <ul>
+                <li>Load, edit and save</li>
+                <li>Real-time computation of sleep statistics</li>
+                <li>Export high-quality hypnogram figure</li>
+              </ul>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="alert alert-dismissible alert-primary">
+              <b>Signal processing</b>
+              <ul>
+                <li>De-meaning / de-trending</li>
+                <li>Filtering</li>
+                <li>Re-referencing to a reference channel or common average</li>
+                <li>Bipolarization</li>
+              </ul>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="alert alert-dismissible alert-primary">
+              <b>Semi-automatic events detections</b>
+              <ul>
+                <li>Spindles, K-complexes, slow waves, rapid eye movements, muscle twitches and peaks (each detection comes with additional and controllable parameters)</li>
+                <li>Can be performed either on single or multiple channels</li>
+                <li>Detections are reported on the hypnogram and inside a table</li>
+              </ul>
+            </div>
+        </div>
+    </div>
 
 
 Import and use sleep
@@ -64,12 +108,6 @@ The :class:`Sleep` module can be imported as follow :
 .. code-block:: python
 
     from visbrain import Sleep
-
-
-Examples and datasets
-~~~~~~~~~~~~~~~~~~~~~
-
-To try out in the absence of sleep data, please check out some `sleep example <http://visbrain.org/auto_examples/index.html#sleep-examples>`_ scripts and datasets on `Google drive <https://drive.google.com/drive/folders/0B6vtJiCQZUBvRjc3cFFYcmFIeW8?usp=sharing>`_
 
 
 GUI description
@@ -270,9 +308,6 @@ CTRL + q                Close the window
 .. ##########################################################################
 .. ##########################################################################
 
-Tutorial
---------
-
 .. ----------------------------------------------------------------------------
 ..                              SUPPORTED FILES
 .. ----------------------------------------------------------------------------
@@ -292,22 +327,22 @@ Here’s the list of natively supported file formats:
 * **.trc** (Micromed version 4)
 * **.eeg** (`ELAN <http://elan.lyon.inserm.fr>`_)
 
-If MNE-python is installed, this list is extended to (see `also <https://martinos.org/mne/dev/manual/io.html#importing-eeg-data>`_):
+If MNE-python is installed, this list is extended to (see `also <https://martinos.org/mne/dev/manual/io.html#importing-eeg-data>`_) :
 
- * **.bdf**
- * **.gdf**
- * **.egi**
- * **.mff**
- * **.set** (EEGLAB)
- * **.cnt**
- * **.vhdr** (*BrainVision files can be loaded using either the native library of Sleep or using MNE*)
+* **.bdf**
+* **.gdf**
+* **.egi**
+* **.mff**
+* **.set** (EEGLAB)
+* **.cnt**
+* **.vhdr** (*BrainVision files can be loaded using either the native library of Sleep or using MNE*)
 
 Note that once MNE-python is installed, the loading of these file formats is transparent for users. It means that you can load these file formats directly using Sleep graphical user interface or command-line, without any additional steps. We therefore **strongly recommand** to `install MNE-python <https://martinos.org/mne/stable/index.html>`_.
 
 If you have a file format that is currently not supported, :class:`Sleep` also provide the ability to directly pass raw data (NumPy array). Please click see this example of how to `to load a Matlab file <http://visbrain.org/auto_examples/sleep/load_matlab.html#sphx-glr-auto-examples-sleep-load-matlab-py>`_ and then pass the data directly to Sleep.
 
 .. note::
-   If you are having trouble with the loading of .edf files, we recommand installing `MNE-python <https://martinos.org/mne/stable/index.html>`_ and then loading your data using the following command::
+  If you are having trouble with the loading of .edf files, we recommand installing `MNE-python <https://martinos.org/mne/stable/index.html>`_ and then loading your data using the following command::
 
     Sleep(data='mydata.edf', hypno='myhypno.csv', use_mne=True).show()
 
@@ -478,7 +513,7 @@ It is possible to manually load raw data and pass them as inputs arguments Sleep
 
 .. code-block:: python
 
-	from scipy.io import loadmat
+    from scipy.io import loadmat
     # Import the Sleep module from visbrain:
     from visbrain import Sleep
     # Load your dataset :
@@ -640,6 +675,63 @@ Perform a peak detection.
 .. important::
   Please note that the software does not yet allow to automatically score sleep stages. However, if you are interested to collaborate and / or implement your own algorithm, please feel free to contact us.
 
+.. _replace_detection:
+
+Use your own detections in Sleep
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+*Sleep* offers the possibility to replace the native detection algorithms with your own detection algorithms. To do it, you have to provide a function with predefined inputs and outputs.
+
+Prototype of the function
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Here's a prototype of a function to replace *Sleep* spindle detections :
+
+.. code-block:: python
+
+  def my_custom_spindle_detection(data, sf, time, hypno):
+      """Use your own spindle detection
+
+      Parameters
+      ----------
+      data : np.ndarray
+          Data of one unique channel (i.e shape (n_time_pts,))
+      sf : float
+           The sampling frequency (512., 1024. etc.)
+      time : np.ndarray
+          The time vector (i.e shape (n_time_pts,))
+      hypno : np.ndarray
+          The hypnogram (i.e shape (n_time_pts,))
+
+      Returns
+      -------
+      indexes : np.ndarray
+          indexes of detected events.
+      """
+      pass
+
+Function output
+^^^^^^^^^^^^^^^
+
+For your convenience, *Sleep* accepts several possible output formats for your custom detection :
+
+* **(Start, Stop)** : an array of shape *(n_dected_events, 2)* where *2* describes the index where each event start and finish.
+* **Boolean vector** : a boolean vector of shape *(n_time_pts,)* where each *True* value refers to a time point that belong to a detected event.
+* **Consecutive indexes** : an array which only contains consecutive indexes of detected events.
+
+It means that your function will work as long as you are able to return any one of these three possible vectors. Since it is very likely that your home-made detection function already return one of those, implementing it in *Sleep* should be fairly easy! A graphical representation of these output formats is displayed below:
+
+.. figure::  picture/picsleep/sleep_return_indices.png
+   :align:   center
+
+   Supported output format of the custom detection algorithm.
+
+Replace Sleep detection
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Once your function has proper inputs and outputs, simply use the :class:`visbrain.Sleep.replace_detections` method to replace the detection of *Sleep* with your own. Please visit the Examples section to see some concrete examples.
+
+
 .. ----------------------------------------------------------------------------
 ..                              GUI CONFIG
 .. ----------------------------------------------------------------------------
@@ -648,7 +740,7 @@ Load and save the GUI configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 From the *Files > Save* contextual menu, you can save the GUI configuration. This will save the state of all buttons and properties inside :class:`Sleep`. Then, you can recharge the GUI configuration using *Files > Load > GUI config*.
-Alternatively, if you want to use a configuration when running :class:`Sleep`, you can use the *config_file* argument to directly pass the path to a configuration file.
+Alternatively, if you want to use a configuration when running :class:`Sleep`, you can use the *config_file* argument to directly pass the path to a configuration file. Note that configuration file are encoded in JSON format, which can be easily read and modified using any text editor.
 
 .. code-block:: python
 
@@ -657,10 +749,6 @@ Alternatively, if you want to use a configuration when running :class:`Sleep`, y
   from visbrain import Sleep
 
   Sleep(config_file='pathto/myconfig.json')
-
-
-.. tip::
-  Configuration file are encoded in JSON format, which can be easily read and modified using any text editor.
 
 
 .. ----------------------------------------------------------------------------
@@ -754,83 +842,11 @@ Save annotations
 
 The list of annotations can be exported (either in .txt or .csv) or loaded from the *Files* contextual menu.
 
-.. ##########################################################################
-.. ##########################################################################
-..                             COMMAND-LINE
-.. ##########################################################################
-.. ##########################################################################
+Examples
+~~~~~~~~
 
+.. include:: generated/visbrain.Sleep.examples
 
+.. raw:: html
 
-.. ##########################################################################
-.. ##########################################################################
-..                                 API
-.. ##########################################################################
-.. ##########################################################################
-
-API
----
-
-Sleep class
-~~~~~~~~~~~
-
-Here is the list of default Sleep inputs :
-
-.. currentmodule:: visbrain
-
-.. autoclass:: Sleep
-  :members: show
-
-    .. rubric:: Methods
-
-    .. autosummary::
-        ~Sleep.show
-
-Command line
-~~~~~~~~~~~~
-
-In addition to using Python script, you can also use the following command-lines from a terminal :
-
-* :ref:`cli_visbrain_sleep` : open the graphical user interface of Sleep.
-* :ref:`cli_visbrain_fig_hyp` : export a hypnogram file (**.txt**, **.csv** or **.hyp**) into a high definition colored or black and white image.
-* :ref:`cli_visbrain_sleep_stats` : Compute sleep statistics from hypnogram file and export them in csv.
-
-.. _cli_visbrain_sleep:
-.. click:: visbrain.cli:cli_sleep
-   :prog: visbrain_sleep
-
-.. _cli_visbrain_fig_hyp:
-.. click:: visbrain.cli:cli_fig_hyp
-   :prog: visbrain_fig_hyp
-
-.. _cli_visbrain_sleep_stats:
-.. click:: visbrain.cli:cli_sleep_stats
-   :prog: visbrain_sleep_stats
-
-Collaborators
--------------
-
-Sleep is developed in collaboration with `Raphael Vallat <https://raphaelvallat.github.io/>`_ and `Christian O Reilly <http://bluebrain.epfl.ch/page-143249-en.html>`_.
-
-Publications
--------------
-
-Please reference Sleep using its dedicated article in `Frontiers in Neuroinformatics <http://journal.frontiersin.org/article/10.3389/fninf.2017.00060/full>`_.
-Please let us know if you used or plan to use Sleep in any upcoming publications!
-
-Bibtex entry :
-
-.. code-block:: latex
-
-  @ARTICLE{10.3389/fninf.2017.00060,
-   AUTHOR={Combrisson, Etienne and Vallat, Raphael and Eichenlaub, Jean-Baptiste and O'Reilly, Christian and Lajnef, Tarek and Guillot, Aymeric and Ruby, Perrine M. and Jerbi, Karim},
-   TITLE={Sleep: An Open-Source Python Software for Visualization, Analysis, and Staging of Sleep Data},
-   JOURNAL={Frontiers in Neuroinformatics},
-   VOLUME={11},
-   PAGES={60},
-   YEAR={2017},
-   URL={http://journal.frontiersin.org/article/10.3389/fninf.2017.00060},
-   DOI={10.3389/fninf.2017.00060},
-   ISSN={1662-5196},
-   ABSTRACT={We introduce Sleep, a new Python open-source graphical user interface (GUI) dedicated to visualization, scoring and analyses of sleep data. Among its most prominent features are: 1) Dynamic display of polysomnographic data, spectrogram, hypnogram and topographic maps with several customizable parameters, 2) Implementation of several automatic detection of sleep features such as spindles, K-complexes, slow waves and rapid eye movements, 3) Implementation of practical signal processing tools such as re-referencing or filtering, and 4) Display of main descriptive statistics including publication-ready tables and figures.  The software package supports loading and reading raw EEG data from a standard file formats such as European Data Format, in addition to a range of commercial data formats. Most importantly, Sleep is built on top of the VisPy library, which provides GPU-based fast and high-level visualization. As a result, it is capable of efficiently handling and displaying large sleep datasets. Sleep is freely available (http://visbrain.org/sleep) and comes with sample datasets and an extensive documentation. Novel functionalities will continue to be added and open-science community efforts are expected to enhance the capacities of this module.}
-  }
+    <div style='clear:both'></div>

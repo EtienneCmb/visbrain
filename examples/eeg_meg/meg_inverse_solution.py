@@ -8,7 +8,7 @@ See the original example :
 
 https://pysurfer.github.io/auto_examples/plot_meg_inverse_solution.html#sphx-glr-auto-examples-plot-meg-inverse-solution-py
 
-.. image:: ../../picture/picpysurfer/ex_pysurfer_meg_inverse.png
+.. image:: ../../picture/piceegmeg/ex_eegmeg_meg_inverse.png
 """
 from visbrain import Brain
 from visbrain.objects import BrainObj

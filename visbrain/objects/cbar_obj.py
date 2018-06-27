@@ -68,6 +68,13 @@ class ColorbarObj(VisbrainObject):
     verbose : string
         Verbosity level.
 
+    Notes
+    -----
+    List of supported shortcuts :
+
+        * **s** : save the figure
+        * **<delete>** : reset camera
+
     Examples
     --------
     >>> from visbrain.objects import ColorbarObj

@@ -1,9 +1,10 @@
 """Test functions in color.py."""
 import numpy as np
 
-from visbrain.utils.color import (color2vb, array2colormap, dynamic_color,
-                                  color2faces, type_coloring, mpl_cmap,
-                                  color2tuple, mpl_cmap_index, colorclip)
+from visbrain.utils.color import (color2vb, array2colormap, cmap_to_glsl,
+                                  dynamic_color, color2faces, type_coloring,
+                                  mpl_cmap, color2tuple, mpl_cmap_index,
+                                  colorclip)
 
 
 class TestColor(object):
@@ -38,6 +39,14 @@ class TestColor(object):
         array2colormap(mat, clim=(-1., 1.), vmin=.1, under='gray', vmax=.7,
                        over='red', cmap='Spectral_r')
         array2colormap(vec, faces_render=True)
+
+    def test_cmap_to_glsl(self):
+        """Test function cmap_to_glsl."""
+        from vispy.color.colormap import Colormap
+        cmap_1 = cmap_to_glsl()
+        cmap_2 = cmap_to_glsl(limits=(7, 200))
+        assert isinstance(cmap_1, Colormap)
+        assert isinstance(cmap_2, Colormap)
 
     def test_dynamic_color(self):
         """Test dynamic_color function."""

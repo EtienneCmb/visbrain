@@ -26,7 +26,7 @@ path = download_file(volume_name)
 Go to the Objects tab and select 'Cross-section' in the combo box. You can also
 press x to display the cross-section panel.
 """
-cs_obj = CrossSecObj(path, section=(70, 171, 80), cmap='gist_stern')
+cs_obj = CrossSecObj(path, coords=(0., 0., 0.), cmap='gist_stern')
 
 """Define a volume object.
 

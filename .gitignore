@@ -60,6 +60,7 @@ target/
 
 #Ipython Notebook
 .ipynb_checkpoints
+notebooks/
 
 # Vispy learning folder :
 Vispy_examples/

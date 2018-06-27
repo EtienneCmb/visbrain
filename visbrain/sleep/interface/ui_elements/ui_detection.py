@@ -1,6 +1,5 @@
 """Main class for sleep tools managment."""
 import numpy as np
-from warnings import warn
 from PyQt5 import QtWidgets, QtCore
 import logging
 
@@ -9,6 +8,10 @@ from ....utils import (remdetect, spindlesdetect, slowwavedetect, kcdetect,
 from ....utils.sleep.event import _events_to_index
 
 logger = logging.getLogger('visbrain')
+
+
+USER_METHOD = {'Spindles': 'spindle', 'Slow waves': 'sw', 'K-complexes': 'kc',
+               'REM': 'rem', 'Muscle twitches': 'mt', 'Peaks': 'peak'}
 
 
 class UiDetection(object):
@@ -57,7 +60,10 @@ class UiDetection(object):
     def _fcn_switch_detection(self):
         """Switch between detection types (show / hide panels)."""
         idx = int(self._ToolDetectType.currentIndex())
+        method = str(self._ToolDetectType.currentText())
         self._stacked_detections.setCurrentIndex(idx)
+        enable = USER_METHOD[method] not in self._custom_detections.keys()
+        self._stacked_detections.setEnabled(enable)
 
     # =====================================================================
     # RUN DETECTION
@@ -80,12 +86,96 @@ class UiDetection(object):
 
         return idx
 
+    # -------------- Get the function to run --------------
+    def _fcn_get_detection_function(self, method):
+        """Get the method to use for the detection (default or custom).
+
+        Parameters
+        ----------
+        method : string
+            Method to use.
+        """
+        user_method = USER_METHOD[method]
+        if user_method in self._custom_detections.keys():
+            logger.warning("Custom method used for %s detection" % method)
+            fcn = self._custom_detections[user_method]
+        else:
+            logger.info("Default method used for %s detection" % method)
+            # Switch between detection types :
+            if method == 'REM':
+                th = self._ToolRemTh.value()
+                rem_only = self._ToolRemOnly.isChecked()
+                def fcn(data, sf, time, hypno):  # noqa
+                    return remdetect(data, sf, hypno, rem_only, th)
+            elif method == 'Spindles':
+                thr = self._ToolSpinTh.value()
+                fmin = self._ToolSpinFmin.value()
+                fmax = self._ToolSpinFmax.value()
+                tmin = self._ToolSpinTmin.value()
+                tmax = self._ToolSpinTmax.value()
+                nrem_only = self._ToolSpinRemOnly.isChecked()
+                def fcn(data, sf, time, hypno):  # noqa
+                    return spindlesdetect(data, sf, thr, hypno, nrem_only,
+                                          fmin, fmax, tmin, tmax)
+            elif method == 'Slow waves':
+                thr = self._ToolWaveTh.value()
+                def fcn(data, sf, time, hypno):  # noqa
+                    return slowwavedetect(data, sf, thr)
+            elif method == 'K-complexes':
+                proba_thr = self._ToolKCProbTh.value()
+                amp_thr = self._ToolKCAmpTh.value()
+                tmin = self._ToolKCMinDur.value()
+                tmax = self._ToolKCMaxDur.value()
+                min_amp = self._ToolKCMinAmp.value()
+                max_amp = self._ToolKCMaxAmp.value()
+                nrem_only = self._ToolKCNremOnly.isChecked()
+                def fcn(data, sf, time, hypno):  # noqa
+                    return kcdetect(data, sf, proba_thr, amp_thr, hypno,
+                                    nrem_only, tmin, tmax, min_amp, max_amp)
+            elif method == 'Muscle twitches':
+                th = self._ToolMTTh.value()
+                rem_only = self._ToolMTOnly.isChecked()
+                def fcn(data, sf, time, hypno):  # noqa
+                    return mtdetect(data, sf, th, hypno, rem_only)
+            elif method == 'Peaks':
+                look = int(self._ToolPeakLook.value() * self._sf)
+                _disp = self._ToolPeakMinMax.currentIndex()
+                disp = ['max', 'min', 'minmax'][_disp]
+                def fcn(data, sf, time, hypno):  # noqa
+                    return peakdetect(sf, data, self._time, look, 1., disp,
+                                      'auto')
+
+        def fcn_check(data, sf, time, hypno):
+            """Wrap fcn with type checking."""
+            assert isinstance(data, np.ndarray)
+            idx = fcn(data, sf, time, hypno)
+            idx = np.asarray(idx)
+            if not idx.size:
+                return idx
+            # Check indices shape and format to (n_events, 2) :
+            if (idx.ndim == 2) and (idx.shape[1] == 2):  # (n_events, 2)
+                return idx.astype(int)
+            elif idx.ndim == 1:  # 1d vector
+                if idx.dtype == bool:  # boolean array
+                    assert len(idx) == len(data)
+                    idx = np.arange(len(data))[idx]
+                return _events_to_index(idx)
+            else:
+                raise ValueError("Return indices should either be an (n_events"
+                                 ", 2) array or a boolean array of shape "
+                                 "(n_time_points,) or an array with "
+                                 "consecutive detected events.")
+
+        return fcn_check
+
     # -------------- Run detection (only on selected channels) --------------
     def _fcn_apply_detection(self):
         """Apply detection (either REM/Spindles/Peaks/SlowWave/KC/MT)."""
         # Get channels to apply detection and the detection method :
         idx = self._fcn_get_chan_detection()
         method = str(self._ToolDetectType.currentText())
+
+        fcn = self._fcn_get_detection_function(method)
 
         ############################################################
         # RUN DETECTION
@@ -95,72 +185,11 @@ class UiDetection(object):
             if len(idx) > 1:
                 self._ToolDetectProgress.show()
 
-            # Switch between detection types :
-            # ====================== REM ======================
-            if method == 'REM':
-                # Get variables :
-                thr = self._ToolRemTh.value()
-                rem_only = self._ToolRemOnly.isChecked()
-                # Get REM indices :
-                index, nb, dty, dur = remdetect(self._data[k, :], self._sf,
-                                                self._hypno, rem_only, thr)
-
-            # ====================== SPINDLES ======================
-            elif method == 'Spindles':
-                # Get variables :
-                thr = self._ToolSpinTh.value()
-                f_min = self._ToolSpinFmin.value()
-                f_max = self._ToolSpinFmax.value()
-                t_min = self._ToolSpinTmin.value()
-                t_max = self._ToolSpinTmax.value()
-                nrem_only = self._ToolSpinRemOnly.isChecked()
-                # Get Spindles indices :
-                index, nb, dty, dur, pwr = spindlesdetect(
-                    self._data[k, :], self._sf, thr, self._hypno, nrem_only,
-                    f_min, f_max, t_min, t_max)
-
-            # ====================== SLOW WAVES ======================
-            elif method == 'Slow waves':
-                # Get variables :
-                thr = self._ToolWaveTh.value()
-                # Get Slow Waves indices :
-                index, nb, dty, dur = slowwavedetect(self._data[k, :],
-                                                     self._sf, thr)
-
-            # ====================== K-COMPLEXES ======================
-            elif method == 'K-complexes':
-                # Get variables :
-                proba_thr = self._ToolKCProbTh.value()
-                amp_thr = self._ToolKCAmpTh.value()
-                tmin = self._ToolKCMinDur.value()
-                tmax = self._ToolKCMaxDur.value()
-                min_amp = self._ToolKCMinAmp.value()
-                max_amp = self._ToolKCMaxAmp.value()
-                nrem_only = self._ToolKCNremOnly.isChecked()
-                # Get Slow Waves indices :
-                index, nb, dty, dur = kcdetect(self._data[k, :], self._sf,
-                                               proba_thr, amp_thr, self._hypno,
-                                               nrem_only, tmin, tmax, min_amp,
-                                               max_amp)
-
-            # ====================== PEAKS ======================
-            elif method == 'Peaks':
-                # Get variables :
-                look = int(self._ToolPeakLook.value() * self._sf)
-                disp = self._ToolPeakMinMax.currentIndex()
-                disp_types = ['max', 'min', 'minmax']
-                index, nb, dty = peakdetect(self._sf, self._data[k, :],
-                                            self._time, lookahead=look,
-                                            delta=1., threshold='auto',
-                                            get=disp_types[disp])
-
-            # ====================== MUSCLE TWITCHES ======================
-            elif method == 'Muscle twitches':
-                # Get variables :
-                th = self._ToolMTTh.value()
-                rem_only = self._ToolMTOnly.isChecked()
-                index, nb, dty, dur = mtdetect(self._data[k, :], self._sf, th,
-                                               self._hypno, rem_only)
+            # Run detection :
+            index = fcn(self._data[k, :], self._sf, self._time, self._hypno)
+            nb = index.shape[0]
+            dty = nb / (len(self._time) / self._sf / 60.)
+            # dur = (index[:, 1] - index[:, 0]) * (1000. / self._sf)
 
             logger.info(("Perform %s detection on channel %s. %i events "
                          "detected.") % (method, self._channels[k], nb))
@@ -168,11 +197,6 @@ class UiDetection(object):
             if index.size:
                 # Enable detection tab :
                 self._DetectionTab.setTabEnabled(1, True)
-                # Update index for this channel and detection :
-                if method == 'Peaks':
-                    index = np.c_[index, index]
-                else:
-                    index = _events_to_index(index)
                 self._detect.dict[(self._channels[k], method)]['index'] = index
                 # Be sure panel is displayed :
                 if not self._canvas_is_visible(k):
@@ -196,13 +220,13 @@ class UiDetection(object):
             self._ToolDetectTable.setItem(0, 1, QtWidgets.QTableWidgetItem(
                 str(round(dty, 2))))
         else:
-            warn("\nNo " + method + " detected on channel " + self._channels[
-                 k] + ". Try to decrease the threshold")
+            logger.error("No %s detected on channel %s. Adjust "
+                         "parameters." % (method, self._channels[k]))
 
         ############################################################
         # LINE REPORT :
         ############################################################
-        self._loc_line_report()
+        self._loc_line_report(select=True)
 
         # Activate the save detections menu and activate detection tab :
         self._check_detect_menu()
@@ -210,7 +234,7 @@ class UiDetection(object):
         # Finally, hide progress bar :
         self._ToolDetectProgress.hide()
 
-    def _loc_line_report(self, *args, refresh=True):
+    def _loc_line_report(self, *args, refresh=True, select=False):
         """Update line report."""
         self._detect.build_line(self._data)
         chans = self._detect.nonzero()
@@ -235,6 +259,9 @@ class UiDetection(object):
         # Reconnect table :
         self._DetectChanSw.currentIndexChanged.connect(
             self._fcn_run_switch_location)
+        # Select the last detected event :
+        if refresh and select:
+            self._DetectChanSw.setCurrentIndex(self._DetectChanSw.count() - 1)
 
     # =====================================================================
     # FILL LOCATION TABLE

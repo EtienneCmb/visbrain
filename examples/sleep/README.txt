@@ -1,4 +1,4 @@
 Sleep Examples
 --------------
 
-Examples demonstrating how to load files in Sleep.
+Examples demonstrating how to use Sleep and how to load files.

@@ -8,7 +8,7 @@ See the original example :
 
 https://pysurfer.github.io/auto_examples/plot_vector_meg_inverse_solution.html#sphx-glr-auto-examples-plot-vector-meg-inverse-solution-py
 
-.. image:: ../../picture/picpysurfer/ex_pysurfer_vector_meg_inverse.png
+.. image:: ../../picture/piceegmeg/ex_eegmeg_vector_meg_inverse.png
 """
 import numpy as np
 
