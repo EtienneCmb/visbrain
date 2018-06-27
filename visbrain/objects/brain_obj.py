@@ -55,6 +55,13 @@ class BrainObj(VisbrainObject):
         Optional arguments are used to control the colorbar
         (See :class:`ColorbarObj`).
 
+    Notes
+    -----
+    List of supported shortcuts :
+
+        * **s** : save the figure
+        * **<delete>** : reset camera
+
     Examples
     --------
     >>> from visbrain.objects import BrainObj
@@ -370,7 +377,9 @@ class BrainObj(VisbrainObject):
         mask = np.zeros((len(self.mesh),), dtype=float)
         self._default_cblabel = "Activation"
         # ============================= METHOD =============================
-        if isinstance(data, np.ndarray) and isinstance(vertices, np.ndarray):
+        if isinstance(data, np.ndarray):
+            if not isinstance(vertices, np.ndarray):
+                vertices = np.arange(len(data))
             logger.info("Add data to specific vertices.")
             assert (data.ndim == 1) and (vertices.ndim == 1)
             assert smoothing_steps is None or isinstance(smoothing_steps, int)

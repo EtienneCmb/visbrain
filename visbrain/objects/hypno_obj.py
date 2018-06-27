@@ -44,6 +44,13 @@ class HypnogramObj(VisbrainObject):
         Optional arguments are used to control the colorbar
         (See :class:`ColorbarObj`).
 
+    Notes
+    -----
+    List of supported shortcuts :
+
+        * **s** : save the figure
+        * **<delete>** : reset camera
+
     Examples
     --------
     >>> import numpy as np

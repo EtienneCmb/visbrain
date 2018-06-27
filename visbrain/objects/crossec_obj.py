@@ -134,18 +134,16 @@ class CrossSecObj(_Volume):
     verbose : string
         Verbosity level.
 
-    Shortcuts
-    ---------
-    +, - : string
-        Increase / decrease contrast.
-    x, X : string
-        Move along the x-axis.
-    y, Y : string
-        Move along the y-axis
-    z, Z : string
-        Move along the z-axis
-    c : string
-        Display / hide the cross.
+    Notes
+    -----
+    List of supported shortcuts :
+
+        * **s** : save the figure
+        * **+, -** :  Increase / decrease contrast.
+        * **x, X** : Move along the x-axis.
+        * **y, Y** : Move along the y-axis
+        * **z, Z** : Move along the z-axis
+        * **c** : Display / hide the cross.
 
     Examples
     --------
