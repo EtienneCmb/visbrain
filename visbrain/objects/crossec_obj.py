@@ -58,6 +58,7 @@ class _Mask(object):
         is_inside_vol = all([0 <= k < i for k, i in zip(sl, self._sh)])
         if not is_inside_vol:
             logger.error("Cannot set slice %s for %s" % (str(xyz), self._name))
+            self._sagittal, self._coronal, self._axial = 0, 0, 0
             return None
         # Set image :
         self._im_sagit.set_data(self._vol[sl[0], ...])

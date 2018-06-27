@@ -114,7 +114,7 @@ print("""
 =============================================================================
 """)
 cs_brod = CrossSecObj('brodmann', interpolation='nearest',
-                      section=(70, 80, 90), cmap='viridis')
+                      coords=(70, 80, 90), cmap='viridis')
 cs_brod.localize_source((-10., -15., 20.))
 sc.add_to_subplot(cs_brod, row=2, col=1, col_span=2, row_span=2,
                   title='Cross-sections')
