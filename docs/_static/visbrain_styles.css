@@ -37,10 +37,25 @@ h3  {
   background-color: #4D394B;
 }
 
+/* ############################ RUBRIC ############################*/
+.rubric {
+    color: #FFF;
+    background-color: #4b4d39;
+    padding: 10px 10px 10px 10px;
+    border-radius: 10px;
+    box-shadow: 10px 10px 20px -10px black;
+}
+
+dt:target, span.highlighted {
+    padding: 10px 10px 10px 10px;
+    border-radius: 10px;
+}
+
 /* ############################ TABLE ############################*/
 th {
-    background-color: #a69ca5;
+    background-color: rgb(180, 180, 180);
     color: white;
+    /*border-radius: 10px;*/
 }
 /*tr:hover {
     background-color: #3498db;
