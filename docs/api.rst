@@ -27,7 +27,6 @@ GUI based modules
    Figure
 
 
-.. _API_objects:
 Objects
 -------
 
@@ -49,6 +48,7 @@ Objects
     CrossSecObj
     HypnogramObj
     ImageObj
+    PacmapObj
     Picture3DObj
     RoiObj
     SceneObj
