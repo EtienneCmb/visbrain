@@ -28,7 +28,7 @@ from .topo import Topo
 from .signal import Signal
 
 __all__ = ['Brain', 'Colorbar', 'Figure', 'Signal', 'Sleep', 'Topo']
-__version__ = "0.4.0"
+__version__ = "0.4.1"
 
 
 # PyQt5 crash if an error occured. This small function fix it for all modules
