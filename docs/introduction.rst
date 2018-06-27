@@ -6,9 +6,7 @@ Presentation
 Quick description
 -----------------
 
-Visbrain is an open-source `Python 3 <https://www.python.org/>`_ package, distributed under the 3-Clause BSD license and is dedicated to brain signals visualization.
-
-Visbrain is under heavy development and many functionalities are frequently added to the package, such as bug fixing, documentation improvements etc.
+Visbrain is an open-source `Python 3 <https://www.python.org/>`_ package, distributed under the 3-Clause BSD license and is dedicated to brain signals visualization. It is under heavy development and many functionalities are frequently added to the package, such as bug fixing, documentation improvements etc.
 
 Visbrain use VisPy to render graphics. Taken from their website :
 
@@ -23,6 +21,28 @@ Visbrain use VisPy to render graphics. Taken from their website :
 
 Structure
 ---------
+
+Visbrain is mainly divided into two branches :
+
+* **Modules** : essentially designed for beginner users, modules comes with a graphical user interface (GUI) for interactions between plotted elements and parameters.
+* **Objects** : objects are elementary bricks i.e. one visualization purpose per object. It's mainly designed for advanced users since objects are much more modular. See the :ref:`Objects` documentation and the API :class:`visbrain.objects`
+
+======================  =======================================================
+Module name             Description
+======================  =======================================================
+:ref:`BrainModule`      Visualizations involving a MNI brain
+:ref:`SleepModule`      Visualize and score polysomnographic data
+:ref:`SignalModule`     Visualize multi-dimensional datasets
+:ref:`TopoModule`       Topographic representations
+:ref:`FigureModule`     Figure layout
+======================  =======================================================
+
+The visbrain structure is summarized below.
+
+.. figure::  picture/visbrain_structure.png
+   :align:   center
+
+   Structure and hierarchy used in visbrain
 
 Installation
 ============
