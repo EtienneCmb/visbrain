@@ -12,7 +12,7 @@ from vispy import scene
 import vispy.visuals.transforms as vist
 
 from .marker import Markers
-from ...utils import (array2colormap, color2vb, PrepareData)
+from ...utils import (color2vb, PrepareData, cmap_to_glsl)
 from ...utils.sleep.event import _index_to_events
 from ...visuals import TopoMesh, TFmapsMesh
 from ...config import PROFILER
@@ -510,10 +510,13 @@ class Spectrogram(PrepareData):
 
             # =================== COLOR ===================
             # Get clim :
-            clim = (contrast * mesh.min(), contrast * mesh.max())
+            _mesh = mesh[sls, :]
+            clim = (contrast * _mesh.min(), contrast * _mesh.max())
             # Turn mesh into color array for selected frequencies:
-            self.mesh.set_data(array2colormap(mesh[sls, :], cmap=cmap,
-                                              clim=clim))
+            self.mesh.set_data(_mesh)
+            _min, _max = _mesh.min(), _mesh.max()
+            _cmap = cmap_to_glsl(limits=(_min, _max), clim=clim, cmap=cmap)
+            self.mesh.cmap = _cmap
             self.mesh.interpolation = interp
 
             # =================== TRANSFORM ===================
