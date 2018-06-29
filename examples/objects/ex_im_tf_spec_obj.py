@@ -41,7 +41,7 @@ print("""
 #                         Custom color properties
 # =============================================================================
 """)
-im_color = ImageObj('im', time, interpolation='bicubic', cmap='Spectral_r',
+im_color = ImageObj('im', time, interpolation='bilinear', cmap='Spectral_r',
                     vmin=5., vmax=20., under='gray', over='darkred')
 sc.add_to_subplot(im_color, row=0, col=2, title='Custom colors')
 cb_im_color = ColorbarObj(im_color, cblabel='Image data', **CBAR_STATE)

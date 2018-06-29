@@ -61,7 +61,6 @@ class _VisbrainObj(CbarBase, _VisbrainShortcuts):
         _VisbrainShortcuts.__init__(self)
         self._cbar_data = None
         self._default_cblabel = ''
-        self._minmax = None
 
     def _get_camera(self):
         raise NotImplementedError

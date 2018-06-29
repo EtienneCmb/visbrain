@@ -1,5 +1,5 @@
 """Most basic colorbar class."""
-from ...utils import color2tuple, wrap_properties
+from ...utils import color2tuple, wrap_properties, cmap_to_glsl
 
 __all__ = ('CbarArgs', 'CbarBase')
 
@@ -38,6 +38,7 @@ class CbarArgs(object):
         self._vmin, self._vmax = vmin, vmax
         self._isvmin, self._isvmax = isvmin, isvmax
         self._under, self._over = under, over
+        self._minmax = None
 
     def to_kwargs(self, addisminmax=False):
         """Return a dictionary for input arguments.
@@ -58,6 +59,22 @@ class CbarArgs(object):
         if addisminmax:
             kwargs['isvmin'], kwargs['isvmax'] = self._isvmin, self._isvmax
         return kwargs
+
+    def _get_glsl_colormap(self, limits=None):
+        """Get a GLSL version of the colormap.
+
+        Parameters
+        ----------
+        limits : tuple | None
+            A tuple of floats defining the limits of the data.
+
+        Returns
+        -------
+        cmap : class:`vispy.color.Colormap`
+            Colormap instance.
+        """
+        limits = limits if limits is not None else self._minmax
+        return cmap_to_glsl(limits=limits, **self.to_kwargs())
 
     def _update_cbar_args(self, cmap, clim, vmin, vmax, under, over):
         """Update colorbar elements."""
