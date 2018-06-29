@@ -518,7 +518,7 @@ class Spectrogram(PrepareData):
             _min, _max = _mesh.min(), _mesh.max()
             _cmap = cmap_to_glsl(limits=(_min, _max), clim=clim, cmap=cmap)
             self.mesh.cmap = _cmap
-            self.mesh.clim = clim
+            self.mesh.clim = 'auto'
             self.mesh.interpolation = interp
 
             # =================== TRANSFORM ===================
