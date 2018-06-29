@@ -435,6 +435,7 @@ class UiPanels(object):
         fstart, fend = self._PanSpecFstart.value(), self._PanSpecFend.value()
         # Get contrast :
         contrast = self._PanSpecCon.value()
+        contrast = 1. if contrast < .1 else contrast
         # Get colormap :
         cmap = str(self._PanSpecCmap.currentText())
         # Get channel to get spectrogram :
