@@ -511,12 +511,14 @@ class Spectrogram(PrepareData):
             # =================== COLOR ===================
             # Get clim :
             _mesh = mesh[sls, :]
+            contrast = 1. if contrast is None else contrast
             clim = (contrast * _mesh.min(), contrast * _mesh.max())
             # Turn mesh into color array for selected frequencies:
             self.mesh.set_data(_mesh)
             _min, _max = _mesh.min(), _mesh.max()
             _cmap = cmap_to_glsl(limits=(_min, _max), clim=clim, cmap=cmap)
             self.mesh.cmap = _cmap
+            self.mesh.clim = clim
             self.mesh.interpolation = interp
 
             # =================== TRANSFORM ===================
