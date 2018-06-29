@@ -120,6 +120,7 @@ class ImageObj(VisbrainObject):
             # Get colormap :
             cmap = self._get_glsl_colormap(limits=(data.min(), data.max()))
             self._image.cmap = cmap
+            self._image.clim = clim
         else:  # data is already a compatible color
             assert data.shape[-1] in [3, 4]
         # Set color to the image :
