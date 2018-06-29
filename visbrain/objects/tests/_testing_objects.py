@@ -47,6 +47,7 @@ class _TestObjects(_TestVisbrain):
 
     @pytest.mark.xfail(reason="Failed if display not correctly configured",
                        run=True, strict=False)
+    @pytest.mark.timeout(5)
     def test_screenshot(self):
         """Test screenshot rendering."""
         basename = self.to_tmp_dir(repr(self.OBJ))
