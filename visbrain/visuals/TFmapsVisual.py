@@ -122,7 +122,7 @@ class TFmapsMesh(CbarBase):
 
         # ======================= COLOR =======================
         self._image.set_data(tf)
-        self._image.clim = self._clim
+        self._image.clim = 'auto'
         self._image.cmap = cmap_to_glsl(limits=(tf.min(), tf.max()), **kwargs)
 
         # ======================= SCALE // TRANSLATE =======================
