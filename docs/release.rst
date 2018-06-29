@@ -12,7 +12,7 @@ Changelog
 
 Improvements
 ~~~~~~~~~~~~
-* Colormap computed onto the GPU for : spectrogram (_Sleep_)
+* Colormap computed onto the GPU for : spectrogram, phase-amplitude coupling, images, 3D images
 
 
 0.4.1
