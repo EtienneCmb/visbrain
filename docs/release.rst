@@ -7,6 +7,14 @@ Changelog
    :local:
    :depth: 1
 
+0.4.2
+-----
+
+Improvements
+~~~~~~~~~~~~
+* Colormap computed onto the GPU for : spectrogram (_Sleep_)
+
+
 0.4.1
 -----
 
