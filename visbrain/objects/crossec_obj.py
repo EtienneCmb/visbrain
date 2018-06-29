@@ -88,6 +88,20 @@ class _Mask(object):
         self._im_coron.cmap = value
         self._im_axial.cmap = value
 
+    # ----------- CLIM -----------
+    @property
+    def clim(self):
+        """Get the clim value."""
+        return self._clim
+
+    @clim.setter
+    def clim(self, value):
+        """Set clim value."""
+        self._im_sagit.clim = value
+        self._im_coron.clim = value
+        self._im_axial.clim = value
+        self._clim = value
+
     # ----------- INTERPOLATION -----------
     @property
     def interpolation(self):
@@ -581,6 +595,7 @@ class CrossSecObj(_Volume):
         clim = (self._vol.min() * (1. + value), self._vol.max() * (1. - value))
         limits = (self._vol.min(), self._vol.max())
         self._bgd.cmap = cmap_to_glsl(limits=limits, clim=clim, cmap='Greys_r')
+        self._bgd.clim = clim
         self._contrast = value
 
     # ----------- TEXT_SIZE -----------
