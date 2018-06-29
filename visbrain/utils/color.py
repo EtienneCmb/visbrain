@@ -14,7 +14,6 @@ import matplotlib.colors as mplcol
 from warnings import warn
 
 from .sigproc import normalize
-from .mesh import vispy_array
 
 
 __all__ = ('color2vb', 'array2colormap', 'cmap_to_glsl', 'dynamic_color',
@@ -202,7 +201,7 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
         x_cmap = np.transpose(np.tile(x_cmap[..., np.newaxis],
                                       (1, 1, 3)), (0, 2, 1))
 
-    return vispy_array(x_cmap)
+    return x_cmap.astype(np.float32)
 
 
 def _transclucent_cmap(x, x_cmap, translucent):
