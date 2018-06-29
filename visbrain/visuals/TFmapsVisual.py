@@ -10,7 +10,7 @@ import vispy.visuals.transforms as vist
 from vispy.scene.visuals import Image
 
 from ..visuals import CbarBase
-from ..utils import (morlet, array2colormap, vispy_array, averaging,
+from ..utils import (morlet, cmap_to_glsl, vispy_array, averaging,
                      normalization)
 
 
@@ -121,8 +121,9 @@ class TFmapsMesh(CbarBase):
         self._cmap = kwargs.get('cmap', 'viridis')
 
         # ======================= COLOR =======================
-        cmap = array2colormap(tf, **kwargs)
-        self._image.set_data(vispy_array(cmap))
+        self._image.set_data(tf)
+        self._image.clim = self._clim
+        self._image.cmap = cmap_to_glsl(limits=(tf.min(), tf.max()), **kwargs)
 
         # ======================= SCALE // TRANSLATE =======================
         # Scale and translate TF :
