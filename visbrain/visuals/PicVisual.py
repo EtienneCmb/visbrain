@@ -8,7 +8,7 @@ import numpy as np
 
 from vispy import gloo, visuals, scene
 
-from ..utils import array2colormap
+from ..utils import cmap_to_glsl, vispy_array
 
 __all__ = ('PicMesh')
 
@@ -16,9 +16,11 @@ VERT_SHADER = """
 #version 120
 
 varying vec4 v_color;
+varying float v_data;
 
 void main() {
-    v_color = $a_color;
+    v_data = $a_data;
+    v_color = $color;
     gl_Position = $transform(vec4($a_position, 1.));
 }
 """
@@ -72,10 +74,9 @@ class PicVisual(visuals.Visual):
 
         # Re-order data :
         self._data = data.ravel()[np.argsort(grid.ravel())]
+        self._data_buffer = gloo.VertexBuffer(vispy_array(self._data))
+        self.shared_program.vert['a_data'] = self._data_buffer
         # Define the color buffer :
-        color = np.zeros((self._data.shape[0], 4), dtype=np.float32)
-        self._color_buffer = gloo.VertexBuffer(color)
-        self.shared_program.vert['a_color'] = self._color_buffer
         self.shared_program.frag['u_alpha'] = alpha
         self.alpha = alpha
         self.set_data(**kwargs)
@@ -199,9 +200,11 @@ class PicVisual(visuals.Visual):
             a_position = self._data_to_pos(self._pos)
             self._pos_buffer.set_data(a_position)
         # Update color properties :
-        color = array2colormap(self._data, **kwargs)
-        # Send the color to the buffer :
-        self._color_buffer.set_data(color)
+        _limits = (self._data.min(), self._data.max())
+        cmap = cmap_to_glsl(limits=_limits, **kwargs)
+        self.shared_program['texture2D_LUT'] = cmap.texture_lut()
+        fcn_color = visuals.shaders.Function(cmap.glsl_map)
+        self.shared_program.vert['color'] = fcn_color('v_data')
         self.update()
 
     # ----------- ALPHA -----------
