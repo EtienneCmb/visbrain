@@ -595,7 +595,7 @@ class CrossSecObj(_Volume):
         clim = (self._vol.min() * (1. + value), self._vol.max() * (1. - value))
         limits = (self._vol.min(), self._vol.max())
         self._bgd.cmap = cmap_to_glsl(limits=limits, clim=clim, cmap='Greys_r')
-        self._bgd.clim = clim
+        self._bgd.clim = 'auto'
         self._contrast = value
 
     # ----------- TEXT_SIZE -----------
