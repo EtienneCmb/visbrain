@@ -4,7 +4,7 @@ import numpy as np
 import vispy.scene.cameras as viscam
 from vispy.scene import Node
 
-from ..pyqt_module import PyQtModule
+from ..pyqt_module import _PyQtModule
 from .ui_init import UiInit
 from .ui_elements import UiElements
 from ..objects import ConnectObj
@@ -14,13 +14,13 @@ from ..visuals import TopoMesh, CbarVisual
 __all__ = ('Topo')
 
 
-class Topo(PyQtModule, UiInit, UiElements):
+class Topo(_PyQtModule, UiInit, UiElements):
     """Display topographic representation."""
 
     def __init__(self, verbose=None):
         """Init."""
-        PyQtModule.__init__(self, verbose=verbose, to_describe='_grid',
-                            icon='topo_icon.svg', show_settings=False)
+        _PyQtModule.__init__(self, verbose=verbose, to_describe='_grid',
+                             icon='topo_icon.svg', show_settings=False)
         self._topos = {}
         self._topoGrid = {}
 

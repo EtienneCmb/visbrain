@@ -7,7 +7,7 @@ import vispy.scene.cameras as viscam
 
 from .interface import UiInit, UiElements
 from .visuals import Visuals
-from ..pyqt_module import PyQtModule
+from ..pyqt_module import _PyQtModule
 from ..utils import (FixedCam, color2vb, MouseEventControl)
 from ..io import ReadSleepData
 from ..config import PROFILER
@@ -15,7 +15,7 @@ from ..config import PROFILER
 logger = logging.getLogger('visbrain')
 
 
-class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
+class Sleep(_PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
             MouseEventControl):
     """Visualize and edit sleep data.
 
@@ -83,7 +83,7 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
                  axis=True, href=['art', 'wake', 'rem', 'n1', 'n2', 'n3'],
                  preload=True, use_mne=False, kwargs_mne={}, verbose=None):
         """Init."""
-        PyQtModule.__init__(self, verbose=verbose, icon='sleep_icon.svg')
+        _PyQtModule.__init__(self, verbose=verbose, icon='sleep_icon.svg')
         # ====================== APP CREATION ======================
         UiInit.__init__(self)
 

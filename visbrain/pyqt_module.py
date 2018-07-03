@@ -1,4 +1,4 @@
-"""All visbrain modules based on PyQt5 should inherit from PyQtModule."""
+"""All visbrain modules based on PyQt5 should inherit from _PyQtModule."""
 import os
 import sip
 from PyQt5 import QtGui
@@ -13,7 +13,7 @@ sip.setdestroyonexit(False)
 logger = logging.getLogger('visbrain')
 
 
-class PyQtModule(object):
+class _PyQtModule(object):
     """Shared methods across PyQt based Visbrain modules.
 
     Parameters
