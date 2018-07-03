@@ -1,6 +1,6 @@
 """Test SceneObj and VisbrainCanvas."""
 import numpy as np
-import pytest
+# import pytest
 import vispy
 
 from visbrain.tests._tests_visbrain import _TestVisbrain
