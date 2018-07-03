@@ -13,13 +13,12 @@ logger = logging.getLogger('visbrain')
 __all__ = ['mne_plot_source_estimation', 'mne_plot_source_space']
 
 
-def _extract_arrays_from_src(src, hemisphere='both'):
+def _extract_arrays_from_src(src, hemisphere='both', fact=1.):
     """Get vertices, faces, active vertices and sources from SourceSpace."""
     logger.debug("Loading vert, faces, activ and sources from src structure.")
     # Define usefull variables :
     _l_nb, _r_nb = src[0]['rr'].shape[0], src[1]['rr'].shape[0]
-    _f_off = [0, src[0]['tris'].max() + 1]
-    _act_off, _fact = [0, _l_nb], 1000.
+    _f_off, _act_off = [0, src[0]['tris'].max() + 1], [0, _l_nb]
     _hemi = {'left': [0], 'right': [1], 'both': [0, 1]}[hemisphere]
     # Get vertices and faces :
     vertices = np.vstack([src[k]['rr'] for k in [0, 1]])
@@ -28,7 +27,7 @@ def _extract_arrays_from_src(src, hemisphere='both'):
     # Get active vertex and sources :
     activ = np.hstack([src[k]['vertno'] + _act_off[k] for k in [0, 1]])
     sources = np.vstack([src[k]['rr'][src[k]['vertno']] for k in _hemi])
-    return _fact * vertices, faces, lr_index, activ, _fact * sources
+    return fact * vertices, faces, lr_index, activ, fact * sources
 
 
 def _plt_src(name, kw_brain_obj, active_data, active_vert, sources,
@@ -198,7 +197,7 @@ def mne_plot_source_space(fif_file, active_data=None, hemisphere='both',
     src = read_source_spaces(fif_file)
     # Build vertices / faces :
     (vertices, faces, lr_index, active_vert,
-     sources) = _extract_arrays_from_src(src, hemisphere)
+     sources) = _extract_arrays_from_src(src, hemisphere, fact=1000.)
     # Complete dicts :
     kw_brain_obj['vertices'], kw_brain_obj['faces'] = vertices, faces
     kw_brain_obj['lr_index'], kw_brain_obj['hemisphere'] = lr_index, hemisphere
