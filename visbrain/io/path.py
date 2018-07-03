@@ -59,7 +59,8 @@ def get_data_path(folder=None, file=None):
     return os.path.join(*(cur_path, 'data', folder, file))
 
 
-def get_files_in_folders(*args, with_ext=False, with_path=False, file=None):
+def get_files_in_folders(*args, with_ext=False, with_path=False, file=None,
+                         exclude=None, sort=True):
     """Get all files in several folders.
 
     Parameters
@@ -72,6 +73,10 @@ def get_files_in_folders(*args, with_ext=False, with_path=False, file=None):
         Specify if returned files should contains full path to it.
     file : string | None
         Specify if a specific file name is needed.
+    exclude : list | None
+        List of patterns to exclude
+    sort : bool | True
+        Sort the resulting list of files.
 
     Returns
     -------
@@ -98,10 +103,16 @@ def get_files_in_folders(*args, with_ext=False, with_path=False, file=None):
     if isinstance(file, str) and (file in files):
         files = [files[files.index(file)]]
     # Return either files with full path or only file name :
-    if with_ext:
-        return files
-    else:
-        return [os.path.splitext(k)[0] for k in files]
+    if not with_ext:
+        files = [os.path.splitext(k)[0] for k in files]
+    # Sort list :
+    if sort:
+        files.sort()
+    # Patterns to exclude :
+    if isinstance(exclude, (list, tuple)):
+        from itertools import product
+        files = [k for k, i in product(files, exclude) if i not in k]
+    return files
 
 
 def get_files_in_data(folder, with_ext=False):
