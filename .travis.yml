@@ -45,7 +45,7 @@ install:
     - source activate testenv
     # Install dependencies :
     - if [ "${TEST}" == "standard" ]; then
-        pip install codecov pytest pytest-cov pytest-sugar pytest-travis-fold openpyxl xlrd pytest-timeout;
+        pip install codecov pytest pytest-cov pytest-sugar pytest-travis-fold openpyxl xlrd;
         pip install mne nibabel pandas tensorpac;
         pip install git+https://github.com/hbldh/lspopt.git#egg=lspopt;
       fi;
