@@ -7,7 +7,7 @@ from .visuals import Visuals
 from ..utils import (safely_set_cbox, color2tuple, color2vb, mpl_cmap,
                      toggle_enable_tab)
 from ..io import write_fig_canvas
-from ..pyqt_module import _PyQtModule
+from .._pyqt_module import _PyQtModule
 # get_screen_size
 
 

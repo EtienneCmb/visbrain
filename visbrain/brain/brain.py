@@ -14,7 +14,7 @@ from .interface import UiInit, UiElements, BrainShortcuts
 from .visuals import Visuals
 from .cbar import BrainCbar
 from .user import BrainUserMethods
-from ..pyqt_module import _PyQtModule
+from .._pyqt_module import _PyQtModule
 from ..config import PROFILER
 
 logger = logging.getLogger('visbrain')

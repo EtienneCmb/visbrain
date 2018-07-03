@@ -7,7 +7,7 @@ import vispy.scene.cameras as viscam
 
 from .interface import UiInit, UiElements
 from .visuals import Visuals
-from ..pyqt_module import _PyQtModule
+from .._pyqt_module import _PyQtModule
 from ..utils import (FixedCam, color2vb, MouseEventControl)
 from ..io import ReadSleepData
 from ..config import PROFILER

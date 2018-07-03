@@ -4,7 +4,7 @@ import numpy as np
 import vispy.scene.cameras as viscam
 from vispy.scene import Node
 
-from ..pyqt_module import _PyQtModule
+from .._pyqt_module import _PyQtModule
 from .ui_init import UiInit
 from .ui_elements import UiElements
 from ..objects import ConnectObj
