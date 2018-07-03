@@ -53,6 +53,8 @@ install:
     - if [ "${TEST}" == "flake" ]; then
         pip install flake8 pep8-naming;
       fi;
+    # Install latest version vispy :
+    - pip install git+https://github.com/vispy/vispy.git
     # - pip install PyOpenGL PyOpenGL_accelerate
     # - pip install -q freetype-py husl pypng cassowary imageio
     # ------------------- VISBRAIN -------------------
