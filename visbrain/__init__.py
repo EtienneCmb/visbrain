@@ -20,12 +20,12 @@ See http://visbrain.org/ for a complete and step-by step documentation
 import sys as _sys
 
 # Import modules :
-from ._brain import Brain
-from ._colorbar import Colorbar
-from ._figure import Figure
-from ._sleep import Sleep
-from ._topo import Topo
-from ._signal import Signal
+from .brain import Brain
+from .colorbar import Colorbar
+from .figure import Figure
+from .sleep import Sleep
+from .topo import Topo
+from .signal import Signal
 
 __all__ = ['Brain', 'Colorbar', 'Figure', 'Signal', 'Sleep', 'Topo']
 __version__ = "0.4.1"
