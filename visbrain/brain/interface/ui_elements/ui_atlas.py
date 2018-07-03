@@ -149,6 +149,7 @@ class UiAtlas(object):
             self.atlas.scale = self._gl_scale
             self.atlas.reset_camera()
             self.atlas.rotate('top')
+            self.atlas._name = template
         if self.atlas.hemisphere != hemisphere:
             self.atlas.hemisphere = hemisphere
 
