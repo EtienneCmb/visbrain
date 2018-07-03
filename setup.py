@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
-from setuptools import setup
+from setuptools import setup, find_packages
 
 __version__ = "0.4.1"
 NAME = 'visbrain'
@@ -44,7 +44,7 @@ setup(
     url=URL,
     download_url=DOWNLOAD_URL,
     # PACKAGE / DATA
-    packages=['visbrain'],
+    packages=find_packages(),
     package_dir={'visbrain': 'visbrain'},
     package_data=PACKAGE_DATA,
     include_package_data=True,
