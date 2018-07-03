@@ -11,13 +11,12 @@ matrix:
   include:
     - env: TEST=standard
       os: linux
+    - env: TEST=standard
+      os: osx
     - env: TEST=flake
       os: linux
     # - env: TEST=examples
     #   os: linux
-    # - env: TEST=standard
-    #   os: osx
-    #   language: generic
   allow_failures:
     - env: TEST=flake
 
