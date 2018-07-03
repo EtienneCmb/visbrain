@@ -17,7 +17,7 @@ Right now, visbrain contains five modules :
 
 See http://visbrain.org/ for a complete and step-by step documentation
 """
-import sys
+import sys as _sys
 
 # Import modules :
 from .brain import Brain
@@ -35,9 +35,9 @@ __version__ = "0.4.1"
 # to retrieve the PyQt4 behavior :
 
 
-def pyqt4_behavior(type, value, tback):
+def _pyqt4_behavior(type, value, tback):
     """Retrieve PyQt4 behavior if an error occured."""
-    sys.__excepthook__(type, value, tback)
+    _sys.__excepthook__(type, value, tback)
 
 
-sys.excepthook = pyqt4_behavior
+_sys.excepthook = _pyqt4_behavior
