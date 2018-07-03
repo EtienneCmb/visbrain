@@ -157,10 +157,11 @@ class BrainObj(VisbrainObject):
     def list(self, file=None):
         """Get the list of all installed templates."""
         path = self._search_in_path()
-        files = get_files_in_folders(*path, file=file)
+        files = get_files_in_folders(*path, file=file, exclude=['sulcus'])
         download = self._get_downloadable_templates()
-        all_ = set(files + download)
-        return list(all_)
+        all_ = list(set(files + download))
+        all_.sort()
+        return all_
 
     def _define_mesh(self, vertices, faces, normals, lr_index, hemisphere,
                      invert_normals, sulcus):
