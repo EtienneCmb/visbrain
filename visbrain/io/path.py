@@ -30,7 +30,7 @@ def path_to_visbrain_data(file=None, folder=None):
     folder = '' if not isinstance(folder, str) else folder
     vb_path = os.path.join(vb_path, folder)
     if not os.path.exists(vb_path):
-        os.mkdir(vb_path)
+        os.makedirs(vb_path)
         logger.info("visbrain_data has been added to %s" % vb_path)
     file = '' if not isinstance(file, str) else file
     return os.path.join(vb_path, file)
