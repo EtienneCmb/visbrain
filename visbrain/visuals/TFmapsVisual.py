@@ -10,8 +10,7 @@ import vispy.visuals.transforms as vist
 from vispy.scene.visuals import Image
 
 from ..visuals import CbarBase
-from ..utils import (morlet, cmap_to_glsl, vispy_array, averaging,
-                     normalization)
+from ..utils import (morlet, cmap_to_glsl, averaging, normalization)
 
 
 __all__ = ('TFmapsMesh')

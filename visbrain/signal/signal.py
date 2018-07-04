@@ -7,14 +7,14 @@ from .visuals import Visuals
 from ..utils import (safely_set_cbox, color2tuple, color2vb, mpl_cmap,
                      toggle_enable_tab)
 from ..io import write_fig_canvas
-from ..pyqt_module import PyQtModule
+from .._pyqt_module import _PyQtModule
 # get_screen_size
 
 
 __all__ = ('Signal')
 
 
-class Signal(PyQtModule, UiInit, UiElements, Visuals):
+class Signal(_PyQtModule, UiInit, UiElements, Visuals):
     """Signal inspection module (data mining).
 
     The Signal module can be used to relatively large datasets of
@@ -134,7 +134,7 @@ class Signal(PyQtModule, UiInit, UiElements, Visuals):
                  grid_titles_color='black', verbose=None, **kwargs):
         """Init."""
         dscb = ['_grid_canvas.canvas.scene', '_signal_canvas.canvas.scene']
-        PyQtModule.__init__(self, verbose=verbose, to_describe=dscb)
+        _PyQtModule.__init__(self, verbose=verbose, to_describe=dscb)
         self._enable_grid = enable_grid
         self._previous_form = form
         display_grid = bool(display_grid * self._enable_grid)

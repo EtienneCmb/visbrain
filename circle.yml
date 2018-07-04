@@ -38,8 +38,9 @@ dependencies:
       else
         echo "Conda env already set up.";
       fi;
-    - conda install -n circleenv --yes numpy scipy pip;
-    - pip install pytest pytest-travis-fold pytest-timeout;
+    - conda install -n circleenv --yes numpy scipy pip cython;
+    - pip install git+https://github.com/vispy/vispy.git
+    - pip install pytest pytest-travis-fold;
     - pip install mne nibabel pandas openpyxl tensorpac xlrd;
     - pip install git+https://github.com/hbldh/lspopt.git#egg=lspopt;
     - ls -al /home/ubuntu/miniconda3;

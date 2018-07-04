@@ -14,13 +14,13 @@ from .interface import UiInit, UiElements, BrainShortcuts
 from .visuals import Visuals
 from .cbar import BrainCbar
 from .user import BrainUserMethods
-from ..pyqt_module import PyQtModule
+from .._pyqt_module import _PyQtModule
 from ..config import PROFILER
 
 logger = logging.getLogger('visbrain')
 
 
-class Brain(PyQtModule, UiInit, UiElements, Visuals, BrainCbar,
+class Brain(_PyQtModule, UiInit, UiElements, Visuals, BrainCbar,
             BrainUserMethods):
     """Visualization of brain-data on a standard MNI brain.
 
@@ -91,8 +91,8 @@ class Brain(PyQtModule, UiInit, UiElements, Visuals, BrainCbar,
     def __init__(self, bgcolor='black', verbose=None, **kwargs):
         """Init."""
         # ====================== PyQt creation ======================
-        PyQtModule.__init__(self, verbose=verbose, to_describe='view.wc',
-                            icon='brain_icon.svg')
+        _PyQtModule.__init__(self, verbose=verbose, to_describe='view.wc',
+                             icon='brain_icon.svg')
         self._userobj = {}
         self._gl_scale = 100.  # fix appearance for small meshes
         self._camera = viscam.TurntableCamera(name='MainBrainCamera')

@@ -89,3 +89,4 @@ docs/auto_examples/
 docs/modules/
 report.html
 notebooks/
+.pytest_cache/
