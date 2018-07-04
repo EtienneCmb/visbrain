@@ -50,6 +50,7 @@ def _plt_src(name, kw_brain_obj, active_data, active_vert, sources,
         # Define a Brain instance :
         from visbrain import Brain
         brain = Brain(brain_obj=b_obj, source_obj=s_obj)
+        brain._brain_template.setEnabled(False)
         # By default, display colorbar if activation :
         if isinstance(active_data, np.ndarray):
             brain.menuDispCbar.setChecked(True)
