@@ -44,8 +44,8 @@ The visbrain structure is summarized below.
 
    Structure and hierarchy used in visbrain
 
-Installation
-============
+Installation options
+====================
 
 Dependencies
 ------------
@@ -86,3 +86,24 @@ If you want to install visbrain in develop mode :
     git clone https://github.com/EtienneCmb/visbrain.git visbrain/
     cd visbrain/
     python setup.py develop 
+
+From here you can switch to the latest features using :
+
+.. code-block:: shell
+
+    git checkout develop
+
+If you don't want to clone the full package, run :
+
+.. code-block:: shell
+
+    pip install git+https://github.com/EtienneCmb/visbrain.git
+
+
+Update visbrain
+---------------
+You can update visbrain using :
+
+.. code-block:: shell
+
+    pip install --upgrade visbrain
