@@ -7,13 +7,20 @@ Changelog
    :local:
    :depth: 1
 
-0.4.2
+0.4.3
 -----
 
 Improvements
 ~~~~~~~~~~~~
 * Colormap computed onto the GPU for : spectrogram, phase-amplitude coupling, images, 3D images
+* Sorted brain templates in :class:`visbrain.Brain` + remove sulcus as a brain template
+* Fewer visible possibilities when importing from the root of visbrain 
 
+Bug fixes
+~~~~~~~~~
+* Brain scaling in :class:`visbrain.mne.mne_plot_source_estimation`
+* Recursive folder creation for brain template
+* Select from the GUI brain template build with vertices and faces
 
 0.4.1
 -----
