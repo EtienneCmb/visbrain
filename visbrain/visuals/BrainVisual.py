@@ -363,8 +363,21 @@ class BrainVisual(Visual):
         # Set x-range of the texture :
         self._xrange[vertices, to_overlay] = normalize(data)
         self._xrange_buffer.set_data(self._xrange)
-        # Set this vector to the 2D texture :
-        self._text2d_data[to_overlay, ...] = array2colormap(col, **kwargs)
+        # Colormap interpolation :
+        if 'cmap' in kwargs.keys() and isinstance(kwargs['cmap'], np.ndarray):
+            cmap = kwargs['cmap']
+            assert cmap.shape[1] == 4
+            if cmap.shape[0] != LUT_LEN:
+                logger.info('Colormap interpoation')
+                from scipy import interpolate
+                # Define interpolation function :
+                x_, y_ = np.linspace(0, 1, 4), np.linspace(0, 1, cmap.shape[0])
+                f = interpolate.interp2d(x_, y_, cmap)
+                # Interpolate colormap :
+                cmap = f(x_, np.linspace(0, 1, LUT_LEN))
+                self._text2d_data[to_overlay, ...] = cmap
+        else:
+            self._text2d_data[to_overlay, ...] = array2colormap(col, **kwargs)
         self._text_2d.set_data(self._text2d_data)
         # Send data to the mask :
         if isinstance(mask_data, np.ndarray) and len(mask_data) == len(self):
