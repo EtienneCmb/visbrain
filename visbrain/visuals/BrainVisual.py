@@ -321,7 +321,8 @@ class BrainVisual(Visual):
         self._math_buffer.set_data(self._math)
         self.shared_program.vert['u_math'] = self._math_buffer
 
-    def add_overlay(self, data, vertices=None, **kwargs):
+    def add_overlay(self, data, vertices=None, to_overlay=None, mask_data=None,
+                    **kwargs):
         """Add an overlay to the mesh.
 
         Note that the current implementation limit to a number of of four
@@ -333,6 +334,12 @@ class BrainVisual(Visual):
             Array of data of shape (n_data,).
         vertices : array_like | None
             The vertices to color with the data of shape (n_data,).
+        to_overlay : int | None
+            Add data to a specific overlay. This parameter must be a integer
+            with 0 <= to_overlay <= 4.
+        mask_data : array_like | None
+            Array to specify if some vertices have to be considered as masked
+            (and use the `mask_color` color)
         kwargs : dict | {}
             Additional color color properties (cmap, clim, vmin, vmax, under,
             over)
@@ -341,24 +348,30 @@ class BrainVisual(Visual):
         if vertices is None:
             vertices = np.ones((len(self),), dtype=bool)
         assert isinstance(data, np.ndarray) and len(data) == len(vertices)
+        to_overlay = self._n_overlay if to_overlay is None else to_overlay
+        assert to_overlay < 5
         # Build texture coordinate :
-        self._coords[vertices, self._n_overlay] = 0. + self._n_overlay / 4.
+        self._coords[vertices, to_overlay] = 0. + to_overlay / 4.
         self._over_buffer.set_data(self._coords, convert=True)
         # Build the colormap vector :
         data_lim = (data.min(), data.max())
         col = np.linspace(data_lim[0], data_lim[1], LUT_LEN)
         # Set x-range of the texture :
-        self._xrange[vertices, self._n_overlay] = normalize(data)
+        self._xrange[vertices, to_overlay] = normalize(data)
         self._xrange_buffer.set_data(self._xrange)
         # Set this vector to the 2D texture :
-        self._text2d_data[self._n_overlay, ...] = array2colormap(col, **kwargs)
+        self._text2d_data[to_overlay, ...] = array2colormap(col, **kwargs)
         self._text_2d.set_data(self._text2d_data)
+        # Send data to the mask :
+        if isinstance(mask_data, np.ndarray) and len(mask_data) == len(self):
+            self._bgd_data[mask_data] = .5
+            self._bgd_buffer.set_data(self._bgd_data)
         # Set mask :
         mask = self._mask
         mask[vertices] = 1.
         self.mask = mask
         # Send the array for sum and multiplication :
-        self._math[vertices, self._n_overlay] = 1.
+        self._math[vertices, to_overlay] = 1.
         self._math_buffer.set_data(self._math)
         # Update the number of overlays :
         self._n_overlay += 1
