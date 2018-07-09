@@ -301,9 +301,9 @@ class BrainVisual(Visual):
 
         # ____________________ TEXTURES ____________________
         # Background texture :
-        self._bdg_data = np.zeros((len(self),), dtype=np.float32)
-        self._bdg_data[sulcus] = .9
-        self._bgd_buffer.set_data(self._bdg_data, convert=True)
+        self._bgd_data = np.zeros((len(self),), dtype=np.float32)
+        self._bgd_data[sulcus] = .9
+        self._bgd_buffer.set_data(self._bgd_data, convert=True)
         self.shared_program.vert['a_bgd_data'] = self._bgd_buffer
         # Overlay texture :
         self._coords = np.zeros((len(self), 4), dtype=np.float32)
