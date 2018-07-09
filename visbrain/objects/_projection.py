@@ -229,9 +229,9 @@ def _project_sources_data(s_obj, b_obj, project='modulation', radius=10.,
         clim = b_obj._minmax
         b_obj._clim = b_obj._minmax
     # Get where there's masked sources :
+    mask_idx = np.zeros((len(mask),), dtype=bool)
     if s_obj.is_masked:
         mask_idx = _get_masked_index(s_obj, vertices, radius, contribute)
-        mask[mask_idx] = 2.
         mesh.mask_color = mask_color
         logger.info("Set masked sources cortical activity to the "
                     "color %s" % str(list(mesh.mask_color.ravel())[0:-1]))
@@ -240,7 +240,7 @@ def _project_sources_data(s_obj, b_obj, project='modulation', radius=10.,
         mask[~mod.mask] = 1.
 
     # _____________________ MODULATION TO COLOR _____________________
+    mesh.add_overlay(mod[~mod.mask], np.where(~mod.mask)[0], to_overlay=0,
+                     mask_data=mask_idx, cmap=cmap, clim=clim, vmin=vmin,
+                     vmax=vmax, under=under, over=over)
     mesh.mask = mask
-    mod_color = array2colormap(mod, cmap=cmap, clim=clim, vmin=vmin, vmax=vmax,
-                               under=under, over=over)
-    mesh.color = mod_color
