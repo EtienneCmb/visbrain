@@ -627,9 +627,10 @@ class BrainObj(VisbrainObject):
     ###########################################################################
 
     def _update_cbar(self):
-        if isinstance(self._cbar_data, np.ndarray):
-            color = array2colormap(self._cbar_data, **self.to_kwargs())
-            self.mesh.color = color
+        logger.error("In brain_obj : not configured")
+        # if isinstance(self._cbar_data, np.ndarray):
+        #     color = array2colormap(self._cbar_data, **self.to_kwargs())
+        #     self.mesh.color = color
         # else:
         #     logger.error("No data to update for %s" % self.name)
 
