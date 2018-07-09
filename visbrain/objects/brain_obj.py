@@ -87,8 +87,6 @@ class BrainObj(VisbrainObject):
         self.set_data(name, vertices, faces, normals, lr_index, hemisphere,
                       invert_normals, sulcus)
         self.translucent = translucent
-        self._data_color = []
-        self._data_mask = []
 
     def __len__(self):
         """Get the number of vertices."""
@@ -136,8 +134,6 @@ class BrainObj(VisbrainObject):
         self.hemisphere = 'both'
         self.mask = 0.
         self.rotate('top')
-        self._data_color = []
-        self._data_mask = []
         logger.info("Brain object %s cleaned." % self.name)
 
     def save(self, tmpfile=False):
@@ -463,6 +459,8 @@ class BrainObj(VisbrainObject):
         hemisphere : string | None
             The hemisphere for the parcellation. If None, the hemisphere will
             be inferred from file name.
+        data : array_like | None
+            Use data to be transformed into color for each parcellate.
         cmap : string | 'viridis'
             The colormap to use.
         clim : tuple | None
@@ -479,6 +477,8 @@ class BrainObj(VisbrainObject):
         """
         idx, u_colors, labels, u_idx = self._load_annot_file(file)
         roi_labs = []
+        kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
+        data_vec = np.zeros((len(self.mesh),), dtype=np.float32)
         # Get the hemisphere and (left // right) boolean index :
         hemisphere, h_idx = self._hemisphere_from_file(hemisphere, file)
         # Select conversion :
@@ -494,13 +494,10 @@ class BrainObj(VisbrainObject):
             clim = (data.min(), data.max()) if clim is None else clim
             logger.info("Color inferred from data")
             u_colors = np.zeros((len(u_idx), 4), dtype=float)
-            kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
-            data_color = array2colormap(data, **kw)
             self._default_cblabel = "Parcellates data"
         else:
             logger.info("Use default color included in the file")
             u_colors = u_colors.astype(float) / 255.
-            data_color = None
         # Build the select variable :
         if isinstance(select, (np.ndarray, list)):
             select = np.asarray(select)
@@ -522,34 +519,32 @@ class BrainObj(VisbrainObject):
                 select = np.array(select).ravel()
         if not select.size:
             raise ValueError("No parcellates found")
+        # Get corresponding hemisphere indices (left, right or both) :
+        hemi_idx = np.where(h_idx)[0]
         # Prepare color variables :
-        color = np.zeros((len(self.mesh), 4))
-        mask = np.zeros((len(self.mesh),))
+        color = []
+        mask = np.zeros((len(self.mesh),), dtype=bool)
         # Set roi color to the mesh :
-        sub_select = np.where(h_idx)[0]  # sub-hemisphere selection
         no_parcellates = []
         for i, k in enumerate(select):
             sub_idx = np.where(u_idx == k)[0][0]  # index location in u_idx
             if sub_idx:
-                color_index = sub_select[u_idx[idx] == k]
-                if data_color is None:
-                    color[color_index, :] = u_colors[sub_idx, :]
-                else:
-                    color[color_index, :] = data_color[i, :]
+                vert_index = hemi_idx[u_idx[idx] == k]
+                color.append(u_colors[sub_idx, :])
                 roi_labs.append(labels[sub_idx])
-                mask[color_index] = 1.
+                mask[vert_index] = True
+                data_vec[vert_index] = data[i] if data is not None else i
             else:
                 no_parcellates.append(str(k))
         if no_parcellates:
             logger.warning("No corresponding parcellates for index "
                            "%s" % ', '.join(np.unique(no_parcellates)))
+        if data is None:
+            color = np.asarray(color, dtype=np.float32)
+            kw['cmap'] = color
         logger.info("Selected parcellates : %s" % ", ".join(roi_labs))
-        # Keep an eye on data color and mask :
-        self._data_color.append(color)
-        self._data_mask.append(mask)
-        # Set color and mask to the mesh :
-        self.mesh.color = np.array(self._data_color).sum(0)
-        self.mesh.mask = np.array(self._data_mask).sum(0)
+        # Finally, add the overlay to the brain :
+        self.mesh.add_overlay(data_vec[mask], vertices=np.where(mask)[0], **kw)
 
     def get_parcellates(self, file):
         """Get the list of supported parcellates names and index.
