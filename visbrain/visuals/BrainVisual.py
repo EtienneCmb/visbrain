@@ -9,6 +9,11 @@ which make it easier to add vispy transformations.
 
 Authors: Etienne Combrisson <e.combrisson@gmail.com>
 
+Textures
+--------
+1D texture : white (0) + sulcus (.5) + mask (1.)
+2D texture : overlays (limited to 4 overlays)
+
 License: BSD (3-clause)
 """
 import numpy as np
@@ -19,8 +24,8 @@ from vispy.visuals import Visual
 import vispy.visuals.transforms as vist
 from vispy.scene.visuals import create_visual_node
 
-from ..utils import (array2colormap, color2vb, convert_meshdata, vispy_array,
-                     wrap_properties)
+from visbrain.utils import (array2colormap, color2vb, convert_meshdata,
+                            wrap_properties, normalize)
 
 
 logger = logging.getLogger('visbrain')
@@ -38,35 +43,32 @@ SULCUS_COLOR = [.5] * 3 + [1.]
 VERT_SHADER = """
 #version 120
 varying vec3 v_position;
-varying vec4 v_color;
 varying vec3 v_normal;
+varying vec4 v_color;
 
 void main() {
     v_position = $a_position;
     v_normal = $a_normal;
 
-    // Mask : (0. = (white, sulcus), 1. = color, 2. = mask_color)
-    // Sulcus : (0. = white, sulcus = gray)
-    if ($a_mask == 0.)
-    {
-        if ($a_sulcus == 0.)
-        {
-            v_color = vec4(1., 1., 1., 1.);
-        }
-        else if ($a_sulcus == 1.)
-        {
-            v_color = vec4(.5, .5, .5, 1.);
-        }
-    }
-    else if ($a_mask == 1.)
-    {
-        v_color = $a_color;
-    }
-    else if ($a_mask == 2.)
-    {
-        v_color = $u_mask_color;
-    }
-    v_color *= $u_light_color;
+    // Compute background color (i.e white / mask / sulcus)
+    vec4 u_bgd_color = texture1D($u_bgd_text, $a_bgd_data);
+
+    // Compute overlay colors :
+    vec4 u1 = texture2D($u_over_text, vec2($u_range.x, $a_coords.x));
+    vec4 u2 = texture2D($u_over_text, vec2($u_range.y, $a_coords.y));
+    vec4 u3 = texture2D($u_over_text, vec2($u_range.z, $a_coords.z));
+    vec4 u4 = texture2D($u_over_text, vec2($u_range.w, $a_coords.w));
+
+    // Mix overlay colors :
+    vec4 u_col = vec4(0., 0., 0., 0.);
+    u_col = u1 * $u_math.x + u2 * $u_math.y + u3 * $u_math.z + u4 * $u_math.w;
+    float u_div = max($u_math.x + $u_math.y + $u_math.z + $u_math.w, 1.);
+    u_col /= u_div;
+
+    // Mix background and overlay colors :
+    v_color = mix(u_bgd_color, u_col, $a_mask);
+
+    // Finally apply camera transform to position :
     gl_Position = $transform(vec4($a_position, 1));
 }
 """
@@ -190,6 +192,7 @@ class BrainVisual(Visual):
         self._translucent = True
         self._alpha = alpha
         self._hemisphere = hemisphere
+        self._n_overlay = 0
 
         # Initialize the vispy.Visual class with the vertex / fragment buffer :
         Visual.__init__(self, vcode=VERT_SHADER, fcode=FRAG_SHADER)
@@ -197,17 +200,17 @@ class BrainVisual(Visual):
         # _________________ BUFFERS _________________
         # Vertices / faces / normals / color :
         def_3 = np.zeros((0, 3), dtype=np.float32)
-        def_4 = np.zeros((0, 4), dtype=np.float32)
         self._vert_buffer = gloo.VertexBuffer(def_3)
-        self._color_buffer = gloo.VertexBuffer(def_4)
         self._normals_buffer = gloo.VertexBuffer(def_3)
         self._mask_buffer = gloo.VertexBuffer()
-        self._sulcus_buffer = gloo.VertexBuffer()
+        self._bgd_buffer = gloo.VertexBuffer()
+        self._xrange_buffer = gloo.VertexBuffer()
+        self._over_buffer = gloo.VertexBuffer()
+        self._math_buffer = gloo.VertexBuffer()
         self._index_buffer = gloo.IndexBuffer()
 
         # _________________ PROGRAMS _________________
         self.shared_program.vert['a_position'] = self._vert_buffer
-        self.shared_program.vert['a_color'] = self._color_buffer
         self.shared_program.vert['a_normal'] = self._normals_buffer
         self.shared_program.frag['u_alpha'] = alpha
 
@@ -292,65 +295,73 @@ class BrainVisual(Visual):
         self._mask_buffer.set_data(self._mask, convert=True)
         self.shared_program.vert['a_mask'] = self._mask_buffer
         # Sulcus :
-        sulcus = self._mask.copy() if sulcus is None else sulcus
-        sulcus = sulcus.astype(np.float32)
+        sulcus = self._mask.astype(bool).copy() if sulcus is None else sulcus
         assert isinstance(sulcus, np.ndarray)
-        assert len(sulcus) == vertices.shape[0]
-        assert (sulcus.min() == 0.) and (sulcus.max() <= 1.)
-        self._sulcus_buffer.set_data(sulcus, convert=True)
-        self.shared_program.vert['a_sulcus'] = self._sulcus_buffer
-        # Color :
-        self.color = np.ones((len(self), 4), dtype=np.float32)
+        assert len(sulcus) == len(self) and sulcus.dtype == bool
 
-    def set_color(self, data=None, color='white', alpha=1.0, **kwargs):
-        """Set specific colors on the brain.
+        # ____________________ TEXTURES ____________________
+        # Background texture :
+        self._bdg_data = np.zeros((len(self),), dtype=np.float32)
+        self._bdg_data[sulcus] = .9
+        self._bgd_buffer.set_data(self._bdg_data, convert=True)
+        self.shared_program.vert['a_bgd_data'] = self._bgd_buffer
+        # Overlay texture :
+        self._coords = np.zeros((len(self), 4), dtype=np.float32)
+        self._over_buffer.set_data(self._coords, convert=True)
+        self.shared_program.vert['a_coords'] = self._over_buffer
+        self._text2d_data = np.zeros((4, LUT_LEN, 4), dtype=np.float32)
+        self._text_2d = gloo.Texture2D(self._text2d_data)
+        self.shared_program.vert['u_over_text'] = self._text_2d
+        # Build texture range :
+        self._xrange = np.zeros((len(self), 4), dtype=np.float32)
+        self._xrange_buffer.set_data(self._xrange)
+        self.shared_program.vert['u_range'] = self._xrange_buffer
+        # Define buffer for mult and sum :
+        self._math = np.zeros((len(self), 4), dtype=np.float32)
+        self._math_buffer.set_data(self._math)
+        self.shared_program.vert['u_math'] = self._math_buffer
+
+    def add_overlay(self, data, vertices=None, **kwargs):
+        """Add an overlay to the mesh.
+
+        Note that the current implementation limit to a number of of four
+        overlays.
 
         Parameters
         ----------
-        data : array_like | None
-            Data to use for the color. If data is None, the color will
-            be uniform using the color parameter. If data is a vector,
-            the color is going to be deduced from this vector. If data
-            is a (N, 4) it will be interpreted as a color.
-        color : tuple/string/hex | 'white'
-            The default uniform color
-        alpha : float | 1.0
-            Opacity to use if data is a vector
-        kwargs : dict | { }
-            Further arguments are passed to the colormap function.
+        data : array_like
+            Array of data of shape (n_data,).
+        vertices : array_like | None
+            The vertices to color with the data of shape (n_data,).
+        kwargs : dict | {}
+            Additional color color properties (cmap, clim, vmin, vmax, under,
+            over)
         """
-        # Color to RGBA :
-        color = color2vb(color, len(self))
-
-        # Color management :
-        if data is None:  # uniform color
-            col = np.tile(color, (len(self), 1))
-        elif data.ndim == 1:  # data vector
-            col = array2colormap(data.copy(), **kwargs)
-        elif (data.ndim > 1) and (data.shape[1] == 4):
-            col = vispy_array(data)
-        else:
-            col = data
-
-        self._color_buffer.set_data(vispy_array(col))
-        self.update()
-
-    def set_alpha(self, alpha, index=None):
-        """Set transparency to the brain.
-
-        Prameters
-        ---------
-        alpha : float
-            Transparency level.
-        index : array_like | None
-            Index for sending alpha. Used by slices.
-        """
-        if index is None:
-            self._colFaces[..., -1] = np.float32(alpha)
-        else:
-            self._colFaces[index, -1] = np.float32(alpha)
-        self._color_buffer.set_data(self._colFaces)
-        self.update()
+        # Check input variables :
+        if vertices is None:
+            vertices = np.ones((len(self),), dtype=bool)
+        assert isinstance(data, np.ndarray) and len(data) == len(vertices)
+        # Build texture coordinate :
+        self._coords[vertices, self._n_overlay] = 0. + self._n_overlay / 4.
+        self._over_buffer.set_data(self._coords, convert=True)
+        # Build the colormap vector :
+        data_lim = (data.min(), data.max())
+        col = np.linspace(data_lim[0], data_lim[1], LUT_LEN)
+        # Set x-range of the texture :
+        self._xrange[vertices, self._n_overlay] = normalize(data)
+        self._xrange_buffer.set_data(self._xrange)
+        # Set this vector to the 2D texture :
+        self._text2d_data[self._n_overlay, ...] = array2colormap(col, **kwargs)
+        self._text_2d.set_data(self._text2d_data)
+        # Set mask :
+        mask = self._mask
+        mask[vertices] = 1.
+        self.mask = mask
+        # Send the array for sum and multiplication :
+        self._math[vertices, self._n_overlay] = 1.
+        self._math_buffer.set_data(self._math)
+        # Update the number of overlays :
+        self._n_overlay += 1
 
     def set_camera(self, camera=None):
         """Set a camera to the mesh.
@@ -376,8 +387,16 @@ class BrainVisual(Visual):
         # Delete vertices / faces / colors / normals :
         self._vert_buffer.delete()
         self._index_buffer.delete()
-        self._color_buffer.delete()
         self._normals_buffer.delete()
+        self._over_buffer.delete()
+        self._xrange_buffer.delete()
+        self._math_buffer.delete()
+
+    def _build_bgd_texture(self):
+        color_1d = np.c_[np.array([1.] * 4), np.array(self.mask_color),
+                         np.array(SULCUS_COLOR)].T
+        text_1d = gloo.Texture1D(color_1d.astype(np.float32))
+        self.shared_program.vert['u_bgd_text'] = text_1d
 
     # =======================================================================
     # =======================================================================
@@ -393,7 +412,7 @@ class BrainVisual(Visual):
         """Call everytime there is an interaction with the mesh."""
         view_frag = view.view_program.frag
         view_frag['u_light_position'] = self._camera_transform.map(
-            self._light_position)[0:-1]
+            LIGHT_POSITION)[0:-1]
 
     @staticmethod
     def _prepare_transforms(view):
@@ -409,11 +428,6 @@ class BrainVisual(Visual):
     # Properties
     # =======================================================================
     # =======================================================================
-
-    @property
-    def get_vertices(self):
-        """Mesh data."""
-        return self._vertfcn.map(self._vertices)[..., 0:-1]
 
     # ----------- HEMISPHERE -----------
     @property
@@ -434,23 +448,6 @@ class BrainVisual(Visual):
         self._index_buffer.set_data(index)
         self.update()
         self._hemisphere = value
-
-    # ----------- COLOR -----------
-    @property
-    def color(self):
-        """Get the color value."""
-        pass
-        # return self._color
-
-    @color.setter
-    @wrap_properties
-    def color(self, value):
-        """Set color value."""
-        assert isinstance(value, np.ndarray) and value.ndim == 2
-        assert value.shape[0] == len(self)
-        self._color_buffer.set_data(value.astype(np.float32))
-        self.update()
-        # self._color = value
 
     # ----------- MASK -----------
     @property
@@ -486,9 +483,9 @@ class BrainVisual(Visual):
     def sulcus(self, value):
         """Set sulcus value."""
         assert isinstance(value, np.ndarray) and len(value) == len(self)
-        value = value.astype(np.float32)
-        assert (value.min() == 0.) and (value.max() == 1.)
-        self._sulcus_buffer.set_data(value, convert=True)
+        assert isinstance(value.dtype, bool)
+        self._bgd_data[value] = 1.
+        self._bgd_buffer.set_data(self._bgd_data)
         self.update()
 
     # ----------- TRANSPARENT -----------
