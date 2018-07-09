@@ -53,17 +53,21 @@ void main() {
     // Compute background color (i.e white / mask / sulcus)
     vec4 u_bgd_color = texture1D($u_bgd_text, $a_bgd_data);
 
-    // Compute overlay colors :
-    vec4 u1 = texture2D($u_over_text, vec2($u_range.x, $a_coords.x));
-    vec4 u2 = texture2D($u_over_text, vec2($u_range.y, $a_coords.y));
-    vec4 u3 = texture2D($u_over_text, vec2($u_range.z, $a_coords.z));
-    vec4 u4 = texture2D($u_over_text, vec2($u_range.w, $a_coords.w));
-
-    // Mix overlay colors :
+    // Compute overlay colors only if mask is 1.:
     vec4 u_col = vec4(0., 0., 0., 0.);
-    u_col = u1 * $u_math.x + u2 * $u_math.y + u3 * $u_math.z + u4 * $u_math.w;
-    float u_div = max($u_math.x + $u_math.y + $u_math.z + $u_math.w, 1.);
-    u_col /= u_div;
+    if ($a_mask == 1.)
+    {
+        // Turn each overlay into color using a single texture :
+        vec4 u1 = texture2D($u_over_text, vec2($u_range.x, $a_coords.x));
+        vec4 u2 = texture2D($u_over_text, vec2($u_range.y, $a_coords.y));
+        vec4 u3 = texture2D($u_over_text, vec2($u_range.z, $a_coords.z));
+        vec4 u4 = texture2D($u_over_text, vec2($u_range.w, $a_coords.w));
+
+        // Mix overlay colors :
+        u_col = u1 * $u_sum.x + u2 * $u_sum.y + u3 * $u_sum.z + u4 * $u_sum.w;
+        float u_div = max($u_sum.x + $u_sum.y + $u_sum.z + $u_sum.w, 1.);
+        u_col /= u_div;
+    }
 
     // Mix background and overlay colors :
     v_color = mix(u_bgd_color, u_col, $a_mask);
@@ -319,7 +323,7 @@ class BrainVisual(Visual):
         # Define buffer for mult and sum :
         self._math = np.zeros((len(self), 4), dtype=np.float32)
         self._math_buffer.set_data(self._math)
-        self.shared_program.vert['u_math'] = self._math_buffer
+        self.shared_program.vert['u_sum'] = self._math_buffer
 
     def add_overlay(self, data, vertices=None, to_overlay=None, mask_data=None,
                     **kwargs):
