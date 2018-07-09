@@ -25,6 +25,13 @@ from ..utils import (array2colormap, color2vb, convert_meshdata, vispy_array,
 
 logger = logging.getLogger('visbrain')
 
+# Light and color properties :
+LUT_LEN = 1024
+LIGHT_POSITION = [100.] * 3
+LIGHT_INTENSITY = [1.] * 3
+COEF_AMBIENT = .05
+COEF_SPECULAR = .5
+SULCUS_COLOR = [.5] * 3 + [1.]
 
 # Vertex shader : executed code for individual vertices. The transformation
 # applied to each one of them is the camera rotation.
@@ -155,25 +162,11 @@ class BrainVisual(Visual):
         camera.
     meshdata : vispy.meshdata | None
         Custom vispy mesh data
-    color : tuple/string/hex | None
-        Alternatively, you can specify a uniform color.
-    l_position : tuple | (1., 1., 1.)
-        Tuple of three floats defining (x, y, z) light position.
-    l_color : tuple | (1., 1., 1., 1.)
-        Tuple of four floats defining (R, G, B, A) light color.
-    l_intensity : tuple | (1., 1., 1.)
-        Tuple of three floats defining (x, y, z) light intensity.
-    l_ambient : float | 0.05
-        Coefficient for the ambient light
-    l_specular : float | 0.5
-        Coefficient for the specular light
     hemisphere : string | 'both'
         Choose if an hemisphere has to be selected ('both', 'left', 'right')
     lr_index : int | None
         Integer which specify the index where to split left and right
         hemisphere.
-    vertfcn : VisPy.transform | None
-        Transformation to apply to vertices using get_vertices.
     """
 
     def __len__(self):
@@ -190,10 +183,7 @@ class BrainVisual(Visual):
 
     def __init__(self, vertices=None, faces=None, normals=None, lr_index=None,
                  hemisphere='both', sulcus=None, alpha=1., mask_color='orange',
-                 light_position=[100.] * 3, light_color=[1.] * 4,
-                 light_intensity=[1.] * 3, coef_ambient=.05, coef_specular=.5,
-                 vertfcn=None, camera=None, meshdata=None,
-                 invert_normals=False):
+                 camera=None, meshdata=None, invert_normals=False):
         """Init."""
         self._camera = None
         self._camera_transform = vist.NullTransform()
@@ -203,9 +193,6 @@ class BrainVisual(Visual):
 
         # Initialize the vispy.Visual class with the vertex / fragment buffer :
         Visual.__init__(self, vcode=VERT_SHADER, fcode=FRAG_SHADER)
-
-        # _________________ TRANSFORMATIONS _________________
-        self._vertfcn = vist.NullTransform() if vertfcn is None else vertfcn
 
         # _________________ BUFFERS _________________
         # Vertices / faces / normals / color :
@@ -224,16 +211,16 @@ class BrainVisual(Visual):
         self.shared_program.vert['a_normal'] = self._normals_buffer
         self.shared_program.frag['u_alpha'] = alpha
 
+        # _________________ LIGHTS _________________
+        self.shared_program.frag['u_light_intensity'] = LIGHT_INTENSITY
+        self.shared_program.frag['u_coef_ambient'] = COEF_AMBIENT
+        self.shared_program.frag['u_coef_specular'] = COEF_SPECULAR
+
         # _________________ DATA / CAMERA / LIGHT _________________
         self.set_data(vertices, faces, normals, hemisphere, lr_index,
                       invert_normals, sulcus, meshdata)
         self.set_camera(camera)
         self.mask_color = mask_color
-        self.light_color = light_color
-        self.light_position = light_position
-        self.light_intensity = light_intensity
-        self.coef_ambient = coef_ambient
-        self.coef_specular = coef_specular
 
         # _________________ GL STATE _________________
         self.set_gl_state('translucent', depth_test=True, cull_face=False,
@@ -551,85 +538,9 @@ class BrainVisual(Visual):
     @wrap_properties
     def mask_color(self, value):
         """Set mask_color value."""
-        value = color2vb(value)
-        self.shared_program.vert['u_mask_color'] = value.ravel()
+        value = color2vb(value).ravel()
         self._mask_color = value
-        self.update()
-
-    # ----------- LIGHT_POSITION -----------
-    @property
-    def light_position(self):
-        """Get the light_position value."""
-        return self._light_position
-
-    @light_position.setter
-    @wrap_properties
-    def light_position(self, value):
-        """Set light_position value."""
-        assert len(value) == 3
-        self.shared_program.frag['u_light_position'] = value
-        self._light_position = value
-        self.update()
-
-    # ----------- LIGHT_COLOR -----------
-    @property
-    def light_color(self):
-        """Get the light_color value."""
-        return self._light_color
-
-    @light_color.setter
-    @wrap_properties
-    def light_color(self, value):
-        """Set light_color value."""
-        assert len(value) == 4
-        self.shared_program.vert['u_light_color'] = value
-        self._light_color = value
-        self.update()
-
-    # ----------- LIGHT_INTENSITY -----------
-    @property
-    def light_intensity(self):
-        """Get the light_intensity value."""
-        return self._light_intensity
-
-    @light_intensity.setter
-    @wrap_properties
-    def light_intensity(self, value):
-        """Set light_intensity value."""
-        assert len(value) == 3
-        self.shared_program.frag['u_light_intensity'] = value
-        self._light_intensity = value
-        self.update()
-
-    # ----------- COEF_AMBIENT -----------
-    @property
-    def coef_ambient(self):
-        """Get the coef_ambient value."""
-        return self._coef_ambient
-
-    @coef_ambient.setter
-    @wrap_properties
-    def coef_ambient(self, value):
-        """Set coef_ambient value."""
-        assert isinstance(value, (int, float))
-        self.shared_program.frag['u_coef_ambient'] = float(value)
-        self._coef_ambient = value
-        self.update()
-
-    # ----------- COEF_SPECULAR -----------
-    @property
-    def coef_specular(self):
-        """Get the coef_specular value."""
-        return self._coef_specular
-
-    @coef_specular.setter
-    @wrap_properties
-    def coef_specular(self, value):
-        """Set coef_specular value."""
-        assert isinstance(value, (int, float))
-        self.shared_program.frag['u_coef_specular'] = value
-        self._coef_specular = value
-        self.update()
+        self._build_bgd_texture()
 
 
 BrainMesh = create_visual_node(BrainVisual)
