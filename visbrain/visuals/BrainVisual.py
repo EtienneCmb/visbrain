@@ -36,7 +36,7 @@ LIGHT_POSITION = [100.] * 3
 LIGHT_INTENSITY = [1.] * 3
 COEF_AMBIENT = .05
 COEF_SPECULAR = .5
-SULCUS_COLOR = [.5] * 3 + [1.]
+SULCUS_COLOR = [.4] * 3 + [1.]
 
 # Vertex shader : executed code for individual vertices. The transformation
 # applied to each one of them is the camera rotation.
