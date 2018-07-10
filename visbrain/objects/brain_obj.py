@@ -325,7 +325,7 @@ class BrainObj(VisbrainObject):
         _project_sources_data(s_obj, self, project, radius, contribute,
                               mask_color=mask_color, **kw)
 
-    def add_activation(self, data=None, vertices=None, smoothing_steps=20,
+    def add_activation(self, data=None, vertices=None, smoothing_steps=5,
                        file=None, hemisphere=None, hide_under=None,
                        n_contours=None, cmap='viridis', clim=None, vmin=None,
                        vmax=None, under='gray', over='red'):
@@ -368,10 +368,11 @@ class BrainObj(VisbrainObject):
         over : string/tuple/array_like | 'red'
             The color to use for values over vmax.
         """
-        col_kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
+        kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
         is_under = isinstance(hide_under, (int, float))
-        color = np.zeros((len(self.mesh), 4), dtype=np.float32)
-        mask = np.zeros((len(self.mesh),), dtype=float)
+        mask = np.zeros((len(self.mesh),), dtype=bool)
+        data_vec = np.zeros((len(self.mesh),), dtype=np.float32)
+        sm_data = np.zeros((len(self.mesh),), dtype=np.float32)
         self._default_cblabel = "Activation"
         # ============================= METHOD =============================
         if isinstance(data, np.ndarray):
@@ -384,28 +385,14 @@ class BrainObj(VisbrainObject):
             if isinstance(smoothing_steps, int):
                 edges = mesh_edges(self.mesh._faces)
                 sm_mat = smoothing_matrix(vertices, edges, smoothing_steps)
-                sm_data = data[sm_mat.col]
+                sc = data[sm_mat.col]
                 rows = sm_mat.row
             else:
-                sm_data = data
+                sc = data
                 rows = vertices
-            # Clim :
-            clim = (sm_data.min(), sm_data.max()) if clim is None else clim
-            assert len(clim) == 2
-            col_kw['clim'] = clim
-            # Contours :
-            sm_data = self._data_to_contour(sm_data, clim, n_contours)
-            _, idx = self._hemisphere_from_file(hemisphere, None)
-            hemi_idx = np.where(idx)[0]
-            # Convert into colormap :
-            smooth_map = array2colormap(sm_data, **col_kw)
-            color = np.ones((len(self.mesh), 4), dtype=np.float32)
-            color[hemi_idx[rows], :] = smooth_map
-            # Mask :
-            if is_under:
-                mask[hemi_idx[rows[sm_data >= hide_under]]] = 1.
-            else:
-                mask[:] = 1.
+            # Hemisphere :
+            _, hemi_idx = self._hemisphere_from_file(hemisphere, file)
+            activ_vert = np.where(hemi_idx)[0][rows]
         elif isinstance(file, str):
             assert os.path.isfile(file)
             logger.info("Add overlay to the {} brain template "
@@ -416,31 +403,22 @@ class BrainObj(VisbrainObject):
             sc = sc.ravel(order="F")
             hemisphere = 'both' if len(sc) == len(self.mesh) else hemisphere
             # Hemisphere :
-            hemisphere, idx = self._hemisphere_from_file(hemisphere, file)
-            assert len(sc) == idx.sum()
-            # Clim :
-            clim = (sc.min(), sc.max()) if clim is None else clim
-            assert len(clim) == 2
-            col_kw['clim'] = clim
-            # Contour :
-            sc = self._data_to_contour(sc, clim, n_contours)
-            # Convert into colormap :
-            color[idx, :] = array2colormap(sc, **col_kw)
-            # Mask :
-            mask[idx] = 1.
-            if is_under:
-                sub_idx = np.where(idx)[0][sc < hide_under]
-                mask[sub_idx] = 0.
+            _, activ_vert = self._hemisphere_from_file(hemisphere, file)
         else:
             raise ValueError("Unknown activation type.")
-        # Build mask color :
-        col_mask = ~np.tile(mask.reshape(-1, 1).astype(bool), (1, 4))
-        # Keep a copy of each overlay color and mask :
-        self._data_color.append(np.ma.masked_array(color, mask=col_mask))
-        self._data_mask.append(mask)
-        # Set color and mask to the mesh :
-        self.mesh.color = np.ma.array(self._data_color).mean(0)
-        self.mesh.mask = np.array(self._data_mask).max(0)
+        # Define the data to send to the vertices :
+        sm_data[activ_vert] = sc
+        data_vec[activ_vert] = self._data_to_contour(sc, clim, n_contours)
+        mask[activ_vert] = True
+        # Hide under :
+        if is_under:
+            mask[sm_data < hide_under] = False
+        # Clim :
+        clim = (sc.min(), sc.max()) if clim is None else clim
+        assert len(clim) == 2
+        kw['clim'] = clim
+        # Add overlay :
+        self.mesh.add_overlay(data_vec[mask], vertices=np.where(mask)[0], **kw)
 
     def parcellize(self, file, select=None, hemisphere=None, data=None,
                    cmap='viridis', clim=None, vmin=None, under='gray',
@@ -564,6 +542,7 @@ class BrainObj(VisbrainObject):
 
     @staticmethod
     def _data_to_contour(data, clim, n_contours):
+        clim = (data.min(), data.max()) if clim is None else clim
         if isinstance(n_contours, int):
             _range = np.linspace(clim[0], clim[1], n_contours)
             for k in range(len(_range) - 1):
