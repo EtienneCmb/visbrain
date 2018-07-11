@@ -95,7 +95,6 @@ class Colormap(object):
             from scipy import interpolate
             # Define interpolation function :
             x_, y_ = np.linspace(0, 1, 4), np.linspace(0, 1, data.shape[0])
-            print(len(x_), len(y_), cmap.shape)
             f = interpolate.interp2d(x_, y_, cmap, kind=interpolation)
             # Interpolate colormap :
             self._data = f(x_, np.linspace(0, 1, lut_len))
