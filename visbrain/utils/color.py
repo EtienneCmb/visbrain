@@ -7,7 +7,7 @@ string / faces into RBGA colors, defining the basic colormap object...)
 
 import numpy as np
 
-from vispy.color.colormap import Colormap
+from vispy.color.colormap import Colormap as VispyColormap
 
 from matplotlib import cm
 import matplotlib.colors as mplcol
@@ -242,14 +242,14 @@ def cmap_to_glsl(limits=None, lut_len=1024, color=None, **kwargs):
         limits = (0., 1.)
     assert len(limits) == 2
     # Color transform :
-    vec = np.linspace(limits[0], limits[1], n_colors)
+    vec = np.linspace(limits[0], limits[1], lut_len)
     if color is None:  # colormap
-        cmap = Colormap(array2colormap(vec, **kwargs))
+        cmap = VispyColormap(array2colormap(vec, **kwargs))
     else:              # uniform color
         translucent = kwargs.get('translucent', None)
-        rep_col = color2vb(color, length=n_colors)
+        rep_col = color2vb(color, length=lut_len)
         cmap_trans = _transclucent_cmap(vec, rep_col, translucent)
-        cmap = Colormap(cmap_trans)
+        cmap = VispyColormap(cmap_trans)
 
     return cmap
 
