@@ -75,6 +75,16 @@ class Colormap(object):
         Color data of shape (n_data, 4)
     shape : tuple
         Shape of the data.
+    r : array_like
+        Red levels.
+    g : array_like
+        Green levels.
+    b : array_like
+        Blue levels.
+    rgb : array_like
+        RGB levels.
+    alpha : array_like
+        Transparency level.
     glsl : vispy.colors.Colormap
         GL colormap version.
     """
@@ -136,6 +146,31 @@ class Colormap(object):
     def glsl(self):
         """Get a glsl version of the colormap."""
         return cmap_to_glsl(lut_len=len(self), **self._kw)
+
+    @property
+    def r(self):
+        """Get red levels."""
+        return self._data[:, 0]
+
+    @property
+    def g(self):
+        """Get green levels."""
+        return self._data[:, 1]
+
+    @property
+    def b(self):
+        """Get blue levels."""
+        return self._data[:, 2]
+
+    @property
+    def rgb(self):
+        """Get rgb levels."""
+        return self._data[:, 0:3]
+
+    @property
+    def alpha(self):
+        """Get transparency level."""
+        return self._data[:, -1]
 
 
 def color2vb(color=None, default=(1., 1., 1.), length=1, alpha=1.0,

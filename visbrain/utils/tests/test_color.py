@@ -21,6 +21,12 @@ class TestColor(object):
         from vispy.color import Colormap as VispyColormap
         assert isinstance(cmap_1d.data, np.ndarray)
         assert isinstance(cmap_1d.glsl, VispyColormap)
+        assert np.array_equal(cmap_1d.data[:, 0], cmap_1d.r)          # red
+        assert np.array_equal(cmap_1d.data[:, 1], cmap_1d.g)          # green
+        assert np.array_equal(cmap_1d.data[:, 2], cmap_1d.b)          # blue
+        assert np.array_equal(cmap_1d.data[:, 3], cmap_1d.alpha)      # alpha
+        assert np.array_equal(cmap_1d.data[:, 0:3], cmap_1d.rgb)      # rgb
+        assert cmap_1d.rgb.shape == (511, 3)
         # ---------------- 2D data vector ----------------
         # 2D (1024, 4) colors :
         data_2d_uni = np.random.uniform(size=(1024, 4))
