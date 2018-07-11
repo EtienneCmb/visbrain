@@ -96,13 +96,12 @@ class BrainCbar(object):
         """Executed function when projection need updates."""
         kwargs = self.cbqt.cbobjs._objs['roi'].to_kwargs(True)
         self.roi.update_from_dict(kwargs)
-        # self.roi._update_cbar()
+        self.roi._update_cbar()
 
     def _fcn_minmax_roi(self):
         """Executed function for autoscale projections."""
-        self.cbqt.cbobjs._objs['roi']._clim = self.roi._minmax
-        self.roi._clim = self.roi._minmax
-        # self.roi._update_cbar()
+        self.roi._update_cbar_minmax()
+        self.roi._update_cbar()
 
     ###########################################################################
     #                              CONNECTIVITY
