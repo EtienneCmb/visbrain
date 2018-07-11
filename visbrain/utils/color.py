@@ -95,6 +95,9 @@ class Colormap(object):
         elif (data.ndim == 2) and (data.shape[-1] in [3, 4]):  # data as color
             if (data.shape[0] != lut_len) and isinstance(interpolation, str):
                 logger.debug('data consider as color and interpolated')
+                if data.shape[0] == 1:  # replicate color
+                    self._data = np.tile(data, (lut_len, 1))
+                    return None
                 from scipy import interpolate
                 # Define interpolation function :
                 x_, y_ = np.linspace(0, 1, 4), np.linspace(0, 1, data.shape[0])
