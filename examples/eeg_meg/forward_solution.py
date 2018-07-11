@@ -31,7 +31,7 @@ kw_b_obj = dict(translucent=False)
 # Additional inputs for SourceObj :
 kw_s_obj = dict(color='blue', symbol='square')
 # Additional inputs for activations (colormap, clim...) :
-kw_activation = dict(cmap='Blues', hide_under=0., clim=(0., .6))
+kw_activation = dict(cmap='Reds', hide_under=0., clim=(0., .6))
 
 """Show control :
 - True -> directly display the Brain interface
