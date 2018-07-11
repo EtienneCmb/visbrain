@@ -219,14 +219,14 @@ def _transclucent_cmap(x, x_cmap, translucent):
     return x_cmap
 
 
-def cmap_to_glsl(limits=None, n_colors=1024, color=None, **kwargs):
+def cmap_to_glsl(limits=None, lut_len=1024, color=None, **kwargs):
     """Get a glsl colormap.
 
     Parameters
     ----------
     limits : tuple | None
         Color limits for the object. Must be a tuple of two floats.
-    n_colors : int | 1024
+    lut_len : int | 1024
         Number of levels for the colormap.
     color : string | None
         Use a unique color for the colormap.
