@@ -36,7 +36,16 @@ flake: clean-test
 	@flake8
 
 examples: clean
-	@for i in examples/*/*.py;do \
+	@for i in examples/brain/*.py examples/objects/*.py;do \
+		echo "-----------------------------------------------"; \
+		echo $$i; \
+		echo "-----------------------------------------------"; \
+		python $$i --visbrain-show=False; \
+		echo "\n"; \
+	done
+
+examples-full: clean
+	@for i in @for i in examples/*/*.py;do \
 		echo "-----------------------------------------------"; \
 		echo $$i; \
 		echo "-----------------------------------------------"; \
