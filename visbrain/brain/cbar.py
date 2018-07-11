@@ -64,6 +64,7 @@ class BrainCbar(object):
             self.cbqt.select(0)
             self.cbqt._fcn_change_object()
         self.menuDispCbar.setEnabled(is_cbqt)
+        self.cbqt.setEnabled('roi', hasattr(self.roi, 'mesh'))
 
         # Add the camera to the colorbar :
         self.cbqt.add_camera(camera)
@@ -87,6 +88,9 @@ class BrainCbar(object):
     def _fcn_minmax_brain(self):
         """Executed function for autoscale projections."""
         self.atlas._update_cbar_minmax()
+        self.cbqt.cbobjs._objs['brain']['clim'] = self.atlas._clim
+        kwargs = self.cbqt.cbobjs._objs['brain'].to_kwargs(True)
+        self.atlas.update_from_dict(kwargs)
         self.atlas._update_cbar()
 
     ###########################################################################
@@ -101,6 +105,9 @@ class BrainCbar(object):
     def _fcn_minmax_roi(self):
         """Executed function for autoscale projections."""
         self.roi._update_cbar_minmax()
+        self.cbqt.cbobjs._objs['roi']['clim'] = self.roi._clim
+        kwargs = self.cbqt.cbobjs._objs['roi'].to_kwargs(True)
+        self.roi.update_from_dict(kwargs)
         self.roi._update_cbar()
 
     ###########################################################################
