@@ -8,8 +8,7 @@ from vispy import scene
 from .visbrain_obj import VisbrainObject
 from ._projection import _project_sources_data
 from ..visuals import BrainMesh
-from ..utils import (mesh_edges, smoothing_matrix, array2colormap,
-                     rotate_turntable)
+from ..utils import (mesh_edges, smoothing_matrix, rotate_turntable)
 from ..io import (download_file, is_nibabel_installed, is_pandas_installed,
                   get_data_path, get_files_in_data, add_brain_template,
                   remove_brain_template, path_to_tmp, get_files_in_folders,

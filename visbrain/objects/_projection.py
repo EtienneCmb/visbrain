@@ -2,7 +2,7 @@
 import numpy as np
 from scipy.spatial.distance import cdist
 
-from ..utils import (normalize, array2colormap, color2vb)
+from ..utils import (normalize, color2vb)
 
 import logging
 logger = logging.getLogger('visbrain')
