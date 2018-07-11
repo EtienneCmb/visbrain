@@ -73,6 +73,8 @@ class Colormap(object):
     ----------
     data : array_like
         Color data of shape (n_data, 4)
+    shape : tuple
+        Shape of the data.
     glsl : vispy.colors.Colormap
         GL colormap version.
     """
@@ -89,24 +91,22 @@ class Colormap(object):
                         under=under, over=over, translucent=translucent,
                         alpha=alpha)
         # Color conversion :
-        if data.ndim == 1:  # data vector
+        if isinstance(cmap, np.ndarray) and isinstance(interpolation, str):
+            from scipy import interpolate
+            # Define interpolation function :
+            x_, y_ = np.linspace(0, 1, 4), np.linspace(0, 1, data.shape[0])
+            print(len(x_), len(y_), cmap.shape)
+            f = interpolate.interp2d(x_, y_, cmap, kind=interpolation)
+            # Interpolate colormap :
+            self._data = f(x_, np.linspace(0, 1, lut_len))
+        elif data.ndim == 1:  # data vector
             logger.debug('Color inferred from data vector')
             self._data = array2colormap(data, **self._kw)
         elif (data.ndim == 2) and (data.shape[-1] in [3, 4]):  # data as color
-            if (data.shape[0] != lut_len) and isinstance(interpolation, str):
-                logger.debug('data consider as color and interpolated')
-                if data.shape[0] == 1:  # replicate color
-                    self._data = np.tile(data, (lut_len, 1))
-                    return None
-                from scipy import interpolate
-                # Define interpolation function :
-                x_, y_ = np.linspace(0, 1, 4), np.linspace(0, 1, data.shape[0])
-                f = interpolate.interp2d(x_, y_, cmap, kind=interpolation)
-                # Interpolate colormap :
-                self._data = f(x_, np.linspace(0, 1, lut_len))
-            else:
-                logger.debug('data consider as color')
-                self._data = data
+            logger.debug('data consider as color and interpolated')
+            if (data.shape[0] == 1) and isinstance(interpolation, str):
+                data = np.tile(data, (lut_len, 1))
+            self._data = data
         else:
             raise ValueError("data type not recognized.")
         # Alpha correction :
@@ -127,6 +127,11 @@ class Colormap(object):
     def data(self):
         """Get colormap data."""
         return self._data
+
+    @property
+    def shape(self):
+        """Get the shape of the data."""
+        return self._data.shape
 
     @property
     def glsl(self):
