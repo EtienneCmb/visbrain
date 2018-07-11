@@ -4,6 +4,7 @@ This file contains a bundle of functions that can be used to have a more
 flexible control of diffrent problem involving colors (like turn an array /
 string / faces into RBGA colors, defining the basic colormap object...)
 """
+import logging
 
 import numpy as np
 
@@ -14,11 +15,120 @@ import matplotlib.colors as mplcol
 from warnings import warn
 
 from .sigproc import normalize
+from .mesh import vispy_array
 
 
-__all__ = ('color2vb', 'array2colormap', 'cmap_to_glsl', 'dynamic_color',
-           'color2faces', 'type_coloring', 'mpl_cmap', 'color2tuple',
-           'mpl_cmap_index')
+__all__ = ('Colormap', 'color2vb', 'array2colormap', 'cmap_to_glsl',
+           'dynamic_color', 'color2faces', 'type_coloring', 'mpl_cmap',
+           'color2tuple', 'mpl_cmap_index')
+
+
+logger = logging.getLogger('visbrain')
+
+
+class Colormap(object):
+    """Main colormap class.
+
+    Parameters
+    ----------
+    data : array_like
+        Data for the colormap.
+
+            * Row vector of shape (n_data,) will be turned into colors using
+              cmap
+            * Image like of shape (n_data, 4). This image can also be
+              interpolated.
+    cmap : string | inferno
+        Matplotlib colormap
+    clim : tuple/list | None
+        Limit of the colormap. The clim parameter must be a tuple / list
+        of two float number each one describing respectively the (min, max)
+        of the colormap. Every values under clim[0] or over clim[1] will
+        peaked.
+    alpha : float | 1.0
+        The opacity to use. The alpha parameter must be between 0 and 1.
+    vmin : float | None
+        Threshold from which every color will have the color defined using
+        the under parameter bellow.
+    under : tuple/string | 'dimgray'
+        Matplotlib color for values under vmin.
+    vmax : float | None
+        Threshold from which every color will have the color defined using
+        the over parameter bellow.
+    over : tuple/string | 'darkred'
+        Matplotlib color for values over vmax.
+    translucent : tuple | None
+        Set a specific range translucent. With f_1 and f_2 two floats, if
+        translucent is :
+
+            * (f_1, f_2) : values between f_1 and f_2 are set to translucent
+            * (None, f_2) x <= f_2 are set to translucent
+            * (f_1, None) f_1 <= x are set to translucent
+    lut_len : int | 1024
+        Number of levels for the colormap.
+    interpolation : {None, 'linear', 'cubic'}
+        Interpolation type. Default is None.
+
+    Attributes
+    ----------
+    data : array_like
+        Color data of shape (n_data, 4)
+    glsl : vispy.colors.Colormap
+        GL colormap version.
+    """
+
+    def __init__(self, data=None, cmap='viridis', clim=None, vmin=None,
+                 under=None, vmax=None, over=None, translucent=None, alpha=1.,
+                 lut_len=1024, interpolation=None):
+        """Init."""
+        # Preprocess data :
+        data = np.asarray(data)
+        data = np.linspace(0., 1., lut_len) if data is None else data
+        # Keep color parameters into a dict :
+        self._kw = dict(cmap=cmap, clim=clim, vmin=vmin, vmax=vmax,
+                        under=under, over=over, translucent=translucent,
+                        alpha=alpha)
+        # Color conversion :
+        if data.ndim == 1:  # data vector
+            logger.debug('Color inferred from data vector')
+            self._data = array2colormap(data, **self._kw)
+        elif (data.ndim == 2) and (data.shape[-1] in [3, 4]):  # data as color
+            if (data.shape[0] != lut_len) and isinstance(interpolation, str):
+                logger.debug('data consider as color and interpolated')
+                from scipy import interpolate
+                # Define interpolation function :
+                x_, y_ = np.linspace(0, 1, 4), np.linspace(0, 1, data.shape[0])
+                f = interpolate.interp2d(x_, y_, cmap, kind=interpolation)
+                # Interpolate colormap :
+                self._data = f(x_, np.linspace(0, 1, lut_len))
+            else:
+                logger.debug('data consider as color')
+                self._data = data
+        else:
+            raise ValueError("data type not recognized.")
+        # Alpha correction :
+        if self._data.shape[-1] == 3:
+            self._data = np.c_[self._data, np.full((len(self),), alpha)]
+        # NumPy float32 conversion :
+        self._data = vispy_array(self._data)
+
+    def __len__(self):
+        """Get the number of colors in the colormap."""
+        return self._data.shape[0]
+
+    def __getitem__(self, name):
+        """Get a color item."""
+        return self._kw[name]
+
+    @property
+    def data(self):
+        """Get colormap data."""
+        return self._data
+
+    @property
+    def glsl(self):
+        """Get a glsl version of the colormap."""
+        return cmap_to_glsl(lut_len=len(self), **self._kw)
 
 
 def color2vb(color=None, default=(1., 1., 1.), length=1, alpha=1.0,
