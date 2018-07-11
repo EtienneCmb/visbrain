@@ -24,7 +24,7 @@ from vispy.visuals import Visual
 import vispy.visuals.transforms as vist
 from vispy.scene.visuals import create_visual_node
 
-from visbrain.utils import (array2colormap, color2vb, convert_meshdata,
+from visbrain.utils import (Colormap, color2vb, convert_meshdata,
                             wrap_properties, normalize)
 
 
@@ -57,16 +57,19 @@ void main() {
     vec4 u_col = vec4(0., 0., 0., 0.);
     if ($a_mask == 1.)
     {
-        // Turn each overlay into color using a single texture :
-        vec4 u1 = texture2D($u_over_text, vec2($u_range.x, $a_coords.x));
-        vec4 u2 = texture2D($u_over_text, vec2($u_range.y, $a_coords.y));
-        vec4 u3 = texture2D($u_over_text, vec2($u_range.z, $a_coords.z));
-        vec4 u4 = texture2D($u_over_text, vec2($u_range.w, $a_coords.w));
-
-        // Mix overlay colors :
-        u_col = u1 * $u_sum.x + u2 * $u_sum.y + u3 * $u_sum.z + u4 * $u_sum.w;
-        float u_div = max($u_sum.x + $u_sum.y + $u_sum.z + $u_sum.w, 1.);
-        u_col /= u_div;
+        float u_div = 0.;
+        float off = float($u_n_overlays > 1) * 0.999999;
+        for (int i=0; i<$u_n_overlays; i++) {
+            // Texture coordinate :
+            vec2 tex_coords = vec2($u_range[i], (i + off)/$u_n_overlays);
+            // Get the color using the texture :
+            vec4 ux = texture2D($u_over_text, tex_coords);
+            // Ponderate the color with transparency level :
+            u_col += $u_alphas[i] * ux;
+            // Number of contributing overlay per vertex :
+            u_div += $u_alphas[i];
+        }
+        u_col /= max(u_div, 1.);
     }
 
     // Mix background and overlay colors :
@@ -95,7 +98,6 @@ void main() {
     // ----------------- Ambient light -----------------
     vec3 ambientLight = $u_coef_ambient * v_color.rgb * $u_light_intensity;
 
-
     // ----------------- Diffuse light -----------------
     // Calculate the vector from this pixels surface to the light source
     vec3 surfaceToLight = $u_light_position - v_position;
@@ -109,7 +111,6 @@ void main() {
     // Get diffuse light :
     vec3 diffuseLight =  v_color.rgb * brightness * $u_light_intensity;
 
-
     // ----------------- Specular light -----------------
     vec3 surfaceToCamera = vec3(0.0, 0.0, 1.0) - v_position;
     vec3 K = normalize(normalize(surfaceToLight) + normalize(surfaceToCamera));
@@ -117,12 +118,10 @@ void main() {
     specular *= $u_coef_specular;
     vec3 specularLight = specular * vec3(1., 1., 1.) * $u_light_intensity;
 
-
     // ----------------- Attenuation -----------------
     // float att = 0.0001;
     // float distanceToLight = length($u_light_position - v_position);
     // float attenuation = 1.0 / (1.0 + att * pow(distanceToLight, 2));
-
 
     // ----------------- Linear color -----------------
     // Without attenuation :
@@ -134,7 +133,6 @@ void main() {
 
     // ----------------- Gamma correction -----------------
     // vec3 gamma = vec3(1.0/1.2);
-
 
     // ----------------- Final color -----------------
     // Without gamma correction :
@@ -197,6 +195,7 @@ class BrainVisual(Visual):
         self._alpha = alpha
         self._hemisphere = hemisphere
         self._n_overlay = 0
+        self._data_lim = []
 
         # Initialize the vispy.Visual class with the vertex / fragment buffer :
         Visual.__init__(self, vcode=VERT_SHADER, fcode=FRAG_SHADER)
@@ -209,13 +208,13 @@ class BrainVisual(Visual):
         self._mask_buffer = gloo.VertexBuffer()
         self._bgd_buffer = gloo.VertexBuffer()
         self._xrange_buffer = gloo.VertexBuffer()
-        self._over_buffer = gloo.VertexBuffer()
-        self._math_buffer = gloo.VertexBuffer()
+        self._alphas_buffer = gloo.VertexBuffer()
         self._index_buffer = gloo.IndexBuffer()
 
         # _________________ PROGRAMS _________________
         self.shared_program.vert['a_position'] = self._vert_buffer
         self.shared_program.vert['a_normal'] = self._normals_buffer
+        self.shared_program.vert['u_n_overlays'] = self._n_overlay
         self.shared_program.frag['u_alpha'] = alpha
 
         # _________________ LIGHTS _________________
@@ -310,20 +309,17 @@ class BrainVisual(Visual):
         self._bgd_buffer.set_data(self._bgd_data, convert=True)
         self.shared_program.vert['a_bgd_data'] = self._bgd_buffer
         # Overlay texture :
-        self._coords = np.zeros((len(self), 4), dtype=np.float32)
-        self._over_buffer.set_data(self._coords, convert=True)
-        self.shared_program.vert['a_coords'] = self._over_buffer
-        self._text2d_data = np.zeros((4, LUT_LEN, 4), dtype=np.float32)
-        self._text_2d = gloo.Texture2D(self._text2d_data)
-        self.shared_program.vert['u_over_text'] = self._text_2d
+        self._text2d_data = np.zeros((2, LUT_LEN, 4), dtype=np.float32)
+        self._text2d = gloo.Texture2D(self._text2d_data)
+        self.shared_program.vert['u_over_text'] = self._text2d
         # Build texture range :
-        self._xrange = np.zeros((len(self), 4), dtype=np.float32)
+        self._xrange = np.zeros((len(self), 2), dtype=np.float32)
         self._xrange_buffer.set_data(self._xrange)
         self.shared_program.vert['u_range'] = self._xrange_buffer
-        # Define buffer for mult and sum :
-        self._math = np.zeros((len(self), 4), dtype=np.float32)
-        self._math_buffer.set_data(self._math)
-        self.shared_program.vert['u_sum'] = self._math_buffer
+        # Define buffer for transparency per overlay :
+        self._alphas = np.zeros((len(self), 2), dtype=np.float32)
+        self._alphas_buffer.set_data(self._alphas)
+        self.shared_program.vert['u_alphas'] = self._alphas_buffer
 
     def add_overlay(self, data, vertices=None, to_overlay=None, mask_data=None,
                     **kwargs):
@@ -339,59 +335,99 @@ class BrainVisual(Visual):
         vertices : array_like | None
             The vertices to color with the data of shape (n_data,).
         to_overlay : int | None
-            Add data to a specific overlay. This parameter must be a integer
-            with 0 <= to_overlay <= 4.
+            Add data to a specific overlay. This parameter must be a integer.
         mask_data : array_like | None
             Array to specify if some vertices have to be considered as masked
             (and use the `mask_color` color)
         kwargs : dict | {}
             Additional color color properties (cmap, clim, vmin, vmax, under,
-            over)
+            over, translucent)
         """
         # Check input variables :
         if vertices is None:
             vertices = np.ones((len(self),), dtype=bool)
-        assert isinstance(data, np.ndarray) and len(data) == len(vertices)
+        data = np.asarray(data)
         to_overlay = self._n_overlay if to_overlay is None else to_overlay
-        assert to_overlay < 5
-        # Build texture coordinate :
-        self._coords[vertices, to_overlay] = 0. + to_overlay / 4.
-        self._over_buffer.set_data(self._coords, convert=True)
-        # Build the colormap vector :
         data_lim = (data.min(), data.max())
-        col = np.linspace(data_lim[0], data_lim[1], LUT_LEN)
-        # Set x-range of the texture :
-        self._xrange[vertices, to_overlay] = normalize(data)
-        self._xrange_buffer.set_data(self._xrange)
-        # Colormap interpolation :
-        if 'cmap' in kwargs.keys() and isinstance(kwargs['cmap'], np.ndarray):
-            cmap = kwargs['cmap']
-            assert cmap.shape[1] == 4
-            if cmap.shape[0] != LUT_LEN:
-                logger.info('Colormap interpoation')
-                from scipy import interpolate
-                # Define interpolation function :
-                x_, y_ = np.linspace(0, 1, 4), np.linspace(0, 1, cmap.shape[0])
-                f = interpolate.interp2d(x_, y_, cmap)
-                # Interpolate colormap :
-                cmap = f(x_, np.linspace(0, 1, LUT_LEN))
-                self._text2d_data[to_overlay, ...] = cmap
+        if len(self._data_lim) < to_overlay + 1:
+            self._data_lim.append(data_lim)
         else:
-            self._text2d_data[to_overlay, ...] = array2colormap(col, **kwargs)
-        self._text_2d.set_data(self._text2d_data)
+            self._data_lim[to_overlay] = data_lim
+        # -------------------------------------------------------------
+        # TEXTURE COORDINATES
+        # -------------------------------------------------------------
+        need_reshape = to_overlay >= self._xrange.shape[1]
+        if need_reshape:
+            # Add column of zeros :
+            z_ = np.zeros((len(self),), dtype=np.float32)
+            z_text = np.zeros((1, LUT_LEN, 4), dtype=np.float32)
+            self._xrange = np.c_[self._xrange, z_]
+            self._alphas = np.c_[self._alphas, z_]
+            self._text2d_data = np.concatenate((self._text2d_data, z_text))
+        # (x, y) coordinates of the overlay for the texture :
+        self._xrange[vertices, to_overlay] = normalize(data)
+
+        # -------------------------------------------------------------
+        # TEXTURE COLOR
+        # -------------------------------------------------------------
+        # Colormap interpolation (if needed):
+        if 'cmap' in kwargs.keys() and isinstance(kwargs['cmap'], np.ndarray):
+            col = kwargs['cmap']
+            kwargs['interpolation'] = 'linear'
+        else:
+            col = np.linspace(data_lim[0], data_lim[1], LUT_LEN)
+        self._text2d_data[to_overlay, ...] = Colormap(col, **kwargs).data
         # Send data to the mask :
         if isinstance(mask_data, np.ndarray) and len(mask_data) == len(self):
             self._bgd_data[mask_data] = .5
             self._bgd_buffer.set_data(self._bgd_data)
+        # -------------------------------------------------------------
+        # TEXTURE MASK AND TRANSPARENCY
+        # -------------------------------------------------------------
         # Set mask :
         mask = self._mask
         mask[vertices] = 1.
         self.mask = mask
-        # Send the array for sum and multiplication :
-        self._math[vertices, to_overlay] = 1.
-        self._math_buffer.set_data(self._math)
+        self._alphas[vertices, to_overlay] = 1.  # transparency level
+        # -------------------------------------------------------------
+        # BUFFERS
+        # -------------------------------------------------------------
+        if need_reshape:
+            # Re-define buffers :
+            self._xrange_buffer = gloo.VertexBuffer(self._xrange)
+            self._text2d = gloo.Texture2D(self._text2d_data)
+            self._alphas_buffer = gloo.VertexBuffer(self._alphas)
+            # Send buffers to vertex shader :
+            self.shared_program.vert['u_range'] = self._xrange_buffer
+            self.shared_program.vert['u_alphas'] = self._alphas_buffer
+            self.shared_program.vert['u_over_text'] = self._text2d
+        else:
+            self._xrange_buffer.set_data(self._xrange)
+            self._text2d.set_data(self._text2d_data)
+            self._alphas_buffer.set_data(self._alphas)
         # Update the number of overlays :
-        self._n_overlay += 1
+        self._n_overlay = to_overlay + 1
+        self.shared_program.vert['u_n_overlays'] = self._n_overlay
+
+    def update_colormap(self, to_overlay=None, **kwargs):
+        """Update colormap properties of an overlay.
+
+        Parameters
+        ----------
+        to_overlay : int | None
+            Add data to a specific overlay. This parameter must be a integer.
+            If no overlay is specified, the colormap of the last one is used.
+        kwargs : dict | {}
+            Additional color color properties (cmap, clim, vmin, vmax, under,
+            over, translucent)
+        """
+        if self._n_overlay >= 1:
+            overlay = self._n_overlay - 1 if to_overlay is None else to_overlay
+            data_lim = self._data_lim[overlay]
+            col = np.linspace(data_lim[0], data_lim[1], LUT_LEN)
+            self._text2d_data[overlay, ...] = Colormap(col, **kwargs).data
+            self._text2d.set_data(self._text2d_data)
+            self.update()
 
     def set_camera(self, camera=None):
         """Set a camera to the mesh.
@@ -418,7 +454,6 @@ class BrainVisual(Visual):
         self._vert_buffer.delete()
         self._index_buffer.delete()
         self._normals_buffer.delete()
-        self._over_buffer.delete()
         self._xrange_buffer.delete()
         self._math_buffer.delete()
 
@@ -483,8 +518,7 @@ class BrainVisual(Visual):
     @property
     def mask(self):
         """Get the mask value."""
-        pass
-        # return self._mask
+        return self._mask
 
     @mask.setter
     @wrap_properties
@@ -499,8 +533,8 @@ class BrainVisual(Visual):
             value[to_mask] = 1.
         assert isinstance(value, np.ndarray) and len(value) == len(self)
         self._mask_buffer.set_data(value.astype(np.float32), convert=True)
+        self._mask = value
         self.update()
-        # self._mask = value
 
     # ----------- SULCUS -----------
     @property
@@ -568,6 +602,11 @@ class BrainVisual(Visual):
         value = color2vb(value).ravel()
         self._mask_color = value
         self._build_bgd_texture()
+
+    @property
+    def minmax(self):
+        """Get the data limits value."""
+        return self._data_lim[self._n_overlay - 1]
 
 
 BrainMesh = create_visual_node(BrainVisual)
