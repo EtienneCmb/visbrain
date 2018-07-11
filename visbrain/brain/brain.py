@@ -125,6 +125,7 @@ class Brain(_PyQtModule, UiInit, UiElements, Visuals, BrainCbar,
         camera = viscam.PanZoomCamera(rect=(-.2, -2.5, 1, 5))
         BrainCbar.__init__(self, camera)
         PROFILER("Colorbar and panzoom creation")
+        self.background_color(bgcolor)
 
         # ====================== Shortcuts ======================
         BrainShortcuts.__init__(self, self.cbqt.cbviz._canvas)
