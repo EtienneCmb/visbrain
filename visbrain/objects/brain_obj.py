@@ -470,6 +470,7 @@ class BrainObj(VisbrainObject):
             data = np.asarray(data)
             assert data.ndim == 1 and len(data) == len(select)
             clim = (data.min(), data.max()) if clim is None else clim
+            kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
             logger.info("Color inferred from data")
             u_colors = np.zeros((len(u_idx), 4), dtype=float)
             self._default_cblabel = "Parcellates data"
