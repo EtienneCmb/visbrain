@@ -462,7 +462,7 @@ class RoiObj(_Volume):
         else:
             assert not isinstance(select, float)
             select = [select] if isinstance(select, int) else select
-            vert, faces, color = np.array([]), np.array([]), np.array([])
+            vert, faces, data = np.array([]), np.array([]), np.array([])
             # Generate a (n_levels, 4) array of unique colors :
             if isinstance(roi_to_color, dict):
                 assert len(roi_to_color) == len(select)
@@ -480,8 +480,8 @@ class RoiObj(_Volume):
                 faces = np.r_[faces, f + faces.max() + 1] if faces.size else f
                 vert = np.r_[vert, v] if vert.size else v
                 # Concatenate color :
-                col = np.tile(col_unique[[i], ...], (v.shape[0], 1))
-                color = np.r_[color, col] if color.size else col
+                col = np.full((v.shape[0],), i)
+                data = np.r_[data, col] if data.size else col
         if vert.size:
             # Apply hdr transformation to vertices :
             vert_hdr = self._hdr.map(vert)[:, 0:-1]
@@ -494,8 +494,7 @@ class RoiObj(_Volume):
                 logger.debug("ROI mesh already exist")
                 self.mesh.set_data(vertices=vert_hdr, faces=faces)
             if unique_color:
-                self.mask = 1.
-                self.color = color
+                self.mesh.add_overlay(data, cmap=col_unique)
         else:
             raise ValueError("No vertices found for this ROI")
 
