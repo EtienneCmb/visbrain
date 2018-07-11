@@ -59,7 +59,6 @@ class _VisbrainObj(CbarBase, _VisbrainShortcuts):
         """Init."""
         CbarBase.__init__(self, **kw)
         _VisbrainShortcuts.__init__(self)
-        self._cbar_data = None
         self._default_cblabel = ''
 
     def _get_camera(self):
