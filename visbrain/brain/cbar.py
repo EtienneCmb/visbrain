@@ -86,8 +86,7 @@ class BrainCbar(object):
 
     def _fcn_minmax_brain(self):
         """Executed function for autoscale projections."""
-        self.cbqt.cbobjs._objs['brain']._clim = self.atlas._minmax
-        self.atlas._clim = self.atlas._minmax
+        self.atlas._update_cbar_minmax()
         self.atlas._update_cbar()
 
     ###########################################################################
