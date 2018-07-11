@@ -222,7 +222,6 @@ def _project_sources_data(s_obj, b_obj, project='modulation', radius=10.,
     # _____________________ GET MODULATION _____________________
     mod = project_fcn(s_obj, vertices, radius, contribute)
     # Update mesh color informations :
-    b_obj._cbar_data = mod
     b_obj._minmax = (float(mod.min()), float(mod.max()))
     if clim is None:
         clim = b_obj._minmax
