@@ -407,9 +407,10 @@ class BrainVisual(Visual):
         """
         if self._n_overlay >= 1:
             overlay = self._n_overlay - 1 if to_overlay is None else to_overlay
+            # Define the colormap data :
             data_lim = self._data_lim[overlay]
             col = np.linspace(data_lim[0], data_lim[1], LUT_LEN)
-            self._text2d_data[overlay, ...] = Colormap(col, **kwargs).data
+            self._text2d_data[overlay, ...] = Colormap(**kwargs).to_rgba(col)
             self._text2d.set_data(self._text2d_data)
             self.update()
 
