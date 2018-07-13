@@ -53,27 +53,24 @@ void main() {
     // Compute background color (i.e white / mask / sulcus)
     vec4 u_bgd_color = texture1D($u_bgd_text, $a_bgd_data);
 
-    // Compute overlay colors only if mask is 1.:
+    // Compute overlay colors :
     vec4 u_col = vec4(0., 0., 0., 0.);
-    if ($a_mask == 1.)
-    {
-        float u_div = 0.;
-        float off = float($u_n_overlays > 1) * 0.999999;
-        for (int i=0; i<$u_n_overlays; i++) {
-            // Texture coordinate :
-            vec2 tex_coords = vec2($u_range[i], (i + off)/$u_n_overlays);
-            // Get the color using the texture :
-            vec4 ux = texture2D($u_over_text, tex_coords);
-            // Ponderate the color with transparency level :
-            u_col += $u_alphas[i] * ux;
-            // Number of contributing overlay per vertex :
-            u_div += $u_alphas[i];
-        }
-        u_col /= max(u_div, 1.);
+    float u_div = 0.;
+    float off = float($u_n_overlays > 1) * 0.999999;
+    for (int i=0; i<$u_n_overlays; i++) {
+        // Texture coordinate :
+        vec2 tex_coords = vec2($u_range[i], (i + off)/$u_n_overlays);
+        // Get the color using the texture :
+        vec4 ux = texture2D($u_over_text, tex_coords);
+        // Ponderate the color with transparency level :
+        u_col += $u_alphas[i] * ux;
+        // Number of contributing overlay per vertex :
+        u_div += $u_alphas[i];
     }
+    u_col /= max(u_div, 1.);
 
     // Mix background and overlay colors :
-    v_color = mix(u_bgd_color, u_col, $a_mask);
+    v_color = mix(u_bgd_color, u_col, u_col.a);
 
     // Finally apply camera transform to position :
     gl_Position = $transform(vec4($a_position, 1));
@@ -205,7 +202,6 @@ class BrainVisual(Visual):
         def_3 = np.zeros((0, 3), dtype=np.float32)
         self._vert_buffer = gloo.VertexBuffer(def_3)
         self._normals_buffer = gloo.VertexBuffer(def_3)
-        self._mask_buffer = gloo.VertexBuffer()
         self._bgd_buffer = gloo.VertexBuffer()
         self._xrange_buffer = gloo.VertexBuffer()
         self._alphas_buffer = gloo.VertexBuffer()
@@ -293,18 +289,15 @@ class BrainVisual(Visual):
         self._vert_buffer.set_data(vertices, convert=True)
         self._normals_buffer.set_data(normals, convert=True)
         self.hemisphere = hemisphere
-        # Mask :
-        self._mask = np.zeros((len(self),), dtype=np.float32)
-        self._mask_buffer.set_data(self._mask, convert=True)
-        self.shared_program.vert['a_mask'] = self._mask_buffer
         # Sulcus :
-        sulcus = self._mask.astype(bool).copy() if sulcus is None else sulcus
+        n = len(self)
+        sulcus = np.zeros((n,), dtype=bool) if sulcus is None else sulcus
         assert isinstance(sulcus, np.ndarray)
-        assert len(sulcus) == len(self) and sulcus.dtype == bool
+        assert len(sulcus) == n and sulcus.dtype == bool
 
         # ____________________ TEXTURES ____________________
         # Background texture :
-        self._bgd_data = np.zeros((len(self),), dtype=np.float32)
+        self._bgd_data = np.zeros((n,), dtype=np.float32)
         self._bgd_data[sulcus] = .9
         self._bgd_buffer.set_data(self._bgd_data, convert=True)
         self.shared_program.vert['a_bgd_data'] = self._bgd_buffer
@@ -313,11 +306,11 @@ class BrainVisual(Visual):
         self._text2d = gloo.Texture2D(self._text2d_data)
         self.shared_program.vert['u_over_text'] = self._text2d
         # Build texture range :
-        self._xrange = np.zeros((len(self), 2), dtype=np.float32)
+        self._xrange = np.zeros((n, 2), dtype=np.float32)
         self._xrange_buffer.set_data(self._xrange)
         self.shared_program.vert['u_range'] = self._xrange_buffer
         # Define buffer for transparency per overlay :
-        self._alphas = np.zeros((len(self), 2), dtype=np.float32)
+        self._alphas = np.zeros((n, 2), dtype=np.float32)
         self._alphas_buffer.set_data(self._alphas)
         self.shared_program.vert['u_alphas'] = self._alphas_buffer
 
@@ -366,6 +359,8 @@ class BrainVisual(Visual):
             self._text2d_data = np.concatenate((self._text2d_data, z_text))
         # (x, y) coordinates of the overlay for the texture :
         self._xrange[vertices, to_overlay] = normalize(data)
+        # Transparency :
+        self._alphas[vertices, to_overlay] = 1.  # transparency level
 
         # -------------------------------------------------------------
         # TEXTURE COLOR
@@ -381,14 +376,6 @@ class BrainVisual(Visual):
         if isinstance(mask_data, np.ndarray) and len(mask_data) == len(self):
             self._bgd_data[mask_data] = .5
             self._bgd_buffer.set_data(self._bgd_data)
-        # -------------------------------------------------------------
-        # TEXTURE MASK AND TRANSPARENCY
-        # -------------------------------------------------------------
-        # Set mask :
-        mask = self._mask
-        mask[vertices] = 1.
-        self.mask = mask
-        self._alphas[vertices, to_overlay] = 1.  # transparency level
         # -------------------------------------------------------------
         # BUFFERS
         # -------------------------------------------------------------
@@ -513,28 +500,6 @@ class BrainVisual(Visual):
         self._index_buffer.set_data(index)
         self.update()
         self._hemisphere = value
-
-    # ----------- MASK -----------
-    @property
-    def mask(self):
-        """Get the mask value."""
-        return self._mask
-
-    @mask.setter
-    @wrap_properties
-    def mask(self, value):
-        """Set mask value."""
-        if isinstance(value, (int, float, bool)):
-            value = np.full((len(self),), np.float(value), dtype=np.float32)
-        if len(value) != len(self):
-            to_mask = value.copy()
-            logger.debug("Reset brain mask")
-            value = np.zeros((len(self),), dtype=np.float32)
-            value[to_mask] = 1.
-        assert isinstance(value, np.ndarray) and len(value) == len(self)
-        self._mask_buffer.set_data(value.astype(np.float32), convert=True)
-        self._mask = value
-        self.update()
 
     # ----------- SULCUS -----------
     @property
