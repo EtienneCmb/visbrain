@@ -519,7 +519,7 @@ class BrainObj(VisbrainObject):
                            "%s" % ', '.join(np.unique(no_parcellates)))
         if data is None:
             color = np.asarray(color, dtype=np.float32)
-            kw['cmap'] = color
+            kw['cmap'] = color[:, 0:-1]
         logger.info("Selected parcellates : %s" % ", ".join(roi_labs))
         # Finally, add the overlay to the brain :
         self.mesh.add_overlay(data_vec[mask], vertices=np.where(mask)[0], **kw)
