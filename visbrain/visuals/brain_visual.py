@@ -366,12 +366,9 @@ class BrainVisual(Visual):
         # TEXTURE COLOR
         # -------------------------------------------------------------
         # Colormap interpolation (if needed):
-        if 'cmap' in kwargs.keys() and isinstance(kwargs['cmap'], np.ndarray):
-            col = kwargs['cmap']
-            kwargs['interpolation'] = 'linear'
-        else:
-            col = np.linspace(data_lim[0], data_lim[1], LUT_LEN)
-        self._text2d_data[to_overlay, ...] = Colormap(col, **kwargs).data
+        colormap = Colormap(**kwargs)
+        vec = np.linspace(data_lim[0], data_lim[1], LUT_LEN)
+        self._text2d_data[to_overlay, ...] = colormap.to_rgba(vec)
         # Send data to the mask :
         if isinstance(mask_data, np.ndarray) and len(mask_data) == len(self):
             self._bgd_data[mask_data] = .5
