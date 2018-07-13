@@ -357,7 +357,7 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
     return x_cmap.astype(np.float32)
 
 
-def _transclucent_cmap(x, x_cmap, translucent):
+def _transclucent_cmap(x, x_cmap, translucent, smooth=None):
     """Sub function to define transparency."""
     if translucent is not None:
         is_num = [isinstance(k, (int, float)) for k in translucent]
@@ -369,6 +369,11 @@ def _transclucent_cmap(x, x_cmap, translucent):
         elif is_num == [False, True]:  # (None, f_2)
             trans_x = x <= translucent[1]
         x_cmap[..., -1] = np.invert(trans_x)
+        if isinstance(smooth, int):
+            alphas = x_cmap[:, -1]
+            alphas = np.convolve(alphas, np.hanning(smooth), 'valid')
+            alphas /= max(alphas.max(), 1.)
+            x_cmap[smooth - 1::, -1] = alphas
     return x_cmap
 
 
