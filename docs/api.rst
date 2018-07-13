@@ -124,6 +124,13 @@ Miscellaneous
    color2vb
    array2colormap
 
+.. currentmodule:: visbrain.utils
+
+.. autosummary::
+   :toctree: generated/
+
+    Colormap
+
 Command line
 ------------
 
