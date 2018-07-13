@@ -31,13 +31,6 @@ class Colormap(object):
 
     Parameters
     ----------
-    data : array_like
-        Data for the colormap.
-
-            * Row vector of shape (n_data,) will be turned into colors using
-              cmap
-            * Image like of shape (n_data, 4). This image can also be
-              interpolated.
     cmap : string | inferno
         Matplotlib colormap
     clim : tuple/list | None
@@ -89,41 +82,56 @@ class Colormap(object):
         GL colormap version.
     """
 
-    def __init__(self, data=None, cmap='viridis', clim=None, vmin=None,
-                 under=None, vmax=None, over=None, translucent=None, alpha=1.,
+    def __init__(self, cmap='viridis', clim=None, vmin=None, under=None,
+                 vmax=None, over=None, translucent=None, alpha=1.,
                  lut_len=1024, interpolation=None):
         """Init."""
-        # Preprocess data :
-        data = np.asarray(data)
-        data = np.linspace(0., 1., lut_len) if data is None else data
         # Keep color parameters into a dict :
         self._kw = dict(cmap=cmap, clim=clim, vmin=vmin, vmax=vmax,
                         under=under, over=over, translucent=translucent,
                         alpha=alpha)
         # Color conversion :
-        if isinstance(cmap, np.ndarray) and isinstance(interpolation, str):
-            from scipy import interpolate
-            # Define interpolation function :
-            n_ = cmap.shape[-1]
-            x_, y_ = np.linspace(0, 1, n_), np.linspace(0, 1, data.shape[0])
-            f = interpolate.interp2d(x_, y_, cmap, kind=interpolation)
-            # Interpolate colormap :
-            self._data = f(x_, np.linspace(0, 1, lut_len))
-        elif data.ndim == 1:  # data vector
-            logger.debug('Color inferred from data vector')
-            self._data = array2colormap(data, **self._kw)
-        elif (data.ndim == 2) and (data.shape[-1] in [3, 4]):  # data as color
-            logger.debug('data consider as color and interpolated')
-            if (data.shape[0] == 1) and isinstance(interpolation, str):
-                data = np.tile(data, (lut_len, 1))
-            self._data = data
-        else:
-            raise ValueError("data type not recognized.")
+        if isinstance(cmap, np.ndarray):
+            assert (cmap.ndim == 2) and (cmap.shape[-1] in (3, 4))
+            # cmap = single color :
+            if (cmap.shape[0] == 1) and isinstance(interpolation, str):
+                logger.debug("Colormap : unique color repeated.")
+                data = np.tile(cmap, (lut_len, 1))
+            elif (cmap.shape[0] == lut_len) or (interpolation is None):
+                logger.debug("Colormap : Unique repeated.")
+                data = cmap
+            else:
+                from scipy.interpolate import interp2d
+                n_ = cmap.shape[1]
+                x, y = np.linspace(0, 1, n_), np.linspace(0, 1, cmap.shape[0])
+                f = interp2d(x, y, cmap, kind=interpolation)
+                # Interpolate colormap :
+                data = f(x, np.linspace(0, 1, lut_len))
+        elif isinstance(cmap, str):
+            data = array2colormap(np.linspace(0., 1., lut_len), **self._kw)
         # Alpha correction :
-        if self._data.shape[-1] == 3:
-            self._data = np.c_[self._data, np.full((len(self),), alpha)]
+        if data.shape[-1] == 3:
+            data = np.c_[data, np.full((data.shape[0],), alpha)]
         # NumPy float32 conversion :
-        self._data = vispy_array(self._data)
+        self._data = vispy_array(data)
+
+    def to_rgba(self, data):
+        """Turn a data vector into colors using colormap properties.
+
+        Parameters
+        ----------
+        data : array_like
+            Vector of data of shape (n_data,).
+
+        Returns
+        -------
+        color : array_like
+            Array of colors of shape (n_data, 4)
+        """
+        if isinstance(self._kw['cmap'], np.ndarray):
+            return self._data
+        else:
+            return array2colormap(data, **self._kw)
 
     def __len__(self):
         """Get the number of colors in the colormap."""
