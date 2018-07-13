@@ -51,10 +51,10 @@ void main() {
     v_normal = $a_normal;
 
     // Compute background color (i.e white / mask / sulcus)
-    vec4 u_bgd_color = texture1D($u_bgd_text, $a_bgd_data);
+    vec4 bg_color = texture1D($u_bgd_text, $a_bgd_data);
 
     // Compute overlay colors :
-    vec4 u_col = vec4(0., 0., 0., 0.);
+    vec4 overlay_color = vec4(0., 0., 0., 0.);
     float u_div = 0.;
     float off = float($u_n_overlays > 1) * 0.999999;
     for (int i=0; i<$u_n_overlays; i++) {
@@ -63,14 +63,14 @@ void main() {
         // Get the color using the texture :
         vec4 ux = texture2D($u_over_text, tex_coords);
         // Ponderate the color with transparency level :
-        u_col += $u_alphas[i] * ux;
+        overlay_color += $u_alphas[i] * ux;
         // Number of contributing overlay per vertex :
         u_div += $u_alphas[i];
     }
-    u_col /= max(u_div, 1.);
+    overlay_color /= max(u_div, 1.);
 
     // Mix background and overlay colors :
-    v_color = mix(u_bgd_color, u_col, u_col.a);
+    v_color = mix(bg_color, overlay_color, overlay_color.a);
 
     // Finally apply camera transform to position :
     gl_Position = $transform(vec4($a_position, 1));
