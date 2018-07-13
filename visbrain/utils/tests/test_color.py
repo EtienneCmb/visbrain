@@ -14,9 +14,9 @@ class TestColor(object):
         """Test function colormap."""
         # ---------------- 1D data vector ----------------
         data_1d = np.arange(511)
-        cmap_1d = Colormap(data_1d, cmap='inferno', vmin=11, under='gray',
+        cmap_1d = Colormap(cmap='inferno', vmin=11, under='gray',
                            vmax=500, over='red', translucent=(.1, None))
-        assert cmap_1d.shape == (511, 4)
+        assert cmap_1d.to_rgba(data_1d).shape == (511, 4)
         # Properties :
         from vispy.color import Colormap as VispyColormap
         assert isinstance(cmap_1d.data, np.ndarray)
@@ -26,7 +26,7 @@ class TestColor(object):
         assert np.array_equal(cmap_1d.data[:, 2], cmap_1d.b)          # blue
         assert np.array_equal(cmap_1d.data[:, 3], cmap_1d.alpha)      # alpha
         assert np.array_equal(cmap_1d.data[:, 0:3], cmap_1d.rgb)      # rgb
-        assert cmap_1d.rgb.shape == (511, 3)
+        assert cmap_1d.rgb.shape == (1024, 3)
         # ---------------- 2D data vector ----------------
         # Alpha completion :
         data_2d_alpha = np.random.uniform(size=(1024, 3))
@@ -39,8 +39,7 @@ class TestColor(object):
         # 2D (511, 4) colors that need to be interpolated :
         data_2d_interp = np.random.uniform(size=(5, 4))
         cmap_2d_interp = np.random.uniform(size=(5, 4))
-        cmap_2d_interp = Colormap(data_2d_interp, cmap=cmap_2d_interp,
-                                  interpolation='linear')
+        cmap_2d_interp = Colormap(cmap=cmap_2d_interp, interpolation='linear')
         assert cmap_2d_interp.shape == (1024, 4)
         # 2D (1, 4) colors that need to be repeated :
         data_2d_single = np.random.uniform(size=(1, 4))
