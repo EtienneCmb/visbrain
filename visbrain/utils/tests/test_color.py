@@ -28,6 +28,10 @@ class TestColor(object):
         assert np.array_equal(cmap_1d.data[:, 0:3], cmap_1d.rgb)      # rgb
         assert cmap_1d.rgb.shape == (511, 3)
         # ---------------- 2D data vector ----------------
+        # Alpha completion :
+        data_2d_alpha = np.random.uniform(size=(1024, 3))
+        cmap_2d_alpha = Colormap(data_2d_alpha)
+        assert cmap_2d_alpha.shape == (1024, 4)
         # 2D (1024, 4) colors :
         data_2d_uni = np.random.uniform(size=(1024, 4))
         cmap_2d_uni = Colormap(data_2d_uni)
