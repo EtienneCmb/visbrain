@@ -131,7 +131,6 @@ class BrainObj(VisbrainObject):
     def clean(self):
         """Clean brain object."""
         self.hemisphere = 'both'
-        self.mask = 0.
         self.rotate('top')
         logger.info("Brain object %s cleaned." % self.name)
 
@@ -520,6 +519,7 @@ class BrainObj(VisbrainObject):
         if data is None:
             color = np.asarray(color, dtype=np.float32)
             kw['cmap'] = color[:, 0:-1]
+            kw['interpolation'] = 'linear'
         logger.info("Selected parcellates : %s" % ", ".join(roi_labs))
         # Finally, add the overlay to the brain :
         self.mesh.add_overlay(data_vec[mask], vertices=np.where(mask)[0], **kw)

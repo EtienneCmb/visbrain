@@ -494,7 +494,8 @@ class RoiObj(_Volume):
                 logger.debug("ROI mesh already exist")
                 self.mesh.set_data(vertices=vert_hdr, faces=faces)
             if unique_color:
-                self.mesh.add_overlay(data, cmap=col_unique)
+                self.mesh.add_overlay(data, cmap=col_unique,
+                                      interpolation='linear')
         else:
             raise ValueError("No vertices found for this ROI")
 
@@ -639,19 +640,6 @@ class RoiObj(_Volume):
     def normals(self):
         """Get the normals value."""
         return self.mesh._normals
-
-    # ----------- MASK -----------
-    @property
-    @wrap_getter_properties
-    def mask(self):
-        """Get the mask value."""
-        return self.mesh.mask
-
-    @mask.setter
-    @wrap_setter_properties
-    def mask(self, value):
-        """Set mask value."""
-        self.mesh.mask = value
 
     # ----------- COLOR -----------
     @property
