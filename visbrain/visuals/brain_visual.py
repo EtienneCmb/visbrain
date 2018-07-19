@@ -32,7 +32,7 @@ logger = logging.getLogger('visbrain')
 
 # Light and color properties :
 LUT_LEN = 1024
-LIGHT_POSITION = [100.] * 3
+LIGHT_POSITION = [0., 0., 1e7]
 LIGHT_INTENSITY = [1.] * 3
 COEF_AMBIENT = .05
 COEF_SPECULAR = 0.
@@ -91,13 +91,15 @@ varying vec4 v_color;
 varying vec3 v_normal;
 
 void main() {
+    // Adapt light position with camera rotation
+    vec3 light_pos = $camtf(vec4($u_light_position, 0.)).xyz;
 
     // ----------------- Ambient light -----------------
     vec3 ambientLight = $u_coef_ambient * v_color.rgb * $u_light_intensity;
 
     // ----------------- Diffuse light -----------------
     // Calculate the vector from this pixels surface to the light source
-    vec3 surfaceToLight = $u_light_position - v_position;
+    vec3 surfaceToLight = light_pos - v_position;
 
     // Calculate the cosine of the angle of incidence
     float l_surf_norm = length(surfaceToLight) * length(v_normal);
@@ -117,7 +119,7 @@ void main() {
 
     // ----------------- Attenuation -----------------
     // float att = 0.0001;
-    // float distanceToLight = length($u_light_position - v_position);
+    // float distanceToLight = length(light_pos - v_position);
     // float attenuation = 1.0 / (1.0 + att * pow(distanceToLight, 2));
 
     // ----------------- Linear color -----------------
@@ -187,7 +189,6 @@ class BrainVisual(Visual):
                  camera=None, meshdata=None, invert_normals=False):
         """Init."""
         self._camera = None
-        self._camera_transform = vist.NullTransform()
         self._translucent = True
         self._alpha = alpha
         self._hemisphere = hemisphere
@@ -217,10 +218,14 @@ class BrainVisual(Visual):
         self.shared_program.frag['u_light_intensity'] = LIGHT_INTENSITY
         self.shared_program.frag['u_coef_ambient'] = COEF_AMBIENT
         self.shared_program.frag['u_coef_specular'] = COEF_SPECULAR
+        self.shared_program.frag['u_light_position'] = LIGHT_POSITION
+        self.shared_program.frag['camtf'] = vist.NullTransform()
 
         # _________________ DATA / CAMERA / LIGHT _________________
+        # Data :
         self.set_data(vertices, faces, normals, hemisphere, lr_index,
                       invert_normals, sulcus, meshdata)
+        # Camera :
         self.set_camera(camera)
         self.mask_color = mask_color
 
@@ -427,7 +432,7 @@ class BrainVisual(Visual):
         """
         if camera is not None:
             self._camera = camera
-            self._camera_transform = self._camera.transform
+            self.shared_program.frag['camtf'] = self._camera.transform
             self.update()
 
     def clean(self):
@@ -460,9 +465,7 @@ class BrainVisual(Visual):
 
     def _prepare_draw(self, view=None):
         """Call everytime there is an interaction with the mesh."""
-        view_frag = view.view_program.frag
-        view_frag['u_light_position'] = self._camera_transform.map(
-            LIGHT_POSITION)[0:-1]
+        pass
 
     @staticmethod
     def _prepare_transforms(view):
