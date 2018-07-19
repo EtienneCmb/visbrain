@@ -35,7 +35,7 @@ LUT_LEN = 1024
 LIGHT_POSITION = [100.] * 3
 LIGHT_INTENSITY = [1.] * 3
 COEF_AMBIENT = .05
-COEF_SPECULAR = .5
+COEF_SPECULAR = 0.
 SULCUS_COLOR = [.4] * 3 + [1.]
 
 # Vertex shader : executed code for individual vertices. The transformation
