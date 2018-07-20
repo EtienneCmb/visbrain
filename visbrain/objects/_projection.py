@@ -196,7 +196,7 @@ def _get_masked_index(s_obj, v, radius, contribute=False):
 def _project_sources_data(s_obj, b_obj, project='modulation', radius=10.,
                           contribute=False, cmap='viridis', clim=None,
                           vmin=None, under='black', vmax=None, over='red',
-                          mask_color=None):
+                          mask_color=None, to_overlay=0):
     """Project source's data."""
     # _____________________ CHECKING _____________________
     assert type(s_obj).__name__ in ['SourceObj', 'CombineSources']
@@ -235,6 +235,6 @@ def _project_sources_data(s_obj, b_obj, project='modulation', radius=10.,
                     "color %s" % str(list(mesh.mask_color.ravel())[0:-1]))
 
     # _____________________ MODULATION TO COLOR _____________________
-    mesh.add_overlay(mod[~mod.mask], np.where(~mod.mask)[0], to_overlay=0,
-                     mask_data=mask_idx, cmap=cmap, clim=clim, vmin=vmin,
-                     vmax=vmax, under=under, over=over)
+    mesh.add_overlay(mod[~mod.mask], np.where(~mod.mask)[0], cmap=cmap,
+                     to_overlay=to_overlay, mask_data=mask_idx, clim=clim,
+                     vmin=vmin, vmax=vmax, under=under, over=over)

@@ -287,7 +287,7 @@ class BrainObj(VisbrainObject):
     def project_sources(self, s_obj, project='modulation', radius=10.,
                         contribute=False, cmap='viridis', clim=None, vmin=None,
                         under='black', vmax=None, over='red',
-                        mask_color=None):
+                        mask_color=None, to_overlay=0):
         """Project source's activity or repartition onto the brain object.
 
         Parameters
@@ -321,7 +321,8 @@ class BrainObj(VisbrainObject):
         kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
         self._default_cblabel = "Source %s" % project
         _project_sources_data(s_obj, self, project, radius, contribute,
-                              mask_color=mask_color, **kw)
+                              mask_color=mask_color, to_overlay=to_overlay,
+                              **kw)
 
     def add_activation(self, data=None, vertices=None, smoothing_steps=5,
                        file=None, hemisphere=None, hide_under=None,
