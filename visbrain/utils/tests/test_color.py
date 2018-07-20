@@ -37,7 +37,6 @@ class TestColor(object):
         cmap_2d_uni = Colormap(data_2d_uni)
         assert cmap_2d_uni.shape == (1024, 4)
         # 2D (511, 4) colors that need to be interpolated :
-        data_2d_interp = np.random.uniform(size=(5, 4))
         cmap_2d_interp = np.random.uniform(size=(5, 4))
         cmap_2d_interp = Colormap(cmap=cmap_2d_interp, interpolation='linear')
         assert cmap_2d_interp.shape == (1024, 4)
