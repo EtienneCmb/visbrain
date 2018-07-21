@@ -223,6 +223,11 @@ class VisbrainObject(_VisbrainObj):
                          widget=canvas.canvas.central_widget, **kw)
         self._node.parent = None
 
+    def copy(self):
+        """Get a copy of the object."""
+        from copy import copy
+        return copy(self)
+
     # ----------- PARENT -----------
     @property
     def parent(self):
