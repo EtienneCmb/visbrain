@@ -102,6 +102,7 @@ def download_file(name, astype=None, filename=None, to_path=None, unzip=False,
     else:
         assert isinstance(name, str) and isinstance(astype, str)
         filename, url = name, get_data_url(name, astype)
+        to_path = os.path.join(vb_path, astype)
     to_path = vb_path if not isinstance(to_path, str) else to_path
     path_to_file = os.path.join(to_path, filename)
     to_download = not os.path.isfile(path_to_file)
