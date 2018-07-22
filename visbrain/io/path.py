@@ -141,8 +141,7 @@ def get_files_in_data(folder, with_ext=False):
 
 def path_to_tmp(file=None, folder=None):
     """Get the path to the tmp folder."""
-    vb_path = os.path.join(os.path.expanduser('~'), 'visbrain_data')
-    tmp_path = os.path.join(vb_path, 'tmp')
+    tmp_path = os.path.join(path_to_visbrain_data(), 'tmp')
     if not os.path.exists(tmp_path):
         os.mkdir(tmp_path)
     folder = '' if not isinstance(folder, str) else folder
@@ -155,8 +154,7 @@ def path_to_tmp(file=None, folder=None):
 
 def clean_tmp():
     """Clean the tmp folder."""
-    vb_path = os.path.join(os.path.expanduser('~'), 'visbrain_data')
-    tmp_path = os.path.join(vb_path, 'tmp')
+    tmp_path = os.path.join(path_to_visbrain_data(), 'tmp')
     if os.path.exists(tmp_path):
         import shutil
         shutil.rmtree(tmp_path)
