@@ -83,11 +83,11 @@ class _Volume(VisbrainObject):
             logger.info('Loading %s' % name)
             labels = index = system = None
         elif isinstance(name, str):
-            name_npz = name + '.npz'
             to_load = None
-            if self._df_is_downloaded(name_npz):
+            name_npz = name + '.npz'
+            if name in self._df_get_downloaded():
                 to_load = self._df_get_file(name_npz, download=False)
-            elif self._df_is_downloadable(name_npz):
+            elif name_npz in self._df_get_downloadable():
                 to_load = self._df_download_file(name_npz)
             # Load file :
             if isinstance(to_load, str):
