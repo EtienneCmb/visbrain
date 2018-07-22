@@ -8,7 +8,7 @@ import vispy.visuals.transforms as vist
 
 from .scene_obj import VisbrainCanvas
 from ..io import (write_fig_canvas, dialog_save, path_to_visbrain_data,
-                  load_config_json, get_data_path, download_file,
+                  load_config_json, get_data_url_path, download_file,
                   get_files_in_folders)
 from ..utils import color2vb, set_log_level, merge_cameras
 from ..config import CONFIG
@@ -79,7 +79,7 @@ class _VisbrainObj(CbarBase, _VisbrainShortcuts):
     # --------------------------- DATA ---------------------------
     def _df_is_downloadable(self, file):
         """Get if a file name could be downloaded."""
-        json_path = get_data_path(file='data_url.json')
+        json_path = get_data_url_path()
         json_struct = load_config_json(json_path)[self._data_folder]
         return file in json_struct
 
@@ -89,7 +89,7 @@ class _VisbrainObj(CbarBase, _VisbrainShortcuts):
 
     def _df_get_downloadable(self):
         """Get the list of files that can be downloaded."""
-        json_path = get_data_path(file='data_url.json')
+        json_path = get_data_url_path()
         return load_config_json(json_path)[self._data_folder]
 
     def _df_get_tmp_folder(self):
