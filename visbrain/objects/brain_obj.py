@@ -97,12 +97,11 @@ class BrainObj(VisbrainObject):
         # _______________________ TEMPLATE _______________________
         if not all([isinstance(k, np.ndarray) for k in [vertices, faces]]):
             to_load = None
-            name_npz = name + '.npz'
             # Identify if the template is already downloaded or not :
-            if name_npz in self._df_get_downloaded(with_ext=True):
-                to_load = self._df_get_file(name_npz, download=False)
-            elif name_npz in self._df_get_downloadable():  # need download
-                to_load = self._df_download_file(name_npz)
+            if name in self._df_get_downloaded():
+                to_load = self._df_get_file(name + '.npz', download=False)
+            elif name in self._df_get_downloadable():  # need download
+                to_load = self._df_download_file(name)
             assert isinstance(to_load, str)
             # Load the template :
             arch = np.load(to_load)
