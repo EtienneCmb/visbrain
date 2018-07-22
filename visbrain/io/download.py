@@ -7,18 +7,13 @@ import zipfile
 from warnings import warn
 
 from .rw_config import load_config_json
-from .path import get_data_path
+from .path import get_data_url_path
 
 
 logger = logging.getLogger('visbrain')
 
 
-__all__ = ["get_data_url_file", "download_file"]
-
-
-def get_data_url_file():
-    """Get path to the data_url.json file."""
-    return load_config_json(get_data_path(file='data_url.json'))
+__all__ = ["download_file"]
 
 
 def get_data_url(name, astype):
@@ -37,7 +32,7 @@ def get_data_url(name, astype):
         Url to the file to download.
     """
     # Get path to data_url.txt :
-    urls = get_data_url_file()[astype]
+    urls = load_config_json(get_data_url_path())[astype]
     # Try to get the file :
     try:
         url_to_download = urls[name]
