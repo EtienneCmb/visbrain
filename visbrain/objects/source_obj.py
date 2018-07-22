@@ -59,9 +59,9 @@ class SourceObj(VisbrainObject):
     text : list | None
         Text to attach to each source. For example, text could be the name of
         each source.
-    text_size : float | 3.
+    text_size : float | 2.
         Text size attached to sources.
-    text_color : array_like/string/tuple | 'black'
+    text_color : array_like/string/tuple | 'white'
         Text color attached to sources.
     text_bold : bool | False
         Specify if the text attached to sources should be bold.
@@ -114,8 +114,8 @@ class SourceObj(VisbrainObject):
     def __init__(self, name, xyz, data=None, color='red', alpha=1.,
                  symbol='disc', radius_min=5., radius_max=10., edge_width=0.,
                  edge_color='black', system='mni', mask=None,
-                 mask_color='gray', text=None, text_size=3.,
-                 text_color='black', text_bold=False,
+                 mask_color='gray', text=None, text_size=2.,
+                 text_color='white', text_bold=False,
                  text_translate=(0., 2., 0.), visible=True, transform=None,
                  parent=None, verbose=None, _z=-10., **kw):
         """Init."""
