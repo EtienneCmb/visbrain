@@ -1,7 +1,8 @@
 language: python
 
-cache: pip
+cache:
   pip: true
+  apt: true
   directories:
     - ~/visbrain_data
 
