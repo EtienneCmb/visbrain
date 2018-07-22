@@ -11,7 +11,6 @@ Authors: Etienne Combrisson <e.combrisson@gmail.com>
 
 License: BSD (3-clause)
 """
-import os
 import logging
 
 import numpy as np
@@ -23,7 +22,7 @@ import vispy.visuals.transforms as vist
 
 from ..utils import (array2colormap, color2vb, mpl_cmap, normalize,
                      vpnormalize, vprecenter)
-from ..io import get_data_path
+from ..io import download_file
 from .cbar import CbarVisual
 
 logger = logging.getLogger('visbrain')
@@ -435,7 +434,7 @@ class TopoMesh(object):
             List of channel names.
         """
         # Load the coordinates template :
-        path = os.path.join(get_data_path(), 'topo', 'eegref.npz')
+        path = download_file('eegref.npz', astype='topo')
         file = np.load(path)
         name_ref, xyz_ref = file['chan'], file['xyz']
         keeponly = np.ones((len(chan)), dtype=bool)
