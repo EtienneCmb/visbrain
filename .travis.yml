@@ -1,6 +1,9 @@
 language: python
 
 cache: pip
+  pip: true
+  directories:
+    - ~/visbrain_data
 
 sudo: false
 dist: trusty

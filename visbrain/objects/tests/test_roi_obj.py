@@ -101,4 +101,4 @@ class TestRoiObj(_TestVolumeObject):
         roi_custom.save(tmpfile=True)
         # Test reloading roi from name only :
         RoiObj('tmp_roi')
-        # clean_tmp()
+        clean_tmp()
