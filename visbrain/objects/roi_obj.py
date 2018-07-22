@@ -211,8 +211,13 @@ class RoiObj(_Volume):
         self.ref = pd.DataFrame(label_dict, columns=cols)
         self.ref = self.ref.set_index(index)
         self.analysis = pd.DataFrame({}, columns=cols)
+        self._analysis_backup = self.analysis.copy()
 
         logger.info("%s ROI loaded." % name)
+
+    def reset(self):
+        """Reset the RoiObject."""
+        self.analysis = self._analysis_backup
 
     def get_labels(self, save_to_path=None):
         """Get the labels associated with the loaded ROI.
@@ -329,6 +334,10 @@ class RoiObj(_Volume):
         if source_name is None:
             source_name = ['s' + str(k) for k in range(n_sources)]
         assert len(source_name) == n_sources
+        # Check analysis :
+        if len(self.analysis):
+            logger.debug('Reset analysis because already exist')
+            self.reset()
         # Loop over sources :
         for k in range(n_sources):
             # Apply HDR transformation :
