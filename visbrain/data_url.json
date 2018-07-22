@@ -15,14 +15,14 @@
         "mist.zip": "https://www.dropbox.com/s/aefmw90uvx09gqw/mist.zip?dl=1"
     },
     "topo": {
-        "eegref": "https://www.dropbox.com/s/doe3fnxbct5rsss/eegref.npz?dl=1"
+        "eegref.npz": "https://www.dropbox.com/s/doe3fnxbct5rsss/eegref.npz?dl=1"
     },
     "icons": {
-        "brain_icon": "",
-        "colorbar_icon": "",
-        "figure_icon": "",
-        "sleep_icon": "",
-        "topo_icon": ""
+        "brain_icon.svg": "https://www.dropbox.com/s/47eb6a1jlgzk9vc/brain_icon.svg?dl=1",
+        "colorbar_icon.svg": "https://www.dropbox.com/s/botcrkxkor1gtzh/colorbar_icon.svg?dl=1",
+        "figure_icon.svg": "https://www.dropbox.com/s/dpjtsenf9n9mvxt/figure_icon.svg?dl=1",
+        "sleep_icon.svg": "https://www.dropbox.com/s/bj0a88krqtq5q00/sleep_icon.svg?dl=1",
+        "topo_icon.svg": "https://www.dropbox.com/s/yvmsuerie5bn075/topo_icon.svg?dl=1"
     },
     "example_data": {
         "xyz_sample.npz": "https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1",
