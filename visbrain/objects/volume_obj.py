@@ -211,7 +211,7 @@ class VolumeObj(_Volume):
         Volume rendering method. Default is 'mip'.
     threshold : float | 0.
         Threshold value for iso rendering method.
-    cmap : {'Opaquegrays', 'TransFire', 'OpaqueFire', 'TransGrays'}
+    cmap : {'OpaqueGrays', 'TransFire', 'OpaqueFire', 'TransGrays'}
         Colormap to use.
     select : list | None
         Select some structures in the volume.
