@@ -15,7 +15,7 @@ from visbrain.tests._tests_visbrain import _TestVisbrain
 
 
 # Download intrcranial xyz :
-mat = np.load(download_file('xyz_sample.npz'))
+mat = np.load(download_file('xyz_sample.npz', astype='example_data'))
 xyz_full = mat['xyz']
 mat.close()
 xyz_1, xyz_2 = xyz_full[20:30, :], xyz_full[10:20, :]

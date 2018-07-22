@@ -12,9 +12,11 @@ class TestReadData(object):
 
     def test_read_stc(self):
         """Test function read_stc."""
-        read_stc(download_file("meg_source_estimate-lh.stc"))
+        read_stc(download_file("meg_source_estimate-lh.stc",
+                               astype='example_data'))
 
     @pytest.mark.slow
     def test_read_nifti(self):
         """Test function read_nifti."""
-        read_nifti(download_file("GG-853-GM-0.7mm.nii.gz"))
+        read_nifti(download_file("GG-853-GM-0.7mm.nii.gz",
+                                 astype='example_data'))

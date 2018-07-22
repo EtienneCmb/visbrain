@@ -8,9 +8,7 @@ from visbrain.tests._tests_visbrain import _TestVisbrain
 # List of image files to test with :
 _FILES = ['default.png', 'inside.png', 'count.png', 'density.png',
           'repartition.jpg', 'roi.jpg']
-all_downloaded = [os.path.isfile(path_to_visbrain_data(k)) for k in _FILES]
-if not all(all_downloaded):
-    download_file('figure.zip', unzip=True)
+download_file('figure.zip', unzip=True, astype='example_data')
 
 # Create a tmp/ directory :
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -26,7 +24,7 @@ class TestFigure(_TestVisbrain):
     def test_figure(self):
         """Test function figure."""
         # Get files :
-        files = [path_to_visbrain_data(k) for k in _FILES]
+        files = [path_to_visbrain_data(k, 'example_data') for k in _FILES]
 
         # Titles :
         titles = ['Default', 'Sources inside', 'Connectivity',

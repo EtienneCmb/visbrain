@@ -10,12 +10,12 @@ from visbrain.tests._tests_visbrain import _TestVisbrain
 # from visbrain.config import CONFIG
 
 # File to load :
-sleep_file = path_to_visbrain_data('excerpt2.edf')
-hypno_file = path_to_visbrain_data('Hypnogram_excerpt2.txt')
+sleep_file = path_to_visbrain_data('excerpt2.edf', 'example_data')
+hypno_file = path_to_visbrain_data('Hypnogram_excerpt2.txt', 'example_data')
 
 # Download sleep file :
 if not os.path.isfile(sleep_file):
-    download_file('sleep_edf.zip', unzip=True)
+    download_file('sleep_edf.zip', unzip=True, astype='example_data')
 
 
 class TestCli(_TestVisbrain):
