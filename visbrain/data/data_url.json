@@ -12,7 +12,7 @@
         "aal.npz": "https://www.dropbox.com/s/feqaoj58va5anbr/aal.npz?dl=1",
         "brodmann.npz": "https://www.dropbox.com/s/qg2w9b191r7f4ox/brodmann.npz?dl=1",
         "talairach.npz": "https://www.dropbox.com/s/g9q9al7t481x180/talairach.npz?dl=1",
-        "mist": "https://www.dropbox.com/s/aefmw90uvx09gqw/mist.zip?dl=1"
+        "mist.zip": "https://www.dropbox.com/s/aefmw90uvx09gqw/mist.zip?dl=1"
     },
     "topo": {
         "eegref": "https://www.dropbox.com/s/doe3fnxbct5rsss/eegref.npz?dl=1"
