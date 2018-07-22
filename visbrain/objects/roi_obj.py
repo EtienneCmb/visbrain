@@ -211,8 +211,13 @@ class RoiObj(_Volume):
         self.ref = pd.DataFrame(label_dict, columns=cols)
         self.ref = self.ref.set_index(index)
         self.analysis = pd.DataFrame({}, columns=cols)
+        self._analysis_backup = self.analysis.copy()
 
         logger.info("%s ROI loaded." % name)
+
+    def reset(self):
+        """Reset the RoiObject."""
+        self.analysis = self._analysis_backup
 
     def get_labels(self, save_to_path=None):
         """Get the labels associated with the loaded ROI.
@@ -329,6 +334,10 @@ class RoiObj(_Volume):
         if source_name is None:
             source_name = ['s' + str(k) for k in range(n_sources)]
         assert len(source_name) == n_sources
+        # Check analysis :
+        if len(self.analysis):
+            logger.debug('Reset analysis because already exist')
+            self.reset()
         # Loop over sources :
         for k in range(n_sources):
             # Apply HDR transformation :
@@ -462,7 +471,7 @@ class RoiObj(_Volume):
         else:
             assert not isinstance(select, float)
             select = [select] if isinstance(select, int) else select
-            vert, faces, color = np.array([]), np.array([]), np.array([])
+            vert, faces, data = np.array([]), np.array([]), np.array([])
             # Generate a (n_levels, 4) array of unique colors :
             if isinstance(roi_to_color, dict):
                 assert len(roi_to_color) == len(select)
@@ -480,8 +489,8 @@ class RoiObj(_Volume):
                 faces = np.r_[faces, f + faces.max() + 1] if faces.size else f
                 vert = np.r_[vert, v] if vert.size else v
                 # Concatenate color :
-                col = np.tile(col_unique[[i], ...], (v.shape[0], 1))
-                color = np.r_[color, col] if color.size else col
+                col = np.full((v.shape[0],), i)
+                data = np.r_[data, col] if data.size else col
         if vert.size:
             # Apply hdr transformation to vertices :
             vert_hdr = self._hdr.map(vert)[:, 0:-1]
@@ -494,8 +503,8 @@ class RoiObj(_Volume):
                 logger.debug("ROI mesh already exist")
                 self.mesh.set_data(vertices=vert_hdr, faces=faces)
             if unique_color:
-                self.mask = 1.
-                self.color = color
+                self.mesh.add_overlay(data, cmap=col_unique,
+                                      interpolation='linear')
         else:
             raise ValueError("No vertices found for this ROI")
 
@@ -578,6 +587,18 @@ class RoiObj(_Volume):
 
     ###########################################################################
     ###########################################################################
+    #                               CBAR
+    ###########################################################################
+    ###########################################################################
+
+    def _update_cbar(self):
+        self.mesh.update_colormap(**self.to_kwargs())
+
+    def _update_cbar_minmax(self):
+        self._clim = self.mesh.minmax
+
+    ###########################################################################
+    ###########################################################################
     #                                PROPERTIES
     ###########################################################################
     ###########################################################################
@@ -628,19 +649,6 @@ class RoiObj(_Volume):
     def normals(self):
         """Get the normals value."""
         return self.mesh._normals
-
-    # ----------- MASK -----------
-    @property
-    @wrap_getter_properties
-    def mask(self):
-        """Get the mask value."""
-        return self.mesh.mask
-
-    @mask.setter
-    @wrap_setter_properties
-    def mask(self, value):
-        """Set mask value."""
-        self.mesh.mask = value
 
     # ----------- COLOR -----------
     @property

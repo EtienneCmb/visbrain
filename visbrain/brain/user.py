@@ -96,6 +96,7 @@ class BrainUserMethods(object):
         """
         bckcolor = color2vb(color).ravel()[0:-1]
         self.view.canvas.bgcolor = bckcolor
+        self.cbqt.cbviz.bgcolor = bckcolor
 
     def screenshot(self, saveas, canvas='main', print_size=None, dpi=300.,
                    unit='centimeter', factor=None, region=None, autocrop=False,

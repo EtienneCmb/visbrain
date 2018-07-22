@@ -59,7 +59,6 @@ class _VisbrainObj(CbarBase, _VisbrainShortcuts):
         """Init."""
         CbarBase.__init__(self, **kw)
         _VisbrainShortcuts.__init__(self)
-        self._cbar_data = None
         self._default_cblabel = ''
 
     def _get_camera(self):
@@ -223,6 +222,11 @@ class VisbrainObject(_VisbrainObj):
         write_fig_canvas(saveas, canvas.canvas,
                          widget=canvas.canvas.central_widget, **kw)
         self._node.parent = None
+
+    def copy(self):
+        """Get a copy of the object."""
+        from copy import copy
+        return copy(self)
 
     # ----------- PARENT -----------
     @property

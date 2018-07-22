@@ -196,3 +196,4 @@ class UiSources(object):
         self.sources.project_sources(b_obj, project=project, radius=radius,
                                      contribute=contribute,
                                      mask_color=mask_color, **kwargs)
+        self.cbqt.setEnabled('roi', hasattr(self.roi, 'mesh'))

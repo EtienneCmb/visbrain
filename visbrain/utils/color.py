@@ -4,21 +4,182 @@ This file contains a bundle of functions that can be used to have a more
 flexible control of diffrent problem involving colors (like turn an array /
 string / faces into RBGA colors, defining the basic colormap object...)
 """
+import logging
 
 import numpy as np
 
-from vispy.color.colormap import Colormap
+from vispy.color.colormap import Colormap as VispyColormap
 
 from matplotlib import cm
 import matplotlib.colors as mplcol
 from warnings import warn
 
 from .sigproc import normalize
+from .mesh import vispy_array
 
 
-__all__ = ('color2vb', 'array2colormap', 'cmap_to_glsl', 'dynamic_color',
-           'color2faces', 'type_coloring', 'mpl_cmap', 'color2tuple',
-           'mpl_cmap_index')
+__all__ = ('Colormap', 'color2vb', 'array2colormap', 'cmap_to_glsl',
+           'dynamic_color', 'color2faces', 'type_coloring', 'mpl_cmap',
+           'color2tuple', 'mpl_cmap_index')
+
+
+logger = logging.getLogger('visbrain')
+
+
+class Colormap(object):
+    """Main colormap class.
+
+    Parameters
+    ----------
+    cmap : string | inferno
+        Matplotlib colormap
+    clim : tuple/list | None
+        Limit of the colormap. The clim parameter must be a tuple / list
+        of two float number each one describing respectively the (min, max)
+        of the colormap. Every values under clim[0] or over clim[1] will
+        peaked.
+    alpha : float | 1.0
+        The opacity to use. The alpha parameter must be between 0 and 1.
+    vmin : float | None
+        Threshold from which every color will have the color defined using
+        the under parameter bellow.
+    under : tuple/string | 'dimgray'
+        Matplotlib color for values under vmin.
+    vmax : float | None
+        Threshold from which every color will have the color defined using
+        the over parameter bellow.
+    over : tuple/string | 'darkred'
+        Matplotlib color for values over vmax.
+    translucent : tuple | None
+        Set a specific range translucent. With f_1 and f_2 two floats, if
+        translucent is :
+
+            * (f_1, f_2) : values between f_1 and f_2 are set to translucent
+            * (None, f_2) x <= f_2 are set to translucent
+            * (f_1, None) f_1 <= x are set to translucent
+    lut_len : int | 1024
+        Number of levels for the colormap.
+    interpolation : {None, 'linear', 'cubic'}
+        Interpolation type. Default is None.
+
+    Attributes
+    ----------
+    data : array_like
+        Color data of shape (n_data, 4)
+    shape : tuple
+        Shape of the data.
+    r : array_like
+        Red levels.
+    g : array_like
+        Green levels.
+    b : array_like
+        Blue levels.
+    rgb : array_like
+        RGB levels.
+    alpha : array_like
+        Transparency level.
+    glsl : vispy.colors.Colormap
+        GL colormap version.
+    """
+
+    def __init__(self, cmap='viridis', clim=None, vmin=None, under=None,
+                 vmax=None, over=None, translucent=None, alpha=1.,
+                 lut_len=1024, interpolation=None):
+        """Init."""
+        # Keep color parameters into a dict :
+        self._kw = dict(cmap=cmap, clim=clim, vmin=vmin, vmax=vmax,
+                        under=under, over=over, translucent=translucent,
+                        alpha=alpha)
+        # Color conversion :
+        if isinstance(cmap, np.ndarray):
+            assert (cmap.ndim == 2) and (cmap.shape[-1] in (3, 4))
+            # cmap = single color :
+            if (cmap.shape[0] == 1) and isinstance(interpolation, str):
+                logger.debug("Colormap : unique color repeated.")
+                data = np.tile(cmap, (lut_len, 1))
+            elif (cmap.shape[0] == lut_len) or (interpolation is None):
+                logger.debug("Colormap : Unique repeated.")
+                data = cmap
+            else:
+                from scipy.interpolate import interp2d
+                n_ = cmap.shape[1]
+                x, y = np.linspace(0, 1, n_), np.linspace(0, 1, cmap.shape[0])
+                f = interp2d(x, y, cmap, kind=interpolation)
+                # Interpolate colormap :
+                data = f(x, np.linspace(0, 1, lut_len))
+        elif isinstance(cmap, str):
+            data = array2colormap(np.linspace(0., 1., lut_len), **self._kw)
+        # Alpha correction :
+        if data.shape[-1] == 3:
+            data = np.c_[data, np.full((data.shape[0],), alpha)]
+        # NumPy float32 conversion :
+        self._data = vispy_array(data)
+
+    def to_rgba(self, data):
+        """Turn a data vector into colors using colormap properties.
+
+        Parameters
+        ----------
+        data : array_like
+            Vector of data of shape (n_data,).
+
+        Returns
+        -------
+        color : array_like
+            Array of colors of shape (n_data, 4)
+        """
+        if isinstance(self._kw['cmap'], np.ndarray):
+            return self._data
+        else:
+            return array2colormap(data, **self._kw)
+
+    def __len__(self):
+        """Get the number of colors in the colormap."""
+        return self._data.shape[0]
+
+    def __getitem__(self, name):
+        """Get a color item."""
+        return self._kw[name]
+
+    @property
+    def data(self):
+        """Get colormap data."""
+        return self._data
+
+    @property
+    def shape(self):
+        """Get the shape of the data."""
+        return self._data.shape
+
+    @property
+    def glsl(self):
+        """Get a glsl version of the colormap."""
+        return cmap_to_glsl(lut_len=len(self), **self._kw)
+
+    @property
+    def r(self):
+        """Get red levels."""
+        return self._data[:, 0]
+
+    @property
+    def g(self):
+        """Get green levels."""
+        return self._data[:, 1]
+
+    @property
+    def b(self):
+        """Get blue levels."""
+        return self._data[:, 2]
+
+    @property
+    def rgb(self):
+        """Get rgb levels."""
+        return self._data[:, 0:3]
+
+    @property
+    def alpha(self):
+        """Get transparency level."""
+        return self._data[:, -1]
 
 
 def color2vb(color=None, default=(1., 1., 1.), length=1, alpha=1.0,
@@ -204,7 +365,7 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
     return x_cmap.astype(np.float32)
 
 
-def _transclucent_cmap(x, x_cmap, translucent):
+def _transclucent_cmap(x, x_cmap, translucent, smooth=None):
     """Sub function to define transparency."""
     if translucent is not None:
         is_num = [isinstance(k, (int, float)) for k in translucent]
@@ -216,17 +377,22 @@ def _transclucent_cmap(x, x_cmap, translucent):
         elif is_num == [False, True]:  # (None, f_2)
             trans_x = x <= translucent[1]
         x_cmap[..., -1] = np.invert(trans_x)
+        if isinstance(smooth, int):
+            alphas = x_cmap[:, -1]
+            alphas = np.convolve(alphas, np.hanning(smooth), 'valid')
+            alphas /= max(alphas.max(), 1.)
+            x_cmap[smooth - 1::, -1] = alphas
     return x_cmap
 
 
-def cmap_to_glsl(limits=None, n_colors=1024, color=None, **kwargs):
+def cmap_to_glsl(limits=None, lut_len=1024, color=None, **kwargs):
     """Get a glsl colormap.
 
     Parameters
     ----------
     limits : tuple | None
         Color limits for the object. Must be a tuple of two floats.
-    n_colors : int | 1024
+    lut_len : int | 1024
         Number of levels for the colormap.
     color : string | None
         Use a unique color for the colormap.
@@ -242,14 +408,14 @@ def cmap_to_glsl(limits=None, n_colors=1024, color=None, **kwargs):
         limits = (0., 1.)
     assert len(limits) == 2
     # Color transform :
-    vec = np.linspace(limits[0], limits[1], n_colors)
+    vec = np.linspace(limits[0], limits[1], lut_len)
     if color is None:  # colormap
-        cmap = Colormap(array2colormap(vec, **kwargs))
+        cmap = VispyColormap(array2colormap(vec, **kwargs))
     else:              # uniform color
         translucent = kwargs.get('translucent', None)
-        rep_col = color2vb(color, length=n_colors)
+        rep_col = color2vb(color, length=lut_len)
         cmap_trans = _transclucent_cmap(vec, rep_col, translucent)
-        cmap = Colormap(cmap_trans)
+        cmap = VispyColormap(cmap_trans)
 
     return cmap
 

@@ -74,8 +74,6 @@ class TestRoiObj(_TestVolumeObject):
         assert isinstance(roi_obj.vertices, np.ndarray)
         assert isinstance(roi_obj.faces, np.ndarray)
         assert isinstance(roi_obj.normals, np.ndarray)
-        assert roi_obj.mask is None
-        assert roi_obj.color is None
         assert isinstance(roi_obj.mask_color, np.ndarray)
 
     def test_select_roi(self):

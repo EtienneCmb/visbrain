@@ -24,7 +24,7 @@ download_file(file_name_2)
 file_1 = path_to_visbrain_data(file=file_name_1)
 file_2 = path_to_visbrain_data(file=file_name_2)
 
-b_obj = BrainObj('inflated', translucent=False)
+b_obj = BrainObj('inflated', translucent=False, sulcus=True)
 b_obj.add_activation(file=file_1, clim=(4., 30.), hide_under=4, cmap='Reds_r',
                      hemisphere='left')
 b_obj.add_activation(file=file_2, clim=(4., 30.), hide_under=4, cmap='Blues_r',

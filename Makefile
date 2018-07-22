@@ -1,5 +1,4 @@
 # simple makefile to simplify repetetive build env management tasks under posix
-
 CTAGS ?= ctags
 
 all: clean inplace test
@@ -37,8 +36,22 @@ flake: clean-test
 	@flake8
 
 examples: clean
-	@echo "NOT CONFIGURED YET"
+	@for i in examples/brain/*.py examples/objects/*.py;do \
+		echo "-----------------------------------------------"; \
+		echo $$i; \
+		echo "-----------------------------------------------"; \
+		python $$i --visbrain-show=False; \
+		echo "\n"; \
+	done
 
+examples-full: clean
+	@for i in @for i in examples/*/*.py;do \
+		echo "-----------------------------------------------"; \
+		echo $$i; \
+		echo "-----------------------------------------------"; \
+		python $$i --visbrain-show=False; \
+		echo "\n"; \
+	done
 
 pypi:
 	@python setup.py register -r pypi

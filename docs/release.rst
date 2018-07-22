@@ -12,7 +12,8 @@ Changelog
 
 Improvements
 ~~~~~~~~~~~~
-* Colormap computed onto the GPU for : spectrogram, phase-amplitude coupling, images, 3D images
+* Fix colormap update for every recording modality
+* Colormap computed onto the GPU for : spectrogram, phase-amplitude coupling, images, 3D images, brain object
 * Sorted brain templates in :class:`visbrain.Brain` + remove sulcus as a brain template
 * Fewer visible possibilities when importing from the root of visbrain 
 

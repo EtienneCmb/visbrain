@@ -585,5 +585,5 @@ class SceneObj(object):
             logger.profiler("PARENT TREE \n%s" % self._grid.describe_tree())
             logger.profiler(" ")
             PROFILER.finish()
-        if sys.flags.interactive != 1:
+        if sys.flags.interactive != 1 and CONFIG['SHOW_PYQT_APP']:
             CONFIG['VISPY_APP'].run()
