@@ -26,7 +26,7 @@ print("""
 #                              Nii.gz file
 # =============================================================================
 """)
-path = download_file('GG-853-GM-0.7mm.nii.gz')
+path = download_file('GG-853-GM-0.7mm.nii.gz', astype='example_data')
 cs_cust = CrossSecObj(path, coords=(0., 0., 0.), cmap='gist_stern')
 sc.add_to_subplot(cs_cust, row=0, col=1, title='Nii.gz file')
 

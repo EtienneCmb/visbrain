@@ -11,7 +11,7 @@ https://www.dropbox.com/s/5o1ph08rmpft200/cbar_config.zip?dl=0
 .. image:: ../../picture/piccbar/ex_load_existing_config.png
 """
 from visbrain import Colorbar
-from visbrain.io import download_file, path_to_visbrain_data
+from visbrain.io import download_file
 
-download_file('cbar_config.zip', unzip=True, remove_archive=True)
-Colorbar(config=path_to_visbrain_data('config_1.txt')).show()
+path = download_file('cbar_config.zip', unzip=True, astype='example_data')
+Colorbar(config=path).show()

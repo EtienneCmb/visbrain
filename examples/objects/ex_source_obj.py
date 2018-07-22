@@ -27,7 +27,7 @@ from visbrain.io import download_file
 """
 Load the xyz coordinates and corresponding subject name
 """
-mat = np.load(download_file('xyz_sample.npz'))
+mat = np.load(download_file('xyz_sample.npz', astype='example_data'))
 xyz = mat['xyz']
 n_sources = xyz.shape[0]
 text = ['S' + str(k) for k in range(n_sources)]

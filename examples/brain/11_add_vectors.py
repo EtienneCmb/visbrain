@@ -24,7 +24,7 @@ kwargs = {}
 """
 Load the xyz coordinates and corresponding subject name
 """
-mat = np.load(download_file('xyz_sample.npz'))
+mat = np.load(download_file('xyz_sample.npz', astype='example_data'))
 xyz, subjects = mat['xyz'], mat['subjects']
 
 """The first vector object use the position of a subset of sources as a

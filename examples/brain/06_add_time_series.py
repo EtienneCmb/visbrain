@@ -18,7 +18,7 @@ from visbrain.io import download_file
 
 # Load the xyz coordinates and corresponding subject name :
 
-s_xyz = np.load(download_file('xyz_sample.npz'))['xyz']
+s_xyz = np.load(download_file('xyz_sample.npz', astype='example_data'))['xyz']
 s_xyz = s_xyz[4::25, ...]
 s_text = [str(k) for k in range(s_xyz.shape[0])]
 s_textsize = 1.5

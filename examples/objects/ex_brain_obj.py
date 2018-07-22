@@ -61,7 +61,7 @@ sc.add_to_subplot(b_obj_lw, row=0, col=1, rotate='right',
 b_obj_rw = BrainObj('white', hemisphere='both', translucent=True)
 
 # Define a source object and project data on the right hemisphere:
-mat = np.load(download_file('xyz_sample.npz'))
+mat = np.load(download_file('xyz_sample.npz', astype='example_data'))
 xyz, subjects = mat['xyz'], mat['subjects']
 data = np.random.rand(xyz.shape[0])
 s_obj = SourceObj('Sources', xyz, data=data, cmap='inferno')
@@ -76,7 +76,7 @@ print("""
 #                   Parcellize the brain (using all parcellates)
 # =============================================================================
 """)
-path_to_file1 = download_file('lh.aparc.a2009s.annot')
+path_to_file1 = download_file('lh.aparc.a2009s.annot', astype='example_data')
 b_obj_parl = BrainObj('inflated', hemisphere='left', translucent=False)
 # print(b_obj_parl.get_parcellates(path_to_file1))  # available parcellates
 b_obj_parl.parcellize(path_to_file1)
@@ -88,7 +88,7 @@ print("""
 #                          Send data to parcellates
 # =============================================================================
 """)
-path_to_file2 = download_file('rh.aparc.annot')
+path_to_file2 = download_file('rh.aparc.annot', astype='example_data')
 b_obj_parr = BrainObj('inflated', hemisphere='right', translucent=False)
 # print(b_obj_parr.get_parcellates(path_to_file2))  # available parcellates
 select_par = ['paracentral', 'precentral', 'fusiform', 'postcentral',
@@ -108,7 +108,7 @@ print("""
 #                          Add a custom brain template
 # =============================================================================
 """)
-mat = np.load(download_file('Custom.npz'))
+mat = np.load(download_file('Custom.npz', astype='example_data'))
 vert, faces, norms = mat['vertices'], mat['faces'], mat['normals']
 b_obj_custom = BrainObj('Custom', vertices=1000 * vert, faces=faces,
                         normals=norms, translucent=False)
@@ -120,7 +120,7 @@ print("""
 #                                fMRI activation
 # =============================================================================
 """)
-file = download_file('lh.sig.nii.gz')
+file = download_file('lh.sig.nii.gz', astype='example_data')
 b_obj_fmri = BrainObj('inflated', translucent=False, sulcus=True)
 b_obj_fmri.add_activation(file=file, clim=(5., 20.), hide_under=5,
                           cmap='viridis', hemisphere='left')
@@ -132,7 +132,8 @@ print("""
 #                            MEG inverse solution
 # =============================================================================
 """)
-file = read_stc(download_file('meg_source_estimate-rh.stc'))
+file = read_stc(download_file('meg_source_estimate-rh.stc',
+                              astype='example_data'))
 data = file['data'][:, 2]
 vertices = file['vertices']
 b_obj_meg = BrainObj('inflated', translucent=False, hemisphere='right',

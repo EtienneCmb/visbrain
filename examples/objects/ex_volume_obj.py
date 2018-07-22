@@ -60,7 +60,7 @@ print("""
 #                              Custom nii.gz file
 # =============================================================================
 """)
-path = download_file('GG-853-GM-0.7mm.nii.gz')
+path = download_file('GG-853-GM-0.7mm.nii.gz', astype='example_data')
 v_obj_nii = VolumeObj(path, method='mip', cmap='OpaqueGrays', threshold=.7)
 sc.add_to_subplot(v_obj_nii, row=1, col=1, title='Custom nii.gz file')
 
@@ -70,7 +70,7 @@ print("""
 #                              Second nii.gz file
 # =============================================================================
 """)
-path = download_file('GG-853-WM-0.7mm.nii.gz')
+path = download_file('GG-853-WM-0.7mm.nii.gz', astype='example_data')
 vol_obj_sec = VolumeObj(path, method='translucent', cmap='TransGrays')
 sc.add_to_subplot(vol_obj_sec, row=1, col=2, title='Second nii.gz file')
 
@@ -79,7 +79,7 @@ print("""
 #                              Threshold selection
 # =============================================================================
 """)
-path = download_file('GG-853-WM-0.7mm.nii.gz')
+path = download_file('GG-853-WM-0.7mm.nii.gz', astype='example_data')
 vol_obj_th = VolumeObj(path, method='iso', threshold=.1)
 sc.add_to_subplot(vol_obj_th, row=1, col=3, title='Threshold selection')
 
