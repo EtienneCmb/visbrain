@@ -17,8 +17,8 @@ __all__ = ["get_data_url_file", "download_file"]
 
 
 def get_data_url_file():
-    """Get path to the data_url.txt file."""
-    return load_config_json(get_data_path(file='data_url.txt'))
+    """Get path to the data_url.json file."""
+    return load_config_json(get_data_path(file='data_url.json'))
 
 
 def get_data_url(name):

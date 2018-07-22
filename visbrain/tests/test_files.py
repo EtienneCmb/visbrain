@@ -38,6 +38,6 @@ def test_topo_file():
 
 
 def test_data_url():
-    """Test if the data_url.txt is installed."""
-    path = get_data_path(file='data_url.txt')
-    _test_file('URL to data (data_url.txt)', path)
+    """Test if the data_url.json is installed."""
+    path = get_data_path(file='data_url.json')
+    _test_file('URL to data (data_url.json)', path)
