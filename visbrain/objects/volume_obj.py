@@ -89,14 +89,14 @@ class _Volume(VisbrainObject):
                 to_load = self._df_get_file(name_npz, download=False)
             elif self._df_is_downloadable(name_npz):
                 to_load = self._df_download_file(name_npz)
-            assert isinstance(to_load, str)
-            self._name = os.path.split(to_load)[1].split('.npz')[0]
             # Load file :
-            arch = np.load(to_load)
-            vol, hdr = arch['vol'], arch['hdr']
-            labels, index = arch['labels'], arch['index']
-            system = 'tal' if 'talairach' in to_load else 'mni'
-            logger.debug("%s volume loaded" % name)
+            if isinstance(to_load, str):
+                self._name = os.path.split(to_load)[1].split('.npz')[0]
+                arch = np.load(to_load)
+                vol, hdr = arch['vol'], arch['hdr']
+                labels, index = arch['labels'], arch['index']
+                system = 'tal' if 'talairach' in to_load else 'mni'
+                logger.debug("%s volume loaded" % name)
 
         self._vol, self._hdr = self._check_volume(vol, hdr)
         self._labels, self._index, self._system = labels, index, system
