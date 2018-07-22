@@ -1,4 +1,5 @@
 """Main class for Visbrain objects."""
+import os
 import sys
 import logging
 
@@ -6,7 +7,9 @@ import vispy
 import vispy.visuals.transforms as vist
 
 from .scene_obj import VisbrainCanvas
-from ..io import write_fig_canvas, dialog_save
+from ..io import (write_fig_canvas, dialog_save, path_to_visbrain_data,
+                  load_config_json, get_data_path, download_file,
+                  get_files_in_folders)
 from ..utils import color2vb, set_log_level, merge_cameras
 from ..config import CONFIG
 from ..visuals import CbarBase
@@ -60,15 +63,71 @@ class _VisbrainObj(CbarBase, _VisbrainShortcuts):
         CbarBase.__init__(self, **kw)
         _VisbrainShortcuts.__init__(self)
         self._default_cblabel = ''
+        self._data_folder = None
 
+    # --------------------------- CAMERA ---------------------------
     def _get_camera(self):
         raise NotImplementedError
 
+    # --------------------------- COLORBAR ---------------------------
     def _update_cbar(self):
         raise NotImplementedError
 
     def _update_cbar_minmax(self):
         raise NotImplementedError
+
+    # --------------------------- DATA ---------------------------
+    def _df_is_downloadable(self, file):
+        """Get if a file name could be downloaded."""
+        json_path = get_data_path(file='data_url.json')
+        json_struct = load_config_json(json_path)[self._data_folder]
+        return file in json_struct
+
+    def _df_is_downloaded(self, file):
+        """Get if a file has already been downloaded."""
+        return os.path.isfile(os.path.join(self._data_folder_path, file))
+
+    def _df_get_downloadable(self):
+        """Get the list of files that can be downloaded."""
+        json_path = get_data_path(file='data_url.json')
+        return load_config_json(json_path)[self._data_folder]
+
+    def _df_get_downloaded(self, **kwargs):
+        """Get the list of files that are already downloaded."""
+        return get_files_in_folders(self._data_folder_path, **kwargs)
+
+    def _df_get_file(self, file, download=True):
+        """Get the path to a file or download it if needed."""
+        is_dl = self._df_is_downloaded(file)
+        if not is_dl and download:
+            assert self._df_is_downloadable(file)
+            self._df_download_file(file)
+        return os.path.join(self._data_folder_path, file)
+
+    def _df_download_file(self, file):
+        """Download a file."""
+        return download_file(file, astype=self._data_folder,
+                             to_path=self._data_folder_path)
+
+    # ----------- DATA_FOLDER -----------
+    @property
+    def data_folder(self):
+        """Get the data_folder value."""
+        return self._data_folder
+
+    @data_folder.setter
+    def data_folder(self, value):
+        """Set data_folder value."""
+        if isinstance(self._data_folder, str):
+            raise ValueError("data_folder can only be set once.")
+        assert isinstance(value, str)
+        # Create the directory if it doesn't exist :
+        full_path = path_to_visbrain_data(folder=value)
+        if not os.path.exists(full_path):
+            os.makedirs(full_path)
+            logger.info("%s folder created" % full_path)
+        self._data_folder = value
+        self._data_folder_path = full_path
 
 
 class VisbrainObject(_VisbrainObj):
