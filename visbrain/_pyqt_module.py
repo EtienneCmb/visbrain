@@ -6,8 +6,7 @@ import logging
 
 from .utils import set_widget_size, set_log_level
 from .config import PROFILER, CONFIG
-from .io import (get_data_path, path_to_tmp,
-                 clean_tmp, path_to_visbrain_data)
+from .io import (path_to_tmp, download_file, clean_tmp, path_to_visbrain_data)
 
 sip.setdestroyonexit(False)
 logger = logging.getLogger('visbrain')
@@ -83,7 +82,9 @@ class _PyQtModule(object):
             self.QuickSettings.setCurrentIndex(0)
         # Set icon (if possible) :
         if isinstance(self._module_icon, str):
-            path_ico = get_data_path(folder='icons', file=self._module_icon)
+            path_ico = path_to_visbrain_data(self._module_icon, 'icons')
+            if not os.path.isfile(path_ico):
+                download_file(self._module_icon, astype='icons')
             if os.path.isfile(path_ico):
                 app_icon = QtGui.QIcon()
                 app_icon.addFile(path_ico)
