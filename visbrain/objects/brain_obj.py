@@ -113,6 +113,8 @@ class BrainObj(VisbrainObject):
         if sulcus is True:
             if not self._df_is_downloaded('sulcus.npy'):
                 sulcus_file = self._df_download_file('sulcus.npy')
+            else:
+                sulcus_file = self._df_get_file('sulcus.npy')
             sulcus = np.load(sulcus_file)
         else:
             sulcus = None
