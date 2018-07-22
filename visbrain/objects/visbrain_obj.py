@@ -92,9 +92,18 @@ class _VisbrainObj(CbarBase, _VisbrainShortcuts):
         json_path = get_data_path(file='data_url.json')
         return load_config_json(json_path)[self._data_folder]
 
+    def _df_get_tmp_folder(self):
+        """Get the tmp associated folder."""
+        vb_path = path_to_visbrain_data()
+        return os.path.join(*(vb_path, 'tmp', self._data_folder))
+
     def _df_get_downloaded(self, **kwargs):
         """Get the list of files that are already downloaded."""
-        return get_files_in_folders(self._data_folder_path, **kwargs)
+        main_path = get_files_in_folders(self._data_folder_path, **kwargs)
+        tmp_path = self._df_get_tmp_folder()
+        if os.path.isdir(tmp_path):
+            main_path += get_files_in_folders(tmp_path, **kwargs)
+        return main_path
 
     def _df_get_file(self, file, download=True):
         """Get the path to a file or download it if needed."""
@@ -102,12 +111,16 @@ class _VisbrainObj(CbarBase, _VisbrainShortcuts):
         if not is_dl and download:
             assert self._df_is_downloadable(file)
             self._df_download_file(file)
-        return os.path.join(self._data_folder_path, file)
+        # Find if the file is in _data_folder or in tmp :
+        if file in os.listdir(self._data_folder_path):
+            use_path = self._data_folder_path
+        else:
+            use_path = self._df_get_tmp_folder()
+        return os.path.join(use_path, file)
 
     def _df_download_file(self, file):
         """Download a file."""
-        return download_file(file, astype=self._data_folder,
-                             to_path=self._data_folder_path)
+        return download_file(file, astype=self._data_folder)
 
     # ----------- DATA_FOLDER -----------
     @property
