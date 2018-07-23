@@ -309,6 +309,8 @@ class SourceObj(VisbrainObject):
         mask_color : string/tuple/array_like | 'gray'
             The color to use for the projection of masked sources. If None,
             the color of the masked sources is going to be used.
+        to_overlay : int | 0
+            The overlay number used for the projection.
         """
         kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
         self._default_cblabel = "Source's %s" % project

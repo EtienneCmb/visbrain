@@ -288,10 +288,8 @@ class RoiObj(_Volume):
                     pat_in_col[:, c] = df_to_use[i].astype(str).str.match(k)
             idx_to_keep[:, p] = np.any(pat_in_col, 1)
         # Return either the union or intersection across research :
-        if union:
-            idx_to_keep = np.any(idx_to_keep, 1)
-        else:
-            idx_to_keep = np.all(idx_to_keep, 1)
+        fcn = np.any if union else np.all
+        idx_to_keep = fcn(idx_to_keep, 1)
         if not np.any(idx_to_keep):
             logger.error("No corresponding entries in the %s ROI for "
                          "%s" % (self.name, ', '.join(patterns)))
@@ -545,7 +543,7 @@ class RoiObj(_Volume):
     def project_sources(self, s_obj, project='modulation', radius=10.,
                         contribute=False, cmap='viridis', clim=None, vmin=None,
                         under='black', vmax=None, over='red',
-                        mask_color=None):
+                        mask_color=None, to_overlay=0):
         """Project source's activity or repartition onto ROI.
 
         Parameters
@@ -575,12 +573,15 @@ class RoiObj(_Volume):
         mask_color : string/tuple/array_like | 'gray'
             The color to use for the projection of masked sources. If None,
             the color of the masked sources is going to be used.
+        to_overlay : int | 0
+            The overlay number used for the projection.
         """
         if self:
             kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
             self._default_cblabel = "Source's %s" % project
             _project_sources_data(s_obj, self, project, radius, contribute,
-                                  mask_color=mask_color, **kw)
+                                  mask_color=mask_color, to_overlay=to_overlay,
+                                  **kw)
         else:
             raise ValueError("Cannot project sources because no ROI selected. "
                              "Use the `select_roi` method before.")
