@@ -94,7 +94,7 @@ class TestBrain(_TestVisbrain):
 
     def test_brain_control(self):
         """Test method brain_control."""
-        template = ['B1', 'B2', 'B3', 'white']
+        template = vb.brain_list()
         hemi = ['left', 'right', 'both']
         translucent = [False, True]
         alpha = [.1, 1.]
@@ -108,7 +108,7 @@ class TestBrain(_TestVisbrain):
 
     def test_brain_list(self):
         """Test method brain_list."""
-        vb.brain_list() == ['B1', 'B2', 'B3']
+        assert len(vb.brain_list()) > 1
 
     ###########################################################################
     #                                 SOURCES
