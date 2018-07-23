@@ -9,7 +9,8 @@ from vispy.app.canvas import MouseEvent, KeyEvent
 
 from visbrain import Brain
 from visbrain.objects import (SourceObj, ConnectObj, TimeSeries3DObj,
-                              Picture3DObj, RoiObj, VolumeObj, CrossSecObj)
+                              Picture3DObj, RoiObj, VolumeObj, CrossSecObj,
+                              BrainObj)
 from visbrain.io import download_file
 from visbrain.tests._tests_visbrain import _TestVisbrain
 
@@ -20,6 +21,13 @@ xyz_full = mat['xyz']
 mat.close()
 xyz_1, xyz_2 = xyz_full[20:30, :], xyz_full[10:20, :]
 
+
+# ---------------- Brain ----------------
+# Just to be sure to have them on server :
+BrainObj('B1')
+BrainObj('B2')
+BrainObj('B3')
+BrainObj('white')
 
 # ---------------- Sources ----------------
 # Define some random sources :
