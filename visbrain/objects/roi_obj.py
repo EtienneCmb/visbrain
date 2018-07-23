@@ -53,13 +53,13 @@ class RoiObj(_Volume):
         Array of labels. A structured array can be used (i.e
         label=np.zeros(n_sources, dtype=[('brodmann', int), ('aal', object)])).
     index : array_like | None
-        Array of index that make the correspondance between the volumne values
+        Array of index that make the correspondance between the volume values
         and labels. The length of index must be the same as label.
     hdr : array_like | None
         Array of transform source's coordinates into the volume space. Must be
         a (4, 4) array.
     system : {'mni', 'tal'}
-        The system of the volumne. Can either be MNI ('mni') or Talairach
+        The system of the volume. Can either be MNI ('mni') or Talairach
         ('tal').
     transform : VisPy.visuals.transforms | None
         VisPy transformation to set to the parent node.
@@ -176,13 +176,13 @@ class RoiObj(_Volume):
             labels=np.zeros(n_sources, dtype=[('brodmann', int),
             ('aal', object)])).
         index : array_like | None
-            Array of index that make the correspondance between the volumne
+            Array of index that make the correspondance between the volume
             values and labels. The length of index must be the same as labels.
         hdr : array_like | None
             Array of transform source's coordinates into the volume space.
             Must be a (4, 4) array.
         system : {'mni', 'tal'}
-            The system of the volumne. Can either be MNI ('mni') or Talairach
+            The system of the volume. Can either be MNI ('mni') or Talairach
             ('tal').
         """
         # Test if pandas is installed :

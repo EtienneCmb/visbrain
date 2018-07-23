@@ -41,8 +41,11 @@ class TestRoiObj(_TestVolumeObject):
 
     def test_definition(self):
         """Test function definition."""
-        for k in ['aal', 'talairach', 'brodmann']:
-            RoiObj(k)
+        # Default :
+        _ = [RoiObj(k) for k in ['aal', 'talairach', 'brodmann']]  # noqa
+        # MIST :
+        levels = [7, 12, 20, 36, 64, 122, 197, 325, 444, 'ROI']
+        _ = [RoiObj('mist_%s' % str(k)) for k in levels]  # noqa
 
     def test_get_labels(self):
         """Test function get_labels."""

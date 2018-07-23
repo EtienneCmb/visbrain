@@ -10,7 +10,8 @@ from vispy.visuals.transforms import MatrixTransform
 
 from .visbrain_obj import VisbrainObject, CombineObjects
 from ..utils import (wrap_properties, normalize, array_to_stt, stt_to_array)
-from ..io import (read_nifti, save_volume_template, remove_volume_template)
+from ..io import (read_nifti, save_volume_template, remove_volume_template,
+                  download_file, path_to_visbrain_data, read_mist)
 
 
 logger = logging.getLogger('visbrain')
@@ -83,20 +84,26 @@ class _Volume(VisbrainObject):
             logger.info('Loading %s' % name)
             labels = index = system = None
         elif isinstance(name, str):
-            to_load = None
-            name_npz = name + '.npz'
-            if name in self._df_get_downloaded():
-                to_load = self._df_get_file(name_npz, download=False)
-            elif name_npz in self._df_get_downloadable():
-                to_load = self._df_download_file(name_npz)
-            # Load file :
-            if isinstance(to_load, str):
-                self._name = os.path.split(to_load)[1].split('.npz')[0]
-                arch = np.load(to_load)
-                vol, hdr = arch['vol'], arch['hdr']
-                labels, index = arch['labels'], arch['index']
-                system = 'tal' if 'talairach' in to_load else 'mni'
-                logger.debug("%s volume loaded" % name)
+            # Switch between MIST and {aal, brodmann...} :
+            if 'MIST' in name.upper():
+                mist_path = path_to_visbrain_data('mist', 'roi')
+                if not os.path.isdir(mist_path):
+                    download_file('mist.zip', astype='roi', unzip=True)
+                (vol, labels, index, hdr), system = read_mist(name), 'mni'
+            else:
+                to_load, name_npz = None, name + '.npz'
+                if name in self._df_get_downloaded():
+                    to_load = self._df_get_file(name_npz, download=False)
+                elif name_npz in self._df_get_downloadable():
+                    to_load = self._df_download_file(name_npz)
+                # Load file :
+                if isinstance(to_load, str):
+                    self._name = os.path.split(to_load)[1].split('.npz')[0]
+                    arch = np.load(to_load)
+                    vol, hdr = arch['vol'], arch['hdr']
+                    labels, index = arch['labels'], arch['index']
+                    system = 'tal' if 'talairach' in to_load else 'mni'
+                    logger.debug("%s volume loaded" % name)
 
         self._vol, self._hdr = self._check_volume(vol, hdr)
         self._labels, self._index, self._system = labels, index, system
