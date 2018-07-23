@@ -12,15 +12,14 @@ https://pysurfer.github.io/auto_examples/plot_meg_inverse_solution.html#sphx-glr
 """
 from visbrain import Brain
 from visbrain.objects import BrainObj
-from visbrain.io import path_to_visbrain_data, download_file, read_stc
+from visbrain.io import download_file, read_stc
 
 """Download file if needed :
 """
-file = 'meg_source_estimate-lh.stc'
-download_file(file)
+stc_file = download_file('meg_source_estimate-lh.stc', astype='example_data')
 
 # Read the *.stc file :
-file = read_stc(path_to_visbrain_data(file=file))
+file = read_stc(stc_file)
 
 # Get the data and vertices from the file :
 data = file['data'][:, 2]

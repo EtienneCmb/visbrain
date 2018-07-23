@@ -19,8 +19,8 @@ from visbrain.io import download_file, path_to_visbrain_data, read_nifti
 
 """Get the path to Visbrain data and download deep sources
 """
-vb_path = path_to_visbrain_data()
-mat = np.load(download_file('xyz_sample.npz'))
+vb_path = path_to_visbrain_data(folder='example_data')
+mat = np.load(download_file('xyz_sample.npz', astype='example_data'))
 xyz, subjects = mat['xyz'], mat['subjects']
 data = np.random.uniform(low=-1., high=1., size=(xyz.shape[0],))
 
@@ -85,9 +85,10 @@ sc.add_to_subplot(roi_aal, row=0, col=1,
 print("\n-> Use a custom roi_object and plot dorsal and ventral thalamus with "
       "fixed colors")
 # Download the MIST_ROI.zip archive. See the README inside the archive
-download_file('MIST_ROI.zip', unzip=True)
-nifti_file = path_to_visbrain_data('MIST_ROI.nii.gz')
-csv_file = path_to_visbrain_data('MIST_ROI.csv')
+download_file('MIST_ROI.zip', unzip=True, astype='example_data')
+nifti_file = path_to_visbrain_data(file='MIST_ROI.nii.gz',
+                                   folder='example_data')
+csv_file = path_to_visbrain_data(file='MIST_ROI.csv', folder='example_data')
 # Read the .csv file :
 arr = np.genfromtxt(csv_file, delimiter=';', dtype=str)
 # Get column names, labels and index :

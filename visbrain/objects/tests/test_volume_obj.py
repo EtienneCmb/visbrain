@@ -30,11 +30,13 @@ class TestVolumeObj(_TestVolumeObject):
 
     def test_nii_definition(self):
         """Test function nii_definition."""
-        VolumeObj(download_file('GG-853-GM-0.7mm.nii.gz'))
+        VolumeObj(download_file('GG-853-GM-0.7mm.nii.gz',
+                                astype='example_data'))
 
     def test_save(self):
         """Test function save."""
-        v_obj = VolumeObj(download_file('GG-853-GM-0.7mm.nii.gz'))
+        v_obj = VolumeObj(download_file('GG-853-GM-0.7mm.nii.gz',
+                                        astype='example_data'))
         v_obj.save()
         v_obj.save(tmpfile=True)
 

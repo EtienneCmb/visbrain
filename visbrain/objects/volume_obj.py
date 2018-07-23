@@ -9,11 +9,8 @@ from vispy.color import BaseColormap
 from vispy.visuals.transforms import MatrixTransform
 
 from .visbrain_obj import VisbrainObject, CombineObjects
-from ..utils import (load_predefined_roi, wrap_properties, normalize,
-                     array_to_stt, stt_to_array)
-from ..io import (read_nifti, get_files_in_data, get_files_in_folders,
-                  path_to_visbrain_data, get_data_path, path_to_tmp,
-                  save_volume_template, remove_volume_template)
+from ..utils import (wrap_properties, normalize, array_to_stt, stt_to_array)
+from ..io import (read_nifti, save_volume_template, remove_volume_template)
 
 
 logger = logging.getLogger('visbrain')
@@ -73,6 +70,7 @@ class _Volume(VisbrainObject):
     def __init__(self, name, parent, transform, verbose, **kw):
         """Init."""
         VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)
+        self.data_folder = 'roi'
 
     def __call__(self, name, vol=None, hdr=None, labels=None, index=None,
                  system=None):
@@ -85,11 +83,20 @@ class _Volume(VisbrainObject):
             logger.info('Loading %s' % name)
             labels = index = system = None
         elif isinstance(name, str):
-            path = self.list(file=name + '.npz')
-            if len(path):
-                self._name = os.path.split(path[0])[1].split('.npz')[0]
+            to_load = None
+            name_npz = name + '.npz'
+            if name in self._df_get_downloaded():
+                to_load = self._df_get_file(name_npz, download=False)
+            elif name_npz in self._df_get_downloadable():
+                to_load = self._df_download_file(name_npz)
+            # Load file :
+            if isinstance(to_load, str):
+                self._name = os.path.split(to_load)[1].split('.npz')[0]
+                arch = np.load(to_load)
+                vol, hdr = arch['vol'], arch['hdr']
+                labels, index = arch['labels'], arch['index']
+                system = 'tal' if 'talairach' in to_load else 'mni'
                 logger.debug("%s volume loaded" % name)
-                vol, labels, index, hdr, system = load_predefined_roi(path[0])
 
         self._vol, self._hdr = self._check_volume(vol, hdr)
         self._labels, self._index, self._system = labels, index, system
@@ -105,16 +112,9 @@ class _Volume(VisbrainObject):
         """Remove the volume template."""
         remove_volume_template(self.name)
 
-    def _search_in_path(self):
-        """Specify where to find volume templates."""
-        _vb_data = path_to_visbrain_data(folder='roi')
-        _data = get_data_path(folder='roi')
-        _tmp = path_to_tmp(folder='roi')
-        return _vb_data, _data, _tmp
-
     def list(self, file=None):
         """Get the list of installed volumes."""
-        return get_files_in_folders(*self._search_in_path(), file=file)
+        return self._df_get_downloaded(file=file)
 
     def slice_to_pos(self, sl, axis=None, hdr=None):
         """Return the position from slice in the volume space."""
@@ -171,10 +171,10 @@ class _Volume(VisbrainObject):
     @name.setter
     def name(self, value):
         """Set name value."""
-        if value in get_files_in_data('roi', with_ext=False):
+        if value in self.list():
             self(value)
             self.update()
-        self._name = value
+            self._name = value
 
 
 class _CombineVolume(CombineObjects):
@@ -186,7 +186,7 @@ class _CombineVolume(CombineObjects):
 
     def list(self, file=None):
         """Get the list of installed volumes."""
-        return get_files_in_folders(*_Volume._search_in_path(self), file=file)
+        return self._df_get_downloaded(file=file)
 
     def save(self, tmpfile=False):
         for k in self:

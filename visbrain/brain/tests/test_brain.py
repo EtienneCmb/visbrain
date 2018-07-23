@@ -9,17 +9,25 @@ from vispy.app.canvas import MouseEvent, KeyEvent
 
 from visbrain import Brain
 from visbrain.objects import (SourceObj, ConnectObj, TimeSeries3DObj,
-                              Picture3DObj, RoiObj, VolumeObj, CrossSecObj)
+                              Picture3DObj, RoiObj, VolumeObj, CrossSecObj,
+                              BrainObj)
 from visbrain.io import download_file
 from visbrain.tests._tests_visbrain import _TestVisbrain
 
 
 # Download intrcranial xyz :
-mat = np.load(download_file('xyz_sample.npz'))
+mat = np.load(download_file('xyz_sample.npz', astype='example_data'))
 xyz_full = mat['xyz']
 mat.close()
 xyz_1, xyz_2 = xyz_full[20:30, :], xyz_full[10:20, :]
 
+
+# ---------------- Brain ----------------
+# Just to be sure to have them on server :
+BrainObj('B1')
+BrainObj('B2')
+BrainObj('B3')
+BrainObj('white')
 
 # ---------------- Sources ----------------
 # Define some random sources :
@@ -94,7 +102,7 @@ class TestBrain(_TestVisbrain):
 
     def test_brain_control(self):
         """Test method brain_control."""
-        template = ['B1', 'B2', 'B3', 'white']
+        template = vb.brain_list()
         hemi = ['left', 'right', 'both']
         translucent = [False, True]
         alpha = [.1, 1.]
@@ -108,7 +116,7 @@ class TestBrain(_TestVisbrain):
 
     def test_brain_list(self):
         """Test method brain_list."""
-        vb.brain_list() == ['B1', 'B2', 'B3']
+        assert len(vb.brain_list()) > 1
 
     ###########################################################################
     #                                 SOURCES

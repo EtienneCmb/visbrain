@@ -17,12 +17,7 @@ DOWNLOAD_URL = "https://github.com/EtienneCmb/visbrain/archive/" + \
                "v" + __version__ + ".tar.gz"
 # Data path :
 HERE = os.path.abspath(os.path.dirname(__file__))
-PACKAGE_DATA = {'visbrain.data.templates': ['B1.npz', 'B2.npz', 'B3.npz'],
-                'visbrain.data.roi': ['aal.npz', 'brodmann.npz',
-                                      'talairach.npz'],
-                'visbrain.data.topo': ['eegref.npz'],
-                'visbrain.data.icons': ['*.svg'],
-                }
+PACKAGE_DATA = {}
 
 
 def read(fname):

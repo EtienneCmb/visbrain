@@ -15,9 +15,9 @@ xyz[:, 0] -= 50.
 xyz[:, 1] -= 50.
 s_obj = SourceObj('S1', xyz)
 
-download_file('MIST_ROI.zip', unzip=True)
-nifti_file = path_to_visbrain_data('MIST_ROI.nii.gz')
-csv_file = path_to_visbrain_data('MIST_ROI.csv')
+download_file('MIST_ROI.zip', unzip=True, astype='example_data')
+nifti_file = path_to_visbrain_data('MIST_ROI.nii.gz', 'example_data')
+csv_file = path_to_visbrain_data('MIST_ROI.csv', 'example_data')
 # Read the .csv file :
 arr = np.genfromtxt(csv_file, delimiter=';', dtype=str)
 # Get column names, labels and index :

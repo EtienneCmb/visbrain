@@ -26,7 +26,7 @@ from visbrain.io import download_file, path_to_visbrain_data
 save_pic_path = path_to_visbrain_data(folder='Example_pic')
 
 # Load the xyz coordinates and corresponding subject name :
-s_xyz = np.load(download_file('xyz_sample.npz'))['xyz']
+s_xyz = np.load(download_file('xyz_sample.npz', astype='example_data'))['xyz']
 
 """Create a source object with random data between [-50,50]
 """

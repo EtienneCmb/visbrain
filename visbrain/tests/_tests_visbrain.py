@@ -13,7 +13,7 @@ class _TestVisbrain(object):
 
     def need_file(self, file):
         """Path to a needed file from visbrain-data."""
-        return download_file(file)
+        return download_file(file, astype='example_data')
 
     def to_tmp_dir(self, file=None):
         """Path to a tmp dir in visbrain-data."""

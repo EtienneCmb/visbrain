@@ -20,7 +20,7 @@ kwargs = {}
 
 """Load the xyz coordinates and corresponding subject name
 """
-mat = np.load(download_file('xyz_sample.npz'))
+mat = np.load(download_file('xyz_sample.npz', astype='example_data'))
 xyz, subjects = mat['xyz'], mat['subjects']
 
 """The "subjects" list is composed of 6 diffrents subjects and here we set one

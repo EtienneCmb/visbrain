@@ -19,7 +19,7 @@ volume_name = 'GG-853-WM-0.7mm.nii.gz'  # 'GG-853-GM-0.7mm.nii.gz'
 
 """Download the file.
 """
-path = download_file(volume_name)
+path = download_file(volume_name, astype='example_data')
 
 """Define a cross-section object
 

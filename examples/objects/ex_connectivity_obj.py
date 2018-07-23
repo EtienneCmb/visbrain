@@ -11,7 +11,7 @@ import numpy as np
 from visbrain.objects import ConnectObj, SceneObj, SourceObj, BrainObj
 from visbrain.io import download_file
 
-arch = np.load(download_file('phase_sync_delta.npz'))
+arch = np.load(download_file('phase_sync_delta.npz', astype='example_data'))
 nodes, edges = arch['nodes'], arch['edges']
 
 sc = SceneObj(bgcolor=(.1, .1, .1))

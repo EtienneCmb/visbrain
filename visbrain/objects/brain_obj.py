@@ -9,10 +9,8 @@ from .visbrain_obj import VisbrainObject
 from ._projection import _project_sources_data
 from ..visuals import BrainMesh
 from ..utils import (mesh_edges, smoothing_matrix, rotate_turntable)
-from ..io import (download_file, is_nibabel_installed, is_pandas_installed,
-                  get_data_path, get_files_in_data, add_brain_template,
-                  remove_brain_template, path_to_tmp, get_files_in_folders,
-                  path_to_visbrain_data)
+from ..io import (is_nibabel_installed, is_pandas_installed,
+                  add_brain_template, remove_brain_template)
 
 logger = logging.getLogger('visbrain')
 
@@ -83,6 +81,7 @@ class BrainObj(VisbrainObject):
         VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)
         # Load brain template :
         self._scale = _scale
+        self.data_folder = 'templates'
         self.set_data(name, vertices, faces, normals, lr_index, hemisphere,
                       invert_normals, sulcus)
         self.translucent = translucent
@@ -95,35 +94,41 @@ class BrainObj(VisbrainObject):
                  lr_index=None, hemisphere='both', invert_normals=False,
                  sulcus=False):
         """Load a brain template."""
-        # _______________________ DEFAULT _______________________
-        b_download = self._get_downloadable_templates()
-        b_installed = get_files_in_data('templates')
-        # Need to download the brain template :
-        if (name in b_download) and (name not in b_installed):
-            self._add_downloadable_templates(name)
-        if not isinstance(vertices, np.ndarray):  # predefined
-            (vertices, faces, normals,
-             lr_index) = self._load_brain_template(name)
+        # _______________________ TEMPLATE _______________________
+        if not all([isinstance(k, np.ndarray) for k in [vertices, faces]]):
+            to_load = None
+            name_npz = name + '.npz'
+            # Identify if the template is already downloaded or not :
+            if name in self._df_get_downloaded():
+                to_load = self._df_get_file(name_npz, download=False)
+            elif name_npz in self._df_get_downloadable():  # need download
+                to_load = self._df_download_file(name_npz)
+            assert isinstance(to_load, str)
+            # Load the template :
+            arch = np.load(to_load)
+            vertices, faces = arch['vertices'], arch['faces']
+            normals = arch['normals']
+            lr_index = arch['lr_index'] if 'lr_index' in arch.keys() else None
+
         # Sulcus :
         if sulcus is True:
-            if name not in b_download:
-                logger.error("Sulcus only available for inflated, white and "
-                             "sphere templates")
-                sulcus = None
+            if not self._df_is_downloaded('sulcus.npy'):
+                sulcus_file = self._df_download_file('sulcus.npy')
             else:
-                to_path = self._get_template_path()
-                sulcus = np.load(download_file('sulcus.npy', to_path=to_path))
-        elif isinstance(sulcus, np.ndarray):
-            assert len(sulcus) == vertices.shape[0]
+                sulcus_file = self._df_get_file('sulcus.npy')
+            sulcus = np.load(sulcus_file)
         else:
             sulcus = None
-
         # _______________________ CHECKING _______________________
         assert all([isinstance(k, np.ndarray) for k in (vertices, faces)])
         if normals is not None:  # vertex normals
             assert isinstance(normals, np.ndarray)
         assert (lr_index is None) or isinstance(lr_index, np.ndarray)
         assert hemisphere in ['both', 'left', 'right']
+        if isinstance(sulcus, np.ndarray) and len(sulcus) != vertices.shape[0]:
+            logger.error("Sulcus ignored. Use it only for the inflated, white "
+                         "and sphere brain templates")
+            sulcus = None
 
         self._define_mesh(vertices, faces, normals, lr_index, hemisphere,
                           invert_normals, sulcus)
@@ -150,12 +155,7 @@ class BrainObj(VisbrainObject):
 
     def list(self, file=None):
         """Get the list of all installed templates."""
-        path = self._search_in_path()
-        files = get_files_in_folders(*path, file=file, exclude=['sulcus'])
-        download = self._get_downloadable_templates()
-        all_ = list(set(files + download))
-        all_.sort()
-        return all_
+        return self._df_get_downloaded(with_ext=False, exclude=['sulcus'])
 
     def _define_mesh(self, vertices, faces, normals, lr_index, hemisphere,
                      invert_normals, sulcus):
@@ -170,49 +170,6 @@ class BrainObj(VisbrainObject):
         else:
             self.mesh.set_data(vertices=vertices, faces=faces, normals=normals,
                                lr_index=lr_index, hemisphere=hemisphere)
-
-    def _search_in_path(self):
-        """Specify where to find brain templates."""
-        _vb_path_tmp = path_to_visbrain_data(folder='templates')
-        _data_path = get_data_path(folder='templates')
-        _tmp_path = path_to_tmp(folder='templates')
-        return _vb_path_tmp, _data_path, _tmp_path
-
-    def _load_brain_template(self, name):
-        """Load the brain template."""
-        path = self._search_in_path()
-        name = get_files_in_folders(*path, file=name + '.npz')[0]
-        arch = np.load(name)
-        vertices, faces = arch['vertices'], arch['faces']
-        normals = arch['normals']
-        lr_index = arch['lr_index'] if 'lr_index' in arch.keys() else None
-        return vertices, faces, normals, lr_index
-
-    ###########################################################################
-    ###########################################################################
-    #                           PATH METHODS
-    ###########################################################################
-    ###########################################################################
-
-    def _get_template_path(self):
-        """Get the path where datasets are stored."""
-        return get_data_path(folder='templates')
-
-    def _get_default_templates(self):
-        """Get the default list of brain templates."""
-        return ['B1', 'B2', 'B3']
-
-    def _get_downloadable_templates(self):
-        """Get the list of brain that can be downloaded."""
-        logger.debug("hdr transformation missing for downloadable templates")
-        return ['white', 'inflated', 'sphere']
-
-    def _add_downloadable_templates(self, name, ext='.npz'):
-        """Download then install a brain template."""
-        assert name in self._get_downloadable_templates()
-        to_path = self._get_template_path()
-        # Download the file :
-        download_file(name + ext, to_path=to_path)
 
     ###########################################################################
     ###########################################################################
