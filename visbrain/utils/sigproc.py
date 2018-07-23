@@ -349,6 +349,7 @@ def smooth_3d(vol, smooth_factor=3):
     if isinstance(smooth_factor, int) and (smooth_factor >= 3):
         sz = np.full((3,), smooth_factor, dtype=int)
         smooth = np.ones([smooth_factor] * 3) / np.prod(sz)
-        return fftconvolve(vol, smooth, mode='same')
+        sm = fftconvolve(vol, smooth, mode='same')
+        return normalize(sm, vol.min(), vol.max())
     else:
         return vol
