@@ -12,7 +12,6 @@ Right now, visbrain contains five modules :
 * Sleep : visualize polysomnographic data and hypnogram edition.
 * Signal : data mining module for signal inspection.
 * Figure : figure-layout for high-quality publication-like figures.
-* Colorbar : a colorbar editor
 * Topo : topographic representations
 
 See http://visbrain.org/ for a complete and step-by step documentation
@@ -21,13 +20,12 @@ import sys as _sys
 
 # Import modules :
 from .brain import Brain
-from .colorbar import Colorbar
 from .figure import Figure
 from .sleep import Sleep
 from .topo import Topo
 from .signal import Signal
 
-__all__ = ['Brain', 'Colorbar', 'Figure', 'Signal', 'Sleep', 'Topo']
+__all__ = ['Brain', 'Figure', 'Signal', 'Sleep', 'Topo']
 __version__ = "0.4.2"
 
 
