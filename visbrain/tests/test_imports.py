@@ -44,8 +44,3 @@ def test_import_figure():
 def test_import_topo():
     """Import the Topo module.."""
     from visbrain import Topo  # noqa
-
-
-def test_import_colorbar():
-    """Import the Topo module."""
-    from visbrain import Colorbar  # noqa
