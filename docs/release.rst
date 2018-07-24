@@ -27,6 +27,7 @@ Bug fixes
 * Recursive folder creation for brain template
 * Select from the GUI brain template build with vertices and faces
 * Repeat source localization using the same RoiObj
+* Colorbar module has been removed and replaced by CbarObj 
 
 0.4.1
 -----
