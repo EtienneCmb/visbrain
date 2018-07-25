@@ -17,9 +17,10 @@ New features
 Improvements
 ~~~~~~~~~~~~
 * Fix colormap update for every recording modality
-* Colormap computed onto the GPU for : spectrogram, phase-amplitude coupling, images, 3D images, brain object
+* Colormap computed onto the GPU for : spectrogram, phase-amplitude coupling, images, 3D images, brain object, grid signals
 * Sorted brain templates in :class:`visbrain.Brain` + remove sulcus as a brain template
 * Fewer visible possibilities when importing from the root of visbrain 
+* Remove all data from the visbrain package
 
 Bug fixes
 ~~~~~~~~~
@@ -27,7 +28,8 @@ Bug fixes
 * Recursive folder creation for brain template
 * Select from the GUI brain template build with vertices and faces
 * Repeat source localization using the same RoiObj
-* Colorbar module has been removed and replaced by CbarObj 
+* Colorbar module has been removed and replaced by CbarObj
+* Insert annotation inside Signal
 
 0.4.1
 -----
