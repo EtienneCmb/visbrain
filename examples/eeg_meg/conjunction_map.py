@@ -10,7 +10,7 @@ https://pysurfer.github.io/auto_examples/plot_fmri_conjunction.html#sphx-glr-aut
 
 .. image:: ../../picture/piceegmeg/ex_eegmeg_conjunction_map.png
 """
-from visbrain import Brain
+from visbrain.gui import Brain
 from visbrain.objects import BrainObj
 from visbrain.io import download_file
 

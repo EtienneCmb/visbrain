@@ -48,7 +48,7 @@ def _plt_src(name, kw_brain_obj, active_data, active_vert, sources,
     # Return either a scene or a BrainObj and SourceObj :
     if show is True:  # Display inside the Brain GUI
         # Define a Brain instance :
-        from visbrain import Brain
+        from visbrain.gui import Brain
         brain = Brain(brain_obj=b_obj, source_obj=s_obj)
         brain._brain_template.setEnabled(False)
         # By default, display colorbar if activation :

@@ -18,14 +18,9 @@ See http://visbrain.org/ for a complete and step-by step documentation
 """
 import sys as _sys
 
-# Import modules :
-from .brain import Brain
-from .figure import Figure
-from .sleep import Sleep
-from .topo import Topo
-from .signal import Signal
+# Deprecated in next release :
+# from visbrain.gui import Brain, Figure, Sleep, Topo, Signal
 
-__all__ = ['Brain', 'Figure', 'Signal', 'Sleep', 'Topo']
 __version__ = "0.4.2"
 
 

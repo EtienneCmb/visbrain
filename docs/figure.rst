@@ -14,7 +14,7 @@ This module can be used to arange several exported figures in a grid, to control
 
 .. code-block:: python
 
-    from visbrain import Figure
+    from visbrain.gui import Figure
 
 
 Example
@@ -23,7 +23,7 @@ Example
 .. code-block:: python
 
     # Import the Figure module :
-    from visbrain import Figure
+    from visbrain.gui import Figure
 
     # Set the list of files to load :
     files = ['front.png', 'top.png', 'connect.png', 'connect.png']

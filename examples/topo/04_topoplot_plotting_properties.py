@@ -11,7 +11,7 @@ https://www.dropbox.com/s/m76y3p0fyj6lxht/topoplot_data.npz?dl=1
 """
 import numpy as np
 
-from visbrain import Topo
+from visbrain.gui import Topo
 from visbrain.io import download_file
 
 # Load the data :

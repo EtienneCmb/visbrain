@@ -19,7 +19,7 @@ https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
 import os
 import numpy as np
 
-from visbrain import Brain
+from visbrain.gui import Brain
 from visbrain.objects import BrainObj, SourceObj, RoiObj
 from visbrain.io import download_file, path_to_visbrain_data
 

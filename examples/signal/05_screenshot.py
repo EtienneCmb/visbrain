@@ -8,7 +8,7 @@ Export all of the time-frequency maps, psd of a dataset.
 """
 import numpy as np
 
-from visbrain import Signal
+from visbrain.gui import Signal
 
 sf = 1000.  # Sampling-frequency
 n_pts = 4000  # Number of time points

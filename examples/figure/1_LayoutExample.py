@@ -9,7 +9,7 @@ https://www.dropbox.com/s/jsjct54ynvdjzfq/figure.zip?dl=1
 """
 import os
 
-from visbrain import Figure
+from visbrain.gui import Figure
 from visbrain.io import download_file
 
 fig_path = download_file("figure.zip", unzip=True, astype='example_data')

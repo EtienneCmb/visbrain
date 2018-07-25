@@ -4,7 +4,7 @@ import click
 import os.path
 import numpy as np
 
-from visbrain import Sleep
+from visbrain.gui import Sleep
 from visbrain.io import (write_fig_hyp, read_hypno, oversample_hypno,
                          write_csv)
 from visbrain.utils import sleepstats

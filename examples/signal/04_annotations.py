@@ -12,7 +12,7 @@ https://drive.google.com/file/d/0B6vtJiCQZUBvMG95RHNXbDEwaGs/view?usp=sharing
 
 .. image:: ../../picture/picsignal/ex_annotations.png
 """
-from visbrain import Signal
+from visbrain.gui import Signal
 from visbrain.utils import generate_eeg
 
 sf = 512.  # sampling frequency

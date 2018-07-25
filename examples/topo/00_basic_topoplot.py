@@ -6,7 +6,7 @@ Basic topographic plot based on channel names.
 
 .. image:: ../../picture/pictopo/ex_basic_topoplot.png
 """
-from visbrain import Topo
+from visbrain.gui import Topo
 
 # Create a topoplot instance :
 t = Topo()

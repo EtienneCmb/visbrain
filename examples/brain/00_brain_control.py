@@ -22,7 +22,7 @@ elevation.
 
 .. image:: ../../picture/picbrain/ex_brain_control.png
 """
-from visbrain import Brain
+from visbrain.gui import Brain
 from visbrain.objects import BrainObj
 
 """Visbrain comes with three default templates :

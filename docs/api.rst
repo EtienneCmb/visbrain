@@ -9,12 +9,17 @@ API
    :depth: 2
 
 
-GUI based modules
------------------
+Graphical user interface
+------------------------
 
-:py:mod:`visbrain`:
+:py:mod:`visbrain.gui`:
 
-.. currentmodule:: visbrain
+.. currentmodule:: visbrain.gui
+
+.. automodule:: visbrain.gui
+   :no-members:
+   :no-inherited-members:
+
 
 .. autosummary::
    :toctree: generated/

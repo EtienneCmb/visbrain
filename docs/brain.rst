@@ -102,7 +102,7 @@ The *Brain* module can be imported as follow :
 
 .. code-block:: python
 
-    from visbrain import Brain
+    from visbrain.gui import Brain
 
 GUI description
 ~~~~~~~~~~~~~~~

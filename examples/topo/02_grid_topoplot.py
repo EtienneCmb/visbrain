@@ -6,7 +6,7 @@ Display topographic plots into a grid.
 
 .. image:: ../../picture/pictopo/ex_grid_topoplot.png
 """
-from visbrain import Topo
+from visbrain.gui import Topo
 
 # Create a topoplot instance :
 t = Topo()

@@ -12,7 +12,7 @@ https://pysurfer.github.io/auto_examples/plot_vector_meg_inverse_solution.html#s
 """
 import numpy as np
 
-from visbrain import Brain
+from visbrain.gui import Brain
 from visbrain.objects import BrainObj, VectorObj
 from visbrain.io import read_stc, download_file
 

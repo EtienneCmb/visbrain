@@ -107,7 +107,7 @@ The :class:`Sleep` module can be imported as follow :
 
 .. code-block:: python
 
-    from visbrain import Sleep
+    from visbrain.gui import Sleep
 
 
 GUI description
@@ -455,7 +455,7 @@ Don't send anything, just open the interface and you will have a popup window as
 .. code-block:: python
 
     # Import the Sleep module from visbrain :
-    from visbrain import Sleep
+    from visbrain.gui import Sleep
     # Run the interface :
     Sleep().show()
 
@@ -475,7 +475,7 @@ Instead of leaving inputs arguments empty, send the path to the data :
 .. code-block:: python
 
     # Import the Sleep module from visbrain :
-    from visbrain import Sleep
+    from visbrain.gui import Sleep
     # Define where the data are located :
     dfile = '/home/perso/myfile.eeg'
     # File for the hypogram :
@@ -494,7 +494,7 @@ Finally, it is possible to load several other file formats using `MNE Python pac
 .. code-block:: python
 
   # Import the Sleep module:
-  from visbrain import Sleep
+  from visbrain.gui import Sleep
   # - Biosemi Data Format (BDF)
   data = 'mybdffile.bdf'
   # - EGI format
@@ -515,7 +515,7 @@ It is possible to manually load raw data and pass them as inputs arguments Sleep
 
     from scipy.io import loadmat
     # Import the Sleep module from visbrain:
-    from visbrain import Sleep
+    from visbrain.gui import Sleep
     # Load your dataset :
     mat = loadmat('testing_database.mat')
     # Get the data, sampling frequency and channel names:
@@ -746,7 +746,7 @@ Alternatively, if you want to use a configuration when running :class:`Sleep`, y
 
   from mne import io
   # Import the Sleep module:
-  from visbrain import Sleep
+  from visbrain.gui import Sleep
 
   Sleep(config_file='pathto/myconfig.json')
 
@@ -787,7 +787,7 @@ Annotations can be defined in a `csv file <https://drive.google.com/file/d/0B6vt
 
   from mne import io
   # Import the Sleep module:
-  from visbrain import Sleep
+  from visbrain.gui import Sleep
 
   Sleep(annotations='pathto/myannotations.txt')
 
@@ -802,7 +802,7 @@ Alternatively, you can use annotations from MNE-python and pass your annotations
 
   import numpy as np
   from mne import Annotations
-  from visbrain import Sleep
+  from visbrain.gui import Sleep
 
   # Define the onset, duration and description :
   onset = np.array([117., 256., 312.])
@@ -822,7 +822,7 @@ Annotations can be seen as the combination of a time-code and a label. If you do
 .. code-block:: python
 
   import numpy as np
-  from visbrain import Sleep
+  from visbrain.gui import Sleep
 
   # Define the onset :
   onset = np.array([117., 256., 312.])

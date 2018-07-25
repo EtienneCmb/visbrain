@@ -12,7 +12,7 @@ https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
 """
 import numpy as np
 
-from visbrain import Brain
+from visbrain.gui import Brain
 from visbrain.objects import Picture3DObj, SourceObj
 from visbrain.io import download_file
 

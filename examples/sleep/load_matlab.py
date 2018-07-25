@@ -13,7 +13,7 @@ import os
 import numpy as np
 from scipy.io import loadmat
 
-from visbrain import Sleep
+from visbrain.gui import Sleep
 from visbrain.io import download_file, path_to_visbrain_data
 
 ###############################################################################

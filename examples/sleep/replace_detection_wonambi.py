@@ -27,7 +27,7 @@ https://www.dropbox.com/s/bj1ra95rbksukro/sleep_edf.zip?dl=1
 import os
 import numpy as np
 
-from visbrain import Sleep
+from visbrain.gui import Sleep
 from visbrain.io import download_file, path_to_visbrain_data
 
 from wonambi.detect.spindle import DetectSpindle, detect_Moelle2011

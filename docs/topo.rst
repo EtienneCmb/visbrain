@@ -58,7 +58,7 @@ The :class:`Topo` module can be imported as follow :
 
 .. code-block:: python
 
-    from visbrain import Topo
+    from visbrain.gui import Topo
 
 Examples
 ~~~~~~~~

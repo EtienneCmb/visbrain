@@ -12,7 +12,7 @@ which is defined as the number of contributing sources per vertex.
 """
 import numpy as np
 
-from visbrain import Brain
+from visbrain.gui import Brain
 from visbrain.objects import SourceObj, BrainObj
 from visbrain.io import download_file
 

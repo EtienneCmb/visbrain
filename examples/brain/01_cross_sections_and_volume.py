@@ -9,7 +9,7 @@ See : https://brainder.org/download/flair/
 
 .. image:: ../../picture/picbrain/ex_crossec_and_volume.png
 """
-from visbrain import Brain
+from visbrain.gui import Brain
 from visbrain.objects import CrossSecObj, VolumeObj
 from visbrain.io import download_file
 

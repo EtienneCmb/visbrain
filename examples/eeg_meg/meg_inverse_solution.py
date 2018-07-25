@@ -10,7 +10,7 @@ https://pysurfer.github.io/auto_examples/plot_meg_inverse_solution.html#sphx-glr
 
 .. image:: ../../picture/piceegmeg/ex_eegmeg_meg_inverse.png
 """
-from visbrain import Brain
+from visbrain.gui import Brain
 from visbrain.objects import BrainObj
 from visbrain.io import download_file, read_stc
 

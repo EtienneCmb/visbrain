@@ -10,7 +10,7 @@ https://www.dropbox.com/s/bj1ra95rbksukro/sleep_edf.zip?dl=1
 .. image:: ../../picture/picsleep/ex_LoadEDF.png
 """
 import os
-from visbrain import Sleep
+from visbrain.gui import Sleep
 from visbrain.io import download_file, path_to_visbrain_data
 
 ###############################################################################

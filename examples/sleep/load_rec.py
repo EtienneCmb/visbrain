@@ -11,7 +11,7 @@ https://www.dropbox.com/s/hc18bgn2hlnmiph/sleep_edf.zip?dl=1
 """
 import os
 
-from visbrain import Sleep
+from visbrain.gui import Sleep
 from visbrain.io import download_file, path_to_visbrain_data
 
 ###############################################################################

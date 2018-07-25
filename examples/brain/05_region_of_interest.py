@@ -13,7 +13,7 @@ project the source's activity on it.
 from __future__ import print_function
 import numpy as np
 
-from visbrain import Brain
+from visbrain.gui import Brain
 from visbrain.objects import BrainObj, SourceObj, RoiObj
 from visbrain.io import download_file
 

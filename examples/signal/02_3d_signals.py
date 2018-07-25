@@ -15,7 +15,7 @@ channels, 10 trials of 4000 points each. The 2D grid will have a shape of
 .. image:: ../../picture/picsignal/ex_3d_signal.png
 """
 from itertools import product
-from visbrain import Signal
+from visbrain.gui import Signal
 from visbrain.utils import generate_eeg
 
 sf = 512.  # sampling frequency

@@ -12,7 +12,7 @@ colorbar for all subplots.
 .. image:: ../../picture/pictopo/ex_shared_colorbar.png
 """
 import numpy as np
-from visbrain import Topo
+from visbrain.gui import Topo
 
 # Create a topoplot instance :
 t = Topo()

@@ -12,7 +12,7 @@ used in this example.
 """
 import numpy as np
 
-from visbrain import Brain
+from visbrain.gui import Brain
 from visbrain.objects import BrainObj
 from visbrain.io import download_file
 
