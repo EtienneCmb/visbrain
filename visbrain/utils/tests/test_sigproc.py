@@ -2,6 +2,8 @@
 import numpy as np
 from itertools import product
 
+from vispy.visuals.transforms import STTransform, NullTransform
+
 from visbrain.utils.sigproc import (normalize, derivative, tkeo, zerocrossing,
                                     power_of_ten, averaging, normalization,
                                     smoothing, smooth_3d)
@@ -71,4 +73,9 @@ class TestSigproc(object):
     def test_smooth_3d(self):
         """Test function smooth_3d."""
         x = np.random.rand(10, 20, 30)
-        smooth_3d(x)
+        # Smoothing without correction :
+        xm, tf_1 = smooth_3d(x, correct=False)
+        assert isinstance(tf_1, NullTransform)
+        # Smoothing with correction :
+        xm, tf_2 = smooth_3d(x, correct=True)
+        assert isinstance(tf_2, STTransform)
