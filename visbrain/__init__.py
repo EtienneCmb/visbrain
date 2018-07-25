@@ -19,7 +19,7 @@ See http://visbrain.org/ for a complete and step-by step documentation
 import sys as _sys
 
 # Deprecated in next release :
-# from visbrain.gui import Brain, Figure, Sleep, Topo, Signal
+from visbrain.gui import Brain, Figure, Sleep, Topo, Signal
 
 __version__ = "0.4.2"
 
