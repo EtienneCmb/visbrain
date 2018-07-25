@@ -27,20 +27,27 @@ varying vec3 a_pos;
 void main() {
     float nrows = $u_size.x;
     float ncols = $u_size.y;
+
     // Compute the x coordinate from the time index.
     float x = -1 + 2*$a_index.z / ($u_n-1);
+
     // Turn position into a vec3 :
     a_pos = vec3($a_position, 1, 1);
     vec2 position = vec2(x - (1 - 1 / $u_scale.x), a_pos);
+
     // Find the affine transformation for the subplots.
     vec2 a = vec2(1./ncols, 1./nrows)*.98;
     vec2 b = vec2(-1 + $u_space*($a_index.x+.5) / ncols,
                   -1 + $u_space*($a_index.y+.5) / nrows);
+
     // Apply the static subplot transformation + scaling.
     gl_Position = $transform(vec4(a*$u_scale*position+b, 0.0, 1.0));
-    v_color = vec4($a_color, 1.);
-    v_index = $a_index;
+
+    // Use texture 1D to get the color.
+    v_color = texture1D($u_text, $a_color);
+
     // For clipping test in the fragment shader.
+    v_index = $a_index;
     v_position = gl_Position.xy;
 }
 """
@@ -51,7 +58,7 @@ varying vec4 v_color;
 varying vec3 v_index;
 varying vec2 v_position;
 void main() {
-    gl_FragColor = v_color;
+    gl_FragColor = vec4(v_color.xyz, 1.);
 
     // Discard the fragments between the signals (emulate glMultiDrawArrays).
     if ((fract(v_index.x) > 0.) || (fract(v_index.y) > 0.))
@@ -122,11 +129,10 @@ class GridSignalVisual(visuals.Visual):
         rnd_3 = np.zeros((1, 3), dtype=np.float32)
         self._dbuffer = gloo.VertexBuffer(rnd_1)
         self._ibuffer = gloo.VertexBuffer(rnd_3)
-        self._cbuffer = gloo.VertexBuffer(rnd_3)
+        self._cbuffer = gloo.VertexBuffer()
         # Send to the program :
         self.shared_program.vert['a_position'] = self._dbuffer
         self.shared_program.vert['a_index'] = self._ibuffer
-        self.shared_program.vert['a_color'] = self._cbuffer
         self.shared_program.vert['u_size'] = (1, 1)
         self.shared_program.vert['u_n'] = len(self)
 
@@ -216,14 +222,18 @@ class GridSignalVisual(visuals.Visual):
             g_size = np.array(self.g_size)
             n = len(self)
             if color == 'random':  # (m, 3) random color
-                singcol = np.random.uniform(size=(m, 3), low=rnd_dyn[0],
-                                            high=rnd_dyn[1]).astype(np.float32)
+                color_1d = np.random.uniform(size=(m, 3), low=rnd_dyn[0],
+                                             high=rnd_dyn[1])
+                color_idx = np.mgrid[0:m, 0:len(self)][0] / m
             elif color is not None:  # (m, 3) uniform color
-                singcol = color2vb(color, length=m)[:, 0:3]
-            # Repeat the array n_times to have a (m * n_times, 3) array :
-            a_color = np.repeat(singcol, n, axis=0)
-            # Send color to buffer :
-            self._cbuffer.set_data(vispy_array(a_color))
+                color_1d = color2vb(color)
+                color_idx = np.zeros((m * len(self)), dtype=np.float32)
+            # Send texture to vertex shader :
+            text_1d = gloo.Texture1D(color_1d.astype(np.float32))
+            self.shared_program.vert['u_text'] = text_1d
+            # Send color index to use for the texture :
+            self._cbuffer.set_data(color_idx.astype(np.float32))
+            self.shared_program.vert['a_color'] = self._cbuffer
 
         # ====================== TITLES ======================
         # Titles checking :
@@ -314,18 +324,6 @@ class GridSignalVisual(visuals.Visual):
     @property
     def rect(self):
         return (-1.05, -1.1, self._space + .1, self._space + .2)
-
-    # ----------- COLOR -----------
-    @property
-    def color(self):
-        """Get the color value."""
-        return self._color
-
-    @color.setter
-    def color(self, value):
-        """Set color value."""
-        self._color = value
-        self.set_data(color=value)
 
     # ----------- FONT_SIZE -----------
     @property
