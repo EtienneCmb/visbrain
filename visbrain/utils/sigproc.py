@@ -4,6 +4,8 @@ import logging
 import numpy as np
 from scipy.signal import fftconvolve
 
+from vispy.visuals.transforms import STTransform, NullTransform
+
 
 __all__ = ('normalize', 'derivative', 'tkeo', 'zerocrossing', 'power_of_ten',
            'averaging', 'normalization', 'smoothing', 'smooth_3d')
@@ -331,7 +333,7 @@ def smoothing(x, n_window=10, window='hanning'):
     return y[n_window - 1:-n_window + 1]
 
 
-def smooth_3d(vol, smooth_factor=3):
+def smooth_3d(vol, smooth_factor=3, correct=True):
     """Smooth a 3-D volume.
 
     Parameters
@@ -346,10 +348,21 @@ def smooth_3d(vol, smooth_factor=3):
     vol_smooth : array_like
         The smooth volume with the same shape as vol.
     """
-    if isinstance(smooth_factor, int) and (smooth_factor >= 3):
-        sz = np.full((3,), smooth_factor, dtype=int)
-        smooth = np.ones([smooth_factor] * 3) / np.prod(sz)
-        sm = fftconvolve(vol, smooth, mode='same')
-        return normalize(sm, vol.min(), vol.max())
-    else:
-        return vol
+    tf = NullTransform()
+    # No smoothing :
+    if (not isinstance(smooth_factor, int)) or (smooth_factor < 3):
+        return vol, tf
+    # Smoothing array :
+    sz = np.full((3,), smooth_factor, dtype=int)
+    smooth = np.ones([smooth_factor] * 3) / np.prod(sz)
+    # Apply smoothing :
+    sm = fftconvolve(vol, smooth, mode='same')
+    if correct:
+        # Get the shape of the vol and the one with 'full' convolution :
+        vx, vy, vz = vol.shape
+        vcx, vcy, vcz = np.array([vx, vy, vz]) + smooth_factor - 1
+        # Define transform :
+        sc = [vx / vcx, vy / vcy, vz / vcz]
+        tr = .5 * np.array([smooth_factor] * 3)
+        tf = STTransform(scale=sc, translate=tr)
+    return sm, tf

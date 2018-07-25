@@ -518,7 +518,13 @@ class RoiObj(_Volume):
         # Get the list of remaining ROIs :
         unique_vol = np.unique(vol[vol != 0])
         logger.info("Selected ROI(s) : \n%r" % self.ref.loc[unique_vol])
-        return isosurface(smooth_3d(vol, smooth), level=.5)
+        # Smooth the volume :
+        vol_sm, tf = smooth_3d(vol, smooth, correct=True)
+        # Get the isosurface :
+        vert, faces = isosurface(vol_sm, level=.5)
+        # Mesh correction after smoothing :
+        vert = tf.map(vert)
+        return vert, faces
 
     def _get_camera(self):
         """Get the most adapted camera."""
