@@ -6,6 +6,3 @@ from .hypno_visual import Hypnogram  # noqa
 from .pic_visual import PicMesh  # noqa
 from .tf_map_visual import TFmapsMesh  # noqa
 from .topo_visual import TopoMesh  # noqa
-
-# Temporaly patch for invisible markers :
-from .marker_patch import vert_markers_patch  # noqa
