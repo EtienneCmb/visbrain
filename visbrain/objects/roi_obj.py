@@ -502,7 +502,7 @@ class RoiObj(_Volume):
                 self.mesh.set_data(vertices=vert_hdr, faces=faces)
             if unique_color:
                 self.mesh.add_overlay(data, cmap=col_unique,
-                                      interpolation='linear')
+                                      interpolation='linear', to_overlay=0)
         else:
             raise ValueError("No vertices found for this ROI")
 

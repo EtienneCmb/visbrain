@@ -60,6 +60,12 @@ class UiAtlas(object):
         self._roiDiv.addItems(vol_list)
         self._roiDiv.setCurrentIndex(vol_list.index(self.roi.name))
         self._roiDiv.currentIndexChanged.connect(self._fcn_build_roi_list)
+        # Roi smooth :
+        self._roiIsSmooth.clicked.connect(self._fcn_roi_smooth)
+        self._roiSmooth.setEnabled(False)
+        # MIST level :
+        self._roiLevel.setEnabled('mist' in self.roi.name.lower())
+        self._roiLevel.currentIndexChanged.connect(self._fcn_build_roi_list)
         # Apply and reset :
         self._roiButRst.clicked.connect(self._fcn_reset_roi_list)
         self._roiButApply.clicked.connect(self._fcn_apply_roi_selection)
@@ -180,10 +186,19 @@ class UiAtlas(object):
         self.menuDispROI.setChecked(self._roi_grp.isChecked())
         self._fcn_menu_disp_roi()
 
+    def _fcn_roi_smooth(self):
+        """Enable ROI smoothing."""
+        self._roiSmooth.setEnabled(self._roiIsSmooth.isChecked())
+
     def _fcn_build_roi_list(self):
         """Build a list of checkable ROIs."""
         # Select volume :
         selected_roi = str(self._roiDiv.currentText())
+        # Mist :
+        if 'mist' in selected_roi.lower():
+            self._roiLevel.setEnabled('mist' in selected_roi)
+            level = str(self._roiLevel.currentText())
+            selected_roi += '_%s' % level
         if self.roi.name != selected_roi:
             self.roi(selected_roi)
         # Clear widget list and add ROIs :
@@ -226,10 +241,11 @@ class UiAtlas(object):
         """Apply ROI selection."""
         # Get the list of selected ROIs :
         _roiToAdd = self._fcn_get_selected_rois()
-        smooth = self._roiSmooth.value()
+        smooth = self._roiSmooth.value() * int(self._roiIsSmooth.isChecked())
+        uni_col = bool(self._roiUniColor.isChecked())
 
         if _roiToAdd:
-            self.roi.select_roi(_roiToAdd, smooth=smooth)
+            self.roi.select_roi(_roiToAdd, smooth=smooth, unique_color=uni_col)
             self.roi.camera = self._camera
             # Enable projection on ROI and related buttons :
             self._s_proj_on.model().item(1).setEnabled(True)

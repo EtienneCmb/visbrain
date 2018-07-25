@@ -472,16 +472,28 @@ name</string>
                      <property name="topMargin">
                       <number>0</number>
                      </property>
-                     <item row="2" column="2">
+                     <item row="2" column="0">
+                      <widget class="QLabel" name="label_114">
+                       <property name="font">
+                        <font>
+                         <italic>true</italic>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>Level</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="3" column="2">
                       <widget class="QSpinBox" name="_roiSmooth">
                        <property name="minimum">
-                        <number>0</number>
+                        <number>3</number>
                        </property>
                        <property name="singleStep">
-                        <number>1</number>
+                        <number>2</number>
                        </property>
                        <property name="value">
-                        <number>0</number>
+                        <number>3</number>
                        </property>
                       </widget>
                      </item>
@@ -493,8 +505,7 @@ name</string>
                         </font>
                        </property>
                        <property name="text">
-                        <string>ROI
-type</string>
+                        <string>ROI</string>
                        </property>
                       </widget>
                      </item>
@@ -511,7 +522,7 @@ type</string>
                        </property>
                       </widget>
                      </item>
-                     <item row="2" column="1">
+                     <item row="3" column="1">
                       <widget class="Line" name="line_4">
                        <property name="minimumSize">
                         <size>
@@ -524,7 +535,7 @@ type</string>
                        </property>
                       </widget>
                      </item>
-                     <item row="3" column="2">
+                     <item row="5" column="2">
                       <spacer name="horizontalSpacer_29">
                        <property name="orientation">
                         <enum>Qt::Horizontal</enum>
@@ -536,18 +547,6 @@ type</string>
                         </size>
                        </property>
                       </spacer>
-                     </item>
-                     <item row="2" column="0">
-                      <widget class="QLabel" name="label_2">
-                       <property name="font">
-                        <font>
-                         <italic>true</italic>
-                        </font>
-                       </property>
-                       <property name="text">
-                        <string>Smooth</string>
-                       </property>
-                      </widget>
                      </item>
                      <item row="0" column="0" colspan="3">
                       <widget class="QCheckBox" name="_roiTransp">
@@ -561,6 +560,90 @@ type</string>
                      </item>
                      <item row="1" column="2">
                       <widget class="QComboBox" name="_roiDiv"/>
+                     </item>
+                     <item row="2" column="1">
+                      <widget class="Line" name="line_7">
+                       <property name="minimumSize">
+                        <size>
+                         <width>10</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Vertical</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="2" column="2">
+                      <widget class="QComboBox" name="_roiLevel">
+                       <property name="enabled">
+                        <bool>false</bool>
+                       </property>
+                       <item>
+                        <property name="text">
+                         <string>7</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>12</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>20</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>36</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>64</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>122</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>197</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>325</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>444</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>ROI</string>
+                        </property>
+                       </item>
+                      </widget>
+                     </item>
+                     <item row="3" column="0">
+                      <widget class="QCheckBox" name="_roiIsSmooth">
+                       <property name="text">
+                        <string>Smooth</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="4" column="0" colspan="3">
+                      <widget class="QCheckBox" name="_roiUniColor">
+                       <property name="text">
+                        <string>Unique color</string>
+                       </property>
+                      </widget>
                      </item>
                     </layout>
                    </item>
