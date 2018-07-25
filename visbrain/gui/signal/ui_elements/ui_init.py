@@ -102,7 +102,7 @@ class SignalShortcuts(object):
             """Executed function when double click mouse over canvas."""
             # Get event position and camera rectangle:
             x_pos, y_pos = event.pos
-            rect = self._signal_canvas._camera.rect
+            rect = self._signal_canvas.camera.rect
             # Get right padding, canvas, title and wc size :
             cs = canvas.size
             ws = self._signal_canvas.wc.size
