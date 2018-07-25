@@ -43,7 +43,7 @@ def get_data_url_path():
 
 
 def get_files_in_folders(*args, with_ext=False, with_path=False, file=None,
-                         exclude=None, sort=True):
+                         exclude=None, sort=True, unique=True):
     """Get all files in several folders.
 
     Parameters
@@ -60,6 +60,8 @@ def get_files_in_folders(*args, with_ext=False, with_path=False, file=None,
         List of patterns to exclude
     sort : bool | True
         Sort the resulting list of files.
+    unique : bool | True
+        Get a unique list of files.
 
     Returns
     -------
@@ -88,13 +90,16 @@ def get_files_in_folders(*args, with_ext=False, with_path=False, file=None,
     # Return either files with full path or only file name :
     if not with_ext:
         files = [os.path.splitext(k)[0] for k in files]
-    # Sort list :
-    if sort:
-        files.sort()
     # Patterns to exclude :
     if isinstance(exclude, (list, tuple)):
         from itertools import product
         files = [k for k, i in product(files, exclude) if i not in k]
+    # Unique :
+    if unique:
+        files = list(set(files))
+    # Sort list :
+    if sort:
+        files.sort()
     return files
 
 
