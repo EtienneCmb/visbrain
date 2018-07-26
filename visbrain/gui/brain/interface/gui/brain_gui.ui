@@ -611,21 +611,6 @@ name</string>
                        </item>
                        <item>
                         <property name="text">
-                         <string>197</string>
-                        </property>
-                       </item>
-                       <item>
-                        <property name="text">
-                         <string>325</string>
-                        </property>
-                       </item>
-                       <item>
-                        <property name="text">
-                         <string>444</string>
-                        </property>
-                       </item>
-                       <item>
-                        <property name="text">
                          <string>ROI</string>
                         </property>
                        </item>
@@ -652,7 +637,7 @@ name</string>
                      <property name="topMargin">
                       <number>0</number>
                      </property>
-                     <item row="1" column="0">
+                     <item row="2" column="0">
                       <layout class="QHBoxLayout" name="horizontalLayout_13">
                        <property name="topMargin">
                         <number>0</number>
@@ -728,8 +713,15 @@ name</string>
                        </property>
                       </spacer>
                      </item>
+                     <item row="1" column="0">
+                      <widget class="QLineEdit" name="_roiFilter">
+                       <property name="placeholderText">
+                        <string>Filter (regular expression)</string>
+                       </property>
+                      </widget>
+                     </item>
                      <item row="0" column="0">
-                      <widget class="QTableWidget" name="_roiToAdd"/>
+                      <widget class="QTableView" name="_roiToAdd"/>
                      </item>
                     </layout>
                    </item>

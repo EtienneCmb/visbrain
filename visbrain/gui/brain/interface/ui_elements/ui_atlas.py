@@ -5,7 +5,7 @@ commands for the user
 """
 import numpy as np
 import logging
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore
 
 from visbrain.objects.volume_obj import VOLUME_CMAPS
 from visbrain.utils import mpl_cmap, mpl_cmap_index, fill_pyqt_table
@@ -202,40 +202,35 @@ class UiAtlas(object):
         if self.roi.name != selected_roi:
             self.roi(selected_roi)
         # Clear widget list and add ROIs :
-        self._roiToAdd.clear()
+        self._roiToAdd.reset()
         df = self.roi.get_labels()
-        col_names = [''] + list(df.keys())
+        if 'mist' in selected_roi.lower():
+            df = df[['index', 'name_%s' % level]]
+        col_names = list(df.keys())
         col_names.pop(col_names.index('index'))
-        cols = [[''] * len(df)]
-        cols += [list(df[k]) for k in col_names if k not in ['', 'index']]
+        cols = [list(df[k]) for k in col_names if k not in ['', 'index']]
+        # Build the table with the filter :
+        self._roiModel = fill_pyqt_table(self._roiToAdd, col_names, cols,
+                                         filter=self._roiFilter, check=0,
+                                         filter_col=0)
         # By default, uncheck items :
-        fill_pyqt_table(self._roiToAdd, col_names, cols)
         self._fcn_reset_roi_list()
 
     def _fcn_reset_roi_list(self):
         """Reset ROIs selection."""
         # Unchecked all ROIs :
-        for num in range(self._roiToAdd.rowCount()):
-            c = QtWidgets.QTableWidgetItem()
-            c.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
-            c.setCheckState(QtCore.Qt.Unchecked)
-            self._roiToAdd.setItem(num, 0, c)
+        for num in range(self._roiModel.rowCount()):
+            self._roiModel.item(num, 0).setCheckState(QtCore.Qt.Unchecked)
 
     def _fcn_get_selected_rois(self):
         """Get the list of selected ROIs."""
         _roiToAdd = []
         all_idx = list(self.roi.get_labels()['index'])
-        for num in range(self._roiToAdd.rowCount()):
-            item = self._roiToAdd.item(num, 0)
+        for num in range(self._roiModel.rowCount()):
+            item = self._roiModel.item(num, 0)
             if item.checkState():
                 _roiToAdd.append(all_idx[num])
         return _roiToAdd
-
-    def _fcn_set_selected_rois(self, selection):
-        """Set a list of selected rois."""
-        for k in selection:
-            item = self._roiToAdd.item(k)
-            item.setCheckState(QtCore.Qt.Checked)
 
     def _fcn_apply_roi_selection(self, _, roi_name='roi'):
         """Apply ROI selection."""
