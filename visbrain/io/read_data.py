@@ -164,8 +164,7 @@ def read_mist(name):
     Parameters
     ----------
     name : string
-        Name of the level. Use MIST_x with x 7, 12, 20, 36, 64, 122, 197, 325,
-        444 or ROI.
+        Name of the level. Use MIST_x with x 7, 12, 20, 36, 64, 122 or ROI.
 
     Returns
     -------
@@ -182,8 +181,7 @@ def read_mist(name):
     name = name.upper()
     assert ('MIST' in name) and ('_' in name)
     level = name.split('_')[-1]
-    assert level in ['7', '12', '20', '36', '64', '122', '197', '325',
-                     '444', 'ROI']
+    assert level in ['7', '12', '20', '36', '64', '122', 'ROI']
     # Define path :
     parc, parc_info = '%s.nii.gz', '%s.csv'
     folder, folder_info = 'Parcellations', 'Parcel_Information'
