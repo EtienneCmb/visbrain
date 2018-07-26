@@ -523,7 +523,7 @@ class RoiObj(_Volume):
         # Get the isosurface :
         vert, faces = isosurface(vol_sm, level=.5)
         # Mesh correction after smoothing :
-        vert = tf.map(vert)
+        vert = tf.map(vert)[:, 0:-1]
         return vert, faces
 
     def _get_camera(self):
