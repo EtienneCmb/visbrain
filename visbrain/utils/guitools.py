@@ -456,9 +456,9 @@ def fill_pyqt_table(table, col_names=None, col=None, df=None, filter=None,
     # Switch between table view / widget :
     if isinstance(table, QTableWidget):  # Table widget
         table.clear()
-        table.setColumnCount(n_rows)
+        table.setColumnCount(n_cols)
         table.setHorizontalHeaderLabels(col_names)
-        table.setRowCount(n_cols)
+        table.setRowCount(n_rows)
 
         for i in range(table.rowCount()):
             for k in range(table.columnCount()):
