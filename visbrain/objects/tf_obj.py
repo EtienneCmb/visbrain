@@ -144,7 +144,7 @@ class TimeFrequencyObj(ImageObj):
 
         # Update color arguments :
         self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
-        logger.info("Compute time-frequency decomposition using the"
+        logger.info("    Compute time-frequency decomposition using the"
                     " %s method" % method)
 
         if method == 'fourier':
@@ -156,7 +156,7 @@ class TimeFrequencyObj(ImageObj):
             time = np.arange(n_pts) / sf
             tf = np.zeros((len(freqs), n_pts), dtype=data.dtype)
             # Compute TF and inplace normalization :
-            logger.info("Compute the time-frequency map ("
+            logger.info("    Compute the time-frequency map ("
                         "normalization=%r)" % norm)
             for i, k in enumerate(freqs):
                 tf[i, :] = np.square(np.abs(morlet(data, sf, k)))
@@ -164,8 +164,8 @@ class TimeFrequencyObj(ImageObj):
 
             # Averaging :
             if isinstance(n_window, int):
-                logger.info("Averaging time-frequency map using windows of "
-                            "size %i with a %f overlap" % (n_window, overlap))
+                logger.info("    Averaging time-frequency map using windows of"
+                            " size %i with a %f overlap" % (n_window, overlap))
                 kw = dict(overlap=overlap, window=window)
                 tf = averaging(tf, n_window, axis=1, **kw)
                 time = averaging(time, n_window, **kw)

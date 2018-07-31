@@ -355,7 +355,7 @@ class SceneObj(object):
                  **kwargs):
         """Init."""
         set_log_level(verbose)
-        logger.info("Scene creation")
+        logger.info("    Scene creation")
         PROFILER('Scene creation')
         # Create the canvas and the grid :
         self.canvas = scene.SceneCanvas(keys='interactive', show=False,
@@ -496,7 +496,7 @@ class SceneObj(object):
             rotate_turntable(fixed=rotate, camera_state=camera_state,
                              camera=sub.camera)
         PROFILER('%s added to the scene' % repr(obj))
-        logger.info('%s added to the scene' % repr(obj))
+        logger.info('    %s added to the scene' % repr(obj))
 
     def link(self, *args):
         """Link the camera of several objects of the scene.
@@ -512,7 +512,7 @@ class SceneObj(object):
         >>> # Link cameras of subplots (0, 0), (0, 1) and (1, 0)
         >>> sc.link((0, 0), (0, 1), (1, 0))
         """
-        logger.info('Link cameras')
+        logger.info('    Link cameras')
         if args[0] == -1:
             args = [(k[0] - 1, k[1] - 1) for k in self._grid_desc.keys()]
         assert len(args) > 1
