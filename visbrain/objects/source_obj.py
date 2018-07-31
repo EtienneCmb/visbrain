@@ -126,6 +126,7 @@ class SourceObj(VisbrainObject):
         assert sh[1] in [2, 3]
         self._n_sources = sh[0]
         pos = xyz if sh[1] == 3 else np.c_[xyz, np.full((len(self),), _z)]
+        logger.info('    %i sources detected' % self._n_sources)
         # Radius min and max :
         assert all([isinstance(k, (int, float)) for k in (
             radius_min, radius_max)])
@@ -364,7 +365,7 @@ class SourceObj(VisbrainObject):
             roi_obj = [roi_obj]
         assert all([isinstance(k, RoiObj) for k in roi_obj])
         # Convert predefined ROI into RoiObj objects :
-        logger.info("Analyse source's locations using the %s "
+        logger.info("    Analyse source's locations using the %s "
                     "atlas" % ', '.join([k.name for k in roi_obj]))
         if isinstance(roi_obj, (list, tuple)):
             test_r = all([k in proi or isinstance(k, RoiObj) for k in roi_obj])
@@ -377,7 +378,7 @@ class SourceObj(VisbrainObject):
                                  distance) for k in roi_obj]
         # Merge multiple DataFrames :
         if len(df) > 1:
-            logger.info('Merging DataFrames')
+            logger.info('    Merging DataFrames')
             import pandas as pd
             df_full = df.copy()
             df = df_full[0]
@@ -395,7 +396,7 @@ class SourceObj(VisbrainObject):
             idx_to_keep = np.vstack(idx_to_keep).sum(0).astype(bool)
             df = df.loc[idx_to_keep]
             self.visible = idx_to_keep
-            logger.info("%i sources found in %s" % (len(df),
+            logger.info("    %i sources found in %s" % (len(df),
                                                     ', '.join(keep_only)))
 
         return df
@@ -438,13 +439,14 @@ class SourceObj(VisbrainObject):
         """
         if isinstance(data, np.ndarray):
             assert len(data) == len(self) and (data.ndim == 1)
-            logger.info("Color %s using a data vector" % self.name)
+            logger.info("    Color %s using a data vector" % self.name)
             kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
             colors = array2colormap(data, **kw)
         elif (analysis is not None) and (color_by is not None):
             # Group analysis :
             assert color_by in list(analysis.columns)
-            logger.info("Color %s according to the %s" % (self.name, color_by))
+            logger.info("    Color %s according to the %s" % (self.name,
+                                                              color_by))
             gp = analysis.groupby(color_by).groups
             # Compute color :
             if roi_to_color is None:  # random color
@@ -494,7 +496,7 @@ class SourceObj(VisbrainObject):
         assert isinstance(distance, (int, float))
         xyz = self._xyz
         if select in ['inside', 'outside', 'close']:
-            logger.info("Select sources %s vertices" % select)
+            logger.info("    Select sources %s vertices" % select)
             if v.ndim == 2:  # index faced vertices
                 v = v[:, np.newaxis, :]
             # Predifined inside :
@@ -521,9 +523,9 @@ class SourceObj(VisbrainObject):
             self.visible = cond
             self.visible_obj = cond
             msg = 'Display' if cond else 'Hide'
-            logger.info("%s all sources" % msg)
+            logger.info("    %s all sources" % msg)
         elif select in ['left', 'right']:
-            logger.info('Select sources in the %s hemisphere' % select)
+            logger.info('    Select sources in the %s hemisphere' % select)
             vec = xyz[:, 0]
             self.visible = vec <= 0 if select == 'left' else vec >= 0
 

@@ -55,7 +55,7 @@ roi_to_find1('brodmann')                      # Switch to Brodmann
 idx_ba6 = roi_to_find1.where_is('BA6')        # Find only BA6
 print(ref_brod.loc[idx_ba6])
 roi_to_find1('aal')                           # Switch to AAL
-idx_sma = roi_to_find1.where_is(['Supp Motor Area', '(L)'], union=False)
+idx_sma = roi_to_find1.where_is('Supp Motor Area')
 
 # =============================================================================
 #                              BRAIN + BA6

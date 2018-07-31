@@ -137,7 +137,7 @@ class BrainObj(VisbrainObject):
         """Clean brain object."""
         self.hemisphere = 'both'
         self.rotate('top')
-        logger.info("Brain object %s cleaned." % self.name)
+        logger.info("    Brain object %s cleaned." % self.name)
 
     def save(self, tmpfile=False):
         """Save the brain template (if not already saved)."""
@@ -334,7 +334,7 @@ class BrainObj(VisbrainObject):
         if isinstance(data, np.ndarray):
             if not isinstance(vertices, np.ndarray):
                 vertices = np.arange(len(data))
-            logger.info("Add data to specific vertices.")
+            logger.info("    Add data to specific vertices.")
             assert (data.ndim == 1) and (vertices.ndim == 1)
             assert smoothing_steps is None or isinstance(smoothing_steps, int)
             # Get smoothed vertices // data :
@@ -351,7 +351,7 @@ class BrainObj(VisbrainObject):
             activ_vert = np.where(hemi_idx)[0][rows]
         elif isinstance(file, str):
             assert os.path.isfile(file)
-            logger.info("Add overlay to the {} brain template "
+            logger.info("    Add overlay to the {} brain template "
                         "({})".format(self._name, file))
             from visbrain.io import read_nifti
             # Load data using Nibabel :
@@ -417,7 +417,7 @@ class BrainObj(VisbrainObject):
         hemisphere, h_idx = self._hemisphere_from_file(hemisphere, file)
         # Select conversion :
         if select is None:
-            logger.info("Select all parcellates")
+            logger.info("    Select all parcellates")
             select = labels.tolist()
             if 'Unknown' in select:
                 select.pop(select.index('Unknown'))
@@ -427,17 +427,17 @@ class BrainObj(VisbrainObject):
             assert data.ndim == 1 and len(data) == len(select)
             clim = (data.min(), data.max()) if clim is None else clim
             kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
-            logger.info("Color inferred from data")
+            logger.info("    Color inferred from data")
             u_colors = np.zeros((len(u_idx), 4), dtype=float)
             self._default_cblabel = "Parcellates data"
         else:
-            logger.info("Use default color included in the file")
+            logger.info("    Use default color included in the file")
             u_colors = u_colors.astype(float) / 255.
         # Build the select variable :
         if isinstance(select, (np.ndarray, list)):
             select = np.asarray(select)
             if select.dtype != int:
-                logger.info('Search parcellates using labels')
+                logger.info('    Search parcellates using labels')
                 select_str = select.copy()
                 select, bad_select = [], []
                 for k in select_str:
@@ -478,7 +478,7 @@ class BrainObj(VisbrainObject):
             color = np.asarray(color, dtype=np.float32)
             kw['cmap'] = color[:, 0:-1]
             kw['interpolation'] = 'linear'
-        logger.info("Selected parcellates : %s" % ", ".join(roi_labs))
+        logger.info("    Selected parcellates : %s" % ", ".join(roi_labs))
         # Finally, add the overlay to the brain :
         self.mesh.add_overlay(data_vec[mask], vertices=np.where(mask)[0], **kw)
 
@@ -539,7 +539,7 @@ class BrainObj(VisbrainObject):
         id_vert, ctab, names = nibabel.freesurfer.read_annot(file)
         names = np.array(names).astype(str)
         color, u_idx = ctab[:, 0:4], ctab[..., -1]
-        logger.info("Annot file loaded (%s)" % file)
+        logger.info("    Annot file loaded (%s)" % file)
         # Test if variables have the same size :
         if len(u_idx) != len(names):
             min_len = min(len(u_idx), color.shape[0], len(names))

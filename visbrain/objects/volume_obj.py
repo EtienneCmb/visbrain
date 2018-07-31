@@ -81,7 +81,7 @@ class _Volume(VisbrainObject):
             vol, _, hdr = read_nifti(name)
             name = os.path.split(name)[1].split('.nii')[0]
             self._name = name
-            logger.info('Loading %s' % name)
+            logger.info('    %s volume loaded' % name)
             labels = index = system = None
         elif isinstance(name, str):
             # Switch between MIST and {aal, brodmann...} :

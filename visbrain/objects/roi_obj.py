@@ -213,7 +213,7 @@ class RoiObj(_Volume):
         self.analysis = pd.DataFrame({}, columns=cols)
         self._analysis_backup = self.analysis.copy()
 
-        logger.info("%s ROI loaded." % name)
+        logger.info("    %s ROI loaded." % name)
 
     def reset(self):
         """Reset the RoiObject."""
@@ -235,7 +235,7 @@ class RoiObj(_Volume):
             writer = pd.ExcelWriter(save_as)
             self.ref.to_excel(writer)
             writer.save()
-            logger.info("Saved as %s" % save_as)
+            logger.info("    Saved as %s" % save_as)
         return self.ref
 
     def where_is(self, patterns, df=None, union=True, columns=None,
@@ -366,7 +366,7 @@ class RoiObj(_Volume):
             bad_rows = np.where(np.array(bad_rows).sum(0))[0]
             good_rows = np.arange(n_sources)
             good_rows = np.delete(good_rows, bad_rows)
-            logger.info("%i rows containing the %r pattern "
+            logger.info("    %i rows containing the %r pattern "
                         "found" % (len(bad_rows), replace_with))
             # Get good and bad xyz and compute euclidian distance :
             xyz_good = xyz_untouched[good_rows, :]
@@ -384,7 +384,7 @@ class RoiObj(_Volume):
                     n_replaced += 1
             close_str[good_rows] = -1
             self.analysis["Replaced with"] = close_str
-            logger.info("Anatomical informations of %i sources have been "
+            logger.info("    Anatomical informations of %i sources have been "
                         "replaced using a distance of "
                         "%1.f" % (n_replaced, distance))
         # Add Text and (X, Y, Z) to the table :
@@ -465,7 +465,7 @@ class RoiObj(_Volume):
             unique_color = True
         if not unique_color:
             vert, faces = self._select_roi(self._vol.copy(), select, smooth)
-            logger.info("Same white color used across ROI(s)")
+            logger.info("    Same white color used across ROI(s)")
         else:
             assert not isinstance(select, float)
             select = [select] if isinstance(select, int) else select
@@ -475,11 +475,11 @@ class RoiObj(_Volume):
                 assert len(roi_to_color) == len(select)
                 col_unique = [color2vb(k) for k in roi_to_color.values()]
                 col_unique = np.array(col_unique).reshape(len(select), 4)
-                logger.info("Specific colors has been defined")
+                logger.info("    Specific colors has been defined")
             else:
                 col_unique = np.random.uniform(.1, .9, (len(select), 4))
                 col_unique[..., -1] = 1.
-                logger.info("Random color are going to be used.")
+                logger.info("    Random color are going to be used.")
             # Get vertices and faces of each ROI :
             for i, k in enumerate(select):
                 v, f = self._select_roi(self._vol.copy(), int(k), smooth)
@@ -517,7 +517,7 @@ class RoiObj(_Volume):
         vol[condition] = 0
         # Get the list of remaining ROIs :
         unique_vol = np.unique(vol[vol != 0])
-        logger.info("Selected ROI(s) : \n%r" % self.ref.loc[unique_vol])
+        logger.info("    Selected ROI(s) : \n%r" % self.ref.loc[unique_vol])
         # Smooth the volume :
         vol_sm, tf = smooth_3d(vol, smooth, correct=True)
         # Get the isosurface :

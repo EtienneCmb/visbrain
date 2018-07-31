@@ -68,7 +68,7 @@ class _Mask(object):
         self._sagittal = int(sl[0])
         self._coronal = int(sl[1])
         self._axial = int(sl[2])
-        logger.info("Cut coords at position %s" % str(xyz))
+        logger.info("    Cut coords at position %s" % str(xyz))
 
     def update(self):
         self._im_sagit.update()
@@ -309,7 +309,7 @@ class CrossSecObj(_Volume):
         if xyz is None:
             xyz = self._latest_xyz
         self.cut_coords(xyz)
-        logger.info("Activation set using the %s file" % name)
+        logger.info("    Activation set using the %s file" % name)
 
     def localize_source(self, coords):
         """Cut at a specific MNI coordinate and display the cross.
@@ -354,7 +354,7 @@ class CrossSecObj(_Volume):
                             color=color)
         self._sources.cmap = cmap
         self.cut_coords(xyz[0, :])
-        logger.info("%i sources highlighted" % xyz.shape[0])
+        logger.info("    %i sources highlighted" % xyz.shape[0])
 
     ###########################################################################
     ###########################################################################

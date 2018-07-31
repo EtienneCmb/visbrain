@@ -6,7 +6,7 @@ from ..utils import (normalize, color2vb)
 
 import logging
 logger = logging.getLogger('visbrain')
-PROJ_STR = "%i sources visibles and not masked used for the %s"
+PROJ_STR = "    %i sources visibles and not masked used for the %s"
 
 
 def _get_eucl_mask(v, xyz, radius, contribute, xsign):
@@ -176,7 +176,7 @@ def _get_masked_index(s_obj, v, radius, contribute=False):
     # Check inputs and get masked xyz / data :
     xyz, data, v, xsign = _check_projection(s_obj, v, radius, contribute,
                                             False)
-    logger.info("%i sources visibles and masked found" % len(data))
+    logger.info("    %i sources visibles and masked found" % len(data))
     # Predefined masked euclidian distance :
     nv, index_faced = v.shape[0], v.shape[1]
     fmask = np.ones((v.shape[0], index_faced, len(data)), dtype=bool)
@@ -210,10 +210,10 @@ def _project_sources_data(s_obj, b_obj, project='modulation', radius=10.,
         raise ValueError("`project` must either be 'modulation' or "
                          "'repartition'")
     if mask_color is None:
-        logger.warning("mask_color use %s.mask_color variable" % s_obj.name)
+        logger.debug("mask_color use %s.mask_color variable" % s_obj.name)
         mask_color = s_obj.mask_color
     mask_color = color2vb(mask_color)
-    logger.info("Project the source's %s (radius=%r, "
+    logger.info("    Project the source's %s (radius=%r, "
                 "contribute=%r)" % (project, radius, contribute))
     # Get mesh and vertices :
     mesh = b_obj.mesh
@@ -231,7 +231,7 @@ def _project_sources_data(s_obj, b_obj, project='modulation', radius=10.,
     if s_obj.is_masked:
         mask_idx = _get_masked_index(s_obj, vertices, radius, contribute)
         mesh.mask_color = mask_color
-        logger.info("Set masked sources cortical activity to the "
+        logger.info("    Set masked sources cortical activity to the "
                     "color %s" % str(list(mesh.mask_color.ravel())[0:-1]))
 
     # _____________________ MODULATION TO COLOR _____________________

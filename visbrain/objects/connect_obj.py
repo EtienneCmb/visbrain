@@ -1,4 +1,6 @@
 """Base class for objects of type connectivity."""
+import logging
+
 import numpy as np
 from collections import Counter
 
@@ -7,6 +9,9 @@ from vispy.scene import visuals
 
 from .visbrain_obj import VisbrainObject, CombineObjects
 from ..utils import array2colormap, normalize, color2vb, wrap_properties
+
+
+logger = logging.getLogger('visbrain')
 
 
 class ConnectObj(VisbrainObject):
@@ -106,6 +111,7 @@ class ConnectObj(VisbrainObject):
         assert sh[1] >= 2
         pos = nodes if sh[1] == 3 else np.c_[nodes, np.full((len(self),), _z)]
         self._pos = pos.astype(np.float32)
+        logger.info("    %i nodes detected" % self._pos.shape[0])
         # Edges :
         assert edges.shape == (len(self), len(self))
         if not np.ma.isMA(edges):
@@ -153,8 +159,10 @@ class ConnectObj(VisbrainObject):
         nnz_x, nnz_y = np.where(~self._edges.mask)
         indices = np.c_[nnz_x, nnz_y].flatten()
         line_pos = self._pos[indices, :]
+        logger.info("    %i connectivity links displayed" % len(indices))
 
         # Color either edges or nodes :
+        logger.info("    %s coloring method for connectivity" % self._color_by)
         if self._color_by == 'strength':
             nnz_values = self._edges.compressed()
             values = np.c_[nnz_values, nnz_values].flatten()
