@@ -344,6 +344,10 @@ class BrainVisual(Visual):
         # Check input variables :
         if vertices is None:
             vertices = np.ones((len(self),), dtype=bool)
+        if not len(vertices):
+            logger.warning('Vertices array is empty. Abandoning.')
+            return
+
         data = np.asarray(data)
         to_overlay = self._n_overlay if to_overlay is None else to_overlay
         data_lim = (data.min(), data.max())
