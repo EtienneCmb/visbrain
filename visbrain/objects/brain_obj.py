@@ -335,8 +335,7 @@ class BrainObj(VisbrainObject):
         # ============================= METHOD =============================
         if isinstance(data, np.ndarray):
             if hemisphere is None and file is None:
-                assert len(self.mesh) == len(data)
-                logger.info('Using both hemisphere (inferred from the data size)')
+                logger.info('Using both hemispheres')
                 hemisphere = 'both'
             # Hemisphere :
             _, activ_vert = self._hemisphere_from_file(hemisphere, file)
