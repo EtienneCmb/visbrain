@@ -223,7 +223,7 @@ class SignalVisual(SignalAnnotations):
             idx.insert(self._axis, slice(None))
 
         # Convert data to be compatible with VisPy and prepare data :
-        data_c = vispy_array(data[idx]).copy()
+        data_c = vispy_array(data[tuple(idx)]).copy()
         _data = self._prep._prepare_data(self._sf, data_c, self._time)
 
         # Set data :

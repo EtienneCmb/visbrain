@@ -123,8 +123,8 @@ def write_fig_hyp(data, sf, file=None, start_s=0, grid=False, ascolor=False,
     if grid:
         plt.grid(True, 'major', ls=':', lw=.2, c='k', alpha=.3)
 
-    plt.tick_params(axis='both', which='both', bottom='on', top='off',
-                    labelbottom='on', left='on', right='off', labelleft='on',
+    plt.tick_params(axis='both', which='both', bottom=True, top=False,
+                    labelbottom=True, left=True, right=False, labelleft=True,
                     labelcolor='k', direction='out')
 
     # Invert Y axis and despine
