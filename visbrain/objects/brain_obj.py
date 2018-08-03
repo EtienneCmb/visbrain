@@ -297,15 +297,17 @@ class BrainObj(VisbrainObject):
         data : array_like | None
             Vector array of data of shape (n_data,).
         vertices : array_like | None
-            Vector array of vertices of shape (n_vtx). Must be an array of
-            integers.
+            Vector array of vertex indices of shape (n_vtx).
+            Must be an array of integers. If hemisphere is 'left' or 'right'
+            indexation is done with respect to the specified hemisphere.
         smoothing_steps : int | 20
-            Number of smoothing steps (smoothing is used if n_data < n_vtx)
+            Number of smoothing steps (smoothing is used if n_data < n_vtx).
+            If None or 0, no smoothing is performed.
         file : string | None
             Full path to the overlay file.
         hemisphrere : {None, 'both', 'left', 'right'}
-            The hemisphere to use to add the overlay. If None, the method try
-            to inferred the hemisphere from the file name.
+            The hemisphere to use to add the overlay. If None, the method tries
+            to infer the hemisphere from the file name.
         hide_under : float | None
             Hide activations under a certain threshold.
         n_contours : int | None
@@ -332,23 +334,46 @@ class BrainObj(VisbrainObject):
         self._default_cblabel = "Activation"
         # ============================= METHOD =============================
         if isinstance(data, np.ndarray):
-            if not isinstance(vertices, np.ndarray):
-                vertices = np.arange(len(data))
-            logger.info("Add data to specific vertices.")
-            assert (data.ndim == 1) and (vertices.ndim == 1)
-            assert smoothing_steps is None or isinstance(smoothing_steps, int)
-            # Get smoothed vertices // data :
-            if isinstance(smoothing_steps, int):
-                edges = mesh_edges(self.mesh._faces)
-                sm_mat = smoothing_matrix(vertices, edges, smoothing_steps)
-                sc = data[sm_mat.col]
-                rows = sm_mat.row
-            else:
-                sc = data
-                rows = vertices
+            if hemisphere is None and file is None:
+                logger.info('Using both hemispheres')
+                hemisphere = 'both'
             # Hemisphere :
-            _, hemi_idx = self._hemisphere_from_file(hemisphere, file)
-            activ_vert = np.where(hemi_idx)[0][rows]
+            _, activ_vert = self._hemisphere_from_file(hemisphere, file)
+            activ_vert_idx = np.where(activ_vert)[0]
+
+            is_do_smoothing = True
+
+            if vertices is None:
+                # Data are defined on a dense grid
+                assert len(activ_vert_idx) == len(data)
+                vertices = np.arange(len(activ_vert_idx))
+                is_do_smoothing = False
+                if smoothing_steps:
+                    logger.warning(
+                        'Data defined on a dense grid; ignore smoothing.')
+            else:
+                assert len(vertices) == len(data)
+
+            logger.info("Add data to specific vertices.")
+            assert (data.ndim == 1) and (np.asarray(vertices).ndim == 1)
+            assert smoothing_steps is None or isinstance(smoothing_steps, int)
+
+            # Get smoothed vertices // data :
+            if hemisphere != 'both':
+                # Transform to indexing with respect to the whole brain
+                vert_whole = activ_vert_idx[vertices]
+            else:
+                vert_whole = vertices
+
+            if smoothing_steps and is_do_smoothing:
+                edges = mesh_edges(self.mesh._faces)
+                sm_mat = smoothing_matrix(vert_whole, edges, smoothing_steps)
+                sc = sm_mat * data  # actual data smoothing
+                if hemisphere != 'both':
+                    sc = sc[activ_vert]
+            else:
+                sc = np.zeros_like(sm_data[activ_vert])
+                sc[vertices] = data
         elif isinstance(file, str):
             assert os.path.isfile(file)
             logger.info("Add overlay to the {} brain template "
