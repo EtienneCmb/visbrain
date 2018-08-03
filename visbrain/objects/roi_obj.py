@@ -42,11 +42,26 @@ def wrap_getter_properties(fn):
 class RoiObj(_Volume):
     """Create a Region Of Interest (ROI) object.
 
+    **Main functionalities**
+
+        * Display a mesh of selected ROIs
+        * Localize sources
+
+    **Supported ROI**
+
+        * Brodmann Areas
+        * Talairach atlas
+        * Automated Anatomical Labeling (AAL)
+        * MIST, including levels 7, 12, 20, 36, 64, 122 and ROI [1]_
+
     Parameters
     ----------
     name : string
         Name of the ROI object. If name is 'brodmann', 'aal' or 'talairach' a
         predefined ROI object is used and vol, index and label are ignored.
+        MIST [1]_ is also supported. To specify a resolution use `mist_%s` with
+        %s in ['7', '12', '20', '36', '64', '122', 'ROI'] (e.g 'mist_7',
+        `mist_ROI`)
     vol : array_like | None
         ROI volume. Sould be an array with three dimensions.
     labels : array_like | None
@@ -85,6 +100,12 @@ class RoiObj(_Volume):
     >>> r = RoiObj('brodmann')
     >>> r.select_roi(select=[4, 6, 38], unique_color=True, smooth=7)
     >>> r.preview(axis=True)
+
+    References
+    ----------
+    .. [1] Urchs, S., Armoza, J., Benhajali, Y., St-Aubin, J., Orban, P., &
+           Bellec, P. (2017). MIST: A multi-resolution parcellation of
+           functional brain networks. MNI Open Research, 1.
     """
 
     ###########################################################################
