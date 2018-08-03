@@ -334,11 +334,9 @@ class BrainObj(VisbrainObject):
         self._default_cblabel = "Activation"
         # ============================= METHOD =============================
         if isinstance(data, np.ndarray):
-            if hemisphere is None and file is None:
-                logger.info('Using both hemispheres')
-                hemisphere = 'both'
             # Hemisphere :
-            _, activ_vert = self._hemisphere_from_file(hemisphere, file)
+            hemisphere, activ_vert = self._hemisphere_from_file(hemisphere,
+                                                                file)
             activ_vert_idx = np.where(activ_vert)[0]
 
             is_do_smoothing = True
