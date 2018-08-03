@@ -21,6 +21,8 @@ Improvements
 * Sorted brain templates in :class:`visbrain.Brain` + remove sulcus as a brain template
 * Fewer visible possibilities when importing from the root of visbrain 
 * Remove all data from the visbrain package
+* Include MIST ROI template to the :class:`visbrain.objects.RoiObj`
+* Enable to filter ROIs from the Brain GUI
 
 Bug fixes
 ~~~~~~~~~
@@ -30,6 +32,7 @@ Bug fixes
 * Repeat source localization using the same RoiObj
 * Colorbar module has been removed and replaced by CbarObj
 * Insert annotation inside Signal
+* Smoothing for MEG data (`PR20 <https://github.com/EtienneCmb/visbrain/pull/20>`_)
 
 0.4.1
 -----
