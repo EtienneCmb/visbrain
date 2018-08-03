@@ -354,7 +354,7 @@ class BrainObj(VisbrainObject):
             else:
                 assert len(vertices) == len(data)
 
-            logger.info("Add data to specific vertices.")
+            logger.info("    Add data to specific vertices.")
             assert (data.ndim == 1) and (np.asarray(vertices).ndim == 1)
             assert smoothing_steps is None or isinstance(smoothing_steps, int)
 
