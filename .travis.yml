@@ -16,9 +16,9 @@ matrix:
   include:
     - env: TEST=standard
       os: linux
-    - env: TEST=standard
-      os: linux
-      python: '3.7'
+    # - env: TEST=standard
+    #   os: linux
+    #   python: '3.7'
     - env: TEST=flake
       os: linux
     # - env: TEST=standard
