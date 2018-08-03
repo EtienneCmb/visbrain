@@ -419,7 +419,7 @@ class Figure(object):
                 for loc, spine in ax.spines.items():
                     if loc in ['left', 'right', 'top', 'bottom']:
                         spine.set_color('none')
-                        ax.tick_params(**{loc: 'off'})
+                        ax.tick_params(**{loc: False})
 
     @staticmethod
     def _cbar(cb, cmap, clim, vmin, under, vmax, over, title, ycb, fz_title,

@@ -168,7 +168,7 @@ def power_of_ten(x, e=3):
 
 
 def averaging(ts, n_window, axis=-1, overlap=0., window='flat'):
-    """Take the mean of a np.ndarray.
+    """Take the mean of an ndarray.
 
     Parameters
     ----------
@@ -226,9 +226,9 @@ def averaging(ts, n_window, axis=-1, overlap=0., window='flat'):
     sl_ts = [slice(None)] * ts.ndim
     sl_av = sl_ts.copy()
     for k in range(n_ind):
-        sl_ts[axis] = slice(ind[k, 0], ind[k, 1])
-        sl_av[axis] = slice(k, k + 1)
-        average[sl_av] += (ts[sl_ts] * win).mean(axis=axis, keepdims=True)
+        sl_ts[axis], sl_av[axis] = slice(ind[k, 0], ind[k, 1]), slice(k, k + 1)
+        average[tuple(sl_av)] += (ts[tuple(sl_ts)] * win).mean(axis=axis,
+                                                               keepdims=True)
 
     return average
 
@@ -264,7 +264,7 @@ def normalization(data, axis=-1, norm=None, baseline=None):
     if (baseline is not None) and (len(baseline) == 2):
         sl = [slice(None)] * data.ndim
         sl[axis] = slice(baseline[0], baseline[1])
-        _data = data[sl]
+        _data = data[tuple(sl)]
     else:
         _data = None
 

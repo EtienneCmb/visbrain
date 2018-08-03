@@ -348,7 +348,7 @@ class CrossSecObj(_Volume):
         for k in range(xyz.shape[0]):
             sl = self.pos_to_slice(xyz[k, :])
             idx = [f(sl[0], sh[0]), f(sl[1], sh[1]), f(sl[2], sh[2])]
-            vol[idx] = _val
+            vol[tuple(idx)] = _val
         self._sources.set_volume(vol, self._hdr)
         cmap = cmap_to_glsl(limits=(0., _val), translucent=(None, .5),
                             color=color)
