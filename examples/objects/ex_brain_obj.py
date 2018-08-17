@@ -139,7 +139,7 @@ vertices = file['vertices']
 b_obj_meg = BrainObj('inflated', translucent=False, hemisphere='right',
                      sulcus=True)
 b_obj_meg.add_activation(data=data, vertices=vertices, hemisphere='right',
-                         smoothing_steps=5, clim=(7., 17.), hide_under=7.,
+                         smoothing_steps=21, clim=(7., 17.), hide_under=7.,
                          cmap='plasma', vmin=9, vmax=15.)
 sc.add_to_subplot(b_obj_meg, row=2, col=2, title='MEG inverse solution',
                   rotate='right')
