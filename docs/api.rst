@@ -58,6 +58,7 @@ Objects
     RoiObj
     SceneObj
     SourceObj
+    TopoObj
     TimeFrequencyObj
     TimeSeries3DObj
     VectorObj
