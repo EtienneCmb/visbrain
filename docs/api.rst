@@ -102,6 +102,8 @@ I/O
    download_file
    path_to_visbrain_data
    read_stc
+   write_fig_hyp
+   get_sleep_stats
 
 Miscellaneous
 -------------
@@ -135,24 +137,3 @@ Miscellaneous
    :toctree: generated/
 
     Colormap
-
-Command line
-------------
-
-In addition to using Python script, you can also use the following command-lines from a terminal :
-
-* :ref:`cli_visbrain_sleep` : open the graphical user interface of Sleep.
-* :ref:`cli_visbrain_fig_hyp` : export a hypnogram file (**.txt**, **.csv** or **.hyp**) into a high definition colored or black and white image.
-* :ref:`cli_visbrain_sleep_stats` : Compute sleep statistics from hypnogram file and export them in csv.
-
-.. _cli_visbrain_sleep:
-.. click:: visbrain.cli:cli_sleep
-   :prog: visbrain_sleep
-
-.. _cli_visbrain_fig_hyp:
-.. click:: visbrain.cli:cli_fig_hyp
-   :prog: visbrain_fig_hyp
-
-.. _cli_visbrain_sleep_stats:
-.. click:: visbrain.cli:cli_sleep_stats
-   :prog: visbrain_sleep_stats
