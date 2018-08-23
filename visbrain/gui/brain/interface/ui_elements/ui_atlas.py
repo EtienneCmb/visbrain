@@ -88,11 +88,8 @@ class UiAtlas(object):
         # Subdivision :
         self._csDiv.addItems(vol_list)
         self._csDiv.currentIndexChanged.connect(self._fcn_crossec_change)
-        # Cmap :
-        self._csCmap.addItems(mpl_cmap())
-        idx = mpl_cmap_index(self.cross_sec.to_kwargs()['cmap'])
-        self._csCmap.setCurrentIndex(idx[0])
-        self._csCmap.currentIndexChanged.connect(self._fcn_crossec_cmap)
+        self._csLevel.currentIndexChanged.connect(self._fcn_crossec_change)
+        self._csInterp.currentIndexChanged.connect(self._fcn_crossec_interp)
         # Visibility :
         self._sec_grp.setChecked(self.cross_sec.visible_obj)
         self._sec_grp.clicked.connect(self._fcn_crossec_viz)
@@ -277,10 +274,6 @@ class UiAtlas(object):
         sl = self.cross_sec.slice_to_pos((dx, dy, dz))
         self.cross_sec.cut_coords(sl)
 
-    def _fcn_crossec_cmap(self):
-        """Change cross-sections colormap."""
-        self._fcn_crossec_move(update=True)
-
     def _fcn_crossec_viz(self):
         """Control cross-sections visibility."""
         self.menuDispCrossec.setChecked(self._sec_grp.isChecked())
@@ -290,11 +283,27 @@ class UiAtlas(object):
         """Change the cross-sections subdivision type."""
         # Get selected volume :
         name = str(self._csDiv.currentText())
+        level = str(self._csLevel.currentText())
+        is_mist = name == 'mist'
+        self._csLevel.setEnabled(is_mist)
+        name = name + '_' + level if is_mist else name
         # Select the volume :
         self.cross_sec(name)
+        self.cross_sec.contrast = 0.
         # Update clim and minmax :
         self._fcn_crossec_sl_limits()
-        self._fcn_crossec_move(update=True)
+        self._fcn_crossec_interp()
+        # self.cross_sec.cut_coords(None)
+        self._fcn_crossec_move()
+        self.cross_sec._set_text(0, 'File = ' + name)
+        # Reset sliders :
+        self._csSagit.setValue(self.cross_sec._sagittal)
+        self._csCoron.setValue(self.cross_sec._coronal)
+        self._csAxial.setValue(self.cross_sec._axial)
+
+    def _fcn_crossec_interp(self):
+        """Interpolation method."""
+        self.cross_sec.interpolation = str(self._csInterp.currentText())
 
     ###########################################################################
     ###########################################################################
