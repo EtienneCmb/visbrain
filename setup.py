@@ -51,8 +51,7 @@ setup(
         "vispy>=0.5.2",
         "matplotlib>=1.5.5",
         "pyqt5",
-        "pillow",
-        "Click"
+        "pillow"
     ],
     dependency_links=[],
     classifiers=["Development Status :: 3 - Alpha",
@@ -67,10 +66,4 @@ setup(
                  "Operating System :: POSIX :: Linux",
                  "Operating System :: Microsoft :: Windows",
                  "Natural Language :: English"
-                 ],
-    entry_points='''
-        [console_scripts]
-        visbrain_sleep=visbrain.cli:cli_sleep
-        visbrain_fig_hyp=visbrain.cli:cli_fig_hyp
-        visbrain_sleep_stats=visbrain.cli:cli_sleep_stats
-    ''')
+                 ])

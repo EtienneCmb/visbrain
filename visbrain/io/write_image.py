@@ -98,7 +98,8 @@ def write_fig_hyp(data, sf, file=None, start_s=0, grid=False, ascolor=False,
             idxm = np.where(hypno == q)[0] + 1
             idxm[idxm >= len(hypno)] = len(hypno) - 1
             mask[idxm] = False
-            plt.plot(np.ma.masked_array(hypno, mask=mask), i, linewidth=lw)
+            plt.plot(np.ma.masked_array(hypno, mask=mask), i, ls='steps',
+                     linewidth=lw)
 
     # Plot REM epochs
     remcol = 'k' if not ascolor else colors[4]
