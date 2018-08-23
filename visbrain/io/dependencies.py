@@ -129,5 +129,5 @@ def is_sc_image_installed(raise_error=False):
     # Raise error (if needed) :
     if raise_error and not is_installed:
         raise IOError("scikit-image not installed. In a terminal, run : pip"
-                      " install skimage")
+                      " install scikit-image")
     return is_installed
