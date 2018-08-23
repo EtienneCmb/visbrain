@@ -27,7 +27,6 @@ Graphical user interface
 
    Brain
    Sleep
-   Topo
    Signal
    Figure
 
