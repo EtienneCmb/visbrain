@@ -10,7 +10,7 @@ import vispy.visuals.transforms as vist
 
 from .visbrain_obj import VisbrainObject
 from ..objects import ConnectObj
-from ..io import download_file
+from ..io import download_file, is_sc_image_installed
 from ..utils import (array2colormap, color2vb, mpl_cmap, normalize,
                      vpnormalize, vprecenter)
 
@@ -347,6 +347,7 @@ class TopoObj(VisbrainObject):
                 if level_colors in cmaps:
                     level_colors = array2colormap(levels, cmap=level_colors)
             grid[nmask] = np.inf
+            is_sc_image_installed(True)
             self.iso = visuals.Isocurve(data=grid, parent=self.node_head,
                                         levels=levels, color_lev=level_colors,
                                         width=2.)
