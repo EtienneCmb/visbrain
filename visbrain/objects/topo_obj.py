@@ -249,7 +249,9 @@ class TopoObj(VisbrainObject):
 
     def _get_camera(self):
         """Get the most adapted camera."""
-        return scene.cameras.PanZoomCamera(rect=self.rect)
+        cam = scene.cameras.PanZoomCamera(rect=self.rect)
+        cam.aspect = 1.
+        return cam
 
     def set_data(self, data, levels=None, level_colors='white', cmap='viridis',
                  clim=None, vmin=None, under='gray', vmax=None, over='red'):
