@@ -39,8 +39,3 @@ def test_import_signal():
 def test_import_figure():
     """Import the Figure module.."""
     from visbrain.gui import Figure  # noqa
-
-
-def test_import_topo():
-    """Import the Topo module.."""
-    from visbrain.gui import Topo  # noqa

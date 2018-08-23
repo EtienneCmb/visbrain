@@ -1,13 +1,13 @@
 """
-Use custom coordinates
-======================
+Connectivity
+============
 
-Display topographic plots using custom coordinates.
+Add connectivity to the topoplot.
 
 Download topoplot data (topoplot_data.npz) :
 https://www.dropbox.com/s/m76y3p0fyj6lxht/topoplot_data.npz?dl=1
 
-.. image:: ../../picture/pictopo/ex_custom_coordinates.png
+.. image:: ../../picture/pictopo/ex_connectivity.png
 """
 import numpy as np
 
@@ -32,9 +32,26 @@ channels = [str(k) for k in range(len(data))]
 # Then we pass the channel names and data to the topo object (TopoObj) and
 # create a colorbar object based on the topoplot.
 
-t_obj = TopoObj('topo', data, channels=channels, xyz=xyz)
+t_obj = TopoObj('topo', data, channels=channels, xyz=xyz, cmap='bwr')
 cb_obj = ColorbarObj(t_obj, cblabel='Beta power', cbtxtsz=12, txtsz=10.,
                      width=.2, txtcolor='black')
+
+###############################################################################
+# Connect channels
+###############################################################################
+# To connect channels together, we need a 2D array of shape
+# (n_channels, n_channels) describing connectivity strength between channels.
+# Note that the `visbrain.objects.TopoObj.connect` method basically use the
+# `visbrain.objects.ConnectObj` object.
+
+# Create the 2D array of connectivity links :
+connect = (data.reshape(-1, 1) + data.reshape(1, -1)) / 2.
+# Select only connectivity links with a connectivity strength under 1.97
+select = connect < 1.97
+# Connect the selected channels :
+t_obj.connect(connect, select=select, cmap='inferno', antialias=True,
+              line_width=4.)
+
 
 ###############################################################################
 # Creation of the scene
@@ -44,6 +61,6 @@ cb_obj = ColorbarObj(t_obj, cblabel='Beta power', cbtxtsz=12, txtsz=10.,
 
 sc = SceneObj(bgcolor='white', size=(950, 800))
 sc.add_to_subplot(t_obj, row=0, col=0, title='Custom data',
-                  title_color='black')
+                  title_color='black', width_max=800, height_max=800)
 sc.add_to_subplot(cb_obj, row=0, col=1, width_max=200)
 sc.preview()

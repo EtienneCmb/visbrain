@@ -27,7 +27,6 @@ Graphical user interface
 
    Brain
    Sleep
-   Topo
    Signal
    Figure
 
@@ -58,6 +57,7 @@ Objects
     RoiObj
     SceneObj
     SourceObj
+    TopoObj
     TimeFrequencyObj
     TimeSeries3DObj
     VectorObj
