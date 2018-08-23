@@ -1,16 +1,4 @@
-"""Topoplot visual.
-
-Parents description :
-
-node -> rescale x800 (solve GL issues for small plots)
-    node_headfull -> scale (-1, 1)
-        node_head -> recenter + (T4, Fpz)
-        node_chan -> translate (0, 0, 10.) (objects superposition)
-
-Authors: Etienne Combrisson <e.combrisson@gmail.com>
-
-License: BSD (3-clause)
-"""
+"""Base class for objects of type connectivity."""
 import logging
 
 import numpy as np
@@ -20,35 +8,39 @@ from vispy import scene
 from vispy.scene import visuals
 import vispy.visuals.transforms as vist
 
+from .visbrain_obj import VisbrainObject
+from ..objects import ConnectObj
+from ..io import download_file
 from ..utils import (array2colormap, color2vb, mpl_cmap, normalize,
                      vpnormalize, vprecenter)
-from ..io import download_file
-from .cbar import CbarVisual
 
 logger = logging.getLogger('visbrain')
 
-__all__ = ('TopoMesh')
 
-
-class TopoMesh(object):
-    """Create a TopoMesh VisPy object.
+class TopoObj(VisbrainObject):
+    """Create a topoplot object.
 
     Parameters
     ----------
+    name : string
+        The name of the connectivity object.
+    data : array_like
+        Array of data of shape (n_channels)
     xyz : array_like | None
         Array of source's coordinates.
     channels : list | None
         List of channel names.
     system : {'cartesian', 'spherical'}
         Coordinate system.
+    levels : array_like/int | None
+        The levels at which the isocurve is constructed.
+    level_colors : string/array_like | 'white'
+        The color to use when drawing the line. If a list is given, it
+        must be of shape (Nlev), if an array is given, it must be of
+        shape (Nlev, ...). and provide one color per level
+        (rgba, colorname). By default, all levels are whites.
     unit : {'degree', 'rad'}
         If system is 'spherical', specify if angles are in degrees or radians.
-    title : string | None
-        Title of the topoplot.
-    title_color : array_like/string | 'black'
-        Color for the title.
-    title_size : float | 20.
-        Size of the title.
     line_color : array_like/string | 'black'
         Color of lines for the head, nose and eras.
     line_width : float | 4.
@@ -63,32 +55,60 @@ class TopoMesh(object):
         triangle_down, and star.
     chan_txt_color : array_like/string | 'black'
         Color of channel names.
-    bgcolor : array_like/string | 'white'
-        Background color.
-    cbar : bool | True
-        Attach a colorbar to the topoplot.
-    cb_txt_size : float | 16.
-        Text size for the colorbar limits and label.
-    margin : float | .05
-        Margin percentage.
+    cmap : string | None
+        Matplotlib colormap (like 'viridis', 'inferno'...).
+    clim : tuple/list | None
+        Colorbar limit. Every values under / over clim will
+        clip.
+    vmin : float | None
+        Every values under vmin will have the color defined
+        using the under parameter.
+    vmax : float | None
+        Every values over vmin will have the color defined
+        using the over parameter.
+    under : tuple/string | None
+        Matplotlib color under vmin.
+    over : tuple/string | None
+        Matplotlib color over vmax.
+    transform : VisPy.visuals.transforms | None
+        VisPy transformation to set to the parent node.
     parent : VisPy.parent | None
-        VisPy parent.
+        Line object parent.
+    verbose : string
+        Verbosity level.
+    kw : dict | {}
+        Optional arguments are used to control the colorbar
+        (See :class:`ColorbarObj`).
+
+    Notes
+    -----
+    List of supported shortcuts :
+
+        * **s** : save the figure
+        * **<delete>** : reset camera
     """
 
-    def __init__(self, xyz=None, channels=None, system='cartesian',
-                 unit='degree', title=None, title_color='black',
-                 title_size=20., line_color='black', line_width=4.,
-                 chan_size=12., chan_offset=(0., 0., 0.),
-                 chan_mark_color='white', chan_mark_symbol='disc',
-                 chan_txt_color='black', bgcolor='white', cbar=True,
-                 cb_txt_size=10., margin=.05, parent=None):
+    ###########################################################################
+    ###########################################################################
+    #                                BUILT IN
+    ###########################################################################
+    ###########################################################################
+
+    def __init__(self, name, data, xyz=None, channels=None, system='cartesian',
+                 levels=None, level_colors='white', unit='degree',
+                 line_color='black', line_width=3., chan_size=12.,
+                 chan_offset=(0., 0., 0.), chan_mark_color='white',
+                 chan_mark_symbol='disc', chan_txt_color='black',
+                 cmap='viridis', clim=None, vmin=None, under='gray', vmax=None,
+                 over='red', margin=.05, transform=None, parent=None,
+                 verbose=None, **kw):
         """Init."""
+        VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)
+
         # ======================== VARIABLES ========================
-        self._bgcolor = color2vb(bgcolor)
         scale = 800.  # fix GL bugs for small plots
         pos = np.zeros((1, 3), dtype=np.float32)
         # Colors :
-        title_color = color2vb(title_color)
         line_color = color2vb(line_color)
         chan_txt_color = color2vb(chan_txt_color)
         self._chan_mark_color = color2vb(chan_mark_color)
@@ -101,7 +121,7 @@ class TopoMesh(object):
 
         # ======================== NODES ========================
         # Main topoplot node :
-        self.node = scene.Node(name='Topoplot', parent=parent)
+        self.node = scene.Node(name='Topoplot', parent=self._node)
         self.node.transform = vist.STTransform(scale=[scale] * 3)
         # Headset + channels :
         self.node_headfull = scene.Node(name='HeadChan', parent=self.node)
@@ -110,21 +130,14 @@ class TopoMesh(object):
         # Channel node :
         self.node_chan = scene.Node(name='Channels', parent=self.node_headfull)
         self.node_chan.transform = vist.STTransform(translate=(0., 0., -10.))
-        # Cbar node :
-        self.node_cbar = scene.Node(name='Channels', parent=self.node)
         # Dictionaries :
         kw_line = {'width': line_width, 'color': line_color,
-                   'parent': self.node_head}
+                   'parent': self.node_head, 'antialias': False}
 
         # ======================== PARENT VISUALS ========================
         # Main disc :
         self.disc = visuals.Image(pos=pos, name='Disc', parent=self.node_head,
                                   interpolation='bilinear')
-        # Title :
-        self.title = visuals.Text(text=title, pos=(0., .6, 0.), name='Title',
-                                  parent=self.node, font_size=title_size,
-                                  color=title_color, bold=True)
-        self.title.font_size *= 1.1
 
         # ======================== HEAD / NOSE / EAR ========================
         # ------------------ HEAD ------------------
@@ -170,27 +183,19 @@ class TopoMesh(object):
 
         # ================== CHANNELS ==================
         # Channel's markers :
-        self.chanMarkers = visuals.Markers(pos=pos, name='ChanMarkers',
-                                           parent=self.node_chan)
+        self.chan_markers = visuals.Markers(pos=pos, name='ChanMarkers',
+                                            parent=self.node_chan)
         # Channel's text :
-        self.chanText = visuals.Text(pos=pos, name='ChanText',
-                                     parent=self.node_chan, anchor_x='center',
-                                     color=chan_txt_color,
-                                     font_size=chan_size)
+        self.chan_text = visuals.Text(pos=pos, name='ChanText',
+                                      parent=self.node_chan, anchor_x='center',
+                                      color=chan_txt_color,
+                                      font_size=chan_size)
 
         # ================== CAMERA ==================
         self.rect = ((-scale / 2) * (1 + margin),
                      (-scale / 2) * (1 + margin),
-                     scale * (1. + cbar * .3 + margin),
+                     scale * (1. + margin),
                      scale * (1.11 + margin))
-
-        # ================== CBAR ==================
-        if cbar:
-            self.cbar = CbarVisual(cbtxtsz=1.2 * cb_txt_size,
-                                   txtsz=cb_txt_size, txtcolor=title_color,
-                                   cbtxtsh=2., parent=self.node_cbar)
-            self.node_cbar.transform = vist.STTransform(scale=(.6, .4, 1.),
-                                                        translate=(.6, 0., 0.))
 
         # ================== COORDINATES ==================
         auto = self._get_channel_coordinates(xyz, channels, system, unit)
@@ -218,7 +223,7 @@ class TopoMesh(object):
             self.node_headfull.transform = circle
             # Text translation :
             tr = np.array([0., .04, 0.]) + np.array(chan_offset)
-        self.chanText.transform = vist.STTransform(translate=tr)
+        self.chan_text.transform = vist.STTransform(translate=tr)
 
         # ================== GRID INTERPOLATION ==================
         # Interpolation vectors :
@@ -231,6 +236,9 @@ class TopoMesh(object):
             return f(xnew, ynew)
         self._grid_interpolation = _grid_interpolation
 
+        self.set_data(data, levels, level_colors, cmap, clim, vmin, under,
+                      vmax, over)
+
     def __len__(self):
         """Return the number of channels."""
         return self._nchan
@@ -239,9 +247,12 @@ class TopoMesh(object):
         """Return if coordinates exist."""
         return hasattr(self, '_xyz')
 
+    def _get_camera(self):
+        """Get the most adapted camera."""
+        return scene.cameras.PanZoomCamera(rect=self.rect)
+
     def set_data(self, data, levels=None, level_colors='white', cmap='viridis',
-                 clim=None, vmin=None, under='gray', vmax=None, over='red',
-                 cblabel=None):
+                 clim=None, vmin=None, under='gray', vmax=None, over='red'):
         """Set data to the topoplot.
 
         Parameters
@@ -270,8 +281,6 @@ class TopoMesh(object):
             Matplotlib color under vmin.
         over : tuple/string | None
             Matplotlib color over vmax.
-        cblabel : string | None
-            Colorbar label.
         """
         # ================== XYZ / CHANNELS / DATA ==================
         xyz = self._xyz[self._keeponly]
@@ -279,17 +288,18 @@ class TopoMesh(object):
         data = np.asarray(data, dtype=float).ravel()
         if len(data) == len(self):
             data = data[self._keeponly]
+        logger.info("    %i channels detected" % len(channels))
 
         # =================== CHANNELS ===================
         # Markers :
         radius = normalize(data, 10., 30.)
-        self.chanMarkers.set_data(pos=xyz, size=radius, edge_color='black',
-                                  face_color=self._chan_mark_color,
-                                  symbol=self._chan_mark_symbol)
+        self.chan_markers.set_data(pos=xyz, size=radius, edge_color='black',
+                                   face_color=self._chan_mark_color,
+                                   symbol=self._chan_mark_symbol)
         # Names :
         if channels is not None:
-            self.chanText.text = channels
-            self.chanText.pos = xyz
+            self.chan_text.text = channels
+            self.chan_text.pos = xyz
 
         # =================== GRID ===================
         pos_x, pos_y = xyz[:, 0], xyz[:, 1]
@@ -312,30 +322,23 @@ class TopoMesh(object):
 
         # =================== DISC ===================
         # Force min < off-disc values < max :
-        grid[nmask] = data.mean()
-        grid = normalize(grid, data.min(), data.max())
-        clim = (data.min(), data.max()) if clim is None else clim
-        image = array2colormap(grid, cmap=cmap, clim=clim, vmin=vmin,
-                               vmax=vmax, under=under, over=over)
-        image[nmask] = self._bgcolor
-        self.disc.set_data(image)
-
-        # =================== COLORBAR ===================
-        if hasattr(self, 'cbar'):
-            self.cbar.clim = clim
-            self.cbar.cmap = cmap
-            self.cbar.isvmin = vmin is not None
-            self.cbar.vmin = vmin
-            self.cbar.under = under
-            self.cbar.isvmax = vmax is not None
-            self.cbar.vmax = vmax
-            self.cbar.over = over
-            self.cbar.cblabel = cblabel
+        d_min, d_max = data.min(), data.max()
+        grid = normalize(grid, d_min, d_max)
+        clim = (d_min, d_max) if clim is None else clim
+        self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
+        grid_color = array2colormap(grid, **self.to_kwargs())
+        grid_color[nmask, -1] = 0.
+        # grid[nmask] = d_min
+        # self.disc.clim = clim
+        # self.disc.cmap = cmap_to_glsl(limits=(d_min, d_max),
+        #                               translucent=(None, d_min),
+        #                               **self.to_kwargs())
+        self.disc.set_data(grid_color)
 
         # =================== LEVELS ===================
         if levels is not None:
             if isinstance(levels, int):
-                levels = np.linspace(grid.min(), grid.max(), levels)
+                levels = np.linspace(d_min, d_max, levels)
             if isinstance(level_colors, str):
                 # Get colormaps :
                 cmaps = mpl_cmap(bool(level_colors.find('_r') + 1))
@@ -346,6 +349,21 @@ class TopoMesh(object):
                                         levels=levels, color_lev=level_colors,
                                         width=2.)
             self.iso.transform = vist.STTransform(translate=(0., 0., -5.))
+
+    def connect(self, connect, **kwargs):
+        """Draw connectivity lines between channels.
+
+        Parameters
+        ----------
+        connect : array_like
+            A 2D array of connectivity links of shape (n_channels, n_channels).
+        kwargs : dict | {}
+            Optional arguments are passed to the `visbrain.objects.ConnectObj`
+            object.
+        """
+        logger.info("    Connect channels")
+        self._connect = ConnectObj('ChanConnect', self._xyz, connect,
+                                   parent=self.node_chan, **kwargs)
 
     def _get_channel_coordinates(self, xyz, channels, system, unit):
         """Get channel coordinates.
@@ -396,7 +414,7 @@ class TopoMesh(object):
                     pass  # all good
                 elif system == 'spherical':
                     xyz = self._spherical_to_cartesian(xyz, unit)
-                    xyz = self.array_project_radial_to3d(xyz)
+                    xyz = self._array_project_radial_to3d(xyz)
 
         self._xyz = xyz
         self._channels = channels
@@ -420,7 +438,7 @@ class TopoMesh(object):
         """
         ref = self._get_coordinates_from_name([x, y])[0]
         ref = self._spherical_to_cartesian(ref, unit='degree')
-        ref = self.array_project_radial_to3d(ref)
+        ref = self._array_project_radial_to3d(ref)
         ref_x, ref_y = ref[0, 0], ref[1, 1]
         return ref_x, ref_y
 
@@ -512,7 +530,7 @@ class TopoMesh(object):
         return zi
 
     @staticmethod
-    def array_project_radial_to3d(points_2d):
+    def _array_project_radial_to3d(points_2d):
         """Radial 3d projection."""
         points_2d = np.atleast_2d(points_2d)
         alphas = np.sqrt(np.sum(points_2d**2, -1))

@@ -355,7 +355,7 @@ class SceneObj(object):
                  **kwargs):
         """Init."""
         set_log_level(verbose)
-        logger.info("    Scene creation")
+        logger.info("Creation of a scene")
         PROFILER('Scene creation')
         # Create the canvas and the grid :
         self.canvas = scene.SceneCanvas(keys='interactive', show=False,
