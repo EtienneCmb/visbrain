@@ -399,6 +399,8 @@ class SceneObj(object):
                         objs.append(j)
                         transforms.append(j.transform)
                         # Get scaling factor :
+                        if not isinstance(k, scene.transforms.STTransform):
+                            continue
                         sc = np.array([k.scale.sum() for k in transforms])
                         if sc.size and not len(np.unique(sc)) == 1:
                             unique_tf = transforms[sc.argmax()]
@@ -412,13 +414,14 @@ class SceneObj(object):
             logger.debug("Object rescaled %s" % str([self._fix_gl] * 3))
             obj._scale = self._fix_gl
             sc = [self._fix_gl] * 3
+            tf = scene.transforms.STTransform(scale=sc)
         else:
-            sc = [1.] * 3
+            tf = obj._node.transform
         # Add transformation to the node :
         if hasattr(obj, '_node'):  # VisbrainObject
-            obj._node.transform = scene.transforms.STTransform(scale=sc)
+            obj._node.transform = tf
         elif hasattr(obj, '_cnode'):  # combineObjects
-            obj._cnode.transform = scene.transforms.STTransform(scale=sc)
+            obj._cnode.transform = tf
 
     def add_to_subplot(self, obj, row=0, col=0, row_span=1, col_span=1,
                        title=None, title_size=12., title_color='white',
