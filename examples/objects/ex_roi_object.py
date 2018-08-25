@@ -1,6 +1,6 @@
 """
-Region Of Interest (ROI) object
-===============================
+Region Of Interest object (RoiObj) : complete tutorial
+======================================================
 
 This example illustrate the main functionalities and inputs of the roi
 object i.e :
