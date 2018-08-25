@@ -181,8 +181,8 @@ class SourceObj(VisbrainObject):
         # Radius / color :
         self.visible = visible
         self._update_radius()
-        self._update_color()
         self.alpha = alpha
+        self._update_color()
 
     def __len__(self):
         """Get the number of sources."""
