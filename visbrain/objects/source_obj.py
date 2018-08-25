@@ -354,7 +354,8 @@ class SourceObj(VisbrainObject):
             A Pandas DataFrame or a list of DataFrames if roi_obj is a list.
         """
         # List of predefined ROI objects :
-        proi = ['brodmann', 'aal', 'talairach']
+        proi = ['brodmann', 'aal', 'talairach', 'mist_7', 'mist_12', 'mist_20',
+                'mist_36', 'mist_64', 'mist_122', 'mist_ROI']
         # Define the ROI object if needed :
         if isinstance(roi_obj, (str, list, tuple)):
             if isinstance(roi_obj, str):
