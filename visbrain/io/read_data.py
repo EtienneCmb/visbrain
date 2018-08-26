@@ -7,19 +7,12 @@ This file contain functions to load :
 - Text (*.txt)
 - CSV (*.csv)
 - JSON (*.json)
-- NIFTI
-- MIST
 """
-import os
-
 import numpy as np
 
-from .dependencies import is_nibabel_installed
-from .path import path_to_visbrain_data
-from ..utils.transform import array_to_stt
 
 __all__ = ('read_mat', 'read_pickle', 'read_npy', 'read_npz', 'read_txt',
-           'read_csv', 'read_json', 'read_nifti', 'read_stc', 'read_mist')
+           'read_csv', 'read_json', 'read_stc')
 
 
 def read_mat(path, vars=None):
@@ -57,41 +50,6 @@ def read_csv(path):
 def read_json(path):
     """Read data from a JSON (json) file."""
     pass
-
-
-def read_nifti(path, hdr_as_array=False):
-    """Read data from a NIFTI file using Nibabel.
-
-    Parameters
-    ----------
-    path : string
-        Path to the nifti file.
-
-    Returns
-    -------
-    vol : array_like
-        The 3-D volume data.
-    header : Nifti1Header
-        Nifti header.
-    transform : VisPy.transform
-        The transformation
-    """
-    is_nibabel_installed(raise_error=True)
-    import nibabel as nib
-    # Load the file :
-    img = nib.load(path)
-    # Get the data and affine transformation ::
-    vol = img.get_data()
-    affine = img.affine
-    # Replace NaNs with 0. :
-    vol[np.isnan(vol)] = 0.
-    # Define the transformation :
-    if hdr_as_array:
-        transform = affine
-    else:
-        transform = array_to_stt(affine)
-
-    return vol, img.header, transform
 
 
 def read_stc(path):
@@ -152,51 +110,3 @@ def read_stc(path):
     # close the file
     fid.close()
     return stc
-
-
-def read_mist(name):
-    """Load MIST parcellation.
-
-    See : MIST: A multi-resolution parcellation of functional networks
-    Authors : Sebastian Urchs, Jonathan Armoza, Yassine Benhajali,
-              Jolène St-Aubin, Pierre Orban, Pierre Bellec
-
-    Parameters
-    ----------
-    name : string
-        Name of the level. Use MIST_x with x 7, 12, 20, 36, 64, 122 or ROI.
-
-    Returns
-    -------
-    vol : array_like | None
-        ROI volume.
-    labels : array_like | None
-        Array of labels.
-    index : array_like | None
-        Array of index that make the correspondance between the volume values
-        and labels.
-    hdr : array_like | None
-        Array of transform source's coordinates into the volume space.
-    """
-    name = name.upper()
-    assert ('MIST' in name) and ('_' in name)
-    level = name.split('_')[-1]
-    assert level in ['7', '12', '20', '36', '64', '122', 'ROI']
-    # Define path :
-    parc, parc_info = '%s.nii.gz', '%s.csv'
-    folder, folder_info = 'Parcellations', 'Parcel_Information'
-    mist_path = path_to_visbrain_data('mist', 'roi')
-    parc_path = os.path.join(*(mist_path, folder, parc % name))
-    parc_info_path = os.path.join(*(mist_path, folder_info, parc_info % name))
-    # Load info :
-    m = np.genfromtxt(parc_info_path, delimiter=';', dtype=str, skip_header=1,
-                      usecols=[0, 1, 2])
-    n_roi = m.shape[0]
-    index = m[:, 0].astype(int)
-    lab_, name_ = 'label_%s' % level, 'name_%s' % level
-    labels = np.zeros(n_roi, dtype=[(lab_, object), (name_, object)])
-    labels[lab_] = m[:, 1]
-    labels[name_] = np.char.replace(np.char.capitalize(m[:, 2]), '_', ' ')
-    # Load parc :
-    vol, _, hdr = read_nifti(parc_path, hdr_as_array=True)
-    return vol, labels, index, hdr
