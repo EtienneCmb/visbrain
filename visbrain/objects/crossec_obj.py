@@ -8,7 +8,7 @@ from vispy import scene
 import vispy.visuals.transforms as vist
 
 from ..utils import cmap_to_glsl, wrap_properties, color2vb, FixedCam
-from ..io import read_nifti
+from ..io import read_nifti, niimg_to_transform
 from .volume_obj import _Volume
 
 logger = logging.getLogger('visbrain')
@@ -175,7 +175,7 @@ class CrossSecObj(_Volume):
         """Init."""
         # __________________________ VOLUME __________________________
         _Volume.__init__(self, name, parent, transform, verbose, **kw)
-        self._rect = (-1.5, -1., 3., 2.)
+        self._rect = (0., -1., 2., 2.)
         self._sagittal = 0
         self._coronal = 0
         self._axial = 0
@@ -212,10 +212,10 @@ class CrossSecObj(_Volume):
         # __________________________ TEXT __________________________
         self._txt_format = '%s = %.2f'
         # Add text (sagit, coron, axial, left, right) :
-        txt_pos = np.array([[.05, -.1, 0.], [.05, -.2, 0.], [.05, -.3, 0.],
-                            [.05, -.4, 0.], [.05, -.5, 0.],
-                            [-.1, -.1, 0.], [0.1, .9, 0.],    # L
-                            [-.1, -.9, 0.], [0.9, .9, 0.]])   # R
+        txt_pos = np.array([[1.05, -.1, 0.], [1.05, -.2, 0.], [1.05, -.3, 0.],
+                            [1.05, -.4, 0.], [1.05, -.5, 0.],
+                            [0.05, -.1, 0.], [1.1, .9, 0.],    # L
+                            [0.05, -.9, 0.], [1.9, .9, 0.]])   # R
         txt = [''] * 5 + ['L'] * 2 + ['R'] * 2
         self._txt = scene.visuals.Text(text=txt, pos=txt_pos, anchor_x='left',
                                        color=color2vb(text_color),
@@ -283,13 +283,13 @@ class CrossSecObj(_Volume):
         # Load the nifti volume :
         vol, _, hdr = read_nifti(data)
         vol, hdr = self._check_volume(vol, hdr)
-        fact = [k / i for k, i in zip(self._bgd._sh, vol.shape)]
+        tf_sagit, tf_coron, tf_axial = niimg_to_transform(vol, hdr, False,
+                                                          self._vol, self._hdr)
         # Set transform :
-        tf_sagit = vist.STTransform(scale=(fact[2], fact[1], 1.))
         self._act._im_sagit.transform = tf_sagit
-        tf_coron = vist.STTransform(scale=(fact[2], fact[0], 1.))
+        tf_coron.prepend(vist.STTransform(translate=(1., 0., 0.)))
         self._act._im_coron.transform = tf_coron
-        tf_axial = vist.STTransform(scale=(fact[1], fact[0], 1.))
+        tf_axial.prepend(vist.STTransform(translate=(0., -1., 0.)))
         self._act._im_axial.transform = tf_axial
         # Set the volume and colormap :
         self._act.set_volume(vol, hdr)
@@ -373,6 +373,7 @@ class CrossSecObj(_Volume):
         """Get the camera."""
         # cam = scene.cameras.PanZoomCamera(rect=self._rect)
         cam = FixedCam(rect=self._rect)
+        cam.aspect = 1.
         return cam
 
     def _update(self):
@@ -384,26 +385,21 @@ class CrossSecObj(_Volume):
         self._txt.update()
 
     def _grid_transform(self):
-        sh = self._sh
-        rz90 = vist.MatrixTransform()
-        rz90.rotate(90, (0, 0, 1))
-        rx180 = vist.MatrixTransform()
-        rx180.rotate(180, (1, 0, 0))
+        tf_sagit, tf_coron, tf_axial = niimg_to_transform(self._vol, self._hdr)
         # Sagittal transformation :
-        norm_sagit = vist.STTransform(scale=(1. / sh[1], 1. / sh[2], 1.),
-                                      translate=(-1., 0., 0.))
-        tf_sagit = vist.ChainTransform([norm_sagit, rz90, rx180])
-        self._sagit_node.transform = tf_sagit
+        self._bgd._im_sagit.transform = tf_sagit
+        self._cross[0].transform = tf_sagit
+        self._center[0].transform = tf_sagit
         # Coronal transformation :
-        norm_coron = vist.STTransform(scale=(1. / sh[0], 1. / sh[2], 1.),
-                                      translate=(0., 0., 0.))
-        tf_coron = vist.ChainTransform([norm_coron, rz90, rx180])
-        self._coron_node.transform = tf_coron
+        tf_coron.prepend(vist.STTransform(translate=(1., 0., 0.)))
+        self._bgd._im_coron.transform = tf_coron
+        self._cross[1].transform = tf_coron
+        self._center[1].transform = tf_coron
         # Axial transformation :
-        norm_axis = vist.STTransform(scale=(1. / sh[1], 1. / sh[0], 1.),
-                                     translate=(-1., 0., 0.))
-        tf_axial = vist.ChainTransform([norm_axis, rx180])
-        self._axial_node.transform = tf_axial
+        tf_axial.prepend(vist.STTransform(translate=(0., -1., 0.)))
+        self._bgd._im_axial.transform = tf_axial
+        self._cross[2].transform = tf_axial
+        self._center[2].transform = tf_axial
 
     def _set_image(self, xyz, display_cross=False):
         # xyz = None -> volume center :
@@ -459,29 +455,32 @@ class CrossSecObj(_Volume):
     def _mouse_to_pos(self, pos):
         """Convert mouse position to pos."""
         sh = np.array(self._bgd._sh)
-        csize = self.canvas.canvas.size
-        rect = (-1.5, -1., 3., 1.)
-        # Canvas -> camera conversion :
-        x = +(pos[0] * rect[2] / csize[0]) + rect[0]
-        y = -(pos[1] * rect[3] / csize[1]) - rect[1]
-        if (-1. <= x <= 0.) and (.5 <= y <= 1.):
-            idx_xy, sl_z = [1, 2], self._bgd._sagittal
-            x_off, y_off, y_lim, y_inv = 1., -1., 0., 2.
-        elif (0. <= x <= 1.) and (.5 <= y <= 1.):
-            idx_xy, sl_z = [0, 2], self._bgd._coronal
-            x_off, y_off, y_lim, y_inv = 0., -1., 0., 2.
-        elif (-1. <= x <= 0.) and (0 <= y <= .5):
-            idx_xy, sl_z = [1, 0], self._bgd._axial
-            x_off, y_off, y_lim, y_inv = 1., .5, -.5, -1.
+        if hasattr(self._node.parent.parent.camera, 'rect'):
+            rect = self._node.parent.parent.camera._real_rect
         else:
             return None
-        # Camera -> pos conversion :
-        pic = sh[idx_xy]
-        sl_x = (rect[2] * (x + x_off) * pic[0]) / rect[2]
-        sl_y = (rect[3] * (y_inv * y + y_off) * pic[1]) / \
-            ((1. + y_lim) * rect[3])
+        csize = self.canvas.canvas.size
+        left, bottom, width, height = rect.left, rect.bottom, rect.width, \
+            rect.height
+        sgn = np.sign(np.diag(self._hdr.matrix))[0:-1]
+        # Canvas -> [0, 1]
+        x = +(pos[0] * width / csize[0]) + left
+        y = -(pos[1] * height / csize[1]) - bottom
+        if (0. <= x <= 1.) and (0. <= y <= 1.):
+            use_idx, sl_z = [1, 2], self._bgd._sagittal
+        elif (1. <= x <= 2.) and (0. <= y <= 1.):
+            use_idx, sl_z = [0, 2], self._bgd._coronal
+            x -= 1.
+            x = x if sgn[0] == 1 else 1 - x
+        elif (0. <= x <= 1.) and (-1. <= y <= 0.):
+            use_idx, sl_z = [1, 0], self._bgd._axial
+            y += 1.
+            y = y if sgn[0] == -1 else 1 - y
+        # Pixel conversion
+        x_sh, y_sh = sh[use_idx]
+        sl_x, sl_y = x * sh[use_idx[0]], y * sh[use_idx[1]]
         sl_xyz = np.array([sl_z] * 3)
-        sl_xyz[idx_xy] = [sl_x, sl_y]
+        sl_xyz[use_idx] = [sl_x, sl_y]
         return self.slice_to_pos(sl_xyz)
 
     def _on_mouse_press(self):
