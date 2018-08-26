@@ -68,7 +68,6 @@ class _Mask(object):
         self._sagittal = int(sl[0])
         self._coronal = int(sl[1])
         self._axial = int(sl[2])
-        logger.info("    Cut coords at position %s" % str(xyz))
 
     def update(self):
         self._im_sagit.update()

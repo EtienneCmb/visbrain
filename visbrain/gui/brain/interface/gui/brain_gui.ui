@@ -238,7 +238,7 @@ name</string>
                </sizepolicy>
               </property>
               <property name="currentIndex">
-               <number>1</number>
+               <number>3</number>
               </property>
               <widget class="QWidget" name="_brain_page">
                <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -985,7 +985,30 @@ name</string>
                    </item>
                    <item>
                     <layout class="QGridLayout" name="gridLayout_10">
-                     <item row="2" column="0">
+                     <item row="1" column="1">
+                      <widget class="Line" name="line_75">
+                       <property name="minimumSize">
+                        <size>
+                         <width>20</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Vertical</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="5" column="2">
+                      <widget class="QSlider" name="_csAxial">
+                       <property name="minimum">
+                        <number>-5</number>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="4" column="0">
                       <widget class="QLabel" name="label_46">
                        <property name="font">
                         <font>
@@ -997,7 +1020,7 @@ name</string>
                        </property>
                       </widget>
                      </item>
-                     <item row="3" column="1">
+                     <item row="5" column="1">
                       <widget class="Line" name="line_71">
                        <property name="minimumSize">
                         <size>
@@ -1007,6 +1030,18 @@ name</string>
                        </property>
                        <property name="orientation">
                         <enum>Qt::Vertical</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="1" column="0">
+                      <widget class="QLabel" name="label_50">
+                       <property name="font">
+                        <font>
+                         <italic>true</italic>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>Level</string>
                        </property>
                       </widget>
                      </item>
@@ -1023,7 +1058,7 @@ name</string>
                        </property>
                       </widget>
                      </item>
-                     <item row="2" column="2">
+                     <item row="4" column="2">
                       <widget class="QSlider" name="_csCoron">
                        <property name="minimum">
                         <number>-5</number>
@@ -1033,7 +1068,7 @@ name</string>
                        </property>
                       </widget>
                      </item>
-                     <item row="3" column="0">
+                     <item row="5" column="0">
                       <widget class="QLabel" name="label_47">
                        <property name="font">
                         <font>
@@ -1048,7 +1083,7 @@ name</string>
                      <item row="0" column="2">
                       <widget class="QComboBox" name="_csDiv"/>
                      </item>
-                     <item row="2" column="1">
+                     <item row="4" column="1">
                       <widget class="Line" name="line_69">
                        <property name="minimumSize">
                         <size>
@@ -1061,7 +1096,7 @@ name</string>
                        </property>
                       </widget>
                      </item>
-                     <item row="1" column="1">
+                     <item row="3" column="1">
                       <widget class="Line" name="line_48">
                        <property name="minimumSize">
                         <size>
@@ -1074,7 +1109,7 @@ name</string>
                        </property>
                       </widget>
                      </item>
-                     <item row="1" column="2">
+                     <item row="3" column="2">
                       <widget class="QSlider" name="_csSagit">
                        <property name="minimum">
                         <number>-5</number>
@@ -1090,45 +1125,7 @@ name</string>
                        </property>
                       </widget>
                      </item>
-                     <item row="4" column="1">
-                      <widget class="Line" name="line_87">
-                       <property name="minimumSize">
-                        <size>
-                         <width>20</width>
-                         <height>0</height>
-                        </size>
-                       </property>
-                       <property name="orientation">
-                        <enum>Qt::Vertical</enum>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="4" column="2">
-                      <widget class="QComboBox" name="_csCmap"/>
-                     </item>
-                     <item row="3" column="2">
-                      <widget class="QSlider" name="_csAxial">
-                       <property name="minimum">
-                        <number>-5</number>
-                       </property>
-                       <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="4" column="0">
-                      <widget class="QLabel" name="label_59">
-                       <property name="font">
-                        <font>
-                         <italic>true</italic>
-                        </font>
-                       </property>
-                       <property name="text">
-                        <string>Cmap</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="1" column="0">
+                     <item row="3" column="0">
                       <widget class="QLabel" name="label_44">
                        <property name="font">
                         <font>
@@ -1152,13 +1149,124 @@ name</string>
                        </property>
                       </widget>
                      </item>
-                     <item row="5" column="0" colspan="3">
+                     <item row="6" column="0" colspan="3">
                       <widget class="QWidget" name="widget_5" native="true">
                        <layout class="QHBoxLayout" name="horizontalLayout_15">
                         <property name="margin">
                          <number>0</number>
                         </property>
                        </layout>
+                      </widget>
+                     </item>
+                     <item row="2" column="1">
+                      <widget class="Line" name="line_80">
+                       <property name="minimumSize">
+                        <size>
+                         <width>20</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Vertical</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="2" column="0">
+                      <widget class="QLabel" name="label_55">
+                       <property name="font">
+                        <font>
+                         <italic>true</italic>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>Interpolation</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="1" column="2">
+                      <widget class="QComboBox" name="_csLevel">
+                       <property name="enabled">
+                        <bool>false</bool>
+                       </property>
+                       <item>
+                        <property name="text">
+                         <string>7</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>12</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>20</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>36</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>64</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>122</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>ROI</string>
+                        </property>
+                       </item>
+                      </widget>
+                     </item>
+                     <item row="2" column="2">
+                      <widget class="QComboBox" name="_csInterp">
+                       <item>
+                        <property name="text">
+                         <string>nearest</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>bilinear</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>hanning</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>hamming</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>hermite</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>kaiser</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>quadric</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>bicubic</string>
+                        </property>
+                       </item>
                       </widget>
                      </item>
                     </layout>

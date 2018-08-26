@@ -51,7 +51,8 @@ setup(
         "vispy>=0.5.2",
         "matplotlib>=1.5.5",
         "pyqt5",
-        "pillow"
+        "pillow",
+        "PyOpenGL"
     ],
     dependency_links=[],
     classifiers=["Development Status :: 3 - Alpha",

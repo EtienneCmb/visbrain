@@ -104,6 +104,7 @@ class _Volume(VisbrainObject):
                     labels, index = arch['labels'], arch['index']
                     system = 'tal' if 'talairach' in to_load else 'mni'
                     logger.debug("%s volume loaded" % name)
+            self._name = name
 
         self._vol, self._hdr = self._check_volume(vol, hdr)
         self._labels, self._index, self._system = labels, index, system
