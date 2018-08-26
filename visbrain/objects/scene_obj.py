@@ -406,8 +406,6 @@ class SceneObj(object):
                         objs.append(j)
                         transforms.append(j.transform)
                         # Get scaling factor :
-                        if not isinstance(k, scene.transforms.STTransform):
-                            continue
                         sc = np.array([k.scale.sum() for k in transforms])
                         if sc.size and not len(np.unique(sc)) == 1:
                             unique_tf = transforms[sc.argmax()]

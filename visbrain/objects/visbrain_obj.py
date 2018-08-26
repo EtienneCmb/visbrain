@@ -170,7 +170,7 @@ class VisbrainObject(_VisbrainObj):
         self._name = name
         # Transformation :
         if transform is None:
-            transform = vist.NullTransform()
+            transform = vist.STTransform()
         self._node.transform = transform
         # Verbose :
         set_log_level(verbose)
