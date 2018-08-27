@@ -463,8 +463,10 @@ class SceneObj(object):
             Rotate the scene. Use 'top', 'bottom', 'left', 'right', 'front' or
             'back'. Only available for 3-D objects.
         zoom : float | None
-            Zoom level. For example, `zoom=2` means that the displayed object
-            will appear with a double size.
+            Zoom level. If zoom is in ]0, 1[, the size of the object decrease.
+            If `zoom=1`, no zoom is applied. If zoom > 1., the size of the
+            object increase. For example, `zoom=2` means that the displayed
+            object will appear twice as large.
         camera_state : dict | {}
             Arguments to pass to the camera.
         width_max : float | None
