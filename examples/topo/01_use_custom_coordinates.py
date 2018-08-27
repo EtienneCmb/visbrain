@@ -4,9 +4,6 @@ Use custom coordinates
 
 Display topographic plots using custom coordinates.
 
-Download topoplot data (topoplot_data.npz) :
-https://www.dropbox.com/s/m76y3p0fyj6lxht/topoplot_data.npz?dl=1
-
 .. image:: ../../picture/pictopo/ex_custom_coordinates.png
 """
 import numpy as np

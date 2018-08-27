@@ -1,6 +1,6 @@
 """
-Volume object
-=============
+Volume object (VolumeObj) : complete tutorial
+=============================================
 
 Illustration of the main functionalities and inputs of the volume object :
 
@@ -16,7 +16,7 @@ from visbrain.io import download_file
 
 
 # Define the scene
-sc = SceneObj()
+sc = SceneObj(size=(1000, 600))
 
 ###############################################################################
 # MIP rendering

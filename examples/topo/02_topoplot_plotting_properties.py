@@ -4,9 +4,6 @@ Plotting properties
 
 Display topographic plots in a grid using several plotting properties.
 
-Download topoplot data (topoplot_data.npz) :
-https://www.dropbox.com/s/m76y3p0fyj6lxht/topoplot_data.npz?dl=1
-
 .. image:: ../../picture/pictopo/ex_topoplot_plotting_properties.png
 """
 import numpy as np
