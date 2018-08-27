@@ -433,7 +433,8 @@ class SceneObj(object):
     def add_to_subplot(self, obj, row=0, col=0, row_span=1, col_span=1,
                        title=None, title_size=12., title_color='white',
                        title_bold=True, use_this_cam=False, rotate=None,
-                       camera_state={}, width_max=None, height_max=None):
+                       zoom=None, camera_state={}, width_max=None,
+                       height_max=None):
         """Add object to subplot.
 
         Parameters
@@ -463,6 +464,9 @@ class SceneObj(object):
         rotate : string | None
             Rotate the scene. Use 'top', 'bottom', 'left', 'right', 'front' or
             'back'. Only available for 3-D objects.
+        zoom : float | None
+            Zoom level. For example, `zoom=2` means that the displayed object
+            will appear with a double size.
         camera_state : dict | {}
             Arguments to pass to the camera.
         width_max : float | None
@@ -499,6 +503,17 @@ class SceneObj(object):
         sub.height_max = height_max
         sub.width_max = width_max
         sub.add(obj.parent)
+        # Zoom :
+        if isinstance(zoom, (int, float)):
+            assert zoom > 0, "`zoom` should be > 0"
+            if isinstance(sub.camera, scene.cameras.TurntableCamera):
+                camera_state['scale_factor'] = sub.camera.scale_factor * zoom
+            elif isinstance(sub.camera, scene.cameras.PanZoomCamera):
+                r = sub.camera.rect
+                prop = np.array((r.width, r.height)) * zoom
+                left = r.center[0] - (prop[0] / 2.)
+                bottom = r.center[1] - (prop[1] / 2.)
+                sub.camera.rect = (left, bottom, prop[0], prop[1])
         # Camera :
         if camera_state == {}:
             camera_state = self._camera_state
