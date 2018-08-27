@@ -17,9 +17,9 @@ CS_KW = dict(text_size=8.)
 # #                              Brodmann area
 # # =============================================================================
 # """)
-# cs_brod = CrossSecObj('brodmann', **CS_KW)
-# cs_brod.localize_source((-10., -15., 20.))
-# sc.add_to_subplot(cs_brod, row=0, col=0)
+cs_brod = CrossSecObj('brodmann', **CS_KW)
+cs_brod.localize_source((-10., -15., 20.))
+sc.add_to_subplot(cs_brod, row=0, col=0)
 
 # print("""
 # # =============================================================================
@@ -30,10 +30,10 @@ CS_KW = dict(text_size=8.)
 path = "/home/etienne/anaconda3/envs/pyqt5/lib/python3.6/site-packages/nilearn/datasets/data/avg152T1_brain.nii.gz"
 cs_cust = CrossSecObj(path, coords=(0., 0., 0.), **CS_KW)
 f = "/home/etienne/nilearn_data/brainomics_localizer/brainomics_data/S02/t_map_left_auditory_&_visual_click_vs_right_auditory&visual_click.nii.gz"
-cs_cust.set_activation(f, translucent=(-2.9, 2.9), cmap='bwr')
+cs_cust.set_activation(f, translucent=(-3, 3), cmap='bwr')
 cs_cust.localize_source((39, -19, 55))
-cs_cust.preview()
-0/0
+# cs_cust.preview()
+# 0/0
 sc.add_to_subplot(cs_cust, row=0, col=1)
 
 sc.preview()
