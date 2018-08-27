@@ -505,7 +505,7 @@ class SceneObj(object):
         if isinstance(zoom, (int, float)):
             assert zoom > 0, "`zoom` should be > 0"
             if isinstance(sub.camera, scene.cameras.TurntableCamera):
-                camera_state['scale_factor'] = sub.camera.scale_factor * zoom
+                sub.camera.scale_factor /= zoom
             elif isinstance(sub.camera, scene.cameras.PanZoomCamera):
                 r = sub.camera.rect
                 prop = np.array((r.width, r.height)) * zoom
