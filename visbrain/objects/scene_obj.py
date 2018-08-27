@@ -5,7 +5,7 @@ import logging
 import numpy as np
 from vispy import scene
 
-from ..io import write_fig_canvas
+from ..io import write_fig_canvas, dialog_save
 from ..utils import color2vb, set_log_level, rotate_turntable
 from ..visuals import CbarVisual
 from ..config import CONFIG, PROFILER
@@ -349,6 +349,13 @@ class SceneObj(object):
         The default camera state to use.
     verbose : string
         Verbosity level.
+
+    Notes
+    -----
+    List of supported shortcuts :
+
+        * **s** : save the figure
+        * **delete** : reset all views
     """
 
     def __init__(self, bgcolor='black', camera_state={}, verbose=None,
@@ -580,10 +587,29 @@ class SceneObj(object):
         write_fig_canvas(saveas, self.canvas,
                          widget=self.canvas.central_widget, **kwargs)
 
+    def _scene_shortcuts(self):
+        """Add shortcuts to the scene."""
+        # On key pressed :
+        def key_pressed(event):  # noqa
+            if event.text == 's':
+                from PyQt5.QtWidgets import QWidget
+                ext = ['png', 'tiff', 'jpg']
+                _ext = ['%s file (*.%s)' % (k.upper(), k) for k in ext]
+                _ext += ['All files (*.*)']
+                saveas = dialog_save(QWidget(), name='Export the scene',
+                                     default='canvas.png', allext=_ext)
+                if saveas:
+                    write_fig_canvas(saveas, self.canvas,
+                                     widget=self.canvas.central_widget)
+        self.canvas.events.key_press.connect(key_pressed)
+
     def preview(self):
         """Previsualize the result."""
         self._gl_uniform_transforms()
         self.canvas.show(visible=True)
+        # Shortcuts :
+        self._scene_shortcuts()
+        # Profiler :
         if PROFILER and logger.level == 1:
             logger.profiler("PARENT TREE \n%s" % self._grid.describe_tree())
             logger.profiler(" ")
