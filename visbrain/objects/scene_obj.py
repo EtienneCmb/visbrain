@@ -510,7 +510,7 @@ class SceneObj(object):
                 sub.camera.scale_factor /= zoom
             elif isinstance(sub.camera, scene.cameras.PanZoomCamera):
                 r = sub.camera.rect
-                prop = np.array((r.width, r.height)) * zoom
+                prop = np.array((r.width, r.height)) / zoom
                 left = r.center[0] - (prop[0] / 2.)
                 bottom = r.center[1] - (prop[1] / 2.)
                 sub.camera.rect = (left, bottom, prop[0], prop[1])
