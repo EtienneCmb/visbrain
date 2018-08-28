@@ -1,5 +1,5 @@
-Brain Examples
---------------
+Graphical user interface : Brain
+--------------------------------
 
 Examples demonstrating visualizations on a standard 3D-MNI brain.
 

@@ -1,5 +1,5 @@
-Signal Examples
----------------
+Graphical user interface : Signal
+---------------------------------
 
 Examples demonstrating how to use the Signal module.
 
