@@ -463,7 +463,7 @@ class RoiObj(_Volume):
     ###########################################################################
 
     def select_roi(self, select=.5, unique_color=False, roi_to_color=None,
-                   smooth=3):
+                   smooth=3, translucent=False):
         """Select several Region Of Interest (ROI).
 
         Parameters
@@ -477,6 +477,8 @@ class RoiObj(_Volume):
             {1: 'red', 2: 'orange'}.
         smooth : int | 3
             Smoothing level. Must be an odd integer (smooth % 2 = 1).
+        translucent : bool | False
+            Set if the mesh should be translucent or opaque.
         """
         # Get vertices / faces :
         vert = np.array([])
@@ -518,6 +520,7 @@ class RoiObj(_Volume):
                 logger.debug("ROI mesh defined")
                 self.mesh = BrainMesh(vertices=vert_hdr, faces=faces,
                                       parent=self._node)
+                self.mesh.translucent = translucent
             else:
                 logger.debug("ROI mesh already exist")
                 self.mesh.set_data(vertices=vert_hdr, faces=faces)
