@@ -68,7 +68,7 @@ jobs:
         - run:
             name: Run visbrain's test
             command: |
-              pytest
+              py.test
         - save_cache:
             key: data-cache
             paths:
