@@ -520,6 +520,7 @@ class SceneObj(object):
         if isinstance(sub.camera, scene.cameras.TurntableCamera):
             rotate_turntable(fixed=rotate, camera_state=camera_state,
                              camera=sub.camera)
+        sub.camera.set_default_state()
         PROFILER('%s added to the scene' % repr(obj))
         logger.info('    %s added to the scene' % repr(obj))
 
