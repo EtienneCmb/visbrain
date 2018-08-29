@@ -14,7 +14,6 @@ jobs:
         - run:
             name: Clean CircleCI
             command: |
-              cd ~;
               rm -rf ~/.pyenv;
               rm -rf ~/virtualenvs;
         - run:
@@ -65,7 +64,7 @@ jobs:
         - run:
             name: Install visbrain
             command: |
-              cd ~/visbrain && pip install -e .;
+              python setup.py develop;
         - run:
             name: Run visbrain's test
             command: |
