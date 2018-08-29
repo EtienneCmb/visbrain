@@ -27,6 +27,7 @@ jobs:
             name: Setup Python environment
             command: |
               conda create -n circleenv --yes pip python=3.6 pip;
+              source activate circleenv
               conda install -n circleenv --yes numpy scipy pip cython;
               pip install git+https://github.com/vispy/vispy.git
               pip install pytest pytest-travis-fold pytest-sugar;
