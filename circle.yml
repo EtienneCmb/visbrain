@@ -24,7 +24,6 @@ jobs:
               PATH: $MINICONDA/bin:$PATH
             command: |
               cd /home/circleci
-              hash -r
               wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
               chmod +x ~/miniconda.sh;
               ~/miniconda.sh -b -f -p $MINICONDA
