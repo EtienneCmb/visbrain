@@ -1,8 +1,8 @@
 """Test function in read_data.py."""
-import pytest
+# import pytest
 
 from visbrain.io.read_data import (read_mat, read_pickle, read_npy, read_npz,  # noqa
-                                   read_txt, read_csv, read_json, read_nifti,
+                                   read_txt, read_csv, read_json,
                                    read_stc)
 from visbrain.io.download import download_file
 

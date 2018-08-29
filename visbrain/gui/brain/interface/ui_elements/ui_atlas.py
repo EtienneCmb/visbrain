@@ -8,7 +8,7 @@ import logging
 from PyQt5 import QtCore
 
 from visbrain.objects.volume_obj import VOLUME_CMAPS
-from visbrain.utils import mpl_cmap, mpl_cmap_index, fill_pyqt_table
+from visbrain.utils import fill_pyqt_table
 
 
 logger = logging.getLogger('visbrain')
