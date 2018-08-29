@@ -57,6 +57,7 @@ jobs:
               echo $CIRCLE_BRANCH;
               which python;
               which pip;
+              echo "export LD_PRELOAD=~/miniconda3/envs/testenv/lib/libgobject-2.0.so.0" >> $BASH_ENV
         - save_cache:
             key: pip-cache
             paths:
