@@ -39,9 +39,6 @@ jobs:
               else
                 echo "Miniconda3 already set up.";
               fi
-              conda update --yes --quiet conda;
-              conda create -n testenv --yes python=3.6 numpy scipy pip cython
-              source activate testenv
         - save_cache:
             key: miniconda-cache
             paths:
@@ -49,6 +46,9 @@ jobs:
         - run:
             name: Setup Python environment
             command: |
+              conda update --yes --quiet conda;
+              conda create -n testenv --yes python=3.6 numpy scipy pip cython
+              source activate testenv
               pip install git+https://github.com/vispy/vispy.git;
               pip install pytest pytest-travis-fold pytest-sugar;
               pip install mne nibabel pandas openpyxl tensorpac xlrd scikit-image;
