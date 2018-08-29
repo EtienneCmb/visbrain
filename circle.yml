@@ -23,26 +23,36 @@ jobs:
               /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1400x900x24 -ac +extension GLX +render -noreset;
               echo "export DISPLAY=:99" >> $BASH_ENV;
         - run: sudo apt-get install libgl1-mesa-glx libegl1-mesa libxrandr2 libxrandr2 libxss1 libxcursor1 libxcomposite1 libasound2 libxi6 libxtst6 qt5-default
+        - restore_cache:
+            keys:
+              - data-cache
+              - pip-cache
+              - miniconda-cache
         - run:
             name: Install miniconda
             command: |
-              wget -q http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh;
-              chmod +x ~/miniconda.sh;
-              ~/miniconda.sh -b -p ~/miniconda3;
-              ls -ls ~/miniconda3
-              echo "export PATH=~/miniconda3/bin:$PATH" >> $BASH_ENV;
-        - run:
-            name: Setup Python environment
-            command: |
+              if [ ! -d "~/miniconda3" ]; then
+                wget -q http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh;
+                chmod +x ~/miniconda.sh;
+                ~/miniconda.sh -b -p ~/miniconda3;
+                echo "export PATH=~/miniconda3/bin:$PATH" >> $BASH_ENV;
+              else
+                echo "Miniconda3 already set up.";
+              fi
               conda update --yes --quiet conda;
               conda create -n testenv --yes python=3.6 numpy scipy pip cython
               source activate testenv
+        - save_cache:
+            key: miniconda-cache
+            paths:
+              - ~/.cache/miniconda
+        - run:
+            name: Setup Python environment
+            command: |
               pip install git+https://github.com/vispy/vispy.git;
               pip install pytest pytest-travis-fold pytest-sugar;
               pip install mne nibabel pandas openpyxl tensorpac xlrd scikit-image;
               pip install git+https://github.com/hbldh/lspopt.git#egg=lspopt;
-              ls -al /home/ubuntu/miniconda3;
-              ls -al /home/ubuntu/miniconda3/bin;
               echo $PATH;
               echo $CIRCLE_BRANCH
               which python;
@@ -55,10 +65,6 @@ jobs:
             name: Install visbrain
             command: |
               cd /home/ubuntu/visbrain && pip install -e .;
-        - restore_cache:
-            keys:
-              - data-cache
-              - pip-cache
         - run:
             name: Run visbrain's test
             command: |
