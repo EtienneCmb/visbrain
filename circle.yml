@@ -1,60 +1,60 @@
-general:
-  branches:
-    ignore:
-      - gh-pages
-
-
-machine:
-  environment:
-    # We need to set this variable to let Anaconda take precedence
-    PATH: "/home/ubuntu/miniconda3/envs/circleenv/bin:/home/ubuntu/miniconda3/bin:$PATH"
-    DISPLAY: ":99.0"
-  python:
-      version: 3.6.0
-
-dependencies:
-  cache_directories:
-    - "~/miniconda3"
-  # Various dependencies
-  pre:
-    # Get a running Python
-    - cd ~;
-    # Disable pyenv (no cleaner way provided by CircleCI as it prepends pyenv version to PATH)
-    - rm -rf ~/.pyenv;
-    - rm -rf ~/virtualenvs;
-    # Get Anaconda and conda-based requirements
-    - >
-      if [ ! -d "/home/ubuntu/miniconda3" ]; then
-        echo "Setting up conda";
-        wget -q http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh;
-        chmod +x ~/miniconda.sh;
-        ~/miniconda.sh -b -p /home/ubuntu/miniconda3;
-        conda update --yes --quiet conda;
-      else
-        echo "Conda already set up.";
-      fi
-    - if ! conda env list | grep circleenv; then
-        conda create -n circleenv --yes pip python=3.6 pip;
-      else
-        echo "Conda env already set up.";
-      fi;
-    - conda install -n circleenv --yes numpy scipy pip cython;
-    - pip install git+https://github.com/vispy/vispy.git
-    - pip install pytest pytest-travis-fold;
-    - pip install mne nibabel pandas openpyxl tensorpac xlrd scikit-image;
-    - pip install git+https://github.com/hbldh/lspopt.git#egg=lspopt;
-    - ls -al /home/ubuntu/miniconda3;
-    - ls -al /home/ubuntu/miniconda3/bin;
-    - echo $PATH;
-    - echo $CIRCLE_BRANCH
-    - which python;
-    - which pip;
-
-  override:
-    - cd /home/ubuntu/visbrain && pip install -e .;
-    - /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1400x900x24 -ac +extension GLX +render -noreset;
-
-test:
-  override:
-    - py.test:
-        timeout: 1500
+version: 2
+jobs:
+    build:
+      branches:
+        ignore:
+          - gh-pages
+        only:
+          - master
+          - develop
+      docker:
+        - image: circleci/python:3.6-jessie
+      steps:
+        - checkout
+        - run:
+            name: Spin up Xvfb
+            command: |
+              /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1400x900x24 -ac +extension GLX +render -noreset;
+              echo "export DISPLAY=:99" >> $BASH_ENV;
+        - run:
+            name: Install miniconda
+            command: |
+              wget -q http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O ~/miniconda.sh;
+              chmod +x ~/miniconda.sh;
+              ~/miniconda.sh -b -p ~/miniconda;
+              echo "export PATH=~/miniconda/bin:$PATH" >> $BASH_ENV;
+        - run:
+            name: Setup Python environment
+            command: |
+              conda create -n circleenv --yes pip python=3.6 pip;
+              conda install -n circleenv --yes numpy scipy pip cython;
+              pip install git+https://github.com/vispy/vispy.git
+              pip install pytest pytest-travis-fold pytest-sugar;
+              pip install mne nibabel pandas openpyxl tensorpac xlrd scikit-image;
+              pip install git+https://github.com/hbldh/lspopt.git#egg=lspopt;
+              ls -al /home/ubuntu/miniconda3;
+              ls -al /home/ubuntu/miniconda3/bin;
+              echo $PATH;
+              echo $CIRCLE_BRANCH
+              which python;
+              which pip;
+        - save_cache:
+            key: pip-cache
+            paths:
+              - ~/.cache/pip
+        - run:
+            name: Install visbrain
+            command: |
+              cd /home/ubuntu/visbrain && pip install -e .;
+        - restore_cache:
+            keys:
+              - data-cache
+              - pip-cache
+        - run:
+            name: Run visbrain's test
+            command: |
+              pytest
+        - save_cache:
+            key: data-cache
+            paths:
+              - ~/.visbrain_data
