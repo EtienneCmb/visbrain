@@ -57,8 +57,6 @@ jobs:
               echo $CIRCLE_BRANCH;
               which python;
               which pip;
-              echo "export LD_PRELOAD=~/miniconda3/envs/testenv/lib/libgobject-2.0.so.0" >> $BASH_ENV
-              echo "export LD_PRELOAD=~/miniconda3/envs/testenv/lib/libgcc_s.so.1" >> $BASH_ENV
         - save_cache:
             key: pip-cache
             paths:
@@ -73,6 +71,8 @@ jobs:
             command: |
               mkdir test-reports
               source activate testenv;
+              echo "export LD_PRELOAD=~/miniconda3/envs/testenv/lib/libgobject-2.0.so.0" >> $BASH_ENV;
+              echo "export LD_PRELOAD=~/miniconda3/envs/testenv/lib/libgcc_s.so.1" >> $BASH_ENV;
               pytest --junitxml=test-reports/junit.xml
         - store_test_results:
             path: test-reports
