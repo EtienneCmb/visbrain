@@ -66,9 +66,14 @@ jobs:
             command: |
               python setup.py develop;
         - run:
-            name: Run visbrain's test
+            name: run tests
             command: |
-              py.test
+              mkdir test-reports
+              pytest --junitxml=test-reports/junit.xml
+        - store_test_results:
+            path: test-reports
+        - store_artifacts:
+            path: test-reports 
         - save_cache:
             key: data-cache
             paths:
