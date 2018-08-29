@@ -16,21 +16,26 @@ jobs:
             command: |
               /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1400x900x24 -ac +extension GLX +render -noreset;
               echo "export DISPLAY=:99" >> $BASH_ENV;
-        - run:
-            name: Install miniconda
-            command: |
-              wget -q http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh;
-              chmod +x ~/miniconda.sh;
-              ~/miniconda.sh -b -p ~/miniconda3;
-              ls ~/miniconda3;
-              echo "export PATH=~/miniconda3/bin:$PATH" >> $BASH_ENV;
-              conda update --yes --quiet conda;
+          - run:
+              name: Install miniconda
+              command: |
+                cd /home/circleci
+                echo 'export MINICONDA=$HOME/miniconda' >> ~/.bashrc
+                echo 'export PATH="$MINICONDA/bin:$PATH"' >> ~/.bashrc
+                source ~/.bashrc
+                hash -r
+                wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+                bash miniconda.sh -b -f -p $MINICONDA
+                conda config --set always_yes yes
+                conda update conda
+                conda info -a
+                conda create -n testenv --yes pip python=3.6  numpy scipy pip cython;
+                echo 'source activate testenv' >> ~/.bashrc
+                source ~/.bashrc
+                source activate testenv
         - run:
             name: Setup Python environment
             command: |
-              conda create -n circleenv --yes pip python=3.6 pip;
-              conda install -n circleenv --yes numpy scipy pip cython;
-              source activate circleenv;
               pip install git+https://github.com/vispy/vispy.git;
               pip install pytest pytest-travis-fold pytest-sugar;
               pip install mne nibabel pandas openpyxl tensorpac xlrd scikit-image;
