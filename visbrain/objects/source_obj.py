@@ -390,7 +390,9 @@ class SourceObj(VisbrainObject):
         else:
             df = df[0]
         # Keep only sources that match with patterns :
-        if isinstance(keep_only, (list, tuple)):
+        if isinstance(keep_only, (str, list, tuple)):
+            if isinstance(keep_only, str):
+                keep_only = [keep_only]
             idx_to_keep = []
             for k, i in product(df.keys(), keep_only):
                 idx_to_keep.append(np.array(df[k], dtype=object) == i)
