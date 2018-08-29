@@ -48,7 +48,7 @@ jobs:
               conda update --yes --quiet conda;
               conda create -n testenv --yes python=3.6 numpy scipy pip cython;
               source activate testenv;
-              pip install -U pip;
+              pip install -U pip sip;
               pip install git+https://github.com/vispy/vispy.git;
               pip install pytest pytest-travis-fold pytest-sugar;
               pip install mne nibabel pandas openpyxl tensorpac xlrd scikit-image;
