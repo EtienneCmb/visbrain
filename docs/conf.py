@@ -20,7 +20,7 @@ import sys
 from datetime import date
 
 import sphinx_bootstrap_theme
-from sphinx_gallery.sorting import FileNameSortKey
+from sphinx_gallery.sorting import FileNameSortKey, ExplicitOrder
 from numpydoc import numpydoc, docscrape
 
 import visbrain
@@ -74,6 +74,12 @@ sphinx_gallery_conf = {
     'gallery_dirs': 'auto_examples',
     'backreferences_dir': 'generated',
     'default_thumb_file': 'picture/visbrain.png',
+    'subsection_order': ExplicitOrder(['../examples/objects',
+                                       '../examples/gui_brain',
+                                       '../examples/gui_sleep',
+                                       '../examples/gui_signal',
+                                       '../examples/eeg_meg',
+                                       '../examples/figure']),
     'within_subsection_order': FileNameSortKey,
     'doc_module': ('visbrain'),
     # 'thumbnail_size': (100, 100),

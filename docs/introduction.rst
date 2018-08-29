@@ -33,7 +33,6 @@ Module name             Description
 :ref:`BrainModule`      Visualizations involving a MNI brain
 :ref:`SleepModule`      Visualize and score polysomnographic data
 :ref:`SignalModule`     Visualize multi-dimensional datasets
-:ref:`TopoModule`       Topographic representations
 :ref:`FigureModule`     Figure layout
 ======================  =======================================================
 

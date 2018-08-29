@@ -181,8 +181,8 @@ class SourceObj(VisbrainObject):
         # Radius / color :
         self.visible = visible
         self._update_radius()
-        self._update_color()
         self.alpha = alpha
+        self._update_color()
 
     def __len__(self):
         """Get the number of sources."""
@@ -354,7 +354,8 @@ class SourceObj(VisbrainObject):
             A Pandas DataFrame or a list of DataFrames if roi_obj is a list.
         """
         # List of predefined ROI objects :
-        proi = ['brodmann', 'aal', 'talairach']
+        proi = ['brodmann', 'aal', 'talairach', 'mist_7', 'mist_12', 'mist_20',
+                'mist_36', 'mist_64', 'mist_122', 'mist_ROI']
         # Define the ROI object if needed :
         if isinstance(roi_obj, (str, list, tuple)):
             if isinstance(roi_obj, str):
@@ -389,7 +390,9 @@ class SourceObj(VisbrainObject):
         else:
             df = df[0]
         # Keep only sources that match with patterns :
-        if isinstance(keep_only, (list, tuple)):
+        if isinstance(keep_only, (str, list, tuple)):
+            if isinstance(keep_only, str):
+                keep_only = [keep_only]
             idx_to_keep = []
             for k, i in product(df.keys(), keep_only):
                 idx_to_keep.append(np.array(df[k], dtype=object) == i)

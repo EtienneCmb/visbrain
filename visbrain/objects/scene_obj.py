@@ -406,8 +406,6 @@ class SceneObj(object):
                         objs.append(j)
                         transforms.append(j.transform)
                         # Get scaling factor :
-                        if not isinstance(k, scene.transforms.STTransform):
-                            continue
                         sc = np.array([k.scale.sum() for k in transforms])
                         if sc.size and not len(np.unique(sc)) == 1:
                             unique_tf = transforms[sc.argmax()]
@@ -465,8 +463,10 @@ class SceneObj(object):
             Rotate the scene. Use 'top', 'bottom', 'left', 'right', 'front' or
             'back'. Only available for 3-D objects.
         zoom : float | None
-            Zoom level. For example, `zoom=2` means that the displayed object
-            will appear with a double size.
+            Zoom level. If zoom is in ]0, 1[, the size of the object decrease.
+            If `zoom=1`, no zoom is applied. If zoom > 1., the size of the
+            object increase. For example, `zoom=2` means that the displayed
+            object will appear twice as large.
         camera_state : dict | {}
             Arguments to pass to the camera.
         width_max : float | None
@@ -507,10 +507,10 @@ class SceneObj(object):
         if isinstance(zoom, (int, float)):
             assert zoom > 0, "`zoom` should be > 0"
             if isinstance(sub.camera, scene.cameras.TurntableCamera):
-                camera_state['scale_factor'] = sub.camera.scale_factor * zoom
+                sub.camera.scale_factor /= zoom
             elif isinstance(sub.camera, scene.cameras.PanZoomCamera):
                 r = sub.camera.rect
-                prop = np.array((r.width, r.height)) * zoom
+                prop = np.array((r.width, r.height)) / zoom
                 left = r.center[0] - (prop[0] / 2.)
                 bottom = r.center[1] - (prop[1] / 2.)
                 sub.camera.rect = (left, bottom, prop[0], prop[1])
@@ -520,6 +520,7 @@ class SceneObj(object):
         if isinstance(sub.camera, scene.cameras.TurntableCamera):
             rotate_turntable(fixed=rotate, camera_state=camera_state,
                              camera=sub.camera)
+        sub.camera.set_default_state()
         PROFILER('%s added to the scene' % repr(obj))
         logger.info('    %s added to the scene' % repr(obj))
 
