@@ -19,21 +19,17 @@ jobs:
         - run: sudo apt-get install libgl1-mesa-glx libegl1-mesa libxrandr2 libxrandr2 libxss1 libxcursor1 libxcomposite1 libasound2 libxi6 libxtst6 qt5-default
         - run:
             name: Install miniconda
-            environment:
-              MINICONDA: $HOME/miniconda
-              PATH: $MINICONDA/bin:$PATH
             command: |
-              wget -q http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh;
+              wget -q http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O ~/miniconda.sh;
               chmod +x ~/miniconda.sh;
-              ~/miniconda.sh -b -f -p $MINICONDA
-              conda config --set always_yes yes
-              conda update conda
-              conda info -a
-              conda create -n testenv python=3.6.0 numpy scipy pip cython
-              source activate testenv
+              ~/miniconda.sh -b -p ~/miniconda;
+              echo "export PATH=~/miniconda/bin:$PATH" >> $BASH_ENV;
         - run:
             name: Setup Python environment
             command: |
+              conda update --yes --quiet conda;
+              conda create -n testenv --yes python=3.6 numpy scipy pip cython
+              source activate testenv
               pip install git+https://github.com/vispy/vispy.git;
               pip install pytest pytest-travis-fold pytest-sugar;
               pip install mne nibabel pandas openpyxl tensorpac xlrd scikit-image;
