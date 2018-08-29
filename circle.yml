@@ -46,10 +46,8 @@ jobs:
             name: Setup Python environment
             command: |
               conda update --yes --quiet conda;
-              conda create -n testenv --yes python=3.6 numpy scipy pip cython;
+              conda create -n testenv --yes python=3.6 numpy scipy pip cython qt==5.9.4 matplotlib==2.2.2 pyqt==5.9.2 ;
               source activate testenv;
-              conda remove --yes qt pyqt matplotlib sip libxcb icu vtk;
-              pip install -U pip PyQt5 PyQt5-sip;
               pip install git+https://github.com/vispy/vispy.git;
               pip install pytest pytest-travis-fold pytest-sugar;
               pip install mne nibabel pandas openpyxl tensorpac xlrd scikit-image;
