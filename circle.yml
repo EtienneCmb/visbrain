@@ -8,7 +8,7 @@ jobs:
           - master
           - develop
       docker:
-        - image: circleci/python:3.6.1
+        - image: circleci/python:3.6-jessie
       steps:
         - checkout
         - run:
@@ -19,17 +19,17 @@ jobs:
         - run:
             name: Install miniconda
             command: |
-              wget -q http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O ~/miniconda.sh;
+              wget -q http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh;
               chmod +x ~/miniconda.sh;
-              ~/miniconda.sh -b -p ~/miniconda;
+              ~/miniconda.sh -b -p ~/miniconda3;
               echo "export PATH=~/miniconda/bin:$PATH" >> $BASH_ENV;
         - run:
             name: Setup Python environment
             command: |
               conda create -n circleenv --yes pip python=3.6 pip;
               conda install -n circleenv --yes numpy scipy pip cython;
-              source activate circleenv
-              pip install git+https://github.com/vispy/vispy.git
+              source activate circleenv;
+              pip install git+https://github.com/vispy/vispy.git;
               pip install pytest pytest-travis-fold pytest-sugar;
               pip install mne nibabel pandas openpyxl tensorpac xlrd scikit-image;
               pip install git+https://github.com/hbldh/lspopt.git#egg=lspopt;
