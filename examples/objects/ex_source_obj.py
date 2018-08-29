@@ -63,7 +63,8 @@ CAM_STATE = dict(azimuth=0,        # azimuth angle
 S_KW = dict(camera_state=CAM_STATE)
 # Create the scene
 sc = SceneObj(size=(1600, 1000))
-CBAR_STATE = dict(cbtxtsz=12, txtsz=10., width=.5, rect=(1., -2., 1., 4.))
+CBAR_STATE = dict(cbtxtsz=12, txtsz=10., width=.5, cbtxtsh=3.,
+                  rect=(1., -2., 1., 4.))
 
 ###############################################################################
 # Basic source object
@@ -100,7 +101,7 @@ sc.add_to_subplot(s_obj_col, row=0, row_span=2, col=1,
 # the dynamic of radius sources
 
 # Create some random data of shape (n_sources,)
-rnd_data = np.random.rand(n_sources)
+rnd_data = np.random.uniform(low=-100, high=100, size=(n_sources,))
 # Control the radius range of sources
 radius_min = 7.
 radius_max = 25.
@@ -193,7 +194,7 @@ sc.add_to_subplot(s_obj_aal, row=1, col=2,
 s_obj_data = SourceObj('S3', xyz, data=rnd_data, radius_min=radius_min,
                        radius_max=radius_max)
 # Color sources according to a data vector
-s_obj_data.color_sources(data=rnd_data, cmap='viridis', clim=(-0, 1),)
+s_obj_data.color_sources(data=rnd_data, cmap='viridis', clim=(-100, 100),)
 # Get the colorbar of the source object
 cb_data = ColorbarObj(s_obj_data, cblabel='Random data', border=False,
                       **CBAR_STATE)
@@ -262,8 +263,8 @@ s_rep = SourceObj('proj', xyz, data=rnd_data)
 b_rep = BrainObj('B3', translucent=False)
 # Project source's activity on the surface of the brain
 s_rep.project_sources(b_rep, cmap='viridis', project='repartition')
-# Get the colorbar of the source object
-cb_rep = ColorbarObj(s_rep, cblabel='Number of sources\nper vertex',
+# Get the colorbar of the brain object
+cb_rep = ColorbarObj(b_rep, cblabel='Number of sources\nper vertex',
                      border=False, **CBAR_STATE)
 sc.add_to_subplot(b_rep, row=2, col=3, title="Project source's repartition")
 sc.add_to_subplot(cb_rep, row=2, col=4)
