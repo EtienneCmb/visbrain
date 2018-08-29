@@ -21,7 +21,7 @@ jobs:
             command: |
               /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1400x900x24 -ac +extension GLX +render -noreset;
               echo "export DISPLAY=:99" >> $BASH_ENV;
-        - run: sudo apt-get install libgl1-mesa-glx libegl1-mesa libxrandr2 libxrandr2 libxss1 libxcursor1 libxcomposite1 libasound2 libxi6 libxtst6 qt5-default libgcc_s.so.1
+        - run: sudo apt-get install libgl1-mesa-glx libegl1-mesa libxrandr2 libxrandr2 libxss1 libxcursor1 libxcomposite1 libasound2 libxi6 libxtst6 qt5-default;
         - restore_cache:
             keys:
               - data-cache
@@ -58,6 +58,7 @@ jobs:
               which python;
               which pip;
               echo "export LD_PRELOAD=~/miniconda3/envs/testenv/lib/libgobject-2.0.so.0" >> $BASH_ENV
+              echo "export LD_PRELOAD=~/miniconda3/envs/testenv/lib/libgcc_s.so.1" >> $BASH_ENV
         - save_cache:
             key: pip-cache
             paths:
