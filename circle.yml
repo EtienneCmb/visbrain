@@ -18,20 +18,18 @@ jobs:
               echo "export DISPLAY=:99" >> $BASH_ENV;
         - run:
             name: Install miniconda
+            environment:
+              MINICONDA: $HOME/miniconda
+              PATH: $MINICONDA/bin:$PATH
             command: |
               cd /home/circleci
-              echo 'export MINICONDA=$HOME/miniconda' >> ~/.bashrc
-              echo 'export PATH="$MINICONDA/bin:$PATH"' >> ~/.bashrc
-              source ~/.bashrc
               hash -r
               wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
               bash miniconda.sh -b -f -p $MINICONDA
               conda config --set always_yes yes
               conda update conda
               conda info -a
-              conda create -n testenv --yes pip python=3.6  numpy scipy pip cython;
-              echo 'source activate testenv' >> ~/.bashrc
-              source ~/.bashrc
+              conda create -n testenv python=3.6.0 numpy scipy pip cython
               source activate testenv
         - run:
             name: Setup Python environment
