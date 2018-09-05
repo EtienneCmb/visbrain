@@ -341,6 +341,9 @@ class CrossSecObj(_Volume):
         sh = self._bgd._sh
         vol = np.zeros(sh, dtype=np.float32)
         _val = 10.
+        self._sources._im_sagit.transform = self._bgd._im_sagit.transform
+        self._sources._im_coron.transform = self._bgd._im_coron.transform
+        self._sources._im_axial.transform = self._bgd._im_axial.transform
 
         def f(x, sh):
             return slice(max(x, int(x - radius)), min(sh - 1, int(x + radius)))
