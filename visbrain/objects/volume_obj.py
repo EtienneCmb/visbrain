@@ -77,7 +77,7 @@ class _Volume(VisbrainObject):
                  system=None):
         """Load a predefined volume."""
         _, ext = os.path.splitext(name)
-        if ('.nii' in ext) or ('gz' in ext):
+        if ('.nii' in ext) or ('gz' in ext) or ('img' in ext):
             vol, _, hdr = read_nifti(name)
             name = os.path.split(name)[1].split('.nii')[0]
             self._name = name
