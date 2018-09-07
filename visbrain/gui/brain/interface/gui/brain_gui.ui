@@ -238,7 +238,7 @@ name</string>
                </sizepolicy>
               </property>
               <property name="currentIndex">
-               <number>3</number>
+               <number>5</number>
               </property>
               <widget class="QWidget" name="_brain_page">
                <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -2535,6 +2535,11 @@ ROI</string>
                          <item>
                           <property name="text">
                            <string>count</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>causal</string>
                           </property>
                          </item>
                         </widget>

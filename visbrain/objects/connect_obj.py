@@ -30,10 +30,18 @@ class ConnectObj(VisbrainObject):
         values of shape (n_nodes, n_nodes).
     line_width : float | 3.
         Connectivity line width.
-    color_by : {'strength', 'count'}
-        Coloring method. Use 'strength' to color edges according to their
-        connection strength define by the edges input. Use 'count' to color
-        edges according to the number of connections per node.
+    color_by : {'strength', 'count', 'causal'}
+        Coloring method:
+
+            * 'strength' : color edges according to their connection strength
+              define by the `edges` input. Only the upper triangle of the
+              connectivity array is considered.
+            * 'count' : color edges according to the number of connections per
+              node. Only the upper triangle of the connectivity array is
+              considered.
+            * 'causal' : color edges according to the connectivity strength but
+              this time, the upper and lower triangles of the connectivity
+              array in `edges` are considered.
     custom_colors : dict | None
         Use a dictionary to colorize edges. For example, {1.2: 'red',
         2.8: 'green', None: 'black'} turn connections that have a 1.2 and 2.8
@@ -121,10 +129,12 @@ class ConnectObj(VisbrainObject):
         if isinstance(select, np.ndarray):
             assert select.shape == edges.shape and select.dtype == bool
             edges.mask = np.invert(select)
-        edges.mask[np.tril_indices(len(self), 0)] = True
+        if color_by is not 'causal':
+            edges.mask[np.tril_indices(len(self), 0)] = True
+        edges.mask[np.diag_indices(len(self))] = True
         self._edges = edges
         # Colorby :
-        assert color_by in ['strength', 'count']
+        assert color_by in ['strength', 'count', 'causal']
         self._color_by = color_by
         # Dynamic :
         if dynamic is not None:
@@ -155,20 +165,31 @@ class ConnectObj(VisbrainObject):
 
     def _build_line(self):
         """Build the connectivity line."""
-        # Build the line position (consecutive segments):
-        nnz_x, nnz_y = np.where(~self._edges.mask)
-        indices = np.c_[nnz_x, nnz_y].flatten()
-        line_pos = self._pos[indices, :]
-        logger.info("    %i connectivity links displayed" % len(indices))
-
+        pos, edges = self._pos, self._edges
         # Color either edges or nodes :
         logger.info("    %s coloring method for connectivity" % self._color_by)
-        if self._color_by == 'strength':
-            nnz_values = self._edges.compressed()
-            values = np.c_[nnz_values, nnz_values].flatten()
-        elif self._color_by == 'count':
-            node_count = Counter(np.ravel([nnz_x, nnz_y]))
-            values = np.array([node_count[k] for k in indices])
+        # Switch between coloring method :
+        if self._color_by in ['strength', 'count']:
+            # Build line position
+            nnz_x, nnz_y = np.where(~edges.mask)
+            indices = np.c_[nnz_x, nnz_y].flatten()
+            line_pos = pos[indices, :]
+            if self._color_by == 'strength':
+                nnz_values = edges.compressed()
+                values = np.c_[nnz_values, nnz_values].flatten()
+            elif self._color_by == 'count':
+                node_count = Counter(np.ravel([nnz_x, nnz_y]))
+                values = np.array([node_count[k] for k in indices])
+        elif self._color_by == 'causal':
+            indices = np.array(np.where(~edges.mask)).T
+            # Build line pos :
+            line_pos = np.zeros((2 * indices.shape[0], 3), dtype=float)
+            line_pos[0::2, :] = pos[indices[:, 0], :]
+            line_pos[1::2, :] = (pos[indices[:, 1]] + pos[indices[:, 0]]) / 2.
+            # Build values :
+            values = np.full((line_pos.shape[0],), edges.min(), dtype=float)
+            values[1::2] = edges.compressed()
+        logger.info("    %i connectivity links displayed" % line_pos.shape[0])
         self._minmax = (values.min(), values.max())
         if self._clim is None:
             self._clim = self._minmax
@@ -187,8 +208,11 @@ class ConnectObj(VisbrainObject):
 
         # Dynamic color :
         if self._dynamic is not None:
-            color[:, 3] = normalize(values.copy(), tomin=self._dynamic[0],
-                                    tomax=self._dynamic[1])
+            if self._color_by == 'causal':
+                color[0::2, :] = self._dynamic[0]
+            else:
+                color[:, 3] = normalize(values.copy(), tomin=self._dynamic[0],
+                                        tomax=self._dynamic[1])
 
         # Send data to the connectivity object :
         self._connect.set_data(pos=line_pos, color=color)
@@ -229,7 +253,7 @@ class ConnectObj(VisbrainObject):
     @wrap_properties
     def color_by(self, value):
         """Set color_by value."""
-        assert value in ['strength', 'count']
+        assert value in ['strength', 'count', 'causal']
         self._color_by = value
         self._build_line()
 
