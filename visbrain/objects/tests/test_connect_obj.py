@@ -50,6 +50,8 @@ class TestConnectObj(_TestObjects):
         """Test function connect_attributes."""
         self.assert_and_test('line_width', 4.4)
         self.assert_and_test('color_by', 'strength')
+        self.assert_and_test('color_by', 'count')
+        self.assert_and_test('color_by', 'causal')
         self.assert_and_test('dynamic', (.2, .4))
         self.assert_and_test('alpha', 0.7)
 

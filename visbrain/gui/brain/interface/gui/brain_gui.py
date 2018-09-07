@@ -1065,6 +1065,7 @@ class Ui_MainWindow(object):
         self._c_colorby.setObjectName("_c_colorby")
         self._c_colorby.addItem("")
         self._c_colorby.addItem("")
+        self._c_colorby.addItem("")
         self.gridLayout_14.addWidget(self._c_colorby, 0, 1, 1, 1)
         self.label_37 = QtWidgets.QLabel(self._c_grp)
         font = QtGui.QFont()
@@ -1761,7 +1762,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         self.QuickSettings.setCurrentIndex(0)
-        self._obj_stack.setCurrentIndex(3)
+        self._obj_stack.setCurrentIndex(5)
         self._brain_hemi.setCurrentIndex(0)
         self._source_tab.setCurrentIndex(2)
         self._c_alpha_stack.setCurrentIndex(0)
@@ -1930,6 +1931,7 @@ class Ui_MainWindow(object):
         self._c_colorby.setToolTip(_translate("MainWindow", "<html><head/><body><p>Color connectivity line according to :</p><p>- Their connectivity strength</p><p>- The number of connections per node</p><p>- The line density (use the radius to control the density)</p><p><span style=\" font-weight:600;\">Input parameter : </span><span style=\" font-style:italic;\">c_colorby</span></p></body></html>"))
         self._c_colorby.setItemText(0, _translate("MainWindow", "strength"))
         self._c_colorby.setItemText(1, _translate("MainWindow", "count"))
+        self._c_colorby.setItemText(2, _translate("MainWindow", "causal"))
         self.label_37.setText(_translate("MainWindow", "Transparency"))
         self.label_109.setText(_translate("MainWindow", "Color"))
         self.label_22.setText(_translate("MainWindow", "Line\n"
