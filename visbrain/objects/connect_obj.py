@@ -181,11 +181,18 @@ class ConnectObj(VisbrainObject):
                 node_count = Counter(np.ravel([nnz_x, nnz_y]))
                 values = np.array([node_count[k] for k in indices])
         elif self._color_by == 'causal':
-            indices = np.array(np.where(~edges.mask)).T
+            idx = np.array(np.where(~edges.mask)).T
+            # If the array is not symetric, the line needs to be drawn between
+            # points. If it's symetric, line should stop a the middle point.
+            # Here, we get the maske value of the symetric and use it to
+            # ponderate middle point calculation :
+            pond = (~np.array(edges.mask))[idx[:, 1], idx[:, 0]]
+            pond = pond.astype(float).reshape(-1, 1)
+            div = pond + 1.
             # Build line pos :
-            line_pos = np.zeros((2 * indices.shape[0], 3), dtype=float)
-            line_pos[0::2, :] = pos[indices[:, 0], :]
-            line_pos[1::2, :] = (pos[indices[:, 1]] + pos[indices[:, 0]]) / 2.
+            line_pos = np.zeros((2 * idx.shape[0], 3), dtype=float)
+            line_pos[0::2, :] = pos[idx[:, 0], :]
+            line_pos[1::2, :] = (pos[idx[:, 1]] + pond * pos[idx[:, 0]]) / div
             # Build values :
             values = np.full((line_pos.shape[0],), edges.min(), dtype=float)
             values[1::2] = edges.compressed()
