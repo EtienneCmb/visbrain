@@ -54,7 +54,7 @@ download_file('MIST_ROI.zip', unzip=True, astype='example_data')
 # First, we need to create the scene that will host objects
 
 # Scene creation with a dark background and a custom size
-sc = SceneObj(bgcolor=(.1, .1, .1), size=(1400, 1000))
+sc = SceneObj(size=(1400, 1000))
 # In this example, we also illustrate the use of the colorbar object. Hence, we
 # centralize colorbar properties inside a dictionary
 CBAR_STATE = dict(cbtxtsz=12, txtsz=10., width=.1, cbtxtsh=3.,

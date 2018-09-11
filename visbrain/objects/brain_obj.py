@@ -521,6 +521,26 @@ class BrainObj(VisbrainObject):
         dico = dict(Index=u_idx, Labels=labels, Color=color.tolist())
         return pd.DataFrame(dico, columns=['Index', 'Labels', 'Color'])
 
+    def slice(self, xmin=None, xmax=None, ymin=None, ymax=None, zmin=None,
+              zmax=None):
+        """Take a slice of the brain.
+
+        Parameters
+        ----------
+        xmin, xmax : float | None
+            Cut the mesh along the x-dimension.
+        ymin, ymax : float | None
+            Cut the mesh along the y-dimension.
+        zmin, zmax : float | None
+            Cut the mesh along the z-dimension.
+        """
+        self.mesh.xmin = xmin
+        self.mesh.xmax = xmax
+        self.mesh.ymin = ymin
+        self.mesh.ymax = ymax
+        self.mesh.zmin = zmin
+        self.mesh.zmax = zmax
+
     @staticmethod
     def _data_to_contour(data, clim, n_contours):
         clim = (data.min(), data.max()) if clim is None else clim

@@ -25,7 +25,7 @@ from visbrain.io import download_file
 arch = np.load(download_file('phase_sync_delta.npz', astype='example_data'))
 nodes, edges = arch['nodes'], arch['edges']
 # Create the scene with a black background
-sc = SceneObj(bgcolor=(.1, .1, .1), size=(1500, 600))
+sc = SceneObj(size=(1500, 600))
 
 ###############################################################################
 # Color by connectivity strength
