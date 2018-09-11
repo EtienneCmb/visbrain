@@ -35,7 +35,7 @@ LUT_LEN = 1024
 LIGHT_POSITION = [0., 0., 1e7]
 LIGHT_INTENSITY = [1.] * 3
 COEF_AMBIENT = .05
-COEF_SPECULAR = 0.
+COEF_SPECULAR = 0.1
 SULCUS_COLOR = [.4] * 3 + [1.]
 
 # Vertex shader : executed code for individual vertices. The transformation
@@ -48,7 +48,7 @@ varying vec4 v_color;
 
 void main() {
     v_position = $a_position;
-    v_normal = $a_normal;
+    v_normal = $u_inv_light * $a_normal;
 
     // Compute background color (i.e white / mask / sulcus)
     vec4 bg_color = texture1D($u_bgd_text, $a_bgd_data);
@@ -91,6 +91,17 @@ varying vec4 v_color;
 varying vec3 v_normal;
 
 void main() {
+    // Slices
+    if (v_position.x < $u_xmin || v_position.x > $u_xmax) {
+        discard;
+    }
+    if (v_position.y < $u_ymin || v_position.y > $u_ymax) {
+        discard;
+    }
+    if (v_position.z < $u_zmin || v_position.z > $u_zmax) {
+        discard;
+    }
+
     // Adapt light position with camera rotation
     vec3 light_pos = $camtf(vec4($u_light_position, 0.)).xyz;
 
@@ -111,16 +122,16 @@ void main() {
     vec3 diffuseLight =  v_color.rgb * brightness * $u_light_intensity;
 
     // ----------------- Specular light -----------------
-    vec3 surfaceToCamera = vec3(0.0, 0.0, 1.0) - v_position;
-    vec3 K = normalize(normalize(surfaceToLight) + normalize(surfaceToCamera));
-    float specular = clamp(pow(abs(dot(v_normal, K)), 40.), 0.0, 1.0);
-    specular *= $u_coef_specular;
-    vec3 specularLight = specular * vec3(1., 1., 1.) * $u_light_intensity;
+    vec3 lightDir = normalize(surfaceToLight);
+    vec3 viewDir = normalize(light_pos - v_position);
+    vec3 reflectDir = reflect(-lightDir, normalize(v_normal));
+    float specular = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+    vec3 specularLight = $u_coef_specular * specular * vec3(1., 1., 1.);
 
     // ----------------- Attenuation -----------------
     // float att = 0.0001;
     // float distanceToLight = length(light_pos - v_position);
-    // float attenuation = 1.0 / (1.0 + att * pow(distanceToLight, 2));
+    // float attenuation = 1.0 / (1.0 + att * pow(distanceToLight, 4));
 
     // ----------------- Linear color -----------------
     // Without attenuation :
@@ -228,6 +239,12 @@ class BrainVisual(Visual):
         # Camera :
         self.set_camera(camera)
         self.mask_color = mask_color
+
+        # Slices :
+        self.xmin, self.xmax = None, None
+        self.ymin, self.ymax = None, None
+        self.zmin, self.zmax = None, None
+        self.inv_light = False
 
         # _________________ GL STATE _________________
         self.set_gl_state('translucent', depth_test=True, cull_face=False,
@@ -578,5 +595,103 @@ class BrainVisual(Visual):
         """Get the data limits value."""
         return self._data_lim[self._n_overlay - 1]
 
+    # ----------- XMIN -----------
+    @property
+    def xmin(self):
+        """Get the xmin value."""
+        return self._xmin
 
+    @xmin.setter
+    def xmin(self, value):
+        """Set xmin value."""
+        value = self._vertices[:, 0].min() - 1 if value is None else value
+        assert isinstance(value, (int, float))
+        self.shared_program.frag['u_xmin'] = value
+        self._xmin = value
+
+    # ----------- XMAX -----------
+    @property
+    def xmax(self):
+        """Get the xmax value."""
+        return self._xmax
+
+    @xmax.setter
+    def xmax(self, value):
+        """Set xmax value."""
+        value = self._vertices[:, 0].max() + 1 if value is None else value
+        assert isinstance(value, (int, float))
+        self.shared_program.frag['u_xmax'] = value
+        self._xmax = value
+
+    # ----------- YMIN -----------
+    @property
+    def ymin(self):
+        """Get the ymin value."""
+        return self._ymin
+
+    @ymin.setter
+    def ymin(self, value):
+        """Set ymin value."""
+        value = self._vertices[:, 1].min() - 1 if value is None else value
+        assert isinstance(value, (int, float))
+        self.shared_program.frag['u_ymin'] = value
+        self._ymin = value
+
+    # ----------- YMAX -----------
+    @property
+    def ymax(self):
+        """Get the ymax value."""
+        return self._ymax
+
+    @ymax.setter
+    def ymax(self, value):
+        """Set ymax value."""
+        value = self._vertices[:, 1].max() + 1 if value is None else value
+        assert isinstance(value, (int, float))
+        self.shared_program.frag['u_ymax'] = value
+        self._ymax = value
+
+    # ----------- ZMIN -----------
+    @property
+    def zmin(self):
+        """Get the zmin value."""
+        return self._zmin
+
+    @zmin.setter
+    def zmin(self, value):
+        """Set zmin value."""
+        value = self._vertices[:, 2].min() - 1 if value is None else value
+        assert isinstance(value, (int, float))
+        self.shared_program.frag['u_zmin'] = value
+        self._zmin = value
+
+    # ----------- ZMAX -----------
+    @property
+    def zmax(self):
+        """Get the zmax value."""
+        return self._zmax
+    
+    @zmax.setter
+    def zmax(self, value):
+        """Set zmax value."""
+        value = self._vertices[:, 2].max() + 1 if value is None else value
+        assert isinstance(value, (int, float))
+        self.shared_program.frag['u_zmax'] = value
+        self._zmax = value
+
+    # ----------- INV_LIGHT -----------
+    @property
+    def inv_light(self):
+        """Get the inv_light value."""
+        return self._inv_light
+    
+    @inv_light.setter
+    def inv_light(self, value):
+        """Set inv_light value."""
+        assert isinstance(value, bool)
+        value = -1 if value else 1
+        self.shared_program.vert['u_inv_light'] = value
+        self._inv_light = value
+    
+    
 BrainMesh = create_visual_node(BrainVisual)

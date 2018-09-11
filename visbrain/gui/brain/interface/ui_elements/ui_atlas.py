@@ -48,6 +48,16 @@ class UiAtlas(object):
         self._brain_translucent.setChecked(self.atlas.translucent)
         self._brain_translucent.clicked.connect(self._fcn_brain_translucent)
         self._brain_alpha.valueChanged.connect(self._fcn_brain_alpha)
+        # Slices :
+        self._fcn_brain_reset_slider()
+        self._brain_xmin.valueChanged.connect(self._fcn_brain_slices)
+        self._brain_xmax.valueChanged.connect(self._fcn_brain_slices)
+        self._brain_ymin.valueChanged.connect(self._fcn_brain_slices)
+        self._brain_ymax.valueChanged.connect(self._fcn_brain_slices)
+        self._brain_zmin.valueChanged.connect(self._fcn_brain_slices)
+        self._brain_zmax.valueChanged.connect(self._fcn_brain_slices)
+        # Light :
+        self._brain_inlight.clicked.connect(self._fcn_brain_inlight)
 
         #######################################################################
         #                         REGION OF INTEREST
@@ -155,6 +165,7 @@ class UiAtlas(object):
             self.atlas._name = template
         if self.atlas.hemisphere != hemisphere:
             self.atlas.hemisphere = hemisphere
+        self._fcn_brain_reset_slider()
 
     def _fcn_brain_hemisphere(self):
         """Change the hemisphere."""
@@ -172,6 +183,59 @@ class UiAtlas(object):
         """Update brain transparency."""
         alpha = self._brain_alpha.value() / 100.
         self.atlas.alpha = alpha
+
+    def _fcn_brain_reset_slider(self):
+        """Reset min/max slice sliders."""
+        v = self.atlas.vertices
+        n_cut = 1000
+        xmin, xmax = v[:, 0].min() - 1., v[:, 0].max() + 1.
+        ymin, ymax = v[:, 1].min() - 1., v[:, 1].max() + 1.
+        zmin, zmax = v[:, 2].min() - 1., v[:, 2].max() + 1.
+        # xmin
+        self._brain_xmin.setMinimum(xmin)
+        self._brain_xmin.setMaximum(xmax)
+        self._brain_xmin.setSingleStep((xmin - xmax) / n_cut)
+        self._brain_xmin.setValue(xmin)
+        # xmax
+        self._brain_xmax.setMinimum(xmin)
+        self._brain_xmax.setMaximum(xmax)
+        self._brain_xmax.setSingleStep((xmin - xmax) / n_cut)
+        self._brain_xmax.setValue(xmax)
+        # ymin
+        self._brain_ymin.setMinimum(ymin)
+        self._brain_ymin.setMaximum(ymax)
+        self._brain_ymin.setSingleStep((ymin - ymax) / n_cut)
+        self._brain_ymin.setValue(ymin)
+        # ymax
+        self._brain_ymax.setMinimum(ymin)
+        self._brain_ymax.setMaximum(ymax)
+        self._brain_ymax.setSingleStep((ymin - ymax) / n_cut)
+        self._brain_ymax.setValue(ymax)
+        # zmin
+        self._brain_zmin.setMinimum(zmin)
+        self._brain_zmin.setMaximum(zmax)
+        self._brain_zmin.setSingleStep((zmin - zmax) / n_cut)
+        self._brain_zmin.setValue(zmin)
+        # zmax
+        self._brain_zmax.setMinimum(zmin)
+        self._brain_zmax.setMaximum(zmax)
+        self._brain_zmax.setSingleStep((zmin - zmax) / n_cut)
+        self._brain_zmax.setValue(zmax)
+
+    def _fcn_brain_slices(self):
+        """Slice the brain."""
+        self.atlas.mesh.xmin = float(self._brain_xmin.value())
+        self.atlas.mesh.xmax = float(self._brain_xmax.value())
+        self.atlas.mesh.ymin = float(self._brain_ymin.value())
+        self.atlas.mesh.ymax = float(self._brain_ymax.value())
+        self.atlas.mesh.zmin = float(self._brain_zmin.value())
+        self.atlas.mesh.zmax = float(self._brain_zmax.value())
+        self.atlas.mesh.update()
+
+    def _fcn_brain_inlight(self):
+        """Set light to be inside the brain."""
+        self.atlas.mesh.inv_light = self._brain_inlight.isChecked()
+        self.atlas.mesh.update()
 
     ###########################################################################
     ###########################################################################
