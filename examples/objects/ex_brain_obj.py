@@ -30,6 +30,7 @@ sc = SceneObj(bgcolor='black', size=(1400, 1000))
 # Colorbar default arguments. See `visbrain.objects.ColorbarObj`
 CBAR_STATE = dict(cbtxtsz=12, txtsz=10., width=.1, cbtxtsh=3.,
                   rect=(-.3, -2., 1., 4.))
+KW = dict(title_size=14., zoom=1.2)
 
 ###############################################################################
 # .. note::
@@ -57,7 +58,7 @@ b_obj_fs = BrainObj('inflated', translucent=True, hemisphere='both')
 # Add the brain to the scene. Note that `row_span` means that the plot will
 # occupy two rows (row 0 and 1)
 sc.add_to_subplot(b_obj_fs, row=0, col=0, row_span=2,
-                  title='Translucent inflated brain template')
+                  title='Translucent inflated brain template', **KW)
 
 ###############################################################################
 # Select the left or the right hemisphere
@@ -68,7 +69,7 @@ sc.add_to_subplot(b_obj_fs, row=0, col=0, row_span=2,
 # Opaque left hemispehre of the white matter
 b_obj_lw = BrainObj('white', hemisphere='left', translucent=False)
 sc.add_to_subplot(b_obj_lw, row=0, col=1, rotate='right',
-                  title='Left hemisphere')
+                  title='Left hemisphere', **KW)
 
 ###############################################################################
 # Projection iEEG data on the surface of the brain
@@ -83,10 +84,13 @@ s_obj = SourceObj('iEEG', xyz, data=data, cmap='inferno')
 # Just for fun, color sources according to the data :)
 s_obj.color_sources(data=data)
 # Project source's activity
-s_obj.project_sources(b_obj_proj, cmap='bwr')
+s_obj.project_sources(b_obj_proj, cmap='plasma')
 # Finally, add the source and brain objects to the subplot
-sc.add_to_subplot(s_obj, row=0, col=2, title='Project iEEG data')
+sc.add_to_subplot(s_obj, row=0, col=2, title='Project iEEG data', **KW)
 sc.add_to_subplot(b_obj_proj, row=0, col=2, rotate='left', use_this_cam=True)
+# Finally, add the colorbar :
+cb_proj = ColorbarObj(s_obj, cblabel='Projection of niEEG data', **CBAR_STATE)
+sc.add_to_subplot(cb_proj, row=0, col=3, width_max=200)
 
 ###############################################################################
 # .. note::
@@ -108,7 +112,7 @@ print(b_obj_parl.get_parcellates(path_to_file1))
 # Finally, parcellize the brain and add the brain to the scene
 b_obj_parl.parcellize(path_to_file1)
 sc.add_to_subplot(b_obj_parl, row=1, col=1, rotate='left',
-                  title='Parcellize using the Desikan Atlas')
+                  title='Parcellize using the Desikan Atlas', **KW)
 
 ###############################################################################
 # .. note::
@@ -143,7 +147,7 @@ b_obj_parr.parcellize(path_to_file2, select=select_par, hemisphere='right',
                       vmax=10, under='gray', over='darkred')
 # Add the brain object to the scene
 sc.add_to_subplot(b_obj_parr, row=1, col=2, rotate='right',
-                  title='Send data to Desikan-Killiany parcellates')
+                  title='Send data to Desikan-Killiany parcellates', **KW)
 # Get the colorbar of the brain object and add it to the scene
 cb_parr = ColorbarObj(b_obj_parr, cblabel='Data to parcellates', **CBAR_STATE)
 sc.add_to_subplot(cb_parr, row=1, col=3, width_max=200)
@@ -170,7 +174,7 @@ lr_index = vert[0, :] <= 0.
 b_obj_custom = BrainObj('Custom', vertices=vert, faces=faces,
                         normals=norms, translucent=False)
 sc.add_to_subplot(b_obj_custom, row=2, col=0, title='Use a custom template',
-                  rotate='left')
+                  rotate='left', **KW)
 
 ###############################################################################
 # .. note::
@@ -193,7 +197,7 @@ b_obj_fmri = BrainObj('inflated', translucent=False, sulcus=True)
 b_obj_fmri.add_activation(file=file, clim=(5., 20.), hide_under=5,
                           cmap='viridis', hemisphere='left')
 sc.add_to_subplot(b_obj_fmri, row=2, col=1, title='Add fMRI activation',
-                  rotate='left')
+                  rotate='left', **KW)
 
 ###############################################################################
 # MEG inverse solution
@@ -215,7 +219,7 @@ b_obj_meg.add_activation(data=data, vertices=vertices, hemisphere='right',
                          cmap='plasma')
 # Add the brain and the colorbar object to the scene
 sc.add_to_subplot(b_obj_meg, row=2, col=2, title='MEG inverse solution',
-                  rotate='right')
+                  rotate='right', **KW)
 cb_parr = ColorbarObj(b_obj_meg, cblabel='MEG data', **CBAR_STATE)
 sc.add_to_subplot(cb_parr, row=2, col=3, width_max=200)
 
@@ -229,7 +233,7 @@ sc.add_to_subplot(cb_parr, row=2, col=3, width_max=200)
 # automatize figure generation.
 
 # Link the rotation of subplots (row=0, col=1) and (row=1, col=2)
-sc.link((0, 1), (1, 2))
+# sc.link((0, 1), (1, 2))
 # Screenshot of the scene
 # sc.screenshot('ex_brain_obj.png', transparent=True)
 
