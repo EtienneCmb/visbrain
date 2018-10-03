@@ -24,7 +24,7 @@ Structure
 
 Visbrain is mainly divided into two branches :
 
-* **Modules** : essentially designed for beginner users, modules comes with a graphical user interface (GUI) for interactions between plotted elements and parameters.
+* **Modules** : modules comes with a graphical user interface (GUI) for interactions between plotted elements and parameters.
 * **Objects** : objects are elementary bricks i.e. one visualization purpose per object. It's mainly designed for advanced users since objects are much more modular. See the :ref:`Objects` documentation and the API :class:`visbrain.objects`
 
 ======================  =======================================================
@@ -49,22 +49,22 @@ Installation options
 Dependencies
 ------------
 
-===============================================================               ===========     =========================================
-Package                                                                       Version         Purpose
-===============================================================               ===========     =========================================
-`NumPy <http://www.numpy.org/>`_                                              >= 1.13         Scientific computing
-`SciPy <http://www.scipy.org/>`_                                              -               Mathematics, science, and engineering
-`Matplotlib <http://www.matplotlib.org/>`_                                    >= 1.5.5        Colors and colormaps integration
-`VisPy <http://www.vispy.org/>`_                                              >= 0.5.2        Graphics rendering
-`PyQt5 <https://riverbankcomputing.com/software/pyqt/intro>`_                 -               Graphical User Interface components
-`Pillow <https://pillow.readthedocs.io>`_                                     -               Screenshots and image file format support
-===============================================================               ===========     =========================================
+* NumPy and SciPy (>= 1.13)
+* Matplotlib (>= 1.5.5)
+* VisPy (>= 0.5.2)
+* PyQt5
+* PyOpenGL
+Pillow
 
-PyQt5 can be installed using either **pip install pyqt5** or **conda install pyqt**. We also strongly recommend to install *pandas* and *pyopengl* :
+Optional dependencies
+---------------------
 
-.. code-block:: shell
-
-    pip install pandas PyOpenGL PyOpenGL_accelerate
+* Pandas & xlrd : table import / export
+* Pillow : export figures
+* Nibabel : read nifti files
+* MNE-python : alternative to read sleep data files
+* Tensorpac : compute and display phase-amplitude coupling
+* lspopt : multitaper spectrogram
 
 Regular installation
 --------------------

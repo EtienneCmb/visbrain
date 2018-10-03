@@ -65,6 +65,10 @@ class TestRoiObj(_TestVolumeObject):
         roi_obj.localize_sources(s_obj.xyz, source_name=s_obj.text)
         roi_obj.localize_sources(s_obj.xyz, distance=1000.)
 
+    def test_get_centroids(self):
+        """Test function get_centroids."""
+        roi_obj.get_centroids([2, 4, 6])
+
     def test_project_sources(self):
         """Test function project_sources."""
         roi_obj.project_sources(s_obj, 'modulation')

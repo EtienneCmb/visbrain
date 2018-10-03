@@ -54,6 +54,13 @@ setup(
         "pillow",
         "PyOpenGL"
     ],
+    extras_require={
+        'full': ["mne", "tensorpac", "pandas", "xlrd", "scikit-image",
+                 "nibabel"],
+        'sleep': ["mne", "tensorpac"],
+        'roi': ["pandas", "xlrd"],
+        'topo': ["scikit-image"]
+    },
     dependency_links=[],
     classifiers=["Development Status :: 3 - Alpha",
                  'Intended Audience :: Science/Research',

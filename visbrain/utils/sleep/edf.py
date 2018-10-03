@@ -13,7 +13,7 @@ from logging import getLogger
 from datetime import datetime
 from math import floor
 from re import findall
-from numpy import empty, asarray, fromstring, iinfo
+from numpy import empty, asarray, frombuffer, iinfo
 
 
 lg = getLogger(__name__)
@@ -193,7 +193,7 @@ class Edf:
                 samples = f.read(2 * (endpos - begpos))
 
                 i_dat_end = i_dat + endpos - begpos
-                dat[i_dat:i_dat_end] = fromstring(samples, dtype='<i2')
+                dat[i_dat:i_dat_end] = frombuffer(samples, dtype='<i2')
                 i_dat = i_dat_end
 
         return dat

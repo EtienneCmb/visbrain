@@ -4,6 +4,7 @@ import logging
 from functools import wraps
 
 import numpy as np
+import numpy.core.defchararray as npchar
 from scipy.spatial.distance import cdist
 
 from vispy import scene
@@ -260,7 +261,7 @@ class RoiObj(_Volume):
         return self.ref
 
     def where_is(self, patterns, df=None, union=True, columns=None,
-                 exact=False):
+                 exact=False, case_sensitive=False):
         """Find a list of string patterns in a DataFrame.
 
         Parameters
@@ -275,9 +276,12 @@ class RoiObj(_Volume):
             intersection (False).
         columns : list | None
             List of specific column names to search in. If None, this method
-            inspect every columns in the DataFrame.
+            search through the entire DataFrame.
         exact : bool | False
-            Specify if the pattern to search have to be exact matching.
+            Specify if the pattern to search have to be exact matching (True)
+            or if the pattern is only a part of the result.
+        case_sensitive : bool | False
+            Specify if the search have to be case sensitive.
 
         Returns
         -------
@@ -287,27 +291,28 @@ class RoiObj(_Volume):
         # Check inputs :
         assert isinstance(patterns, (str, list, tuple))
         df_to_use = self.ref if df is None else df
-        n_rows, _ = df_to_use.shape
         is_pandas_installed(raise_error=True)
         import pandas as pd
         assert isinstance(df_to_use, pd.DataFrame)
         patterns = [patterns] if isinstance(patterns, str) else patterns
-        if columns is None:
-            columns = list(df_to_use.keys())
-        if isinstance(columns, str):
-            columns = [columns]
-        assert all([k in df_to_use.keys() for k in columns])
-        n_cols = len(columns)
+        patterns = list(patterns)
+        if columns is not None:
+            df_to_use = df_to_use[columns]
+        dfarr = np.array(df_to_use).astype(str)
+        # Case sensitive :
+        if not case_sensitive:
+            dfarr = npchar.lower(dfarr)
+            patterns = npchar.lower(np.array(patterns).astype(str))
+        # Define the matching function :
+        if exact:
+            def match(x, pat): return np.any(x == pat, axis=1)  # noqa
+        else:
+            def match(x, pat):
+                return np.any((npchar.find(x, pat) + 1).astype(bool), axis=1)
         # Locate patterns :
-        idx_to_keep = np.zeros((n_rows, len(patterns)), dtype=bool)
-        for p, k in enumerate(patterns):
-            pat_in_col = np.zeros((n_rows, n_cols), dtype=bool)
-            for c, i in enumerate(columns):
-                if exact:
-                    pat_in_col[:, c] = df_to_use[i].astype(str) == k
-                else:
-                    pat_in_col[:, c] = df_to_use[i].astype(str).str.match(k)
-            idx_to_keep[:, p] = np.any(pat_in_col, 1)
+        idx_to_keep = np.zeros((dfarr.shape[0], len(patterns)), dtype=bool)
+        for k, p in enumerate(patterns):
+            idx_to_keep[:, k] = match(dfarr, str(p))
         # Return either the union or intersection across research :
         fcn = np.any if union else np.all
         idx_to_keep = fcn(idx_to_keep, 1)
@@ -529,6 +534,34 @@ class RoiObj(_Volume):
                                       interpolation='linear', to_overlay=0)
         else:
             raise ValueError("No vertices found for this ROI")
+
+    def get_centroids(self, select):
+        """Get the (x, y, z) coordinates of the center of a ROI.
+
+        Parameters
+        ----------
+        select : list
+            List of indices of ROIs. Must be a list or tuple of integers.
+
+        Returns
+        -------
+        xyz : array_like
+            Array of shape (n_indiced, 3) which contains the (x, y, z)
+            coordinates of each ROI center.
+        """
+        if isinstance(select, int):
+            select = [select]
+        is_list = isinstance(select, (list, tuple))
+        is_ints = np.all([isinstance(k, int) for k in select])
+        if (not is_list) or (not is_ints):
+            raise ValueError("`select` must be a list of integers.")
+        xyz = np.zeros((len(select), 3), dtype=np.float32)
+        for i, k in enumerate(select):
+            logger.info("    Get centroid of ROI %i" % k)
+            v = self._select_roi(self._vol.copy(), int(k), None)[0]
+            vert_hdr = self._hdr.map(v)[:, 0:-1]
+            xyz[i, :] = vert_hdr.mean(0)
+        return xyz
 
     def _select_roi(self, vol, level, smooth):
         if isinstance(level, (int, np.int)):

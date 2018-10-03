@@ -284,6 +284,41 @@ class VolumeObj(_Volume):
         self.threshold = threshold
         self.cmap = cmap
 
+    def extract_activity(self, xyz, radius=2.):
+        """Extract activity of a volume around (x, y, z) points.
+
+        Parameters
+        ----------
+        xyz : array_like
+            Array of (x, y, z) coordinates of shape (n_sources, 3)
+        radius : float | 2.
+            Radius of the sphere around each point.
+
+        Returns
+        -------
+        act : array_like
+            Activity array of shape (n_sources,)
+        """
+        assert isinstance(xyz, np.ndarray) and (xyz.shape[1] == 3)
+        assert isinstance(radius, (int, float))
+        n_s = xyz.shape[0]
+        # hdr conversion :
+        logger.info("    Convert coordinates in volume space")
+        hdr = self._hdr
+        center, extrem = np.array([[0.] * 3]), np.array([[radius] * 3])
+        xyz_m = np.round(hdr.imap(xyz)[:, 0:-1]).astype(int)
+        radius_0 = np.round(hdr.imap(center)[:, 0:-1]).astype(int)
+        radius_1 = np.round(hdr.imap(extrem)[:, 0:-1]).astype(int)
+        rd = [max(int(k / 2), 1) for k in np.abs(radius_1 - radius_0).ravel()]
+        # Extact activity :
+        logger.info("    Extract activity of the %i sources defined" % n_s)
+        act = np.zeros((n_s,), dtype=np.float32)
+        for i, k in enumerate(xyz_m):
+            act[i] = self._vol[k[0] - rd[0]:k[0] + rd[0],
+                               k[1] - rd[1]:k[1] + rd[1],
+                               k[2] - rd[2]:k[2] + rd[2]].mean()
+        return act
+
     def update(self):
         """Update the volume."""
         self._vol3d.update()

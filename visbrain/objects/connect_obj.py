@@ -8,6 +8,7 @@ from vispy import scene
 from vispy.scene import visuals
 
 from .visbrain_obj import VisbrainObject, CombineObjects
+from .source_obj import SourceObj
 from ..utils import array2colormap, normalize, color2vb, wrap_properties
 
 
@@ -155,6 +156,9 @@ class ConnectObj(VisbrainObject):
 
     def _build_line(self):
         """Build the connectivity line."""
+        if np.all(self._edges.mask):
+            logger.error("There's no connectivity links to display")
+            return None
         # Build the line position (consecutive segments):
         nnz_x, nnz_y = np.where(~self._edges.mask)
         indices = np.c_[nnz_x, nnz_y].flatten()
@@ -192,6 +196,133 @@ class ConnectObj(VisbrainObject):
 
         # Send data to the connectivity object :
         self._connect.set_data(pos=line_pos, color=color)
+
+    def get_nb_connections_per_node(self, sort='index', order='ascending'):
+        """Get the number of connections per node.
+
+        Parameters
+        ----------
+        sort : {'index', 'count'}
+            Sort either by node index ('index') or according to the number of
+            connections per node ('count').
+        order : {'ascending', 'descending'}
+            Get the number of connections per node
+        """
+        return self._get_nb_connect(self._edges.mask, sort, order)
+
+    def analyse_connections(self, roi_obj='talairach', group_by=None,
+                            get_centroids=False, replace_bad=True,
+                            bad_patterns=[-1, 'undefined', 'None'],
+                            distance=None, replace_with='Not found',
+                            keep_only=None):
+        """Analyse connections.
+
+        Parameters
+        ----------
+        roi_obj : string/list | 'talairach'
+            The ROI object to use. Use either 'talairach', 'brodmann' or 'aal'
+            to use a predefined ROI template. Otherwise, use a RoiObj object or
+            a list of RoiObj.
+        group_by : str | None
+            Name of the column inside the dataframe for gouping connectivity
+            results.
+        replace_bad : bool | True
+            Replace bad values (True) or not (False).
+        bad_patterns : list | [-1, 'undefined', 'None']
+            Bad patterns to replace if replace_bad is True.
+        replace_with : string | 'Not found'
+            Replace bad patterns with this string.
+        keep_only : list | None
+            List of string patterns to keep only sources that match.
+
+        Returns
+        -------
+        df : pandas.DataFrames
+            A Pandas DataFrame or a list of DataFrames if roi_obj is a list.
+        """
+        # Get anatomical info of sources :
+        s_obj = SourceObj('analyse', self._pos)
+        df = s_obj.analyse_sources(roi_obj=roi_obj, replace_bad=replace_bad,
+                                   bad_patterns=bad_patterns,
+                                   distance=distance,
+                                   replace_with=replace_with,
+                                   keep_only=keep_only)
+        # If no column, return the full dataframe :
+        if group_by is None:
+            return df
+        # Group DataFrame column :
+        grp = df.groupby(group_by).groups
+        labels, index = list(grp.keys()), list(grp.values())
+        # Prepare the new connectivity array :
+        n_labels = len(labels)
+        x_r = np.zeros((n_labels, n_labels), dtype=float)
+        mask_r = np.ones((n_labels, n_labels), dtype=bool)
+        # Loop over the upper triangle :
+        row, col = np.triu_indices(n_labels)
+        data, mask = self._edges.data, self._edges.mask
+        for r, c in zip(row, col):
+            m = tuple(np.meshgrid(index[r], index[c]))
+            x_r[r, c], mask_r[r, c] = data[m].mean(), mask[m].all()
+        # Define a ROI dataframe :
+        import pandas as pd
+        columns = [group_by, "Mean connectivity strength inside ROI",
+                   "Number of connections per node"]
+        df_roi = pd.DataFrame({}, columns=columns)
+        df_roi[group_by] = labels
+        df_roi[columns[1]] = np.diag(x_r)
+        df_roi[columns[2]] = [len(k) for k in index]
+        # Get (x, y, z) ROI centroids :
+        if get_centroids:
+            # Define the RoiObj :
+            from .roi_obj import RoiObj
+            if isinstance(roi_obj, str):
+                r_obj = RoiObj(roi_obj)
+            assert isinstance(r_obj, RoiObj)
+            # Search where is the label :
+            idx, roi_labels, rm_rows = [], [], []
+            for k, l in enumerate(labels):
+                _idx = r_obj.where_is(l, exact=True)
+                if not len(_idx):
+                    rm_rows += [k]
+                else:
+                    idx += [_idx[0]]
+                    roi_labels += [l]
+            xyz = r_obj.get_centroids(idx)
+            x_r = np.delete(x_r, rm_rows, axis=0)
+            x_r = np.delete(x_r, rm_rows, axis=1)
+            mask_r = np.delete(mask_r, rm_rows, axis=0)
+            mask_r = np.delete(mask_r, rm_rows, axis=1)
+            df_roi.drop(rm_rows, inplace=True)
+            df_roi.index = pd.RangeIndex(len(df_roi.index))
+            df_roi['X'] = xyz[:, 0]
+            df_roi['Y'] = xyz[:, 1]
+            df_roi['Z'] = xyz[:, 2]
+        x_r = np.ma.masked_array(x_r, mask=mask_r)
+        return x_r, labels, df_roi
+
+    @staticmethod
+    def _get_nb_connect(mask, sort, order):
+        """Sub-function to get the number of connections per node."""
+        assert sort in ['index', 'count'], \
+            ("`sort` should either be 'index' or 'count'")
+        assert order in ['ascending', 'descending'], \
+            ("`order` should either be 'ascending' or 'descending'")
+        logger.info("    Get the number of connections per node")
+        n_nodes = mask.shape[0]
+        # Get the number of connections per nodes :
+        nnz_x, nnz_y = np.where(~mask)
+        dict_ord = dict(Counter(np.ravel([nnz_x, nnz_y])))
+        # Full number of connections :
+        nb_connect = np.zeros((n_nodes, 2), dtype=int)
+        nb_connect[:, 0] = np.arange(n_nodes)
+        nb_connect[list(dict_ord.keys()), 1] = list(dict_ord.values())
+        # Sort according to node index or number of connections per node :
+        idx = 0 if sort is 'index' else 1
+        args = np.argsort(nb_connect[:, idx])
+        # Ascending or descending sorting :
+        if order == 'descending':
+            args = np.flip(args)
+        return nb_connect[args, :]
 
     def _get_camera(self):
         """Get the most adapted camera."""

@@ -30,11 +30,6 @@ class _PyQtModule(object):
     def __init__(self, verbose=None, to_describe=None, icon=None,
                  show_settings=True):
         """Init."""
-        from warnings import warn
-        mod_name = type(self).__name__
-        warn("%s module should now be imported from gui. Please change for "
-             "`from visbrain.gui import %s`" % (mod_name, mod_name))
-
         # Log level and profiler creation (if verbose='debug')
         set_log_level(verbose)
         path_to_visbrain_data()
