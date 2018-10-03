@@ -670,7 +670,7 @@ class BrainVisual(Visual):
     def zmax(self):
         """Get the zmax value."""
         return self._zmax
-    
+
     @zmax.setter
     def zmax(self, value):
         """Set zmax value."""
@@ -684,7 +684,7 @@ class BrainVisual(Visual):
     def inv_light(self):
         """Get the inv_light value."""
         return self._inv_light
-    
+
     @inv_light.setter
     def inv_light(self, value):
         """Set inv_light value."""
@@ -692,6 +692,6 @@ class BrainVisual(Visual):
         value = -1 if value else 1
         self.shared_program.vert['u_inv_light'] = value
         self._inv_light = value
-    
-    
+
+
 BrainMesh = create_visual_node(BrainVisual)
