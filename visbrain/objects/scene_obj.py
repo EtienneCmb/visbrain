@@ -6,7 +6,7 @@ import numpy as np
 from vispy import scene
 
 from ..io import write_fig_canvas, dialog_save
-from ..utils import color2vb, set_log_level, rotate_turntable
+from ..utils import color2vb, set_log_level, rotate_turntable, FixedCam
 from ..visuals import CbarVisual
 from ..config import CONFIG, PROFILER
 
@@ -487,7 +487,8 @@ class SceneObj(object):
             self._grid_desc[(row + 1, col + 1)] = len(self._grid.children)
             title_color = color2vb(title_color)
             tit = scene.visuals.Text(title, color=title_color, anchor_x='left',
-                                     bold=title_bold, font_size=title_size)
+                                     bold=title_bold, font_size=title_size,
+                                     anchor_y='bottom')
             sub.add_subvisual(tit)
         else:
             sub = self[(row, col)]
@@ -508,7 +509,8 @@ class SceneObj(object):
             assert zoom > 0, "`zoom` should be > 0"
             if isinstance(sub.camera, scene.cameras.TurntableCamera):
                 sub.camera.scale_factor /= zoom
-            elif isinstance(sub.camera, scene.cameras.PanZoomCamera):
+            elif isinstance(sub.camera, scene.cameras.PanZoomCamera) or \
+                    isinstance(sub.camera, FixedCam):
                 r = sub.camera.rect
                 prop = np.array((r.width, r.height)) / zoom
                 left = r.center[0] - (prop[0] / 2.)
