@@ -7,7 +7,7 @@ from visbrain.io import read_stc, clean_tmp
 
 
 NEEDED_FILES = dict(ANNOT_FILE_1='lh.aparc.annot',
-                    ANNOT_FILE_2='rh.PALS_B12_Brodmann.annot',
+                    ANNOT_FILE_2='rh.aparc.annot',
                     MEG_INVERSE='meg_source_estimate-lh.stc',
                     OVERLAY_1='lh.sig.nii.gz',
                     OVERLAY_2='lh.alt_sig.nii.gz',
@@ -33,17 +33,6 @@ class TestBrainObj(_TestObjects):
     """Test BrainObj."""
 
     OBJ = b_obj
-
-    def _prepare_brain(self, name='inflated'):
-        b_obj.set_data(name)
-        b_obj.clean()
-
-    def test_get_template_list(self):
-        """Test function get_template_list."""
-        b_obj._get_template_path()
-        b_obj._get_default_templates()
-        b_obj._get_downloadable_templates()
-        b_obj._add_downloadable_templates('white')
 
     def test_rotation(self):
         """Test function rotation."""
@@ -71,6 +60,8 @@ class TestBrainObj(_TestObjects):
 
     def test_get_parcellates(self):
         """Test function get_parcellates."""
+        # Prepare the brain :
+        b_obj = BrainObj('inflated')
         import pandas as pd
         file_1 = self.need_file(NEEDED_FILES['ANNOT_FILE_1'])
         file_2 = self.need_file(NEEDED_FILES['ANNOT_FILE_2'])
@@ -81,7 +72,7 @@ class TestBrainObj(_TestObjects):
     def test_overlay_from_file(self):
         """Test add_activation method."""
         # Prepare the brain :
-        self._prepare_brain()
+        b_obj = BrainObj('inflated')
         file_1 = self.need_file(NEEDED_FILES['OVERLAY_1'])
         file_2 = self.need_file(NEEDED_FILES['OVERLAY_2'])
         # Overlay :
@@ -99,6 +90,7 @@ class TestBrainObj(_TestObjects):
 
     def test_parcellize(self):
         """Test function parcellize."""
+        b_obj = BrainObj('inflated')
         file_1 = self.need_file(NEEDED_FILES['PARCELLATES_1'])
         file_2 = self.need_file(NEEDED_FILES['PARCELLATES_2'])
         b_obj.parcellize(file_1, hemisphere='left')
@@ -153,6 +145,5 @@ class TestBrainObj(_TestObjects):
 
     def test_remove(self):
         """Test function remove."""
-        b_cust = BrainObj('Custom')
-        b_cust.remove()
+        BrainObj('Custom').remove()
         clean_tmp()

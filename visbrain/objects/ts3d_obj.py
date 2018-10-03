@@ -92,7 +92,7 @@ class TimeSeries3DObj(VisbrainObject):
         assert isinstance(select, (list, np.ndarray))
         self._select = select
         # Amplitude / width :
-        assert isinstance(ts_amp, float) and isinstance(ts_width, float)
+        assert all([isinstance(k, (int, float)) for k in (ts_amp, ts_width)])
         self._ts_amp, self._ts_width = ts_amp, ts_width
         # Translate :
         assert len(translate) == 3

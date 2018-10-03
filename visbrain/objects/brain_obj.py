@@ -8,12 +8,9 @@ from vispy import scene
 from .visbrain_obj import VisbrainObject
 from ._projection import _project_sources_data
 from ..visuals import BrainMesh
-from ..utils import (mesh_edges, smoothing_matrix, array2colormap,
-                     rotate_turntable)
-from ..io import (download_file, is_nibabel_installed, is_pandas_installed,
-                  get_data_path, get_files_in_data, add_brain_template,
-                  remove_brain_template, path_to_tmp, get_files_in_folders,
-                  path_to_visbrain_data)
+from ..utils import (mesh_edges, smoothing_matrix, rotate_turntable)
+from ..io import (is_nibabel_installed, is_pandas_installed,
+                  add_brain_template, remove_brain_template)
 
 logger = logging.getLogger('visbrain')
 
@@ -84,11 +81,10 @@ class BrainObj(VisbrainObject):
         VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)
         # Load brain template :
         self._scale = _scale
+        self.data_folder = 'templates'
         self.set_data(name, vertices, faces, normals, lr_index, hemisphere,
                       invert_normals, sulcus)
         self.translucent = translucent
-        self._data_color = []
-        self._data_mask = []
 
     def __len__(self):
         """Get the number of vertices."""
@@ -98,35 +94,41 @@ class BrainObj(VisbrainObject):
                  lr_index=None, hemisphere='both', invert_normals=False,
                  sulcus=False):
         """Load a brain template."""
-        # _______________________ DEFAULT _______________________
-        b_download = self._get_downloadable_templates()
-        b_installed = get_files_in_data('templates')
-        # Need to download the brain template :
-        if (name in b_download) and (name not in b_installed):
-            self._add_downloadable_templates(name)
-        if not isinstance(vertices, np.ndarray):  # predefined
-            (vertices, faces, normals,
-             lr_index) = self._load_brain_template(name)
+        # _______________________ TEMPLATE _______________________
+        if not all([isinstance(k, np.ndarray) for k in [vertices, faces]]):
+            to_load = None
+            name_npz = name + '.npz'
+            # Identify if the template is already downloaded or not :
+            if name in self._df_get_downloaded():
+                to_load = self._df_get_file(name_npz, download=False)
+            elif name_npz in self._df_get_downloadable():  # need download
+                to_load = self._df_download_file(name_npz)
+            assert isinstance(to_load, str)
+            # Load the template :
+            arch = np.load(to_load)
+            vertices, faces = arch['vertices'], arch['faces']
+            normals = arch['normals']
+            lr_index = arch['lr_index'] if 'lr_index' in arch.keys() else None
+
         # Sulcus :
         if sulcus is True:
-            if name not in b_download:
-                logger.error("Sulcus only available for inflated, white and "
-                             "sphere templates")
-                sulcus = None
+            if not self._df_is_downloaded('sulcus.npy'):
+                sulcus_file = self._df_download_file('sulcus.npy')
             else:
-                to_path = self._get_template_path()
-                sulcus = np.load(download_file('sulcus.npy', to_path=to_path))
-        elif isinstance(sulcus, np.ndarray):
-            assert len(sulcus) == vertices.shape[0]
+                sulcus_file = self._df_get_file('sulcus.npy')
+            sulcus = np.load(sulcus_file)
         else:
             sulcus = None
-
         # _______________________ CHECKING _______________________
         assert all([isinstance(k, np.ndarray) for k in (vertices, faces)])
         if normals is not None:  # vertex normals
             assert isinstance(normals, np.ndarray)
         assert (lr_index is None) or isinstance(lr_index, np.ndarray)
         assert hemisphere in ['both', 'left', 'right']
+        if isinstance(sulcus, np.ndarray) and len(sulcus) != vertices.shape[0]:
+            logger.error("Sulcus ignored. Use it only for the inflated, white "
+                         "and sphere brain templates")
+            sulcus = None
 
         self._define_mesh(vertices, faces, normals, lr_index, hemisphere,
                           invert_normals, sulcus)
@@ -134,11 +136,8 @@ class BrainObj(VisbrainObject):
     def clean(self):
         """Clean brain object."""
         self.hemisphere = 'both'
-        self.mask = 0.
         self.rotate('top')
-        self._data_color = []
-        self._data_mask = []
-        logger.info("Brain object %s cleaned." % self.name)
+        logger.info("    Brain object %s cleaned." % self.name)
 
     def save(self, tmpfile=False):
         """Save the brain template (if not already saved)."""
@@ -156,11 +155,7 @@ class BrainObj(VisbrainObject):
 
     def list(self, file=None):
         """Get the list of all installed templates."""
-        path = self._search_in_path()
-        files = get_files_in_folders(*path, file=file)
-        download = self._get_downloadable_templates()
-        all_ = set(files + download)
-        return list(all_)
+        return self._df_get_downloaded(with_ext=False, exclude=['sulcus'])
 
     def _define_mesh(self, vertices, faces, normals, lr_index, hemisphere,
                      invert_normals, sulcus):
@@ -175,49 +170,6 @@ class BrainObj(VisbrainObject):
         else:
             self.mesh.set_data(vertices=vertices, faces=faces, normals=normals,
                                lr_index=lr_index, hemisphere=hemisphere)
-
-    def _search_in_path(self):
-        """Specify where to find brain templates."""
-        _vb_path_tmp = path_to_visbrain_data(folder='templates')
-        _data_path = get_data_path(folder='templates')
-        _tmp_path = path_to_tmp(folder='templates')
-        return _vb_path_tmp, _data_path, _tmp_path
-
-    def _load_brain_template(self, name):
-        """Load the brain template."""
-        path = self._search_in_path()
-        name = get_files_in_folders(*path, file=name + '.npz')[0]
-        arch = np.load(name)
-        vertices, faces = arch['vertices'], arch['faces']
-        normals = arch['normals']
-        lr_index = arch['lr_index'] if 'lr_index' in arch.keys() else None
-        return vertices, faces, normals, lr_index
-
-    ###########################################################################
-    ###########################################################################
-    #                           PATH METHODS
-    ###########################################################################
-    ###########################################################################
-
-    def _get_template_path(self):
-        """Get the path where datasets are stored."""
-        return get_data_path(folder='templates')
-
-    def _get_default_templates(self):
-        """Get the default list of brain templates."""
-        return ['B1', 'B2', 'B3']
-
-    def _get_downloadable_templates(self):
-        """Get the list of brain that can be downloaded."""
-        logger.debug("hdr transformation missing for downloadable templates")
-        return ['white', 'inflated', 'sphere']
-
-    def _add_downloadable_templates(self, name, ext='.npz'):
-        """Download then install a brain template."""
-        assert name in self._get_downloadable_templates()
-        to_path = self._get_template_path()
-        # Download the file :
-        download_file(name + ext, to_path=to_path)
 
     ###########################################################################
     ###########################################################################
@@ -292,7 +244,7 @@ class BrainObj(VisbrainObject):
     def project_sources(self, s_obj, project='modulation', radius=10.,
                         contribute=False, cmap='viridis', clim=None, vmin=None,
                         under='black', vmax=None, over='red',
-                        mask_color=None):
+                        mask_color=None, to_overlay=0):
         """Project source's activity or repartition onto the brain object.
 
         Parameters
@@ -326,9 +278,10 @@ class BrainObj(VisbrainObject):
         kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
         self._default_cblabel = "Source %s" % project
         _project_sources_data(s_obj, self, project, radius, contribute,
-                              mask_color=mask_color, **kw)
+                              mask_color=mask_color, to_overlay=to_overlay,
+                              **kw)
 
-    def add_activation(self, data=None, vertices=None, smoothing_steps=20,
+    def add_activation(self, data=None, vertices=None, smoothing_steps=5,
                        file=None, hemisphere=None, hide_under=None,
                        n_contours=None, cmap='viridis', clim=None, vmin=None,
                        vmax=None, under='gray', over='red'):
@@ -344,15 +297,17 @@ class BrainObj(VisbrainObject):
         data : array_like | None
             Vector array of data of shape (n_data,).
         vertices : array_like | None
-            Vector array of vertices of shape (n_vtx). Must be an array of
-            integers.
+            Vector array of vertex indices of shape (n_vtx).
+            Must be an array of integers. If hemisphere is 'left' or 'right'
+            indexation is done with respect to the specified hemisphere.
         smoothing_steps : int | 20
-            Number of smoothing steps (smoothing is used if n_data < n_vtx)
+            Number of smoothing steps (smoothing is used if n_data < n_vtx).
+            If None or 0, no smoothing is performed.
         file : string | None
             Full path to the overlay file.
         hemisphrere : {None, 'both', 'left', 'right'}
-            The hemisphere to use to add the overlay. If None, the method try
-            to inferred the hemisphere from the file name.
+            The hemisphere to use to add the overlay. If None, the method tries
+            to infer the hemisphere from the file name.
         hide_under : float | None
             Hide activations under a certain threshold.
         n_contours : int | None
@@ -371,47 +326,55 @@ class BrainObj(VisbrainObject):
         over : string/tuple/array_like | 'red'
             The color to use for values over vmax.
         """
-        col_kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
+        kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
         is_under = isinstance(hide_under, (int, float))
-        color = np.zeros((len(self.mesh), 4), dtype=np.float32)
-        mask = np.zeros((len(self.mesh),), dtype=float)
+        mask = np.zeros((len(self.mesh),), dtype=bool)
+        data_vec = np.zeros((len(self.mesh),), dtype=np.float32)
+        sm_data = np.zeros((len(self.mesh),), dtype=np.float32)
         self._default_cblabel = "Activation"
         # ============================= METHOD =============================
         if isinstance(data, np.ndarray):
-            if not isinstance(vertices, np.ndarray):
-                vertices = np.arange(len(data))
-            logger.info("Add data to specific vertices.")
-            assert (data.ndim == 1) and (vertices.ndim == 1)
+            # Hemisphere :
+            hemisphere, activ_vert = self._hemisphere_from_file(hemisphere,
+                                                                file)
+            activ_vert_idx = np.where(activ_vert)[0]
+
+            is_do_smoothing = True
+
+            if vertices is None:
+                # Data are defined on a dense grid
+                assert len(activ_vert_idx) == len(data)
+                vertices = np.arange(len(activ_vert_idx))
+                is_do_smoothing = False
+                if smoothing_steps:
+                    logger.warning(
+                        'Data defined on a dense grid; ignore smoothing.')
+            else:
+                assert len(vertices) == len(data)
+
+            logger.info("    Add data to specific vertices.")
+            assert (data.ndim == 1) and (np.asarray(vertices).ndim == 1)
             assert smoothing_steps is None or isinstance(smoothing_steps, int)
+
             # Get smoothed vertices // data :
-            if isinstance(smoothing_steps, int):
+            if hemisphere != 'both':
+                # Transform to indexing with respect to the whole brain
+                vert_whole = activ_vert_idx[vertices]
+            else:
+                vert_whole = vertices
+
+            if smoothing_steps and is_do_smoothing:
                 edges = mesh_edges(self.mesh._faces)
-                sm_mat = smoothing_matrix(vertices, edges, smoothing_steps)
-                sm_data = data[sm_mat.col]
-                rows = sm_mat.row
+                sm_mat = smoothing_matrix(vert_whole, edges, smoothing_steps)
+                sc = sm_mat * data  # actual data smoothing
+                if hemisphere != 'both':
+                    sc = sc[activ_vert]
             else:
-                sm_data = data
-                rows = vertices
-            # Clim :
-            clim = (sm_data.min(), sm_data.max()) if clim is None else clim
-            assert len(clim) == 2
-            col_kw['clim'] = clim
-            # Contours :
-            sm_data = self._data_to_contour(sm_data, clim, n_contours)
-            _, idx = self._hemisphere_from_file(hemisphere, None)
-            hemi_idx = np.where(idx)[0]
-            # Convert into colormap :
-            smooth_map = array2colormap(sm_data, **col_kw)
-            color = np.ones((len(self.mesh), 4), dtype=np.float32)
-            color[hemi_idx[rows], :] = smooth_map
-            # Mask :
-            if is_under:
-                mask[hemi_idx[rows[sm_data >= hide_under]]] = 1.
-            else:
-                mask[:] = 1.
+                sc = np.zeros_like(sm_data[activ_vert])
+                sc[vertices] = data
         elif isinstance(file, str):
             assert os.path.isfile(file)
-            logger.info("Add overlay to the {} brain template "
+            logger.info("    Add overlay to the {} brain template "
                         "({})".format(self._name, file))
             from visbrain.io import read_nifti
             # Load data using Nibabel :
@@ -419,31 +382,22 @@ class BrainObj(VisbrainObject):
             sc = sc.ravel(order="F")
             hemisphere = 'both' if len(sc) == len(self.mesh) else hemisphere
             # Hemisphere :
-            hemisphere, idx = self._hemisphere_from_file(hemisphere, file)
-            assert len(sc) == idx.sum()
-            # Clim :
-            clim = (sc.min(), sc.max()) if clim is None else clim
-            assert len(clim) == 2
-            col_kw['clim'] = clim
-            # Contour :
-            sc = self._data_to_contour(sc, clim, n_contours)
-            # Convert into colormap :
-            color[idx, :] = array2colormap(sc, **col_kw)
-            # Mask :
-            mask[idx] = 1.
-            if is_under:
-                sub_idx = np.where(idx)[0][sc < hide_under]
-                mask[sub_idx] = 0.
+            _, activ_vert = self._hemisphere_from_file(hemisphere, file)
         else:
             raise ValueError("Unknown activation type.")
-        # Build mask color :
-        col_mask = ~np.tile(mask.reshape(-1, 1).astype(bool), (1, 4))
-        # Keep a copy of each overlay color and mask :
-        self._data_color.append(np.ma.masked_array(color, mask=col_mask))
-        self._data_mask.append(mask)
-        # Set color and mask to the mesh :
-        self.mesh.color = np.ma.array(self._data_color).mean(0)
-        self.mesh.mask = np.array(self._data_mask).max(0)
+        # Define the data to send to the vertices :
+        sm_data[activ_vert] = sc
+        data_vec[activ_vert] = self._data_to_contour(sc, clim, n_contours)
+        mask[activ_vert] = True
+        # Hide under :
+        if is_under:
+            mask[sm_data < hide_under] = False
+        # Clim :
+        clim = (sc.min(), sc.max()) if clim is None else clim
+        assert len(clim) == 2
+        kw['clim'] = clim
+        # Add overlay :
+        self.mesh.add_overlay(data_vec[mask], vertices=np.where(mask)[0], **kw)
 
     def parcellize(self, file, select=None, hemisphere=None, data=None,
                    cmap='viridis', clim=None, vmin=None, under='gray',
@@ -462,6 +416,8 @@ class BrainObj(VisbrainObject):
         hemisphere : string | None
             The hemisphere for the parcellation. If None, the hemisphere will
             be inferred from file name.
+        data : array_like | None
+            Use data to be transformed into color for each parcellate.
         cmap : string | 'viridis'
             The colormap to use.
         clim : tuple | None
@@ -478,11 +434,13 @@ class BrainObj(VisbrainObject):
         """
         idx, u_colors, labels, u_idx = self._load_annot_file(file)
         roi_labs = []
+        kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
+        data_vec = np.zeros((len(self.mesh),), dtype=np.float32)
         # Get the hemisphere and (left // right) boolean index :
         hemisphere, h_idx = self._hemisphere_from_file(hemisphere, file)
         # Select conversion :
         if select is None:
-            logger.info("Select all parcellates")
+            logger.info("    Select all parcellates")
             select = labels.tolist()
             if 'Unknown' in select:
                 select.pop(select.index('Unknown'))
@@ -491,20 +449,18 @@ class BrainObj(VisbrainObject):
             data = np.asarray(data)
             assert data.ndim == 1 and len(data) == len(select)
             clim = (data.min(), data.max()) if clim is None else clim
-            logger.info("Color inferred from data")
-            u_colors = np.zeros((len(u_idx), 4), dtype=float)
             kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
-            data_color = array2colormap(data, **kw)
+            logger.info("    Color inferred from data")
+            u_colors = np.zeros((len(u_idx), 4), dtype=float)
             self._default_cblabel = "Parcellates data"
         else:
-            logger.info("Use default color included in the file")
+            logger.info("    Use default color included in the file")
             u_colors = u_colors.astype(float) / 255.
-            data_color = None
         # Build the select variable :
         if isinstance(select, (np.ndarray, list)):
             select = np.asarray(select)
             if select.dtype != int:
-                logger.info('Search parcellates using labels')
+                logger.info('    Search parcellates using labels')
                 select_str = select.copy()
                 select, bad_select = [], []
                 for k in select_str:
@@ -521,34 +477,33 @@ class BrainObj(VisbrainObject):
                 select = np.array(select).ravel()
         if not select.size:
             raise ValueError("No parcellates found")
+        # Get corresponding hemisphere indices (left, right or both) :
+        hemi_idx = np.where(h_idx)[0]
         # Prepare color variables :
-        color = np.zeros((len(self.mesh), 4))
-        mask = np.zeros((len(self.mesh),))
+        color = []
+        mask = np.zeros((len(self.mesh),), dtype=bool)
         # Set roi color to the mesh :
-        sub_select = np.where(h_idx)[0]  # sub-hemisphere selection
         no_parcellates = []
         for i, k in enumerate(select):
             sub_idx = np.where(u_idx == k)[0][0]  # index location in u_idx
             if sub_idx:
-                color_index = sub_select[u_idx[idx] == k]
-                if data_color is None:
-                    color[color_index, :] = u_colors[sub_idx, :]
-                else:
-                    color[color_index, :] = data_color[i, :]
+                vert_index = hemi_idx[u_idx[idx] == k]
+                color.append(u_colors[sub_idx, :])
                 roi_labs.append(labels[sub_idx])
-                mask[color_index] = 1.
+                mask[vert_index] = True
+                data_vec[vert_index] = data[i] if data is not None else i
             else:
                 no_parcellates.append(str(k))
         if no_parcellates:
             logger.warning("No corresponding parcellates for index "
                            "%s" % ', '.join(np.unique(no_parcellates)))
-        logger.info("Selected parcellates : %s" % ", ".join(roi_labs))
-        # Keep an eye on data color and mask :
-        self._data_color.append(color)
-        self._data_mask.append(mask)
-        # Set color and mask to the mesh :
-        self.mesh.color = np.array(self._data_color).sum(0)
-        self.mesh.mask = np.array(self._data_mask).sum(0)
+        if data is None:
+            color = np.asarray(color, dtype=np.float32)
+            kw['cmap'] = color[:, 0:-1]
+            kw['interpolation'] = 'linear'
+        logger.info("    Selected parcellates : %s" % ", ".join(roi_labs))
+        # Finally, add the overlay to the brain :
+        self.mesh.add_overlay(data_vec[mask], vertices=np.where(mask)[0], **kw)
 
     def get_parcellates(self, file):
         """Get the list of supported parcellates names and index.
@@ -566,8 +521,29 @@ class BrainObj(VisbrainObject):
         dico = dict(Index=u_idx, Labels=labels, Color=color.tolist())
         return pd.DataFrame(dico, columns=['Index', 'Labels', 'Color'])
 
+    def slice(self, xmin=None, xmax=None, ymin=None, ymax=None, zmin=None,
+              zmax=None):
+        """Take a slice of the brain.
+
+        Parameters
+        ----------
+        xmin, xmax : float | None
+            Cut the mesh along the x-dimension.
+        ymin, ymax : float | None
+            Cut the mesh along the y-dimension.
+        zmin, zmax : float | None
+            Cut the mesh along the z-dimension.
+        """
+        self.mesh.xmin = xmin
+        self.mesh.xmax = xmax
+        self.mesh.ymin = ymin
+        self.mesh.ymax = ymax
+        self.mesh.zmin = zmin
+        self.mesh.zmax = zmax
+
     @staticmethod
     def _data_to_contour(data, clim, n_contours):
+        clim = (data.min(), data.max()) if clim is None else clim
         if isinstance(n_contours, int):
             _range = np.linspace(clim[0], clim[1], n_contours)
             for k in range(len(_range) - 1):
@@ -606,7 +582,7 @@ class BrainObj(VisbrainObject):
         id_vert, ctab, names = nibabel.freesurfer.read_annot(file)
         names = np.array(names).astype(str)
         color, u_idx = ctab[:, 0:4], ctab[..., -1]
-        logger.info("Annot file loaded (%s)" % file)
+        logger.info("    Annot file loaded (%s)" % file)
         # Test if variables have the same size :
         if len(u_idx) != len(names):
             min_len = min(len(u_idx), color.shape[0], len(names))
@@ -626,14 +602,10 @@ class BrainObj(VisbrainObject):
     ###########################################################################
 
     def _update_cbar(self):
-        if isinstance(self._cbar_data, np.ndarray):
-            color = array2colormap(self._cbar_data, **self.to_kwargs())
-            self.mesh.color = color
-        # else:
-        #     logger.error("No data to update for %s" % self.name)
+        self.mesh.update_colormap(**self.to_kwargs())
 
     def _update_cbar_minmax(self):
-        pass
+        self._clim = self.mesh.minmax
 
     ###########################################################################
     ###########################################################################

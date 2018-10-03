@@ -3,7 +3,7 @@
 import os
 from setuptools import setup, find_packages
 
-__version__ = "0.4.2"
+__version__ = "0.4.3"
 NAME = 'visbrain'
 AUTHOR = "Visbrain developpers"
 MAINTAINER = "Etienne Combrisson"
@@ -17,12 +17,7 @@ DOWNLOAD_URL = "https://github.com/EtienneCmb/visbrain/archive/" + \
                "v" + __version__ + ".tar.gz"
 # Data path :
 HERE = os.path.abspath(os.path.dirname(__file__))
-PACKAGE_DATA = {'visbrain.data.templates': ['B1.npz', 'B2.npz', 'B3.npz'],
-                'visbrain.data.roi': ['aal.npz', 'brodmann.npz',
-                                      'talairach.npz'],
-                'visbrain.data.topo': ['eegref.npz'],
-                'visbrain.data.icons': ['*.svg'],
-                }
+PACKAGE_DATA = {}
 
 
 def read(fname):
@@ -57,24 +52,26 @@ setup(
         "matplotlib>=1.5.5",
         "pyqt5",
         "pillow",
-        "Click"
+        "PyOpenGL"
     ],
+    extras_require={
+        'full': ["mne", "tensorpac", "pandas", "xlrd", "scikit-image",
+                 "nibabel"],
+        'sleep': ["mne", "tensorpac"],
+        'roi': ["pandas", "xlrd"],
+        'topo': ["scikit-image"]
+    },
     dependency_links=[],
     classifiers=["Development Status :: 3 - Alpha",
                  'Intended Audience :: Science/Research',
                  'Intended Audience :: Education',
                  'Intended Audience :: Developers',
                  'Topic :: Scientific/Engineering :: Visualization',
-                 "Programming Language :: Python :: 3 :: Only",
                  "Programming Language :: Python :: 3.5",
+                 "Programming Language :: Python :: 3.6",
+                 "Programming Language :: Python :: 3.7",
                  "Operating System :: MacOS",
                  "Operating System :: POSIX :: Linux",
                  "Operating System :: Microsoft :: Windows",
                  "Natural Language :: English"
-                 ],
-    entry_points='''
-        [console_scripts]
-        visbrain_sleep=visbrain.cli:cli_sleep
-        visbrain_fig_hyp=visbrain.cli:cli_fig_hyp
-        visbrain_sleep_stats=visbrain.cli:cli_sleep_stats
-    ''')
+                 ])

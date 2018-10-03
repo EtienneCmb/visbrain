@@ -126,7 +126,7 @@ def volume_to_mesh(vol, smooth_factor=3, level=None, **kwargs):
         Mesh normals.
     """
     # Smooth the volume :
-    vol_s = smooth_3d(vol, smooth_factor)
+    vol_s, tf = smooth_3d(vol, smooth_factor, correct=True)
     # Extract vertices and faces :
     if level is None:
         level = .5
@@ -134,6 +134,8 @@ def volume_to_mesh(vol, smooth_factor=3, level=None, **kwargs):
         vol_s[vol_s != level] = 0
         level = .5
     vert_n, faces_n = isosurface(vol_s, level=level)
+    # Smoothing compensation :
+    vert_n = tf.map(vert_n)[:, 0:-1]
     # Convert to meshdata :
     vertices, faces, normals = convert_meshdata(vert_n, faces_n, **kwargs)
     return vertices, faces, normals

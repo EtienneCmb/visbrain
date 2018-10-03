@@ -13,13 +13,12 @@ logger = logging.getLogger('visbrain')
 __all__ = ['mne_plot_source_estimation', 'mne_plot_source_space']
 
 
-def _extract_arrays_from_src(src, hemisphere='both'):
+def _extract_arrays_from_src(src, hemisphere='both', fact=1.):
     """Get vertices, faces, active vertices and sources from SourceSpace."""
     logger.debug("Loading vert, faces, activ and sources from src structure.")
     # Define usefull variables :
     _l_nb, _r_nb = src[0]['rr'].shape[0], src[1]['rr'].shape[0]
-    _f_off = [0, src[0]['tris'].max() + 1]
-    _act_off, _fact = [0, _l_nb], 1000.
+    _f_off, _act_off = [0, src[0]['tris'].max() + 1], [0, _l_nb]
     _hemi = {'left': [0], 'right': [1], 'both': [0, 1]}[hemisphere]
     # Get vertices and faces :
     vertices = np.vstack([src[k]['rr'] for k in [0, 1]])
@@ -28,13 +27,13 @@ def _extract_arrays_from_src(src, hemisphere='both'):
     # Get active vertex and sources :
     activ = np.hstack([src[k]['vertno'] + _act_off[k] for k in [0, 1]])
     sources = np.vstack([src[k]['rr'][src[k]['vertno']] for k in _hemi])
-    return _fact * vertices, faces, lr_index, activ, _fact * sources
+    return fact * vertices, faces, lr_index, activ, fact * sources
 
 
 def _plt_src(name, kw_brain_obj, active_data, active_vert, sources,
              kw_source_obj, kw_activation, show):
     # Define a brain object and a source object :
-    logger.info('Define a Brain and Source objects')
+    logger.info('    Define a Brain and Source objects')
     from visbrain.objects import BrainObj, SourceObj, SceneObj
     brain_obj, source_obj = name + '_brain', name + '_sources'
     b_obj = BrainObj(brain_obj, **kw_brain_obj)
@@ -42,22 +41,24 @@ def _plt_src(name, kw_brain_obj, active_data, active_vert, sources,
     s_obj.visible_obj = False
     # Add data to the BrainObj if needed :
     if isinstance(active_data, np.ndarray):
-        logger.info("Add active data between "
+        logger.info("    Add active data between "
                     "[%2f, %2f]" % (active_data.min(), active_data.max()))
         b_obj.add_activation(data=active_data, vertices=active_vert,
                              **kw_activation)
     # Return either a scene or a BrainObj and SourceObj :
     if show is True:  # Display inside the Brain GUI
         # Define a Brain instance :
-        from visbrain import Brain
+        from visbrain.gui import Brain
         brain = Brain(brain_obj=b_obj, source_obj=s_obj)
+        brain._brain_template.setEnabled(False)
         # By default, display colorbar if activation :
         if isinstance(active_data, np.ndarray):
             brain.menuDispCbar.setChecked(True)
             brain._fcn_menu_disp_cbar()
         brain.show()
     elif show is 'scene':  # return a SceneObj
-        logger.info('Define a unique scene for the Brain and Source objects')
+        logger.info("    Define a unique scene for the Brain and Source "
+                    "objects")
         sc = SceneObj()
         sc.add_to_subplot(s_obj)
         sc.add_to_subplot(b_obj, use_this_cam=True)
@@ -131,7 +132,7 @@ def mne_plot_source_estimation(sbj, sbj_dir, fwd_file, stc_file=None,
     (vertices, faces, lr_index, active_vert,
      sources) = _extract_arrays_from_src(fwd_src, hemisphere)
     # Head to MNI conversion
-    logger.info("Head to MNI conversion")
+    logger.info("    Head to MNI conversion")
     vertices = head_to_mni(vertices, sbj, mri_head_t, subjects_dir=sbj_dir)
     sources = head_to_mni(sources, sbj, mri_head_t, subjects_dir=sbj_dir)
     # Add data to the mesh :
@@ -142,16 +143,16 @@ def mne_plot_source_estimation(sbj, sbj_dir, fwd_file, stc_file=None,
                          "(%i)" % (len(active_data), len(active_vert)))
             active_data = active_vert = None
         else:
-            logger.info("Array of active data used.")
+            logger.info("    Array of active data used.")
     elif isinstance(stc_file, str) and isinstance(active_data, int):
         # Get active data :
         assert os.path.isfile(stc_file)
         n_tp = active_data
         data = mne.read_source_estimate(stc_file).data
         active_data = np.abs(data[:, n_tp] / data[:, n_tp].max())
-        logger.info("Time instant %i used for activation" % n_tp)
+        logger.info("    Time instant %i used for activation" % n_tp)
     else:
-        logger.info("No active data detected.")
+        logger.info("    No active data detected.")
         active_data = active_vert = None
     # Complete dicts :
     kw_brain_obj['vertices'], kw_brain_obj['faces'] = vertices, faces
@@ -198,7 +199,7 @@ def mne_plot_source_space(fif_file, active_data=None, hemisphere='both',
     src = read_source_spaces(fif_file)
     # Build vertices / faces :
     (vertices, faces, lr_index, active_vert,
-     sources) = _extract_arrays_from_src(src, hemisphere)
+     sources) = _extract_arrays_from_src(src, hemisphere, fact=1000.)
     # Complete dicts :
     kw_brain_obj['vertices'], kw_brain_obj['faces'] = vertices, faces
     kw_brain_obj['lr_index'], kw_brain_obj['hemisphere'] = lr_index, hemisphere

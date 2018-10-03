@@ -56,10 +56,10 @@ class _Formatter(logging.Formatter):
         # Set level color :
         levelname_color = COLOR_SEQ % (30 + COLORS[name]) + name + RESET_SEQ
         record.levelname = levelname_color
-        # if record.levelno == 11:
-        #     logging.Formatter.__init__(self, FORMAT['print'])
-        # else:
-        #     logging.Formatter.__init__(self, FORMAT[self._format_type])
+        if record.levelno == 20:
+            logging.Formatter.__init__(self, FORMAT['print'])
+        else:
+            logging.Formatter.__init__(self, FORMAT[self._format_type])
         return formatter_message(logging.Formatter.format(self, record))
 
 

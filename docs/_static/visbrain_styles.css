@@ -76,12 +76,12 @@ th {
 
 /* ############################ ALERT ############################*/
 .alert-info {
-    background-color: #47a7f5;
-    font-weight: bold;
+    color: black;
+    background-color: #c7e4fc;
 }
 .alert-warning {
-    background-color: #FD9500;
-    font-weight: bold;
+    color: black;
+    background-color: #fedfb2;
 }
 .alert-primary {
     background-color: #4b4d39;

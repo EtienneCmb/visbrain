@@ -1,0 +1,57 @@
+{
+    "templates": {
+        "B1.npz": "https://www.dropbox.com/s/7oisd56fm9fkwe1/B1.npz?dl=1",
+        "B2.npz": "https://www.dropbox.com/s/k6qev2k7ac8fe60/B2.npz?dl=1",
+        "B3.npz": "https://www.dropbox.com/s/t3huxif2xplned7/B3.npz?dl=1",
+        "inflated.npz": "https://www.dropbox.com/s/nl2hh0thoy7xbnd/inflated.npz?dl=1",
+        "sphere.npz": "https://www.dropbox.com/s/os90qcr5rwigqmh/sphere.npz?dl=1",
+        "white.npz": "https://www.dropbox.com/s/avpq84gq06d5mbc/white.npz?dl=1",
+        "sulcus.npy": "https://www.dropbox.com/s/jfihlb7pna7ws2i/sulcus.npy?dl=1"
+    },
+    "roi": {
+        "aal.npz": "https://www.dropbox.com/s/feqaoj58va5anbr/aal.npz?dl=1",
+        "brodmann.npz": "https://www.dropbox.com/s/qg2w9b191r7f4ox/brodmann.npz?dl=1",
+        "talairach.npz": "https://www.dropbox.com/s/g9q9al7t481x180/talairach.npz?dl=1",
+        "mist.zip": "https://www.dropbox.com/s/aefmw90uvx09gqw/mist.zip?dl=1"
+    },
+    "topo": {
+        "eegref.npz": "https://www.dropbox.com/s/doe3fnxbct5rsss/eegref.npz?dl=1"
+    },
+    "icons": {
+        "brain_icon.svg": "https://www.dropbox.com/s/47eb6a1jlgzk9vc/brain_icon.svg?dl=1",
+        "colorbar_icon.svg": "https://www.dropbox.com/s/botcrkxkor1gtzh/colorbar_icon.svg?dl=1",
+        "figure_icon.svg": "https://www.dropbox.com/s/dpjtsenf9n9mvxt/figure_icon.svg?dl=1",
+        "sleep_icon.svg": "https://www.dropbox.com/s/bj0a88krqtq5q00/sleep_icon.svg?dl=1",
+        "topo_icon.svg": "https://www.dropbox.com/s/yvmsuerie5bn075/topo_icon.svg?dl=1"
+    },
+    "example_data": {
+        "xyz_sample.npz": "https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1",
+        "phase_sync_delta.npz": "https://www.dropbox.com/s/08xaq1lkj7rnuf6/phase_sync_delta.npz?dl=1",
+        "thalamus.txt": "https://www.dropbox.com/s/sw7vkplwd9zbns1/thalamus.txt?dl=1",
+        "Px.npy": "https://www.dropbox.com/s/qzwjavhz5lg13km/Px.npy?dl=1",
+        "meg_source_estimate-lh.stc": "https://www.dropbox.com/s/q6cw5gf3edjqqcc/meg_source_estimate-lh.stc?dl=1",
+        "meg_source_estimate-rh.stc": "https://www.dropbox.com/s/uyr6291q2z87uvo/meg_source_estimate-rh.stc?dl=1",
+        "lh.sig.nii.gz": "https://www.dropbox.com/s/soq2l4pqxerhzyo/lh.sig.nii.gz?dl=1",
+        "lh.alt_sig.nii.gz": "https://www.dropbox.com/s/q7w4mw8se4vknlp/lh.alt_sig.nii.gz?dl=1",
+        "figure.zip": "https://www.dropbox.com/s/jsjct54ynvdjzfq/figure.zip?dl=1",
+        "lh.aparc.a2009s.annot": "https://www.dropbox.com/s/zdtgwqal7m9nr8g/lh.aparc.a2009s.annot?dl=1",
+        "rh.aparc.a2009s.annot": "https://www.dropbox.com/s/zt1o27zgna6id05/rh.aparc.a2009s.annot?dl=1",
+        "lh.PALS_B12_Brodmann.annot": "https://www.dropbox.com/s/zn3zu9hnym9yny2/lh.PALS_B12_Brodmann.annot?dl=1",
+        "rh.PALS_B12_Brodmann.annot": "https://www.dropbox.com/s/8ddj6pscs6maau3/rh.PALS_B12_Brodmann.annot?dl=1",
+        "lh.aparc.annot": "https://www.dropbox.com/s/31voof5ijgyz9zw/lh.aparc.annot?dl=1",
+        "rh.aparc.annot": "https://www.dropbox.com/s/a06wl7kw1orwiia/rh.aparc.annot?dl=1",
+        "brain_config.txt": "https://www.dropbox.com/s/o0ljy16mpz7mmxu/brain_config.txt?dl=1",
+        "cbar_config.zip": "https://www.dropbox.com/s/5o1ph08rmpft200/cbar_config.zip?dl=1",
+        "GG-853-GM-0.7mm.nii.gz": "https://www.dropbox.com/s/escinae2yprcq52/GG-853-GM-0.7mm.nii.gz?dl=1",
+        "GG-853-WM-0.7mm.nii.gz": "https://www.dropbox.com/s/26l6ky0bj981yux/GG-853-WM-0.7mm.nii.gz?dl=1",
+        "Custom.npz": "https://www.dropbox.com/s/twrn2e7hjwsea6b/Custom.npz?dl=1",
+        "sleep_rec.zip": "https://www.dropbox.com/s/oer3eh8s6i8wcf5/sleep_rec.zip?dl=1",
+        "sleep_edf.zip": "https://www.dropbox.com/s/bj1ra95rbksukro/sleep_edf.zip?dl=1",
+        "sleep_brainvision.zip": "https://www.dropbox.com/s/t2bo9ufvc3f8mbj/sleep_brainvision.zip?dl=1",
+        "sleep_elan.zip": "https://www.dropbox.com/s/95xvdqivpgk90hg/sleep_elan.zip?dl=1",
+        "sleep_matlab.zip": "https://www.dropbox.com/s/bmfc2u55xsejbaf/sleep_matlab.zip?dl=1",
+        "topoplot_data.npz": "https://www.dropbox.com/s/m76y3p0fyj6lxht/topoplot_data.npz?dl=1",
+        "MIST_ROI.zip": "https://www.dropbox.com/s/3v24xqrc715e2w5/MIST_ROI.zip?dl=1",
+        "s101_jbe.hyp": "https://www.dropbox.com/s/69c5cke4tuehyqb/s101_jbe.hyp?dl=1"
+    }
+}

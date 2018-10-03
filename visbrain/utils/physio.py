@@ -7,10 +7,9 @@ from itertools import product
 from scipy.stats import zscore
 
 from .sigproc import smoothing
-from ..io.path import get_data_path, get_files_in_data
 
 __all__ = ('find_non_eeg', 'rereferencing', 'bipolarization', 'commonaverage',
-           'tal2mni', 'mni2tal', 'load_predefined_roi', 'generate_eeg')
+           'tal2mni', 'mni2tal', 'generate_eeg')
 
 logger = logging.getLogger('visbrain')
 
@@ -230,36 +229,36 @@ def _spm_matrix(p):
     p.extend(q[len(p):12])
 
     # Translation t :
-    t = np.matrix([[1, 0, 0, p[0]],
-                   [0, 1, 0, p[1]],
-                   [0, 0, 1, p[2]],
-                   [0, 0, 0, 1]])
+    t = np.array([[1, 0, 0, p[0]],
+                  [0, 1, 0, p[1]],
+                  [0, 0, 1, p[2]],
+                  [0, 0, 0, 1]])
     # Rotation 1 :
-    r1 = np.matrix([[1, 0, 0, 0],
-                    [0, np.cos(p[3]), np.sin(p[3]), 0],
-                    [0, -np.sin(p[3]), np.cos(p[3]), 0],
-                    [0, 0, 0, 1]])
-    # Rotation 2 :
-    r2 = np.matrix([[np.cos(p[4]), 0, np.sin(p[4]), 0],
-                    [0, 1, 0, 0],
-                    [-np.sin([p[4]]), 0, np.cos(p[4]), 0],
-                    [0, 0, 0, 1]])
-    # Rotation 3 :
-    r3 = np.matrix([[np.cos(p[5]), np.sin(p[5]), 0, 0],
-                    [-np.sin(p[5]), np.cos(p[5]), 0, 0],
-                    [0, 0, 1, 0],
-                    [0, 0, 0, 1]])
-    # Translation z :
-    z = np.matrix([[p[6], 0, 0, 0],
-                   [0, p[7], 0, 0],
-                   [0, 0, p[8], 0],
+    r1 = np.array([[1, 0, 0, 0],
+                   [0, np.cos(p[3]), np.sin(p[3]), 0],
+                   [0, -np.sin(p[3]), np.cos(p[3]), 0],
                    [0, 0, 0, 1]])
-    # Translation s :
-    s = np.matrix([[1, p[9], p[10], 0],
-                   [0, 1, p[11], 0],
+    # Rotation 2 :
+    r2 = np.array([[np.cos(p[4]), 0, np.sin(p[4]), 0],
+                   [0, 1, 0, 0],
+                   [-np.sin([p[4]]), 0, np.cos(p[4]), 0],
+                   [0, 0, 0, 1]])
+    # Rotation 3 :
+    r3 = np.array([[np.cos(p[5]), np.sin(p[5]), 0, 0],
+                   [-np.sin(p[5]), np.cos(p[5]), 0, 0],
                    [0, 0, 1, 0],
                    [0, 0, 0, 1]])
-    return t * r1 * r2 * r3 * z * s
+    # Translation z :
+    z = np.array([[p[6], 0, 0, 0],
+                  [0, p[7], 0, 0],
+                  [0, 0, p[8], 0],
+                  [0, 0, 0, 1]])
+    # Translation s :
+    s = np.array([[1, p[9], p[10], 0],
+                  [0, 1, p[11], 0],
+                  [0, 0, 1, 0],
+                  [0, 0, 0, 1]])
+    return np.linalg.multi_dot([t, r1, r2, r3, z, s])
 
 
 def tal2mni(xyz):
@@ -286,10 +285,10 @@ def tal2mni(xyz):
     downz = np.linalg.inv(_spm_matrix([0., 0., 0., 0., 0., 0., .99, .97, .84]))
 
     # Apply rotation and translation :
-    xyz = rotn * np.c_[xyz, np.ones((n_sources, ))].T
+    xyz = np.dot(rotn, np.c_[xyz, np.ones((n_sources, ))].T)
     tmp = np.array(xyz)[2, :] < 0.
-    xyz[:, tmp] = downz * xyz[:, tmp]
-    xyz[:, ~tmp] = upz * xyz[:, ~tmp]
+    xyz[:, tmp] = np.dot(downz, xyz[:, tmp])
+    xyz[:, ~tmp] = np.dot(upz, xyz[:, ~tmp])
     return np.array(xyz[0:3, :].T)
 
 
@@ -317,44 +316,9 @@ def mni2tal(xyz):
     xyz = np.c_[xyz, np.ones((n_sources, ))].T
 
     tmp = np.array(xyz)[2, :] < 0.
-    xyz[:, tmp] = down_t * xyz[:, tmp]
-    xyz[:, ~tmp] = up_t * xyz[:, ~tmp]
+    xyz[:, tmp] = np.dot(down_t, xyz[:, tmp])
+    xyz[:, ~tmp] = np.dot(up_t, xyz[:, ~tmp])
     return np.array(xyz[0:3, :].T)
-
-
-def load_predefined_roi(name):
-    """Load a predefined ROI template.
-
-    Parameters
-    ----------
-    name : {'brodmann', 'aal', 'talairach'}
-        Name of the ROI atlas to load.
-
-    Returns
-    -------
-    vol : array_like
-        The volume of shape (nx, ny, nz).
-    labels : array_like
-        Array of labels of type object and of length n_labels.
-    index : array_like
-        Array of index corresponding to the labels of type np.int and of length
-        n_labels.
-    hdr : array_like
-        The matrix of transformation of shape (4, 4).
-    system : {'mni', 'tal'}
-        The system used by the volume.
-    """
-    if name in get_files_in_data('roi', with_ext=False):
-        file = get_data_path(folder='roi', file=name + '.npz')
-    else:
-        file = name
-    # Load archive :
-    arch = np.load(file)
-    # Extract informations :
-    vol, hdr = arch['vol'], arch['hdr']
-    labels, index = arch['labels'], arch['index']
-
-    return vol, labels, index, hdr, 'tal' if name == 'talairach' else 'mni'
 
 
 def generate_eeg(sf=512., n_pts=1000, n_channels=1, n_trials=1, n_sines=100,

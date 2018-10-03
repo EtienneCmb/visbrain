@@ -4,6 +4,8 @@ import logging
 import numpy as np
 from scipy.signal import fftconvolve
 
+from vispy.visuals.transforms import STTransform, NullTransform
+
 
 __all__ = ('normalize', 'derivative', 'tkeo', 'zerocrossing', 'power_of_ten',
            'averaging', 'normalization', 'smoothing', 'smooth_3d')
@@ -166,7 +168,7 @@ def power_of_ten(x, e=3):
 
 
 def averaging(ts, n_window, axis=-1, overlap=0., window='flat'):
-    """Take the mean of a np.ndarray.
+    """Take the mean of an ndarray.
 
     Parameters
     ----------
@@ -224,9 +226,9 @@ def averaging(ts, n_window, axis=-1, overlap=0., window='flat'):
     sl_ts = [slice(None)] * ts.ndim
     sl_av = sl_ts.copy()
     for k in range(n_ind):
-        sl_ts[axis] = slice(ind[k, 0], ind[k, 1])
-        sl_av[axis] = slice(k, k + 1)
-        average[sl_av] += (ts[sl_ts] * win).mean(axis=axis, keepdims=True)
+        sl_ts[axis], sl_av[axis] = slice(ind[k, 0], ind[k, 1]), slice(k, k + 1)
+        average[tuple(sl_av)] += (ts[tuple(sl_ts)] * win).mean(axis=axis,
+                                                               keepdims=True)
 
     return average
 
@@ -262,7 +264,7 @@ def normalization(data, axis=-1, norm=None, baseline=None):
     if (baseline is not None) and (len(baseline) == 2):
         sl = [slice(None)] * data.ndim
         sl[axis] = slice(baseline[0], baseline[1])
-        _data = data[sl]
+        _data = data[tuple(sl)]
     else:
         _data = None
 
@@ -331,7 +333,7 @@ def smoothing(x, n_window=10, window='hanning'):
     return y[n_window - 1:-n_window + 1]
 
 
-def smooth_3d(vol, smooth_factor=3):
+def smooth_3d(vol, smooth_factor=3, correct=True):
     """Smooth a 3-D volume.
 
     Parameters
@@ -346,9 +348,21 @@ def smooth_3d(vol, smooth_factor=3):
     vol_smooth : array_like
         The smooth volume with the same shape as vol.
     """
-    if isinstance(smooth_factor, int) and (smooth_factor >= 3):
-        sz = np.full((3,), smooth_factor, dtype=int)
-        smooth = np.ones([smooth_factor] * 3) / np.prod(sz)
-        return fftconvolve(vol, smooth, mode='same')
-    else:
-        return vol
+    tf = NullTransform()
+    # No smoothing :
+    if (not isinstance(smooth_factor, int)) or (smooth_factor < 3):
+        return vol, tf
+    # Smoothing array :
+    sz = np.full((3,), smooth_factor, dtype=int)
+    smooth = np.ones([smooth_factor] * 3) / np.prod(sz)
+    # Apply smoothing :
+    sm = fftconvolve(vol, smooth, mode='same')
+    if correct:
+        # Get the shape of the vol and the one with 'full' convolution :
+        vx, vy, vz = vol.shape
+        vcx, vcy, vcz = np.array([vx, vy, vz]) + smooth_factor - 1
+        # Define transform :
+        sc = [vx / vcx, vy / vcy, vz / vcz]
+        tr = .5 * np.array([smooth_factor] * 3)
+        tf = STTransform(scale=sc, translate=tr)
+    return sm, tf

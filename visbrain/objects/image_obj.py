@@ -5,7 +5,7 @@ import logging
 from vispy import scene
 
 from .visbrain_obj import VisbrainObject
-from ..utils import array2colormap, wrap_properties, color2vb
+from ..utils import vispy_array, wrap_properties, color2vb
 
 logger = logging.getLogger('visbrain')
 
@@ -116,14 +116,15 @@ class ImageObj(VisbrainObject):
                 data = data[::dsf_x, ::dsf_y]
                 xaxis, yaxis = xaxis[::dsf_x], yaxis[::dsf_y]
             # Set properties :
-            kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
-            # Get color :
-            color = array2colormap(data, **kw)
+            self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
+            # Get colormap :
+            cmap = self._get_glsl_colormap(limits=(data.min(), data.max()))
+            self._image.cmap = cmap
+            self._image.clim = 'auto'
         else:  # data is already a compatible color
             assert data.shape[-1] in [3, 4]
-            color = data
         # Set color to the image :
-        self._image.set_data(color)
+        self._image.set_data(vispy_array(data))
         fact_x = (self._dim[1] - self._dim[0]) / len(xaxis)
         fact_y = (self._dim[3] - self._dim[2]) / len(yaxis)
         sc = (fact_x, fact_y, 1.)

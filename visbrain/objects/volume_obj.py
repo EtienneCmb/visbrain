@@ -9,11 +9,9 @@ from vispy.color import BaseColormap
 from vispy.visuals.transforms import MatrixTransform
 
 from .visbrain_obj import VisbrainObject, CombineObjects
-from ..utils import (load_predefined_roi, wrap_properties, normalize,
-                     array_to_stt, stt_to_array)
-from ..io import (read_nifti, get_files_in_data, get_files_in_folders,
-                  path_to_visbrain_data, get_data_path, path_to_tmp,
-                  save_volume_template, remove_volume_template)
+from ..utils import (wrap_properties, normalize, array_to_stt, stt_to_array)
+from ..io import (read_nifti, save_volume_template, remove_volume_template,
+                  download_file, path_to_visbrain_data, read_mist)
 
 
 logger = logging.getLogger('visbrain')
@@ -73,23 +71,40 @@ class _Volume(VisbrainObject):
     def __init__(self, name, parent, transform, verbose, **kw):
         """Init."""
         VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)
+        self.data_folder = 'roi'
 
     def __call__(self, name, vol=None, hdr=None, labels=None, index=None,
                  system=None):
         """Load a predefined volume."""
         _, ext = os.path.splitext(name)
-        if ('.nii' in ext) or ('gz' in ext):
+        if ('.nii' in ext) or ('gz' in ext) or ('img' in ext):
             vol, _, hdr = read_nifti(name)
             name = os.path.split(name)[1].split('.nii')[0]
             self._name = name
-            logger.info('Loading %s' % name)
+            logger.info('    %s volume loaded' % name)
             labels = index = system = None
         elif isinstance(name, str):
-            path = self.list(file=name + '.npz')
-            if len(path):
-                self._name = os.path.split(path[0])[1].split('.npz')[0]
-                logger.debug("%s volume loaded" % name)
-                vol, labels, index, hdr, system = load_predefined_roi(path[0])
+            # Switch between MIST and {aal, brodmann...} :
+            if 'MIST' in name.upper():
+                mist_path = path_to_visbrain_data('mist', 'roi')
+                if not os.path.isdir(mist_path):
+                    download_file('mist.zip', astype='roi', unzip=True)
+                (vol, labels, index, hdr), system = read_mist(name), 'mni'
+            else:
+                to_load, name_npz = None, name + '.npz'
+                if name in self._df_get_downloaded():
+                    to_load = self._df_get_file(name_npz, download=False)
+                elif name_npz in self._df_get_downloadable():
+                    to_load = self._df_download_file(name_npz)
+                # Load file :
+                if isinstance(to_load, str):
+                    self._name = os.path.split(to_load)[1].split('.npz')[0]
+                    arch = np.load(to_load)
+                    vol, hdr = arch['vol'], arch['hdr']
+                    labels, index = arch['labels'], arch['index']
+                    system = 'tal' if 'talairach' in to_load else 'mni'
+                    logger.debug("%s volume loaded" % name)
+            self._name = name
 
         self._vol, self._hdr = self._check_volume(vol, hdr)
         self._labels, self._index, self._system = labels, index, system
@@ -105,16 +120,9 @@ class _Volume(VisbrainObject):
         """Remove the volume template."""
         remove_volume_template(self.name)
 
-    def _search_in_path(self):
-        """Specify where to find volume templates."""
-        _vb_data = path_to_visbrain_data(folder='roi')
-        _data = get_data_path(folder='roi')
-        _tmp = path_to_tmp(folder='roi')
-        return _vb_data, _data, _tmp
-
     def list(self, file=None):
         """Get the list of installed volumes."""
-        return get_files_in_folders(*self._search_in_path(), file=file)
+        return self._df_get_downloaded(file=file)
 
     def slice_to_pos(self, sl, axis=None, hdr=None):
         """Return the position from slice in the volume space."""
@@ -171,10 +179,10 @@ class _Volume(VisbrainObject):
     @name.setter
     def name(self, value):
         """Set name value."""
-        if value in get_files_in_data('roi', with_ext=False):
+        if value in self.list():
             self(value)
             self.update()
-        self._name = value
+            self._name = value
 
 
 class _CombineVolume(CombineObjects):
@@ -186,7 +194,7 @@ class _CombineVolume(CombineObjects):
 
     def list(self, file=None):
         """Get the list of installed volumes."""
-        return get_files_in_folders(*_Volume._search_in_path(self), file=file)
+        return self._df_get_downloaded(file=file)
 
     def save(self, tmpfile=False):
         for k in self:
@@ -211,7 +219,7 @@ class VolumeObj(_Volume):
         Volume rendering method. Default is 'mip'.
     threshold : float | 0.
         Threshold value for iso rendering method.
-    cmap : {'Opaquegrays', 'TransFire', 'OpaqueFire', 'TransGrays'}
+    cmap : {'OpaqueGrays', 'TransFire', 'OpaqueFire', 'TransGrays'}
         Colormap to use.
     select : list | None
         Select some structures in the volume.
@@ -275,6 +283,41 @@ class VolumeObj(_Volume):
         self.method = method
         self.threshold = threshold
         self.cmap = cmap
+
+    def extract_activity(self, xyz, radius=2.):
+        """Extract activity of a volume around (x, y, z) points.
+
+        Parameters
+        ----------
+        xyz : array_like
+            Array of (x, y, z) coordinates of shape (n_sources, 3)
+        radius : float | 2.
+            Radius of the sphere around each point.
+
+        Returns
+        -------
+        act : array_like
+            Activity array of shape (n_sources,)
+        """
+        assert isinstance(xyz, np.ndarray) and (xyz.shape[1] == 3)
+        assert isinstance(radius, (int, float))
+        n_s = xyz.shape[0]
+        # hdr conversion :
+        logger.info("    Convert coordinates in volume space")
+        hdr = self._hdr
+        center, extrem = np.array([[0.] * 3]), np.array([[radius] * 3])
+        xyz_m = np.round(hdr.imap(xyz)[:, 0:-1]).astype(int)
+        radius_0 = np.round(hdr.imap(center)[:, 0:-1]).astype(int)
+        radius_1 = np.round(hdr.imap(extrem)[:, 0:-1]).astype(int)
+        rd = [max(int(k / 2), 1) for k in np.abs(radius_1 - radius_0).ravel()]
+        # Extact activity :
+        logger.info("    Extract activity of the %i sources defined" % n_s)
+        act = np.zeros((n_s,), dtype=np.float32)
+        for i, k in enumerate(xyz_m):
+            act[i] = self._vol[k[0] - rd[0]:k[0] + rd[0],
+                               k[1] - rd[1]:k[1] + rd[1],
+                               k[2] - rd[2]:k[2] + rd[2]].mean()
+        return act
 
     def update(self):
         """Update the volume."""

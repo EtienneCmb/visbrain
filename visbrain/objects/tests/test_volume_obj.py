@@ -28,13 +28,20 @@ class TestVolumeObj(_TestVolumeObject):
             self.assert_and_test('cmap', k)
         self.assert_and_test('threshlod', 5)
 
+    def test_extract_activity(self):
+        """Test function extract_activity."""
+        xyz = np.random.uniform(-20, 20, (100, 3))
+        v_obj.extract_activity(xyz, radius=10.)
+
     def test_nii_definition(self):
         """Test function nii_definition."""
-        VolumeObj(download_file('GG-853-GM-0.7mm.nii.gz'))
+        VolumeObj(download_file('GG-853-GM-0.7mm.nii.gz',
+                                astype='example_data'))
 
     def test_save(self):
         """Test function save."""
-        v_obj = VolumeObj(download_file('GG-853-GM-0.7mm.nii.gz'))
+        v_obj = VolumeObj(download_file('GG-853-GM-0.7mm.nii.gz',
+                                        astype='example_data'))
         v_obj.save()
         v_obj.save(tmpfile=True)
 

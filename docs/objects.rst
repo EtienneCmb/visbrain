@@ -97,3 +97,9 @@ A scene can be imported from :class:`visbrain.objects` and defined as follow :
 
 
 This is a non-exhaustive example. You definitively should take a look at the :class:`visbrain.objects.SceneObj`
+
+
+Complete object tutorial
+------------------------
+
+For each object, we provide a `complete tutorial <http://visbrain.org/auto_examples/index.html#objects-examples>`_ with illustration of all functionalities.

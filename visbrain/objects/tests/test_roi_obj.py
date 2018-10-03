@@ -15,9 +15,9 @@ xyz[:, 0] -= 50.
 xyz[:, 1] -= 50.
 s_obj = SourceObj('S1', xyz)
 
-download_file('MIST_ROI.zip', unzip=True)
-nifti_file = path_to_visbrain_data('MIST_ROI.nii.gz')
-csv_file = path_to_visbrain_data('MIST_ROI.csv')
+download_file('MIST_ROI.zip', unzip=True, astype='example_data')
+nifti_file = path_to_visbrain_data('MIST_ROI.nii.gz', 'example_data')
+csv_file = path_to_visbrain_data('MIST_ROI.csv', 'example_data')
 # Read the .csv file :
 arr = np.genfromtxt(csv_file, delimiter=';', dtype=str)
 # Get column names, labels and index :
@@ -41,8 +41,11 @@ class TestRoiObj(_TestVolumeObject):
 
     def test_definition(self):
         """Test function definition."""
-        for k in ['aal', 'talairach', 'brodmann']:
-            RoiObj(k)
+        # Default :
+        _ = [RoiObj(k) for k in ['aal', 'talairach', 'brodmann']]  # noqa
+        # MIST :
+        levels = [7, 12, 20, 36, 64, 122, 'ROI']
+        _ = [RoiObj('mist_%s' % str(k)) for k in levels]  # noqa
 
     def test_get_labels(self):
         """Test function get_labels."""
@@ -62,6 +65,10 @@ class TestRoiObj(_TestVolumeObject):
         roi_obj.localize_sources(s_obj.xyz, source_name=s_obj.text)
         roi_obj.localize_sources(s_obj.xyz, distance=1000.)
 
+    def test_get_centroids(self):
+        """Test function get_centroids."""
+        roi_obj.get_centroids([2, 4, 6])
+
     def test_project_sources(self):
         """Test function project_sources."""
         roi_obj.project_sources(s_obj, 'modulation')
@@ -74,8 +81,6 @@ class TestRoiObj(_TestVolumeObject):
         assert isinstance(roi_obj.vertices, np.ndarray)
         assert isinstance(roi_obj.faces, np.ndarray)
         assert isinstance(roi_obj.normals, np.ndarray)
-        assert roi_obj.mask is None
-        assert roi_obj.color is None
         assert isinstance(roi_obj.mask_color, np.ndarray)
 
     def test_select_roi(self):

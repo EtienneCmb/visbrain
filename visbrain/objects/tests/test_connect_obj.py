@@ -36,6 +36,18 @@ class TestConnectObj(_TestObjects):
         ConnectObj('C1', nodes, edges, dynamic=(.1, .4))
         ConnectObj('C2', nodes, edges, custom_colors=custom_colors)
 
+    def test_get_nb_connections_per_node(self):
+        """Test function get_nb_connections_per_node."""
+        sort = ['index', 'count']
+        order = ['ascending', 'descending']
+        for s in sort:
+            for o in order:
+                c_obj.get_nb_connections_per_node(s, o)
+
+    def test_analyse_connections(self):
+        """Test function analyse_connections."""
+        c_obj.analyse_connections(get_centroids=True)
+
     def test_builtin_methods(self):
         """Test function connect_builtin_methods."""
         custom_colors[None] = 'blue'
@@ -50,6 +62,8 @@ class TestConnectObj(_TestObjects):
         """Test function connect_attributes."""
         self.assert_and_test('line_width', 4.4)
         self.assert_and_test('color_by', 'strength')
+        self.assert_and_test('color_by', 'count')
+        self.assert_and_test('color_by', 'causal')
         self.assert_and_test('dynamic', (.2, .4))
         self.assert_and_test('alpha', 0.7)
 

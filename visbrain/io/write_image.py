@@ -98,7 +98,8 @@ def write_fig_hyp(data, sf, file=None, start_s=0, grid=False, ascolor=False,
             idxm = np.where(hypno == q)[0] + 1
             idxm[idxm >= len(hypno)] = len(hypno) - 1
             mask[idxm] = False
-            plt.plot(np.ma.masked_array(hypno, mask=mask), i, linewidth=lw)
+            plt.plot(np.ma.masked_array(hypno, mask=mask), i, ls='steps',
+                     linewidth=lw)
 
     # Plot REM epochs
     remcol = 'k' if not ascolor else colors[4]
@@ -123,8 +124,8 @@ def write_fig_hyp(data, sf, file=None, start_s=0, grid=False, ascolor=False,
     if grid:
         plt.grid(True, 'major', ls=':', lw=.2, c='k', alpha=.3)
 
-    plt.tick_params(axis='both', which='both', bottom='on', top='off',
-                    labelbottom='on', left='on', right='off', labelleft='on',
+    plt.tick_params(axis='both', which='both', bottom=True, top=False,
+                    labelbottom=True, left=True, right=False, labelleft=True,
                     labelcolor='k', direction='out')
 
     # Invert Y axis and despine

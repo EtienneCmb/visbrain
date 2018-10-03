@@ -7,6 +7,33 @@ Changelog
    :local:
    :depth: 1
 
+0.4.3
+-----
+
+New features
+~~~~~~~~~~~~
+* :class:`visbrain.objects.SourceObj.project_sources` can now be projected to a specific overlay.
+
+Improvements
+~~~~~~~~~~~~
+* Fix colormap update for every recording modality
+* Colormap computed onto the GPU for : spectrogram, phase-amplitude coupling, images, 3D images, brain object, grid signals
+* Sorted brain templates in :class:`visbrain.Brain` + remove sulcus as a brain template
+* Fewer visible possibilities when importing from the root of visbrain 
+* Remove all data from the visbrain package
+* Include MIST ROI template to the :class:`visbrain.objects.RoiObj`
+* Enable to filter ROIs from the Brain GUI
+
+Bug fixes
+~~~~~~~~~
+* Brain scaling in :class:`visbrain.mne.mne_plot_source_estimation`
+* Recursive folder creation for brain template
+* Select from the GUI brain template build with vertices and faces
+* Repeat source localization using the same RoiObj
+* Colorbar module has been removed and replaced by CbarObj
+* Insert annotation inside Signal
+* Smoothing for MEG data (`PR20 <https://github.com/EtienneCmb/visbrain/pull/20>`_)
+
 0.4.1
 -----
 
@@ -16,6 +43,7 @@ New features
 * You can now :ref:`replace_detection` using the :class:`visbrain.Sleep.replace_detections` method.
 * Add activations (:class:`visbrain.objects.CrossSecObj.set_activation`) and highlight multiple sources (:class:`visbrain.objects.CrossSecObj.highlight_sources`) inside the :class:`visbrain.objects.CrossSecObj`
 * Plot MNE sources :class:`visbrain.mne.mne_plot_source_space`
+
 
 Improvements
 ~~~~~~~~~~~~

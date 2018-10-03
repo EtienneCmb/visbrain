@@ -12,32 +12,22 @@ Right now, visbrain contains five modules :
 * Sleep : visualize polysomnographic data and hypnogram edition.
 * Signal : data mining module for signal inspection.
 * Figure : figure-layout for high-quality publication-like figures.
-* Colorbar : a colorbar editor
 * Topo : topographic representations
 
 See http://visbrain.org/ for a complete and step-by step documentation
 """
-import sys
+import sys as _sys
 
-# Import modules :
-from .brain import Brain
-from .colorbar import Colorbar
-from .figure import Figure
-from .sleep import Sleep
-from .topo import Topo
-from .signal import Signal
-
-__all__ = ['Brain', 'Colorbar', 'Figure', 'Signal', 'Sleep', 'Topo']
-__version__ = "0.4.2"
+__version__ = "0.4.3"
 
 
 # PyQt5 crash if an error occured. This small function fix it for all modules
 # to retrieve the PyQt4 behavior :
 
 
-def pyqt4_behavior(type, value, tback):
+def _pyqt4_behavior(type, value, tback):
     """Retrieve PyQt4 behavior if an error occured."""
-    sys.__excepthook__(type, value, tback)
+    _sys.__excepthook__(type, value, tback)
 
 
-sys.excepthook = pyqt4_behavior
+_sys.excepthook = _pyqt4_behavior

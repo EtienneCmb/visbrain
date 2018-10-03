@@ -3,21 +3,5 @@ include README.rst
 include LICENSE
 include requirements.txt
 
-# Brain templates (Don't use recursive-include visbrain/data *.npz) :
-include visbrain/data/templates/B1.npz
-include visbrain/data/templates/B2.npz
-include visbrain/data/templates/B3.npz
-
-# ROI :
-include visbrain/data/roi/brodmann.npz
-include visbrain/data/roi/aal.npz
-include visbrain/data/roi/talairach.npz
-
-# Eegref :
-include visbrain/data/topo/eegref.npz
-
-# Add visbrain icons :
-recursive-include visbrain/data/icons *.svg
-
 # Add url path :
-include visbrain/data/data_url.txt
+include visbrain/data_url.json

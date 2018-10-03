@@ -2,11 +2,11 @@
 import numpy as np
 from scipy.spatial.distance import cdist
 
-from ..utils import (normalize, array2colormap, color2vb)
+from ..utils import (normalize, color2vb)
 
 import logging
 logger = logging.getLogger('visbrain')
-PROJ_STR = "%i sources visibles and not masked used for the %s"
+PROJ_STR = "    %i sources visibles and not masked used for the %s"
 
 
 def _get_eucl_mask(v, xyz, radius, contribute, xsign):
@@ -176,7 +176,7 @@ def _get_masked_index(s_obj, v, radius, contribute=False):
     # Check inputs and get masked xyz / data :
     xyz, data, v, xsign = _check_projection(s_obj, v, radius, contribute,
                                             False)
-    logger.info("%i sources visibles and masked found" % len(data))
+    logger.info("    %i sources visibles and masked found" % len(data))
     # Predefined masked euclidian distance :
     nv, index_faced = v.shape[0], v.shape[1]
     fmask = np.ones((v.shape[0], index_faced, len(data)), dtype=bool)
@@ -196,7 +196,7 @@ def _get_masked_index(s_obj, v, radius, contribute=False):
 def _project_sources_data(s_obj, b_obj, project='modulation', radius=10.,
                           contribute=False, cmap='viridis', clim=None,
                           vmin=None, under='black', vmax=None, over='red',
-                          mask_color=None):
+                          mask_color=None, to_overlay=0):
     """Project source's data."""
     # _____________________ CHECKING _____________________
     assert type(s_obj).__name__ in ['SourceObj', 'CombineSources']
@@ -210,37 +210,31 @@ def _project_sources_data(s_obj, b_obj, project='modulation', radius=10.,
         raise ValueError("`project` must either be 'modulation' or "
                          "'repartition'")
     if mask_color is None:
-        logger.warning("mask_color use %s.mask_color variable" % s_obj.name)
+        logger.debug("mask_color use %s.mask_color variable" % s_obj.name)
         mask_color = s_obj.mask_color
     mask_color = color2vb(mask_color)
-    logger.info("Project the source's %s (radius=%r, "
+    logger.info("    Project the source's %s (radius=%r, "
                 "contribute=%r)" % (project, radius, contribute))
     # Get mesh and vertices :
     mesh = b_obj.mesh
     vertices = mesh._vertices
-    mask = np.zeros((vertices.shape[0]), dtype=np.float32)
 
     # _____________________ GET MODULATION _____________________
     mod = project_fcn(s_obj, vertices, radius, contribute)
     # Update mesh color informations :
-    b_obj._cbar_data = mod
     b_obj._minmax = (float(mod.min()), float(mod.max()))
     if clim is None:
         clim = b_obj._minmax
         b_obj._clim = b_obj._minmax
     # Get where there's masked sources :
+    mask_idx = np.zeros((len(mod),), dtype=bool)
     if s_obj.is_masked:
         mask_idx = _get_masked_index(s_obj, vertices, radius, contribute)
-        mask[mask_idx] = 2.
         mesh.mask_color = mask_color
-        logger.info("Set masked sources cortical activity to the "
+        logger.info("    Set masked sources cortical activity to the "
                     "color %s" % str(list(mesh.mask_color.ravel())[0:-1]))
-    # Enable to set color to active vertices :
-    if mod.mask.sum():
-        mask[~mod.mask] = 1.
 
     # _____________________ MODULATION TO COLOR _____________________
-    mesh.mask = mask
-    mod_color = array2colormap(mod, cmap=cmap, clim=clim, vmin=vmin, vmax=vmax,
-                               under=under, over=over)
-    mesh.color = mod_color
+    mesh.add_overlay(mod[~mod.mask], np.where(~mod.mask)[0], cmap=cmap,
+                     to_overlay=to_overlay, mask_data=mask_idx, clim=clim,
+                     vmin=vmin, vmax=vmax, under=under, over=over)

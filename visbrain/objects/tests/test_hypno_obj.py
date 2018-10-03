@@ -8,7 +8,7 @@ from visbrain.io import path_to_visbrain_data
 
 data = np.repeat(np.arange(6), 100) - 1.
 h_obj = HypnogramObj('hypno', data)
-hypno_file = path_to_visbrain_data('Hypnogram_excerpt2.txt')
+hypno_file = path_to_visbrain_data('Hypnogram_excerpt2.txt', 'example_data')
 
 
 class TestHypnogramObj(_TestObjects):

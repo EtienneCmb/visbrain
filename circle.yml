@@ -1,59 +1,82 @@
-general:
-  branches:
-    ignore:
-      - gh-pages
-
-
-machine:
-  environment:
-    # We need to set this variable to let Anaconda take precedence
-    PATH: "/home/ubuntu/miniconda3/envs/circleenv/bin:/home/ubuntu/miniconda3/bin:$PATH"
-    DISPLAY: ":99.0"
-  python:
-      version: 3.6.0
-
-dependencies:
-  cache_directories:
-    - "~/miniconda3"
-  # Various dependencies
-  pre:
-    # Get a running Python
-    - cd ~;
-    # Disable pyenv (no cleaner way provided by CircleCI as it prepends pyenv version to PATH)
-    - rm -rf ~/.pyenv;
-    - rm -rf ~/virtualenvs;
-    # Get Anaconda and conda-based requirements
-    - >
-      if [ ! -d "/home/ubuntu/miniconda3" ]; then
-        echo "Setting up conda";
-        wget -q http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh;
-        chmod +x ~/miniconda.sh;
-        ~/miniconda.sh -b -p /home/ubuntu/miniconda3;
-        conda update --yes --quiet conda;
-      else
-        echo "Conda already set up.";
-      fi
-    - if ! conda env list | grep circleenv; then
-        conda create -n circleenv --yes pip python=3.6 pip;
-      else
-        echo "Conda env already set up.";
-      fi;
-    - conda install -n circleenv --yes numpy scipy pip;
-    - pip install pytest pytest-travis-fold;
-    - pip install mne nibabel pandas openpyxl tensorpac xlrd;
-    - pip install git+https://github.com/hbldh/lspopt.git#egg=lspopt;
-    - ls -al /home/ubuntu/miniconda3;
-    - ls -al /home/ubuntu/miniconda3/bin;
-    - echo $PATH;
-    - echo $CIRCLE_BRANCH
-    - which python;
-    - which pip;
-
-  override:
-    - cd /home/ubuntu/visbrain && pip install -e .;
-    - /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1400x900x24 -ac +extension GLX +render -noreset;
-
-test:
-  override:
-    - py.test:
-        timeout: 1500
+version: 2
+jobs:
+    build:
+      branches:
+        ignore:
+          - gh-pages
+        only:
+          - master
+          - develop
+      docker:
+        - image: circleci/python:3.6-jessie
+      steps:
+        - checkout
+        - run:
+            name: Clean CircleCI
+            command: |
+              rm -rf ~/.pyenv;
+              rm -rf ~/virtualenvs;
+        - run:
+            name: Spin up Xvfb
+            command: |
+              /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1400x900x24 -ac +extension GLX +render -noreset;
+              echo "export DISPLAY=:99" >> $BASH_ENV;
+        - run: sudo apt-get install libgl1-mesa-glx libegl1-mesa libxrandr2 libxrandr2 libxss1 libxcursor1 libxcomposite1 libasound2 libxi6 libxtst6 qt5-default;
+        - restore_cache:
+            keys:
+              - data-cache
+              - pip-cache
+              - miniconda-cache
+        - run:
+            name: Install miniconda
+            command: |
+              if [ ! -d "~/miniconda3" ]; then
+                wget -q http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh;
+                chmod +x ~/miniconda.sh;
+                ~/miniconda.sh -b -p ~/miniconda3;
+                echo "export PATH=~/miniconda3/bin:$PATH" >> $BASH_ENV;
+              else
+                echo "Miniconda3 already set up.";
+              fi
+        - save_cache:
+            key: miniconda-cache
+            paths:
+              - ~/.cache/miniconda
+        - run:
+            name: Setup Python environment
+            command: |
+              conda update --yes --quiet conda;
+              conda create -n testenv --yes python=3.6 numpy scipy pip cython qt==5.9.4 matplotlib==2.2.2 pyqt==5.9.2 ;
+              source activate testenv;
+              pip install -U pip;
+              pip install git+https://github.com/vispy/vispy.git;
+              pip install pytest pytest-travis-fold;
+              pip install mne nibabel pandas openpyxl tensorpac xlrd scikit-image;
+              pip install git+https://github.com/hbldh/lspopt.git#egg=lspopt;
+              echo $PATH;
+              echo $CIRCLE_BRANCH;
+              which python;
+              which pip;
+        - save_cache:
+            key: pip-cache
+            paths:
+              - ~/.cache/pip
+        - run:
+            name: Install visbrain
+            command: |
+              source activate testenv;
+              python setup.py develop;
+        - run:
+            name: run tests
+            command: |
+              mkdir test-reports
+              source activate testenv;
+              pytest --junitxml=test-reports/junit.xml
+        - store_test_results:
+            path: test-reports
+        - store_artifacts:
+            path: test-reports 
+        - save_cache:
+            key: data-cache
+            paths:
+              - ~/.visbrain_data

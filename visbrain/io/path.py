@@ -6,8 +6,8 @@ import sys
 logger = logging.getLogger('visbrain')
 
 
-__all__ = ['path_to_visbrain_data', 'get_data_path', 'get_files_in_data',
-           'get_files_in_folders', 'path_to_tmp', 'clean_tmp']
+__all__ = ['path_to_visbrain_data', 'get_files_in_folders', 'path_to_tmp',
+           'clean_tmp', 'get_data_url_path']
 
 
 def path_to_visbrain_data(file=None, folder=None):
@@ -36,30 +36,14 @@ def path_to_visbrain_data(file=None, folder=None):
     return os.path.join(vb_path, file)
 
 
-def get_data_path(folder=None, file=None):
-    """Get the path to the visbrain data folder.
-
-    This function can find a file in visbrain/data or visbrain/data/folder.
-
-    Parameters
-    ----------
-    folder : string | None
-        Sub-folder of visbrain/data.
-    file : string | None
-        File name.
-
-    Returns
-    -------
-    path : string
-        Path to the data folder or to the file if file is not None.
-    """
-    cur_path = sys.modules[__name__].__file__.split('io')[0]
-    folder = '' if not isinstance(folder, str) else folder
-    file = '' if not isinstance(file, str) else file
-    return os.path.join(*(cur_path, 'data', folder, file))
+def get_data_url_path():
+    """Get the path to the data_url JSON file."""
+    url_path = sys.modules[__name__].__file__.split('io')[0]
+    return os.path.join(url_path, 'data_url.json')
 
 
-def get_files_in_folders(*args, with_ext=False, with_path=False, file=None):
+def get_files_in_folders(*args, with_ext=False, with_path=False, file=None,
+                         exclude=None, sort=True, unique=True):
     """Get all files in several folders.
 
     Parameters
@@ -72,6 +56,12 @@ def get_files_in_folders(*args, with_ext=False, with_path=False, file=None):
         Specify if returned files should contains full path to it.
     file : string | None
         Specify if a specific file name is needed.
+    exclude : list | None
+        List of patterns to exclude
+    sort : bool | True
+        Sort the resulting list of files.
+    unique : bool | True
+        Get a unique list of files.
 
     Returns
     -------
@@ -98,40 +88,24 @@ def get_files_in_folders(*args, with_ext=False, with_path=False, file=None):
     if isinstance(file, str) and (file in files):
         files = [files[files.index(file)]]
     # Return either files with full path or only file name :
-    if with_ext:
-        return files
-    else:
-        return [os.path.splitext(k)[0] for k in files]
-
-
-def get_files_in_data(folder, with_ext=False):
-    """Get the list of files in a folder of visbrain/data.
-
-    Parameters
-    ----------
-    folder : string
-        Sub-folder of visbrain/data.
-    with_ext : bool | False
-        Return the list of files with or without extensions.
-
-    Returns
-    -------
-    all_files : list
-        List of files in visbrain/data/folder.
-    """
-    if not os.path.isdir(get_data_path(folder=folder)):
-        return []
-    all_files = os.listdir(get_data_path(folder=folder))
-    if with_ext:
-        return all_files
-    else:
-        return [os.path.splitext(k)[0] for k in all_files]
+    if not with_ext:
+        files = [os.path.splitext(k)[0] for k in files]
+    # Patterns to exclude :
+    if isinstance(exclude, (list, tuple)):
+        from itertools import product
+        files = [k for k, i in product(files, exclude) if i not in k]
+    # Unique :
+    if unique:
+        files = list(set(files))
+    # Sort list :
+    if sort:
+        files.sort()
+    return files
 
 
 def path_to_tmp(file=None, folder=None):
     """Get the path to the tmp folder."""
-    vb_path = os.path.join(os.path.expanduser('~'), 'visbrain_data')
-    tmp_path = os.path.join(vb_path, 'tmp')
+    tmp_path = os.path.join(path_to_visbrain_data(), 'tmp')
     if not os.path.exists(tmp_path):
         os.mkdir(tmp_path)
     folder = '' if not isinstance(folder, str) else folder
@@ -144,8 +118,7 @@ def path_to_tmp(file=None, folder=None):
 
 def clean_tmp():
     """Clean the tmp folder."""
-    vb_path = os.path.join(os.path.expanduser('~'), 'visbrain_data')
-    tmp_path = os.path.join(vb_path, 'tmp')
+    tmp_path = os.path.join(path_to_visbrain_data(), 'tmp')
     if os.path.exists(tmp_path):
         import shutil
         shutil.rmtree(tmp_path)

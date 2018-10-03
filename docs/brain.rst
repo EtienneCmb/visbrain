@@ -102,7 +102,7 @@ The *Brain* module can be imported as follow :
 
 .. code-block:: python
 
-    from visbrain import Brain
+    from visbrain.gui import Brain
 
 GUI description
 ~~~~~~~~~~~~~~~
@@ -118,15 +118,6 @@ The *Brain* graphical user interface is subdivided into three main parts :
 * **Colorbar canvas** (*hide by default*)
 * **Cross-sections canvas** (*hide by default*)
 
-.. .. note::
-
-..    If you want to save the current GUI state (i.e. all buttons properties) and retrieve it later, use the menu File/Save/GUI config and File/Load/GUI config or the associated *Brain* method.
-
-..    **Examples**
-..       * :ref:`sphx_glr_auto_examples_brain_13_load_gui_config.py`
-
-..    **API**
-..       * :ref:`LoadSaveConfig`
 
 Settings panel tabs
 ^^^^^^^^^^^^^^^^^^^
@@ -186,10 +177,6 @@ By default, *Brain* comes with three brain templates respectively B1 (with cereb
 
 Further brain templates can be downloaded `here <https://drive.google.com/open?id=0B6vtJiCQZUBvd0xfTHJqcHg2bTA>`_.
 
-.. note::
-
-   **Examples**
-      * :ref:`sphx_glr_auto_examples_brain_02_brain_using_vertices.py`
 
 Sources
 ~~~~~~~
@@ -204,11 +191,6 @@ Sources can be added to the scene using (x, y, z) MNI coordinates and comes with
 * **Connectivity :** must be a (N, N) upper triangular array describing how to connect sources
 * **Time-series and/or pictures** : finally, it's also possible to visualize signals (such as time-series, spectral signals...) and 2-D pictures (time-frequency maps, comodulogram...)
 
-.. note::
-
-   **Examples**
-      * :ref:`sphx_glr_auto_examples_brain_03_sources.py`
-      * :ref:`sphx_glr_auto_examples_brain_09_add_multiple_objects.py`
 
 Cortical projection and repartition
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -223,11 +205,6 @@ Cortical projection and repartition
 
 Both methods use a **radius** parameter and only vertices with an euclidian distance under **radius** are going to be considered. From the GUI, those functions can be executed from the menu *Project*, from the tab *Sources/Properties/Projection*, using keyboard :ref:`brainshortcuts` or *Brain* methods.
 
-.. note::
-
-   **Examples**
-      * :ref:`sphx_glr_auto_examples_brain_03_sources.py`
-      * :ref:`sphx_glr_auto_examples_brain_08_screenshot.py`
 
 Connect sources
 ^^^^^^^^^^^^^^^
@@ -243,11 +220,6 @@ Sources can be connected together using connectivity links. *Brain* provides thr
 * **Count :** color each connectivity node according to the number of connections to it
 * **Density :** color each link according to the number of existing links in a controllable sphere.
 
-.. note::
-
-   **Examples**
-      * :ref:`sphx_glr_auto_examples_brain_04_connectivity.py`
-      * :ref:`sphx_glr_auto_examples_brain_09_add_multiple_objects.py`
 
 Attach time-series and/or pictures
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -259,11 +231,6 @@ Attach time-series and/or pictures
 
 As a complement, *Brain* provides the ability to visualize directly into the MNI brain time-series and pictures.
 
-.. note::
-
-   **Examples**
-      * :ref:`sphx_glr_auto_examples_brain_06_add_time_series.py`
-      * :ref:`sphx_glr_auto_examples_brain_07_add_pictures.py`
 
 .. warning::
 
@@ -290,12 +257,6 @@ Cross-sections
 
 Cross-sections correspond to an axial, sagittal and coronal slice of the volume and can either be visualize in 3-D (inside the brain template) or in slitted view
 
-.. note::
-
-   **Examples**
-      * :ref:`sphx_glr_auto_examples_brain_00_brain_control.py`
-      * :ref:`sphx_glr_auto_examples_brain_10_add_nifti_volume.py`
-
 
 Region Of Interest (ROI)
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -306,27 +267,6 @@ Region Of Interest (ROI)
    Cortical projection on the thalamus (Left) and cortical repartition on Brodmann area 4 and 6.
 
 If a volume is provided with corresponding labels, ROIs can be extracted and then be transformed into a mesh, compatible with source's projection methods.
-
-.. note::
-
-   **Examples**
-      * :ref:`sphx_glr_auto_examples_brain_05_region_of_interest.py`
-      * :ref:`sphx_glr_auto_examples_brain_08_screenshot.py`
-
-
-3-D volume rendering
-^^^^^^^^^^^^^^^^^^^^
-
-.. figure::  picture/picbrain/brain_volume.png
-   :align:   center
-
-   Volume rendering methods of a Nifti volume.
-
-.. note::
-
-   **Examples**
-      * :ref:`sphx_glr_auto_examples_brain_00_brain_control.py`
-      * :ref:`sphx_glr_auto_examples_brain_10_add_nifti_volume.py`
 
 
 Colorbar control
@@ -342,11 +282,6 @@ The colorbar can be controlled for individual objects including :
 * **Connectivity** (*if defined*)
 * **Pictures** (*if defined*)
 * **Projections** (*if defined*)
-
-.. note::
-
-   **Examples**
-      * :ref:`sphx_glr_auto_examples_brain_08_screenshot.py`
 
 Examples
 ~~~~~~~~

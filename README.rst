@@ -46,6 +46,7 @@ Visbrain requires :
 * Matplotlib >= 1.5.5
 * PyQt5
 * Pillow
+* PyOpenGL
 
 User installation
 -----------------
@@ -54,38 +55,5 @@ Install Visbrain :
 
 .. code-block:: shell
 
-    pip install visbrain
+    pip install -U visbrain
 
-We also strongly recommend to install *pandas* and *pyopengl* :
-
-.. code-block:: shell
-
-    pip install pandas PyOpenGL PyOpenGL_accelerate
-
-Modules
-=======
-
-.. figure::  https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/visbrain_readme.png
-   :align:   center
-
-* `Brain <http://visbrain.org/brain.html>`_ : visualize EEG/MEG/Intracranial data, connectivity in a standard MNI 3D brain (see `Brain examples <http://visbrain.org/auto_examples/index.html#brain-examples>`_).
-* `Sleep <http://visbrain.org/sleep.html>`_ : visualize and analyze polysomnographic sleep data (see `Sleep examples <http://visbrain.org/auto_examples/index.html#sleep-examples>`_).
-* `Signal <http://visbrain.org/signal.html>`_ : data-mining module for time-series inspection (see `Signal examples <http://visbrain.org/auto_examples/index.html#signal-examples>`_).
-* `Topo <http://visbrain.org/topo.html>`_ : display topographical maps (see `Topo examples <http://visbrain.org/auto_examples/index.html#topoplot-examples>`_).
-* `Figure <http://visbrain.org/figure.html>`_ : figure-layout for high-quality publication-like figures (see `Figure examples <http://visbrain.org/auto_examples/index.html#figure-examples>`_).
-* `Colorbar <http://visbrain.org/colorbar.html>`_ : colorbar editor (see `Colorbar examples <http://visbrain.org/auto_examples/index.html#colorbar-examples>`_).
-
-
-Contribution
-============
-
-Main developers
----------------
-
-* `Etienne Combrisson <http://etiennecmb.github.io>`_
-* `Raphael Vallat <https://raphaelvallat.github.io>`_
-
-With the help of
-----------------
-
-*Karim Jerbi, Christian O'Reilly, David Meunier, Dmitri Altukchov, Tarek Lajnef, Perrine Ruby, JB Einchenlaub, kevroy314, Annalisa Pascarella, Thomas Thiery, Yann Harel, Anne-Lise Saive, Golnush Alamian*

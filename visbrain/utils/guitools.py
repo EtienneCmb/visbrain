@@ -426,7 +426,8 @@ def set_widget_size(app, widget, width=100., height=100.):
     widget.resize(size)
 
 
-def fill_pyqt_table(table, col_names=None, col=None, df=None):
+def fill_pyqt_table(table, col_names=None, col=None, df=None, filter=None,
+                    filter_col=0, check=None):
     """Fill a PyQt table widget.
 
     Parameters
@@ -438,7 +439,8 @@ def fill_pyqt_table(table, col_names=None, col=None, df=None):
     df : pandas.DataFrame or dict | None
         Alternatively, a pandas DataFrame or a dictionary can also be used.
     """
-    from PyQt5.QtWidgets import QTableWidgetItem
+    from PyQt5.QtWidgets import (QTableWidgetItem, QTableWidget, QTableView)
+    from PyQt5 import QtGui, QtCore
 
     # ________________________ Checking ________________________
     # Dictionary / pandas.DataFrame :
@@ -449,14 +451,35 @@ def fill_pyqt_table(table, col_names=None, col=None, df=None):
             col.append(df[k])
     assert len(col_names) == len(col)
     assert all([isinstance(k, str) for k in col_names])
+    n_rows, n_cols = (len(col[0]), len(col_names))
 
-    # ________________________ Define table ________________________
-    table.clear()
-    table.setColumnCount(len(col_names))
-    table.setHorizontalHeaderLabels(col_names)
-    table.setRowCount(len(col[0]))
+    # Switch between table view / widget :
+    if isinstance(table, QTableWidget):  # Table widget
+        table.clear()
+        table.setColumnCount(n_cols)
+        table.setHorizontalHeaderLabels(col_names)
+        table.setRowCount(n_rows)
 
-    # ________________________ Pre-allocate ________________________
-    for i in range(table.rowCount()):
-        for k in range(table.columnCount()):
-            table.setItem(i, k, QTableWidgetItem(str(col[k][i])))
+        for i in range(table.rowCount()):
+            for k in range(table.columnCount()):
+                table.setItem(i, k, QTableWidgetItem(str(col[k][i])))
+    elif isinstance(table, QTableView):  # Table view
+        table.reset()
+        # Fill the model :
+        model = QtGui.QStandardItemModel(n_rows, n_cols)
+        model.setHorizontalHeaderLabels(col_names)
+        for i in range(n_rows):
+            for k in range(n_cols):
+                item = QtGui.QStandardItem(str(col[k][i]))
+                item.setCheckable(check == k)
+                model.setItem(i, k, item)
+        table.setModel(model)
+
+        if filter is not None:
+            filt_model = QtCore.QSortFilterProxyModel()
+            filt_model.setSourceModel(model)
+            filt_model.setFilterKeyColumn(filter_col)
+            filt_model.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
+            filter.textChanged.connect(filt_model.setFilterRegExp)
+            table.setModel(filt_model)
+        return model

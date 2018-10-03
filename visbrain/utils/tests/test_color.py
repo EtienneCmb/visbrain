@@ -4,11 +4,50 @@ import numpy as np
 from visbrain.utils.color import (color2vb, array2colormap, cmap_to_glsl,
                                   dynamic_color, color2faces, type_coloring,
                                   mpl_cmap, color2tuple, mpl_cmap_index,
-                                  colorclip)
+                                  colorclip, Colormap)
 
 
 class TestColor(object):
     """Test functions in color.py."""
+
+    def test_colormap(self):
+        """Test function colormap."""
+        # ---------------- 1D data vector ----------------
+        data_1d = np.arange(511)
+        cmap_1d = Colormap(cmap='inferno', vmin=11, under='gray',
+                           vmax=500, over='red', translucent=(.1, None))
+        assert cmap_1d.to_rgba(data_1d).shape == (511, 4)
+        # Properties :
+        from vispy.color import Colormap as VispyColormap
+        assert isinstance(cmap_1d.data, np.ndarray)
+        assert isinstance(cmap_1d.glsl, VispyColormap)
+        assert np.array_equal(cmap_1d.data[:, 0], cmap_1d.r)          # red
+        assert np.array_equal(cmap_1d.data[:, 1], cmap_1d.g)          # green
+        assert np.array_equal(cmap_1d.data[:, 2], cmap_1d.b)          # blue
+        assert np.array_equal(cmap_1d.data[:, 3], cmap_1d.alpha)      # alpha
+        assert np.array_equal(cmap_1d.data[:, 0:3], cmap_1d.rgb)      # rgb
+        assert cmap_1d.rgb.shape == (1024, 3)
+        # ---------------- 2D data vector ----------------
+        # Alpha completion :
+        data_2d_alpha = np.random.uniform(size=(1024, 3))
+        cmap_2d_alpha = Colormap(data_2d_alpha)
+        assert cmap_2d_alpha.shape == (1024, 4)
+        # 2D (1024, 4) colors :
+        data_2d_uni = np.random.uniform(size=(1024, 4))
+        cmap_2d_uni = Colormap(data_2d_uni)
+        assert cmap_2d_uni.shape == (1024, 4)
+        # 2D (511, 4) colors that need to be interpolated :
+        cmap_2d_interp = np.random.uniform(size=(5, 4))
+        cmap_2d_interp = Colormap(cmap=cmap_2d_interp, interpolation='linear')
+        assert cmap_2d_interp.shape == (1024, 4)
+        # 2D (1, 4) colors that need to be repeated :
+        data_2d_single = np.random.uniform(size=(1, 4))
+        cmap_2d_single = Colormap(data_2d_single, interpolation='linear')
+        assert cmap_2d_single.shape == (1024, 4)
+        # 2D (511, 4) colors without interpolation :
+        data_2d_norm = np.random.uniform(size=(511, 4))
+        cmap_2d_norm = Colormap(data_2d_norm)
+        assert cmap_2d_norm.shape == (511, 4)
 
     def test_color2vb(self):
         """Test color2vb function."""

@@ -6,6 +6,7 @@ from .mneio import *  # noqa
 from .path import *  # noqa
 from .read_annotations import *  # noqa
 from .read_data import *  # noqa
+from .rw_nifti import (read_nifti, read_mist, niimg_to_transform)  # noqa
 from .read_sleep import *  # noqa
 from .rw_config import *  # noqa
 from .rw_hypno import *  # noqa

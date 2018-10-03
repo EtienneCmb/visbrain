@@ -4,6 +4,7 @@ import logging
 from functools import wraps
 
 import numpy as np
+import numpy.core.defchararray as npchar
 from scipy.spatial.distance import cdist
 
 from vispy import scene
@@ -42,24 +43,39 @@ def wrap_getter_properties(fn):
 class RoiObj(_Volume):
     """Create a Region Of Interest (ROI) object.
 
+    **Main functionalities**
+
+        * Display a mesh of selected ROIs
+        * Localize sources
+
+    **Supported ROI**
+
+        * Brodmann Areas
+        * Talairach atlas
+        * Automated Anatomical Labeling (AAL)
+        * MIST, including levels 7, 12, 20, 36, 64, 122 and ROI [1]_
+
     Parameters
     ----------
     name : string
         Name of the ROI object. If name is 'brodmann', 'aal' or 'talairach' a
         predefined ROI object is used and vol, index and label are ignored.
+        MIST [1]_ is also supported. To specify a resolution use `mist_%s` with
+        %s in ['7', '12', '20', '36', '64', '122', 'ROI'] (e.g 'mist_7',
+        `mist_ROI`)
     vol : array_like | None
         ROI volume. Sould be an array with three dimensions.
     labels : array_like | None
         Array of labels. A structured array can be used (i.e
         label=np.zeros(n_sources, dtype=[('brodmann', int), ('aal', object)])).
     index : array_like | None
-        Array of index that make the correspondance between the volumne values
+        Array of index that make the correspondance between the volume values
         and labels. The length of index must be the same as label.
     hdr : array_like | None
         Array of transform source's coordinates into the volume space. Must be
         a (4, 4) array.
     system : {'mni', 'tal'}
-        The system of the volumne. Can either be MNI ('mni') or Talairach
+        The system of the volume. Can either be MNI ('mni') or Talairach
         ('tal').
     transform : VisPy.visuals.transforms | None
         VisPy transformation to set to the parent node.
@@ -85,6 +101,12 @@ class RoiObj(_Volume):
     >>> r = RoiObj('brodmann')
     >>> r.select_roi(select=[4, 6, 38], unique_color=True, smooth=7)
     >>> r.preview(axis=True)
+
+    References
+    ----------
+    .. [1] Urchs, S., Armoza, J., Benhajali, Y., St-Aubin, J., Orban, P., &
+           Bellec, P. (2017). MIST: A multi-resolution parcellation of
+           functional brain networks. MNI Open Research, 1.
     """
 
     ###########################################################################
@@ -176,13 +198,13 @@ class RoiObj(_Volume):
             labels=np.zeros(n_sources, dtype=[('brodmann', int),
             ('aal', object)])).
         index : array_like | None
-            Array of index that make the correspondance between the volumne
+            Array of index that make the correspondance between the volume
             values and labels. The length of index must be the same as labels.
         hdr : array_like | None
             Array of transform source's coordinates into the volume space.
             Must be a (4, 4) array.
         system : {'mni', 'tal'}
-            The system of the volumne. Can either be MNI ('mni') or Talairach
+            The system of the volume. Can either be MNI ('mni') or Talairach
             ('tal').
         """
         # Test if pandas is installed :
@@ -211,8 +233,13 @@ class RoiObj(_Volume):
         self.ref = pd.DataFrame(label_dict, columns=cols)
         self.ref = self.ref.set_index(index)
         self.analysis = pd.DataFrame({}, columns=cols)
+        self._analysis_backup = self.analysis.copy()
 
-        logger.info("%s ROI loaded." % name)
+        logger.info("    %s ROI loaded." % name)
+
+    def reset(self):
+        """Reset the RoiObject."""
+        self.analysis = self._analysis_backup
 
     def get_labels(self, save_to_path=None):
         """Get the labels associated with the loaded ROI.
@@ -230,11 +257,11 @@ class RoiObj(_Volume):
             writer = pd.ExcelWriter(save_as)
             self.ref.to_excel(writer)
             writer.save()
-            logger.info("Saved as %s" % save_as)
+            logger.info("    Saved as %s" % save_as)
         return self.ref
 
     def where_is(self, patterns, df=None, union=True, columns=None,
-                 exact=False):
+                 exact=False, case_sensitive=False):
         """Find a list of string patterns in a DataFrame.
 
         Parameters
@@ -249,9 +276,12 @@ class RoiObj(_Volume):
             intersection (False).
         columns : list | None
             List of specific column names to search in. If None, this method
-            inspect every columns in the DataFrame.
+            search through the entire DataFrame.
         exact : bool | False
-            Specify if the pattern to search have to be exact matching.
+            Specify if the pattern to search have to be exact matching (True)
+            or if the pattern is only a part of the result.
+        case_sensitive : bool | False
+            Specify if the search have to be case sensitive.
 
         Returns
         -------
@@ -261,32 +291,31 @@ class RoiObj(_Volume):
         # Check inputs :
         assert isinstance(patterns, (str, list, tuple))
         df_to_use = self.ref if df is None else df
-        n_rows, _ = df_to_use.shape
         is_pandas_installed(raise_error=True)
         import pandas as pd
         assert isinstance(df_to_use, pd.DataFrame)
         patterns = [patterns] if isinstance(patterns, str) else patterns
-        if columns is None:
-            columns = list(df_to_use.keys())
-        if isinstance(columns, str):
-            columns = [columns]
-        assert all([k in df_to_use.keys() for k in columns])
-        n_cols = len(columns)
-        # Locate patterns :
-        idx_to_keep = np.zeros((n_rows, len(patterns)), dtype=bool)
-        for p, k in enumerate(patterns):
-            pat_in_col = np.zeros((n_rows, n_cols), dtype=bool)
-            for c, i in enumerate(columns):
-                if exact:
-                    pat_in_col[:, c] = df_to_use[i].astype(str) == k
-                else:
-                    pat_in_col[:, c] = df_to_use[i].astype(str).str.match(k)
-            idx_to_keep[:, p] = np.any(pat_in_col, 1)
-        # Return either the union or intersection across research :
-        if union:
-            idx_to_keep = np.any(idx_to_keep, 1)
+        patterns = list(patterns)
+        if columns is not None:
+            df_to_use = df_to_use[columns]
+        dfarr = np.array(df_to_use).astype(str)
+        # Case sensitive :
+        if not case_sensitive:
+            dfarr = npchar.lower(dfarr)
+            patterns = npchar.lower(np.array(patterns).astype(str))
+        # Define the matching function :
+        if exact:
+            def match(x, pat): return np.any(x == pat, axis=1)  # noqa
         else:
-            idx_to_keep = np.all(idx_to_keep, 1)
+            def match(x, pat):
+                return np.any((npchar.find(x, pat) + 1).astype(bool), axis=1)
+        # Locate patterns :
+        idx_to_keep = np.zeros((dfarr.shape[0], len(patterns)), dtype=bool)
+        for k, p in enumerate(patterns):
+            idx_to_keep[:, k] = match(dfarr, str(p))
+        # Return either the union or intersection across research :
+        fcn = np.any if union else np.all
+        idx_to_keep = fcn(idx_to_keep, 1)
         if not np.any(idx_to_keep):
             logger.error("No corresponding entries in the %s ROI for "
                          "%s" % (self.name, ', '.join(patterns)))
@@ -329,6 +358,10 @@ class RoiObj(_Volume):
         if source_name is None:
             source_name = ['s' + str(k) for k in range(n_sources)]
         assert len(source_name) == n_sources
+        # Check analysis :
+        if len(self.analysis):
+            logger.debug('Reset analysis because already exist')
+            self.reset()
         # Loop over sources :
         for k in range(n_sources):
             # Apply HDR transformation :
@@ -359,7 +392,7 @@ class RoiObj(_Volume):
             bad_rows = np.where(np.array(bad_rows).sum(0))[0]
             good_rows = np.arange(n_sources)
             good_rows = np.delete(good_rows, bad_rows)
-            logger.info("%i rows containing the %r pattern "
+            logger.info("    %i rows containing the %r pattern "
                         "found" % (len(bad_rows), replace_with))
             # Get good and bad xyz and compute euclidian distance :
             xyz_good = xyz_untouched[good_rows, :]
@@ -377,7 +410,7 @@ class RoiObj(_Volume):
                     n_replaced += 1
             close_str[good_rows] = -1
             self.analysis["Replaced with"] = close_str
-            logger.info("Anatomical informations of %i sources have been "
+            logger.info("    Anatomical informations of %i sources have been "
                         "replaced using a distance of "
                         "%1.f" % (n_replaced, distance))
         # Add Text and (X, Y, Z) to the table :
@@ -435,7 +468,7 @@ class RoiObj(_Volume):
     ###########################################################################
 
     def select_roi(self, select=.5, unique_color=False, roi_to_color=None,
-                   smooth=3):
+                   smooth=3, translucent=False):
         """Select several Region Of Interest (ROI).
 
         Parameters
@@ -449,6 +482,8 @@ class RoiObj(_Volume):
             {1: 'red', 2: 'orange'}.
         smooth : int | 3
             Smoothing level. Must be an odd integer (smooth % 2 = 1).
+        translucent : bool | False
+            Set if the mesh should be translucent or opaque.
         """
         # Get vertices / faces :
         vert = np.array([])
@@ -458,21 +493,21 @@ class RoiObj(_Volume):
             unique_color = True
         if not unique_color:
             vert, faces = self._select_roi(self._vol.copy(), select, smooth)
-            logger.info("Same white color used across ROI(s)")
+            logger.info("    Same white color used across ROI(s)")
         else:
             assert not isinstance(select, float)
             select = [select] if isinstance(select, int) else select
-            vert, faces, color = np.array([]), np.array([]), np.array([])
+            vert, faces, data = np.array([]), np.array([]), np.array([])
             # Generate a (n_levels, 4) array of unique colors :
             if isinstance(roi_to_color, dict):
                 assert len(roi_to_color) == len(select)
                 col_unique = [color2vb(k) for k in roi_to_color.values()]
                 col_unique = np.array(col_unique).reshape(len(select), 4)
-                logger.info("Specific colors has been defined")
+                logger.info("    Specific colors has been defined")
             else:
                 col_unique = np.random.uniform(.1, .9, (len(select), 4))
                 col_unique[..., -1] = 1.
-                logger.info("Random color are going to be used.")
+                logger.info("    Random color are going to be used.")
             # Get vertices and faces of each ROI :
             for i, k in enumerate(select):
                 v, f = self._select_roi(self._vol.copy(), int(k), smooth)
@@ -480,8 +515,8 @@ class RoiObj(_Volume):
                 faces = np.r_[faces, f + faces.max() + 1] if faces.size else f
                 vert = np.r_[vert, v] if vert.size else v
                 # Concatenate color :
-                col = np.tile(col_unique[[i], ...], (v.shape[0], 1))
-                color = np.r_[color, col] if color.size else col
+                col = np.full((v.shape[0],), i)
+                data = np.r_[data, col] if data.size else col
         if vert.size:
             # Apply hdr transformation to vertices :
             vert_hdr = self._hdr.map(vert)[:, 0:-1]
@@ -490,14 +525,43 @@ class RoiObj(_Volume):
                 logger.debug("ROI mesh defined")
                 self.mesh = BrainMesh(vertices=vert_hdr, faces=faces,
                                       parent=self._node)
+                self.mesh.translucent = translucent
             else:
                 logger.debug("ROI mesh already exist")
                 self.mesh.set_data(vertices=vert_hdr, faces=faces)
             if unique_color:
-                self.mask = 1.
-                self.color = color
+                self.mesh.add_overlay(data, cmap=col_unique,
+                                      interpolation='linear', to_overlay=0)
         else:
             raise ValueError("No vertices found for this ROI")
+
+    def get_centroids(self, select):
+        """Get the (x, y, z) coordinates of the center of a ROI.
+
+        Parameters
+        ----------
+        select : list
+            List of indices of ROIs. Must be a list or tuple of integers.
+
+        Returns
+        -------
+        xyz : array_like
+            Array of shape (n_indiced, 3) which contains the (x, y, z)
+            coordinates of each ROI center.
+        """
+        if isinstance(select, int):
+            select = [select]
+        is_list = isinstance(select, (list, tuple))
+        is_ints = np.all([isinstance(k, int) for k in select])
+        if (not is_list) or (not is_ints):
+            raise ValueError("`select` must be a list of integers.")
+        xyz = np.zeros((len(select), 3), dtype=np.float32)
+        for i, k in enumerate(select):
+            logger.info("    Get centroid of ROI %i" % k)
+            v = self._select_roi(self._vol.copy(), int(k), None)[0]
+            vert_hdr = self._hdr.map(v)[:, 0:-1]
+            xyz[i, :] = vert_hdr.mean(0)
+        return xyz
 
     def _select_roi(self, vol, level, smooth):
         if isinstance(level, (int, np.int)):
@@ -510,8 +574,14 @@ class RoiObj(_Volume):
         vol[condition] = 0
         # Get the list of remaining ROIs :
         unique_vol = np.unique(vol[vol != 0])
-        logger.info("Selected ROI(s) : \n%r" % self.ref.loc[unique_vol])
-        return isosurface(smooth_3d(vol, smooth), level=.5)
+        logger.info("    Selected ROI(s) : \n%r" % self.ref.loc[unique_vol])
+        # Smooth the volume :
+        vol_sm, tf = smooth_3d(vol, smooth, correct=True)
+        # Get the isosurface :
+        vert, faces = isosurface(vol_sm, level=.5)
+        # Mesh correction after smoothing :
+        vert = tf.map(vert)[:, 0:-1]
+        return vert, faces
 
     def _get_camera(self):
         """Get the most adapted camera."""
@@ -536,7 +606,7 @@ class RoiObj(_Volume):
     def project_sources(self, s_obj, project='modulation', radius=10.,
                         contribute=False, cmap='viridis', clim=None, vmin=None,
                         under='black', vmax=None, over='red',
-                        mask_color=None):
+                        mask_color=None, to_overlay=0):
         """Project source's activity or repartition onto ROI.
 
         Parameters
@@ -566,15 +636,30 @@ class RoiObj(_Volume):
         mask_color : string/tuple/array_like | 'gray'
             The color to use for the projection of masked sources. If None,
             the color of the masked sources is going to be used.
+        to_overlay : int | 0
+            The overlay number used for the projection.
         """
         if self:
             kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
             self._default_cblabel = "Source's %s" % project
             _project_sources_data(s_obj, self, project, radius, contribute,
-                                  mask_color=mask_color, **kw)
+                                  mask_color=mask_color, to_overlay=to_overlay,
+                                  **kw)
         else:
             raise ValueError("Cannot project sources because no ROI selected. "
                              "Use the `select_roi` method before.")
+
+    ###########################################################################
+    ###########################################################################
+    #                               CBAR
+    ###########################################################################
+    ###########################################################################
+
+    def _update_cbar(self):
+        self.mesh.update_colormap(**self.to_kwargs())
+
+    def _update_cbar_minmax(self):
+        self._clim = self.mesh.minmax
 
     ###########################################################################
     ###########################################################################
@@ -628,19 +713,6 @@ class RoiObj(_Volume):
     def normals(self):
         """Get the normals value."""
         return self.mesh._normals
-
-    # ----------- MASK -----------
-    @property
-    @wrap_getter_properties
-    def mask(self):
-        """Get the mask value."""
-        return self.mesh.mask
-
-    @mask.setter
-    @wrap_setter_properties
-    def mask(self, value):
-        """Set mask value."""
-        self.mesh.mask = value
 
     # ----------- COLOR -----------
     @property

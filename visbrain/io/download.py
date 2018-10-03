@@ -7,27 +7,24 @@ import zipfile
 from warnings import warn
 
 from .rw_config import load_config_json
-from .path import get_data_path
+from .path import get_data_url_path
 
 
 logger = logging.getLogger('visbrain')
 
 
-__all__ = ["get_data_url_file", "download_file"]
+__all__ = ["download_file"]
 
 
-def get_data_url_file():
-    """Get path to the data_url.txt file."""
-    return load_config_json(get_data_path(file='data_url.txt'))
-
-
-def get_data_url(name):
+def get_data_url(name, astype):
     """Get filename and url to a file.
 
     Parameters
     ----------
     name : string
         Name of the file.
+    astype : string
+        Type of the file to download.
 
     Returns
     -------
@@ -35,7 +32,7 @@ def get_data_url(name):
         Url to the file to download.
     """
     # Get path to data_url.txt :
-    urls = get_data_url_file()
+    urls = load_config_json(get_data_url_path())[astype]
     # Try to get the file :
     try:
         url_to_download = urls[name]
@@ -60,7 +57,7 @@ def reporthook(blocknum, blocksize, totalsize):
         sys.stderr.write("\rread %d" % (readsofar,))
 
 
-def download_file(name, filename=None, to_path=None, unzip=False,
+def download_file(name, astype=None, filename=None, to_path=None, unzip=False,
                   remove_archive=False, use_pwd=False):
     """Download a file.
 
@@ -70,6 +67,9 @@ def download_file(name, filename=None, to_path=None, unzip=False,
     ----------
     name : string
         Name of the file to download or url.
+    astype : str | None
+        If name is a name of a file that can be downloaded, astype refer to the
+        type of the file.
     filename : string | None
         Name of the file to be saved in case of url.
     to_path : string | None
@@ -95,7 +95,9 @@ def download_file(name, filename=None, to_path=None, unzip=False,
         assert isinstance(filename, str)
         url = name
     else:
-        filename, url = name, get_data_url(name)
+        assert isinstance(name, str) and isinstance(astype, str)
+        filename, url = name, get_data_url(name, astype)
+        to_path = os.path.join(vb_path, astype)
     to_path = vb_path if not isinstance(to_path, str) else to_path
     path_to_file = os.path.join(to_path, filename)
     to_download = not os.path.isfile(path_to_file)

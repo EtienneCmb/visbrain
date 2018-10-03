@@ -9,12 +9,17 @@ API
    :depth: 2
 
 
-GUI based modules
------------------
+Graphical user interface
+------------------------
 
-:py:mod:`visbrain`:
+:py:mod:`visbrain.gui`:
 
-.. currentmodule:: visbrain
+.. currentmodule:: visbrain.gui
+
+.. automodule:: visbrain.gui
+   :no-members:
+   :no-inherited-members:
+
 
 .. autosummary::
    :toctree: generated/
@@ -22,7 +27,6 @@ GUI based modules
 
    Brain
    Sleep
-   Topo
    Signal
    Figure
 
@@ -53,6 +57,7 @@ Objects
     RoiObj
     SceneObj
     SourceObj
+    TopoObj
     TimeFrequencyObj
     TimeSeries3DObj
     VectorObj
@@ -97,6 +102,8 @@ I/O
    download_file
    path_to_visbrain_data
    read_stc
+   write_fig_hyp
+   get_sleep_stats
 
 Miscellaneous
 -------------
@@ -124,23 +131,9 @@ Miscellaneous
    color2vb
    array2colormap
 
-Command line
-------------
+.. currentmodule:: visbrain.utils
 
-In addition to using Python script, you can also use the following command-lines from a terminal :
+.. autosummary::
+   :toctree: generated/
 
-* :ref:`cli_visbrain_sleep` : open the graphical user interface of Sleep.
-* :ref:`cli_visbrain_fig_hyp` : export a hypnogram file (**.txt**, **.csv** or **.hyp**) into a high definition colored or black and white image.
-* :ref:`cli_visbrain_sleep_stats` : Compute sleep statistics from hypnogram file and export them in csv.
-
-.. _cli_visbrain_sleep:
-.. click:: visbrain.cli:cli_sleep
-   :prog: visbrain_sleep
-
-.. _cli_visbrain_fig_hyp:
-.. click:: visbrain.cli:cli_fig_hyp
-   :prog: visbrain_fig_hyp
-
-.. _cli_visbrain_sleep_stats:
-.. click:: visbrain.cli:cli_sleep_stats
-   :prog: visbrain_sleep_stats
+    Colormap
