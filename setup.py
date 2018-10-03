@@ -3,7 +3,7 @@
 import os
 from setuptools import setup, find_packages
 
-__version__ = "0.4.2"
+__version__ = "0.4.3"
 NAME = 'visbrain'
 AUTHOR = "Visbrain developpers"
 MAINTAINER = "Etienne Combrisson"
