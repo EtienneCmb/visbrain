@@ -13,6 +13,9 @@ Changelog
 New features
 ~~~~~~~~~~~~
 * :class:`visbrain.objects.SourceObj.project_sources` can now be projected to a specific overlay.
+* :class:`visbrain.objects.ConnectObj.get_nb_connections_per_node` to get the number of connections per node
+* :class:`visbrain.objects.ConnectObj.analyse_connections` to analyse and group connectivity links per ROI
+* :class:`visbrain.objects.RoiObj.get_centroids` to get the (x, y, z) MNI coordinates of ROIs' center
 
 Improvements
 ~~~~~~~~~~~~
