@@ -11,18 +11,14 @@ https://www.dropbox.com/s/hc18bgn2hlnmiph/sleep_edf.zip?dl=1
 """
 import os
 
-from visbrain import Sleep
+from visbrain.gui import Sleep
 from visbrain.io import download_file, path_to_visbrain_data
 
 ###############################################################################
 #                               LOAD YOUR FILE
 ###############################################################################
-current_path = path_to_visbrain_data()
-target_path = os.path.join(current_path, 'sleep_data', 'rec')
-
-# Download the rec file :
-download_file('sleep_rec.zip', unzip=True, to_path=target_path,
-              remove_archive=True)
+download_file('sleep_rec.zip', unzip=True, astype='example_data')
+target_path = path_to_visbrain_data(folder='example_data')
 
 dfile = os.path.join(target_path, '1.rec')
 

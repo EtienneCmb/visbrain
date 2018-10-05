@@ -15,7 +15,7 @@ https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
 """
 import numpy as np
 
-from visbrain import Brain
+from visbrain.gui import Brain
 from visbrain.objects import VectorObj, BrainObj, SourceObj
 from visbrain.io import download_file
 
@@ -24,7 +24,7 @@ kwargs = {}
 """
 Load the xyz coordinates and corresponding subject name
 """
-mat = np.load(download_file('xyz_sample.npz'))
+mat = np.load(download_file('xyz_sample.npz', astype='example_data'))
 xyz, subjects = mat['xyz'], mat['subjects']
 
 """The first vector object use the position of a subset of sources as a

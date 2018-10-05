@@ -15,7 +15,9 @@ visbrain.objects.VolumeObj
       :toctree: VolumeObj
    
       ~VolumeObj.__init__
+      ~VolumeObj.copy
       ~VolumeObj.describe_tree
+      ~VolumeObj.extract_activity
       ~VolumeObj.list
       ~VolumeObj.pos_to_slice
       ~VolumeObj.preview

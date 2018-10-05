@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>visbrain.objects.roi_obj &#8212; visbrain 0.4.1 documentation</title>
+    <title>visbrain.objects.roi_obj &#8212; visbrain 0.4.3 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
@@ -38,7 +38,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/visbrain_128x128.png"></span>
           visbrain</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.4.1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.4.3</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -66,10 +66,12 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../introduction.html#structure">1.2. Structure</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../introduction.html#installation">2. Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../introduction.html#installation-options">2. Installation options</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../introduction.html#dependencies">2.1. Dependencies</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../introduction.html#regular-installation">2.2. Regular installation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../introduction.html#develop-mode">2.3. Develop mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../introduction.html#optional-dependencies">2.2. Optional dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../introduction.html#regular-installation">2.3. Regular installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../introduction.html#develop-mode">2.4. Develop mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../introduction.html#update-visbrain">2.5. Update visbrain</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../objects.html">1. Objects</a><ul>
@@ -79,6 +81,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../objects.html#embedded-objects-to-create-a-complex-scene">1.1.3. Embedded objects to create a complex scene</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../../../objects.html#complete-object-tutorial">1.2. Complete object tutorial</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../brain.html">1. Brain</a><ul>
@@ -100,14 +103,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../brain.html#volume">1.6. Volume</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../brain.html#cross-sections">1.6.1. Cross-sections</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../brain.html#region-of-interest-roi">1.6.2. Region Of Interest (ROI)</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../brain.html#d-volume-rendering">1.6.3. 3-D volume rendering</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../brain.html#colorbar-control">1.7. Colorbar control</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../brain.html#examples">1.8. Examples</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../brain.html#examples-using-visbrain-brain">1.8.1. Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.Brain</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../brain.html#examples">1.8. Examples</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../sleep.html">1. Sleep</a><ul>
@@ -172,19 +171,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../sleep.html#save-annotations">1.11.3. Save annotations</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../../../sleep.html#examples">1.12. Examples</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../sleep.html#examples-using-visbrain-sleep">1.12.1. Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.Sleep</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../../topo.html">1. Topo</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../topo.html#main-features">1.1. Main features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../topo.html#import-and-use-topo">1.2. Import and use Topo</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../topo.html#examples">1.3. Examples</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../topo.html#examples-using-visbrain-topo">1.3.1. Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.Topo</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sleep.html#examples">1.12. Examples</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../signal.html">1. Signal</a><ul>
@@ -192,18 +179,12 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../signal.html#main-features">1.2. Main features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../signal.html#import-and-use-signal">1.3. Import and use Signal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../signal.html#shortcuts">1.4. Shortcuts</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../signal.html#examples">1.5. Examples</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../signal.html#examples-using-visbrain-signal">1.5.1. Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.Signal</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../signal.html#examples">1.5. Examples</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../figure.html">1. <code class="docutils literal notranslate"><span class="pre">Figure</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../figure.html#description">1.1. Description</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../figure.html#example">1.2. Example</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../figure.html#examples-using-visbrain-figure">1.2.1. Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.Figure</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../figure.html#example">1.2. Example</a></li>
 </ul>
 </li>
 </ul>
@@ -216,29 +197,196 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/index.html#brain-examples">Brain Examples</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/brain/00_brain_control.html">Brain control</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/brain/01_cross_sections_and_volume.html">Cross-sections and volume control</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/brain/02_brain_using_vertices.html">Define a brain template using vertices and faces</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/brain/03_sources.html">Add deep sources</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/brain/04_connectivity.html">Connect deep sources</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/brain/05_region_of_interest.html">Add Region of interest (ROI)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/brain/06_add_time_series.html">Add time series</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/brain/07_add_pictures.html">Add pictures</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/brain/08_screenshot.html">Screenshot example</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/brain/09_add_multiple_objects.html">Add multiple objects to the scene</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/brain/09_add_multiple_objects.html#sources">SOURCES</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/brain/09_add_multiple_objects.html#connectivity">CONNECTIVITY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/index.html#objects-examples">Objects examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/objects/ex_brain_obj.html">Brain object (BrainObj) : complete tutorial</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_brain_obj.html#scene-creation">Scene creation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_brain_obj.html#basic-brain-using-mni-template">Basic brain using MNI template</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_brain_obj.html#select-the-left-or-the-right-hemisphere">Select the left or the right hemisphere</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_brain_obj.html#projection-ieeg-data-on-the-surface-of-the-brain">Projection iEEG data on the surface of the brain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_brain_obj.html#parcellize-the-brain">Parcellize the brain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_brain_obj.html#send-data-to-parcellates">Send data to parcellates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_brain_obj.html#custom-brain-template">Custom brain template</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_brain_obj.html#fmri-activation">fMRI activation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_brain_obj.html#meg-inverse-solution">MEG inverse solution</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_brain_obj.html#fun-stuff">“Fun” stuff</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/brain/10_add_nifti_volume.html">Add Nifti volume</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/brain/11_add_vectors.html">Add vectors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/brain/12_parcellize.html">Parcellize brain surface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/objects/ex_combine_objects.html">Combine multiple objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/objects/ex_connectivity_obj.html">Connectivity object (ConnectObj) : complete tutorial</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_connectivity_obj.html#download-data-and-define-the-scene">Download data and define the scene</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_connectivity_obj.html#color-by-connectivity-strength">Color by connectivity strength</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_connectivity_obj.html#color-by-number-of-connections-per-node">Color by number of connections per node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_connectivity_obj.html#custom-colors">Custom colors</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/index.html#colorbar-examples">Colorbar Examples</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/colorbar/00_open_editor.html">Open the colorbar editor</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/colorbar/01_load_existing_config.html">Load an existing colorbar configuration file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/objects/ex_im_tf_spec_obj.html">Image, time-frequency map and spectrogram objects</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_im_tf_spec_obj.html#scene-creation">Scene creation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_im_tf_spec_obj.html#create-sample-data">Create sample data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_im_tf_spec_obj.html#plot-an-image">Plot an image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_im_tf_spec_obj.html#interpolated-image">Interpolated image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_im_tf_spec_obj.html#color-properties">Color properties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_im_tf_spec_obj.html#spectrogram">Spectrogram</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_im_tf_spec_obj.html#time-frequency-map">Time-frequency map</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_im_tf_spec_obj.html#multi-taper">Multi-taper</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/objects/ex_pac_obj.html">Phase-Amplitude Coupling (PAC)  object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/objects/ex_roi_object.html">Region Of Interest object (RoiObj) : complete tutorial</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_roi_object.html#download-data">Download data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_roi_object.html#scene-creation">Scene creation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_roi_object.html#find-the-index-of-a-region-of-interest">Find the index of a region of interest</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_roi_object.html#extract-the-mesh-of-an-roi">Extract the mesh of an ROI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_roi_object.html#set-a-unique-color-per-roi-mesh">Set a unique color per ROI mesh</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_roi_object.html#project-source-s-data-onto-the-surface-of-roi-mesh">Project source’s data onto the surface of ROI mesh</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_roi_object.html#get-anatomical-informations-of-sources">Get anatomical informations of sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_roi_object.html#select-sources-that-are-inside-an-roi">Select sources that are inside an ROI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_roi_object.html#define-and-use-your-own-region-of-interest">Define and use your own region of interest</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/objects/ex_source_obj.html">Source object (SourceObj) : complete tutorial</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_source_obj.html#download-data">Download data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_source_obj.html#scene-creation">Scene creation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_source_obj.html#basic-source-object">Basic source object</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_source_obj.html#text-symbol-and-color-control">Text, symbol and color control</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_source_obj.html#assigning-data-to-sources-and-radius-control">Assigning data to sources and radius control</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_source_obj.html#mask-sources">Mask sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_source_obj.html#get-anatomical-informations-of-sources">Get anatomical informations of sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_source_obj.html#color-sources-using-predefined-colors-according-to-the-aal-location">Color sources, using predefined colors, according to the AAL location</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_source_obj.html#color-sources-according-to-data">Color sources according to data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_source_obj.html#project-source-s-activity-on-the-surface-of-the-brain">Project source’s activity on the surface of the brain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_source_obj.html#project-masked-source-s-activity-on-the-surface-of-the-brain">Project masked source’s activity on the surface of the brain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_source_obj.html#project-source-s-activity-on-the-surface-of-the-dmn">Project source’s activity on the surface of the DMN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_source_obj.html#project-source-s-repartition-on-the-surface-of-the-brain">Project source’s repartition on the surface of the brain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_source_obj.html#display-only-sources-in-the-left-hemisphere">Display only sources in the left hemisphere</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_source_obj.html#force-sources-to-fit-to-the-surface-of-the-brain">Force sources to fit to the surface of the brain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_source_obj.html#display-only-sources-inside-the-brain">Display only sources inside the brain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_source_obj.html#take-a-screenshot-of-the-scene">Take a screenshot of the scene</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/objects/ex_topo_obj.html">Topoplot object (TopoObj) : complete tutorial</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_topo_obj.html#download-data">Download data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_topo_obj.html#creation-of-the-scene">Creation of the scene</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_topo_obj.html#topoplot-based-on-channel-names">Topoplot based on channel names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_topo_obj.html#topoplot-based-on-channel-x-y-coordinates">Topoplot based on channel (x, y) coordinates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_topo_obj.html#custom-extrema-colors">Custom extrema colors</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_topo_obj.html#connect-channels">Connect channels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_topo_obj.html#topoplot-with-regulary-spaced-levels">Topoplot with regulary spaced levels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_topo_obj.html#topoplot-with-custom-levels">Topoplot with custom levels</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/objects/ex_tspic_obj.html">Time-series and pictures 3D (TimeSeries3DObj &amp; Picture3DObj): complete tutorial</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_tspic_obj.html#define-sample-data-and-scene">Define sample data and scene</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_tspic_obj.html#basic-plot">Basic plot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_tspic_obj.html#subset-selection">Subset selection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_tspic_obj.html#shape-and-color-properties">Shape and color properties</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/objects/ex_volume_obj.html">Volume object (VolumeObj) : complete tutorial</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_volume_obj.html#mip-rendering">MIP rendering</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_volume_obj.html#translucent-rendering">Translucent rendering</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_volume_obj.html#additive-rendering">Additive rendering</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_volume_obj.html#iso-rendering">Iso rendering</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_volume_obj.html#volume-thresholding">Volume thresholding</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_volume_obj.html#select-volume-levels">Select volume levels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_volume_obj.html#mri-file-mip-rendering">MRI file : mip rendering</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/ex_volume_obj.html#mri-file-translucent-rendering">MRI file : translucent rendering</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/index.html#graphical-user-interface-brain">Graphical user interface : Brain</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_brain/00_brain_control.html">Brain control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_brain/01_cross_sections_and_volume.html">Cross-sections and volume control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_brain/02_brain_using_vertices.html">Define a brain template using vertices and faces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_brain/03_sources.html">Add deep sources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_brain/04_connectivity.html">Connect deep sources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_brain/05_region_of_interest.html">Add Region of interest (ROI)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_brain/06_add_time_series.html">Add time series</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_brain/07_add_pictures.html">Add pictures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_brain/08_screenshot.html">Screenshot example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_brain/09_add_multiple_objects.html">Add multiple objects to the scene</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/gui_brain/09_add_multiple_objects.html#sources">SOURCES</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/gui_brain/09_add_multiple_objects.html#connectivity">CONNECTIVITY</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_brain/10_add_nifti_volume.html">Add Nifti volume</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_brain/11_add_vectors.html">Add vectors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_brain/12_parcellize.html">Parcellize brain surface</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/index.html#graphical-user-interface-sleep">Graphical user interface : Sleep</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_sleep/basic_sleep.html">Basic configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_sleep/get_sleep_statistics.html">Get sleep statistics</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/gui_sleep/get_sleep_statistics.html#hypnogram-data">Hypnogram data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/gui_sleep/get_sleep_statistics.html#id1">Get sleep statistics</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_sleep/load_brainvision.html">Load a BrainVision file</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/gui_sleep/load_brainvision.html#load-your-file">LOAD YOUR FILE</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_sleep/load_edf.html">Load EDF file</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/gui_sleep/load_edf.html#load-your-file">LOAD YOUR FILE</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_sleep/load_elan.html">Load ELAN files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/gui_sleep/load_elan.html#load-your-file">LOAD YOUR FILE</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_sleep/load_matlab.html">Load a Matlab file</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/gui_sleep/load_matlab.html#load-your-file">LOAD YOUR FILE</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_sleep/load_rec.html">Load REC files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/gui_sleep/load_rec.html#load-your-file">LOAD YOUR FILE</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_sleep/load_using_mne.html">Load a file using MNE-python</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/gui_sleep/load_using_mne.html#load-your-file">LOAD YOUR FILE</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_sleep/plot_hypnogram.html">Matplotlib plot of an hypnogram</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/gui_sleep/plot_hypnogram.html#plotting-properties">Plotting properties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/gui_sleep/plot_hypnogram.html#hypnogram-data">Hypnogram data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/gui_sleep/plot_hypnogram.html#plot-the-hypnogram">Plot the hypnogram</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_sleep/replace_detection_basic.html">Replace detection algorithm : basic example</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/gui_sleep/replace_detection_basic.html#load-your-file-and-create-an-instance-of-sleep">Load your file and create an instance of Sleep</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/gui_sleep/replace_detection_basic.html#define-new-methods">Define new methods</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../../auto_examples/gui_sleep/replace_detection_basic.html#spindle-function">Spindle function</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../../../auto_examples/gui_sleep/replace_detection_basic.html#rapid-eye-movement-function">Rapid eye movement function</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/gui_sleep/replace_detection_basic.html#replace-existing-methods">Replace existing methods</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_sleep/replace_detection_wonambi.html">Replace detection with wonambi algorithm</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/gui_sleep/replace_detection_wonambi.html#load-your-file-and-create-an-instance-of-sleep">Load your file and create an instance of Sleep</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/gui_sleep/replace_detection_wonambi.html#define-new-methods">Define new methods</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../../auto_examples/gui_sleep/replace_detection_wonambi.html#spindle-function">Spindle function</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../../../auto_examples/gui_sleep/replace_detection_wonambi.html#slow-waves-function">Slow-waves function</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/gui_sleep/replace_detection_wonambi.html#replace-existing-methods">Replace existing methods</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/index.html#graphical-user-interface-signal">Graphical user interface : Signal</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_signal/00_1d_signal.html">Plot a 1D signal</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/gui_signal/00_1d_signal.html#shortcuts">Shortcuts</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_signal/01_2d_signals.html">Plot a 2D array of data</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/gui_signal/01_2d_signals.html#shortcuts">Shortcuts</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_signal/02_3d_signals.html">Plot a 3D array of data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_signal/03_interface_customization.html">Interface customization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_signal/04_annotations.html">Import, save and add annotations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_signal/05_screenshot.html">Screenshot tutorial</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/gui_signal/06_butterfly.html">Butterfly plot</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/index.html#eeg-meg-examples">EEG/MEG Examples</a><ul>
@@ -262,113 +410,24 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/figure/1_LayoutExample.html">Page layout example</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/index.html#objects-examples">Objects examples</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/objects/ex_brain_obj.html">Brain object</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/objects/ex_combine_objects.html">Combine multiple objects</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/objects/ex_connectivity_obj.html">Connectivity object</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/objects/ex_cross_section_obj.html">Cross-section object</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/objects/ex_im_tf_spec_obj.html">Image, time-frequency map and spectrogram objects</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/objects/ex_pac_obj.html">Phase-Amplitude Coupling (PAC)  object</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/objects/ex_roi_object.html">Region Of Interest (ROI) object</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/objects/ex_source_obj.html">Source object</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/objects/ex_volume_obj.html">Volume object</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/index.html#signal-examples">Signal Examples</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/signal/00_1d_signal.html">Plot a 1D signal</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/signal/00_1d_signal.html#shortcuts">Shortcuts</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/signal/01_2d_signals.html">Plot a 2D array of data</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/signal/01_2d_signals.html#shortcuts">Shortcuts</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/signal/02_3d_signals.html">Plot a 3D array of data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/signal/03_interface_customization.html">Interface customization</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/signal/04_annotations.html">Import, save and add annotations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/signal/05_screenshot.html">Screenshot tutorial</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/signal/06_butterfly.html">Butterfly plot</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/index.html#sleep-examples">Sleep Examples</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/sleep/basic_sleep.html">Basic configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/sleep/load_brainvision.html">Load a BrainVision file</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/sleep/load_brainvision.html#load-your-file">LOAD YOUR FILE</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/sleep/load_edf.html">Load EDF file</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/sleep/load_edf.html#load-your-file">LOAD YOUR FILE</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/sleep/load_elan.html">Load ELAN files</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/sleep/load_elan.html#load-your-file">LOAD YOUR FILE</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/sleep/load_matlab.html">Load a Matlab file</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/sleep/load_matlab.html#load-your-file">LOAD YOUR FILE</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/sleep/load_rec.html">Load REC files</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/sleep/load_rec.html#load-your-file">LOAD YOUR FILE</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/sleep/load_using_mne.html">Load a file using MNE-python</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/sleep/load_using_mne.html#load-your-file">LOAD YOUR FILE</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/sleep/replace_detection_basic.html">Replace detection algorithm : basic example</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/sleep/replace_detection_basic.html#load-your-file-and-create-an-instance-of-sleep">Load your file and create an instance of Sleep</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/sleep/replace_detection_basic.html#define-new-methods">Define new methods</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="../../../auto_examples/sleep/replace_detection_basic.html#spindle-function">Spindle function</a></li>
-<li class="toctree-l5"><a class="reference internal" href="../../../auto_examples/sleep/replace_detection_basic.html#rapid-eye-movement-function">Rapid eye movement function</a></li>
-</ul>
-</li>
-<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/sleep/replace_detection_basic.html#replace-existing-methods">Replace existing methods</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/sleep/replace_detection_wonambi.html">Replace detection with wonambi algorithm</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/sleep/replace_detection_wonambi.html#load-your-file-and-create-an-instance-of-sleep">Load your file and create an instance of Sleep</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/sleep/replace_detection_wonambi.html#define-new-methods">Define new methods</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="../../../auto_examples/sleep/replace_detection_wonambi.html#spindle-function">Spindle function</a></li>
-<li class="toctree-l5"><a class="reference internal" href="../../../auto_examples/sleep/replace_detection_wonambi.html#slow-waves-function">Slow-waves function</a></li>
-</ul>
-</li>
-<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/sleep/replace_detection_wonambi.html#replace-existing-methods">Replace existing methods</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/index.html#topoplot-examples">Topoplot Examples</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/topo/00_basic_topoplot.html">Basic topoplot</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/topo/01_use_custom_coordinates.html">Use custom coordinates</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/topo/02_grid_topoplot.html">Grid topoplot</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/topo/03_shared_colorbar.html">Shared colorbar</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/topo/04_topoplot_plotting_properties.html">Plotting properties</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/topo/05_topoplot_and_connectivity.html">Connectivity</a></li>
-</ul>
-</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api.html">API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../api.html#gui-based-modules">GUI based modules</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../generated/visbrain.Brain.html">visbrain.Brain</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../generated/visbrain.Brain.html#examples-using-visbrain-brain">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.Brain</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api.html#graphical-user-interface">Graphical user interface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../generated/visbrain.gui.Brain.html">visbrain.gui.Brain</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/visbrain.gui.Brain.html#examples-using-visbrain-gui-brain">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.gui.Brain</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../../../generated/visbrain.Sleep.html">visbrain.Sleep</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../generated/visbrain.Sleep.html#examples-using-visbrain-sleep">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.Sleep</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../generated/visbrain.gui.Sleep.html">visbrain.gui.Sleep</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/visbrain.gui.Sleep.html#examples-using-visbrain-gui-sleep">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.gui.Sleep</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../../../generated/visbrain.Topo.html">visbrain.Topo</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../generated/visbrain.Topo.html#examples-using-visbrain-topo">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.Topo</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../generated/visbrain.gui.Signal.html">visbrain.gui.Signal</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/visbrain.gui.Signal.html#examples-using-visbrain-gui-signal">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.gui.Signal</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../../../generated/visbrain.Signal.html">visbrain.Signal</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../generated/visbrain.Signal.html#examples-using-visbrain-signal">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.Signal</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../../generated/visbrain.Figure.html">visbrain.Figure</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../generated/visbrain.Figure.html#examples-using-visbrain-figure">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.Figure</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../generated/visbrain.gui.Figure.html">visbrain.gui.Figure</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/visbrain.gui.Figure.html#examples-using-visbrain-gui-figure">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.gui.Figure</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -378,6 +437,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/BrainObj/visbrain.objects.BrainObj.__init__.html">visbrain.objects.BrainObj.__init__</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/BrainObj/visbrain.objects.BrainObj.add_activation.html">visbrain.objects.BrainObj.add_activation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/BrainObj/visbrain.objects.BrainObj.clean.html">visbrain.objects.BrainObj.clean</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/BrainObj/visbrain.objects.BrainObj.copy.html">visbrain.objects.BrainObj.copy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/BrainObj/visbrain.objects.BrainObj.describe_tree.html">visbrain.objects.BrainObj.describe_tree</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/BrainObj/visbrain.objects.BrainObj.get_parcellates.html">visbrain.objects.BrainObj.get_parcellates</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/BrainObj/visbrain.objects.BrainObj.list.html">visbrain.objects.BrainObj.list</a></li>
@@ -391,6 +451,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/BrainObj/visbrain.objects.BrainObj.screenshot.html">visbrain.objects.BrainObj.screenshot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/BrainObj/visbrain.objects.BrainObj.set_data.html">visbrain.objects.BrainObj.set_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/BrainObj/visbrain.objects.BrainObj.set_shortcuts_to_canvas.html">visbrain.objects.BrainObj.set_shortcuts_to_canvas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/BrainObj/visbrain.objects.BrainObj.slice.html">visbrain.objects.BrainObj.slice</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/BrainObj/visbrain.objects.BrainObj.to_dict.html">visbrain.objects.BrainObj.to_dict</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/BrainObj/visbrain.objects.BrainObj.to_kwargs.html">visbrain.objects.BrainObj.to_kwargs</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/BrainObj/visbrain.objects.BrainObj.update.html">visbrain.objects.BrainObj.update</a></li>
@@ -400,6 +461,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../generated/visbrain.objects.ColorbarObj.html">visbrain.objects.ColorbarObj</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/ColorbarObj/visbrain.objects.ColorbarObj.__init__.html">visbrain.objects.ColorbarObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/ColorbarObj/visbrain.objects.ColorbarObj.copy.html">visbrain.objects.ColorbarObj.copy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/ColorbarObj/visbrain.objects.ColorbarObj.describe_tree.html">visbrain.objects.ColorbarObj.describe_tree</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/ColorbarObj/visbrain.objects.ColorbarObj.preview.html">visbrain.objects.ColorbarObj.preview</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/ColorbarObj/visbrain.objects.ColorbarObj.screenshot.html">visbrain.objects.ColorbarObj.screenshot</a></li>
@@ -413,7 +475,10 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../generated/visbrain.objects.ConnectObj.html">visbrain.objects.ConnectObj</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/ConnectObj/visbrain.objects.ConnectObj.__init__.html">visbrain.objects.ConnectObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/ConnectObj/visbrain.objects.ConnectObj.analyse_connections.html">visbrain.objects.ConnectObj.analyse_connections</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/ConnectObj/visbrain.objects.ConnectObj.copy.html">visbrain.objects.ConnectObj.copy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/ConnectObj/visbrain.objects.ConnectObj.describe_tree.html">visbrain.objects.ConnectObj.describe_tree</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/ConnectObj/visbrain.objects.ConnectObj.get_nb_connections_per_node.html">visbrain.objects.ConnectObj.get_nb_connections_per_node</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/ConnectObj/visbrain.objects.ConnectObj.preview.html">visbrain.objects.ConnectObj.preview</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/ConnectObj/visbrain.objects.ConnectObj.screenshot.html">visbrain.objects.ConnectObj.screenshot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/ConnectObj/visbrain.objects.ConnectObj.set_shortcuts_to_canvas.html">visbrain.objects.ConnectObj.set_shortcuts_to_canvas</a></li>
@@ -426,6 +491,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../generated/visbrain.objects.CrossSecObj.html">visbrain.objects.CrossSecObj</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/CrossSecObj/visbrain.objects.CrossSecObj.__init__.html">visbrain.objects.CrossSecObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/CrossSecObj/visbrain.objects.CrossSecObj.copy.html">visbrain.objects.CrossSecObj.copy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/CrossSecObj/visbrain.objects.CrossSecObj.cut_coords.html">visbrain.objects.CrossSecObj.cut_coords</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/CrossSecObj/visbrain.objects.CrossSecObj.describe_tree.html">visbrain.objects.CrossSecObj.describe_tree</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/CrossSecObj/visbrain.objects.CrossSecObj.highlight_sources.html">visbrain.objects.CrossSecObj.highlight_sources</a></li>
@@ -448,6 +514,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../generated/visbrain.objects.HypnogramObj.html">visbrain.objects.HypnogramObj</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/HypnogramObj/visbrain.objects.HypnogramObj.__init__.html">visbrain.objects.HypnogramObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/HypnogramObj/visbrain.objects.HypnogramObj.copy.html">visbrain.objects.HypnogramObj.copy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/HypnogramObj/visbrain.objects.HypnogramObj.describe_tree.html">visbrain.objects.HypnogramObj.describe_tree</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/HypnogramObj/visbrain.objects.HypnogramObj.preview.html">visbrain.objects.HypnogramObj.preview</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/HypnogramObj/visbrain.objects.HypnogramObj.screenshot.html">visbrain.objects.HypnogramObj.screenshot</a></li>
@@ -461,6 +528,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../generated/visbrain.objects.ImageObj.html">visbrain.objects.ImageObj</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/ImageObj/visbrain.objects.ImageObj.__init__.html">visbrain.objects.ImageObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/ImageObj/visbrain.objects.ImageObj.copy.html">visbrain.objects.ImageObj.copy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/ImageObj/visbrain.objects.ImageObj.describe_tree.html">visbrain.objects.ImageObj.describe_tree</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/ImageObj/visbrain.objects.ImageObj.preview.html">visbrain.objects.ImageObj.preview</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/ImageObj/visbrain.objects.ImageObj.screenshot.html">visbrain.objects.ImageObj.screenshot</a></li>
@@ -475,6 +543,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../generated/visbrain.objects.PacmapObj.html">visbrain.objects.PacmapObj</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/PacmapObj/visbrain.objects.PacmapObj.__init__.html">visbrain.objects.PacmapObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/PacmapObj/visbrain.objects.PacmapObj.copy.html">visbrain.objects.PacmapObj.copy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/PacmapObj/visbrain.objects.PacmapObj.describe_tree.html">visbrain.objects.PacmapObj.describe_tree</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/PacmapObj/visbrain.objects.PacmapObj.preview.html">visbrain.objects.PacmapObj.preview</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/PacmapObj/visbrain.objects.PacmapObj.screenshot.html">visbrain.objects.PacmapObj.screenshot</a></li>
@@ -489,6 +558,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../generated/visbrain.objects.Picture3DObj.html">visbrain.objects.Picture3DObj</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/Picture3DObj/visbrain.objects.Picture3DObj.__init__.html">visbrain.objects.Picture3DObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/Picture3DObj/visbrain.objects.Picture3DObj.copy.html">visbrain.objects.Picture3DObj.copy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/Picture3DObj/visbrain.objects.Picture3DObj.describe_tree.html">visbrain.objects.Picture3DObj.describe_tree</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/Picture3DObj/visbrain.objects.Picture3DObj.preview.html">visbrain.objects.Picture3DObj.preview</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/Picture3DObj/visbrain.objects.Picture3DObj.screenshot.html">visbrain.objects.Picture3DObj.screenshot</a></li>
@@ -502,7 +572,9 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../generated/visbrain.objects.RoiObj.html">visbrain.objects.RoiObj</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/RoiObj/visbrain.objects.RoiObj.__init__.html">visbrain.objects.RoiObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/RoiObj/visbrain.objects.RoiObj.copy.html">visbrain.objects.RoiObj.copy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/RoiObj/visbrain.objects.RoiObj.describe_tree.html">visbrain.objects.RoiObj.describe_tree</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/RoiObj/visbrain.objects.RoiObj.get_centroids.html">visbrain.objects.RoiObj.get_centroids</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/RoiObj/visbrain.objects.RoiObj.get_labels.html">visbrain.objects.RoiObj.get_labels</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/RoiObj/visbrain.objects.RoiObj.list.html">visbrain.objects.RoiObj.list</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/RoiObj/visbrain.objects.RoiObj.localize_sources.html">visbrain.objects.RoiObj.localize_sources</a></li>
@@ -510,6 +582,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/RoiObj/visbrain.objects.RoiObj.preview.html">visbrain.objects.RoiObj.preview</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/RoiObj/visbrain.objects.RoiObj.project_sources.html">visbrain.objects.RoiObj.project_sources</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/RoiObj/visbrain.objects.RoiObj.remove.html">visbrain.objects.RoiObj.remove</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/RoiObj/visbrain.objects.RoiObj.reset.html">visbrain.objects.RoiObj.reset</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/RoiObj/visbrain.objects.RoiObj.save.html">visbrain.objects.RoiObj.save</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/RoiObj/visbrain.objects.RoiObj.screenshot.html">visbrain.objects.RoiObj.screenshot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/RoiObj/visbrain.objects.RoiObj.select_roi.html">visbrain.objects.RoiObj.select_roi</a></li>
@@ -537,6 +610,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/SourceObj/visbrain.objects.SourceObj.__init__.html">visbrain.objects.SourceObj.__init__</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/SourceObj/visbrain.objects.SourceObj.analyse_sources.html">visbrain.objects.SourceObj.analyse_sources</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/SourceObj/visbrain.objects.SourceObj.color_sources.html">visbrain.objects.SourceObj.color_sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/SourceObj/visbrain.objects.SourceObj.copy.html">visbrain.objects.SourceObj.copy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/SourceObj/visbrain.objects.SourceObj.describe_tree.html">visbrain.objects.SourceObj.describe_tree</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/SourceObj/visbrain.objects.SourceObj.fit_to_vertices.html">visbrain.objects.SourceObj.fit_to_vertices</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/SourceObj/visbrain.objects.SourceObj.preview.html">visbrain.objects.SourceObj.preview</a></li>
@@ -551,8 +625,25 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/visbrain.objects.SourceObj.html#examples-using-visbrain-objects-sourceobj">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.objects.SourceObj</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../../../generated/visbrain.objects.TopoObj.html">visbrain.objects.TopoObj</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/TopoObj/visbrain.objects.TopoObj.__init__.html">visbrain.objects.TopoObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/TopoObj/visbrain.objects.TopoObj.connect.html">visbrain.objects.TopoObj.connect</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/TopoObj/visbrain.objects.TopoObj.copy.html">visbrain.objects.TopoObj.copy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/TopoObj/visbrain.objects.TopoObj.describe_tree.html">visbrain.objects.TopoObj.describe_tree</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/TopoObj/visbrain.objects.TopoObj.preview.html">visbrain.objects.TopoObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/TopoObj/visbrain.objects.TopoObj.screenshot.html">visbrain.objects.TopoObj.screenshot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/TopoObj/visbrain.objects.TopoObj.set_data.html">visbrain.objects.TopoObj.set_data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/TopoObj/visbrain.objects.TopoObj.set_shortcuts_to_canvas.html">visbrain.objects.TopoObj.set_shortcuts_to_canvas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/TopoObj/visbrain.objects.TopoObj.to_dict.html">visbrain.objects.TopoObj.to_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/TopoObj/visbrain.objects.TopoObj.to_kwargs.html">visbrain.objects.TopoObj.to_kwargs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/TopoObj/visbrain.objects.TopoObj.update.html">visbrain.objects.TopoObj.update</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/TopoObj/visbrain.objects.TopoObj.update_from_dict.html">visbrain.objects.TopoObj.update_from_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/visbrain.objects.TopoObj.html#examples-using-visbrain-objects-topoobj">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.objects.TopoObj</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../../../generated/visbrain.objects.TimeFrequencyObj.html">visbrain.objects.TimeFrequencyObj</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/TimeFrequencyObj/visbrain.objects.TimeFrequencyObj.__init__.html">visbrain.objects.TimeFrequencyObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/TimeFrequencyObj/visbrain.objects.TimeFrequencyObj.copy.html">visbrain.objects.TimeFrequencyObj.copy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/TimeFrequencyObj/visbrain.objects.TimeFrequencyObj.describe_tree.html">visbrain.objects.TimeFrequencyObj.describe_tree</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/TimeFrequencyObj/visbrain.objects.TimeFrequencyObj.preview.html">visbrain.objects.TimeFrequencyObj.preview</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/TimeFrequencyObj/visbrain.objects.TimeFrequencyObj.screenshot.html">visbrain.objects.TimeFrequencyObj.screenshot</a></li>
@@ -567,6 +658,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../generated/visbrain.objects.TimeSeries3DObj.html">visbrain.objects.TimeSeries3DObj</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/TimeSeries3DObj/visbrain.objects.TimeSeries3DObj.__init__.html">visbrain.objects.TimeSeries3DObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/TimeSeries3DObj/visbrain.objects.TimeSeries3DObj.copy.html">visbrain.objects.TimeSeries3DObj.copy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/TimeSeries3DObj/visbrain.objects.TimeSeries3DObj.describe_tree.html">visbrain.objects.TimeSeries3DObj.describe_tree</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/TimeSeries3DObj/visbrain.objects.TimeSeries3DObj.preview.html">visbrain.objects.TimeSeries3DObj.preview</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/TimeSeries3DObj/visbrain.objects.TimeSeries3DObj.screenshot.html">visbrain.objects.TimeSeries3DObj.screenshot</a></li>
@@ -580,6 +672,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../generated/visbrain.objects.VectorObj.html">visbrain.objects.VectorObj</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/VectorObj/visbrain.objects.VectorObj.__init__.html">visbrain.objects.VectorObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/VectorObj/visbrain.objects.VectorObj.copy.html">visbrain.objects.VectorObj.copy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/VectorObj/visbrain.objects.VectorObj.describe_tree.html">visbrain.objects.VectorObj.describe_tree</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/VectorObj/visbrain.objects.VectorObj.preview.html">visbrain.objects.VectorObj.preview</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/VectorObj/visbrain.objects.VectorObj.screenshot.html">visbrain.objects.VectorObj.screenshot</a></li>
@@ -593,7 +686,9 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../generated/visbrain.objects.VolumeObj.html">visbrain.objects.VolumeObj</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/VolumeObj/visbrain.objects.VolumeObj.__init__.html">visbrain.objects.VolumeObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/VolumeObj/visbrain.objects.VolumeObj.copy.html">visbrain.objects.VolumeObj.copy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/VolumeObj/visbrain.objects.VolumeObj.describe_tree.html">visbrain.objects.VolumeObj.describe_tree</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/VolumeObj/visbrain.objects.VolumeObj.extract_activity.html">visbrain.objects.VolumeObj.extract_activity</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/VolumeObj/visbrain.objects.VolumeObj.list.html">visbrain.objects.VolumeObj.list</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/VolumeObj/visbrain.objects.VolumeObj.pos_to_slice.html">visbrain.objects.VolumeObj.pos_to_slice</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/VolumeObj/visbrain.objects.VolumeObj.preview.html">visbrain.objects.VolumeObj.preview</a></li>
@@ -639,6 +734,14 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../generated/visbrain.io.read_stc.html#examples-using-visbrain-io-read-stc">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.io.read_stc</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../../../generated/visbrain.io.write_fig_hyp.html">visbrain.io.write_fig_hyp</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/visbrain.io.write_fig_hyp.html#examples-using-visbrain-io-write-fig-hyp">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.io.write_fig_hyp</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../generated/visbrain.io.get_sleep_stats.html">visbrain.io.get_sleep_stats</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../generated/visbrain.io.get_sleep_stats.html#examples-using-visbrain-io-get-sleep-stats">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.io.get_sleep_stats</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api.html#miscellaneous">Miscellaneous</a><ul>
@@ -655,12 +758,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../generated/visbrain.utils.volume_to_mesh.html">visbrain.utils.volume_to_mesh</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../generated/visbrain.utils.color2vb.html">visbrain.utils.color2vb</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../generated/visbrain.utils.array2colormap.html">visbrain.utils.array2colormap</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api.html#command-line">Command line</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../api.html#visbrain-sleep">visbrain_sleep</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../api.html#visbrain-fig-hyp">visbrain_fig_hyp</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../api.html#visbrain-sleep-stats">visbrain_sleep_stats</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../generated/visbrain.utils.Colormap.html">visbrain.utils.Colormap</a></li>
 </ul>
 </li>
 </ul>
@@ -671,21 +769,27 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../release.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../release.html#id1">0.4.1</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../release.html#id1">0.4.3</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../release.html#new-features">New features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../release.html#improvements">Improvements</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../release.html#bug-fixes">Bug fixes</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../release.html#id2">0.4.0</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../release.html#id2">0.4.1</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../release.html#id3">New features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../release.html#id4">Improvements</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../release.html#id5">Bug fixes</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../release.html#id6">0.3.8</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../release.html#id6">0.4.0</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../release.html#id7">New features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../release.html#id8">Improvements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id9">Bug fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../release.html#id10">0.3.8</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id11">New features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id12">Improvements</a></li>
 </ul>
 </li>
 </ul>
@@ -756,6 +860,7 @@
 <span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">wraps</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy.core.defchararray</span> <span class="k">as</span> <span class="nn">npchar</span>
 <span class="kn">from</span> <span class="nn">scipy.spatial.distance</span> <span class="k">import</span> <span class="n">cdist</span>
 
 <span class="kn">from</span> <span class="nn">vispy</span> <span class="k">import</span> <span class="n">scene</span>
@@ -794,24 +899,39 @@
 <div class="viewcode-block" id="RoiObj"><a class="viewcode-back" href="../../../generated/visbrain.objects.RoiObj.html#visbrain.objects.RoiObj">[docs]</a><span class="k">class</span> <span class="nc">RoiObj</span><span class="p">(</span><span class="n">_Volume</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Create a Region Of Interest (ROI) object.</span>
 
+<span class="sd">    **Main functionalities**</span>
+
+<span class="sd">        * Display a mesh of selected ROIs</span>
+<span class="sd">        * Localize sources</span>
+
+<span class="sd">    **Supported ROI**</span>
+
+<span class="sd">        * Brodmann Areas</span>
+<span class="sd">        * Talairach atlas</span>
+<span class="sd">        * Automated Anatomical Labeling (AAL)</span>
+<span class="sd">        * MIST, including levels 7, 12, 20, 36, 64, 122 and ROI [1]_</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    name : string</span>
 <span class="sd">        Name of the ROI object. If name is &#39;brodmann&#39;, &#39;aal&#39; or &#39;talairach&#39; a</span>
 <span class="sd">        predefined ROI object is used and vol, index and label are ignored.</span>
+<span class="sd">        MIST [1]_ is also supported. To specify a resolution use `mist_%s` with</span>
+<span class="sd">        %s in [&#39;7&#39;, &#39;12&#39;, &#39;20&#39;, &#39;36&#39;, &#39;64&#39;, &#39;122&#39;, &#39;ROI&#39;] (e.g &#39;mist_7&#39;,</span>
+<span class="sd">        `mist_ROI`)</span>
 <span class="sd">    vol : array_like | None</span>
 <span class="sd">        ROI volume. Sould be an array with three dimensions.</span>
 <span class="sd">    labels : array_like | None</span>
 <span class="sd">        Array of labels. A structured array can be used (i.e</span>
 <span class="sd">        label=np.zeros(n_sources, dtype=[(&#39;brodmann&#39;, int), (&#39;aal&#39;, object)])).</span>
 <span class="sd">    index : array_like | None</span>
-<span class="sd">        Array of index that make the correspondance between the volumne values</span>
+<span class="sd">        Array of index that make the correspondance between the volume values</span>
 <span class="sd">        and labels. The length of index must be the same as label.</span>
 <span class="sd">    hdr : array_like | None</span>
 <span class="sd">        Array of transform source&#39;s coordinates into the volume space. Must be</span>
 <span class="sd">        a (4, 4) array.</span>
 <span class="sd">    system : {&#39;mni&#39;, &#39;tal&#39;}</span>
-<span class="sd">        The system of the volumne. Can either be MNI (&#39;mni&#39;) or Talairach</span>
+<span class="sd">        The system of the volume. Can either be MNI (&#39;mni&#39;) or Talairach</span>
 <span class="sd">        (&#39;tal&#39;).</span>
 <span class="sd">    transform : VisPy.visuals.transforms | None</span>
 <span class="sd">        VisPy transformation to set to the parent node.</span>
@@ -837,6 +957,12 @@
 <span class="sd">    &gt;&gt;&gt; r = RoiObj(&#39;brodmann&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; r.select_roi(select=[4, 6, 38], unique_color=True, smooth=7)</span>
 <span class="sd">    &gt;&gt;&gt; r.preview(axis=True)</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Urchs, S., Armoza, J., Benhajali, Y., St-Aubin, J., Orban, P., &amp;</span>
+<span class="sd">           Bellec, P. (2017). MIST: A multi-resolution parcellation of</span>
+<span class="sd">           functional brain networks. MNI Open Research, 1.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1">###########################################################################</span>
@@ -928,13 +1054,13 @@
 <span class="sd">            labels=np.zeros(n_sources, dtype=[(&#39;brodmann&#39;, int),</span>
 <span class="sd">            (&#39;aal&#39;, object)])).</span>
 <span class="sd">        index : array_like | None</span>
-<span class="sd">            Array of index that make the correspondance between the volumne</span>
+<span class="sd">            Array of index that make the correspondance between the volume</span>
 <span class="sd">            values and labels. The length of index must be the same as labels.</span>
 <span class="sd">        hdr : array_like | None</span>
 <span class="sd">            Array of transform source&#39;s coordinates into the volume space.</span>
 <span class="sd">            Must be a (4, 4) array.</span>
 <span class="sd">        system : {&#39;mni&#39;, &#39;tal&#39;}</span>
-<span class="sd">            The system of the volumne. Can either be MNI (&#39;mni&#39;) or Talairach</span>
+<span class="sd">            The system of the volume. Can either be MNI (&#39;mni&#39;) or Talairach</span>
 <span class="sd">            (&#39;tal&#39;).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Test if pandas is installed :</span>
@@ -963,8 +1089,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ref</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">label_dict</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">cols</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({},</span> <span class="n">columns</span><span class="o">=</span><span class="n">cols</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_analysis_backup</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> ROI loaded.&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span></div>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;    </span><span class="si">%s</span><span class="s2"> ROI loaded.&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RoiObj.reset"><a class="viewcode-back" href="../../../generated/visbrain.objects.RoiObj.html#visbrain.objects.RoiObj.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reset the RoiObject.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analysis_backup</span></div>
 
 <div class="viewcode-block" id="RoiObj.get_labels"><a class="viewcode-back" href="../../../generated/visbrain.objects.RoiObj.html#visbrain.objects.RoiObj.get_labels">[docs]</a>    <span class="k">def</span> <span class="nf">get_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_to_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the labels associated with the loaded ROI.</span>
@@ -982,11 +1113,11 @@
             <span class="n">writer</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelWriter</span><span class="p">(</span><span class="n">save_as</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">ref</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">)</span>
             <span class="n">writer</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Saved as </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">save_as</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;    Saved as </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">save_as</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref</span></div>
 
 <div class="viewcode-block" id="RoiObj.where_is"><a class="viewcode-back" href="../../../generated/visbrain.objects.RoiObj.html#visbrain.objects.RoiObj.where_is">[docs]</a>    <span class="k">def</span> <span class="nf">where_is</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">patterns</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">union</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">exact</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                 <span class="n">exact</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">case_sensitive</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Find a list of string patterns in a DataFrame.</span>
 
 <span class="sd">        Parameters</span>
@@ -1001,9 +1132,12 @@
 <span class="sd">            intersection (False).</span>
 <span class="sd">        columns : list | None</span>
 <span class="sd">            List of specific column names to search in. If None, this method</span>
-<span class="sd">            inspect every columns in the DataFrame.</span>
+<span class="sd">            search through the entire DataFrame.</span>
 <span class="sd">        exact : bool | False</span>
-<span class="sd">            Specify if the pattern to search have to be exact matching.</span>
+<span class="sd">            Specify if the pattern to search have to be exact matching (True)</span>
+<span class="sd">            or if the pattern is only a part of the result.</span>
+<span class="sd">        case_sensitive : bool | False</span>
+<span class="sd">            Specify if the search have to be case sensitive.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1013,32 +1147,31 @@
         <span class="c1"># Check inputs :</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">patterns</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span>
         <span class="n">df_to_use</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref</span> <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">df</span>
-        <span class="n">n_rows</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">df_to_use</span><span class="o">.</span><span class="n">shape</span>
         <span class="n">is_pandas_installed</span><span class="p">(</span><span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df_to_use</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>
         <span class="n">patterns</span> <span class="o">=</span> <span class="p">[</span><span class="n">patterns</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">patterns</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">patterns</span>
-        <span class="k">if</span> <span class="n">columns</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">columns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df_to_use</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">columns</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">columns</span><span class="p">]</span>
-        <span class="k">assert</span> <span class="nb">all</span><span class="p">([</span><span class="n">k</span> <span class="ow">in</span> <span class="n">df_to_use</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">])</span>
-        <span class="n">n_cols</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span>
-        <span class="c1"># Locate patterns :</span>
-        <span class="n">idx_to_keep</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_rows</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">patterns</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">patterns</span><span class="p">):</span>
-            <span class="n">pat_in_col</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_rows</span><span class="p">,</span> <span class="n">n_cols</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">columns</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">exact</span><span class="p">:</span>
-                    <span class="n">pat_in_col</span><span class="p">[:,</span> <span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_to_use</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span> <span class="o">==</span> <span class="n">k</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">pat_in_col</span><span class="p">[:,</span> <span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_to_use</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
-            <span class="n">idx_to_keep</span><span class="p">[:,</span> <span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">pat_in_col</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="c1"># Return either the union or intersection across research :</span>
-        <span class="k">if</span> <span class="n">union</span><span class="p">:</span>
-            <span class="n">idx_to_keep</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">idx_to_keep</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">patterns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">patterns</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">columns</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">df_to_use</span> <span class="o">=</span> <span class="n">df_to_use</span><span class="p">[</span><span class="n">columns</span><span class="p">]</span>
+        <span class="n">dfarr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df_to_use</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+        <span class="c1"># Case sensitive :</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">case_sensitive</span><span class="p">:</span>
+            <span class="n">dfarr</span> <span class="o">=</span> <span class="n">npchar</span><span class="o">.</span><span class="n">lower</span><span class="p">(</span><span class="n">dfarr</span><span class="p">)</span>
+            <span class="n">patterns</span> <span class="o">=</span> <span class="n">npchar</span><span class="o">.</span><span class="n">lower</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">patterns</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">))</span>
+        <span class="c1"># Define the matching function :</span>
+        <span class="k">if</span> <span class="n">exact</span><span class="p">:</span>
+            <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">pat</span><span class="p">):</span> <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="n">pat</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># noqa</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">idx_to_keep</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">idx_to_keep</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">pat</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">((</span><span class="n">npchar</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">pat</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># Locate patterns :</span>
+        <span class="n">idx_to_keep</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dfarr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">patterns</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">patterns</span><span class="p">):</span>
+            <span class="n">idx_to_keep</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="p">(</span><span class="n">dfarr</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+        <span class="c1"># Return either the union or intersection across research :</span>
+        <span class="n">fcn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span> <span class="k">if</span> <span class="n">union</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span>
+        <span class="n">idx_to_keep</span> <span class="o">=</span> <span class="n">fcn</span><span class="p">(</span><span class="n">idx_to_keep</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">idx_to_keep</span><span class="p">):</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;No corresponding entries in the </span><span class="si">%s</span><span class="s2"> ROI for &quot;</span>
                          <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">patterns</span><span class="p">)))</span>
@@ -1081,6 +1214,10 @@
         <span class="k">if</span> <span class="n">source_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">source_name</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;s&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_sources</span><span class="p">)]</span>
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">source_name</span><span class="p">)</span> <span class="o">==</span> <span class="n">n_sources</span>
+        <span class="c1"># Check analysis :</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Reset analysis because already exist&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
         <span class="c1"># Loop over sources :</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_sources</span><span class="p">):</span>
             <span class="c1"># Apply HDR transformation :</span>
@@ -1111,7 +1248,7 @@
             <span class="n">bad_rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">bad_rows</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">good_rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_sources</span><span class="p">)</span>
             <span class="n">good_rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">good_rows</span><span class="p">,</span> <span class="n">bad_rows</span><span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%i</span><span class="s2"> rows containing the </span><span class="si">%r</span><span class="s2"> pattern &quot;</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;    </span><span class="si">%i</span><span class="s2"> rows containing the </span><span class="si">%r</span><span class="s2"> pattern &quot;</span>
                         <span class="s2">&quot;found&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bad_rows</span><span class="p">),</span> <span class="n">replace_with</span><span class="p">))</span>
             <span class="c1"># Get good and bad xyz and compute euclidian distance :</span>
             <span class="n">xyz_good</span> <span class="o">=</span> <span class="n">xyz_untouched</span><span class="p">[</span><span class="n">good_rows</span><span class="p">,</span> <span class="p">:]</span>
@@ -1129,7 +1266,7 @@
                     <span class="n">n_replaced</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="n">close_str</span><span class="p">[</span><span class="n">good_rows</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="p">[</span><span class="s2">&quot;Replaced with&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">close_str</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Anatomical informations of </span><span class="si">%i</span><span class="s2"> sources have been &quot;</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;    Anatomical informations of </span><span class="si">%i</span><span class="s2"> sources have been &quot;</span>
                         <span class="s2">&quot;replaced using a distance of &quot;</span>
                         <span class="s2">&quot;%1.f&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">n_replaced</span><span class="p">,</span> <span class="n">distance</span><span class="p">))</span>
         <span class="c1"># Add Text and (X, Y, Z) to the table :</span>
@@ -1187,7 +1324,7 @@
     <span class="c1">###########################################################################</span>
 
 <div class="viewcode-block" id="RoiObj.select_roi"><a class="viewcode-back" href="../../../generated/visbrain.objects.RoiObj.html#visbrain.objects.RoiObj.select_roi">[docs]</a>    <span class="k">def</span> <span class="nf">select_roi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">select</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span> <span class="n">unique_color</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">roi_to_color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                   <span class="n">smooth</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+                   <span class="n">smooth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Select several Region Of Interest (ROI).</span>
 
 <span class="sd">        Parameters</span>
@@ -1201,6 +1338,8 @@
 <span class="sd">            {1: &#39;red&#39;, 2: &#39;orange&#39;}.</span>
 <span class="sd">        smooth : int | 3</span>
 <span class="sd">            Smoothing level. Must be an odd integer (smooth % 2 = 1).</span>
+<span class="sd">        translucent : bool | False</span>
+<span class="sd">            Set if the mesh should be translucent or opaque.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Get vertices / faces :</span>
         <span class="n">vert</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
@@ -1210,21 +1349,21 @@
             <span class="n">unique_color</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">unique_color</span><span class="p">:</span>
             <span class="n">vert</span><span class="p">,</span> <span class="n">faces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_select_roi</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_vol</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">select</span><span class="p">,</span> <span class="n">smooth</span><span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Same white color used across ROI(s)&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;    Same white color used across ROI(s)&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">assert</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">select</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
             <span class="n">select</span> <span class="o">=</span> <span class="p">[</span><span class="n">select</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">select</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">else</span> <span class="n">select</span>
-            <span class="n">vert</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+            <span class="n">vert</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
             <span class="c1"># Generate a (n_levels, 4) array of unique colors :</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">roi_to_color</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
                 <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">roi_to_color</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">select</span><span class="p">)</span>
                 <span class="n">col_unique</span> <span class="o">=</span> <span class="p">[</span><span class="n">color2vb</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">roi_to_color</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
                 <span class="n">col_unique</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">col_unique</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">select</span><span class="p">),</span> <span class="mi">4</span><span class="p">)</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Specific colors has been defined&quot;</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;    Specific colors has been defined&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">col_unique</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">9</span><span class="p">,</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">select</span><span class="p">),</span> <span class="mi">4</span><span class="p">))</span>
                 <span class="n">col_unique</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Random color are going to be used.&quot;</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;    Random color are going to be used.&quot;</span><span class="p">)</span>
             <span class="c1"># Get vertices and faces of each ROI :</span>
             <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">select</span><span class="p">):</span>
                 <span class="n">v</span><span class="p">,</span> <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_select_roi</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_vol</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="n">smooth</span><span class="p">)</span>
@@ -1232,8 +1371,8 @@
                 <span class="n">faces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">faces</span><span class="p">,</span> <span class="n">f</span> <span class="o">+</span> <span class="n">faces</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">faces</span><span class="o">.</span><span class="n">size</span> <span class="k">else</span> <span class="n">f</span>
                 <span class="n">vert</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">vert</span><span class="p">,</span> <span class="n">v</span><span class="p">]</span> <span class="k">if</span> <span class="n">vert</span><span class="o">.</span><span class="n">size</span> <span class="k">else</span> <span class="n">v</span>
                 <span class="c1"># Concatenate color :</span>
-                <span class="n">col</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">col_unique</span><span class="p">[[</span><span class="n">i</span><span class="p">],</span> <span class="o">...</span><span class="p">],</span> <span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">))</span>
-                <span class="n">color</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">color</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span> <span class="k">if</span> <span class="n">color</span><span class="o">.</span><span class="n">size</span> <span class="k">else</span> <span class="n">col</span>
+                <span class="n">col</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],),</span> <span class="n">i</span><span class="p">)</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">data</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span> <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">size</span> <span class="k">else</span> <span class="n">col</span>
         <span class="k">if</span> <span class="n">vert</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
             <span class="c1"># Apply hdr transformation to vertices :</span>
             <span class="n">vert_hdr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdr</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">vert</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
@@ -1242,14 +1381,43 @@
                 <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;ROI mesh defined&quot;</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span> <span class="o">=</span> <span class="n">BrainMesh</span><span class="p">(</span><span class="n">vertices</span><span class="o">=</span><span class="n">vert_hdr</span><span class="p">,</span> <span class="n">faces</span><span class="o">=</span><span class="n">faces</span><span class="p">,</span>
                                       <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">translucent</span> <span class="o">=</span> <span class="n">translucent</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;ROI mesh already exist&quot;</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">vertices</span><span class="o">=</span><span class="n">vert_hdr</span><span class="p">,</span> <span class="n">faces</span><span class="o">=</span><span class="n">faces</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">unique_color</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="mf">1.</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">color</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">add_overlay</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">col_unique</span><span class="p">,</span>
+                                      <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">to_overlay</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No vertices found for this ROI&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RoiObj.get_centroids"><a class="viewcode-back" href="../../../generated/visbrain.objects.RoiObj.html#visbrain.objects.RoiObj.get_centroids">[docs]</a>    <span class="k">def</span> <span class="nf">get_centroids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">select</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the (x, y, z) coordinates of the center of a ROI.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        select : list</span>
+<span class="sd">            List of indices of ROIs. Must be a list or tuple of integers.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        xyz : array_like</span>
+<span class="sd">            Array of shape (n_indiced, 3) which contains the (x, y, z)</span>
+<span class="sd">            coordinates of each ROI center.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">select</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">select</span> <span class="o">=</span> <span class="p">[</span><span class="n">select</span><span class="p">]</span>
+        <span class="n">is_list</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">select</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span>
+        <span class="n">is_ints</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">select</span><span class="p">])</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">is_list</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">is_ints</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;`select` must be a list of integers.&quot;</span><span class="p">)</span>
+        <span class="n">xyz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">select</span><span class="p">),</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">select</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;    Get centroid of ROI </span><span class="si">%i</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">k</span><span class="p">)</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_select_roi</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_vol</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="kc">None</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">vert_hdr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdr</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">v</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">xyz</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">vert_hdr</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">xyz</span></div>
 
     <span class="k">def</span> <span class="nf">_select_roi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vol</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">smooth</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)):</span>
@@ -1262,8 +1430,14 @@
         <span class="n">vol</span><span class="p">[</span><span class="n">condition</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="c1"># Get the list of remaining ROIs :</span>
         <span class="n">unique_vol</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">vol</span><span class="p">[</span><span class="n">vol</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">])</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Selected ROI(s) : </span><span class="se">\n</span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">unique_vol</span><span class="p">])</span>
-        <span class="k">return</span> <span class="n">isosurface</span><span class="p">(</span><span class="n">smooth_3d</span><span class="p">(</span><span class="n">vol</span><span class="p">,</span> <span class="n">smooth</span><span class="p">),</span> <span class="n">level</span><span class="o">=.</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;    Selected ROI(s) : </span><span class="se">\n</span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">unique_vol</span><span class="p">])</span>
+        <span class="c1"># Smooth the volume :</span>
+        <span class="n">vol_sm</span><span class="p">,</span> <span class="n">tf</span> <span class="o">=</span> <span class="n">smooth_3d</span><span class="p">(</span><span class="n">vol</span><span class="p">,</span> <span class="n">smooth</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># Get the isosurface :</span>
+        <span class="n">vert</span><span class="p">,</span> <span class="n">faces</span> <span class="o">=</span> <span class="n">isosurface</span><span class="p">(</span><span class="n">vol_sm</span><span class="p">,</span> <span class="n">level</span><span class="o">=.</span><span class="mi">5</span><span class="p">)</span>
+        <span class="c1"># Mesh correction after smoothing :</span>
+        <span class="n">vert</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">vert</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">vert</span><span class="p">,</span> <span class="n">faces</span>
 
     <span class="k">def</span> <span class="nf">_get_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the most adapted camera.&quot;&quot;&quot;</span>
@@ -1288,7 +1462,7 @@
 <div class="viewcode-block" id="RoiObj.project_sources"><a class="viewcode-back" href="../../../generated/visbrain.objects.RoiObj.html#visbrain.objects.RoiObj.project_sources">[docs]</a>    <span class="k">def</span> <span class="nf">project_sources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s_obj</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="s1">&#39;modulation&#39;</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span>
                         <span class="n">contribute</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                         <span class="n">under</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span>
-                        <span class="n">mask_color</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                        <span class="n">mask_color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">to_overlay</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Project source&#39;s activity or repartition onto ROI.</span>
 
 <span class="sd">        Parameters</span>
@@ -1318,15 +1492,30 @@
 <span class="sd">        mask_color : string/tuple/array_like | &#39;gray&#39;</span>
 <span class="sd">            The color to use for the projection of masked sources. If None,</span>
 <span class="sd">            the color of the masked sources is going to be used.</span>
+<span class="sd">        to_overlay : int | 0</span>
+<span class="sd">            The overlay number used for the projection.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="p">:</span>
             <span class="n">kw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_cbar_args</span><span class="p">(</span><span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span> <span class="n">over</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_default_cblabel</span> <span class="o">=</span> <span class="s2">&quot;Source&#39;s </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">project</span>
             <span class="n">_project_sources_data</span><span class="p">(</span><span class="n">s_obj</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">contribute</span><span class="p">,</span>
-                                  <span class="n">mask_color</span><span class="o">=</span><span class="n">mask_color</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+                                  <span class="n">mask_color</span><span class="o">=</span><span class="n">mask_color</span><span class="p">,</span> <span class="n">to_overlay</span><span class="o">=</span><span class="n">to_overlay</span><span class="p">,</span>
+                                  <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot project sources because no ROI selected. &quot;</span>
                              <span class="s2">&quot;Use the `select_roi` method before.&quot;</span><span class="p">)</span></div>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">#                               CBAR</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
+
+    <span class="k">def</span> <span class="nf">_update_cbar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">update_colormap</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">to_kwargs</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">_update_cbar_minmax</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_clim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">minmax</span>
 
     <span class="c1">###########################################################################</span>
     <span class="c1">###########################################################################</span>
@@ -1380,19 +1569,6 @@
     <span class="k">def</span> <span class="nf">normals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the normals value.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">_normals</span>
-
-    <span class="c1"># ----------- MASK -----------</span>
-    <span class="nd">@property</span>
-    <span class="nd">@wrap_getter_properties</span>
-    <span class="k">def</span> <span class="nf">mask</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get the mask value.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">mask</span>
-
-    <span class="nd">@mask</span><span class="o">.</span><span class="n">setter</span>
-    <span class="nd">@wrap_setter_properties</span>
-    <span class="k">def</span> <span class="nf">mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Set mask value.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="c1"># ----------- COLOR -----------</span>
     <span class="nd">@property</span>
@@ -1483,7 +1659,7 @@
         <div class="container">
             <img src="../../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2018-06-27.</p>
+        <p>&copy; Copyright Last updated on 2018-10-05.</p>
     </footer>
 
   </body>

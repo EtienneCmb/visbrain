@@ -12,7 +12,7 @@ https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
 from __future__ import print_function
 import numpy as np
 
-from visbrain import Brain
+from visbrain.gui import Brain
 from visbrain.objects import SourceObj, ConnectObj
 from visbrain.io import download_file
 
@@ -22,7 +22,7 @@ print(__doc__)
 kwargs = {}
 
 # Load the xyz coordinates and corresponding subject name :
-mat = np.load(download_file('xyz_sample.npz'))
+mat = np.load(download_file('xyz_sample.npz', astype='example_data'))
 s_xyz, subjects = mat['xyz'], mat['subjects']
 
 """

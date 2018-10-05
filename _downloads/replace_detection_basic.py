@@ -23,15 +23,12 @@ https://www.dropbox.com/s/bj1ra95rbksukro/sleep_edf.zip?dl=1
 import os
 import numpy as np
 
-from visbrain import Sleep
+from visbrain.gui import Sleep
 from visbrain.io import download_file, path_to_visbrain_data
 
-# Get data path and where to save it :
-current_path = path_to_visbrain_data()
-target_path = os.path.join(current_path, 'sleep_data', 'edf')
-
 # Download the file :
-download_file('sleep_edf.zip', unzip=True, to_path=target_path)
+download_file('sleep_edf.zip', unzip=True, astype='example_data')
+target_path = path_to_visbrain_data(folder='example_data')
 
 # Get data path :
 dfile = os.path.join(target_path, 'excerpt2.edf')            # data

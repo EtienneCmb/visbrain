@@ -9,14 +9,14 @@ vertices and faces.
 """
 import numpy as np
 
-from visbrain import Brain
+from visbrain.gui import Brain
 from visbrain.objects import BrainObj
 from visbrain.io import download_file
 
 """Download and the load the Custom.npz archive. This file contains vertices
 and faces of a brain template that is not integrated by default in Visbrain.
 """
-mat = np.load(download_file('Custom.npz'))
+mat = np.load(download_file('Custom.npz', astype='example_data'))
 
 """Get vertices and faces from the archive.
 

@@ -17,6 +17,7 @@ visbrain.objects.BrainObj
       ~BrainObj.__init__
       ~BrainObj.add_activation
       ~BrainObj.clean
+      ~BrainObj.copy
       ~BrainObj.describe_tree
       ~BrainObj.get_parcellates
       ~BrainObj.list
@@ -30,6 +31,7 @@ visbrain.objects.BrainObj
       ~BrainObj.screenshot
       ~BrainObj.set_data
       ~BrainObj.set_shortcuts_to_canvas
+      ~BrainObj.slice
       ~BrainObj.to_dict
       ~BrainObj.to_kwargs
       ~BrainObj.update

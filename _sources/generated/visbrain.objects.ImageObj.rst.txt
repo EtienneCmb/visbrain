@@ -15,6 +15,7 @@ visbrain.objects.ImageObj
       :toctree: ImageObj
    
       ~ImageObj.__init__
+      ~ImageObj.copy
       ~ImageObj.describe_tree
       ~ImageObj.preview
       ~ImageObj.screenshot

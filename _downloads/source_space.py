@@ -15,7 +15,7 @@ import numpy as np
 
 from mne.datasets import sample
 
-from visbrain import Brain
+from visbrain.gui import Brain
 from visbrain.mne import mne_plot_source_space
 
 # Define path :

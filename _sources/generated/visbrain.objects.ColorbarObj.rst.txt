@@ -15,6 +15,7 @@ visbrain.objects.ColorbarObj
       :toctree: ColorbarObj
    
       ~ColorbarObj.__init__
+      ~ColorbarObj.copy
       ~ColorbarObj.describe_tree
       ~ColorbarObj.preview
       ~ColorbarObj.screenshot

@@ -17,17 +17,15 @@ https://www.dropbox.com/s/t2bo9ufvc3f8mbj/sleep_brainvision.zip?dl=1
 """
 import os
 from mne import io
-from visbrain import Sleep
+from visbrain.gui import Sleep
 from visbrain.io import download_file, path_to_visbrain_data
 
 ###############################################################################
 #                               LOAD YOUR FILE
 ###############################################################################
-current_path = path_to_visbrain_data()
-target_path = os.path.join(current_path, 'sleep_data', 'brainvision')
-
 # Download dataset :
-download_file("sleep_brainvision.zip", unzip=True, to_path=target_path)
+download_file("sleep_brainvision.zip", unzip=True, astype='example_data')
+target_path = path_to_visbrain_data(folder='example_data')
 
 dfile = os.path.join(target_path, 'sub-02.vhdr')
 hfile = os.path.join(target_path, 'sub-02.hyp')

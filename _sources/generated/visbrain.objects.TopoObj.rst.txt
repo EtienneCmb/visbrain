@@ -1,0 +1,36 @@
+visbrain.objects.TopoObj
+========================
+
+.. currentmodule:: visbrain.objects
+
+.. autoclass:: TopoObj
+   :exclude-members: __init__, set_shortcuts_to_canvas, to_dict, to_kwargs, update, update_from_dict, describe_tree
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree: TopoObj
+   
+      ~TopoObj.__init__
+      ~TopoObj.connect
+      ~TopoObj.copy
+      ~TopoObj.describe_tree
+      ~TopoObj.preview
+      ~TopoObj.screenshot
+      ~TopoObj.set_data
+      ~TopoObj.set_shortcuts_to_canvas
+      ~TopoObj.to_dict
+      ~TopoObj.to_kwargs
+      ~TopoObj.update
+      ~TopoObj.update_from_dict
+   
+   
+
+.. include:: visbrain.objects.TopoObj.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

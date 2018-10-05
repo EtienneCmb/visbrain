@@ -18,7 +18,7 @@ pictures are going to be set in a layout in the 1_LayoutExample.py script.
 .. code-block:: python
 
     import numpy as np
-    from visbrain import Brain
+    from visbrain.gui import Brain
 
 
     kwargs = {}

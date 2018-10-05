@@ -2,6 +2,10 @@
 
 .. _general_examples:
 
+.. warning::
+    Some Visbrain's examples are based on data that need to be downloaded.
+    Those data are downloaded inside the folder *~/visbrain_data/example_data*
+
 Examples
 ========
 
@@ -13,8 +17,217 @@ Examples
 
     <div style='clear:both'></div>
 
-Brain Examples
---------------
+Objects examples
+----------------
+
+Examples demonstrating how to use objects.
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the brain object i.e :">
+
+.. only:: html
+
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_brain_obj_thumb.png
+
+        :ref:`sphx_glr_auto_examples_objects_ex_brain_obj.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/objects/ex_brain_obj
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the feasibility to combine multiple objects in the same scene.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_combine_objects_thumb.png
+
+        :ref:`sphx_glr_auto_examples_objects_ex_combine_objects.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/objects/ex_combine_objects
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Illustration of the main functionalities and inputs of the connctivity object :">
+
+.. only:: html
+
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_connectivity_obj_thumb.png
+
+        :ref:`sphx_glr_auto_examples_objects_ex_connectivity_obj.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/objects/ex_connectivity_obj
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_im_tf_spec_obj_thumb.png
+
+        :ref:`sphx_glr_auto_examples_objects_ex_im_tf_spec_obj.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/objects/ex_im_tf_spec_obj
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="The PAC measure the degree of coupling between the phase of slow oscillations and the amplitude...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_pac_obj_thumb.png
+
+        :ref:`sphx_glr_auto_examples_objects_ex_pac_obj.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/objects/ex_pac_obj
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the roi object i.e :">
+
+.. only:: html
+
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_roi_object_thumb.png
+
+        :ref:`sphx_glr_auto_examples_objects_ex_roi_object.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/objects/ex_roi_object
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the source object i.e :">
+
+.. only:: html
+
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_source_obj_thumb.png
+
+        :ref:`sphx_glr_auto_examples_objects_ex_source_obj.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/objects/ex_source_obj
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the topoplot object i.e :">
+
+.. only:: html
+
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_topo_obj_thumb.png
+
+        :ref:`sphx_glr_auto_examples_objects_ex_topo_obj.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/objects/ex_topo_obj
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Illustration of the main features of 3d time-series and 3d pictures. This include :">
+
+.. only:: html
+
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_tspic_obj_thumb.png
+
+        :ref:`sphx_glr_auto_examples_objects_ex_tspic_obj.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/objects/ex_tspic_obj
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Illustration of the main functionalities and inputs of the volume object :">
+
+.. only:: html
+
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_volume_obj_thumb.png
+
+        :ref:`sphx_glr_auto_examples_objects_ex_volume_obj.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/objects/ex_volume_obj
+.. raw:: html
+
+    <div style='clear:both'></div>
+
+Graphical user interface : Brain
+--------------------------------
 
 Examples demonstrating visualizations on a standard 3D-MNI brain.
 
@@ -29,9 +242,9 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 
 .. only:: html
 
-    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_00_brain_control_thumb.png
+    .. figure:: /auto_examples/gui_brain/images/thumb/sphx_glr_00_brain_control_thumb.png
 
-        :ref:`sphx_glr_auto_examples_brain_00_brain_control.py`
+        :ref:`sphx_glr_auto_examples_gui_brain_00_brain_control.py`
 
 .. raw:: html
 
@@ -41,7 +254,7 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 .. toctree::
    :hidden:
 
-   /auto_examples/brain/00_brain_control
+   /auto_examples/gui_brain/00_brain_control
 
 .. raw:: html
 
@@ -49,9 +262,9 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 
 .. only:: html
 
-    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_01_cross_sections_and_volume_thumb.png
+    .. figure:: /auto_examples/gui_brain/images/thumb/sphx_glr_01_cross_sections_and_volume_thumb.png
 
-        :ref:`sphx_glr_auto_examples_brain_01_cross_sections_and_volume.py`
+        :ref:`sphx_glr_auto_examples_gui_brain_01_cross_sections_and_volume.py`
 
 .. raw:: html
 
@@ -61,7 +274,7 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 .. toctree::
    :hidden:
 
-   /auto_examples/brain/01_cross_sections_and_volume
+   /auto_examples/gui_brain/01_cross_sections_and_volume
 
 .. raw:: html
 
@@ -69,9 +282,9 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 
 .. only:: html
 
-    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_02_brain_using_vertices_thumb.png
+    .. figure:: /auto_examples/gui_brain/images/thumb/sphx_glr_02_brain_using_vertices_thumb.png
 
-        :ref:`sphx_glr_auto_examples_brain_02_brain_using_vertices.py`
+        :ref:`sphx_glr_auto_examples_gui_brain_02_brain_using_vertices.py`
 
 .. raw:: html
 
@@ -81,7 +294,7 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 .. toctree::
    :hidden:
 
-   /auto_examples/brain/02_brain_using_vertices
+   /auto_examples/gui_brain/02_brain_using_vertices
 
 .. raw:: html
 
@@ -89,9 +302,9 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 
 .. only:: html
 
-    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_03_sources_thumb.png
+    .. figure:: /auto_examples/gui_brain/images/thumb/sphx_glr_03_sources_thumb.png
 
-        :ref:`sphx_glr_auto_examples_brain_03_sources.py`
+        :ref:`sphx_glr_auto_examples_gui_brain_03_sources.py`
 
 .. raw:: html
 
@@ -101,7 +314,7 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 .. toctree::
    :hidden:
 
-   /auto_examples/brain/03_sources
+   /auto_examples/gui_brain/03_sources
 
 .. raw:: html
 
@@ -109,9 +322,9 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 
 .. only:: html
 
-    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_04_connectivity_thumb.png
+    .. figure:: /auto_examples/gui_brain/images/thumb/sphx_glr_04_connectivity_thumb.png
 
-        :ref:`sphx_glr_auto_examples_brain_04_connectivity.py`
+        :ref:`sphx_glr_auto_examples_gui_brain_04_connectivity.py`
 
 .. raw:: html
 
@@ -121,7 +334,7 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 .. toctree::
    :hidden:
 
-   /auto_examples/brain/04_connectivity
+   /auto_examples/gui_brain/04_connectivity
 
 .. raw:: html
 
@@ -129,9 +342,9 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 
 .. only:: html
 
-    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_05_region_of_interest_thumb.png
+    .. figure:: /auto_examples/gui_brain/images/thumb/sphx_glr_05_region_of_interest_thumb.png
 
-        :ref:`sphx_glr_auto_examples_brain_05_region_of_interest.py`
+        :ref:`sphx_glr_auto_examples_gui_brain_05_region_of_interest.py`
 
 .. raw:: html
 
@@ -141,7 +354,7 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 .. toctree::
    :hidden:
 
-   /auto_examples/brain/05_region_of_interest
+   /auto_examples/gui_brain/05_region_of_interest
 
 .. raw:: html
 
@@ -149,9 +362,9 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 
 .. only:: html
 
-    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_06_add_time_series_thumb.png
+    .. figure:: /auto_examples/gui_brain/images/thumb/sphx_glr_06_add_time_series_thumb.png
 
-        :ref:`sphx_glr_auto_examples_brain_06_add_time_series.py`
+        :ref:`sphx_glr_auto_examples_gui_brain_06_add_time_series.py`
 
 .. raw:: html
 
@@ -161,7 +374,7 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 .. toctree::
    :hidden:
 
-   /auto_examples/brain/06_add_time_series
+   /auto_examples/gui_brain/06_add_time_series
 
 .. raw:: html
 
@@ -169,9 +382,9 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 
 .. only:: html
 
-    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_07_add_pictures_thumb.png
+    .. figure:: /auto_examples/gui_brain/images/thumb/sphx_glr_07_add_pictures_thumb.png
 
-        :ref:`sphx_glr_auto_examples_brain_07_add_pictures.py`
+        :ref:`sphx_glr_auto_examples_gui_brain_07_add_pictures.py`
 
 .. raw:: html
 
@@ -181,7 +394,7 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 .. toctree::
    :hidden:
 
-   /auto_examples/brain/07_add_pictures
+   /auto_examples/gui_brain/07_add_pictures
 
 .. raw:: html
 
@@ -189,9 +402,9 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 
 .. only:: html
 
-    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_08_screenshot_thumb.png
+    .. figure:: /auto_examples/gui_brain/images/thumb/sphx_glr_08_screenshot_thumb.png
 
-        :ref:`sphx_glr_auto_examples_brain_08_screenshot.py`
+        :ref:`sphx_glr_auto_examples_gui_brain_08_screenshot.py`
 
 .. raw:: html
 
@@ -201,7 +414,7 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 .. toctree::
    :hidden:
 
-   /auto_examples/brain/08_screenshot
+   /auto_examples/gui_brain/08_screenshot
 
 .. raw:: html
 
@@ -209,9 +422,9 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 
 .. only:: html
 
-    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_09_add_multiple_objects_thumb.png
+    .. figure:: /auto_examples/gui_brain/images/thumb/sphx_glr_09_add_multiple_objects_thumb.png
 
-        :ref:`sphx_glr_auto_examples_brain_09_add_multiple_objects.py`
+        :ref:`sphx_glr_auto_examples_gui_brain_09_add_multiple_objects.py`
 
 .. raw:: html
 
@@ -221,7 +434,7 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 .. toctree::
    :hidden:
 
-   /auto_examples/brain/09_add_multiple_objects
+   /auto_examples/gui_brain/09_add_multiple_objects
 
 .. raw:: html
 
@@ -229,9 +442,9 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 
 .. only:: html
 
-    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_10_add_nifti_volume_thumb.png
+    .. figure:: /auto_examples/gui_brain/images/thumb/sphx_glr_10_add_nifti_volume_thumb.png
 
-        :ref:`sphx_glr_auto_examples_brain_10_add_nifti_volume.py`
+        :ref:`sphx_glr_auto_examples_gui_brain_10_add_nifti_volume.py`
 
 .. raw:: html
 
@@ -241,7 +454,7 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 .. toctree::
    :hidden:
 
-   /auto_examples/brain/10_add_nifti_volume
+   /auto_examples/gui_brain/10_add_nifti_volume
 
 .. raw:: html
 
@@ -249,9 +462,9 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 
 .. only:: html
 
-    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_11_add_vectors_thumb.png
+    .. figure:: /auto_examples/gui_brain/images/thumb/sphx_glr_11_add_vectors_thumb.png
 
-        :ref:`sphx_glr_auto_examples_brain_11_add_vectors.py`
+        :ref:`sphx_glr_auto_examples_gui_brain_11_add_vectors.py`
 
 .. raw:: html
 
@@ -261,7 +474,7 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 .. toctree::
    :hidden:
 
-   /auto_examples/brain/11_add_vectors
+   /auto_examples/gui_brain/11_add_vectors
 
 .. raw:: html
 
@@ -269,9 +482,9 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 
 .. only:: html
 
-    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_12_parcellize_thumb.png
+    .. figure:: /auto_examples/gui_brain/images/thumb/sphx_glr_12_parcellize_thumb.png
 
-        :ref:`sphx_glr_auto_examples_brain_12_parcellize.py`
+        :ref:`sphx_glr_auto_examples_gui_brain_12_parcellize.py`
 
 .. raw:: html
 
@@ -281,26 +494,30 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 .. toctree::
    :hidden:
 
-   /auto_examples/brain/12_parcellize
+   /auto_examples/gui_brain/12_parcellize
 .. raw:: html
 
     <div style='clear:both'></div>
 
-Colorbar Examples
------------------
+Graphical user interface : Sleep
+--------------------------------
 
-Examples demonstrating how to open and configure the Colorbar editor.
+Examples demonstrating how to use Sleep and how to load files.
+
+.. contents:: Contents
+   :local:
+   :depth: 2
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Open the colorbar editor and pass inputs to control it.">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to open Sleep.">
 
 .. only:: html
 
-    .. figure:: /auto_examples/colorbar/images/thumb/sphx_glr_00_open_editor_thumb.png
+    .. figure:: /auto_examples/gui_sleep/images/thumb/sphx_glr_basic_sleep_thumb.png
 
-        :ref:`sphx_glr_auto_examples_colorbar_00_open_editor.py`
+        :ref:`sphx_glr_auto_examples_gui_sleep_basic_sleep.py`
 
 .. raw:: html
 
@@ -310,17 +527,17 @@ Examples demonstrating how to open and configure the Colorbar editor.
 .. toctree::
    :hidden:
 
-   /auto_examples/colorbar/00_open_editor
+   /auto_examples/gui_sleep/basic_sleep
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="The configuration is in a config.txt file and is loaded to reproduce the colorbar configuration...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Get sleep statictics such as sleep stages duration, duration of the hypnogram. ">
 
 .. only:: html
 
-    .. figure:: /auto_examples/colorbar/images/thumb/sphx_glr_01_load_existing_config_thumb.png
+    .. figure:: /auto_examples/gui_sleep/images/thumb/sphx_glr_get_sleep_statistics_thumb.png
 
-        :ref:`sphx_glr_auto_examples_colorbar_01_load_existing_config.py`
+        :ref:`sphx_glr_auto_examples_gui_sleep_get_sleep_statistics.py`
 
 .. raw:: html
 
@@ -330,7 +547,340 @@ Examples demonstrating how to open and configure the Colorbar editor.
 .. toctree::
    :hidden:
 
-   /auto_examples/colorbar/01_load_existing_config
+   /auto_examples/gui_sleep/get_sleep_statistics
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to load a BrainVision file.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/gui_sleep/images/thumb/sphx_glr_load_brainvision_thumb.png
+
+        :ref:`sphx_glr_auto_examples_gui_sleep_load_brainvision.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/gui_sleep/load_brainvision
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to load an EDF file.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/gui_sleep/images/thumb/sphx_glr_load_edf_thumb.png
+
+        :ref:`sphx_glr_auto_examples_gui_sleep_load_edf.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/gui_sleep/load_edf
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to load an ELAN file.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/gui_sleep/images/thumb/sphx_glr_load_elan_thumb.png
+
+        :ref:`sphx_glr_auto_examples_gui_sleep_load_elan.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/gui_sleep/load_elan
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to load an ELAN file.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/gui_sleep/images/thumb/sphx_glr_load_matlab_thumb.png
+
+        :ref:`sphx_glr_auto_examples_gui_sleep_load_matlab.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/gui_sleep/load_matlab
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to load a .rec file.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/gui_sleep/images/thumb/sphx_glr_load_rec_thumb.png
+
+        :ref:`sphx_glr_auto_examples_gui_sleep_load_rec.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/gui_sleep/load_rec
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to load data using MNE-Python package. https://martinos.org/mne/stable/i...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/gui_sleep/images/thumb/sphx_glr_load_using_mne_thumb.png
+
+        :ref:`sphx_glr_auto_examples_gui_sleep_load_using_mne.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/gui_sleep/load_using_mne
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Plot a hypnogram using matplotlib. ">
+
+.. only:: html
+
+    .. figure:: /auto_examples/gui_sleep/images/thumb/sphx_glr_plot_hypnogram_thumb.png
+
+        :ref:`sphx_glr_auto_examples_gui_sleep_plot_hypnogram.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/gui_sleep/plot_hypnogram
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrates how to replace the default detection algorithm.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/gui_sleep/images/thumb/sphx_glr_replace_detection_basic_thumb.png
+
+        :ref:`sphx_glr_auto_examples_gui_sleep_replace_detection_basic.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/gui_sleep/replace_detection_basic
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrates how to replace the default spindle detection algorithm with those impl...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/gui_sleep/images/thumb/sphx_glr_replace_detection_wonambi_thumb.png
+
+        :ref:`sphx_glr_auto_examples_gui_sleep_replace_detection_wonambi.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/gui_sleep/replace_detection_wonambi
+.. raw:: html
+
+    <div style='clear:both'></div>
+
+Graphical user interface : Signal
+---------------------------------
+
+Examples demonstrating how to use the Signal module.
+
+.. contents:: Contents
+   :local:
+   :depth: 2
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Plot a basic vector. Then, you can visualize this vector as a continuous line, markers, histogr...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/gui_signal/images/thumb/sphx_glr_00_1d_signal_thumb.png
+
+        :ref:`sphx_glr_auto_examples_gui_signal_00_1d_signal.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/gui_signal/00_1d_signal
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Dispose a two dimensional array of data into a grid.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/gui_signal/images/thumb/sphx_glr_01_2d_signals_thumb.png
+
+        :ref:`sphx_glr_auto_examples_gui_signal_01_2d_signals.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/gui_signal/01_2d_signals
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Plot and inspect a 3D array of data.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/gui_signal/images/thumb/sphx_glr_02_3d_signals_thumb.png
+
+        :ref:`sphx_glr_auto_examples_gui_signal_02_3d_signals.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/gui_signal/02_3d_signals
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Use custom color, font size...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/gui_signal/images/thumb/sphx_glr_03_interface_customization_thumb.png
+
+        :ref:`sphx_glr_auto_examples_gui_signal_03_interface_customization.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/gui_signal/03_interface_customization
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Import annotations from a text file and annotate trials.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/gui_signal/images/thumb/sphx_glr_04_annotations_thumb.png
+
+        :ref:`sphx_glr_auto_examples_gui_signal_04_annotations.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/gui_signal/04_annotations
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Export all of the time-frequency maps, psd of a dataset.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/gui_signal/images/thumb/sphx_glr_05_screenshot_thumb.png
+
+        :ref:`sphx_glr_auto_examples_gui_signal_05_screenshot.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/gui_signal/05_screenshot
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Superimposition of all the signals.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/gui_signal/images/thumb/sphx_glr_06_butterfly_thumb.png
+
+        :ref:`sphx_glr_auto_examples_gui_signal_06_butterfly.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/gui_signal/06_butterfly
 .. raw:: html
 
     <div style='clear:both'></div>
@@ -496,7 +1046,7 @@ Examples demonstrating figure layout.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Arange pictures in a grid. ">
+    <div class="sphx-glr-thumbcontainer" tooltip="Arange pictures in a grid.">
 
 .. only:: html
 
@@ -513,666 +1063,6 @@ Examples demonstrating figure layout.
    :hidden:
 
    /auto_examples/figure/1_LayoutExample
-.. raw:: html
-
-    <div style='clear:both'></div>
-
-Objects examples
-----------------
-
-Examples demonstrating how to use objects.
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the brain object i.e :">
-
-.. only:: html
-
-    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_brain_obj_thumb.png
-
-        :ref:`sphx_glr_auto_examples_objects_ex_brain_obj.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/objects/ex_brain_obj
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the feasibility to combine multiple objects in the same scene.">
-
-.. only:: html
-
-    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_combine_objects_thumb.png
-
-        :ref:`sphx_glr_auto_examples_objects_ex_combine_objects.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/objects/ex_combine_objects
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Illustration of the main functionalities and inputs of the connctivity object.">
-
-.. only:: html
-
-    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_connectivity_obj_thumb.png
-
-        :ref:`sphx_glr_auto_examples_objects_ex_connectivity_obj.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/objects/ex_connectivity_obj
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Illustration and main functionalities and inputs of the cross-section object.">
-
-.. only:: html
-
-    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_cross_section_obj_thumb.png
-
-        :ref:`sphx_glr_auto_examples_objects_ex_cross_section_obj.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/objects/ex_cross_section_obj
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram.">
-
-.. only:: html
-
-    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_im_tf_spec_obj_thumb.png
-
-        :ref:`sphx_glr_auto_examples_objects_ex_im_tf_spec_obj.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/objects/ex_im_tf_spec_obj
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="The PAC measure the degree of coupling between the phase of slow oscillations and the amplitude...">
-
-.. only:: html
-
-    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_pac_obj_thumb.png
-
-        :ref:`sphx_glr_auto_examples_objects_ex_pac_obj.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/objects/ex_pac_obj
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the roi object i.e :">
-
-.. only:: html
-
-    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_roi_object_thumb.png
-
-        :ref:`sphx_glr_auto_examples_objects_ex_roi_object.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/objects/ex_roi_object
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the source object i.e :">
-
-.. only:: html
-
-    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_source_obj_thumb.png
-
-        :ref:`sphx_glr_auto_examples_objects_ex_source_obj.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/objects/ex_source_obj
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Illustration of the main functionalities and inputs of the volume object.">
-
-.. only:: html
-
-    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_volume_obj_thumb.png
-
-        :ref:`sphx_glr_auto_examples_objects_ex_volume_obj.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/objects/ex_volume_obj
-.. raw:: html
-
-    <div style='clear:both'></div>
-
-Signal Examples
----------------
-
-Examples demonstrating how to use the Signal module.
-
-.. contents:: Contents
-   :local:
-   :depth: 2
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Plot a basic vector. Then, you can visualize this vector as a continuous line, markers, histogr...">
-
-.. only:: html
-
-    .. figure:: /auto_examples/signal/images/thumb/sphx_glr_00_1d_signal_thumb.png
-
-        :ref:`sphx_glr_auto_examples_signal_00_1d_signal.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/signal/00_1d_signal
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Dispose a two dimensional array of data into a grid.">
-
-.. only:: html
-
-    .. figure:: /auto_examples/signal/images/thumb/sphx_glr_01_2d_signals_thumb.png
-
-        :ref:`sphx_glr_auto_examples_signal_01_2d_signals.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/signal/01_2d_signals
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Plot and inspect a 3D array of data.">
-
-.. only:: html
-
-    .. figure:: /auto_examples/signal/images/thumb/sphx_glr_02_3d_signals_thumb.png
-
-        :ref:`sphx_glr_auto_examples_signal_02_3d_signals.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/signal/02_3d_signals
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Use custom color, font size...">
-
-.. only:: html
-
-    .. figure:: /auto_examples/signal/images/thumb/sphx_glr_03_interface_customization_thumb.png
-
-        :ref:`sphx_glr_auto_examples_signal_03_interface_customization.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/signal/03_interface_customization
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Import annotations from a text file and annotate trials.">
-
-.. only:: html
-
-    .. figure:: /auto_examples/signal/images/thumb/sphx_glr_04_annotations_thumb.png
-
-        :ref:`sphx_glr_auto_examples_signal_04_annotations.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/signal/04_annotations
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Export all of the time-frequency maps, psd of a dataset.">
-
-.. only:: html
-
-    .. figure:: /auto_examples/signal/images/thumb/sphx_glr_05_screenshot_thumb.png
-
-        :ref:`sphx_glr_auto_examples_signal_05_screenshot.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/signal/05_screenshot
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Superimposition of all the signals.">
-
-.. only:: html
-
-    .. figure:: /auto_examples/signal/images/thumb/sphx_glr_06_butterfly_thumb.png
-
-        :ref:`sphx_glr_auto_examples_signal_06_butterfly.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/signal/06_butterfly
-.. raw:: html
-
-    <div style='clear:both'></div>
-
-Sleep Examples
---------------
-
-Examples demonstrating how to use Sleep and how to load files.
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to open Sleep.">
-
-.. only:: html
-
-    .. figure:: /auto_examples/sleep/images/thumb/sphx_glr_basic_sleep_thumb.png
-
-        :ref:`sphx_glr_auto_examples_sleep_basic_sleep.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/sleep/basic_sleep
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to load a BrainVision file.">
-
-.. only:: html
-
-    .. figure:: /auto_examples/sleep/images/thumb/sphx_glr_load_brainvision_thumb.png
-
-        :ref:`sphx_glr_auto_examples_sleep_load_brainvision.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/sleep/load_brainvision
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to load an EDF file.">
-
-.. only:: html
-
-    .. figure:: /auto_examples/sleep/images/thumb/sphx_glr_load_edf_thumb.png
-
-        :ref:`sphx_glr_auto_examples_sleep_load_edf.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/sleep/load_edf
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to load an ELAN file.">
-
-.. only:: html
-
-    .. figure:: /auto_examples/sleep/images/thumb/sphx_glr_load_elan_thumb.png
-
-        :ref:`sphx_glr_auto_examples_sleep_load_elan.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/sleep/load_elan
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to load an ELAN file.">
-
-.. only:: html
-
-    .. figure:: /auto_examples/sleep/images/thumb/sphx_glr_load_matlab_thumb.png
-
-        :ref:`sphx_glr_auto_examples_sleep_load_matlab.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/sleep/load_matlab
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to load a .rec file.">
-
-.. only:: html
-
-    .. figure:: /auto_examples/sleep/images/thumb/sphx_glr_load_rec_thumb.png
-
-        :ref:`sphx_glr_auto_examples_sleep_load_rec.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/sleep/load_rec
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to load data using MNE-Python package. https://martinos.org/mne/stable/i...">
-
-.. only:: html
-
-    .. figure:: /auto_examples/sleep/images/thumb/sphx_glr_load_using_mne_thumb.png
-
-        :ref:`sphx_glr_auto_examples_sleep_load_using_mne.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/sleep/load_using_mne
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrates how to replace the default detection algorithm.">
-
-.. only:: html
-
-    .. figure:: /auto_examples/sleep/images/thumb/sphx_glr_replace_detection_basic_thumb.png
-
-        :ref:`sphx_glr_auto_examples_sleep_replace_detection_basic.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/sleep/replace_detection_basic
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrates how to replace the default spindle detection algorithm with those impl...">
-
-.. only:: html
-
-    .. figure:: /auto_examples/sleep/images/thumb/sphx_glr_replace_detection_wonambi_thumb.png
-
-        :ref:`sphx_glr_auto_examples_sleep_replace_detection_wonambi.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/sleep/replace_detection_wonambi
-.. raw:: html
-
-    <div style='clear:both'></div>
-
-Topoplot Examples
------------------
-
-Examples demonstrating how to display and configure topographic plot.
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Basic topographic plot based on channel names.">
-
-.. only:: html
-
-    .. figure:: /auto_examples/topo/images/thumb/sphx_glr_00_basic_topoplot_thumb.png
-
-        :ref:`sphx_glr_auto_examples_topo_00_basic_topoplot.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/topo/00_basic_topoplot
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Display topographic plots using custom coordinates.">
-
-.. only:: html
-
-    .. figure:: /auto_examples/topo/images/thumb/sphx_glr_01_use_custom_coordinates_thumb.png
-
-        :ref:`sphx_glr_auto_examples_topo_01_use_custom_coordinates.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/topo/01_use_custom_coordinates
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Display topographic plots into a grid.">
-
-.. only:: html
-
-    .. figure:: /auto_examples/topo/images/thumb/sphx_glr_02_grid_topoplot_thumb.png
-
-        :ref:`sphx_glr_auto_examples_topo_02_grid_topoplot.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/topo/02_grid_topoplot
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Add a shared colorbar across topographic plot.">
-
-.. only:: html
-
-    .. figure:: /auto_examples/topo/images/thumb/sphx_glr_03_shared_colorbar_thumb.png
-
-        :ref:`sphx_glr_auto_examples_topo_03_shared_colorbar.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/topo/03_shared_colorbar
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Display topographic plots in a grid using several plotting properties.">
-
-.. only:: html
-
-    .. figure:: /auto_examples/topo/images/thumb/sphx_glr_04_topoplot_plotting_properties_thumb.png
-
-        :ref:`sphx_glr_auto_examples_topo_04_topoplot_plotting_properties.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/topo/04_topoplot_plotting_properties
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Add connectivity to the topoplot.">
-
-.. only:: html
-
-    .. figure:: /auto_examples/topo/images/thumb/sphx_glr_05_topoplot_and_connectivity_thumb.png
-
-        :ref:`sphx_glr_auto_examples_topo_05_topoplot_and_connectivity.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/topo/05_topoplot_and_connectivity
 .. raw:: html
 
     <div style='clear:both'></div>

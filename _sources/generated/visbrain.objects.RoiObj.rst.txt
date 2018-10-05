@@ -15,7 +15,9 @@ visbrain.objects.RoiObj
       :toctree: RoiObj
    
       ~RoiObj.__init__
+      ~RoiObj.copy
       ~RoiObj.describe_tree
+      ~RoiObj.get_centroids
       ~RoiObj.get_labels
       ~RoiObj.list
       ~RoiObj.localize_sources
@@ -23,6 +25,7 @@ visbrain.objects.RoiObj
       ~RoiObj.preview
       ~RoiObj.project_sources
       ~RoiObj.remove
+      ~RoiObj.reset
       ~RoiObj.save
       ~RoiObj.screenshot
       ~RoiObj.select_roi

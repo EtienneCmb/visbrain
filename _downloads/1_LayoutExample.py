@@ -2,20 +2,23 @@
 Page layout example
 ===================
 
-Arange pictures in a grid. 
+Arange pictures in a grid.
 
 Download the archive :
 https://www.dropbox.com/s/jsjct54ynvdjzfq/figure.zip?dl=1
 """
-from visbrain import Figure
-from visbrain.io import download_file, path_to_visbrain_data
+import os
 
-download_file("figure.zip", unzip=True)
+from visbrain.gui import Figure
+from visbrain.io import download_file
+
+fig_path = download_file("figure.zip", unzip=True, astype='example_data')
+fig_path = fig_path.split("figure.zip")[0]
 
 # Files to load :
 files = ['default.png', 'inside.png', 'count.png', 'density.png',
          'repartition.jpg', 'roi.jpg']
-files = [path_to_visbrain_data(k) for k in files]
+files = [os.path.join(fig_path, k) for k in files]
 
 # Titles :
 titles = ['Default view', 'Select sources inside', 'Connectivity',

@@ -13,15 +13,17 @@ project the source's activity on it.
 from __future__ import print_function
 import numpy as np
 
-from visbrain import Brain
+from visbrain.gui import Brain
 from visbrain.objects import BrainObj, SourceObj, RoiObj
 from visbrain.io import download_file
 
 """Download the location of sources closed to the thalamus and the power of
 alpha oscillations
 """
-s_xyz = np.loadtxt(download_file('thalamus.txt'))
-s_data = np.load(download_file('Px.npy')).mean(1) * 10e26
+thalamus_xyz = download_file('thalamus.txt', astype='example_data')
+thalamus_data = download_file('Px.npy', astype='example_data')
+s_xyz = np.loadtxt(thalamus_xyz)
+s_data = np.load(thalamus_data).mean(1) * 10e26
 
 """Create a source object
 """

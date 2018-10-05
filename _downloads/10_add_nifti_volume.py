@@ -16,14 +16,14 @@ https://brainder.org/download/flair/
 from __future__ import print_function
 import numpy as np
 
-from visbrain import Brain
+from visbrain.gui import Brain
 from visbrain.objects import VolumeObj, CrossSecObj, SourceObj
 from visbrain.io import download_file
 
 """Download two NIFTI files
 """
-path_1 = download_file('GG-853-GM-0.7mm.nii.gz')
-path_2 = download_file('GG-853-WM-0.7mm.nii.gz')
+path_1 = download_file('GG-853-GM-0.7mm.nii.gz', astype='example_data')
+path_2 = download_file('GG-853-WM-0.7mm.nii.gz', astype='example_data')
 
 """Define four sources sources and a Source object
 """

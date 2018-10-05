@@ -15,6 +15,7 @@ visbrain.objects.PacmapObj
       :toctree: PacmapObj
    
       ~PacmapObj.__init__
+      ~PacmapObj.copy
       ~PacmapObj.describe_tree
       ~PacmapObj.preview
       ~PacmapObj.screenshot

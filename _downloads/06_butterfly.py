@@ -7,7 +7,7 @@ Superimposition of all the signals.
 .. image:: ../../picture/picsignal/ex_butterfly.png
 """
 import numpy as np
-from visbrain import Signal
+from visbrain.gui import Signal
 
 
 sf = 1024.  # Sampling frequency

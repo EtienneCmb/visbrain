@@ -77,7 +77,7 @@ The :class:`Signal` module can be imported as follow :
 
 .. code-block:: python
 
-    from visbrain import Signal
+    from visbrain.gui import Signal
 
 
 Shortcuts

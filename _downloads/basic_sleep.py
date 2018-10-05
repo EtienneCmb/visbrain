@@ -11,6 +11,6 @@ Two windows will then appear :
 
 .. image:: ../../picture/picsleep/ex_basic_sleep.png
 """
-from visbrain import Sleep
+from visbrain.gui import Sleep
 
 Sleep().show()

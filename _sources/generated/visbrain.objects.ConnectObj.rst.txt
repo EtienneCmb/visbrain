@@ -15,7 +15,10 @@ visbrain.objects.ConnectObj
       :toctree: ConnectObj
    
       ~ConnectObj.__init__
+      ~ConnectObj.analyse_connections
+      ~ConnectObj.copy
       ~ConnectObj.describe_tree
+      ~ConnectObj.get_nb_connections_per_node
       ~ConnectObj.preview
       ~ConnectObj.screenshot
       ~ConnectObj.set_shortcuts_to_canvas

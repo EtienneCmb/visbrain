@@ -29,7 +29,7 @@ scene.
 
     """Get the path to Visbrain data and download deep sources
     """
-    mat = np.load(download_file('xyz_sample.npz'))
+    mat = np.load(download_file('xyz_sample.npz', astype='example_data'))
     xyz, subjects = mat['xyz'], mat['subjects']
     data = np.random.uniform(low=-1., high=1., size=(xyz.shape[0],))
 
@@ -50,7 +50,7 @@ scene.
                                    fMRI activation
     =============================================================================
     """)
-    file = download_file('lh.sig.nii.gz')
+    file = download_file('lh.sig.nii.gz', astype='example_data')
     b_obj_fmri = BrainObj('inflated', translucent=False, sulcus=True)
     b_obj_fmri.add_activation(file=file, clim=(5., 20.), hide_under=5,
                               cmap='viridis', hemisphere='left')
@@ -109,7 +109,7 @@ scene.
     #                               Connectivity
     # =============================================================================
     """)
-    arch = np.load(download_file('phase_sync_delta.npz'))
+    arch = np.load(download_file('phase_sync_delta.npz', astype='example_data'))
     nodes, edges = arch['nodes'], arch['edges']
     c_count = ConnectObj('default', nodes, edges, select=edges > .7,
                          color_by='count', antialias=True, line_width=2.,

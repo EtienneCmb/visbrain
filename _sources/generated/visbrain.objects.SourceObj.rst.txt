@@ -17,6 +17,7 @@ visbrain.objects.SourceObj
       ~SourceObj.__init__
       ~SourceObj.analyse_sources
       ~SourceObj.color_sources
+      ~SourceObj.copy
       ~SourceObj.describe_tree
       ~SourceObj.fit_to_vertices
       ~SourceObj.preview

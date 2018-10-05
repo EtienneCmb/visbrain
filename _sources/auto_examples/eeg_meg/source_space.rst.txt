@@ -28,7 +28,7 @@ Load .fif file in the MNE-python dataset
 
     from mne.datasets import sample
 
-    from visbrain import Brain
+    from visbrain.gui import Brain
     from visbrain.mne import mne_plot_source_space
 
     # Define path :

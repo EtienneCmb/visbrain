@@ -27,7 +27,7 @@ Shortcuts
 
 .. image:: ../../picture/picsignal/ex_2d_signal.png
 """
-from visbrain import Signal
+from visbrain.gui import Signal
 from visbrain.utils import generate_eeg
 
 sf = 512.  # sampling frequency
