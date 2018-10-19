@@ -329,11 +329,11 @@ class UiMenu(HelpMenu):
             self._fcn_score_to_hypno()
 
     def _load_config(self, *args, filename=None):
-        """Load a config file (*.txt) containing several display parameters."""
+        """Load a config file (*.json) containing several display parameters."""
         import json
         if not filename:
             filename = dialog_load(self, 'Load config File', 'config',
-                                   "Text file (*.txt);;All files (*.*)")
+                                   "JSON file (*.json);;Text files (*.txt);;All files (*.*)")
         if filename:
             with open(filename) as f:
                 # Load the configuration file :
