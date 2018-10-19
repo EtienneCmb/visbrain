@@ -39,6 +39,8 @@ class ReadSleepData(object):
         # Dialog window if data is None :
         if data is None:
             data = dialog_load(self, "Open dataset", '',
+                               "Any EEG files (*.vhdr *.edf *.gdf *.bdf *.eeg "
+                               "*.egi *.mff *.cnt *.trc *.set *.rec);;"
                                "BrainVision (*.vhdr);;EDF (*.edf);;"
                                "GDF (*.gdf);;BDF (*.bdf);;Elan (*.eeg);;"
                                "EGI (*.egi);;MFF (*.mff);;CNT (*.cnt);;"
