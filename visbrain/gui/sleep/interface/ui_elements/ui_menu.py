@@ -333,7 +333,8 @@ class UiMenu(HelpMenu):
         import json
         if not filename:
             filename = dialog_load(self, 'Load config File', 'config',
-                                   "JSON file (*.json);;Text files (*.txt);;All files (*.*)")
+                                   "JSON file (*.json);;Text files (*.txt);;"
+                                   "All files (*.*)")
         if filename:
             with open(filename) as f:
                 # Load the configuration file :
