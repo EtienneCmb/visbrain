@@ -361,6 +361,10 @@ class BrainVisual(Visual):
         # Check input variables :
         if vertices is None:
             vertices = np.ones((len(self),), dtype=bool)
+        # Send data to the mask :
+        if isinstance(mask_data, np.ndarray) and len(mask_data) == len(self):
+            self._bgd_data[mask_data] = .5
+            self._bgd_buffer.set_data(self._bgd_data)
         if not len(vertices):
             logger.warning('Vertices array is empty. Abandoning.')
             return
@@ -395,10 +399,7 @@ class BrainVisual(Visual):
         colormap = Colormap(**kwargs)
         vec = np.linspace(data_lim[0], data_lim[1], LUT_LEN)
         self._text2d_data[to_overlay, ...] = colormap.to_rgba(vec)
-        # Send data to the mask :
-        if isinstance(mask_data, np.ndarray) and len(mask_data) == len(self):
-            self._bgd_data[mask_data] = .5
-            self._bgd_buffer.set_data(self._bgd_data)
+
         # -------------------------------------------------------------
         # BUFFERS
         # -------------------------------------------------------------
