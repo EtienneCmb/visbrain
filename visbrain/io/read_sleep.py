@@ -202,9 +202,16 @@ class ReadSleepData(object):
         for idx_chan, iqr_chan in enumerate(iqr_data):
             if iqr_chan < 1:
                 mult_fact = np.floor(np.log10(50 / iqr_chan))
-                warn("Wrong channel data amplitude. " +\ 
-                     "Multiplying data amplitude by 10^{:.0f}".format(mult_fact))
-                data[idx_chan, :] *= 10 ** mult_fact
+                
+        # Assume that the inter-quartile amplitude of EEG data is ~50 uV
+        iqr_chan = iqr(data[:, :int(data.shape[1] / 4)], axis=-1)
+        bad_iqr = iqr_chan < 1.
+
+        if np.any(bad_iqr):
+            mult_fact = np.zeros_like(iqr_chan)
+            mult_fact[bad_iqr] = np.floor(np.log10(50 / iqr_chan[bad_iqr]))
+            data *= 10 ** mult_fact[..., np.newaxis]                
+            warn("Wrong channel data amplitude. ")
 
         # ---------- CONVERSION ----------=
         # Convert data and hypno to be contiguous and float 32 (for vispy):
