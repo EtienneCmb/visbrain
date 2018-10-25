@@ -202,7 +202,8 @@ class ReadSleepData(object):
         for idx_chan, iqr_chan in enumerate(iqr_data):
             if iqr_chan < 1:
                 mult_fact = np.floor(np.log10(50 / iqr_chan))
-                warn("Wrong channel data amplitude. Multiplying data amplitude by 10^%i" % mult_fact)
+                warn("Wrong channel data amplitude. " +\ 
+                     "Multiplying data amplitude by 10^{:.0f}".format(mult_fact))
                 data[idx_chan, :] *= 10 ** mult_fact
 
         # ---------- CONVERSION ----------=
