@@ -20,7 +20,7 @@ from .mesh import vispy_array
 
 __all__ = ('Colormap', 'color2vb', 'array2colormap', 'cmap_to_glsl',
            'dynamic_color', 'color2faces', 'type_coloring', 'mpl_cmap',
-           'color2tuple', 'mpl_cmap_index')
+           'color2tuple', 'mpl_cmap_index', 'vector_to_opacity')
 
 
 logger = logging.getLogger('visbrain')
@@ -641,3 +641,56 @@ def mpl_cmap_index(cmap, cmaps=None):
         return np.where(np.char.find(cmaps, cmap) + 1)[0][0], invert
     else:
         return cmaps.index(cmap), invert
+
+
+def vector_to_opacity(data, clim=None, dyn=(0., 1.), orientation='ascending',
+                      order=1):
+    """Convert a data vector into opacity.
+
+    Parameters
+    ----------
+    data : array_like
+        Vector of data of shape (n_data,).
+    clim : tuple | None
+        Limits to use. If None, clim is defined as the min and max of the data
+    dyn : tuple | (0., 1.)
+        Minimum and maximum of the transparency levels.
+    orientation : {'ascending', 'center', 'descending'}
+        Define the transparency behavior :
+
+            * 'ascending' : from translucent to opaque
+            * 'center' : from opaque to translucent and finish by opaque
+            * 'descending' ; from opaque to translucent
+    order : int | 1
+        Get the alpha ** order.
+
+    Returns
+    -------
+    alpha : array_like
+        Array of transparency
+    """
+    data = np.asarray(data)
+    assert data.ndim == 1
+    clim = (data.min(), data.max()) if clim is None else clim
+    assert len(clim) == 2
+    assert (len(dyn) == 2) and (dyn[0] >= 0.) and (dyn[1] <= 1.)
+    assert orientation in ['ascending', 'center', 'descending']
+
+    _data, clim = data.copy(), np.asarray(clim)
+    if orientation == 'center':
+        _data = np.abs(_data - clim.mean())
+        clim = clim - clim.mean()
+
+    # Get limits :
+    xtr_min = max(dyn[0] * _data.min() / clim[0], 0.) if clim[0] != 0. else 0.
+    xtr_max = min(dyn[1] * _data.max() / clim[1], 1.) if clim[1] != 0. else 0.
+
+    # Get alpha :
+    alpha = np.zeros_like(_data)
+    if orientation == 'descending':
+        alpha = normalize(_data, xtr_max, xtr_min)
+    elif orientation == 'center':
+        alpha = normalize(_data, xtr_min, xtr_max)
+    elif orientation == 'ascending':
+        alpha = normalize(_data, xtr_min, xtr_max)
+    return np.clip(alpha, 0., 1.) ** order
