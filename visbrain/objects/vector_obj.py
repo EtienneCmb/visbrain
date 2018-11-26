@@ -7,7 +7,8 @@ from vispy.scene.visuals import Arrow
 from vispy.visuals.line.arrow import ARROW_TYPES
 
 from .visbrain_obj import VisbrainObject, CombineObjects
-from ..utils import array2colormap, color2vb, wrap_properties, normalize
+from ..utils import (array2colormap, color2vb, wrap_properties, normalize,
+                     vector_to_opacity)
 
 
 logger = logging.getLogger('visbrain')
@@ -49,6 +50,15 @@ class VectorObj(VisbrainObject):
         Use a dynamic transparency method. The dynamic input must be a tuple
         of two float between [0, 1]. Vectors with stronger associated data are
         going to be set more opaque.
+    dynamic_order : int | 1
+        If 1, the dynamic transparency is linearly modulated by the
+        connectivity. If 2, the transparency follow a x**2 curve etc.
+    dynamic_orientation : str | 'ascending'
+        Define the transparency behavior :
+
+            * 'ascending' : from translucent to opaque
+            * 'center' : from opaque to translucent and finish by opaque
+            * 'descending' ; from opaque to translucent
     line_width : float | 5.
         Line width of each vector.
     arrow_size : float | 10.
@@ -114,7 +124,8 @@ class VectorObj(VisbrainObject):
     ###########################################################################
 
     def __init__(self, name, arrows, data=None, inferred_data=False,
-                 select=None, color='black', dynamic=None, line_width=5.,
+                 select=None, color='black', dynamic=None, dynamic_order=1,
+                 dynamic_orientation='ascending', line_width=5.,
                  arrow_size=10., arrow_type='stealth', arrow_coef=1.,
                  arrow_norm=(5., 20.), antialias=False, cmap='viridis',
                  clim=None, vmin=None, under='gray', vmax=None, over='red',
@@ -172,8 +183,10 @@ class VectorObj(VisbrainObject):
                                    vmax=vmax, under=under, over=over)
             # Dynamic transparency :
             if isinstance(dynamic, (tuple, list)) and len(dynamic) == 2:
-                assert all(x >= 0. and x <= 1. for x in dynamic)
-                color[..., -1] = normalize(data.copy(), dynamic[0], dynamic[1])
+                alphas = vector_to_opacity(data, clim=clim, dyn=dynamic,
+                                           order=dynamic_order,
+                                           orientation=dynamic_orientation)
+                color[..., -1] = alphas
         else:
             color = np.tile(color2vb(color).reshape(1, -1), (len(self), 1))
 
@@ -187,6 +200,8 @@ class VectorObj(VisbrainObject):
                              antialias=antialias, arrow_color=color,
                              connect='segments', width=line_width,
                              parent=self._node)
+        self._arrows.set_gl_state('translucent', depth_test=False,
+                                  cull_face=False)
 
     def __len__(self):
         """Get the number of arrows."""

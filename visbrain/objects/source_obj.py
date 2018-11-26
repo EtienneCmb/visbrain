@@ -165,6 +165,8 @@ class SourceObj(VisbrainObject):
                                         edge_color=edge_color,
                                         edge_width=edge_width,
                                         symbol=symbol, parent=self._node)
+        self._sources.set_gl_state('translucent', depth_test=False,
+                                   cull_face=False)
 
         # _______________________ TEXT _______________________
         tvisible = text is None
