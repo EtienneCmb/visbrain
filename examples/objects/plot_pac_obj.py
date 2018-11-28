@@ -12,8 +12,6 @@ The PacmapObj can be use to visualize three things :
       phase.
     * The evolution of coupling across time for several frequency phase
     * The evolution of coupling across time for several frequency amplitude
-
-.. image:: ../../picture/picobjects/ex_pac_obj.png
 """
 import numpy as np
 
@@ -41,7 +39,7 @@ print("""
 """)
 pac_obj_como = PacmapObj('como', sig, sf=sf, f_pha=(2, 30, 1, .5),
                          f_amp=(60, 150, 10, 1), interpolation='bicubic')
-sc.add_to_subplot(pac_obj_como, row=0, col=0, title='Comodulogram')
+sc.add_to_subplot(pac_obj_como, row=0, col=0, zoom=.8, title='Comodulogram')
 
 print("""
 # =============================================================================
@@ -50,7 +48,8 @@ print("""
 """)
 pac_pha_como = PacmapObj('como', sig, sf=sf, f_pha=(2, 30, 1, .5),
                          f_amp=[70., 110.], n_window=500, cmap='plasma')
-sc.add_to_subplot(pac_pha_como, row=0, col=1, title='Optimal phase frequency')
+sc.add_to_subplot(pac_pha_como, row=0, col=1, zoom=.8,
+                  title='Optimal phase frequency')
 
 print("""
 # =============================================================================
@@ -59,6 +58,6 @@ print("""
 """)
 pac_amp_como = PacmapObj('como', sig, sf=sf, f_pha=[2, 20],
                          f_amp=(60, 150, 10, 1), n_window=500, cmap='inferno')
-sc.add_to_subplot(pac_amp_como, row=0, col=2,
+sc.add_to_subplot(pac_amp_como, row=0, col=2, zoom=.8,
                   title='Optimal amplitude frequency')
 sc.preview()

@@ -21,8 +21,6 @@ The source objects can interact with several other objects :
     * RoiObj : source's activity and repartition can be projected on the
       surface of region of interest. In addition, ROI objects can also be used
       to get anatomical informations of sources
-
-.. image:: ../../picture/picobjects/ex_source_obj.png
 """
 import numpy as np
 
