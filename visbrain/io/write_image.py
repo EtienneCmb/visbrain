@@ -7,12 +7,14 @@
 import os
 import logging
 import numpy as np
+
+from .path import path_to_tmp, clean_tmp
 from ..utils.color import color2vb
 
 logger = logging.getLogger('visbrain')
 
 __all__ = ('write_fig_hyp', 'write_fig_spindles', 'write_fig_canvas',
-           'write_fig_pyqt')
+           'write_fig_pyqt', 'mpl_preview')
 
 
 def write_fig_hyp(data, sf, file=None, start_s=0, grid=False, ascolor=False,
@@ -439,3 +441,23 @@ def write_fig_pyqt(self, filename):
         self.timerScreen.setSingleShot(True)
         self.timerScreen.timeout.connect(_take_screenshot)
         self.timerScreen.start(500)
+
+
+def mpl_preview(canvas, **kw):
+    """Preview canvas using Matplotlib."""
+    import matplotlib.pyplot as plt
+    import matplotlib.image as mpimg
+
+    save_as = os.path.join(path_to_tmp(), 'mpl_render.png')
+    write_fig_canvas(save_as, canvas, **kw)
+
+    img = mpimg.imread(save_as)
+    fig = plt.figure(figsize=(12, 8))
+    ax = plt.subplot(111)
+    ax.imshow(img, interpolation='bicubic')
+    ax.set_xticklabels(())
+    ax.set_yticklabels(())
+    plt.axis('off')
+    fig.tight_layout(pad=0., h_pad=0., w_pad=0.)
+    plt.show()
+    clean_tmp()
