@@ -21,8 +21,11 @@ The source objects can interact with several other objects :
     * RoiObj : source's activity and repartition can be projected on the
       surface of region of interest. In addition, ROI objects can also be used
       to get anatomical informations of sources
+<<<<<<< develop:examples/objects/ex_source_obj.py
 
 .. image:: ../../_static/object/ex_source_obj.png
+=======
+>>>>>>> Rename objects examples to be build using sphinx:examples/objects/plot_source_obj.py
 """
 import numpy as np
 

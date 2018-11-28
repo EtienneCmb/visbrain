@@ -4,8 +4,11 @@ Combine multiple objects
 
 This example illustrate the feasibility to combine multiple objects in the same
 scene.
+<<<<<<< develop:examples/objects/ex_combine_objects.py
 
 .. image:: ../../_static/object/ex_combine_obj.png
+=======
+>>>>>>> Rename objects examples to be build using sphinx:examples/objects/plot_combine_objects.py
 """
 import numpy as np
 

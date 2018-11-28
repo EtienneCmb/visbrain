@@ -11,8 +11,11 @@ object i.e :
   * Project source's activity on the surface of the brain
   * Parcellize the brain and send data to selected parcellates
   * Add fMRI activation and MEG inverse solution
+<<<<<<< develop:examples/objects/ex_brain_obj.py
 
 .. image:: ../../_static/object/ex_brain_obj.png
+=======
+>>>>>>> Rename objects examples to be build using sphinx:examples/objects/plot_brain_obj.py
 """
 import numpy as np
 
@@ -108,7 +111,7 @@ path_to_file1 = download_file('lh.aparc.a2009s.annot', astype='example_data')
 # Define the brain object (now you should know how to do it)
 b_obj_parl = BrainObj('inflated', hemisphere='left', translucent=False)
 # Print parcellates included in the file
-print(b_obj_parl.get_parcellates(path_to_file1))
+# print(b_obj_parl.get_parcellates(path_to_file1))
 # Finally, parcellize the brain and add the brain to the scene
 b_obj_parl.parcellize(path_to_file1)
 sc.add_to_subplot(b_obj_parl, row=1, col=1, rotate='left',
@@ -131,7 +134,7 @@ path_to_file2 = download_file('rh.aparc.annot', astype='example_data')
 # Define the brain object (again... I know, this is redundant)
 b_obj_parr = BrainObj('inflated', hemisphere='right', translucent=False)
 # Print parcellates included in the file
-print(b_obj_parr.get_parcellates(path_to_file2))
+# print(b_obj_parr.get_parcellates(path_to_file2))
 # From the list of printed parcellates, we only select a few of them
 select_par = ['paracentral', 'precentral', 'fusiform', 'postcentral',
               'superiorparietal', 'superiortemporal', 'inferiorparietal',

@@ -7,8 +7,11 @@ Use and control image, time-frequency maps and spectrogram.
     * Display and configure an image (color, interpolation)
     * Compute and display time-frequency properties of a signal (spectrogram,
       wavelet based time-frequency maps or multi-taper)
+<<<<<<< develop:examples/objects/ex_im_tf_spec_obj.py
 
 .. image:: ../../_static/object/ex_imtfspec_obj.png
+=======
+>>>>>>> Rename objects examples to be build using sphinx:examples/objects/plot_im_tf_spec_obj.py
 """
 import numpy as np
 from visbrain.objects import (ImageObj, TimeFrequencyObj, ColorbarObj,
