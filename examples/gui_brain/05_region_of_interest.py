@@ -23,7 +23,7 @@ alpha oscillations
 thalamus_xyz = download_file('thalamus.txt', astype='example_data')
 thalamus_data = download_file('Px.npy', astype='example_data')
 s_xyz = np.loadtxt(thalamus_xyz)
-s_data = np.load(thalamus_data).mean(1) * 10e26
+s_data = np.load(thalamus_data).mean(1)
 
 """Create a source object
 """
