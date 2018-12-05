@@ -4,9 +4,6 @@ jobs:
       branches:
         ignore:
           - gh-pages
-        only:
-          - master
-          - develop
       docker:
         - image: circleci/python:3.6-jessie
       steps:
