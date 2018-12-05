@@ -68,6 +68,7 @@ jobs:
         - run:
             name: Build the documentation
             command: |
+                source activate testenv;
                 cd docs
                 make html
             no_output_timeout: 15m
