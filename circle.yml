@@ -73,7 +73,7 @@ jobs:
                 make html
             no_output_timeout: 15m
         - store_artifacts:
-            path: doc/_build/html/
+            path: docs/_build/html/
             destination: html
         - add_ssh_keys:
             fingerprints:
