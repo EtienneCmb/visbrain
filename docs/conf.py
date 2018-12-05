@@ -49,7 +49,6 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.linkcode',
     'sphinx_gallery.gen_gallery',
-    'sphinx_click.ext',
     'numpydoc',
 ]
 # , 'sphinx.ext.napoleon'
