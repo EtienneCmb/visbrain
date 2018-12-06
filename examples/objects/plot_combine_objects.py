@@ -4,8 +4,6 @@ Combine multiple objects
 
 This example illustrate the feasibility to combine multiple objects in the same
 scene.
-
-.. image:: ../../_static/object/ex_combine_obj.png
 """
 import numpy as np
 

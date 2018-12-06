@@ -2,14 +2,12 @@
 Time-series and pictures 3D (TimeSeries3DObj & Picture3DObj): complete tutorial
 ===============================================================================
 
-Illustration of the main features of 3d time-series and 3d pictures. This
+Illustration of the main features of 3d time-series and pictures. This
 include :
 
     * Define and plot of spatially distributed time-series (TS) and pictures
     * Masking TS and pictures
     * Custom properties (i.e line width, colors, size...)
-
-.. image:: ../../_static/object/ex_tspic_obj.png
 """
 import numpy as np
 

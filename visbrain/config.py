@@ -8,29 +8,24 @@ from vispy import app as visapp
 
 from .utils import Profiler, set_log_level
 
-"""Set 'info' as the default logging level
-"""
+# Set 'info' as the default logging level
 logger = logging.getLogger('visbrain')
 set_log_level('info')
 
-"""Configuration dict
-"""
+# Configuration dict
 CONFIG = {}
 
-"""Visbrain profiler (derived from the VisPy profiler)
-"""
+# Visbrain profiler (derived from the VisPy profiler)
 PROFILER = Profiler()
 
-"""PyQt application
-"""
+# PyQt application
 PYQT_APP = QtWidgets.QApplication.instance()
 if PYQT_APP is None:
     PYQT_APP = QtWidgets.QApplication([''])
 CONFIG['PYQT_APP'] = PYQT_APP
 CONFIG['SHOW_PYQT_APP'] = True
 
-"""VisPy application
-"""
+# VisPy application
 CONFIG['VISPY_APP'] = visapp.application.Application()
 
 
@@ -39,8 +34,10 @@ def use_app(backend_name):
     CONFIG['VISPY_APP'] = visapp.application.Application(backend_name)
 
 
-"""Input command line arguments
-"""
+# MPL render :
+CONFIG['MPL_RENDER'] = False
+
+# Input command line arguments
 VISBRAIN_HELP = """
 Visbrain command line arguments:
 
