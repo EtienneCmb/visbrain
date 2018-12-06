@@ -78,6 +78,18 @@ jobs:
         - add_ssh_keys:
             fingerprints:
                 - "5a:43:30:04:e8:11:8b:79:ed:65:76:3d:48:18:9e:03"
+        - deploy:
+            name: github pages deployment
+            command: |
+              if [ "${CIRCLE_BRANCH}" == "master" ]; then
+                echo "Deploying dev docs.";
+                git config --global user.email "e.combrisson@gmail.com";
+                git config --global user.name "EtienneCmb";
+                cd doc;
+                make install;
+              else
+                echo "No deployment (build: ${CIRCLE_BRANCH}).";
+              fi    
         - save_cache:
             key: data-cache
             paths:
