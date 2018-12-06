@@ -8,7 +8,7 @@ Illustration of the main functionalities and inputs of the connctivity object :
     * Color connectivity links according to the number of connections per node
     * Color connectivity links using custom colors
 
-.. image:: ../../picture/picobjects/ex_connect_obj.png
+.. image:: ../../_static/object/ex_connect_obj.png
 """
 import numpy as np
 

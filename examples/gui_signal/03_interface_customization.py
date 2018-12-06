@@ -4,7 +4,7 @@ Interface customization
 
 Use custom color, font size...
 
-.. image:: ../../picture/picsignal/ex_custom_interface.png
+.. image:: ../../_static/examples/ex_custom_interface.png
 """
 from visbrain.gui import Signal
 from visbrain.utils import generate_eeg

@@ -4,6 +4,8 @@ Matplotlib plot of an hypnogram
 
 Plot a hypnogram using matplotlib.
 """
+import matplotlib.pyplot as plt
+
 from visbrain.io import write_fig_hyp, read_hypno, download_file
 
 ###############################################################################
@@ -30,3 +32,4 @@ data, sf = read_hypno(path_to_hypno)
 # figure is saved
 
 write_fig_hyp(data, sf, grid=grid, ascolor=ascolor, file=file)
+plt.show()

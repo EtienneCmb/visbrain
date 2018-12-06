@@ -62,6 +62,7 @@ Objects
     TimeSeries3DObj
     VectorObj
     VolumeObj
+    VispyObj
 
 Compatibility with existing software
 ------------------------------------

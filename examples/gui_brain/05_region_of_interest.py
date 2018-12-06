@@ -8,7 +8,7 @@ This small dataset (thx to Tarek Lajnef) contains sources inside the thalamus
 and alpha power for each source. We are going to display the thalamus, then
 project the source's activity on it.
 
-.. image:: ../../picture/picbrain/ex_region_of_interest.png
+.. image:: ../../_static/examples/ex_region_of_interest.png
 """
 from __future__ import print_function
 import numpy as np

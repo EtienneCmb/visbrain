@@ -6,16 +6,16 @@ Sleep
 .. raw:: html
 
   <div class="jumbotron">
-    <h1 class="display-3">Quick description <img alt="_images/sleep_ico.png" src="_images/sleep_ico.png" width="150" height="150" align="right"></h1>
+    <h1 class="display-3">Quick description <img alt="_static/ico/sleep_ico.png" src="_static/ico/sleep_ico.png" width="150" height="150" align="right"></h1>
     <p class="lead">Sleep is a flexible graphical user interface for visualization, analysis and scoring of polysomnographic sleep data and is developed in collaboration with <a href="https://raphaelvallat.github.io/">Raphael Vallat</a> and <a href="http://bluebrain.epfl.ch/page-143249-en.html">Christian O Reilly</a>. If you use Sleep, please cite the article in <a href="http://journal.frontiersin.org/article/10.3389/fninf.2017.00060/full">Frontiers in Neuroinformatics</a>.</p>
     <hr class="my-4">
     <p>
 
-Checkout the API of the :class:`visbrain.Sleep` class. If you need help with the :class:`Sleep` module, ask your questions in the dedicated `gitter Sleep chat <https://gitter.im/visbrain-python/Sleep?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
+Checkout the API of the :class:`visbrain.gui.Sleep` class. If you need help with the :class:`Sleep` module, ask your questions in the dedicated `gitter Sleep chat <https://gitter.im/visbrain-python/Sleep?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
 
 .. raw:: html
 
-    <img alt="_images/sleep_main.png" src="_images/sleep_main.png" align="center"></p>
+    <img alt="_static/sleep/sleep_main.png" src="_static/sleep/sleep_main.png" align="center"></p>
   </div>
 
 .. contents:: Contents
@@ -120,7 +120,7 @@ Components
 
 The :class:`Sleep` GUI is divided into 4 main parts:
 
-.. figure::  picture/picsleep/sleep_main_parts.png
+.. figure::  _static/sleep/sleep_main_parts.png
    :align:   center
 
 
@@ -165,7 +165,7 @@ Panels
 
 Manage channel, time-frequency, hypnogram and topographic map
 
-.. figure::  picture/picsleep/sleep_topo.png
+.. figure::  _static/sleep/sleep_topo.png
    :align:   center
 
    The Settings panel: topoplot properties
@@ -202,7 +202,7 @@ Tools
 
 Signal processing and re-referencing tools.
 
-.. figure::  picture/picsleep/sleep_filtering.png
+.. figure::  _static/sleep/sleep_filtering.png
    :align:   center
 
    Bandpass filter (12-14 Hz) applied on all channels.
@@ -221,7 +221,7 @@ Infos
 
 The Infos panel displays the recording infos (e.g. name and downsampling frequency) as well as the main sleep statistics computed with the hypnogram (see specs below). These values are adjusted in real-time when you edit the hypnogram. Sleep statistics can be exported to **.csv** or **.txt** file.
 
-.. figure::  picture/picsleep/sleep_info.png
+.. figure::  _static/sleep/sleep_info.png
    :align:   center
 
    The Infos panel: sleep statistics and basic infos of the current recording.
@@ -376,7 +376,7 @@ Save hypnogram
 .. important::
   Since release v0.4, the default hypnogram export format uses stage duration rather than point-per-second encoding. This format avoids potential errors caused by downsampling and confusion in the values assigned to each sleep stage (which can drastically differ between two labs, e.g. N2 sleep can be encoded with the value 2 in one lab, and -2 in another lab). However, for retro-compatibility, we still allow user to save and load hypnogram in point-per-second format. Please see the image below to see the difference between stage-duration and point-per-second encoding.
 
-.. figure::  picture/picsleep/hypno_encoding.png
+.. figure::  _static/sleep/hypno_encoding.png
    :align:   center
 
 By default, Sleep will save your hypnogram in .txt, using the stage-duration encoding:
@@ -462,7 +462,7 @@ Don't send anything, just open the interface and you will have a popup window as
     Sleep().show()
 
 
-.. figure::  picture/picsleep/sleep_open.png
+.. figure::  _static/sleep/sleep_open.png
    :align:   center
 
    Popup window for loading your files.
@@ -552,7 +552,7 @@ Wavelet             Morlet's wavelet                        None
 Multitaper          Multitaper-based Wigner spectrogram     `lspopt <https://github.com/hbldh/lspopt>`_
 =================   ===================================     ============================================
 
-.. figure::  picture/picsleep/sleep_spectro_methods.png
+.. figure::  _static/sleep/sleep_spectro_methods.png
    :align:   center
 
    Comparison of the 3 methods on a 50 minutes recording (C3 electrode, 0.5-20 Hz).
@@ -571,7 +571,7 @@ Hypnogram scoring
 
 Sleep offers two possibilities to score the hypnogram: using shortcuts or using the :ref:`scoretable`.
 
-.. figure::  picture/picsleep/sleep_scoring.png
+.. figure::  _static/sleep/sleep_scoring.png
    :align:   center
 
    Hypnogram scoring.
@@ -641,7 +641,7 @@ Spindles detection
 ^^^^^^^^^^^^^^^^^^
 This algorithm perform a semi-automatic detection of sleep spindles which are an essential feature of N2 sleep. Sleep spindles are defined as bursts of 12-14 Hz waves that occur for at least 0.5 seconds. They are maximally visible on central electrodes.
 
-.. figure::  picture/picsleep/sleep_spindles.png
+.. figure::  _static/sleep/sleep_spindles.png
    :align:   center
 
    Spindles detection on channel Cz.
@@ -662,7 +662,7 @@ Peaks detection
 
 Perform a peak detection.
 
-.. figure::  picture/picsleep/sleep_peak.png
+.. figure::  _static/sleep/sleep_peak.png
    :align:   center
 
    Peaks detection on ECG channel.
@@ -723,7 +723,7 @@ For your convenience, *Sleep* accepts several possible output formats for your c
 
 It means that your function will work as long as you are able to return any one of these three possible vectors. Since it is very likely that your home-made detection function already return one of those, implementing it in *Sleep* should be fairly easy! A graphical representation of these output formats is displayed below:
 
-.. figure::  picture/picsleep/sleep_return_indices.png
+.. figure::  _static/sleep/sleep_return_indices.png
    :align:   center
 
    Supported output format of the custom detection algorithm.
@@ -731,7 +731,7 @@ It means that your function will work as long as you are able to return any one 
 Replace Sleep detection
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-Once your function has proper inputs and outputs, simply use the :class:`visbrain.Sleep.replace_detections` method to replace the detection of *Sleep* with your own. Please visit the Examples section to see some concrete examples.
+Once your function has proper inputs and outputs, simply use the :class:`visbrain.gui.Sleep.replace_detections` method to replace the detection of *Sleep* with your own. Please visit the Examples section to see some concrete examples.
 
 
 .. ----------------------------------------------------------------------------
@@ -764,7 +764,7 @@ Import, add and save annotations
 
 :class:`Sleep` provides a table for annotations. In this table, specify where the event start, finish and the associated text. Selecting a row of this table center the window around the selected time-code. This allow to quickly navigate even in large files.
 
-.. figure::  picture/picsleep/sleep_annotations.png
+.. figure::  _static/sleep/sleep_annotations.png
    :align:   center
 
    Annotations in Sleep. All annotations are referenced in a table in the quick settings panel (left). Each annotation is then reported in the time axis as a green triangle.
@@ -847,7 +847,7 @@ The list of annotations can be exported (either in .txt or .csv) or loaded from 
 Examples
 ~~~~~~~~
 
-.. include:: generated/visbrain.Sleep.examples
+.. include:: generated/visbrain.gui.Sleep.examples
 
 .. raw:: html
 

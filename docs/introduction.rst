@@ -38,7 +38,7 @@ Module name             Description
 
 The visbrain structure is summarized below.
 
-.. figure::  picture/visbrain_structure.png
+.. figure::  _static/visbrain_structure.png
    :align:   center
 
    Structure and hierarchy used in visbrain

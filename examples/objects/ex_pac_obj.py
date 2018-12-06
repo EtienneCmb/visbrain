@@ -13,7 +13,7 @@ The PacmapObj can be use to visualize three things :
     * The evolution of coupling across time for several frequency phase
     * The evolution of coupling across time for several frequency amplitude
 
-.. image:: ../../picture/picobjects/ex_pac_obj.png
+.. image:: ../../_static/object/ex_pac_obj.png
 """
 import numpy as np
 

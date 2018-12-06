@@ -25,13 +25,13 @@ Shortcuts
 * Double click on the signal canvas (right) to insert annotations
 * Press <delete> on both to reset the camera
 
-.. image:: ../../picture/picsignal/ex_2d_signal.png
+.. image:: ../../_static/examples/ex_2d_signal.png
 """
 from visbrain.gui import Signal
 from visbrain.utils import generate_eeg
 
-sf = 512.  # sampling frequency
-n_pts = 4000  # number of time points
+sf = 512.       # sampling frequency
+n_pts = 4000    # number of time points
 n_trials = 120  # number of trials in the dataset
 
 """Generate a random EEG dataset of shape (n_trials, n_pts). Also get the

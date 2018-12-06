@@ -11,7 +11,7 @@ object i.e :
     levels with custom colors)
   * Display connectivity
 
-.. image:: ../../picture/picobjects/ex_topo_obj.png
+.. image:: ../../_static/object/ex_topo_obj.png
 """
 import numpy as np
 

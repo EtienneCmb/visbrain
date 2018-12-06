@@ -7,7 +7,7 @@ This example demonstrate how to load an ELAN file.
 Required dataset at :
 https://www.dropbox.com/s/95xvdqivpgk90hg/sleep_elan.zip?dl=1
 
-.. image:: ../../picture/picsleep/ex_LoadElan.png
+.. image:: ../../_static/examples/ex_LoadElan.png
 """
 import os
 from visbrain.gui import Sleep

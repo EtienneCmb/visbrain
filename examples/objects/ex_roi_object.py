@@ -25,7 +25,7 @@ List of supported ROI atlases :
     ROI atlases are stored inside NumPy files that are downloaded when needed.
     Every ROI files is downloaded to the ~/visbrain_data/roi folder
 
-.. image:: ../../picture/picobjects/ex_roi_obj.png
+.. image:: ../../_static/object/ex_roi_obj.png
 """
 import numpy as np
 

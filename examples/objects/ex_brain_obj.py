@@ -12,7 +12,7 @@ object i.e :
   * Parcellize the brain and send data to selected parcellates
   * Add fMRI activation and MEG inverse solution
 
-.. image:: ../../picture/picobjects/ex_brain_obj.png
+.. image:: ../../_static/object/ex_brain_obj.png
 """
 import numpy as np
 

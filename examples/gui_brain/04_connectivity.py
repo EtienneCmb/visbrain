@@ -8,7 +8,7 @@ and connect them.
 Download source's coordinates (xyz_sample.npz) :
 https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
 
-.. image:: ../../picture/picbrain/ex_connectivity.png
+.. image:: ../../_static/examples/ex_connectivity.png
 """
 from __future__ import print_function
 import numpy as np

@@ -8,7 +8,7 @@ pictures can then be controlled from the GUI in the Sources/Pictures tab.
 Download source's coordinates (xyz_sample.npz) :
 https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
 
-.. image:: ../../picture/picbrain/ex_pictures.png
+.. image:: ../../_static/examples/ex_pictures.png
 """
 import numpy as np
 

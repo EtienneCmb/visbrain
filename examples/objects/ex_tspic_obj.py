@@ -9,7 +9,7 @@ include :
     * Masking TS and pictures
     * Custom properties (i.e line width, colors, size...)
 
-.. image:: ../../picture/picobjects/ex_tspic_obj.png
+.. image:: ../../_static/object/ex_tspic_obj.png
 """
 import numpy as np
 

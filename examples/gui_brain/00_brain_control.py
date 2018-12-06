@@ -20,7 +20,7 @@ Fixed parameters for rotation :
 Custom rotation consist of a tuple of two floats repsectively for azimuth and
 elevation.
 
-.. image:: ../../picture/picbrain/ex_brain_control.png
+.. image:: ../../_static/examples/ex_brain_control.png
 """
 from visbrain.gui import Brain
 from visbrain.objects import BrainObj

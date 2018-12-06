@@ -9,7 +9,7 @@ Illustration of the main functionalities and inputs of the volume object :
     * Select volume levels
     * Load an MRI (nii.gz) file
 
-.. image:: ../../picture/picobjects/ex_vol_obj.png
+.. image:: ../../_static/object/ex_vol_obj.png
 """
 from visbrain.objects import VolumeObj, SceneObj
 from visbrain.io import download_file
