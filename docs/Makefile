@@ -9,7 +9,7 @@ BUILDDIR      = _build
 
 # User-friendly check for sphinx-build
 ifeq ($(shell which $(SPHINXBUILD) >/dev/null 2>&1; echo $$?), 1)
-	$(error The '$(SPHINXBUILD)' command was not found. Make sure you have Sphinx installed, then set the SPHINXBUILD environment variable to point to the full path of the '$(SPHINXBUILD)' executable. Alternatively you can add the directory with the executable to your PATH. If you don\'t have Sphinx installed, grab it from http://sphinx-doc.org/)
+$(error The '$(SPHINXBUILD)' command was not found. Make sure you have Sphinx installed, then set the SPHINXBUILD environment variable to point to the full path of the '$(SPHINXBUILD)' executable. Alternatively you can add the directory with the executable to your PATH. If you don\'t have Sphinx installed, grab it from http://sphinx-doc.org/)
 endif
 
 # Internal variables.
@@ -242,6 +242,7 @@ dummy:
 	@echo "Build finished. Dummy builder generates no files."
 
 install:
+	@echo "Deploying the doc to visbrain.org"
 	rm -rf _build/doctrees _build/visbrain.github.io
 	# Credit to Mainak Jas for this part of code
 	# first clone the EtienneCmb/visbrain.github.io repo because it may ask
@@ -253,7 +254,7 @@ install:
 	# -b gh-pages fetches only the branch for the gh-pages
 	git clone -b gh-pages --single-branch --no-checkout --depth 1 https://github.com/EtienneCmb/visbrain _build/visbrain.github.io
 	touch _build/visbrain.github.io/CNAME
-	echo "visbrain.org" > "_build/visbrain.github.io/CNAME"
+	@echo "visbrain.org" > "_build/visbrain.github.io/CNAME"
 	touch _build/visbrain.github.io/.nojekyll
 	make html
 	cd _build/ && \
