@@ -11,11 +11,6 @@ object i.e :
   * Project source's activity on the surface of the brain
   * Parcellize the brain and send data to selected parcellates
   * Add fMRI activation and MEG inverse solution
-<<<<<<< develop:examples/objects/ex_brain_obj.py
-
-.. image:: ../../_static/object/ex_brain_obj.png
-=======
->>>>>>> Rename objects examples to be build using sphinx:examples/objects/plot_brain_obj.py
 """
 import numpy as np
 

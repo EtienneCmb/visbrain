@@ -10,11 +10,6 @@ object i.e :
   * Display levels (either regulary spaced and based on a colormap or custom
     levels with custom colors)
   * Display connectivity
-<<<<<<< develop:examples/objects/ex_topo_obj.py
-
-.. image:: ../../_static/object/ex_topo_obj.png
-=======
->>>>>>> Rename objects examples to be build using sphinx:examples/objects/plot_topo_obj.py
 """
 import numpy as np
 

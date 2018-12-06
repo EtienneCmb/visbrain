@@ -24,11 +24,6 @@ List of supported ROI atlases :
 .. warning::
     ROI atlases are stored inside NumPy files that are downloaded when needed.
     Every ROI files is downloaded to the ~/visbrain_data/roi folder
-<<<<<<< develop:examples/objects/ex_roi_object.py
-
-.. image:: ../../_static/object/ex_roi_obj.png
-=======
->>>>>>> Rename objects examples to be build using sphinx:examples/objects/plot_roi_object.py
 """
 import numpy as np
 

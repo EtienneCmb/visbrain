@@ -8,11 +8,6 @@ include :
     * Define and plot of spatially distributed time-series (TS) and pictures
     * Masking TS and pictures
     * Custom properties (i.e line width, colors, size...)
-<<<<<<< develop:examples/objects/ex_tspic_obj.py
-
-.. image:: ../../_static/object/ex_tspic_obj.png
-=======
->>>>>>> Rename objects examples to be build using sphinx:examples/objects/plot_tspic_obj.py
 """
 import numpy as np
 

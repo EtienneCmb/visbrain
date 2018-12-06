@@ -8,11 +8,6 @@ Illustration of the main functionalities and inputs of the volume object :
     * Colormap choice
     * Select volume levels
     * Load an MRI (nii.gz) file
-<<<<<<< develop:examples/objects/ex_volume_obj.py
-
-.. image:: ../../_static/object/ex_vol_obj.png
-=======
->>>>>>> Rename objects examples to be build using sphinx:examples/objects/plot_volume_obj.py
 """
 from visbrain.objects import VolumeObj, SceneObj
 from visbrain.io import download_file

@@ -7,11 +7,6 @@ Illustration of the main functionalities and inputs of the connectivity object:
     * Color connectivity links according to connectivity strength
     * Color connectivity links according to the number of connections per node
     * Color connectivity links using custom colors
-<<<<<<< develop:examples/objects/ex_connectivity_obj.py
-
-.. image:: ../../_static/object/ex_connect_obj.png
-=======
->>>>>>> Rename objects examples to be build using sphinx:examples/objects/plot_connectivity_obj.py
 """
 import numpy as np
 

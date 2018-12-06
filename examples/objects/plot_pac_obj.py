@@ -12,11 +12,6 @@ The PacmapObj can be use to visualize three things :
       phase.
     * The evolution of coupling across time for several frequency phase
     * The evolution of coupling across time for several frequency amplitude
-<<<<<<< develop:examples/objects/ex_pac_obj.py
-
-.. image:: ../../_static/object/ex_pac_obj.png
-=======
->>>>>>> Rename objects examples to be build using sphinx:examples/objects/plot_pac_obj.py
 """
 import numpy as np
 
