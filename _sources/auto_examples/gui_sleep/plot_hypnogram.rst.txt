@@ -16,6 +16,8 @@ Plot a hypnogram using matplotlib.
 
 .. code-block:: python
 
+    import matplotlib.pyplot as plt
+
     from visbrain.io import write_fig_hyp, read_hypno, download_file
 
 
@@ -72,6 +74,7 @@ Plot the hypnogram
 
 
     write_fig_hyp(data, sf, grid=grid, ascolor=ascolor, file=file)
+    plt.show()
 
 
 
@@ -81,7 +84,7 @@ Plot the hypnogram
 
 
 
-**Total running time of the script:** ( 0 minutes  0.594 seconds)
+**Total running time of the script:** ( 0 minutes  0.161 seconds)
 
 
 .. _sphx_glr_download_auto_examples_gui_sleep_plot_hypnogram.py:

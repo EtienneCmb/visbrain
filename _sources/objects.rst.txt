@@ -15,7 +15,7 @@ Checkout the list and API of available objects :py:mod:`visbrain.objects`.
 
 .. raw:: html
 
-    <img alt="_images/ex_combine_obj.png" src="_images/ex_combine_obj.png" align="center"></p>
+    <img alt="_static/object/ex_combine_obj.png" src="_static/object/ex_combine_obj.png" align="center"></p>
   </div>
 
 .. contents:: Contents

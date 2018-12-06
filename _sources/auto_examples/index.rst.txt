@@ -29,9 +29,9 @@ Examples demonstrating how to use objects.
 
 .. only:: html
 
-    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_brain_obj_thumb.png
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_plot_brain_obj_thumb.png
 
-        :ref:`sphx_glr_auto_examples_objects_ex_brain_obj.py`
+        :ref:`sphx_glr_auto_examples_objects_plot_brain_obj.py`
 
 .. raw:: html
 
@@ -41,17 +41,17 @@ Examples demonstrating how to use objects.
 .. toctree::
    :hidden:
 
-   /auto_examples/objects/ex_brain_obj
+   /auto_examples/objects/plot_brain_obj
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the feasibility to combine multiple objects in the same scene.">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the feasibility to combine multiple objects in the same scene. ">
 
 .. only:: html
 
-    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_combine_objects_thumb.png
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_plot_combine_objects_thumb.png
 
-        :ref:`sphx_glr_auto_examples_objects_ex_combine_objects.py`
+        :ref:`sphx_glr_auto_examples_objects_plot_combine_objects.py`
 
 .. raw:: html
 
@@ -61,17 +61,17 @@ Examples demonstrating how to use objects.
 .. toctree::
    :hidden:
 
-   /auto_examples/objects/ex_combine_objects
+   /auto_examples/objects/plot_combine_objects
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Illustration of the main functionalities and inputs of the connctivity object :">
+    <div class="sphx-glr-thumbcontainer" tooltip="Illustration of the main functionalities and inputs of the connectivity object:">
 
 .. only:: html
 
-    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_connectivity_obj_thumb.png
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_plot_connectivity_obj_thumb.png
 
-        :ref:`sphx_glr_auto_examples_objects_ex_connectivity_obj.py`
+        :ref:`sphx_glr_auto_examples_objects_plot_connectivity_obj.py`
 
 .. raw:: html
 
@@ -81,7 +81,7 @@ Examples demonstrating how to use objects.
 .. toctree::
    :hidden:
 
-   /auto_examples/objects/ex_connectivity_obj
+   /auto_examples/objects/plot_connectivity_obj
 
 .. raw:: html
 
@@ -89,9 +89,9 @@ Examples demonstrating how to use objects.
 
 .. only:: html
 
-    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_im_tf_spec_obj_thumb.png
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_plot_im_tf_spec_obj_thumb.png
 
-        :ref:`sphx_glr_auto_examples_objects_ex_im_tf_spec_obj.py`
+        :ref:`sphx_glr_auto_examples_objects_plot_im_tf_spec_obj.py`
 
 .. raw:: html
 
@@ -101,7 +101,7 @@ Examples demonstrating how to use objects.
 .. toctree::
    :hidden:
 
-   /auto_examples/objects/ex_im_tf_spec_obj
+   /auto_examples/objects/plot_im_tf_spec_obj
 
 .. raw:: html
 
@@ -109,9 +109,9 @@ Examples demonstrating how to use objects.
 
 .. only:: html
 
-    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_pac_obj_thumb.png
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_plot_pac_obj_thumb.png
 
-        :ref:`sphx_glr_auto_examples_objects_ex_pac_obj.py`
+        :ref:`sphx_glr_auto_examples_objects_plot_pac_obj.py`
 
 .. raw:: html
 
@@ -121,7 +121,7 @@ Examples demonstrating how to use objects.
 .. toctree::
    :hidden:
 
-   /auto_examples/objects/ex_pac_obj
+   /auto_examples/objects/plot_pac_obj
 
 .. raw:: html
 
@@ -129,9 +129,9 @@ Examples demonstrating how to use objects.
 
 .. only:: html
 
-    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_roi_object_thumb.png
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_plot_roi_object_thumb.png
 
-        :ref:`sphx_glr_auto_examples_objects_ex_roi_object.py`
+        :ref:`sphx_glr_auto_examples_objects_plot_roi_object.py`
 
 .. raw:: html
 
@@ -141,7 +141,7 @@ Examples demonstrating how to use objects.
 .. toctree::
    :hidden:
 
-   /auto_examples/objects/ex_roi_object
+   /auto_examples/objects/plot_roi_object
 
 .. raw:: html
 
@@ -149,9 +149,9 @@ Examples demonstrating how to use objects.
 
 .. only:: html
 
-    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_source_obj_thumb.png
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_plot_source_obj_thumb.png
 
-        :ref:`sphx_glr_auto_examples_objects_ex_source_obj.py`
+        :ref:`sphx_glr_auto_examples_objects_plot_source_obj.py`
 
 .. raw:: html
 
@@ -161,7 +161,7 @@ Examples demonstrating how to use objects.
 .. toctree::
    :hidden:
 
-   /auto_examples/objects/ex_source_obj
+   /auto_examples/objects/plot_source_obj
 
 .. raw:: html
 
@@ -169,9 +169,9 @@ Examples demonstrating how to use objects.
 
 .. only:: html
 
-    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_topo_obj_thumb.png
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_plot_topo_obj_thumb.png
 
-        :ref:`sphx_glr_auto_examples_objects_ex_topo_obj.py`
+        :ref:`sphx_glr_auto_examples_objects_plot_topo_obj.py`
 
 .. raw:: html
 
@@ -181,17 +181,17 @@ Examples demonstrating how to use objects.
 .. toctree::
    :hidden:
 
-   /auto_examples/objects/ex_topo_obj
+   /auto_examples/objects/plot_topo_obj
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Illustration of the main features of 3d time-series and 3d pictures. This include :">
+    <div class="sphx-glr-thumbcontainer" tooltip="Illustration of the main features of 3d time-series and pictures. This include :">
 
 .. only:: html
 
-    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_tspic_obj_thumb.png
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_plot_tspic_obj_thumb.png
 
-        :ref:`sphx_glr_auto_examples_objects_ex_tspic_obj.py`
+        :ref:`sphx_glr_auto_examples_objects_plot_tspic_obj.py`
 
 .. raw:: html
 
@@ -201,7 +201,7 @@ Examples demonstrating how to use objects.
 .. toctree::
    :hidden:
 
-   /auto_examples/objects/ex_tspic_obj
+   /auto_examples/objects/plot_tspic_obj
 
 .. raw:: html
 
@@ -209,9 +209,9 @@ Examples demonstrating how to use objects.
 
 .. only:: html
 
-    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_volume_obj_thumb.png
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_plot_volume_obj_thumb.png
 
-        :ref:`sphx_glr_auto_examples_objects_ex_volume_obj.py`
+        :ref:`sphx_glr_auto_examples_objects_plot_volume_obj.py`
 
 .. raw:: html
 
@@ -221,7 +221,7 @@ Examples demonstrating how to use objects.
 .. toctree::
    :hidden:
 
-   /auto_examples/objects/ex_volume_obj
+   /auto_examples/objects/plot_volume_obj
 .. raw:: html
 
     <div style='clear:both'></div>
@@ -531,26 +531,6 @@ Examples demonstrating how to use Sleep and how to load files.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Get sleep statictics such as sleep stages duration, duration of the hypnogram. ">
-
-.. only:: html
-
-    .. figure:: /auto_examples/gui_sleep/images/thumb/sphx_glr_get_sleep_statistics_thumb.png
-
-        :ref:`sphx_glr_auto_examples_gui_sleep_get_sleep_statistics.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/gui_sleep/get_sleep_statistics
-
-.. raw:: html
-
     <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to load a BrainVision file.">
 
 .. only:: html
@@ -668,6 +648,26 @@ Examples demonstrating how to use Sleep and how to load files.
    :hidden:
 
    /auto_examples/gui_sleep/load_using_mne
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Get sleep statictics such as sleep stages duration, duration of the hypnogram. ">
+
+.. only:: html
+
+    .. figure:: /auto_examples/gui_sleep/images/thumb/sphx_glr_plot_get_sleep_statistics_thumb.png
+
+        :ref:`sphx_glr_auto_examples_gui_sleep_plot_get_sleep_statistics.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/gui_sleep/plot_get_sleep_statistics
 
 .. raw:: html
 
@@ -1077,13 +1077,13 @@ Examples demonstrating figure layout.
 
   .. container:: sphx-glr-download
 
-    :download:`Download all examples in Python source code: auto_examples_python.zip <//home/etienne/Toolbox/visbrain/docs/auto_examples/auto_examples_python.zip>`
+    :download:`Download all examples in Python source code: auto_examples_python.zip <//home/circleci/project/docs/auto_examples/auto_examples_python.zip>`
 
 
 
   .. container:: sphx-glr-download
 
-    :download:`Download all examples in Jupyter notebooks: auto_examples_jupyter.zip <//home/etienne/Toolbox/visbrain/docs/auto_examples/auto_examples_jupyter.zip>`
+    :download:`Download all examples in Jupyter notebooks: auto_examples_jupyter.zip <//home/circleci/project/docs/auto_examples/auto_examples_jupyter.zip>`
 
 
 .. only:: html

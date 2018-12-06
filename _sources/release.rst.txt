@@ -7,6 +7,26 @@ Changelog
    :local:
    :depth: 1
 
+0.4.4
+-----
+
+New features
+~~~~~~~~~~~~
+
+* :class:`visbrain.objects.VispyObj` makes VisPy's visuals compatibles with Visbrain's objects
+* :class:`visbrain.objects.SourceObj` control masked sources' radius
+* :class:`visbrain.objects.ConnectObj` finer control of transparency using input parameters `dynamic_order` and `dynamic_orientation`
+
+Improvements
+~~~~~~~~~~~~
+* Make :class:`visbrain.objects` compatibles with `sphinx gallery <https://sphinx-gallery.readthedocs.io/en/latest/>`_
+* Use scientific notation for colorbar extremas
+* File extensions when loading sleep data (`PR32 <https://github.com/EtienneCmb/visbrain/pull/32>`_)
+
+Bug fixes
+~~~~~~~~~
+* Fix :class:`visbrain.gui.Signal` when using 1D signals
+
 0.4.3
 -----
 

@@ -23,7 +23,7 @@ Shortcuts
 * Double click : insert an annotation under the mouse cursor
 * <delete> : reset the camera
 
-.. image:: ../../picture/picsignal/ex_1d_signal.png
+.. image:: ../../_static/examples/ex_1d_signal.png
 
 
 
