@@ -8,7 +8,7 @@ See the original example :
 
 https://pysurfer.github.io/auto_examples/plot_fmri_activation.html#sphx-glr-auto-examples-plot-fmri-activation-py
 
-.. image:: ../../picture/piceegmeg/ex_eegmeg_fmri_activations.png
+.. image:: ../../_static/examples/ex_eegmeg_fmri_activations.png
 """
 from visbrain.gui import Brain
 from visbrain.objects import BrainObj

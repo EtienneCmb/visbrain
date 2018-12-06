@@ -7,7 +7,7 @@ This example demonstrate how to load an EDF file.
 Required dataset at :
 https://www.dropbox.com/s/bj1ra95rbksukro/sleep_edf.zip?dl=1
 
-.. image:: ../../picture/picsleep/ex_LoadEDF.png
+.. image:: ../../_static/examples/ex_LoadEDF.png
 """
 import os
 from visbrain.gui import Sleep

@@ -6,7 +6,7 @@ Sleep
 .. raw:: html
 
   <div class="jumbotron">
-    <h1 class="display-3">Quick description <img alt="_images/sleep_ico.png" src="_images/sleep_ico.png" width="150" height="150" align="right"></h1>
+    <h1 class="display-3">Quick description <img alt="_static/ico/sleep_ico.png" src="_static/ico/sleep_ico.png" width="150" height="150" align="right"></h1>
     <p class="lead">Sleep is a flexible graphical user interface for visualization, analysis and scoring of polysomnographic sleep data and is developed in collaboration with <a href="https://raphaelvallat.github.io/">Raphael Vallat</a> and <a href="http://bluebrain.epfl.ch/page-143249-en.html">Christian O Reilly</a>. If you use Sleep, please cite the article in <a href="http://journal.frontiersin.org/article/10.3389/fninf.2017.00060/full">Frontiers in Neuroinformatics</a>.</p>
     <hr class="my-4">
     <p>

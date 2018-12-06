@@ -13,7 +13,7 @@ https://martinos.org/mne/stable/python_reference.html#reading-raw-data
 Required dataset at :
 https://www.dropbox.com/s/t2bo9ufvc3f8mbj/sleep_brainvision.zip?dl=1
 
-.. image:: ../../picture/picsleep/ex_LoadMNE.png
+.. image:: ../../_static/examples/ex_LoadMNE.png
 """
 import os
 from mne import io

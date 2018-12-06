@@ -5,7 +5,7 @@ Plot source space
 Plot from a .fif file using the :class:`visbrain.mne.mne_plot_source_space`
 function
 
-.. image:: ../../picture/piceegmeg/ex_eegmeg_plot_source_space.png
+.. image:: ../../_static/examples/ex_eegmeg_plot_source_space.png
 """
 ###############################################################################
 # Load .fif file in the MNE-python dataset

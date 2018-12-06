@@ -7,7 +7,7 @@ This example demonstrate how to load an ELAN file.
 Required dataset at :
 https://www.dropbox.com/s/bmfc2u55xsejbaf/sleep_matlab.zip?dl=1
 
-.. image:: ../../picture/picsleep/ex_LoadMatlab.png
+.. image:: ../../_static/examples/ex_LoadMatlab.png
 """
 import os
 import numpy as np

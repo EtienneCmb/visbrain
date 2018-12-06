@@ -12,7 +12,7 @@ To illustrate this point, we generate a random EEG dataset composed with 20
 channels, 10 trials of 4000 points each. The 2D grid will have a shape of
 (20 rows, 10 columns).
 
-.. image:: ../../picture/picsignal/ex_3d_signal.png
+.. image:: ../../_static/examples/ex_3d_signal.png
 """
 from itertools import product
 from visbrain.gui import Signal

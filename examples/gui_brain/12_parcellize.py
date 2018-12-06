@@ -8,7 +8,7 @@ read the .annot file.
 See https://surfer.nmr.mgh.harvard.edu/fswiki/CorticalParcellation for files
 used in this example.
 
-.. image:: ../../picture/picbrain/ex_parcellates.png
+.. image:: ../../_static/examples/ex_parcellates.png
 """
 import numpy as np
 

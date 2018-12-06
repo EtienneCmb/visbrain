@@ -4,7 +4,7 @@ Plot forward solution
 
 Plot source estimation.
 
-.. image:: ../../picture/piceegmeg/ex_eegmeg_mne_forward_solution.png
+.. image:: ../../_static/examples/ex_eegmeg_mne_forward_solution.png
 """
 import os
 

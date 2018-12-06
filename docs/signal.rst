@@ -6,7 +6,7 @@ Signal
 .. raw:: html
 
   <div class="jumbotron">
-    <h1 class="display-3">Quick description <img alt="_images/signal_ico.png" src="_images/signal_ico.png" width="150" height="150" align="right"></h1>
+    <h1 class="display-3">Quick description <img alt="_static/ico/signal_ico.png" src="_static/ico/signal_ico.png" width="150" height="150" align="right"></h1>
     <p class="lead">Signal is a data-mining module for 1-D, 2-D and 3-D datasets. It tries to offer a convenient way to inspect datasets, locate bad trials and reveal time-frequency properties.</p>
     <hr class="my-4">
     <p>

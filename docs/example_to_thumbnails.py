@@ -24,7 +24,8 @@ for root, subdirs, files in os.walk(path_to_examples):
             image_name = os.path.splitext(os.path.split(im_file)[1])[0]
             for line in fileinput.input(im_file):
                 if line.find(image_pattern) + 1:
-                    from_image = os.path.join(*(cwd, 'picture', line[:-1].split('/picture/')[1]))
+                    line_sp = line[:-1].split('.. image:: ')[1]
+                    from_image = os.path.join(*(cwd, '_static', 'examples', line_sp))
                     to_image = to_thmb.format(image_name)
                     image_found = True
             if image_found:

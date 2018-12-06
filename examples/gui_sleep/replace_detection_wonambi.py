@@ -18,7 +18,7 @@ https://wonambi-python.github.io/installation.html for a detailed installation.
 Required dataset at :
 https://www.dropbox.com/s/bj1ra95rbksukro/sleep_edf.zip?dl=1
 
-.. image:: ../../picture/picsleep/ex_replace_detection_wonambi.png
+.. image:: ../../_static/examples/ex_replace_detection_wonambi.png
 """
 ###############################################################################
 # Load your file and create an instance of Sleep
@@ -94,8 +94,8 @@ def fcn_slowwave(data, sf, time, hypno):  # noqa
 ###############################################################################
 # Replace existing methods
 ###############################################################################
-# Now we use the :class:`visbrain.Sleep.replace_detections` method to overwrite
-# existing spindles and slow-waves detections.
+# Now we use the :class:`visbrain.gui.Sleep.replace_detections` method to
+# overwrite existing spindles and slow-waves detections.
 
 # Replace the spindle detection function :
 sp.replace_detections('spindle', fcn_spindle)

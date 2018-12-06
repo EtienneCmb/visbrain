@@ -8,7 +8,7 @@ See the original PySurfer example :
 
 https://pysurfer.github.io/auto_examples/plot_fmri_conjunction.html#sphx-glr-auto-examples-plot-fmri-conjunction-py
 
-.. image:: ../../picture/piceegmeg/ex_eegmeg_conjunction_map.png
+.. image:: ../../_static/examples/ex_eegmeg_conjunction_map.png
 """
 from visbrain.gui import Brain
 from visbrain.objects import BrainObj

@@ -3,7 +3,7 @@
 :py:class:`Figure`
 ##################
 
-.. figure::  picture/ico/figure_ico.png
+.. figure::  _static/ico/figure_ico.png
    :align:   center
 
 Description
