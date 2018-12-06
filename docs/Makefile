@@ -261,5 +261,6 @@ install:
 	cd visbrain.github.io && \
 	git add * && \
 	git add .nojekyll && \
+	git add CNAME && \
 	git commit -a -m 'Make install' && \
 	git push
