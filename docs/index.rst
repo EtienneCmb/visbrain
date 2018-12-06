@@ -33,7 +33,7 @@
 .. raw:: html
 
   <div class="jumbotron">
-    <h1 class="display-3">Visbrain documentation <img alt="_static/visbrain.png" src="_static/visbrain.png" width="200" height="200" align="right"></h1>
+    <h1 class="display-3">Visbrain documentation <img alt="_static/ico/visbrain.png" src="_static/ico/visbrain.png" width="200" height="200" align="right"></h1>
     <p class="lead">A multi-purpose GPU-accelerated open-source suite for brain data visualization.</p>
     <hr class="my-4">
     <p>Visbrain is an open-source <a href="https://www.python.org/">Python 3</a> package dedicated to brain signals visualization. It is based on top of <a href="http://vispy.org/">VisPy</a> and <a href="https://riverbankcomputing.com/software/pyqt/intro">PyQt</a> and is distributed under the 3-Clause BSD license.</p>

@@ -15,7 +15,7 @@ Shortcuts
 * Double click : insert an annotation under the mouse cursor
 * <delete> : reset the camera
 
-.. image:: ../../picture/picsignal/ex_1d_signal.png
+.. image:: ../../_static/examples/ex_1d_signal.png
 """
 from visbrain.gui import Signal
 from visbrain.utils import generate_eeg

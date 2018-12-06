@@ -8,7 +8,7 @@ attach some data to sources and project this activity onto the surface
 (cortical projection). Alternatively, you can run the cortical repartition
 which is defined as the number of contributing sources per vertex.
 
-.. image:: ../../picture/picbrain/ex_sources.png
+.. image:: ../../_static/examples/ex_sources.png
 """
 import numpy as np
 

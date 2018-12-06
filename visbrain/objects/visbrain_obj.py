@@ -9,7 +9,7 @@ import vispy.visuals.transforms as vist
 from .scene_obj import VisbrainCanvas
 from ..io import (write_fig_canvas, dialog_save, path_to_visbrain_data,
                   load_config_json, get_data_url_path, download_file,
-                  get_files_in_folders)
+                  get_files_in_folders, mpl_preview)
 from ..utils import color2vb, set_log_level, merge_cameras
 from ..config import CONFIG
 from ..visuals import CbarBase
@@ -219,16 +219,20 @@ class VisbrainObject(_VisbrainObj):
         kwargs : dict | {}
             Optional arguments are passed to the VisbrainCanvas class.
         """
-        parent_bck = self._node.parent
-        kwargs['cargs'] = {'size': size}
-        canvas = self._get_parent(bgcolor, axis, show, obj, **kwargs)
-        if xyz:
-            vispy.scene.visuals.XYZAxis(parent=canvas.wc.scene)
-        # view.camera = camera
-        if (sys.flags.interactive != 1) and show:
-            CONFIG['VISPY_APP'].run()
-        # Reset orignial parent :
-        self._node.parent = parent_bck
+        if CONFIG['MPL_RENDER']:
+            canvas = self._get_parent(bgcolor, False, False, obj, **kwargs)
+            mpl_preview(canvas.canvas, widget=canvas.canvas.central_widget)
+        else:
+            parent_bck = self._node.parent
+            kwargs['cargs'] = {'size': size}
+            canvas = self._get_parent(bgcolor, axis, show, obj, **kwargs)
+            if xyz:
+                vispy.scene.visuals.XYZAxis(parent=canvas.wc.scene)
+            # view.camera = camera
+            if (sys.flags.interactive != 1) and show:
+                CONFIG['VISPY_APP'].run()
+            # Reset orignial parent :
+            self._node.parent = parent_bck
 
     def describe_tree(self):
         """Tree description."""

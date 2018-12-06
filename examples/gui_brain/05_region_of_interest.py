@@ -8,7 +8,7 @@ This small dataset (thx to Tarek Lajnef) contains sources inside the thalamus
 and alpha power for each source. We are going to display the thalamus, then
 project the source's activity on it.
 
-.. image:: ../../picture/picbrain/ex_region_of_interest.png
+.. image:: ../../_static/examples/ex_region_of_interest.png
 """
 from __future__ import print_function
 import numpy as np
@@ -23,7 +23,7 @@ alpha oscillations
 thalamus_xyz = download_file('thalamus.txt', astype='example_data')
 thalamus_data = download_file('Px.npy', astype='example_data')
 s_xyz = np.loadtxt(thalamus_xyz)
-s_data = np.load(thalamus_data).mean(1) * 10e26
+s_data = np.load(thalamus_data).mean(1)
 
 """Create a source object
 """

@@ -7,12 +7,35 @@ Changelog
    :local:
    :depth: 1
 
+0.4.4
+-----
+
+New features
+~~~~~~~~~~~~
+
+* :class:`visbrain.objects.VispyObj` makes VisPy's visuals compatibles with Visbrain's objects
+* :class:`visbrain.objects.SourceObj` control masked sources' radius
+* :class:`visbrain.objects.ConnectObj` finer control of transparency using input parameters `dynamic_order` and `dynamic_orientation`
+
+Improvements
+~~~~~~~~~~~~
+* Make :class:`visbrain.objects` compatibles with `sphinx gallery <https://sphinx-gallery.readthedocs.io/en/latest/>`_
+* Use scientific notation for colorbar extremas
+* File extensions when loading sleep data (`PR32 <https://github.com/EtienneCmb/visbrain/pull/32>`_)
+
+Bug fixes
+~~~~~~~~~
+* Fix :class:`visbrain.gui.Signal` when using 1D signals
+
 0.4.3
 -----
 
 New features
 ~~~~~~~~~~~~
 * :class:`visbrain.objects.SourceObj.project_sources` can now be projected to a specific overlay.
+* :class:`visbrain.objects.ConnectObj.get_nb_connections_per_node` to get the number of connections per node
+* :class:`visbrain.objects.ConnectObj.analyse_connections` to analyse and group connectivity links per ROI
+* :class:`visbrain.objects.RoiObj.get_centroids` to get the (x, y, z) MNI coordinates of ROIs' center
 
 Improvements
 ~~~~~~~~~~~~

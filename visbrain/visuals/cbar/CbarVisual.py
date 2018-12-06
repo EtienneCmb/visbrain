@@ -249,7 +249,7 @@ class CbarVisual(CbarBase):
 
     def _digits(self, value):
         if isinstance(self._ndigits, int):
-            txt = np.round(value * 10**self._ndigits) / 10**self._ndigits
+            txt = ('%.' + str(self._ndigits) + 'g') % value
         else:
             txt = value
         return txt

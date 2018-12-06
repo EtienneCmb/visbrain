@@ -41,7 +41,7 @@ class SourceObj(VisbrainObject):
         Symbol to use for sources. Allowed style strings are: disc, arrow,
         ring, clobber, square, diamond, vbar, hbar, cross, tailed_arrow, x,
         triangle_up, triangle_down, and star.
-    radius_min / radius_max : float | 5.0/10.0
+    radius_min / radius_max : float | 5. / 10.
         Define the minimum and maximum source's possible radius. By default
         if all sources have the same value, the radius will be radius_min.
     edge_color : string/list/array_like | 'black'
@@ -56,6 +56,8 @@ class SourceObj(VisbrainObject):
         are p-values, mask could be non-significant sources.
     mask_color : array_like/tuple/string | 'gray'
         Color to use for masked sources.
+    mask_radius : float | None
+        Radius size of masked sources.
     text : list | None
         Text to attach to each source. For example, text could be the name of
         each source.
@@ -114,7 +116,7 @@ class SourceObj(VisbrainObject):
     def __init__(self, name, xyz, data=None, color='red', alpha=1.,
                  symbol='disc', radius_min=5., radius_max=10., edge_width=0.,
                  edge_color='black', system='mni', mask=None,
-                 mask_color='gray', text=None, text_size=2.,
+                 mask_color='gray', mask_radius=5., text=None, text_size=2.,
                  text_color='white', text_bold=False,
                  text_translate=(0., 2., 0.), visible=True, transform=None,
                  parent=None, verbose=None, _z=-10., **kw):
@@ -132,6 +134,7 @@ class SourceObj(VisbrainObject):
             radius_min, radius_max)])
         radius_max = max(radius_min, radius_max)
         self._radius_min, self._radius_max = radius_min, radius_max
+        self._mask_radius = mask_radius
         # Data :
         if data is None:
             data = np.ones((len(self),))
@@ -162,6 +165,8 @@ class SourceObj(VisbrainObject):
                                         edge_color=edge_color,
                                         edge_width=edge_width,
                                         symbol=symbol, parent=self._node)
+        self._sources.set_gl_state('translucent', depth_test=False,
+                                   cull_face=False)
 
         # _______________________ TEXT _______________________
         tvisible = text is None
@@ -240,6 +245,8 @@ class SourceObj(VisbrainObject):
         # Marker size + egde width = 0 and text='' for hidden sources :
         self._sources._data['a_size'][to_hide] = 0.
         self._sources._data['a_edgewidth'][to_hide] = 0.
+        if isinstance(self._mask_radius, (int, float)):
+            self._sources._data['a_size'][self._mask] = self._mask_radius
         text = np.array(self._text.copy())
         text[to_hide] = ''
         self._sources_text.text = text

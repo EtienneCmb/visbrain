@@ -7,7 +7,7 @@ This example demonstrate how to load a BrainVision file.
 Required dataset at :
 https://www.dropbox.com/s/t2bo9ufvc3f8mbj/sleep_brainvision.zip?dl=1
 
-.. image:: ../../picture/picsleep/ex_LoadBrainVision.png
+.. image:: ../../_static/examples/ex_LoadBrainVision.png
 """
 import os
 from visbrain.gui import Sleep

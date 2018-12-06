@@ -9,7 +9,8 @@ from vispy.scene import visuals
 
 from .visbrain_obj import VisbrainObject, CombineObjects
 from .source_obj import SourceObj
-from ..utils import array2colormap, normalize, color2vb, wrap_properties
+from ..utils import (array2colormap, color2vb, wrap_properties,
+                     vector_to_opacity)
 
 
 logger = logging.getLogger('visbrain')
@@ -54,6 +55,15 @@ class ConnectObj(VisbrainObject):
     dynamic : tuple | None
         Control the dynamic opacity. For example, if dynamic=(0, 1),
         strong connections will be more opaque than weaker connections.
+    dynamic_order : int | 1
+        If 1, the dynamic transparency is linearly modulated by the
+        connectivity. If 2, the transparency follow a x**2 curve etc.
+    dynamic_orientation : str | 'ascending'
+        Define the transparency behavior :
+
+            * 'ascending' : from translucent to opaque
+            * 'center' : from opaque to translucent and finish by opaque
+            * 'descending' ; from opaque to translucent
     cmap : string | 'viridis'
         Colormap to use if custom_colors is None.
     vmin : float | None
@@ -105,7 +115,8 @@ class ConnectObj(VisbrainObject):
 
     def __init__(self, name, nodes, edges, select=None, line_width=3.,
                  color_by='strength', custom_colors=None, alpha=1.,
-                 antialias=False, dynamic=None, cmap='viridis', clim=None,
+                 antialias=False, dynamic=None, dynamic_order=1,
+                 dynamic_orientation='ascending', cmap='viridis', clim=None,
                  vmin=None, vmax=None, under='gray', over='red',
                  transform=None, parent=None, verbose=None, _z=-10., **kw):
         """Init."""
@@ -141,6 +152,9 @@ class ConnectObj(VisbrainObject):
         if dynamic is not None:
             assert len(dynamic) == 2
         self._dynamic = dynamic
+        assert isinstance(dynamic_order, int) and dynamic_order > 0
+        self._dyn_order = dynamic_order
+        self._dyn_orient = dynamic_orientation
         # Custom color :
         if custom_colors is not None:
             assert isinstance(custom_colors, dict)
@@ -153,7 +167,8 @@ class ConnectObj(VisbrainObject):
         self._connect = visuals.Line(name='ConnectObjLine', width=line_width,
                                      antialias=antialias, parent=self._node,
                                      connect='segments')
-        self._connect.set_gl_state('translucent')
+        self._connect.set_gl_state('translucent', depth_test=False,
+                                   cull_face=False)
         self._build_line()
 
     def __len__(self):
@@ -216,11 +231,10 @@ class ConnectObj(VisbrainObject):
 
         # Dynamic color :
         if self._dynamic is not None:
-            if self._color_by == 'causal':
-                color[0::2, :] = self._dynamic[0]
-            else:
-                color[:, 3] = normalize(values.copy(), tomin=self._dynamic[0],
-                                        tomax=self._dynamic[1])
+            color[:, 3] = vector_to_opacity(values, clim=self._clim,
+                                            dyn=self._dynamic,
+                                            order=self._dyn_order,
+                                            orientation=self._dyn_orient)
 
         # Send data to the connectivity object :
         self._connect.set_data(pos=line_pos, color=color)

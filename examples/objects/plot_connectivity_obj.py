@@ -2,13 +2,11 @@
 Connectivity object (ConnectObj) : complete tutorial
 ====================================================
 
-Illustration of the main functionalities and inputs of the connctivity object :
+Illustration of the main functionalities and inputs of the connectivity object:
 
     * Color connectivity links according to connectivity strength
     * Color connectivity links according to the number of connections per node
     * Color connectivity links using custom colors
-
-.. image:: ../../picture/picobjects/ex_connect_obj.png
 """
 import numpy as np
 

@@ -14,7 +14,7 @@ This example illustrates how to replace the default detection algorithm.
 Required dataset at :
 https://www.dropbox.com/s/bj1ra95rbksukro/sleep_edf.zip?dl=1
 
-.. image:: ../../picture/picsleep/ex_replace_detection_basic.png
+.. image:: ../../_static/examples/ex_replace_detection_basic.png
 """
 ###############################################################################
 # Load your file and create an instance of Sleep
@@ -79,8 +79,8 @@ def fcn_rem(data, sf, time, hypno):  # noqa
 ###############################################################################
 # Replace existing methods
 ###############################################################################
-# Now we use the :class:`visbrain.Sleep.replace_detections` method to overwrite
-# existing spindles and REM detections.
+# Now we use the :class:`visbrain.gui.Sleep.replace_detections` method to
+# overwrite existing spindles and REM detections.
 
 # Replace the spindle detection function :
 sp.replace_detections('spindle', fcn_spindle)
