@@ -187,7 +187,7 @@ Checkout the :py:mod:`visbrain.objects` part of the API. Then, each object has a
     # Display the brain object :
     b_obj.preview()
 
-.. figure::  picture/pictuto/tuto_1.png
+.. figure::  _static/tuto/tuto_1.png
    :align:   center
 
 
@@ -238,7 +238,7 @@ Objects can be combined in a scene (see :class:`visbrain.objects.SceneObj`) to c
     sc.preview()
 
 
-.. figure::  picture/pictuto/tuto_2-1.png
+.. figure::  _static/tuto/tuto_2-1.png
    :align:   center
 
 
@@ -274,7 +274,7 @@ Objects can be combined in a scene (see :class:`visbrain.objects.SceneObj`) to c
     sc.preview()
 
 
-.. figure::  picture/pictuto/tuto_2-2.png
+.. figure::  _static/tuto/tuto_2-2.png
    :align:   center
 
 .. raw:: html

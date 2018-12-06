@@ -11,11 +11,11 @@ Signal
     <hr class="my-4">
     <p>
 
-Checkout the API of the :class:`visbrain.Signal` class.
+Checkout the API of the :class:`visbrain.gui.Signal` class.
 
 .. raw:: html
 
-    <img alt="_images/signal_presentation.png" src="_images/signal_presentation.png" align="center"></p>
+    <img alt="_static/signal/signal_presentation.png" src="_static/signal/signal_presentation.png" align="center"></p>
   </div>
 
 .. contents:: Contents
@@ -105,7 +105,7 @@ CTRL + q                Close Sleep graphical interface
 Examples
 ~~~~~~~~
 
-.. include:: generated/visbrain.Signal.examples
+.. include:: generated/visbrain.gui.Signal.examples
 
 .. raw:: html
 

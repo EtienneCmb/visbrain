@@ -71,7 +71,7 @@ Example
     # Alternatively, you can show the figure :
     f.show()
 
-.. figure::  picture/picfigure/figure_example.png
+.. figure::  _static/figure/figure_example.png
    :align:   center
 
    Code above : four exported figures from the Brain module are aranged in a (2, 2) grid. Then, some have a colorbar, xlabel, ylabel. Finally, there is two shared colorbars.

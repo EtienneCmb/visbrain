@@ -11,7 +11,7 @@ Brain
     <hr class="my-4">
     <p>
 
-Checkout the API of the :class:`visbrain.Brain` class. If you need help with the *Brain* module, ask your questions in the dedicated `gitter Brain chat <https://gitter.im/visbrain-python/Brain?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
+Checkout the API of the :class:`visbrain.gui.Brain` class. If you need help with the *Brain* module, ask your questions in the dedicated `gitter Brain chat <https://gitter.im/visbrain-python/Brain?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
 
 .. raw:: html
 
@@ -286,7 +286,7 @@ The colorbar can be controlled for individual objects including :
 Examples
 ~~~~~~~~
 
-.. include:: generated/visbrain.Brain.examples
+.. include:: generated/visbrain.gui.Brain.examples
 
 .. raw:: html
 

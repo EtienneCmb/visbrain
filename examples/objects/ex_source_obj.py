@@ -22,7 +22,7 @@ The source objects can interact with several other objects :
       surface of region of interest. In addition, ROI objects can also be used
       to get anatomical informations of sources
 
-.. image:: ../../picture/picobjects/ex_source_obj.png
+.. image:: ../../_static/object/ex_source_obj.png
 """
 import numpy as np
 
