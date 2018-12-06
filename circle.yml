@@ -85,7 +85,7 @@ jobs:
                 echo "Deploying dev docs.";
                 git config --global user.email "e.combrisson@gmail.com";
                 git config --global user.name "EtienneCmb";
-                cd doc;
+                cd docs;
                 make install;
               else
                 echo "No deployment (build: ${CIRCLE_BRANCH}).";
