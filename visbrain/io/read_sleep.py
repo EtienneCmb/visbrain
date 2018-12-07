@@ -197,13 +197,6 @@ class ReadSleepData(object):
 
         # ---------- SCALING ----------
         # Assume that the inter-quartile amplitude of EEG data is ~50 uV
-        iqr_data = iqr(data, axis=1)
-
-        for idx_chan, iqr_chan in enumerate(iqr_data):
-            if iqr_chan < 1:
-                mult_fact = np.floor(np.log10(50 / iqr_chan))
-
-        # Assume that the inter-quartile amplitude of EEG data is ~50 uV
         iqr_chan = iqr(data[:, :int(data.shape[1] / 4)], axis=-1)
         bad_iqr = iqr_chan < 1.
 
