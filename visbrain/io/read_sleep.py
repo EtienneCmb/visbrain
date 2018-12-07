@@ -202,8 +202,9 @@ class ReadSleepData(object):
 
         if np.any(bad_iqr):
             mult_fact = np.zeros_like(iqr_chan)
-            mult_fact[bad_iqr] = np.floor(np.log10(50 / iqr_chan[bad_iqr]))
-            data *= 10 ** mult_fact[..., np.newaxis]
+            iqr_chan[iqr_chan == 0.] = 1.
+            mult_fact[bad_iqr] = np.floor(np.log10(50. / iqr_chan[bad_iqr]))
+            data *= 10. ** mult_fact[..., np.newaxis]
             warn("Wrong channel data amplitude. ")
 
         # ---------- CONVERSION ----------=
