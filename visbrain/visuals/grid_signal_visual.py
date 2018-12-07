@@ -108,7 +108,7 @@ class GridSignalVisual(visuals.Visual):
                           blend=True, blend_func=('src_alpha',
                                                   'one_minus_src_alpha'))
         self._draw_mode = 'line_strip'
-        self._txt = Text(bold=False, font_size=font_size)
+        self._txt = Text(bold=False, font_size=font_size, color='white')
 
         # =========================== DATA ===========================
         # Keep some inputs :
