@@ -22,6 +22,7 @@ Improvements
 * Make :class:`visbrain.objects` compatibles with `sphinx gallery <https://sphinx-gallery.readthedocs.io/en/latest/>`_
 * Use scientific notation for colorbar extremas
 * File extensions when loading sleep data (`PR32 <https://github.com/EtienneCmb/visbrain/pull/32>`_)
+* Amplitude range of sleep files (`PR33 <https://github.com/EtienneCmb/visbrain/pull/33>`_)
 
 Bug fixes
 ~~~~~~~~~

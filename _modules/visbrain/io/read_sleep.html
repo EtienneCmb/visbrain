@@ -895,6 +895,7 @@
 <span class="kn">import</span> <span class="nn">io</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">iqr</span>
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span class="n">warn</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 
@@ -1079,10 +1080,16 @@
                 <span class="n">hypno</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">npts</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
 
         <span class="c1"># ---------- SCALING ----------</span>
-        <span class="c1"># Check amplitude of the data and if necessary apply re-scaling</span>
-        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ptp</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">&lt;</span> <span class="mf">0.1</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Wrong data amplitude for Sleep software.&quot;</span><span class="p">)</span>
-            <span class="n">data</span> <span class="o">*=</span> <span class="mf">1e6</span>
+        <span class="c1"># Assume that the inter-quartile amplitude of EEG data is ~50 uV</span>
+        <span class="n">iqr_chan</span> <span class="o">=</span> <span class="n">iqr</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">bad_iqr</span> <span class="o">=</span> <span class="n">iqr_chan</span> <span class="o">&lt;</span> <span class="mf">1.</span>
+
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">bad_iqr</span><span class="p">):</span>
+            <span class="n">mult_fact</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">iqr_chan</span><span class="p">)</span>
+            <span class="n">iqr_chan</span><span class="p">[</span><span class="n">iqr_chan</span> <span class="o">==</span> <span class="mf">0.</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>
+            <span class="n">mult_fact</span><span class="p">[</span><span class="n">bad_iqr</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mf">50.</span> <span class="o">/</span> <span class="n">iqr_chan</span><span class="p">[</span><span class="n">bad_iqr</span><span class="p">]))</span>
+            <span class="n">data</span> <span class="o">*=</span> <span class="mf">10.</span> <span class="o">**</span> <span class="n">mult_fact</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Wrong channel data amplitude. &quot;</span><span class="p">)</span>
 
         <span class="c1"># ---------- CONVERSION ----------=</span>
         <span class="c1"># Convert data and hypno to be contiguous and float 32 (for vispy):</span>
