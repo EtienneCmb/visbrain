@@ -5,7 +5,7 @@ Define a brain template using vertices and faces
 This example illustrate how to define a custom brain template using your own
 vertices and faces.
 
-.. image:: ../../picture/picbrain/ex_add_brain_template.png
+.. image:: ../../_static/examples/ex_add_brain_template.png
 """
 import numpy as np
 

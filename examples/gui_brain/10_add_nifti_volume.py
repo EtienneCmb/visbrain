@@ -11,7 +11,7 @@ Brain/Cross-sections and Brain/Volume tab.
 This script use a custom nifti volume downloadable at :
 https://brainder.org/download/flair/
 
-.. image:: ../../picture/picbrain/ex_add_nifti.png
+.. image:: ../../_static/examples/ex_add_nifti.png
 """
 from __future__ import print_function
 import numpy as np

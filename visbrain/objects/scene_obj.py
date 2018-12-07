@@ -5,7 +5,7 @@ import logging
 import numpy as np
 from vispy import scene
 
-from ..io import write_fig_canvas, dialog_save
+from ..io import write_fig_canvas, mpl_preview, dialog_save
 from ..utils import color2vb, set_log_level, rotate_turntable, FixedCam
 from ..visuals import CbarVisual
 from ..config import CONFIG, PROFILER
@@ -624,13 +624,16 @@ class SceneObj(object):
     def preview(self):
         """Previsualize the result."""
         self._gl_uniform_transforms()
-        self.canvas.show(visible=True)
-        # Shortcuts :
-        self._scene_shortcuts()
-        # Profiler :
-        if PROFILER and logger.level == 1:
-            logger.profiler("PARENT TREE \n%s" % self._grid.describe_tree())
-            logger.profiler(" ")
-            PROFILER.finish()
-        if sys.flags.interactive != 1 and CONFIG['SHOW_PYQT_APP']:
-            CONFIG['VISPY_APP'].run()
+        if CONFIG['MPL_RENDER']:
+            mpl_preview(self.canvas, widget=self.canvas.central_widget)
+        else:
+            self.canvas.show(visible=True)
+            # Shortcuts :
+            self._scene_shortcuts()
+            # Profiler :
+            if PROFILER and logger.level == 1:
+                logger.profiler("PARENT TREE\n%s" % self._grid.describe_tree())
+                logger.profiler(" ")
+                PROFILER.finish()
+            if sys.flags.interactive != 1 and CONFIG['SHOW_PYQT_APP']:
+                CONFIG['VISPY_APP'].run()

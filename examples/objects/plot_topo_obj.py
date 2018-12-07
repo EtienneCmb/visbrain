@@ -10,8 +10,6 @@ object i.e :
   * Display levels (either regulary spaced and based on a colormap or custom
     levels with custom colors)
   * Display connectivity
-
-.. image:: ../../picture/picobjects/ex_topo_obj.png
 """
 import numpy as np
 

@@ -10,7 +10,7 @@ table to jump to it.
 Download an example of annotation file :
 https://drive.google.com/file/d/0B6vtJiCQZUBvMG95RHNXbDEwaGs/view?usp=sharing
 
-.. image:: ../../picture/picsignal/ex_annotations.png
+.. image:: ../../_static/examples/ex_annotations.png
 """
 from visbrain.gui import Signal
 from visbrain.utils import generate_eeg

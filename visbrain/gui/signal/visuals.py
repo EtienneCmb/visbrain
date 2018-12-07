@@ -221,9 +221,10 @@ class SignalVisual(SignalAnnotations):
         elif data.ndim in [2, 3]:
             idx = list(self._navidx[index])
             idx.insert(self._axis, slice(None))
+            idx = tuple(idx)
 
         # Convert data to be compatible with VisPy and prepare data :
-        data_c = vispy_array(data[tuple(idx)]).copy()
+        data_c = vispy_array(data[idx]).copy()
         _data = self._prep._prepare_data(self._sf, data_c, self._time)
 
         # Set data :

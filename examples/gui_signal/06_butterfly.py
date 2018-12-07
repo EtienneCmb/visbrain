@@ -4,7 +4,7 @@ Butterfly plot
 
 Superimposition of all the signals.
 
-.. image:: ../../picture/picsignal/ex_butterfly.png
+.. image:: ../../_static/examples/ex_butterfly.png
 """
 import numpy as np
 from visbrain.gui import Signal

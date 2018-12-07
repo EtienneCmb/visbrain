@@ -7,7 +7,7 @@ This example demonstrate how to load a .rec file.
 Required dataset at :
 https://www.dropbox.com/s/hc18bgn2hlnmiph/sleep_edf.zip?dl=1
 
-.. image:: ../../picture/picsleep/ex_load_rec.png
+.. image:: ../../_static/examples/ex_load_rec.png
 """
 import os
 

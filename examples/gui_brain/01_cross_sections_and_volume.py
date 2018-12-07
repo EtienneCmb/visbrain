@@ -7,7 +7,7 @@ package should also be installed.
 
 See : https://brainder.org/download/flair/
 
-.. image:: ../../picture/picbrain/ex_crossec_and_volume.png
+.. image:: ../../_static/examples/ex_crossec_and_volume.png
 """
 from visbrain.gui import Brain
 from visbrain.objects import CrossSecObj, VolumeObj

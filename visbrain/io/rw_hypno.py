@@ -298,7 +298,7 @@ def read_hypno(filename, time=None, datafile=None):
         The hypnogram original sampling frequency (Hz)
     """
     # Test if file exist :
-    assert os.path.isfile(filename)
+    assert os.path.isfile(filename), "No hypnogram file %s" % filename
 
     # Extract file extension :
     file, ext = os.path.splitext(filename)

@@ -4,7 +4,7 @@ Screenshot tutorial
 
 Export all of the time-frequency maps, psd of a dataset.
 
-.. image:: ../../picture/picsignal/ex_screenshot.png
+.. image:: ../../_static/examples/ex_screenshot.png
 """
 import numpy as np
 

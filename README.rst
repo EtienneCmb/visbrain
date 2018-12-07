@@ -18,7 +18,7 @@
 Visbrain
 ########
 
-.. figure::  https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/visbrain.png
+.. figure::  https://github.com/EtienneCmb/visbrain/blob/master/docs/_static/ico/visbrain.png
    :align:   center
 
 

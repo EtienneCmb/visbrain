@@ -24,6 +24,7 @@ from sphinx_gallery.sorting import FileNameSortKey, ExplicitOrder
 from numpydoc import numpydoc, docscrape
 
 import visbrain
+from visbrain.config import CONFIG
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -49,7 +50,6 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.linkcode',
     'sphinx_gallery.gen_gallery',
-    'sphinx_click.ext',
     'numpydoc',
 ]
 # , 'sphinx.ext.napoleon'
@@ -73,7 +73,7 @@ sphinx_gallery_conf = {
     },
     'gallery_dirs': 'auto_examples',
     'backreferences_dir': 'generated',
-    'default_thumb_file': 'picture/visbrain.png',
+    'default_thumb_file': '_static/ico/visbrain.png',
     'subsection_order': ExplicitOrder(['../examples/objects',
                                        '../examples/gui_brain',
                                        '../examples/gui_sleep',
@@ -205,12 +205,12 @@ html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-html_logo = 'picture/visbrain_128x128.png'
+html_logo = '_static/ico/visbrain_128x128.png'
 
 # The name of an image file (relative to this directory) to use as a favicon of
 # the docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-html_favicon = 'picture/favicon.ico'
+html_favicon = '_static/ico/favicon.ico'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -441,3 +441,6 @@ def linkcode_resolve(domain, info):
 
     return "https://github.com/EtienneCmb/visbrain/tree/master/visbrain/%s%s" % (  # noqa
        fn, linespec)
+
+# Render using Matplotlib :
+CONFIG['MPL_RENDER'] = True

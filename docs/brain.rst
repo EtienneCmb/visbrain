@@ -6,16 +6,16 @@ Brain
 .. raw:: html
 
   <div class="jumbotron">
-    <h1 class="display-3">Quick description <img alt="_images/brain_ico.png" src="_images/brain_ico.png" width="150" height="150" align="right"></h1>
+    <h1 class="display-3">Quick description <img alt="_static/ico/brain_ico.png" src="_static/ico/brain_ico.png" width="150" height="150" align="right"></h1>
     <p class="lead">Brain is a flexible graphical user interface for 3D visualizations on an MNI brain. It can be use to display deep sources, connectivity, region of interest etc.</p>
     <hr class="my-4">
     <p>
 
-Checkout the API of the :class:`visbrain.Brain` class. If you need help with the *Brain* module, ask your questions in the dedicated `gitter Brain chat <https://gitter.im/visbrain-python/Brain?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
+Checkout the API of the :class:`visbrain.gui.Brain` class. If you need help with the *Brain* module, ask your questions in the dedicated `gitter Brain chat <https://gitter.im/visbrain-python/Brain?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
 
 .. raw:: html
 
-    <img alt="_images/brain_description.png" src="_images/brain_description.png" align="center"></p>
+    <img alt="_static/brain/brain_description.png" src="_static/brain/brain_description.png" align="center"></p>
   </div>
 
 .. contents:: Contents
@@ -170,7 +170,7 @@ CTRL + q                Exit
 MNI templates
 ~~~~~~~~~~~~~
 
-.. figure::  picture/picbrain/brain_templates.png
+.. figure::  _static/brain/brain_templates.png
    :align:   center
 
 By default, *Brain* comes with three brain templates respectively B1 (with cerebellum), B2 and B3 (smoothest).
@@ -181,7 +181,7 @@ Further brain templates can be downloaded `here <https://drive.google.com/open?i
 Sources
 ~~~~~~~
 
-.. figure::  picture/picbrain/brain_sources.png
+.. figure::  _static/brain/brain_sources.png
    :align:   center
 
 Sources can be added to the scene using (x, y, z) MNI coordinates and comes with a relatively large number of properties (radius, color, shape...). Source's array of coordinates must be have a shape of (N, 3) with **N** the number of sources. In addition, several objects can be attached to sources :
@@ -195,7 +195,7 @@ Sources can be added to the scene using (x, y, z) MNI coordinates and comes with
 Cortical projection and repartition
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. figure::  picture/picbrain/brain_projection.png
+.. figure::  _static/brain/brain_projection.png
    :align:   center
 
    Cortical projection of source's activity (Left) and source's repartition (Right).
@@ -209,7 +209,7 @@ Both methods use a **radius** parameter and only vertices with an euclidian dist
 Connect sources
 ^^^^^^^^^^^^^^^
 
-.. figure::  picture/picbrain/brain_connect.png
+.. figure::  _static/brain/brain_connect.png
    :align:   center
 
    Example of connectivity.
@@ -224,7 +224,7 @@ Sources can be connected together using connectivity links. *Brain* provides thr
 Attach time-series and/or pictures
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. figure::  picture/picbrain/brain_tspic.png
+.. figure::  _static/brain/brain_tspic.png
    :align:   center
 
    Attach time-series (Left) and pictures (Right) to sources.
@@ -250,7 +250,7 @@ Those volumes can be used to visualize nifti, dycom or any image files. By defau
 Cross-sections
 ^^^^^^^^^^^^^^
 
-.. figure::  picture/picbrain/brain_crossec.png
+.. figure::  _static/brain/brain_crossec.png
    :align:   center
 
    Cross-sections of a Nifti volume
@@ -261,7 +261,7 @@ Cross-sections correspond to an axial, sagittal and coronal slice of the volume 
 Region Of Interest (ROI)
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. figure::  picture/picbrain/brain_roi.png
+.. figure::  _static/brain/brain_roi.png
    :align:   center
 
    Cortical projection on the thalamus (Left) and cortical repartition on Brodmann area 4 and 6.
@@ -272,7 +272,7 @@ If a volume is provided with corresponding labels, ROIs can be extracted and the
 Colorbar control
 ~~~~~~~~~~~~~~~~
 
-.. figure::  picture/picbrain/brain_cbar.png
+.. figure::  _static/brain/brain_cbar.png
    :align:   center
 
    Colorbar example.
@@ -286,7 +286,7 @@ The colorbar can be controlled for individual objects including :
 Examples
 ~~~~~~~~
 
-.. include:: generated/visbrain.Brain.examples
+.. include:: generated/visbrain.gui.Brain.examples
 
 .. raw:: html
 

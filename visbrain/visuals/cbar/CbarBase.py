@@ -124,7 +124,7 @@ class CbarBase(CbarArgs):
         Text size for clim/vmin/vmax text.
     txtsh : float | 1.2
         Shift for clim/vmin/vmax text.
-    border : bool | True
+    border : bool | False
         Display colorbar borders.
     bw : float | 2.
         Border width.
@@ -139,7 +139,7 @@ class CbarBase(CbarArgs):
     def __init__(self, cmap='viridis', clim=(0, 1), vmin=None, isvmin=False,
                  vmax=None, isvmax=False, under='gray', over='red', cblabel='',
                  cbtxtsz=5., cbtxtsh=2.3, txtcolor='white', txtsz=3.,
-                 txtsh=1.2, width=.17, border=True, bw=2., limtxt=True,
+                 txtsh=1.2, width=.17, border=False, bw=2., limtxt=True,
                  bgcolor=(0., 0., 0.), ndigits=2, minmax=None, fcn=None,
                  minmaxfcn=None):
         """Init."""
