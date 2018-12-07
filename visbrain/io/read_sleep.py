@@ -11,6 +11,7 @@ import os
 import io
 import numpy as np
 import datetime
+from scipy.stats import iqr
 from warnings import warn
 import logging
 
@@ -195,10 +196,16 @@ class ReadSleepData(object):
                 hypno = np.zeros((npts,), dtype=np.float32)
 
         # ---------- SCALING ----------
-        # Check amplitude of the data and if necessary apply re-scaling
-        if np.abs(np.ptp(data, 0).mean()) < 0.1:
-            warn("Wrong data amplitude for Sleep software.")
-            data *= 1e6
+        # Assume that the inter-quartile amplitude of EEG data is ~50 uV
+        iqr_chan = iqr(data[:, :int(data.shape[1] / 4)], axis=-1)
+        bad_iqr = iqr_chan < 1.
+
+        if np.any(bad_iqr):
+            mult_fact = np.zeros_like(iqr_chan)
+            iqr_chan[iqr_chan == 0.] = 1.
+            mult_fact[bad_iqr] = np.floor(np.log10(50. / iqr_chan[bad_iqr]))
+            data *= 10. ** mult_fact[..., np.newaxis]
+            warn("Wrong channel data amplitude. ")
 
         # ---------- CONVERSION ----------=
         # Convert data and hypno to be contiguous and float 32 (for vispy):
