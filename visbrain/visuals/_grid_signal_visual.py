@@ -19,6 +19,7 @@ __all__ = ('GridSignal')
 vertex_shader = """
 #version 120
 varying vec3 v_index;
+varying vec4 v_color;
 // Varying variables used for clipping in the fragment shader.
 varying vec2 v_position;
 varying vec4 v_ab;
@@ -42,6 +43,9 @@ void main() {
     // Apply the static subplot transformation + scaling.
     gl_Position = $transform(vec4(a*$u_scale*position+b, 0.0, 1.0));
 
+    // Use texture 1D to get the color.
+    v_color = texture1D($u_text, $a_color);
+
     // For clipping test in the fragment shader.
     v_index = $a_index;
     v_position = gl_Position.xy;
@@ -50,11 +54,11 @@ void main() {
 
 fragment_shader = """
 #version 120
-varying vec4 u_color;
+varying vec4 v_color;
 varying vec3 v_index;
 varying vec2 v_position;
 void main() {
-    gl_FragColor = vec4($u_color);
+    gl_FragColor = vec4(v_color.xyz, 1.);
 
     // Discard the fragments between the signals (emulate glMultiDrawArrays).
     if ((fract(v_index.x) > 0.) || (fract(v_index.y) > 0.))
@@ -127,6 +131,7 @@ class GridSignalVisual(visuals.Visual):
         rnd_3 = np.zeros((1, 3), dtype=np.float32)
         self._dbuffer = gloo.VertexBuffer(rnd_1)
         self._ibuffer = gloo.VertexBuffer(rnd_3)
+        self._cbuffer = gloo.VertexBuffer()
         # Send to the program :
         self.shared_program.vert['a_position'] = self._dbuffer
         self.shared_program.vert['a_index'] = self._ibuffer
@@ -150,6 +155,7 @@ class GridSignalVisual(visuals.Visual):
         random : array_like/string/tuple | 'random'
             Use 'random' for random colors or a color name for uniform color.
         """
+        rnd_dyn = (.2, .8)  # random color range
         # ====================== CHECKING ======================
         # Axis :
         axis = axis if isinstance(axis, int) else self._axis
@@ -200,11 +206,8 @@ class GridSignalVisual(visuals.Visual):
             data = self._prep._prepare_data(self._sf, data, 0)
             # Demean and normalize :
             kw = {'axis': -1, 'keepdims': True}
-            dmax = np.abs(data).max(**kw)
-            dmax[dmax == 0.] = 1.
             data -= data.mean(**kw)
-            data /= dmax
-            # data /= data.max()
+            data /= np.abs(data).max(**kw)
             self._dbuffer.set_data(vispy_array(data))
             self.g_size = g_size
 
@@ -218,8 +221,21 @@ class GridSignalVisual(visuals.Visual):
 
         # ====================== COLOR ======================
         if color is not None:
-            color_1d = color2vb(color)
-            self.shared_program.frag['u_color'] = color_1d.ravel()
+            g_size = np.array(self.g_size)
+            n = len(self)
+            if color == 'random':  # (m, 3) random color
+                color_1d = np.random.uniform(size=(m, 3), low=rnd_dyn[0],
+                                             high=rnd_dyn[1])
+                color_idx = np.mgrid[0:m, 0:len(self)][0] / m
+            elif color is not None:  # (m, 3) uniform color
+                color_1d = color2vb(color)
+                color_idx = np.zeros((m * len(self)), dtype=np.float32)
+            # Send texture to vertex shader :
+            text_1d = gloo.Texture1D(color_1d.astype(np.float32))
+            self.shared_program.vert['u_text'] = text_1d
+            # Send color index to use for the texture :
+            self._cbuffer.set_data(color_idx.astype(np.float32))
+            self.shared_program.vert['a_color'] = self._cbuffer
 
         # ====================== TITLES ======================
         # Titles checking :
@@ -243,6 +259,7 @@ class GridSignalVisual(visuals.Visual):
         """Clean buffers."""
         self._dbuffer.delete()
         self._ibuffer.delete()
+        self._cbuffer.delete()
 
     def _convert_row_cols(self, row, col):
         """Convert row and col according to the optimal grid."""
