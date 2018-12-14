@@ -211,7 +211,9 @@ class VectorObj(VisbrainObject):
         """Get the most adapted camera."""
         d_mean = self._arrows._pos.mean(0)
         dist = 1.1 * np.linalg.norm(self._arrows._pos, axis=1).max()
-        return scene.cameras.TurntableCamera(center=d_mean, scale_factor=dist)
+        cam = scene.cameras.TurntableCamera(center=d_mean, scale_factor=dist)
+        self.camera = cam
+        return cam
 
     # ----------- LINE_WIDTH -----------
     @property

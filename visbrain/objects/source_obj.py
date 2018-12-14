@@ -276,7 +276,9 @@ class SourceObj(VisbrainObject):
         """Get the most adapted camera."""
         d_mean = self._xyz.mean(0)
         dist = 1.1 * np.linalg.norm(self._xyz, axis=1).max()
-        return scene.cameras.TurntableCamera(center=d_mean, scale_factor=dist)
+        cam = scene.cameras.TurntableCamera(center=d_mean, scale_factor=dist)
+        self.camera = cam
+        return cam
 
     ###########################################################################
     ###########################################################################
