@@ -26,6 +26,10 @@ class _TestObjects(_TestVisbrain):
             self.OBJ.visible_obj = k
             assert self.OBJ.visible_obj == k
 
+    def test_animate(self):
+        """Test animated method."""
+        self.OBJ.animate()
+
     def test_preview(self):
         """Test function preview."""
         self.OBJ.preview(show=False, axis=True, xyz=True, bgcolor='black')
