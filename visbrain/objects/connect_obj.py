@@ -370,7 +370,9 @@ class ConnectObj(VisbrainObject):
         """Get the most adapted camera."""
         d_mean = self._pos.mean(0)
         dist = np.sqrt(np.sum(d_mean ** 2))
-        return scene.cameras.TurntableCamera(center=d_mean, scale_factor=dist)
+        cam = scene.cameras.TurntableCamera(center=d_mean, scale_factor=dist)
+        self.camera = cam
+        return cam
 
     ###########################################################################
     ###########################################################################
