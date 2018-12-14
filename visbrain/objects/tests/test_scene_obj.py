@@ -98,10 +98,6 @@ class TestSceneObj(_TestVisbrain):
         sc_obj_3d_2.add_to_subplot(c_obj_2, row=0, col=2)
         sc_obj_3d_2.link(-1)
 
-    def test_animate(self):
-        """Test animate method."""
-        sc_obj_2d_1.animate()
-
     # @pytest.mark.xfail(reason="Failed if display not correctly configured",
     #                    run=True, strict=False)
     # def test_screenshot(self):
