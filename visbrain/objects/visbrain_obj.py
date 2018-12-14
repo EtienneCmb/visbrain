@@ -238,6 +238,55 @@ class VisbrainObject(_VisbrainObj):
         """Tree description."""
         return self._node.describe_tree()
 
+    def animate(self, step=1., interval='auto', iterations=-1):
+        """Animate the object.
+
+        Note that this method can only be used with 3D objects.
+
+        Parameters
+        ----------
+        step : float | 1.
+            Rotation step.
+        interval : float | 'auto'
+            Time between events in seconds. The default is ‘auto’, which
+            attempts to find the interval that matches the refresh rate of the
+            current monitor. Currently this is simply 1/60.
+        iterations : int | -1
+            Number of iterations. Can be -1 for infinite.
+        """
+        from vispy.app import Timer
+        def on_timer(*args, **kwargs):  # noqa
+            if hasattr(self, 'camera'):
+                self.camera.azimuth += step  # noqa
+        kw = dict(connect=on_timer, app=CONFIG['VISPY_APP'],
+                  interval=interval, iterations=iterations)
+        self._app_timer = Timer(**kw)
+        self._app_timer.start()
+
+    def record_animation(self, name, n_pic=10, bgcolor=None):
+        """Record an animated object and save as a *.gif file.
+
+        Note that this method :
+
+            * Can only be used with 3D objects.
+            * Requires the python package imageio
+
+        Parameters
+        ----------
+        name : string
+            Name of the gif file (e.g 'myfile.gif')
+        n_pic : int | 10
+            Number of pictures to use to render the gif.
+        """
+        import imageio
+        writer = imageio.get_writer(name)
+        canvas = self._get_parent(bgcolor, False, False)
+        for k in range(n_pic):
+            im = canvas.canvas.render()
+            writer.append_data(im)
+            self.camera.azimuth += 360. / n_pic
+        writer.close()
+
     def screenshot(self, saveas, print_size=None, dpi=300., unit='centimeter',
                    factor=None, region=None, autocrop=False, bgcolor=None,
                    transparent=False, obj=None, line_width=1., **kwargs):
