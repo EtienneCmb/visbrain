@@ -277,6 +277,8 @@ class VisbrainObject(_VisbrainObj):
             Name of the gif file (e.g 'myfile.gif')
         n_pic : int | 10
             Number of pictures to use to render the gif.
+        bgcolor : string, tuple, list | None
+            Background color.
         """
         import imageio
         writer = imageio.get_writer(name)
