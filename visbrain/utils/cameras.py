@@ -4,7 +4,7 @@ import numpy as np
 
 from vispy.scene.cameras import PanZoomCamera, TurntableCamera, BaseCamera
 
-__all__ = ['FixedCam', 'YScrollCam', 'rotate_turntable',
+__all__ = ['FixedCam', 'ScrollCamera', 'rotate_turntable',
            'optimal_scale_factor', 'merge_cameras']
 
 logger = logging.getLogger('visbrain')
@@ -22,27 +22,31 @@ class FixedCam(PanZoomCamera):
         pass
 
 
-class YScrollCam(PanZoomCamera):
-    """Scroll y-axis camera.
+class ScrollCamera(PanZoomCamera):
+    """Scrolling camera.
 
     Parameters
     ----------
     args : tuple
         Arguments to pass to the PanZoom camera.
-    ylim : tuple | None
-        Tuple of floats describing the limits of the y-range.
+    sc_axis : {'x', 'y'}
+        Scrolling axes.
+    limits : tuple | None
+        Tuple of floats describing the axis limits.
     smooth : float | 1.
         Scrolling smooth factor. Higher values can be used to reduce the
-        y-scrolling.
+        scrolling.
     kwargs : dict | {}
         Optional arguments to pass to the PanZoom camera.
     """
 
-    def __init__(self, *args, ylim=None, smooth=1., **kwargs):
+    def __init__(self, *args, sc_axis='x', limits=None, smooth=1., **kwargs):
         """Init."""
         PanZoomCamera.__init__(self, *args, **kwargs)
-        self.ylim = ylim
-        self.smooth = smooth
+
+        self._ax = 0 if sc_axis == 'x' else 1
+        self._limits = limits
+        self._smooth = smooth
 
     def viewbox_mouse_event(self, event):
         """Ignore mouse event."""
@@ -54,9 +58,10 @@ class YScrollCam(PanZoomCamera):
 
         if event.type == 'mouse_wheel':
             pos = list(self.rect.pos)
-            pos[1] = pos[1] + event.delta[1] / self.smooth
-            if isinstance(self.ylim, (list, tuple)):
-                if not (self.ylim[0] <= pos[1] <= self.ylim[1]):
+            ax = self._ax
+            pos[ax] = pos[ax] + event.delta[1] / self._smooth
+            if isinstance(self._limits, (list, tuple)):
+                if not (self._limits[0] <= pos[ax] <= self._limits[1]):
                     return
             size = self.rect.size
             self.rect = (pos[0], pos[1], size[0], size[1])
