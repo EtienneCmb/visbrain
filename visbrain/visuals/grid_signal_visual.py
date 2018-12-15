@@ -79,17 +79,27 @@ class GridSignalVisual(visuals.Visual):
     space : float | 2.
         Space between subplots.
     scale : tuple | (1., 1.)
-        Tuple descigin the scaling along the x and y-axis.
+        Tuple describing the scaling along the x and y-axis.
+    font_size : float | 10.
+        Title font size.
+    width : float | 1.
+        Line width.
+    method : {'gl', 'agg'}
+        Plotting method. 'gl' is faster but 'agg' should be antialiased.
+    force_shape : tuple | None
+        Force the shape of data. Should be a tuple of two ints.
+    plt_as : {'grid', 'row', 'col'}
+        Plotting type.
     """
 
     def __len__(self):
         """Return the number of time points."""
         return self._n
 
-    def __init__(self, data, axis=-1, sf=1., color='random', title=None,
+    def __init__(self, data, axis=-1, sf=1., color='white', title=None,
                  title_color='white', title_bold=False, space=2.,
-                 scale=(.98, .9), font_size=10.,
-                 width=1., method='gl', force_shape=None):
+                 scale=(1., 1.), font_size=10., width=1., method='gl',
+                 force_shape=None, plt_as='grid'):
         """Init."""
         # =========================== CHECKING ===========================
         assert isinstance(data, np.ndarray) and (data.ndim <= 3)
@@ -120,6 +130,9 @@ class GridSignalVisual(visuals.Visual):
         self._prep = PrepareData(axis=-1)
         self.width = width
         self.method = method
+        assert plt_as in ['grid', 'row', 'col'], ("`plt_as` should either be "
+                                                  "'grid', 'row' or 'col'")
+        self._plt_as = plt_as
 
         # =========================== BUFFERS ===========================
         # Create buffers (for data, index and color)
@@ -134,11 +147,11 @@ class GridSignalVisual(visuals.Visual):
         self.shared_program.vert['u_n'] = len(self)
 
         # Set data :
-        self.set_data(data, axis, color, title, force_shape)
+        self.set_data(data, axis, color, title, force_shape, plt_as)
         self.freeze()
 
     def set_data(self, data=None, axis=None, color=None, title=None,
-                 force_shape=None):
+                 force_shape=None, plt_as='grid'):
         """Set data to the grid of signals.
 
         Parameters
@@ -154,8 +167,6 @@ class GridSignalVisual(visuals.Visual):
         # Axis :
         axis = axis if isinstance(axis, int) else self._axis
         axis = len(self._sh) - 1 if axis == -1 else axis
-
-        # ====================== CHECKING ======================
         # Data :
         if isinstance(data, np.ndarray):
             # -------------- (n_rows, n_cols, n_time) --------------
@@ -177,6 +188,12 @@ class GridSignalVisual(visuals.Visual):
             # -------------- Signals index --------------
             m = np.prod(list(data.shape)[0:-1])
             sig_index = np.arange(m).reshape(*g_size)
+
+            # -------------- Plot type --------------
+            if plt_as == 'row':
+                force_shape = (1, g_size[0] * g_size[1])
+            elif plt_as == 'col':
+                force_shape = (g_size[0] * g_size[1], 1)
 
             # -------------- Optimal 2-D --------------
             self._data = data
@@ -230,7 +247,7 @@ class GridSignalVisual(visuals.Visual):
         if not self._txt.text:
             self._txt.text = title
         # Get titles position :
-        x_factor, y_factor = 1. / (n_cols), 1. / (n_rows)
+        x_factor, y_factor = 1. / n_cols, 1. / n_rows
         r_x = np.linspace(-1. + x_factor, 1. - x_factor, n_cols)
         r_x = np.tile(r_x, n_rows)
         r_y = np.linspace(-1. + y_factor, 1. - y_factor, n_rows)[::-1]
