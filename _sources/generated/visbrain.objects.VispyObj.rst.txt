@@ -15,9 +15,11 @@ visbrain.objects.VispyObj
       :toctree: VispyObj
    
       ~VispyObj.__init__
+      ~VispyObj.animate
       ~VispyObj.copy
       ~VispyObj.describe_tree
       ~VispyObj.preview
+      ~VispyObj.record_animation
       ~VispyObj.screenshot
       ~VispyObj.set_shortcuts_to_canvas
       ~VispyObj.to_dict

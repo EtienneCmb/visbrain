@@ -15,9 +15,11 @@ visbrain.objects.Picture3DObj
       :toctree: Picture3DObj
    
       ~Picture3DObj.__init__
+      ~Picture3DObj.animate
       ~Picture3DObj.copy
       ~Picture3DObj.describe_tree
       ~Picture3DObj.preview
+      ~Picture3DObj.record_animation
       ~Picture3DObj.screenshot
       ~Picture3DObj.set_shortcuts_to_canvas
       ~Picture3DObj.to_dict

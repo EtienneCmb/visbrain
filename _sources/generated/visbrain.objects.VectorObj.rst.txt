@@ -15,9 +15,11 @@ visbrain.objects.VectorObj
       :toctree: VectorObj
    
       ~VectorObj.__init__
+      ~VectorObj.animate
       ~VectorObj.copy
       ~VectorObj.describe_tree
       ~VectorObj.preview
+      ~VectorObj.record_animation
       ~VectorObj.screenshot
       ~VectorObj.set_shortcuts_to_canvas
       ~VectorObj.to_dict

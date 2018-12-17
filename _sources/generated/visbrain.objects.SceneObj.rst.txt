@@ -18,6 +18,7 @@ visbrain.objects.SceneObj
       ~SceneObj.add_to_subplot
       ~SceneObj.link
       ~SceneObj.preview
+      ~SceneObj.record_animation
       ~SceneObj.screenshot
    
    

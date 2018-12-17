@@ -3,8 +3,8 @@
 .. _general_examples:
 
 .. warning::
-    Some Visbrain's examples are based on data that need to be downloaded.
-    Those data are downloaded inside the folder *~/visbrain_data/example_data*
+    - Some Visbrain's examples are based on data that need to be downloaded. Those data are downloaded inside the folder *~/visbrain_data/example_data*
+    - You may encounter a window transparency error. This is a known issue of the Vispy package (see https://github.com/vispy/vispy/pull/1394)
 
 Examples
 ========
@@ -17,11 +17,36 @@ Examples
 
     <div style='clear:both'></div>
 
-Objects examples
-----------------
+SceneObj : combine objects into subplots
+----------------------------------------
 
-Examples demonstrating how to use objects.
+Each Visbrain's object inherits a method called `preview` which basically
+display the object. The SceneObj object can be used to combine objects into
+subplots.
 
+The following examples illustrate how to combine those objects into a grid of
+subplots.
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to animate objects inside the scene. Note that animations can only ...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_plot_animate_scene_thumb.png
+
+        :ref:`sphx_glr_auto_examples_objects_plot_animate_scene.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/objects/plot_animate_scene
 
 .. raw:: html
 
@@ -82,6 +107,26 @@ Examples demonstrating how to use objects.
    :hidden:
 
    /auto_examples/objects/plot_connectivity_obj
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the grid of time-series object i...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_plot_gridsignals_obj_thumb.png
+
+        :ref:`sphx_glr_auto_examples_objects_plot_gridsignals_obj.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/objects/plot_gridsignals_obj
 
 .. raw:: html
 

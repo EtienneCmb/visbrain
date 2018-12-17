@@ -15,9 +15,11 @@ visbrain.objects.HypnogramObj
       :toctree: HypnogramObj
    
       ~HypnogramObj.__init__
+      ~HypnogramObj.animate
       ~HypnogramObj.copy
       ~HypnogramObj.describe_tree
       ~HypnogramObj.preview
+      ~HypnogramObj.record_animation
       ~HypnogramObj.screenshot
       ~HypnogramObj.set_shortcuts_to_canvas
       ~HypnogramObj.set_stage

@@ -16,6 +16,7 @@ visbrain.objects.BrainObj
    
       ~BrainObj.__init__
       ~BrainObj.add_activation
+      ~BrainObj.animate
       ~BrainObj.clean
       ~BrainObj.copy
       ~BrainObj.describe_tree
@@ -24,6 +25,7 @@ visbrain.objects.BrainObj
       ~BrainObj.parcellize
       ~BrainObj.preview
       ~BrainObj.project_sources
+      ~BrainObj.record_animation
       ~BrainObj.remove
       ~BrainObj.reset_camera
       ~BrainObj.rotate

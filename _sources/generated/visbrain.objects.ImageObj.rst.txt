@@ -15,9 +15,11 @@ visbrain.objects.ImageObj
       :toctree: ImageObj
    
       ~ImageObj.__init__
+      ~ImageObj.animate
       ~ImageObj.copy
       ~ImageObj.describe_tree
       ~ImageObj.preview
+      ~ImageObj.record_animation
       ~ImageObj.screenshot
       ~ImageObj.set_data
       ~ImageObj.set_shortcuts_to_canvas

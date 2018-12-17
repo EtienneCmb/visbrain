@@ -15,9 +15,11 @@ visbrain.objects.TimeSeries3DObj
       :toctree: TimeSeries3DObj
    
       ~TimeSeries3DObj.__init__
+      ~TimeSeries3DObj.animate
       ~TimeSeries3DObj.copy
       ~TimeSeries3DObj.describe_tree
       ~TimeSeries3DObj.preview
+      ~TimeSeries3DObj.record_animation
       ~TimeSeries3DObj.screenshot
       ~TimeSeries3DObj.set_shortcuts_to_canvas
       ~TimeSeries3DObj.to_dict

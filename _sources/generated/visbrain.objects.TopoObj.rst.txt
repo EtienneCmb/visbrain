@@ -15,10 +15,12 @@ visbrain.objects.TopoObj
       :toctree: TopoObj
    
       ~TopoObj.__init__
+      ~TopoObj.animate
       ~TopoObj.connect
       ~TopoObj.copy
       ~TopoObj.describe_tree
       ~TopoObj.preview
+      ~TopoObj.record_animation
       ~TopoObj.screenshot
       ~TopoObj.set_data
       ~TopoObj.set_shortcuts_to_canvas

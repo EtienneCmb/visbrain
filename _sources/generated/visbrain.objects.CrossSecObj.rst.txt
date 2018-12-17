@@ -15,6 +15,7 @@ visbrain.objects.CrossSecObj
       :toctree: CrossSecObj
    
       ~CrossSecObj.__init__
+      ~CrossSecObj.animate
       ~CrossSecObj.copy
       ~CrossSecObj.cut_coords
       ~CrossSecObj.describe_tree
@@ -23,6 +24,7 @@ visbrain.objects.CrossSecObj
       ~CrossSecObj.localize_source
       ~CrossSecObj.pos_to_slice
       ~CrossSecObj.preview
+      ~CrossSecObj.record_animation
       ~CrossSecObj.remove
       ~CrossSecObj.save
       ~CrossSecObj.screenshot

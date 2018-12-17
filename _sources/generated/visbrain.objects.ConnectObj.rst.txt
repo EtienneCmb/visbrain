@@ -16,10 +16,12 @@ visbrain.objects.ConnectObj
    
       ~ConnectObj.__init__
       ~ConnectObj.analyse_connections
+      ~ConnectObj.animate
       ~ConnectObj.copy
       ~ConnectObj.describe_tree
       ~ConnectObj.get_nb_connections_per_node
       ~ConnectObj.preview
+      ~ConnectObj.record_animation
       ~ConnectObj.screenshot
       ~ConnectObj.set_shortcuts_to_canvas
       ~ConnectObj.to_dict

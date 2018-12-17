@@ -15,9 +15,11 @@ visbrain.objects.PacmapObj
       :toctree: PacmapObj
    
       ~PacmapObj.__init__
+      ~PacmapObj.animate
       ~PacmapObj.copy
       ~PacmapObj.describe_tree
       ~PacmapObj.preview
+      ~PacmapObj.record_animation
       ~PacmapObj.screenshot
       ~PacmapObj.set_data
       ~PacmapObj.set_shortcuts_to_canvas

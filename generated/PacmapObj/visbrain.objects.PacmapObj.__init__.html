@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>visbrain.objects.PacmapObj.__init__ &#8212; visbrain 0.4.3 documentation</title>
+    <title>visbrain.objects.PacmapObj.__init__ &#8212; visbrain 0.4.4 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
@@ -20,7 +20,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="visbrain.objects.PacmapObj.copy" href="visbrain.objects.PacmapObj.copy.html" />
+    <link rel="next" title="visbrain.objects.PacmapObj.animate" href="visbrain.objects.PacmapObj.animate.html" />
     <link rel="prev" title="visbrain.objects.PacmapObj" href="../visbrain.objects.PacmapObj.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -40,7 +40,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html"><span><img src="../../_static/visbrain_128x128.png"></span>
           visbrain</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.4.3</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.4.4</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -208,7 +208,16 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../auto_examples/index.html#objects-examples">Objects examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../auto_examples/index.html#sceneobj-combine-objects-into-subplots">SceneObj : combine objects into subplots</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../auto_examples/objects/plot_animate_scene.html">Animate objects in the scene</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../auto_examples/objects/plot_animate_scene.html#doanload-data-and-create-the-scene">Doanload data and create the scene</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../auto_examples/objects/plot_animate_scene.html#animate-a-single-brain-object">Animate a single brain object</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../auto_examples/objects/plot_animate_scene.html#animate-multiple-objects">Animate multiple objects</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../auto_examples/objects/plot_animate_scene.html#animate-sources">Animate sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../auto_examples/objects/plot_animate_scene.html#configure-the-animation-rate">Configure the animation rate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../auto_examples/objects/plot_animate_scene.html#save-the-animation">Save the animation</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../../auto_examples/objects/plot_brain_obj.html">Brain object (BrainObj) : complete tutorial</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../auto_examples/objects/plot_brain_obj.html#scene-creation">Scene creation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../auto_examples/objects/plot_brain_obj.html#basic-brain-using-mni-template">Basic brain using MNI template</a></li>
@@ -228,6 +237,13 @@
 <li class="toctree-l4"><a class="reference internal" href="../../auto_examples/objects/plot_connectivity_obj.html#color-by-connectivity-strength">Color by connectivity strength</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../auto_examples/objects/plot_connectivity_obj.html#color-by-number-of-connections-per-node">Color by number of connections per node</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../auto_examples/objects/plot_connectivity_obj.html#custom-colors">Custom colors</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../auto_examples/objects/plot_gridsignals_obj.html">Grid of signals object (GridSignalsObj) : complete tutorial</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../auto_examples/objects/plot_gridsignals_obj.html#scene-creation">Scene creation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../auto_examples/objects/plot_gridsignals_obj.html#generate-random-data">Generate random data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../auto_examples/objects/plot_gridsignals_obj.html#plot-mne-python-data">Plot MNE-Python data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../auto_examples/objects/plot_gridsignals_obj.html#configure-your-plotting-type">Configure your plotting type</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../auto_examples/objects/plot_im_tf_spec_obj.html">Image, time-frequency map and spectrogram objects</a><ul>
@@ -447,6 +463,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../visbrain.objects.BrainObj.html">visbrain.objects.BrainObj</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../BrainObj/visbrain.objects.BrainObj.__init__.html">visbrain.objects.BrainObj.__init__</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../BrainObj/visbrain.objects.BrainObj.add_activation.html">visbrain.objects.BrainObj.add_activation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../BrainObj/visbrain.objects.BrainObj.animate.html">visbrain.objects.BrainObj.animate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../BrainObj/visbrain.objects.BrainObj.clean.html">visbrain.objects.BrainObj.clean</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../BrainObj/visbrain.objects.BrainObj.copy.html">visbrain.objects.BrainObj.copy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../BrainObj/visbrain.objects.BrainObj.describe_tree.html">visbrain.objects.BrainObj.describe_tree</a></li>
@@ -455,6 +472,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../BrainObj/visbrain.objects.BrainObj.parcellize.html">visbrain.objects.BrainObj.parcellize</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../BrainObj/visbrain.objects.BrainObj.preview.html">visbrain.objects.BrainObj.preview</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../BrainObj/visbrain.objects.BrainObj.project_sources.html">visbrain.objects.BrainObj.project_sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../BrainObj/visbrain.objects.BrainObj.record_animation.html">visbrain.objects.BrainObj.record_animation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../BrainObj/visbrain.objects.BrainObj.remove.html">visbrain.objects.BrainObj.remove</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../BrainObj/visbrain.objects.BrainObj.reset_camera.html">visbrain.objects.BrainObj.reset_camera</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../BrainObj/visbrain.objects.BrainObj.rotate.html">visbrain.objects.BrainObj.rotate</a></li>
@@ -472,9 +490,11 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../visbrain.objects.ColorbarObj.html">visbrain.objects.ColorbarObj</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../ColorbarObj/visbrain.objects.ColorbarObj.__init__.html">visbrain.objects.ColorbarObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../ColorbarObj/visbrain.objects.ColorbarObj.animate.html">visbrain.objects.ColorbarObj.animate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../ColorbarObj/visbrain.objects.ColorbarObj.copy.html">visbrain.objects.ColorbarObj.copy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../ColorbarObj/visbrain.objects.ColorbarObj.describe_tree.html">visbrain.objects.ColorbarObj.describe_tree</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../ColorbarObj/visbrain.objects.ColorbarObj.preview.html">visbrain.objects.ColorbarObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../ColorbarObj/visbrain.objects.ColorbarObj.record_animation.html">visbrain.objects.ColorbarObj.record_animation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../ColorbarObj/visbrain.objects.ColorbarObj.screenshot.html">visbrain.objects.ColorbarObj.screenshot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../ColorbarObj/visbrain.objects.ColorbarObj.set_shortcuts_to_canvas.html">visbrain.objects.ColorbarObj.set_shortcuts_to_canvas</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../ColorbarObj/visbrain.objects.ColorbarObj.to_dict.html">visbrain.objects.ColorbarObj.to_dict</a></li>
@@ -487,10 +507,12 @@
 <li class="toctree-l3"><a class="reference internal" href="../visbrain.objects.ConnectObj.html">visbrain.objects.ConnectObj</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../ConnectObj/visbrain.objects.ConnectObj.__init__.html">visbrain.objects.ConnectObj.__init__</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../ConnectObj/visbrain.objects.ConnectObj.analyse_connections.html">visbrain.objects.ConnectObj.analyse_connections</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../ConnectObj/visbrain.objects.ConnectObj.animate.html">visbrain.objects.ConnectObj.animate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../ConnectObj/visbrain.objects.ConnectObj.copy.html">visbrain.objects.ConnectObj.copy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../ConnectObj/visbrain.objects.ConnectObj.describe_tree.html">visbrain.objects.ConnectObj.describe_tree</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../ConnectObj/visbrain.objects.ConnectObj.get_nb_connections_per_node.html">visbrain.objects.ConnectObj.get_nb_connections_per_node</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../ConnectObj/visbrain.objects.ConnectObj.preview.html">visbrain.objects.ConnectObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../ConnectObj/visbrain.objects.ConnectObj.record_animation.html">visbrain.objects.ConnectObj.record_animation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../ConnectObj/visbrain.objects.ConnectObj.screenshot.html">visbrain.objects.ConnectObj.screenshot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../ConnectObj/visbrain.objects.ConnectObj.set_shortcuts_to_canvas.html">visbrain.objects.ConnectObj.set_shortcuts_to_canvas</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../ConnectObj/visbrain.objects.ConnectObj.to_dict.html">visbrain.objects.ConnectObj.to_dict</a></li>
@@ -502,6 +524,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../visbrain.objects.CrossSecObj.html">visbrain.objects.CrossSecObj</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../CrossSecObj/visbrain.objects.CrossSecObj.__init__.html">visbrain.objects.CrossSecObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../CrossSecObj/visbrain.objects.CrossSecObj.animate.html">visbrain.objects.CrossSecObj.animate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../CrossSecObj/visbrain.objects.CrossSecObj.copy.html">visbrain.objects.CrossSecObj.copy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../CrossSecObj/visbrain.objects.CrossSecObj.cut_coords.html">visbrain.objects.CrossSecObj.cut_coords</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../CrossSecObj/visbrain.objects.CrossSecObj.describe_tree.html">visbrain.objects.CrossSecObj.describe_tree</a></li>
@@ -510,6 +533,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../CrossSecObj/visbrain.objects.CrossSecObj.localize_source.html">visbrain.objects.CrossSecObj.localize_source</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../CrossSecObj/visbrain.objects.CrossSecObj.pos_to_slice.html">visbrain.objects.CrossSecObj.pos_to_slice</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../CrossSecObj/visbrain.objects.CrossSecObj.preview.html">visbrain.objects.CrossSecObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../CrossSecObj/visbrain.objects.CrossSecObj.record_animation.html">visbrain.objects.CrossSecObj.record_animation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../CrossSecObj/visbrain.objects.CrossSecObj.remove.html">visbrain.objects.CrossSecObj.remove</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../CrossSecObj/visbrain.objects.CrossSecObj.save.html">visbrain.objects.CrossSecObj.save</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../CrossSecObj/visbrain.objects.CrossSecObj.screenshot.html">visbrain.objects.CrossSecObj.screenshot</a></li>
@@ -523,11 +547,29 @@
 <li class="toctree-l4"><a class="reference internal" href="../visbrain.objects.CrossSecObj.html#examples-using-visbrain-objects-crosssecobj">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.objects.CrossSecObj</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../visbrain.objects.GridSignalsObj.html">visbrain.objects.GridSignalsObj</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../GridSignalsObj/visbrain.objects.GridSignalsObj.__init__.html">visbrain.objects.GridSignalsObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../GridSignalsObj/visbrain.objects.GridSignalsObj.animate.html">visbrain.objects.GridSignalsObj.animate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../GridSignalsObj/visbrain.objects.GridSignalsObj.copy.html">visbrain.objects.GridSignalsObj.copy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../GridSignalsObj/visbrain.objects.GridSignalsObj.describe_tree.html">visbrain.objects.GridSignalsObj.describe_tree</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../GridSignalsObj/visbrain.objects.GridSignalsObj.preview.html">visbrain.objects.GridSignalsObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../GridSignalsObj/visbrain.objects.GridSignalsObj.record_animation.html">visbrain.objects.GridSignalsObj.record_animation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../GridSignalsObj/visbrain.objects.GridSignalsObj.screenshot.html">visbrain.objects.GridSignalsObj.screenshot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../GridSignalsObj/visbrain.objects.GridSignalsObj.set_shortcuts_to_canvas.html">visbrain.objects.GridSignalsObj.set_shortcuts_to_canvas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../GridSignalsObj/visbrain.objects.GridSignalsObj.to_dict.html">visbrain.objects.GridSignalsObj.to_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../GridSignalsObj/visbrain.objects.GridSignalsObj.to_kwargs.html">visbrain.objects.GridSignalsObj.to_kwargs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../GridSignalsObj/visbrain.objects.GridSignalsObj.update.html">visbrain.objects.GridSignalsObj.update</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../GridSignalsObj/visbrain.objects.GridSignalsObj.update_from_dict.html">visbrain.objects.GridSignalsObj.update_from_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../visbrain.objects.GridSignalsObj.html#examples-using-visbrain-objects-gridsignalsobj">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.objects.GridSignalsObj</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../visbrain.objects.HypnogramObj.html">visbrain.objects.HypnogramObj</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../HypnogramObj/visbrain.objects.HypnogramObj.__init__.html">visbrain.objects.HypnogramObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../HypnogramObj/visbrain.objects.HypnogramObj.animate.html">visbrain.objects.HypnogramObj.animate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../HypnogramObj/visbrain.objects.HypnogramObj.copy.html">visbrain.objects.HypnogramObj.copy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../HypnogramObj/visbrain.objects.HypnogramObj.describe_tree.html">visbrain.objects.HypnogramObj.describe_tree</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../HypnogramObj/visbrain.objects.HypnogramObj.preview.html">visbrain.objects.HypnogramObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../HypnogramObj/visbrain.objects.HypnogramObj.record_animation.html">visbrain.objects.HypnogramObj.record_animation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../HypnogramObj/visbrain.objects.HypnogramObj.screenshot.html">visbrain.objects.HypnogramObj.screenshot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../HypnogramObj/visbrain.objects.HypnogramObj.set_shortcuts_to_canvas.html">visbrain.objects.HypnogramObj.set_shortcuts_to_canvas</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../HypnogramObj/visbrain.objects.HypnogramObj.set_stage.html">visbrain.objects.HypnogramObj.set_stage</a></li>
@@ -539,9 +581,11 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../visbrain.objects.ImageObj.html">visbrain.objects.ImageObj</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../ImageObj/visbrain.objects.ImageObj.__init__.html">visbrain.objects.ImageObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../ImageObj/visbrain.objects.ImageObj.animate.html">visbrain.objects.ImageObj.animate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../ImageObj/visbrain.objects.ImageObj.copy.html">visbrain.objects.ImageObj.copy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../ImageObj/visbrain.objects.ImageObj.describe_tree.html">visbrain.objects.ImageObj.describe_tree</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../ImageObj/visbrain.objects.ImageObj.preview.html">visbrain.objects.ImageObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../ImageObj/visbrain.objects.ImageObj.record_animation.html">visbrain.objects.ImageObj.record_animation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../ImageObj/visbrain.objects.ImageObj.screenshot.html">visbrain.objects.ImageObj.screenshot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../ImageObj/visbrain.objects.ImageObj.set_data.html">visbrain.objects.ImageObj.set_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../ImageObj/visbrain.objects.ImageObj.set_shortcuts_to_canvas.html">visbrain.objects.ImageObj.set_shortcuts_to_canvas</a></li>
@@ -554,9 +598,11 @@
 </li>
 <li class="toctree-l3 current"><a class="reference internal" href="../visbrain.objects.PacmapObj.html">visbrain.objects.PacmapObj</a><ul class="current">
 <li class="toctree-l4 current"><a class="current reference internal" href="#">visbrain.objects.PacmapObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="visbrain.objects.PacmapObj.animate.html">visbrain.objects.PacmapObj.animate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="visbrain.objects.PacmapObj.copy.html">visbrain.objects.PacmapObj.copy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="visbrain.objects.PacmapObj.describe_tree.html">visbrain.objects.PacmapObj.describe_tree</a></li>
 <li class="toctree-l4"><a class="reference internal" href="visbrain.objects.PacmapObj.preview.html">visbrain.objects.PacmapObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="visbrain.objects.PacmapObj.record_animation.html">visbrain.objects.PacmapObj.record_animation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="visbrain.objects.PacmapObj.screenshot.html">visbrain.objects.PacmapObj.screenshot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="visbrain.objects.PacmapObj.set_data.html">visbrain.objects.PacmapObj.set_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="visbrain.objects.PacmapObj.set_shortcuts_to_canvas.html">visbrain.objects.PacmapObj.set_shortcuts_to_canvas</a></li>
@@ -569,9 +615,11 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../visbrain.objects.Picture3DObj.html">visbrain.objects.Picture3DObj</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../Picture3DObj/visbrain.objects.Picture3DObj.__init__.html">visbrain.objects.Picture3DObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Picture3DObj/visbrain.objects.Picture3DObj.animate.html">visbrain.objects.Picture3DObj.animate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../Picture3DObj/visbrain.objects.Picture3DObj.copy.html">visbrain.objects.Picture3DObj.copy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../Picture3DObj/visbrain.objects.Picture3DObj.describe_tree.html">visbrain.objects.Picture3DObj.describe_tree</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../Picture3DObj/visbrain.objects.Picture3DObj.preview.html">visbrain.objects.Picture3DObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Picture3DObj/visbrain.objects.Picture3DObj.record_animation.html">visbrain.objects.Picture3DObj.record_animation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../Picture3DObj/visbrain.objects.Picture3DObj.screenshot.html">visbrain.objects.Picture3DObj.screenshot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../Picture3DObj/visbrain.objects.Picture3DObj.set_shortcuts_to_canvas.html">visbrain.objects.Picture3DObj.set_shortcuts_to_canvas</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../Picture3DObj/visbrain.objects.Picture3DObj.to_dict.html">visbrain.objects.Picture3DObj.to_dict</a></li>
@@ -583,6 +631,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../visbrain.objects.RoiObj.html">visbrain.objects.RoiObj</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../RoiObj/visbrain.objects.RoiObj.__init__.html">visbrain.objects.RoiObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RoiObj/visbrain.objects.RoiObj.animate.html">visbrain.objects.RoiObj.animate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../RoiObj/visbrain.objects.RoiObj.copy.html">visbrain.objects.RoiObj.copy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../RoiObj/visbrain.objects.RoiObj.describe_tree.html">visbrain.objects.RoiObj.describe_tree</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../RoiObj/visbrain.objects.RoiObj.get_centroids.html">visbrain.objects.RoiObj.get_centroids</a></li>
@@ -592,6 +641,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../RoiObj/visbrain.objects.RoiObj.pos_to_slice.html">visbrain.objects.RoiObj.pos_to_slice</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../RoiObj/visbrain.objects.RoiObj.preview.html">visbrain.objects.RoiObj.preview</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../RoiObj/visbrain.objects.RoiObj.project_sources.html">visbrain.objects.RoiObj.project_sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RoiObj/visbrain.objects.RoiObj.record_animation.html">visbrain.objects.RoiObj.record_animation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../RoiObj/visbrain.objects.RoiObj.remove.html">visbrain.objects.RoiObj.remove</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../RoiObj/visbrain.objects.RoiObj.reset.html">visbrain.objects.RoiObj.reset</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../RoiObj/visbrain.objects.RoiObj.save.html">visbrain.objects.RoiObj.save</a></li>
@@ -613,6 +663,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../SceneObj/visbrain.objects.SceneObj.add_to_subplot.html">visbrain.objects.SceneObj.add_to_subplot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../SceneObj/visbrain.objects.SceneObj.link.html">visbrain.objects.SceneObj.link</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../SceneObj/visbrain.objects.SceneObj.preview.html">visbrain.objects.SceneObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../SceneObj/visbrain.objects.SceneObj.record_animation.html">visbrain.objects.SceneObj.record_animation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../SceneObj/visbrain.objects.SceneObj.screenshot.html">visbrain.objects.SceneObj.screenshot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../visbrain.objects.SceneObj.html#examples-using-visbrain-objects-sceneobj">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.objects.SceneObj</span></code></a></li>
 </ul>
@@ -620,12 +671,14 @@
 <li class="toctree-l3"><a class="reference internal" href="../visbrain.objects.SourceObj.html">visbrain.objects.SourceObj</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../SourceObj/visbrain.objects.SourceObj.__init__.html">visbrain.objects.SourceObj.__init__</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../SourceObj/visbrain.objects.SourceObj.analyse_sources.html">visbrain.objects.SourceObj.analyse_sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../SourceObj/visbrain.objects.SourceObj.animate.html">visbrain.objects.SourceObj.animate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../SourceObj/visbrain.objects.SourceObj.color_sources.html">visbrain.objects.SourceObj.color_sources</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../SourceObj/visbrain.objects.SourceObj.copy.html">visbrain.objects.SourceObj.copy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../SourceObj/visbrain.objects.SourceObj.describe_tree.html">visbrain.objects.SourceObj.describe_tree</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../SourceObj/visbrain.objects.SourceObj.fit_to_vertices.html">visbrain.objects.SourceObj.fit_to_vertices</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../SourceObj/visbrain.objects.SourceObj.preview.html">visbrain.objects.SourceObj.preview</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../SourceObj/visbrain.objects.SourceObj.project_sources.html">visbrain.objects.SourceObj.project_sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../SourceObj/visbrain.objects.SourceObj.record_animation.html">visbrain.objects.SourceObj.record_animation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../SourceObj/visbrain.objects.SourceObj.screenshot.html">visbrain.objects.SourceObj.screenshot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../SourceObj/visbrain.objects.SourceObj.set_shortcuts_to_canvas.html">visbrain.objects.SourceObj.set_shortcuts_to_canvas</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../SourceObj/visbrain.objects.SourceObj.set_visible_sources.html">visbrain.objects.SourceObj.set_visible_sources</a></li>
@@ -638,10 +691,12 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../visbrain.objects.TopoObj.html">visbrain.objects.TopoObj</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../TopoObj/visbrain.objects.TopoObj.__init__.html">visbrain.objects.TopoObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../TopoObj/visbrain.objects.TopoObj.animate.html">visbrain.objects.TopoObj.animate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../TopoObj/visbrain.objects.TopoObj.connect.html">visbrain.objects.TopoObj.connect</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../TopoObj/visbrain.objects.TopoObj.copy.html">visbrain.objects.TopoObj.copy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../TopoObj/visbrain.objects.TopoObj.describe_tree.html">visbrain.objects.TopoObj.describe_tree</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../TopoObj/visbrain.objects.TopoObj.preview.html">visbrain.objects.TopoObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../TopoObj/visbrain.objects.TopoObj.record_animation.html">visbrain.objects.TopoObj.record_animation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../TopoObj/visbrain.objects.TopoObj.screenshot.html">visbrain.objects.TopoObj.screenshot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../TopoObj/visbrain.objects.TopoObj.set_data.html">visbrain.objects.TopoObj.set_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../TopoObj/visbrain.objects.TopoObj.set_shortcuts_to_canvas.html">visbrain.objects.TopoObj.set_shortcuts_to_canvas</a></li>
@@ -654,9 +709,11 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../visbrain.objects.TimeFrequencyObj.html">visbrain.objects.TimeFrequencyObj</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../TimeFrequencyObj/visbrain.objects.TimeFrequencyObj.__init__.html">visbrain.objects.TimeFrequencyObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../TimeFrequencyObj/visbrain.objects.TimeFrequencyObj.animate.html">visbrain.objects.TimeFrequencyObj.animate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../TimeFrequencyObj/visbrain.objects.TimeFrequencyObj.copy.html">visbrain.objects.TimeFrequencyObj.copy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../TimeFrequencyObj/visbrain.objects.TimeFrequencyObj.describe_tree.html">visbrain.objects.TimeFrequencyObj.describe_tree</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../TimeFrequencyObj/visbrain.objects.TimeFrequencyObj.preview.html">visbrain.objects.TimeFrequencyObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../TimeFrequencyObj/visbrain.objects.TimeFrequencyObj.record_animation.html">visbrain.objects.TimeFrequencyObj.record_animation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../TimeFrequencyObj/visbrain.objects.TimeFrequencyObj.screenshot.html">visbrain.objects.TimeFrequencyObj.screenshot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../TimeFrequencyObj/visbrain.objects.TimeFrequencyObj.set_data.html">visbrain.objects.TimeFrequencyObj.set_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../TimeFrequencyObj/visbrain.objects.TimeFrequencyObj.set_shortcuts_to_canvas.html">visbrain.objects.TimeFrequencyObj.set_shortcuts_to_canvas</a></li>
@@ -669,9 +726,11 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../visbrain.objects.TimeSeries3DObj.html">visbrain.objects.TimeSeries3DObj</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../TimeSeries3DObj/visbrain.objects.TimeSeries3DObj.__init__.html">visbrain.objects.TimeSeries3DObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../TimeSeries3DObj/visbrain.objects.TimeSeries3DObj.animate.html">visbrain.objects.TimeSeries3DObj.animate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../TimeSeries3DObj/visbrain.objects.TimeSeries3DObj.copy.html">visbrain.objects.TimeSeries3DObj.copy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../TimeSeries3DObj/visbrain.objects.TimeSeries3DObj.describe_tree.html">visbrain.objects.TimeSeries3DObj.describe_tree</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../TimeSeries3DObj/visbrain.objects.TimeSeries3DObj.preview.html">visbrain.objects.TimeSeries3DObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../TimeSeries3DObj/visbrain.objects.TimeSeries3DObj.record_animation.html">visbrain.objects.TimeSeries3DObj.record_animation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../TimeSeries3DObj/visbrain.objects.TimeSeries3DObj.screenshot.html">visbrain.objects.TimeSeries3DObj.screenshot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../TimeSeries3DObj/visbrain.objects.TimeSeries3DObj.set_shortcuts_to_canvas.html">visbrain.objects.TimeSeries3DObj.set_shortcuts_to_canvas</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../TimeSeries3DObj/visbrain.objects.TimeSeries3DObj.to_dict.html">visbrain.objects.TimeSeries3DObj.to_dict</a></li>
@@ -683,9 +742,11 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../visbrain.objects.VectorObj.html">visbrain.objects.VectorObj</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../VectorObj/visbrain.objects.VectorObj.__init__.html">visbrain.objects.VectorObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../VectorObj/visbrain.objects.VectorObj.animate.html">visbrain.objects.VectorObj.animate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../VectorObj/visbrain.objects.VectorObj.copy.html">visbrain.objects.VectorObj.copy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../VectorObj/visbrain.objects.VectorObj.describe_tree.html">visbrain.objects.VectorObj.describe_tree</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../VectorObj/visbrain.objects.VectorObj.preview.html">visbrain.objects.VectorObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../VectorObj/visbrain.objects.VectorObj.record_animation.html">visbrain.objects.VectorObj.record_animation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../VectorObj/visbrain.objects.VectorObj.screenshot.html">visbrain.objects.VectorObj.screenshot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../VectorObj/visbrain.objects.VectorObj.set_shortcuts_to_canvas.html">visbrain.objects.VectorObj.set_shortcuts_to_canvas</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../VectorObj/visbrain.objects.VectorObj.to_dict.html">visbrain.objects.VectorObj.to_dict</a></li>
@@ -695,14 +756,31 @@
 <li class="toctree-l4"><a class="reference internal" href="../visbrain.objects.VectorObj.html#examples-using-visbrain-objects-vectorobj">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.objects.VectorObj</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../visbrain.objects.VispyObj.html">visbrain.objects.VispyObj</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../VispyObj/visbrain.objects.VispyObj.__init__.html">visbrain.objects.VispyObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../VispyObj/visbrain.objects.VispyObj.animate.html">visbrain.objects.VispyObj.animate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../VispyObj/visbrain.objects.VispyObj.copy.html">visbrain.objects.VispyObj.copy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../VispyObj/visbrain.objects.VispyObj.describe_tree.html">visbrain.objects.VispyObj.describe_tree</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../VispyObj/visbrain.objects.VispyObj.preview.html">visbrain.objects.VispyObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../VispyObj/visbrain.objects.VispyObj.record_animation.html">visbrain.objects.VispyObj.record_animation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../VispyObj/visbrain.objects.VispyObj.screenshot.html">visbrain.objects.VispyObj.screenshot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../VispyObj/visbrain.objects.VispyObj.set_shortcuts_to_canvas.html">visbrain.objects.VispyObj.set_shortcuts_to_canvas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../VispyObj/visbrain.objects.VispyObj.to_dict.html">visbrain.objects.VispyObj.to_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../VispyObj/visbrain.objects.VispyObj.to_kwargs.html">visbrain.objects.VispyObj.to_kwargs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../VispyObj/visbrain.objects.VispyObj.update.html">visbrain.objects.VispyObj.update</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../VispyObj/visbrain.objects.VispyObj.update_from_dict.html">visbrain.objects.VispyObj.update_from_dict</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../visbrain.objects.VolumeObj.html">visbrain.objects.VolumeObj</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../VolumeObj/visbrain.objects.VolumeObj.__init__.html">visbrain.objects.VolumeObj.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../VolumeObj/visbrain.objects.VolumeObj.animate.html">visbrain.objects.VolumeObj.animate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../VolumeObj/visbrain.objects.VolumeObj.copy.html">visbrain.objects.VolumeObj.copy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../VolumeObj/visbrain.objects.VolumeObj.describe_tree.html">visbrain.objects.VolumeObj.describe_tree</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../VolumeObj/visbrain.objects.VolumeObj.extract_activity.html">visbrain.objects.VolumeObj.extract_activity</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../VolumeObj/visbrain.objects.VolumeObj.list.html">visbrain.objects.VolumeObj.list</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../VolumeObj/visbrain.objects.VolumeObj.pos_to_slice.html">visbrain.objects.VolumeObj.pos_to_slice</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../VolumeObj/visbrain.objects.VolumeObj.preview.html">visbrain.objects.VolumeObj.preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../VolumeObj/visbrain.objects.VolumeObj.record_animation.html">visbrain.objects.VolumeObj.record_animation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../VolumeObj/visbrain.objects.VolumeObj.remove.html">visbrain.objects.VolumeObj.remove</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../VolumeObj/visbrain.objects.VolumeObj.save.html">visbrain.objects.VolumeObj.save</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../VolumeObj/visbrain.objects.VolumeObj.screenshot.html">visbrain.objects.VolumeObj.screenshot</a></li>
@@ -714,19 +792,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../VolumeObj/visbrain.objects.VolumeObj.update.html">visbrain.objects.VolumeObj.update</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../VolumeObj/visbrain.objects.VolumeObj.update_from_dict.html">visbrain.objects.VolumeObj.update_from_dict</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../visbrain.objects.VolumeObj.html#examples-using-visbrain-objects-volumeobj">Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.objects.VolumeObj</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../visbrain.objects.VispyObj.html">visbrain.objects.VispyObj</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../VispyObj/visbrain.objects.VispyObj.__init__.html">visbrain.objects.VispyObj.__init__</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../VispyObj/visbrain.objects.VispyObj.copy.html">visbrain.objects.VispyObj.copy</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../VispyObj/visbrain.objects.VispyObj.describe_tree.html">visbrain.objects.VispyObj.describe_tree</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../VispyObj/visbrain.objects.VispyObj.preview.html">visbrain.objects.VispyObj.preview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../VispyObj/visbrain.objects.VispyObj.screenshot.html">visbrain.objects.VispyObj.screenshot</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../VispyObj/visbrain.objects.VispyObj.set_shortcuts_to_canvas.html">visbrain.objects.VispyObj.set_shortcuts_to_canvas</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../VispyObj/visbrain.objects.VispyObj.to_dict.html">visbrain.objects.VispyObj.to_dict</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../VispyObj/visbrain.objects.VispyObj.to_kwargs.html">visbrain.objects.VispyObj.to_kwargs</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../VispyObj/visbrain.objects.VispyObj.update.html">visbrain.objects.VispyObj.update</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../VispyObj/visbrain.objects.VispyObj.update_from_dict.html">visbrain.objects.VispyObj.update_from_dict</a></li>
 </ul>
 </li>
 </ul>
@@ -917,7 +982,7 @@
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2018-12-07.</p>
+        <p>&copy; Copyright Last updated on 2018-12-17.</p>
     </footer>
 
   </body>

@@ -15,9 +15,11 @@ visbrain.objects.TimeFrequencyObj
       :toctree: TimeFrequencyObj
    
       ~TimeFrequencyObj.__init__
+      ~TimeFrequencyObj.animate
       ~TimeFrequencyObj.copy
       ~TimeFrequencyObj.describe_tree
       ~TimeFrequencyObj.preview
+      ~TimeFrequencyObj.record_animation
       ~TimeFrequencyObj.screenshot
       ~TimeFrequencyObj.set_data
       ~TimeFrequencyObj.set_shortcuts_to_canvas

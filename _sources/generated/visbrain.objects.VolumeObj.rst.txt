@@ -15,12 +15,14 @@ visbrain.objects.VolumeObj
       :toctree: VolumeObj
    
       ~VolumeObj.__init__
+      ~VolumeObj.animate
       ~VolumeObj.copy
       ~VolumeObj.describe_tree
       ~VolumeObj.extract_activity
       ~VolumeObj.list
       ~VolumeObj.pos_to_slice
       ~VolumeObj.preview
+      ~VolumeObj.record_animation
       ~VolumeObj.remove
       ~VolumeObj.save
       ~VolumeObj.screenshot
