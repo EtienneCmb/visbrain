@@ -448,7 +448,7 @@ def mpl_preview(canvas, **kw):
     import matplotlib.pyplot as plt
     import matplotlib.image as mpimg
 
-    save_as = os.path.join(path_to_tmp(), 'mpl_render.png')
+    save_as = os.path.join(path_to_tmp(), 'mpl_render.jpg')
     write_fig_canvas(save_as, canvas, **kw)
 
     img = mpimg.imread(save_as)
