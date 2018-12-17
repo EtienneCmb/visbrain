@@ -19,7 +19,6 @@ __all__ = ('GridSignal')
 vertex_shader = """
 #version 120
 varying vec3 v_index;
-varying vec4 v_color;
 // Varying variables used for clipping in the fragment shader.
 varying vec2 v_position;
 varying vec4 v_ab;
@@ -43,9 +42,6 @@ void main() {
     // Apply the static subplot transformation + scaling.
     gl_Position = $transform(vec4(a*$u_scale*position+b, 0.0, 1.0));
 
-    // Use texture 1D to get the color.
-    v_color = texture1D($u_text, $a_color);
-
     // For clipping test in the fragment shader.
     v_index = $a_index;
     v_position = gl_Position.xy;
@@ -54,11 +50,11 @@ void main() {
 
 fragment_shader = """
 #version 120
-varying vec4 v_color;
+varying vec4 u_color;
 varying vec3 v_index;
 varying vec2 v_position;
 void main() {
-    gl_FragColor = vec4(v_color.xyz, 1.);
+    gl_FragColor = vec4($u_color);
 
     // Discard the fragments between the signals (emulate glMultiDrawArrays).
     if ((fract(v_index.x) > 0.) || (fract(v_index.y) > 0.))
@@ -83,16 +79,27 @@ class GridSignalVisual(visuals.Visual):
     space : float | 2.
         Space between subplots.
     scale : tuple | (1., 1.)
-        Tuple descigin the scaling along the x and y-axis.
+        Tuple describing the scaling along the x and y-axis.
+    font_size : float | 10.
+        Title font size.
+    width : float | 1.
+        Line width.
+    method : {'gl', 'agg'}
+        Plotting method. 'gl' is faster but 'agg' should be antialiased.
+    force_shape : tuple | None
+        Force the shape of data. Should be a tuple of two ints.
+    plt_as : {'grid', 'row', 'col'}
+        Plotting type.
     """
 
     def __len__(self):
         """Return the number of time points."""
         return self._n
 
-    def __init__(self, data, axis=-1, sf=1., color='random', title=None,
-                 space=2., scale=(.98, .9), font_size=10., width=1.,
-                 method='gl', force_shape=None):
+    def __init__(self, data, axis=-1, sf=1., color='white', title=None,
+                 title_color='white', title_bold=False, space=2.,
+                 scale=(1., 1.), font_size=10., width=1., method='gl',
+                 force_shape=None, plt_as='grid'):
         """Init."""
         # =========================== CHECKING ===========================
         assert isinstance(data, np.ndarray) and (data.ndim <= 3)
@@ -108,7 +115,8 @@ class GridSignalVisual(visuals.Visual):
                           blend=True, blend_func=('src_alpha',
                                                   'one_minus_src_alpha'))
         self._draw_mode = 'line_strip'
-        self._txt = Text(bold=False, font_size=font_size)
+        self._txt = Text(bold=title_bold, font_size=font_size,
+                         color=title_color)
 
         # =========================== DATA ===========================
         # Keep some inputs :
@@ -122,6 +130,9 @@ class GridSignalVisual(visuals.Visual):
         self._prep = PrepareData(axis=-1)
         self.width = width
         self.method = method
+        assert plt_as in ['grid', 'row', 'col'], ("`plt_as` should either be "
+                                                  "'grid', 'row' or 'col'")
+        self._plt_as = plt_as
 
         # =========================== BUFFERS ===========================
         # Create buffers (for data, index and color)
@@ -129,7 +140,6 @@ class GridSignalVisual(visuals.Visual):
         rnd_3 = np.zeros((1, 3), dtype=np.float32)
         self._dbuffer = gloo.VertexBuffer(rnd_1)
         self._ibuffer = gloo.VertexBuffer(rnd_3)
-        self._cbuffer = gloo.VertexBuffer()
         # Send to the program :
         self.shared_program.vert['a_position'] = self._dbuffer
         self.shared_program.vert['a_index'] = self._ibuffer
@@ -137,11 +147,11 @@ class GridSignalVisual(visuals.Visual):
         self.shared_program.vert['u_n'] = len(self)
 
         # Set data :
-        self.set_data(data, axis, color, title, force_shape)
+        self.set_data(data, axis, color, title, force_shape, plt_as)
         self.freeze()
 
     def set_data(self, data=None, axis=None, color=None, title=None,
-                 force_shape=None):
+                 force_shape=None, plt_as='grid'):
         """Set data to the grid of signals.
 
         Parameters
@@ -153,13 +163,10 @@ class GridSignalVisual(visuals.Visual):
         random : array_like/string/tuple | 'random'
             Use 'random' for random colors or a color name for uniform color.
         """
-        rnd_dyn = (.2, .8)  # random color range
         # ====================== CHECKING ======================
         # Axis :
         axis = axis if isinstance(axis, int) else self._axis
         axis = len(self._sh) - 1 if axis == -1 else axis
-
-        # ====================== CHECKING ======================
         # Data :
         if isinstance(data, np.ndarray):
             # -------------- (n_rows, n_cols, n_time) --------------
@@ -181,6 +188,12 @@ class GridSignalVisual(visuals.Visual):
             # -------------- Signals index --------------
             m = np.prod(list(data.shape)[0:-1])
             sig_index = np.arange(m).reshape(*g_size)
+
+            # -------------- Plot type --------------
+            if plt_as == 'row':
+                force_shape = (1, g_size[0] * g_size[1])
+            elif plt_as == 'col':
+                force_shape = (g_size[0] * g_size[1], 1)
 
             # -------------- Optimal 2-D --------------
             self._data = data
@@ -204,8 +217,11 @@ class GridSignalVisual(visuals.Visual):
             data = self._prep._prepare_data(self._sf, data, 0)
             # Demean and normalize :
             kw = {'axis': -1, 'keepdims': True}
+            dmax = np.abs(data).max(**kw)
+            dmax[dmax == 0.] = 1.
             data -= data.mean(**kw)
-            data /= np.abs(data).max(**kw)
+            data /= dmax
+            # data /= data.max()
             self._dbuffer.set_data(vispy_array(data))
             self.g_size = g_size
 
@@ -219,21 +235,8 @@ class GridSignalVisual(visuals.Visual):
 
         # ====================== COLOR ======================
         if color is not None:
-            g_size = np.array(self.g_size)
-            n = len(self)
-            if color == 'random':  # (m, 3) random color
-                color_1d = np.random.uniform(size=(m, 3), low=rnd_dyn[0],
-                                             high=rnd_dyn[1])
-                color_idx = np.mgrid[0:m, 0:len(self)][0] / m
-            elif color is not None:  # (m, 3) uniform color
-                color_1d = color2vb(color)
-                color_idx = np.zeros((m * len(self)), dtype=np.float32)
-            # Send texture to vertex shader :
-            text_1d = gloo.Texture1D(color_1d.astype(np.float32))
-            self.shared_program.vert['u_text'] = text_1d
-            # Send color index to use for the texture :
-            self._cbuffer.set_data(color_idx.astype(np.float32))
-            self.shared_program.vert['a_color'] = self._cbuffer
+            color_1d = color2vb(color)
+            self.shared_program.frag['u_color'] = color_1d.ravel()
 
         # ====================== TITLES ======================
         # Titles checking :
@@ -244,7 +247,7 @@ class GridSignalVisual(visuals.Visual):
         if not self._txt.text:
             self._txt.text = title
         # Get titles position :
-        x_factor, y_factor = 1. / (n_cols), 1. / (n_rows)
+        x_factor, y_factor = 1. / n_cols, 1. / n_rows
         r_x = np.linspace(-1. + x_factor, 1. - x_factor, n_cols)
         r_x = np.tile(r_x, n_rows)
         r_y = np.linspace(-1. + y_factor, 1. - y_factor, n_rows)[::-1]
@@ -257,7 +260,6 @@ class GridSignalVisual(visuals.Visual):
         """Clean buffers."""
         self._dbuffer.delete()
         self._ibuffer.delete()
-        self._cbuffer.delete()
 
     def _convert_row_cols(self, row, col):
         """Convert row and col according to the optimal grid."""

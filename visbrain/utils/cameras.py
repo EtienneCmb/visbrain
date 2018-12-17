@@ -2,10 +2,10 @@
 import logging
 import numpy as np
 
-from vispy.scene.cameras import PanZoomCamera, TurntableCamera
+from vispy.scene.cameras import PanZoomCamera, TurntableCamera, BaseCamera
 
-__all__ = ['FixedCam', 'rotate_turntable', 'optimal_scale_factor',
-           'merge_cameras']
+__all__ = ['FixedCam', 'ScrollCamera', 'rotate_turntable',
+           'optimal_scale_factor', 'merge_cameras']
 
 logger = logging.getLogger('visbrain')
 
@@ -20,6 +20,73 @@ class FixedCam(PanZoomCamera):
     def viewbox_mouse_event(self, event):
         """Ignore mouse event."""
         pass
+
+
+class ScrollCamera(PanZoomCamera):
+    """Scrolling camera.
+
+    Parameters
+    ----------
+    args : tuple
+        Arguments to pass to the PanZoom camera.
+    sc_axis : {'x', 'y'}
+        Scrolling axes.
+    limits : tuple | None
+        Tuple of floats describing the axis limits.
+    smooth : float | 1.
+        Scrolling smooth factor. Higher values can be used to reduce the
+        scrolling.
+    kwargs : dict | {}
+        Optional arguments to pass to the PanZoom camera.
+    """
+
+    def __init__(self, *args, sc_axis='x', limits=None, smooth=1., **kwargs):
+        """Init."""
+        PanZoomCamera.__init__(self, *args, **kwargs)
+
+        self._ax = 0 if sc_axis == 'x' else 1
+        self._limits = limits
+        self._smooth = smooth
+
+    def viewbox_mouse_event(self, event):
+        """Ignore mouse event."""
+        if event.handled or not self.interactive:
+            return
+
+        # Scrolling
+        BaseCamera.viewbox_mouse_event(self, event)
+
+        if event.type == 'mouse_wheel':
+            pos = list(self.rect.pos)
+            ax = self._ax
+            pos[ax] = pos[ax] + event.delta[1] / self._smooth
+            if isinstance(self._limits, (list, tuple)):
+                if not (self._limits[0] <= pos[ax] <= self._limits[1]):
+                    return
+            size = self.rect.size
+            self.rect = (pos[0], pos[1], size[0], size[1])
+        elif event.type == 'mouse_move':
+            if event.press_event is None:
+                return
+
+            modifiers = event.mouse_event.modifiers
+            if 2 in event.buttons and not modifiers:
+                # Zoom
+                p1c = np.array(event.last_event.pos)[:2]
+                p2c = np.array(event.pos)[:2]
+                scale = ((1 + self.zoom_factor) **
+                         ((p1c - p2c) * np.array([1, -1])))
+                center = self._transform.imap(event.press_event.pos[:2])
+                self.zoom(scale, center)
+                event.handled = True
+            else:
+                event.handled = False
+        elif event.type == 'mouse_press':
+            # accept the event if it is button 1 or 2.
+            # This is required in order to receive future events
+            event.handled = event.button in [1, 2]
+        else:
+            event.handled = False
 
 
 def _default_cam_config(use_for, values):

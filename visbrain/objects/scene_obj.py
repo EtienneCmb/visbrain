@@ -605,6 +605,33 @@ class SceneObj(object):
         write_fig_canvas(saveas, self.canvas,
                          widget=self.canvas.central_widget, **kwargs)
 
+    def record_animation(self, name, n_pic=10):
+        """Record an animated scene and save as a *.gif file.
+
+        Note that this method :
+
+            * Only 3D objects can be animated.
+            * Requires the python package imageio
+
+        Parameters
+        ----------
+        name : string
+            Name of the gif file (e.g 'myfile.gif')
+        n_pic : int | 10
+            Number of pictures to use to render the gif.
+        """
+        import imageio
+        self._gl_uniform_transforms()
+        subplt = [(k[0] - 1, k[1] - 1) for k in self._grid_desc.keys()]
+        writer = imageio.get_writer(name)
+        for k in range(n_pic):
+            for obj in subplt:
+                if isinstance(self[obj].camera, scene.cameras.TurntableCamera):
+                    self[obj].camera.azimuth += 360. / n_pic
+            im = self.canvas.render()
+            writer.append_data(im)
+        writer.close()
+
     def _scene_shortcuts(self):
         """Add shortcuts to the scene."""
         # On key pressed :

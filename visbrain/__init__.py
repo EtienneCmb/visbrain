@@ -18,7 +18,7 @@ See http://visbrain.org/ for a complete and step-by step documentation
 """
 import sys as _sys
 
-__version__ = "0.4.3"
+__version__ = "0.4.4"
 
 
 # PyQt5 crash if an error occured. This small function fix it for all modules

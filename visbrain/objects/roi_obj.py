@@ -595,6 +595,7 @@ class RoiObj(_Volume):
         self.mesh._camera.scale_factor = sc
         self.mesh._camera.distance = 4 * sc
         self.mesh._camera.center = center
+        self.camera = self.mesh._camera
         return self.mesh._camera
 
     ###########################################################################
