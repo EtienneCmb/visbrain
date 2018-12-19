@@ -213,6 +213,10 @@ class BrainObj(VisbrainObject):
                 * Right : 'sagittal_1', 'right'
                 * Front : 'coronal_0', 'front'
                 * Back : 'coronal_1', 'back'
+                * Side front-left : 'side-fl'
+                * Side front-right : 'side-fr'
+                * Side back-left : 'side-bl'
+                * Side back-right : 'side-br'
         custom : tuple | None
             Custom rotation. This parameter must be a tuple of two floats
             respectively describing the (azimuth, elevation).
