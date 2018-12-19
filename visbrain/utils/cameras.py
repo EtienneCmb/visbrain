@@ -101,6 +101,10 @@ _default_cam_config(['front', 'coronal_0', 'coronal'], (180., 0., [0, 2], -1))
 _default_cam_config(['back', 'coronal_1'], (0., 0., [0, 2], -1))
 _default_cam_config(['top', 'axial_0', 'axial'], (0., 90., [0, 1], 1))
 _default_cam_config(['bottom', 'axial_1'], (0., -90., [0, 1], 1))
+_default_cam_config(['side-fr'], (-150, 0., [0, 2], -1))
+_default_cam_config(['side-fl'], (150, 0., [0, 2], -1))
+_default_cam_config(['side-br'], (-330, 0., [0, 2], -1))
+_default_cam_config(['side-bl'], (330, 0., [0, 2], -1))
 
 
 def rotate_turntable(fixed=None, camera_state={}, camera=None,
