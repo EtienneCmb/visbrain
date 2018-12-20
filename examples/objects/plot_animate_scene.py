@@ -12,7 +12,7 @@ from visbrain.io import download_file
 
 
 ###############################################################################
-# Doanload data and create the scene
+# Download data and create the scene
 ###############################################################################
 # The SceneObj is Matplotlib subplot like in which, you can add visbrain's
 # objects. We first create the scene with a black background, a fixed size
