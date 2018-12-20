@@ -52,6 +52,12 @@
         "sleep_matlab.zip": "https://www.dropbox.com/s/bmfc2u55xsejbaf/sleep_matlab.zip?dl=1",
         "topoplot_data.npz": "https://www.dropbox.com/s/m76y3p0fyj6lxht/topoplot_data.npz?dl=1",
         "MIST_ROI.zip": "https://www.dropbox.com/s/3v24xqrc715e2w5/MIST_ROI.zip?dl=1",
-        "s101_jbe.hyp": "https://www.dropbox.com/s/69c5cke4tuehyqb/s101_jbe.hyp?dl=1"
+        "s101_jbe.hyp": "https://www.dropbox.com/s/69c5cke4tuehyqb/s101_jbe.hyp?dl=1",
+        "ferret.x3d": "https://www.dropbox.com/s/lkiggjdh721ry6x/ferret.x3d?dl=1",
+        "macaque_1.x3d": "https://www.dropbox.com/s/yt5ctaig2uodhpv/macaque_1.x3d?dl=1",
+        "macaque_2.x3d": "https://www.dropbox.com/s/euyzidzuby3d3mj/macaque_2.x3d?dl=1",
+        "mouse.x3d": "https://www.dropbox.com/s/sk0o0yyyse4gq1k/mouse.x3d?dl=1",
+        "rat.x3d": "https://www.dropbox.com/s/e6l83lj3y9l5v2g/rat.x3d?dl=1",
+        "human.x3d": "https://www.dropbox.com/s/qdscp6o6jhi32vg/human.x3d?dl=1"
     }
 }
