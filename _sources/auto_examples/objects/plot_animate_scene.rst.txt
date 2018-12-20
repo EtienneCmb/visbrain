@@ -29,7 +29,7 @@ animations can only be used with 3D objects.
 
 
 
-Doanload data and create the scene
+Download data and create the scene
 ##############################################################################
  The SceneObj is Matplotlib subplot like in which, you can add visbrain's
  objects. We first create the scene with a black background, a fixed size
@@ -193,7 +193,7 @@ Save the animation
     [...........                             ] 29.18002 | downloading       [.......................                 ] 58.36005 / downloading       [...................................     ] 87.54007 - downloading       [........................................] 100.00000 \ downloading   File saved as /home/circleci/.vispy/data/fonts/OpenSans-Bold.ttf.
 
 
-**Total running time of the script:** ( 0 minutes  15.117 seconds)
+**Total running time of the script:** ( 0 minutes  14.671 seconds)
 
 
 .. _sphx_glr_download_auto_examples_objects_plot_animate_scene.py:

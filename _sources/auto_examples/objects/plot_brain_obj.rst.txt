@@ -20,6 +20,10 @@ object i.e :
   * Parcellize the brain and send data to selected parcellates
   * Add fMRI activation and MEG inverse solution
 
+Data for fMRI activations and MEG inverse solutoin comes from the PySurfer
+software (https://github.com/nipy/PySurfer/). Parcellation file comes from
+MNE-Python (https://github.com/mne-tools/mne-python).
+
 
 
 .. code-block:: python
@@ -375,7 +379,7 @@ MEG inverse solution
     [............                            ] 30.15090 | downloading       [........................                ] 60.30180 / downloading       [....................................    ] 90.45271 - downloading       [........................................] 100.00000 \ downloading   File saved as /home/circleci/.vispy/data/fonts/OpenSans-Regular.ttf.
 
 
-**Total running time of the script:** ( 0 minutes  54.360 seconds)
+**Total running time of the script:** ( 0 minutes  55.588 seconds)
 
 
 .. _sphx_glr_download_auto_examples_objects_plot_brain_obj.py:

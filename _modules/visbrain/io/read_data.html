@@ -208,7 +208,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/index.html#sceneobj-combine-objects-into-subplots">SceneObj : combine objects into subplots</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/objects/plot_animate_scene.html">Animate objects in the scene</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/plot_animate_scene.html#doanload-data-and-create-the-scene">Doanload data and create the scene</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/plot_animate_scene.html#download-data-and-create-the-scene">Download data and create the scene</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/plot_animate_scene.html#animate-a-single-brain-object">Animate a single brain object</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/plot_animate_scene.html#animate-multiple-objects">Animate multiple objects</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/plot_animate_scene.html#animate-sources">Animate sources</a></li>
@@ -229,7 +229,17 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/plot_brain_obj.html#fun-stuff">“Fun” stuff</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/objects/plot_combine_objects.html">Combine multiple objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/objects/plot_combine_objects.html">Combine multiple objects</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/plot_combine_objects.html#scene-creation">Scene creation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/plot_combine_objects.html#fmri-activation">fMRI activation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/plot_combine_objects.html#region-of-interest-roi">Region Of Interest (ROI)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/plot_combine_objects.html#sources">Sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/plot_combine_objects.html#d-time-series">3D Time-series</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/plot_combine_objects.html#d-pictures">3D Pictures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/plot_combine_objects.html#connectivity">Connectivity</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/plot_combine_objects.html#cross-sections">Cross-sections</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/objects/plot_connectivity_obj.html">Connectivity object (ConnectObj) : complete tutorial</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/plot_connectivity_obj.html#download-data-and-define-the-scene">Download data and define the scene</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/plot_connectivity_obj.html#color-by-connectivity-strength">Color by connectivity strength</a></li>
@@ -315,6 +325,15 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/plot_volume_obj.html#select-volume-levels">Select volume levels</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/plot_volume_obj.html#mri-file-mip-rendering">MRI file : mip rendering</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/plot_volume_obj.html#mri-file-translucent-rendering">MRI file : translucent rendering</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../auto_examples/objects/plot_x3d_files.html">Plot x3d files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/plot_x3d_files.html#ferret-brain">Ferret brain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/plot_x3d_files.html#macaque-brain-1">Macaque brain (1)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/plot_x3d_files.html#macaque-brain-2">Macaque brain (2)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/plot_x3d_files.html#mouse-brain">Mouse brain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/plot_x3d_files.html#rat-brain">Rat brain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../auto_examples/objects/plot_x3d_files.html#human-brain">Human brain</a></li>
 </ul>
 </li>
 </ul>
@@ -961,7 +980,7 @@
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;read_mat&#39;</span><span class="p">,</span> <span class="s1">&#39;read_pickle&#39;</span><span class="p">,</span> <span class="s1">&#39;read_npy&#39;</span><span class="p">,</span> <span class="s1">&#39;read_npz&#39;</span><span class="p">,</span> <span class="s1">&#39;read_txt&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;read_csv&#39;</span><span class="p">,</span> <span class="s1">&#39;read_json&#39;</span><span class="p">,</span> <span class="s1">&#39;read_stc&#39;</span><span class="p">)</span>
+           <span class="s1">&#39;read_csv&#39;</span><span class="p">,</span> <span class="s1">&#39;read_json&#39;</span><span class="p">,</span> <span class="s1">&#39;read_stc&#39;</span><span class="p">,</span> <span class="s1">&#39;read_x3d&#39;</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">read_mat</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -1059,6 +1078,48 @@
     <span class="c1"># close the file</span>
     <span class="n">fid</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">stc</span></div>
+
+
+<span class="k">def</span> <span class="nf">read_x3d</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Read x3d files.</span>
+
+<span class="sd">    This code has been adapted from :</span>
+<span class="sd">    https://github.com/INCF/Scalable-Brain-Atlas</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path : string</span>
+<span class="sd">        Full path to a .x3d file.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    vertices : array_like</span>
+<span class="sd">        Array of vertices of shape (n_vertices, 3)</span>
+<span class="sd">    faces : array_like</span>
+<span class="sd">        Array of faces of shape (n_faces, 3)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">lxml</span> <span class="k">import</span> <span class="n">etree</span>
+    <span class="kn">import</span> <span class="nn">re</span>
+
+    <span class="c1"># Read root node :</span>
+    <span class="n">tree</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">parser</span><span class="o">=</span><span class="n">etree</span><span class="o">.</span><span class="n">ETCompatXMLParser</span><span class="p">(</span><span class="n">huge_tree</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="n">root_node</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span>
+
+    <span class="c1"># Get mesh faces :</span>
+    <span class="n">face_node</span> <span class="o">=</span> <span class="n">root_node</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;.//IndexedFaceSet&#39;</span><span class="p">)</span>
+    <span class="n">faces</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;[\s,]+&#39;</span><span class="p">,</span> <span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">face_node</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;coordIndex&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+    <span class="n">faces</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;,-1,&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">faces</span><span class="p">)</span>
+    <span class="n">faces</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;,-1$&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">faces</span><span class="p">)</span>
+    <span class="n">faces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">faces</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;,&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">faces</span> <span class="o">=</span> <span class="n">faces</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">faces</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">3</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+
+    <span class="c1"># Get mesh vertices :</span>
+    <span class="n">vertex_node</span> <span class="o">=</span> <span class="n">face_node</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;Coordinate&#39;</span><span class="p">)</span>
+    <span class="n">vertices</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;[\s,]+&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">vertex_node</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;point&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+    <span class="n">vertices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vertices</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">vertices</span> <span class="o">=</span> <span class="n">vertices</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">vertices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">3</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span>
 </pre></div>
 
     </div>
@@ -1081,7 +1142,7 @@
         <div class="container">
             <img src="../../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2018-12-17.</p>
+        <p>&copy; Copyright Last updated on 2018-12-20.</p>
     </footer>
 
   </body>

@@ -210,7 +210,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../auto_examples/index.html#sceneobj-combine-objects-into-subplots">SceneObj : combine objects into subplots</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../auto_examples/objects/plot_animate_scene.html">Animate objects in the scene</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_animate_scene.html#doanload-data-and-create-the-scene">Doanload data and create the scene</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_animate_scene.html#download-data-and-create-the-scene">Download data and create the scene</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_animate_scene.html#animate-a-single-brain-object">Animate a single brain object</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_animate_scene.html#animate-multiple-objects">Animate multiple objects</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_animate_scene.html#animate-sources">Animate sources</a></li>
@@ -231,7 +231,17 @@
 <li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_brain_obj.html#fun-stuff">“Fun” stuff</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html">Combine multiple objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html">Combine multiple objects</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html#scene-creation">Scene creation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html#fmri-activation">fMRI activation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html#region-of-interest-roi">Region Of Interest (ROI)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html#sources">Sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html#d-time-series">3D Time-series</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html#d-pictures">3D Pictures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html#connectivity">Connectivity</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html#cross-sections">Cross-sections</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../auto_examples/objects/plot_connectivity_obj.html">Connectivity object (ConnectObj) : complete tutorial</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_connectivity_obj.html#download-data-and-define-the-scene">Download data and define the scene</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_connectivity_obj.html#color-by-connectivity-strength">Color by connectivity strength</a></li>
@@ -317,6 +327,15 @@
 <li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_volume_obj.html#select-volume-levels">Select volume levels</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_volume_obj.html#mri-file-mip-rendering">MRI file : mip rendering</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_volume_obj.html#mri-file-translucent-rendering">MRI file : translucent rendering</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../auto_examples/objects/plot_x3d_files.html">Plot x3d files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_x3d_files.html#ferret-brain">Ferret brain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_x3d_files.html#macaque-brain-1">Macaque brain (1)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_x3d_files.html#macaque-brain-2">Macaque brain (2)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_x3d_files.html#mouse-brain">Mouse brain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_x3d_files.html#rat-brain">Rat brain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_x3d_files.html#human-brain">Human brain</a></li>
 </ul>
 </li>
 </ul>
@@ -958,7 +977,7 @@
 <h1>visbrain.objects.BrainObj<a class="headerlink" href="#visbrain-objects-brainobj" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="visbrain.objects.BrainObj">
-<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">BrainObj</code><span class="sig-paren">(</span><em>name</em>, <em>vertices=None</em>, <em>faces=None</em>, <em>normals=None</em>, <em>lr_index=None</em>, <em>hemisphere='both'</em>, <em>translucent=True</em>, <em>sulcus=False</em>, <em>invert_normals=False</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>_scale=1.0</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/brain_obj.html#BrainObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L18-L698"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">BrainObj</code><span class="sig-paren">(</span><em>name</em>, <em>vertices=None</em>, <em>faces=None</em>, <em>normals=None</em>, <em>lr_index=None</em>, <em>hemisphere='both'</em>, <em>translucent=True</em>, <em>sulcus=False</em>, <em>invert_normals=False</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>_scale=1.0</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/brain_obj.html#BrainObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L18-L710"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a brain object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -966,10 +985,16 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
 <dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
-<dd><p class="first last">Name of the brain object. If brain is ‘B1’ or ‘B2’ or ‘B3’ use a
+<dd><p class="first">Name of the brain object. If brain is ‘B1’ or ‘B2’ or ‘B3’ use a
 default brain template. If name is ‘white’, ‘inflated’ or
 ‘sphere’ download the template (if needed). Otherwise, at least
-vertices and faces must be defined.</p>
+vertices and faces must be defined. The name parameter can also be the
+path to a file with one the following extensions :</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>x3d (XML files)</li>
+</ul>
+</div></blockquote>
 </dd>
 <dt><strong>vertices</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array_like | None</span></dt>
 <dd><p class="first last">Mesh vertices to use for the brain. Must be an array of shape
@@ -1109,7 +1134,7 @@ hemisphere.</p>
 </table>
 <dl class="method">
 <dt id="visbrain.objects.BrainObj.add_activation">
-<code class="descname">add_activation</code><span class="sig-paren">(</span><em>data=None</em>, <em>vertices=None</em>, <em>smoothing_steps=5</em>, <em>file=None</em>, <em>hemisphere=None</em>, <em>hide_under=None</em>, <em>n_contours=None</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>under='gray'</em>, <em>over='red'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/brain_obj.html#BrainObj.add_activation"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L284-L400"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.add_activation" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_activation</code><span class="sig-paren">(</span><em>data=None</em>, <em>vertices=None</em>, <em>smoothing_steps=5</em>, <em>file=None</em>, <em>hemisphere=None</em>, <em>hide_under=None</em>, <em>n_contours=None</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>under='gray'</em>, <em>over='red'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/brain_obj.html#BrainObj.add_activation"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L296-L412"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.add_activation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add activation to the brain template.</p>
 <p>This method can be used for :</p>
 <blockquote>
@@ -1216,7 +1241,7 @@ current monitor. Currently this is simply 1/60.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.BrainObj.clean">
-<code class="descname">clean</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/brain_obj.html#BrainObj.clean"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L136-L140"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.clean" title="Permalink to this definition">¶</a></dt>
+<code class="descname">clean</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/brain_obj.html#BrainObj.clean"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L144-L148"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.clean" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clean brain object.</p>
 </dd></dl>
 
@@ -1246,7 +1271,7 @@ current monitor. Currently this is simply 1/60.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.BrainObj.get_parcellates">
-<code class="descname">get_parcellates</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/brain_obj.html#BrainObj.get_parcellates"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L508-L522"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.get_parcellates" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_parcellates</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/brain_obj.html#BrainObj.get_parcellates"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L520-L534"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.get_parcellates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the list of supported parcellates names and index.</p>
 <p>This method require the pandas and nibabel packages to be installed.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1272,7 +1297,7 @@ current monitor. Currently this is simply 1/60.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.BrainObj.list">
-<code class="descname">list</code><span class="sig-paren">(</span><em>file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/brain_obj.html#BrainObj.list"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L156-L158"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.list" title="Permalink to this definition">¶</a></dt>
+<code class="descname">list</code><span class="sig-paren">(</span><em>file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/brain_obj.html#BrainObj.list"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L164-L166"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the list of all installed templates.</p>
 </dd></dl>
 
@@ -1290,7 +1315,7 @@ current monitor. Currently this is simply 1/60.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.BrainObj.parcellize">
-<code class="descname">parcellize</code><span class="sig-paren">(</span><em>file</em>, <em>select=None</em>, <em>hemisphere=None</em>, <em>data=None</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>under='gray'</em>, <em>vmax=None</em>, <em>over='red'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/brain_obj.html#BrainObj.parcellize"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L402-L506"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.parcellize" title="Permalink to this definition">¶</a></dt>
+<code class="descname">parcellize</code><span class="sig-paren">(</span><em>file</em>, <em>select=None</em>, <em>hemisphere=None</em>, <em>data=None</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>under='gray'</em>, <em>vmax=None</em>, <em>over='red'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/brain_obj.html#BrainObj.parcellize"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L414-L518"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.parcellize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parcellize the brain surface using a .annot file.</p>
 <p>This method require the nibabel package to be installed.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1381,7 +1406,7 @@ object.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.BrainObj.project_sources">
-<code class="descname">project_sources</code><span class="sig-paren">(</span><em>s_obj</em>, <em>project='modulation'</em>, <em>radius=10.0</em>, <em>contribute=False</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>under='black'</em>, <em>vmax=None</em>, <em>over='red'</em>, <em>mask_color=None</em>, <em>to_overlay=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/brain_obj.html#BrainObj.project_sources"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L244-L282"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.project_sources" title="Permalink to this definition">¶</a></dt>
+<code class="descname">project_sources</code><span class="sig-paren">(</span><em>s_obj</em>, <em>project='modulation'</em>, <em>radius=10.0</em>, <em>contribute=False</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>under='black'</em>, <em>vmax=None</em>, <em>over='red'</em>, <em>mask_color=None</em>, <em>to_overlay=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/brain_obj.html#BrainObj.project_sources"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L256-L294"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.project_sources" title="Permalink to this definition">¶</a></dt>
 <dd><p>Project source’s activity or repartition onto the brain object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1465,19 +1490,19 @@ the color of the masked sources is going to be used.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.BrainObj.remove">
-<code class="descname">remove</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/brain_obj.html#BrainObj.remove"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L152-L154"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.remove" title="Permalink to this definition">¶</a></dt>
+<code class="descname">remove</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/brain_obj.html#BrainObj.remove"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L160-L162"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.remove" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove a brain template.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="visbrain.objects.BrainObj.reset_camera">
-<code class="descname">reset_camera</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/brain_obj.html#BrainObj.reset_camera"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L187-L200"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.reset_camera" title="Permalink to this definition">¶</a></dt>
+<code class="descname">reset_camera</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/brain_obj.html#BrainObj.reset_camera"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L195-L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.reset_camera" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reset the camera.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="visbrain.objects.BrainObj.rotate">
-<code class="descname">rotate</code><span class="sig-paren">(</span><em>fixed=None</em>, <em>scale_factor=None</em>, <em>custom=None</em>, <em>margin=1.08</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/brain_obj.html#BrainObj.rotate"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L202-L236"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.rotate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">rotate</code><span class="sig-paren">(</span><em>fixed=None</em>, <em>scale_factor=None</em>, <em>custom=None</em>, <em>margin=1.08</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/brain_obj.html#BrainObj.rotate"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L210-L248"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.rotate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Rotate the brain using predefined rotations or a custom one.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1494,6 +1519,10 @@ the color of the masked sources is going to be used.</p>
 <li>Right : ‘sagittal_1’, ‘right’</li>
 <li>Front : ‘coronal_0’, ‘front’</li>
 <li>Back : ‘coronal_1’, ‘back’</li>
+<li>Side front-left : ‘side-fl’</li>
+<li>Side front-right : ‘side-fr’</li>
+<li>Side back-left : ‘side-bl’</li>
+<li>Side back-right : ‘side-br’</li>
 </ul>
 </div></blockquote>
 </dd>
@@ -1510,7 +1539,7 @@ respectively describing the (azimuth, elevation).</p>
 
 <dl class="method">
 <dt id="visbrain.objects.BrainObj.save">
-<code class="descname">save</code><span class="sig-paren">(</span><em>tmpfile=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/brain_obj.html#BrainObj.save"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L142-L150"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.save" title="Permalink to this definition">¶</a></dt>
+<code class="descname">save</code><span class="sig-paren">(</span><em>tmpfile=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/brain_obj.html#BrainObj.save"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L150-L158"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.save" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save the brain template (if not already saved).</p>
 </dd></dl>
 
@@ -1596,13 +1625,13 @@ object for the sceen rendering.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.BrainObj.set_data">
-<code class="descname">set_data</code><span class="sig-paren">(</span><em>name=None</em>, <em>vertices=None</em>, <em>faces=None</em>, <em>normals=None</em>, <em>lr_index=None</em>, <em>hemisphere='both'</em>, <em>invert_normals=False</em>, <em>sulcus=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/brain_obj.html#BrainObj.set_data"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L93-L134"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.set_data" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_data</code><span class="sig-paren">(</span><em>name=None</em>, <em>vertices=None</em>, <em>faces=None</em>, <em>normals=None</em>, <em>lr_index=None</em>, <em>hemisphere='both'</em>, <em>invert_normals=False</em>, <em>sulcus=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/brain_obj.html#BrainObj.set_data"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L101-L142"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.set_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load a brain template.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="visbrain.objects.BrainObj.slice">
-<code class="descname">slice</code><span class="sig-paren">(</span><em>xmin=None</em>, <em>xmax=None</em>, <em>ymin=None</em>, <em>ymax=None</em>, <em>zmin=None</em>, <em>zmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/brain_obj.html#BrainObj.slice"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L524-L542"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.slice" title="Permalink to this definition">¶</a></dt>
+<code class="descname">slice</code><span class="sig-paren">(</span><em>xmin=None</em>, <em>xmax=None</em>, <em>ymin=None</em>, <em>ymax=None</em>, <em>zmin=None</em>, <em>zmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/brain_obj.html#BrainObj.slice"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L536-L554"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.slice" title="Permalink to this definition">¶</a></dt>
 <dd><p>Take a slice of the brain.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1661,7 +1690,7 @@ object for the sceen rendering.</p>
 <img alt="../_images/sphx_glr_plot_brain_obj_thumb.png" src="../_images/sphx_glr_plot_brain_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/objects/plot_brain_obj.html#sphx-glr-auto-examples-objects-plot-brain-obj-py"><span class="std std-ref">Brain object (BrainObj) : complete tutorial</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the feasibility to combine multiple objects in the same scene. "><div class="figure" id="id7">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the feasibility to combine multiple objects in the same scene."><div class="figure" id="id7">
 <img alt="../_images/sphx_glr_plot_combine_objects_thumb.png" src="../_images/sphx_glr_plot_combine_objects_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html#sphx-glr-auto-examples-objects-plot-combine-objects-py"><span class="std std-ref">Combine multiple objects</span></a></span></p>
 </div>
@@ -1677,47 +1706,51 @@ object for the sceen rendering.</p>
 <img alt="../_images/sphx_glr_plot_source_obj_thumb.png" src="../_images/sphx_glr_plot_source_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/objects/plot_source_obj.html#sphx-glr-auto-examples-objects-plot-source-obj-py"><span class="std std-ref">Source object (SourceObj) : complete tutorial</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Control the brain i.e the brain template to use, the transparency and the hemisphere."><div class="figure" id="id11">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to plot .x3d files. 6 brain templates are going to be downloaded (t..."><div class="figure" id="id11">
+<img alt="../_images/sphx_glr_plot_x3d_files_thumb.png" src="../_images/sphx_glr_plot_x3d_files_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/objects/plot_x3d_files.html#sphx-glr-auto-examples-objects-plot-x3d-files-py"><span class="std std-ref">Plot x3d files</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Control the brain i.e the brain template to use, the transparency and the hemisphere."><div class="figure" id="id12">
 <img alt="../_images/sphx_glr_00_brain_control_thumb.png" src="../_images/sphx_glr_00_brain_control_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/gui_brain/00_brain_control.html#sphx-glr-auto-examples-gui-brain-00-brain-control-py"><span class="std std-ref">Brain control</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to define a custom brain template using your own vertices and faces..."><div class="figure" id="id12">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to define a custom brain template using your own vertices and faces..."><div class="figure" id="id13">
 <img alt="../_images/sphx_glr_02_brain_using_vertices_thumb.png" src="../_images/sphx_glr_02_brain_using_vertices_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/gui_brain/02_brain_using_vertices.html#sphx-glr-auto-examples-gui-brain-02-brain-using-vertices-py"><span class="std std-ref">Define a brain template using vertices and faces</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Add sources to the scene. This script also illustrate most of the controls for sources. Each so..."><div class="figure" id="id13">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Add sources to the scene. This script also illustrate most of the controls for sources. Each so..."><div class="figure" id="id14">
 <img alt="../_images/sphx_glr_03_sources_thumb.png" src="../_images/sphx_glr_03_sources_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/gui_brain/03_sources.html#sphx-glr-auto-examples-gui-brain-03-sources-py"><span class="std std-ref">Add deep sources</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to display Region Of Interest (ROI)."><div class="figure" id="id14">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to display Region Of Interest (ROI)."><div class="figure" id="id15">
 <img alt="../_images/sphx_glr_05_region_of_interest_thumb.png" src="../_images/sphx_glr_05_region_of_interest_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/gui_brain/05_region_of_interest.html#sphx-glr-auto-examples-gui-brain-05-region-of-interest-py"><span class="std std-ref">Add Region of interest (ROI)</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Offline rendering of selected canvas."><div class="figure" id="id15">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Offline rendering of selected canvas."><div class="figure" id="id16">
 <img alt="../_images/sphx_glr_08_screenshot_thumb.png" src="../_images/sphx_glr_08_screenshot_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/gui_brain/08_screenshot.html#sphx-glr-auto-examples-gui-brain-08-screenshot-py"><span class="std std-ref">Screenshot example</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Add vectors to the scene. This example demonstrate the two methods to defined vectors :"><div class="figure" id="id16">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Add vectors to the scene. This example demonstrate the two methods to defined vectors :"><div class="figure" id="id17">
 <img alt="../_images/sphx_glr_11_add_vectors_thumb.png" src="../_images/sphx_glr_11_add_vectors_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/gui_brain/11_add_vectors.html#sphx-glr-auto-examples-gui-brain-11-add-vectors-py"><span class="std std-ref">Add vectors</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Parcellize the brain surface using .annot files. This example use Nibabel to read the .annot fi..."><div class="figure" id="id17">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Parcellize the brain surface using .annot files. This example use Nibabel to read the .annot fi..."><div class="figure" id="id18">
 <img alt="../_images/sphx_glr_12_parcellize_thumb.png" src="../_images/sphx_glr_12_parcellize_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/gui_brain/12_parcellize.html#sphx-glr-auto-examples-gui-brain-12-parcellize-py"><span class="std std-ref">Parcellize brain surface</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Display a conjunction map from a nii.gz file (NiBabel required)."><div class="figure" id="id18">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Display a conjunction map from a nii.gz file (NiBabel required)."><div class="figure" id="id19">
 <img alt="../_images/sphx_glr_conjunction_map_thumb.png" src="../_images/sphx_glr_conjunction_map_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/eeg_meg/conjunction_map.html#sphx-glr-auto-examples-eeg-meg-conjunction-map-py"><span class="std std-ref">Display conjunction map</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Display fMRI activations from a nii.gz file (NiBabel required)."><div class="figure" id="id19">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Display fMRI activations from a nii.gz file (NiBabel required)."><div class="figure" id="id20">
 <img alt="../_images/sphx_glr_fmri_activation_thumb.png" src="../_images/sphx_glr_fmri_activation_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/eeg_meg/fmri_activation.html#sphx-glr-auto-examples-eeg-meg-fmri-activation-py"><span class="std std-ref">Display fMRI activation</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Plot MEG inverse solution."><div class="figure" id="id20">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Plot MEG inverse solution."><div class="figure" id="id21">
 <img alt="../_images/sphx_glr_meg_inverse_solution_thumb.png" src="../_images/sphx_glr_meg_inverse_solution_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/eeg_meg/meg_inverse_solution.html#sphx-glr-auto-examples-eeg-meg-meg-inverse-solution-py"><span class="std std-ref">Plot MEG inverse solution</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Plot vector-valued MEG inverse solution."><div class="figure" id="id21">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Plot vector-valued MEG inverse solution."><div class="figure" id="id22">
 <img alt="../_images/sphx_glr_vector_based_meg_inverse_thumb.png" src="../_images/sphx_glr_vector_based_meg_inverse_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/eeg_meg/vector_based_meg_inverse.html#sphx-glr-auto-examples-eeg-meg-vector-based-meg-inverse-py"><span class="std std-ref">Plot vector-valued MEG inverse solution</span></a></span></p>
 </div>
@@ -1745,7 +1778,7 @@ object for the sceen rendering.</p>
         <div class="container">
             <img src="../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2018-12-17.</p>
+        <p>&copy; Copyright Last updated on 2018-12-20.</p>
     </footer>
 
   </body>

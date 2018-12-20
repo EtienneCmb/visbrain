@@ -210,7 +210,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../auto_examples/index.html#sceneobj-combine-objects-into-subplots">SceneObj : combine objects into subplots</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../auto_examples/objects/plot_animate_scene.html">Animate objects in the scene</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_animate_scene.html#doanload-data-and-create-the-scene">Doanload data and create the scene</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_animate_scene.html#download-data-and-create-the-scene">Download data and create the scene</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_animate_scene.html#animate-a-single-brain-object">Animate a single brain object</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_animate_scene.html#animate-multiple-objects">Animate multiple objects</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_animate_scene.html#animate-sources">Animate sources</a></li>
@@ -231,7 +231,17 @@
 <li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_brain_obj.html#fun-stuff">“Fun” stuff</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html">Combine multiple objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html">Combine multiple objects</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html#scene-creation">Scene creation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html#fmri-activation">fMRI activation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html#region-of-interest-roi">Region Of Interest (ROI)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html#sources">Sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html#d-time-series">3D Time-series</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html#d-pictures">3D Pictures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html#connectivity">Connectivity</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html#cross-sections">Cross-sections</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../auto_examples/objects/plot_connectivity_obj.html">Connectivity object (ConnectObj) : complete tutorial</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_connectivity_obj.html#download-data-and-define-the-scene">Download data and define the scene</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_connectivity_obj.html#color-by-connectivity-strength">Color by connectivity strength</a></li>
@@ -317,6 +327,15 @@
 <li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_volume_obj.html#select-volume-levels">Select volume levels</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_volume_obj.html#mri-file-mip-rendering">MRI file : mip rendering</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_volume_obj.html#mri-file-translucent-rendering">MRI file : translucent rendering</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../auto_examples/objects/plot_x3d_files.html">Plot x3d files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_x3d_files.html#ferret-brain">Ferret brain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_x3d_files.html#macaque-brain-1">Macaque brain (1)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_x3d_files.html#macaque-brain-2">Macaque brain (2)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_x3d_files.html#mouse-brain">Mouse brain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_x3d_files.html#rat-brain">Rat brain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_x3d_files.html#human-brain">Human brain</a></li>
 </ul>
 </li>
 </ul>
@@ -958,7 +977,7 @@
 <h1>visbrain.objects.SceneObj<a class="headerlink" href="#visbrain-objects-sceneobj" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="visbrain.objects.SceneObj">
-<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">SceneObj</code><span class="sig-paren">(</span><em>bgcolor='black'</em>, <em>camera_state={}</em>, <em>verbose=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/scene_obj.html#SceneObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/scene_obj.py#L339-L666"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.SceneObj" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">SceneObj</code><span class="sig-paren">(</span><em>bgcolor='black'</em>, <em>camera_state={}</em>, <em>verbose=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/scene_obj.html#SceneObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/scene_obj.py#L339-L676"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.SceneObj" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a scene and add objects to it.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1019,7 +1038,7 @@
 </table>
 <dl class="method">
 <dt id="visbrain.objects.SceneObj.add_to_subplot">
-<code class="descname">add_to_subplot</code><span class="sig-paren">(</span><em>obj</em>, <em>row=0</em>, <em>col=0</em>, <em>row_span=1</em>, <em>col_span=1</em>, <em>title=None</em>, <em>title_size=12.0</em>, <em>title_color='white'</em>, <em>title_bold=True</em>, <em>use_this_cam=False</em>, <em>rotate=None</em>, <em>zoom=None</em>, <em>camera_state={}</em>, <em>width_max=None</em>, <em>height_max=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/scene_obj.html#SceneObj.add_to_subplot"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/scene_obj.py#L431-L527"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.SceneObj.add_to_subplot" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_to_subplot</code><span class="sig-paren">(</span><em>obj</em>, <em>row=0</em>, <em>col=0</em>, <em>row_span=1</em>, <em>col_span=1</em>, <em>title=None</em>, <em>title_size=12.0</em>, <em>title_color='white'</em>, <em>title_bold=True</em>, <em>use_this_cam=False</em>, <em>rotate=None</em>, <em>zoom=None</em>, <em>camera_state={}</em>, <em>width_max=None</em>, <em>height_max=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/scene_obj.html#SceneObj.add_to_subplot"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/scene_obj.py#L431-L537"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.SceneObj.add_to_subplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add object to subplot.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1059,8 +1078,21 @@ use the camera of an object as the reference, turn this parameter
 to True.</p>
 </dd>
 <dt><strong>rotate</strong> <span class="classifier-delimiter">:</span> <span class="classifier">string | None</span></dt>
-<dd><p class="first last">Rotate the scene. Use ‘top’, ‘bottom’, ‘left’, ‘right’, ‘front’ or
-‘back’. Only available for 3-D objects.</p>
+<dd><p class="first">Rotate the scene (only available for 3D objects). Use :</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>‘top’ : top view</li>
+<li>‘bottom’ : bottom view</li>
+<li>‘left’ : left view</li>
+<li>‘right’ : right view</li>
+<li>‘front’ : front view</li>
+<li>‘back’ : bottom view</li>
+<li>‘side-fl’ : side view (front-left)</li>
+<li>‘side-fr’ : side view (front-right)</li>
+<li>‘side-bl’ : side view (back-left)</li>
+<li>‘side-br’ : side view (back-right)</li>
+</ul>
+</div></blockquote>
 </dd>
 <dt><strong>zoom</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float | None</span></dt>
 <dd><p class="first last">Zoom level. If zoom is in ]0, 1[, the size of the object decrease.
@@ -1086,7 +1118,7 @@ object will appear twice as large.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.SceneObj.link">
-<code class="descname">link</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/scene_obj.html#SceneObj.link"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/scene_obj.py#L529-L551"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.SceneObj.link" title="Permalink to this definition">¶</a></dt>
+<code class="descname">link</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/scene_obj.html#SceneObj.link"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/scene_obj.py#L539-L561"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.SceneObj.link" title="Permalink to this definition">¶</a></dt>
 <dd><p>Link the camera of several objects of the scene.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1111,13 +1143,13 @@ to link all cameras.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.SceneObj.preview">
-<code class="descname">preview</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/scene_obj.html#SceneObj.preview"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/scene_obj.py#L651-L666"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.SceneObj.preview" title="Permalink to this definition">¶</a></dt>
+<code class="descname">preview</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/scene_obj.html#SceneObj.preview"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/scene_obj.py#L661-L676"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.SceneObj.preview" title="Permalink to this definition">¶</a></dt>
 <dd><p>Previsualize the result.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="visbrain.objects.SceneObj.record_animation">
-<code class="descname">record_animation</code><span class="sig-paren">(</span><em>name</em>, <em>n_pic=10</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/scene_obj.html#SceneObj.record_animation"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/scene_obj.py#L608-L633"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.SceneObj.record_animation" title="Permalink to this definition">¶</a></dt>
+<code class="descname">record_animation</code><span class="sig-paren">(</span><em>name</em>, <em>n_pic=10</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/scene_obj.html#SceneObj.record_animation"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/scene_obj.py#L618-L643"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.SceneObj.record_animation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Record an animated scene and save as a <a href="#id3"><span class="problematic" id="id4">*</span></a>.gif file.</p>
 <p>Note that this method :</p>
 <blockquote>
@@ -1146,7 +1178,7 @@ to link all cameras.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.SceneObj.screenshot">
-<code class="descname">screenshot</code><span class="sig-paren">(</span><em>saveas</em>, <em>print_size=None</em>, <em>dpi=300.0</em>, <em>unit='centimeter'</em>, <em>factor=None</em>, <em>region=None</em>, <em>autocrop=False</em>, <em>bgcolor=None</em>, <em>transparent=False</em>, <em>line_width=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/scene_obj.html#SceneObj.screenshot"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/scene_obj.py#L553-L606"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.SceneObj.screenshot" title="Permalink to this definition">¶</a></dt>
+<code class="descname">screenshot</code><span class="sig-paren">(</span><em>saveas</em>, <em>print_size=None</em>, <em>dpi=300.0</em>, <em>unit='centimeter'</em>, <em>factor=None</em>, <em>region=None</em>, <em>autocrop=False</em>, <em>bgcolor=None</em>, <em>transparent=False</em>, <em>line_width=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/scene_obj.html#SceneObj.screenshot"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/scene_obj.py#L563-L616"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.SceneObj.screenshot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Take a screeshot of the scene.</p>
 <p>By default, the rendered canvas will have the size of your screen.
 The screenshot() method provides two ways to increase to exported image
@@ -1223,7 +1255,7 @@ background.</p>
 <img alt="../_images/sphx_glr_plot_brain_obj_thumb.png" src="../_images/sphx_glr_plot_brain_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/objects/plot_brain_obj.html#sphx-glr-auto-examples-objects-plot-brain-obj-py"><span class="std std-ref">Brain object (BrainObj) : complete tutorial</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the feasibility to combine multiple objects in the same scene. "><div class="figure" id="id7">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the feasibility to combine multiple objects in the same scene."><div class="figure" id="id7">
 <img alt="../_images/sphx_glr_plot_combine_objects_thumb.png" src="../_images/sphx_glr_plot_combine_objects_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html#sphx-glr-auto-examples-objects-plot-combine-objects-py"><span class="std std-ref">Combine multiple objects</span></a></span></p>
 </div>
@@ -1263,6 +1295,10 @@ background.</p>
 <img alt="../_images/sphx_glr_plot_volume_obj_thumb.png" src="../_images/sphx_glr_plot_volume_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/objects/plot_volume_obj.html#sphx-glr-auto-examples-objects-plot-volume-obj-py"><span class="std std-ref">Volume object (VolumeObj) : complete tutorial</span></a></span></p>
 </div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to plot .x3d files. 6 brain templates are going to be downloaded (t..."><div class="figure" id="id17">
+<img alt="../_images/sphx_glr_plot_x3d_files_thumb.png" src="../_images/sphx_glr_plot_x3d_files_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/objects/plot_x3d_files.html#sphx-glr-auto-examples-objects-plot-x3d-files-py"><span class="std std-ref">Plot x3d files</span></a></span></p>
+</div>
 </div><div style='clear:both'></div></div>
 </div>
 
@@ -1287,7 +1323,7 @@ background.</p>
         <div class="container">
             <img src="../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2018-12-17.</p>
+        <p>&copy; Copyright Last updated on 2018-12-20.</p>
     </footer>
 
   </body>

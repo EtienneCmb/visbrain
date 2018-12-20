@@ -20,7 +20,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Brain control" href="../gui_brain/00_brain_control.html" />
+    <link rel="next" title="Plot x3d files" href="plot_x3d_files.html" />
     <link rel="prev" title="Time-series and pictures 3D (TimeSeries3DObj &amp; Picture3DObj): complete tutorial" href="plot_tspic_obj.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -210,7 +210,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#sceneobj-combine-objects-into-subplots">SceneObj : combine objects into subplots</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="plot_animate_scene.html">Animate objects in the scene</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="plot_animate_scene.html#doanload-data-and-create-the-scene">Doanload data and create the scene</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_animate_scene.html#download-data-and-create-the-scene">Download data and create the scene</a></li>
 <li class="toctree-l4"><a class="reference internal" href="plot_animate_scene.html#animate-a-single-brain-object">Animate a single brain object</a></li>
 <li class="toctree-l4"><a class="reference internal" href="plot_animate_scene.html#animate-multiple-objects">Animate multiple objects</a></li>
 <li class="toctree-l4"><a class="reference internal" href="plot_animate_scene.html#animate-sources">Animate sources</a></li>
@@ -231,7 +231,17 @@
 <li class="toctree-l4"><a class="reference internal" href="plot_brain_obj.html#fun-stuff">“Fun” stuff</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="plot_combine_objects.html">Combine multiple objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_combine_objects.html">Combine multiple objects</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plot_combine_objects.html#scene-creation">Scene creation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_combine_objects.html#fmri-activation">fMRI activation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_combine_objects.html#region-of-interest-roi">Region Of Interest (ROI)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_combine_objects.html#sources">Sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_combine_objects.html#d-time-series">3D Time-series</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_combine_objects.html#d-pictures">3D Pictures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_combine_objects.html#connectivity">Connectivity</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_combine_objects.html#cross-sections">Cross-sections</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="plot_connectivity_obj.html">Connectivity object (ConnectObj) : complete tutorial</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="plot_connectivity_obj.html#download-data-and-define-the-scene">Download data and define the scene</a></li>
 <li class="toctree-l4"><a class="reference internal" href="plot_connectivity_obj.html#color-by-connectivity-strength">Color by connectivity strength</a></li>
@@ -317,6 +327,15 @@
 <li class="toctree-l4"><a class="reference internal" href="#select-volume-levels">Select volume levels</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mri-file-mip-rendering">MRI file : mip rendering</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mri-file-translucent-rendering">MRI file : translucent rendering</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plot_x3d_files.html">Plot x3d files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plot_x3d_files.html#ferret-brain">Ferret brain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_x3d_files.html#macaque-brain-1">Macaque brain (1)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_x3d_files.html#macaque-brain-2">Macaque brain (2)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_x3d_files.html#mouse-brain">Mouse brain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_x3d_files.html#rat-brain">Rat brain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_x3d_files.html#human-brain">Human brain</a></li>
 </ul>
 </li>
 </ul>
@@ -1065,7 +1084,7 @@ select only certain levels</div></blockquote>
 </pre></div>
 </div>
 <img alt="../../_images/sphx_glr_plot_volume_obj_001.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_volume_obj_001.png" />
-<p><strong>Total running time of the script:</strong> ( 0 minutes  32.472 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  34.059 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-objects-plot-volume-obj-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" download="" href="../../_downloads/c1372cfa52e1051d89536aed47c6952c/plot_volume_obj.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_volume_obj.py</span></code></a></div>
@@ -1097,7 +1116,7 @@ select only certain levels</div></blockquote>
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2018-12-17.</p>
+        <p>&copy; Copyright Last updated on 2018-12-20.</p>
     </footer>
 
   </body>

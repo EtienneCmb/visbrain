@@ -13,62 +13,9 @@ Combine multiple objects
 This example illustrate the feasibility to combine multiple objects in the same
 scene.
 
+fMRI activations comes from the PySurfer software
+(https://github.com/nipy/PySurfer/).
 
-
-
-.. image:: /auto_examples/objects/images/sphx_glr_plot_combine_objects_001.png
-    :class: sphx-glr-single-img
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    =============================================================================
-                                 Default scene
-    =============================================================================
-
-
-    =============================================================================
-                                   fMRI activation
-    =============================================================================
-
-
-    ===============================================================================
-                               Region Of Interest (ROI)
-    ===============================================================================
-
-
-    =============================================================================
-                                        Sources
-    =============================================================================
-
-
-    # =============================================================================
-    #                               3D Time-series
-    # =============================================================================
-
-
-    # =============================================================================
-    #                               3D Pictures
-    # =============================================================================
-
-
-    # =============================================================================
-    #                               Connectivity
-    # =============================================================================
-
-
-    =============================================================================
-                                   Cross-sections
-    =============================================================================
-
-
-
-
-|
 
 
 .. code-block:: python
@@ -81,17 +28,25 @@ scene.
     from visbrain.io import download_file
     from visbrain.utils import generate_eeg
 
-    """Get the path to Visbrain data and download deep sources
-    """
+    # Get the path to Visbrain data and download deep sources
     mat = np.load(download_file('xyz_sample.npz', astype='example_data'))
     xyz, subjects = mat['xyz'], mat['subjects']
     data = np.random.uniform(low=-1., high=1., size=(xyz.shape[0],))
 
-    print("""
-    =============================================================================
-                                 Default scene
-    =============================================================================
-    """)
+
+
+
+
+
+
+Scene creation
+##############################################################################
+
+
+
+.. code-block:: python
+
+
     CAM_STATE = dict(azimuth=0,        # azimuth angle
                      elevation=90,     # elevation angle
                      )
@@ -99,11 +54,20 @@ scene.
                       rect=(-.3, -2., 1., 4.))
     sc = SceneObj(camera_state=CAM_STATE, size=(1400, 1000))
 
-    print("""
-    =============================================================================
-                                   fMRI activation
-    =============================================================================
-    """)
+
+
+
+
+
+
+fMRI activation
+##############################################################################
+
+
+
+.. code-block:: python
+
+
     file = download_file('lh.sig.nii.gz', astype='example_data')
     b_obj_fmri = BrainObj('inflated', translucent=False, sulcus=True)
     b_obj_fmri.add_activation(file=file, clim=(5., 20.), hide_under=5,
@@ -112,32 +76,57 @@ scene.
                       title='fMRI activation', rotate='top')
 
 
-    print("""
-    ===============================================================================
-                               Region Of Interest (ROI)
-    ===============================================================================
-    """)
+
+
+
+
+
+Region Of Interest (ROI)
+##############################################################################
+
+
+
+.. code-block:: python
+
+
     roi_aal = RoiObj('aal')
     roi_aal.select_roi(select=[29, 30], unique_color=True, smooth=11)
     sc.add_to_subplot(roi_aal, row=0, col=1, title='Region Of Interest (ROI)')
     sc.add_to_subplot(BrainObj('B1'), use_this_cam=True, row=0, col=1)
 
-    print("""
-    =============================================================================
-                                        Sources
-    =============================================================================
-    """)
+
+
+
+
+
+
+Sources
+##############################################################################
+
+
+
+.. code-block:: python
+
+
     s_obj = SourceObj('FirstSources', xyz, data=data)
     s_obj.color_sources(data=data, cmap='Spectral_r')
     sc.add_to_subplot(s_obj, row=1, col=1, title='Sources')
     sc.add_to_subplot(BrainObj('B3'), use_this_cam=True, row=1, col=1)
 
 
-    print("""
-    # =============================================================================
-    #                               3D Time-series
-    # =============================================================================
-    """)
+
+
+
+
+
+3D Time-series
+##############################################################################
+
+
+
+.. code-block:: python
+
+
     ts, _ = generate_eeg(n_pts=100, n_channels=xyz.shape[0])
     select = np.zeros((xyz.shape[0],), dtype=bool)
     select[slice(0, 100, 10)] = True
@@ -147,22 +136,39 @@ scene.
     sc.add_to_subplot(BrainObj('B2'), use_this_cam=True, row=0, col=2)
 
 
-    print("""
-    # =============================================================================
-    #                               3D Pictures
-    # =============================================================================
-    """)
+
+
+
+
+
+3D Pictures
+##############################################################################
+
+
+
+.. code-block:: python
+
+
     pic = np.random.rand(xyz.shape[0], 20, 20)
     pic_obj = Picture3DObj('PIC', pic, xyz, select=select, pic_width=21.,
                            pic_height=21., cmap='viridis')
     sc.add_to_subplot(pic_obj, row=1, col=2, title='3D pictures')
     sc.add_to_subplot(BrainObj('B2'), use_this_cam=True, row=1, col=2)
 
-    print("""
-    # =============================================================================
-    #                               Connectivity
-    # =============================================================================
-    """)
+
+
+
+
+
+
+Connectivity
+##############################################################################
+
+
+
+.. code-block:: python
+
+
     arch = np.load(download_file('phase_sync_delta.npz', astype='example_data'))
     nodes, edges = arch['nodes'], arch['edges']
     c_count = ConnectObj('default', nodes, edges, select=edges > .7,
@@ -174,11 +180,19 @@ scene.
     sc.add_to_subplot(BrainObj('B3'), use_this_cam=True, row=2, col=0)
 
 
-    print("""
-    =============================================================================
-                                   Cross-sections
-    =============================================================================
-    """)
+
+
+
+
+
+Cross-sections
+##############################################################################
+
+
+
+.. code-block:: python
+
+
     cs_brod = CrossSecObj('brodmann', interpolation='nearest',
                           coords=(70, 80, 90), cmap='viridis')
     cs_brod.localize_source((-10., -15., 20.))
@@ -188,7 +202,15 @@ scene.
 
     sc.preview()
 
-**Total running time of the script:** ( 0 minutes  30.933 seconds)
+
+
+.. image:: /auto_examples/objects/images/sphx_glr_plot_combine_objects_001.png
+    :class: sphx-glr-single-img
+
+
+
+
+**Total running time of the script:** ( 0 minutes  32.433 seconds)
 
 
 .. _sphx_glr_download_auto_examples_objects_plot_combine_objects.py:

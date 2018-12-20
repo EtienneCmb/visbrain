@@ -70,7 +70,7 @@ subplots.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the feasibility to combine multiple objects in the same scene. ">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the feasibility to combine multiple objects in the same scene.">
 
 .. only:: html
 
@@ -267,6 +267,26 @@ subplots.
    :hidden:
 
    /auto_examples/objects/plot_volume_obj
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to plot .x3d files. 6 brain templates are going to be downloaded (t...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_plot_x3d_files_thumb.png
+
+        :ref:`sphx_glr_auto_examples_objects_plot_x3d_files.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/objects/plot_x3d_files
 .. raw:: html
 
     <div style='clear:both'></div>

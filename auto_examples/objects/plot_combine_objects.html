@@ -210,7 +210,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#sceneobj-combine-objects-into-subplots">SceneObj : combine objects into subplots</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="plot_animate_scene.html">Animate objects in the scene</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="plot_animate_scene.html#doanload-data-and-create-the-scene">Doanload data and create the scene</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_animate_scene.html#download-data-and-create-the-scene">Download data and create the scene</a></li>
 <li class="toctree-l4"><a class="reference internal" href="plot_animate_scene.html#animate-a-single-brain-object">Animate a single brain object</a></li>
 <li class="toctree-l4"><a class="reference internal" href="plot_animate_scene.html#animate-multiple-objects">Animate multiple objects</a></li>
 <li class="toctree-l4"><a class="reference internal" href="plot_animate_scene.html#animate-sources">Animate sources</a></li>
@@ -231,7 +231,17 @@
 <li class="toctree-l4"><a class="reference internal" href="plot_brain_obj.html#fun-stuff">“Fun” stuff</a></li>
 </ul>
 </li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Combine multiple objects</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Combine multiple objects</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#scene-creation">Scene creation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fmri-activation">fMRI activation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#region-of-interest-roi">Region Of Interest (ROI)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sources">Sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#d-time-series">3D Time-series</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#d-pictures">3D Pictures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#connectivity">Connectivity</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cross-sections">Cross-sections</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="plot_connectivity_obj.html">Connectivity object (ConnectObj) : complete tutorial</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="plot_connectivity_obj.html#download-data-and-define-the-scene">Download data and define the scene</a></li>
 <li class="toctree-l4"><a class="reference internal" href="plot_connectivity_obj.html#color-by-connectivity-strength">Color by connectivity strength</a></li>
@@ -317,6 +327,15 @@
 <li class="toctree-l4"><a class="reference internal" href="plot_volume_obj.html#select-volume-levels">Select volume levels</a></li>
 <li class="toctree-l4"><a class="reference internal" href="plot_volume_obj.html#mri-file-mip-rendering">MRI file : mip rendering</a></li>
 <li class="toctree-l4"><a class="reference internal" href="plot_volume_obj.html#mri-file-translucent-rendering">MRI file : translucent rendering</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plot_x3d_files.html">Plot x3d files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plot_x3d_files.html#ferret-brain">Ferret brain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_x3d_files.html#macaque-brain-1">Macaque brain (1)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_x3d_files.html#macaque-brain-2">Macaque brain (2)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_x3d_files.html#mouse-brain">Mouse brain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_x3d_files.html#rat-brain">Rat brain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_x3d_files.html#human-brain">Human brain</a></li>
 </ul>
 </li>
 </ul>
@@ -906,7 +925,17 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Combine multiple objects</a></li>
+<li><a class="reference internal" href="#">Combine multiple objects</a><ul>
+<li><a class="reference internal" href="#scene-creation">Scene creation</a></li>
+<li><a class="reference internal" href="#fmri-activation">fMRI activation</a></li>
+<li><a class="reference internal" href="#region-of-interest-roi">Region Of Interest (ROI)</a></li>
+<li><a class="reference internal" href="#sources">Sources</a></li>
+<li><a class="reference internal" href="#d-time-series">3D Time-series</a></li>
+<li><a class="reference internal" href="#d-pictures">3D Pictures</a></li>
+<li><a class="reference internal" href="#connectivity">Connectivity</a></li>
+<li><a class="reference internal" href="#cross-sections">Cross-sections</a></li>
+</ul>
+</li>
 </ul>
 </ul>
 </li>
@@ -959,51 +988,8 @@
 <span id="sphx-glr-auto-examples-objects-plot-combine-objects-py"></span><h1>Combine multiple objects<a class="headerlink" href="#combine-multiple-objects" title="Permalink to this headline">¶</a></h1>
 <p>This example illustrate the feasibility to combine multiple objects in the same
 scene.</p>
-<img alt="../../_images/sphx_glr_plot_combine_objects_001.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_combine_objects_001.png" />
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>=============================================================================
-                             Default scene
-=============================================================================
-
-
-=============================================================================
-                               fMRI activation
-=============================================================================
-
-
-===============================================================================
-                           Region Of Interest (ROI)
-===============================================================================
-
-
-=============================================================================
-                                    Sources
-=============================================================================
-
-
-# =============================================================================
-#                               3D Time-series
-# =============================================================================
-
-
-# =============================================================================
-#                               3D Pictures
-# =============================================================================
-
-
-# =============================================================================
-#                               Connectivity
-# =============================================================================
-
-
-=============================================================================
-                               Cross-sections
-=============================================================================
-</pre></div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
+<p>fMRI activations comes from the PySurfer software
+(<a class="reference external" href="https://github.com/nipy/PySurfer/">https://github.com/nipy/PySurfer/</a>).</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <span class="p">(</span><a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.RoiObj.html#visbrain.objects.RoiObj" title="View documentation for visbrain.objects.RoiObj"><span class="n">RoiObj</span></a><span class="p">,</span>
@@ -1012,89 +998,77 @@ scene.</p>
 <span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a>
 <span class="kn">from</span> <span class="nn">visbrain.utils</span> <span class="kn">import</span> <a href="../../generated/visbrain.utils.generate_eeg.html#visbrain.utils.generate_eeg" title="View documentation for visbrain.utils.generate_eeg"><span class="n">generate_eeg</span></a>
 
-<span class="sd">&quot;&quot;&quot;Get the path to Visbrain data and download deep sources</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># Get the path to Visbrain data and download deep sources</span>
 <span class="n">mat</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.load.html#numpy.load" title="View documentation for numpy.load"><span class="n">np</span><span class="o">.</span><span class="n">load</span></a><span class="p">(</span><a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">,</span> <span class="n">astype</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">))</span>
 <span class="n">xyz</span><span class="p">,</span> <span class="n">subjects</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;xyz&#39;</span><span class="p">],</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;subjects&#39;</span><span class="p">]</span>
 <span class="n">data</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.uniform.html#numpy.random.uniform" title="View documentation for numpy.random.uniform"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span></a><span class="p">(</span><span class="n">low</span><span class="o">=-</span><span class="mf">1.</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],))</span>
-
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">=============================================================================</span>
-<span class="s2">                             Default scene</span>
-<span class="s2">=============================================================================</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
-<span class="n">CAM_STATE</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">azimuth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>        <span class="c1"># azimuth angle</span>
+</pre></div>
+</div>
+<div class="section" id="scene-creation">
+<h2>Scene creation<a class="headerlink" href="#scene-creation" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">CAM_STATE</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">azimuth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>        <span class="c1"># azimuth angle</span>
                  <span class="n">elevation</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>     <span class="c1"># elevation angle</span>
                  <span class="p">)</span>
 <span class="n">CBAR_STATE</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">cbtxtsz</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">txtsz</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">width</span><span class="o">=.</span><span class="mi">1</span><span class="p">,</span> <span class="n">cbtxtsh</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span>
                   <span class="n">rect</span><span class="o">=</span><span class="p">(</span><span class="o">-.</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">))</span>
 <span class="n">sc</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a><span class="p">(</span><span class="n">camera_state</span><span class="o">=</span><span class="n">CAM_STATE</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1400</span><span class="p">,</span> <span class="mi">1000</span><span class="p">))</span>
-
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">=============================================================================</span>
-<span class="s2">                               fMRI activation</span>
-<span class="s2">=============================================================================</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
-<span class="nb">file</span> <span class="o">=</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">(</span><span class="s1">&#39;lh.sig.nii.gz&#39;</span><span class="p">,</span> <span class="n">astype</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fmri-activation">
+<h2>fMRI activation<a class="headerlink" href="#fmri-activation" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">file</span> <span class="o">=</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">(</span><span class="s1">&#39;lh.sig.nii.gz&#39;</span><span class="p">,</span> <span class="n">astype</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">)</span>
 <span class="n">b_obj_fmri</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;inflated&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">sulcus</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="n">b_obj_fmri</span><span class="o">.</span><span class="n">add_activation</span><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="nb">file</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="mf">5.</span><span class="p">,</span> <span class="mf">20.</span><span class="p">),</span> <span class="n">hide_under</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
                           <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">hemisphere</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">b_obj_fmri</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">row_span</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                   <span class="n">title</span><span class="o">=</span><span class="s1">&#39;fMRI activation&#39;</span><span class="p">,</span> <span class="n">rotate</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">)</span>
-
-
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">===============================================================================</span>
-<span class="s2">                           Region Of Interest (ROI)</span>
-<span class="s2">===============================================================================</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
-<span class="n">roi_aal</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.RoiObj.html#visbrain.objects.RoiObj" title="View documentation for visbrain.objects.RoiObj"><span class="n">RoiObj</span></a><span class="p">(</span><span class="s1">&#39;aal&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="region-of-interest-roi">
+<h2>Region Of Interest (ROI)<a class="headerlink" href="#region-of-interest-roi" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">roi_aal</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.RoiObj.html#visbrain.objects.RoiObj" title="View documentation for visbrain.objects.RoiObj"><span class="n">RoiObj</span></a><span class="p">(</span><span class="s1">&#39;aal&#39;</span><span class="p">)</span>
 <span class="n">roi_aal</span><span class="o">.</span><span class="n">select_roi</span><span class="p">(</span><span class="n">select</span><span class="o">=</span><span class="p">[</span><span class="mi">29</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span> <span class="n">unique_color</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">roi_aal</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Region Of Interest (ROI)&#39;</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;B1&#39;</span><span class="p">),</span> <span class="n">use_this_cam</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">=============================================================================</span>
-<span class="s2">                                    Sources</span>
-<span class="s2">=============================================================================</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
-<span class="n">s_obj</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">(</span><span class="s1">&#39;FirstSources&#39;</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sources">
+<h2>Sources<a class="headerlink" href="#sources" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">s_obj</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">(</span><span class="s1">&#39;FirstSources&#39;</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
 <span class="n">s_obj</span><span class="o">.</span><span class="n">color_sources</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">s_obj</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Sources&#39;</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;B3&#39;</span><span class="p">),</span> <span class="n">use_this_cam</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-
-
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2"># =============================================================================</span>
-<span class="s2">#                               3D Time-series</span>
-<span class="s2"># =============================================================================</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
-<span class="n">ts</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <a href="../../generated/visbrain.utils.generate_eeg.html#visbrain.utils.generate_eeg" title="View documentation for visbrain.utils.generate_eeg"><span class="n">generate_eeg</span></a><span class="p">(</span><span class="n">n_pts</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_channels</span><span class="o">=</span><span class="n">xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="d-time-series">
+<h2>3D Time-series<a class="headerlink" href="#d-time-series" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <a href="../../generated/visbrain.utils.generate_eeg.html#visbrain.utils.generate_eeg" title="View documentation for visbrain.utils.generate_eeg"><span class="n">generate_eeg</span></a><span class="p">(</span><span class="n">n_pts</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_channels</span><span class="o">=</span><span class="n">xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">select</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.zeros.html#numpy.zeros" title="View documentation for numpy.zeros"><span class="n">np</span><span class="o">.</span><span class="n">zeros</span></a><span class="p">((</span><span class="n">xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
 <span class="n">select</span><span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">10</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">True</span>
 <span class="n">ts_obj</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.TimeSeries3DObj.html#visbrain.objects.TimeSeries3DObj" title="View documentation for visbrain.objects.TimeSeries3DObj"><span class="n">TimeSeries3DObj</span></a><span class="p">(</span><span class="s1">&#39;TS3D&#39;</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="n">select</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;pink&#39;</span><span class="p">,</span>
                          <span class="n">ts_amp</span><span class="o">=</span><span class="mf">24.</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">ts_obj</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;3D time series&#39;</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;B2&#39;</span><span class="p">),</span> <span class="n">use_this_cam</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-
-
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2"># =============================================================================</span>
-<span class="s2">#                               3D Pictures</span>
-<span class="s2"># =============================================================================</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
-<span class="n">pic</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.rand.html#numpy.random.rand" title="View documentation for numpy.random.rand"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span></a><span class="p">(</span><span class="n">xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="d-pictures">
+<h2>3D Pictures<a class="headerlink" href="#d-pictures" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pic</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.rand.html#numpy.random.rand" title="View documentation for numpy.random.rand"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span></a><span class="p">(</span><span class="n">xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
 <span class="n">pic_obj</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.Picture3DObj.html#visbrain.objects.Picture3DObj" title="View documentation for visbrain.objects.Picture3DObj"><span class="n">Picture3DObj</span></a><span class="p">(</span><span class="s1">&#39;PIC&#39;</span><span class="p">,</span> <span class="n">pic</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="n">select</span><span class="p">,</span> <span class="n">pic_width</span><span class="o">=</span><span class="mf">21.</span><span class="p">,</span>
                        <span class="n">pic_height</span><span class="o">=</span><span class="mf">21.</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">pic_obj</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;3D pictures&#39;</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;B2&#39;</span><span class="p">),</span> <span class="n">use_this_cam</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2"># =============================================================================</span>
-<span class="s2">#                               Connectivity</span>
-<span class="s2"># =============================================================================</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
-<span class="n">arch</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.load.html#numpy.load" title="View documentation for numpy.load"><span class="n">np</span><span class="o">.</span><span class="n">load</span></a><span class="p">(</span><a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">(</span><span class="s1">&#39;phase_sync_delta.npz&#39;</span><span class="p">,</span> <span class="n">astype</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="connectivity">
+<h2>Connectivity<a class="headerlink" href="#connectivity" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">arch</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.load.html#numpy.load" title="View documentation for numpy.load"><span class="n">np</span><span class="o">.</span><span class="n">load</span></a><span class="p">(</span><a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">(</span><span class="s1">&#39;phase_sync_delta.npz&#39;</span><span class="p">,</span> <span class="n">astype</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">))</span>
 <span class="n">nodes</span><span class="p">,</span> <span class="n">edges</span> <span class="o">=</span> <span class="n">arch</span><span class="p">[</span><span class="s1">&#39;nodes&#39;</span><span class="p">],</span> <span class="n">arch</span><span class="p">[</span><span class="s1">&#39;edges&#39;</span><span class="p">]</span>
 <span class="n">c_count</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.ConnectObj.html#visbrain.objects.ConnectObj" title="View documentation for visbrain.objects.ConnectObj"><span class="n">ConnectObj</span></a><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="n">edges</span> <span class="o">&gt;</span> <span class="o">.</span><span class="mi">7</span><span class="p">,</span>
                      <span class="n">color_by</span><span class="o">=</span><span class="s1">&#39;count&#39;</span><span class="p">,</span> <span class="n">antialias</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span>
@@ -1103,14 +1077,12 @@ scene.</p>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">c_count</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">row_span</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;3D connectivity&#39;</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">s_obj_c</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;B3&#39;</span><span class="p">),</span> <span class="n">use_this_cam</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-
-
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">=============================================================================</span>
-<span class="s2">                               Cross-sections</span>
-<span class="s2">=============================================================================</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
-<span class="n">cs_brod</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.CrossSecObj.html#visbrain.objects.CrossSecObj" title="View documentation for visbrain.objects.CrossSecObj"><span class="n">CrossSecObj</span></a><span class="p">(</span><span class="s1">&#39;brodmann&#39;</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="cross-sections">
+<h2>Cross-sections<a class="headerlink" href="#cross-sections" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cs_brod</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.CrossSecObj.html#visbrain.objects.CrossSecObj" title="View documentation for visbrain.objects.CrossSecObj"><span class="n">CrossSecObj</span></a><span class="p">(</span><span class="s1">&#39;brodmann&#39;</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span>
                       <span class="n">coords</span><span class="o">=</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">90</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">)</span>
 <span class="n">cs_brod</span><span class="o">.</span><span class="n">localize_source</span><span class="p">((</span><span class="o">-</span><span class="mf">10.</span><span class="p">,</span> <span class="o">-</span><span class="mf">15.</span><span class="p">,</span> <span class="mf">20.</span><span class="p">))</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">cs_brod</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col_span</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">row_span</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
@@ -1120,7 +1092,8 @@ scene.</p>
 <span class="n">sc</span><span class="o">.</span><span class="n">preview</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  30.933 seconds)</p>
+<img alt="../../_images/sphx_glr_plot_combine_objects_001.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_combine_objects_001.png" />
+<p><strong>Total running time of the script:</strong> ( 0 minutes  32.433 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-objects-plot-combine-objects-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" download="" href="../../_downloads/0e781f2aafc3012e772c3da8184fbe1e/plot_combine_objects.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_combine_objects.py</span></code></a></div>
@@ -1128,6 +1101,7 @@ scene.</p>
 <a class="reference download internal" download="" href="../../_downloads/f721cd83531ff0a7075ec19253a75332/plot_combine_objects.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_combine_objects.ipynb</span></code></a></div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
 </div>
 
 
@@ -1151,7 +1125,7 @@ scene.</p>
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2018-12-17.</p>
+        <p>&copy; Copyright Last updated on 2018-12-20.</p>
     </footer>
 
   </body>

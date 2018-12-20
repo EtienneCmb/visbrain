@@ -210,7 +210,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#sceneobj-combine-objects-into-subplots">SceneObj : combine objects into subplots</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="plot_animate_scene.html">Animate objects in the scene</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="plot_animate_scene.html#doanload-data-and-create-the-scene">Doanload data and create the scene</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_animate_scene.html#download-data-and-create-the-scene">Download data and create the scene</a></li>
 <li class="toctree-l4"><a class="reference internal" href="plot_animate_scene.html#animate-a-single-brain-object">Animate a single brain object</a></li>
 <li class="toctree-l4"><a class="reference internal" href="plot_animate_scene.html#animate-multiple-objects">Animate multiple objects</a></li>
 <li class="toctree-l4"><a class="reference internal" href="plot_animate_scene.html#animate-sources">Animate sources</a></li>
@@ -231,7 +231,17 @@
 <li class="toctree-l4"><a class="reference internal" href="#fun-stuff">“Fun” stuff</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="plot_combine_objects.html">Combine multiple objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_combine_objects.html">Combine multiple objects</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plot_combine_objects.html#scene-creation">Scene creation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_combine_objects.html#fmri-activation">fMRI activation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_combine_objects.html#region-of-interest-roi">Region Of Interest (ROI)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_combine_objects.html#sources">Sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_combine_objects.html#d-time-series">3D Time-series</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_combine_objects.html#d-pictures">3D Pictures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_combine_objects.html#connectivity">Connectivity</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_combine_objects.html#cross-sections">Cross-sections</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="plot_connectivity_obj.html">Connectivity object (ConnectObj) : complete tutorial</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="plot_connectivity_obj.html#download-data-and-define-the-scene">Download data and define the scene</a></li>
 <li class="toctree-l4"><a class="reference internal" href="plot_connectivity_obj.html#color-by-connectivity-strength">Color by connectivity strength</a></li>
@@ -317,6 +327,15 @@
 <li class="toctree-l4"><a class="reference internal" href="plot_volume_obj.html#select-volume-levels">Select volume levels</a></li>
 <li class="toctree-l4"><a class="reference internal" href="plot_volume_obj.html#mri-file-mip-rendering">MRI file : mip rendering</a></li>
 <li class="toctree-l4"><a class="reference internal" href="plot_volume_obj.html#mri-file-translucent-rendering">MRI file : translucent rendering</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plot_x3d_files.html">Plot x3d files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plot_x3d_files.html#ferret-brain">Ferret brain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_x3d_files.html#macaque-brain-1">Macaque brain (1)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_x3d_files.html#macaque-brain-2">Macaque brain (2)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_x3d_files.html#mouse-brain">Mouse brain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_x3d_files.html#rat-brain">Rat brain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_x3d_files.html#human-brain">Human brain</a></li>
 </ul>
 </li>
 </ul>
@@ -981,6 +1000,9 @@ object i.e :</p>
 <li>Add fMRI activation and MEG inverse solution</li>
 </ul>
 </div></blockquote>
+<p>Data for fMRI activations and MEG inverse solutoin comes from the PySurfer
+software (<a class="reference external" href="https://github.com/nipy/PySurfer/">https://github.com/nipy/PySurfer/</a>). Parcellation file comes from
+MNE-Python (<a class="reference external" href="https://github.com/mne-tools/mne-python">https://github.com/mne-tools/mne-python</a>).</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.ColorbarObj.html#visbrain.objects.ColorbarObj" title="View documentation for visbrain.objects.ColorbarObj"><span class="n">ColorbarObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a>
@@ -1226,7 +1248,7 @@ automatize figure generation.</div></blockquote>
 [........................................] 100.00000 \ downloading   File saved as /home/circleci/.vispy/data/fonts/OpenSans-Regular.ttf.
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  54.360 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  55.588 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-objects-plot-brain-obj-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" download="" href="../../_downloads/c3341361e0ac5ecbb1b7bc973f20e908/plot_brain_obj.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_brain_obj.py</span></code></a></div>
@@ -1258,7 +1280,7 @@ automatize figure generation.</div></blockquote>
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2018-12-17.</p>
+        <p>&copy; Copyright Last updated on 2018-12-20.</p>
     </footer>
 
   </body>

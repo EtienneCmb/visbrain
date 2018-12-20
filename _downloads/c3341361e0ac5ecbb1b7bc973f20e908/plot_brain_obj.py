@@ -11,6 +11,10 @@ object i.e :
   * Project source's activity on the surface of the brain
   * Parcellize the brain and send data to selected parcellates
   * Add fMRI activation and MEG inverse solution
+
+Data for fMRI activations and MEG inverse solutoin comes from the PySurfer
+software (https://github.com/nipy/PySurfer/). Parcellation file comes from
+MNE-Python (https://github.com/mne-tools/mne-python).
 """
 import numpy as np
 

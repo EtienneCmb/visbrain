@@ -210,7 +210,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../auto_examples/index.html#sceneobj-combine-objects-into-subplots">SceneObj : combine objects into subplots</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../auto_examples/objects/plot_animate_scene.html">Animate objects in the scene</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_animate_scene.html#doanload-data-and-create-the-scene">Doanload data and create the scene</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_animate_scene.html#download-data-and-create-the-scene">Download data and create the scene</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_animate_scene.html#animate-a-single-brain-object">Animate a single brain object</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_animate_scene.html#animate-multiple-objects">Animate multiple objects</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_animate_scene.html#animate-sources">Animate sources</a></li>
@@ -231,7 +231,17 @@
 <li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_brain_obj.html#fun-stuff">“Fun” stuff</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html">Combine multiple objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html">Combine multiple objects</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html#scene-creation">Scene creation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html#fmri-activation">fMRI activation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html#region-of-interest-roi">Region Of Interest (ROI)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html#sources">Sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html#d-time-series">3D Time-series</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html#d-pictures">3D Pictures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html#connectivity">Connectivity</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html#cross-sections">Cross-sections</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../auto_examples/objects/plot_connectivity_obj.html">Connectivity object (ConnectObj) : complete tutorial</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_connectivity_obj.html#download-data-and-define-the-scene">Download data and define the scene</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_connectivity_obj.html#color-by-connectivity-strength">Color by connectivity strength</a></li>
@@ -317,6 +327,15 @@
 <li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_volume_obj.html#select-volume-levels">Select volume levels</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_volume_obj.html#mri-file-mip-rendering">MRI file : mip rendering</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_volume_obj.html#mri-file-translucent-rendering">MRI file : translucent rendering</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../auto_examples/objects/plot_x3d_files.html">Plot x3d files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_x3d_files.html#ferret-brain">Ferret brain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_x3d_files.html#macaque-brain-1">Macaque brain (1)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_x3d_files.html#macaque-brain-2">Macaque brain (2)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_x3d_files.html#mouse-brain">Mouse brain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_x3d_files.html#rat-brain">Rat brain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_examples/objects/plot_x3d_files.html#human-brain">Human brain</a></li>
 </ul>
 </li>
 </ul>
@@ -958,7 +977,7 @@
 <h1>visbrain.objects.CrossSecObj<a class="headerlink" href="#visbrain-objects-crosssecobj" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="visbrain.objects.CrossSecObj">
-<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">CrossSecObj</code><span class="sig-paren">(</span><em>name</em>, <em>vol=None</em>, <em>hdr=None</em>, <em>coords=None</em>, <em>contrast=0.0</em>, <em>interpolation='nearest'</em>, <em>text_size=13.0</em>, <em>text_color='white'</em>, <em>text_bold=True</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>preload=True</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/crossec_obj.html#CrossSecObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/crossec_obj.py#L119-L631"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.CrossSecObj" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">CrossSecObj</code><span class="sig-paren">(</span><em>name</em>, <em>vol=None</em>, <em>hdr=None</em>, <em>coords=None</em>, <em>contrast=0.0</em>, <em>interpolation='nearest'</em>, <em>text_size=13.0</em>, <em>text_color='white'</em>, <em>text_bold=True</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>preload=True</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/crossec_obj.html#CrossSecObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/crossec_obj.py#L119-L632"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.CrossSecObj" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a Cross-sections object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1184,7 +1203,7 @@ be a tuple of three floats for (x, y, z).</p>
 
 <dl class="method">
 <dt id="visbrain.objects.CrossSecObj.highlight_sources">
-<code class="descname">highlight_sources</code><span class="sig-paren">(</span><em>xyz</em>, <em>radius=1</em>, <em>color='green'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/crossec_obj.html#CrossSecObj.highlight_sources"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/crossec_obj.py#L327-L359"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.CrossSecObj.highlight_sources" title="Permalink to this definition">¶</a></dt>
+<code class="descname">highlight_sources</code><span class="sig-paren">(</span><em>xyz</em>, <em>radius=1</em>, <em>color='green'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/crossec_obj.html#CrossSecObj.highlight_sources"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/crossec_obj.py#L328-L360"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.CrossSecObj.highlight_sources" title="Permalink to this definition">¶</a></dt>
 <dd><p>Highlight a number of sources.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1222,7 +1241,7 @@ be a tuple of three floats for (x, y, z).</p>
 
 <dl class="method">
 <dt id="visbrain.objects.CrossSecObj.localize_source">
-<code class="descname">localize_source</code><span class="sig-paren">(</span><em>coords</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/crossec_obj.html#CrossSecObj.localize_source"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/crossec_obj.py#L313-L325"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.CrossSecObj.localize_source" title="Permalink to this definition">¶</a></dt>
+<code class="descname">localize_source</code><span class="sig-paren">(</span><em>coords</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/crossec_obj.html#CrossSecObj.localize_source"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/crossec_obj.py#L314-L326"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.CrossSecObj.localize_source" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cut at a specific MNI coordinate and display the cross.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1419,7 +1438,7 @@ object for the sceen rendering.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.CrossSecObj.set_activation">
-<code class="descname">set_activation</code><span class="sig-paren">(</span><em>data</em>, <em>xyz=None</em>, <em>translucent=(None</em>, <em>0.5)</em>, <em>cmap='Spectral_r'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>under='red'</em>, <em>over='green'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/crossec_obj.html#CrossSecObj.set_activation"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/crossec_obj.py#L250-L311"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.CrossSecObj.set_activation" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_activation</code><span class="sig-paren">(</span><em>data</em>, <em>xyz=None</em>, <em>translucent=(None</em>, <em>0.5)</em>, <em>cmap='Spectral_r'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>under='red'</em>, <em>over='green'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/objects/crossec_obj.html#CrossSecObj.set_activation"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/crossec_obj.py#L250-L312"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.CrossSecObj.set_activation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set any type of additional data (activation, stat…).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1497,7 +1516,7 @@ translucent</li>
 
 <div class="section" id="examples-using-visbrain-objects-crosssecobj">
 <h2>Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.objects.CrossSecObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-crosssecobj" title="Permalink to this headline">¶</a></h2>
-<div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the feasibility to combine multiple objects in the same scene. "><div class="figure" id="id5">
+<div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the feasibility to combine multiple objects in the same scene."><div class="figure" id="id5">
 <img alt="../_images/sphx_glr_plot_combine_objects_thumb.png" src="../_images/sphx_glr_plot_combine_objects_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/objects/plot_combine_objects.html#sphx-glr-auto-examples-objects-plot-combine-objects-py"><span class="std std-ref">Combine multiple objects</span></a></span></p>
 </div>
@@ -1533,7 +1552,7 @@ translucent</li>
         <div class="container">
             <img src="../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2018-12-17.</p>
+        <p>&copy; Copyright Last updated on 2018-12-20.</p>
     </footer>
 
   </body>

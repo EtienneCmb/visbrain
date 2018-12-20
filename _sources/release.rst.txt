@@ -13,6 +13,7 @@ Changelog
 New features
 ~~~~~~~~~~~~
 
+* :class:`visbrain.objects.BrainObj` now support x3d files
 * New object : :class:`visbrain.objects.GridSignalsObj` to plot multi-dimensional time-series and MNE instances or Raw, RawArray and Epochs
 * Each object now inherits a method to animate it and to save the animation as a GIF. See for example :class:`visbrain.objects.BrainObj.animate` and :class:`visbrain.objects.BrainObj.record_animation`. Note that object can also be animate inside subplot (SceneObj)
 * New object : :class:`visbrain.objects.VispyObj` makes VisPy's visuals compatibles with Visbrain's objects
