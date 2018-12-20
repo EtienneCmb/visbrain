@@ -10,7 +10,7 @@ from ._projection import _project_sources_data
 from ..visuals import BrainMesh
 from ..utils import (mesh_edges, smoothing_matrix, rotate_turntable)
 from ..io import (is_nibabel_installed, is_pandas_installed,
-                  add_brain_template, remove_brain_template)
+                  add_brain_template, remove_brain_template, read_x3d)
 
 logger = logging.getLogger('visbrain')
 
@@ -24,7 +24,10 @@ class BrainObj(VisbrainObject):
         Name of the brain object. If brain is 'B1' or 'B2' or 'B3' use a
         default brain template. If name is 'white', 'inflated' or
         'sphere' download the template (if needed). Otherwise, at least
-        vertices and faces must be defined.
+        vertices and faces must be defined. The name parameter can also be the
+        path to a file with one the following extensions :
+
+            * x3d (XML files)
     vertices : array_like | None
         Mesh vertices to use for the brain. Must be an array of shape
         (n_vertices, 3).
@@ -82,6 +85,11 @@ class BrainObj(VisbrainObject):
         # Load brain template :
         self._scale = _scale
         self.data_folder = 'templates'
+        if 'x3d' in name:
+            filename = os.path.split(name)[1]
+            self._name = filename
+            logger.info("    Extracting vertices and faces from %s" % filename)
+            vertices, faces = read_x3d(name)
         self.set_data(name, vertices, faces, normals, lr_index, hemisphere,
                       invert_normals, sulcus)
         self.translucent = translucent
@@ -213,6 +221,10 @@ class BrainObj(VisbrainObject):
                 * Right : 'sagittal_1', 'right'
                 * Front : 'coronal_0', 'front'
                 * Back : 'coronal_1', 'back'
+                * Side front-left : 'side-fl'
+                * Side front-right : 'side-fr'
+                * Side back-left : 'side-bl'
+                * Side back-right : 'side-br'
         custom : tuple | None
             Custom rotation. This parameter must be a tuple of two floats
             respectively describing the (azimuth, elevation).

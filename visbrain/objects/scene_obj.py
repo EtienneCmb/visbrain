@@ -460,8 +460,18 @@ class SceneObj(object):
             use the camera of an object as the reference, turn this parameter
             to True.
         rotate : string | None
-            Rotate the scene. Use 'top', 'bottom', 'left', 'right', 'front' or
-            'back'. Only available for 3-D objects.
+            Rotate the scene (only available for 3D objects). Use :
+
+                * 'top' : top view
+                * 'bottom' : bottom view
+                * 'left' : left view
+                * 'right' : right view
+                * 'front' : front view
+                * 'back' : bottom view
+                * 'side-fl' : side view (front-left)
+                * 'side-fr' : side view (front-right)
+                * 'side-bl' : side view (back-left)
+                * 'side-br' : side view (back-right)
         zoom : float | None
             Zoom level. If zoom is in ]0, 1[, the size of the object decrease.
             If `zoom=1`, no zoom is applied. If zoom > 1., the size of the

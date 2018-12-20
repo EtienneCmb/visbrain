@@ -293,6 +293,7 @@ class CrossSecObj(_Volume):
         # Set the volume and colormap :
         self._act.set_volume(vol, hdr)
         limits = (vol.min(), vol.max())
+        self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
         cmap = cmap_to_glsl(limits=limits, translucent=translucent, cmap=cmap,
                             clim=clim, vmin=vmin, over=over, vmax=vmax,
                             under=under)
