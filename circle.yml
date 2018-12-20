@@ -50,7 +50,7 @@ jobs:
               pip install pytest pytest-travis-fold;
               pip install mne nibabel pandas openpyxl tensorpac xlrd scikit-image;
               pip install git+https://github.com/hbldh/lspopt.git#egg=lspopt;
-              pip install sphinx sphinx-gallery sphinx_bootstrap_theme;
+              pip install sphinx sphinx-gallery sphinx_bootstrap_theme lxml;
               pip install numpydoc;
               echo $PATH;
               echo $CIRCLE_BRANCH;
