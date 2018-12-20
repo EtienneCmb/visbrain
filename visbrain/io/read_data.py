@@ -12,7 +12,7 @@ import numpy as np
 
 
 __all__ = ('read_mat', 'read_pickle', 'read_npy', 'read_npz', 'read_txt',
-           'read_csv', 'read_json', 'read_stc')
+           'read_csv', 'read_json', 'read_stc', 'read_x3d')
 
 
 def read_mat(path, vars=None):
@@ -110,3 +110,45 @@ def read_stc(path):
     # close the file
     fid.close()
     return stc
+
+
+def read_x3d(path):
+    """Read x3d files.
+
+    This code has been adapted from :
+    https://github.com/INCF/Scalable-Brain-Atlas
+
+    Parameters
+    ----------
+    path : string
+        Full path to a .x3d file.
+
+    Returns
+    -------
+    vertices : array_like
+        Array of vertices of shape (n_vertices, 3)
+    faces : array_like
+        Array of faces of shape (n_faces, 3)
+    """
+    from lxml import etree
+    import re
+
+    # Read root node :
+    tree = etree.parse(path, parser=etree.ETCompatXMLParser(huge_tree=True))
+    root_node = tree.getroot()
+
+    # Get mesh faces :
+    face_node = root_node.find('.//IndexedFaceSet')
+    faces = re.sub('[\s,]+', ',', face_node.attrib['coordIndex'].strip())
+    faces = re.sub(',-1,', '\n', faces)
+    faces = re.sub(',-1$', '', faces)
+    faces = np.array(faces.replace('\n', ',').split(',')).astype(int)
+    faces = faces.reshape(int(faces.shape[0] / 3), 3)
+
+    # Get mesh vertices :
+    vertex_node = face_node.find('Coordinate')
+    vertices = re.sub('[\s,]+', ' ', vertex_node.attrib['point'].strip())
+    vertices = np.array(vertices.split(' ')[0:-1]).astype(float)
+    vertices = vertices.reshape(int(vertices.shape[0] / 3), 3)
+
+    return vertices, faces
