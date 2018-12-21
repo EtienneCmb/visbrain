@@ -37,6 +37,15 @@ def use_app(backend_name):
 # MPL render :
 CONFIG['MPL_RENDER'] = False
 
+# Jupyter / iPython :
+try:
+    ip = get_ipython()
+    CONFIG['MPL_RENDER'] = True
+    import vispy
+    vispy.use('PyQt5')
+except NameError:
+    pass
+
 # Input command line arguments
 VISBRAIN_HELP = """
 Visbrain command line arguments:
