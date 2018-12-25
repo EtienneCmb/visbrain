@@ -658,8 +658,15 @@ class SceneObj(object):
                                      widget=self.canvas.central_widget)
         self.canvas.events.key_press.connect(key_pressed)
 
-    def preview(self):
-        """Previsualize the result."""
+    def preview(self, mpl=False):
+        """Previsualize the result.
+
+        Parameters
+        ----------
+        mpl : bool | False
+            Use Matplotlib to display the scene. This result in a non
+            interactive figure.
+        """
         self._gl_uniform_transforms()
         if CONFIG['MPL_RENDER']:
             mpl_preview(self.canvas, widget=self.canvas.central_widget)
