@@ -200,7 +200,7 @@ class VisbrainObject(_VisbrainObj):
         return canvas
 
     def preview(self, bgcolor='black', axis=False, xyz=False, show=True,
-                obj=None, size=(1200, 800), **kwargs):
+                obj=None, size=(1200, 800), mpl=False, **kwargs):
         """Previsualize the result.
 
         Parameters
@@ -216,10 +216,13 @@ class VisbrainObject(_VisbrainObj):
             object.
         size : tuple | (1200, 800)
             Default size of the window.
+        mpl : bool | False
+            Use Matplotlib to display the object. This result in a non
+            interactive figure.
         kwargs : dict | {}
             Optional arguments are passed to the VisbrainCanvas class.
         """
-        if CONFIG['MPL_RENDER']:
+        if CONFIG['MPL_RENDER'] or mpl:
             canvas = self._get_parent(bgcolor, False, False, obj, **kwargs)
             mpl_preview(canvas.canvas, widget=canvas.canvas.central_widget)
         else:

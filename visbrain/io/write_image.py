@@ -8,8 +8,8 @@ import os
 import logging
 import numpy as np
 
-from .path import path_to_tmp, clean_tmp
 from ..utils.color import color2vb
+from ..config import CONFIG
 
 logger = logging.getLogger('visbrain')
 
@@ -395,6 +395,15 @@ def write_fig_canvas(filename, canvas, widget=None, autocrop=False,
         raise ValueError("Can not render the canvas. Try to decrease the "
                          "resolution")
 
+    # Set to the canvas it's previous size :
+    canvas._backend._physical_size = backup_size
+    canvas.size = backup_size
+    canvas.bgcolor = backup_bgcolor
+
+    # Matplotlib render :
+    if CONFIG['MPL_RENDER'] or not isinstance(filename, str):
+        return img
+
     # Remove alpha for files that are not png or tiff :
     if os.path.splitext(filename)[1] not in ['.png', '.tiff']:
         img = img[..., 0:-1]
@@ -407,11 +416,6 @@ def write_fig_canvas(filename, canvas, widget=None, autocrop=False,
     imsave(filename, img)
     px = tuple(img[:, :, 0].T.shape)
     logger.info("Image of size %rpx successfully saved (%s)" % (px, filename))
-
-    # Set to the canvas it's previous size :
-    canvas._backend._physical_size = backup_size
-    canvas.size = backup_size
-    canvas.bgcolor = backup_bgcolor
 
 
 def write_fig_pyqt(self, filename):
@@ -446,12 +450,9 @@ def write_fig_pyqt(self, filename):
 def mpl_preview(canvas, **kw):
     """Preview canvas using Matplotlib."""
     import matplotlib.pyplot as plt
-    import matplotlib.image as mpimg
 
-    save_as = os.path.join(path_to_tmp(), 'mpl_render.jpg')
-    write_fig_canvas(save_as, canvas, **kw)
+    img = write_fig_canvas(None, canvas, **kw)[..., 0:-1]
 
-    img = mpimg.imread(save_as)
     fig = plt.figure(figsize=(12, 8))
     ax = plt.subplot(111)
     ax.imshow(img, interpolation='bicubic')
@@ -460,4 +461,3 @@ def mpl_preview(canvas, **kw):
     plt.axis('off')
     fig.tight_layout(pad=0., h_pad=0., w_pad=0.)
     plt.show()
-    clean_tmp()
