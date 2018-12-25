@@ -1626,8 +1626,15 @@
                                      <span class="n">widget</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">central_widget</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">key_press</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">key_pressed</span><span class="p">)</span>
 
-<div class="viewcode-block" id="SceneObj.preview"><a class="viewcode-back" href="../../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj.preview">[docs]</a>    <span class="k">def</span> <span class="nf">preview</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Previsualize the result.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="SceneObj.preview"><a class="viewcode-back" href="../../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj.preview">[docs]</a>    <span class="k">def</span> <span class="nf">preview</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mpl</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Previsualize the result.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mpl : bool | False</span>
+<span class="sd">            Use Matplotlib to display the scene. This result in a non</span>
+<span class="sd">            interactive figure.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_gl_uniform_transforms</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">CONFIG</span><span class="p">[</span><span class="s1">&#39;MPL_RENDER&#39;</span><span class="p">]:</span>
             <span class="n">mpl_preview</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">central_widget</span><span class="p">)</span>
@@ -1664,7 +1671,7 @@
         <div class="container">
             <img src="../../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2018-12-20.</p>
+        <p>&copy; Copyright Last updated on 2018-12-25.</p>
     </footer>
 
   </body>

@@ -1079,7 +1079,7 @@ images.</p>
 <tr class="row-even"><td><a class="reference internal" href="ImageObj/visbrain.objects.ImageObj.describe_tree.html#visbrain.objects.ImageObj.describe_tree" title="visbrain.objects.ImageObj.describe_tree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">describe_tree</span></code></a>()</td>
 <td>Tree description.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.ImageObj.preview" title="visbrain.objects.ImageObj.preview"><code class="xref py py-obj docutils literal notranslate"><span class="pre">preview</span></code></a>([bgcolor,&nbsp;axis,&nbsp;xyz,&nbsp;show,&nbsp;obj,&nbsp;size])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.ImageObj.preview" title="visbrain.objects.ImageObj.preview"><code class="xref py py-obj docutils literal notranslate"><span class="pre">preview</span></code></a>([bgcolor,&nbsp;axis,&nbsp;xyz,&nbsp;show,&nbsp;obj,&nbsp;…])</td>
 <td>Previsualize the result.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#visbrain.objects.ImageObj.record_animation" title="visbrain.objects.ImageObj.record_animation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">record_animation</span></code></a>(name[,&nbsp;n_pic,&nbsp;bgcolor])</td>
@@ -1110,7 +1110,7 @@ images.</p>
 </table>
 <dl class="method">
 <dt id="visbrain.objects.ImageObj.animate">
-<code class="descname">animate</code><span class="sig-paren">(</span><em>step=1.0</em>, <em>interval='auto'</em>, <em>iterations=-1</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/visbrain_obj.py#L241-L264"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.ImageObj.animate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">animate</code><span class="sig-paren">(</span><em>step=1.0</em>, <em>interval='auto'</em>, <em>iterations=-1</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/visbrain_obj.py#L244-L267"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.ImageObj.animate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Animate the object.</p>
 <p>Note that this method can only be used with 3D objects.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1150,7 +1150,7 @@ current monitor. Currently this is simply 1/60.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.ImageObj.copy">
-<code class="descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/visbrain_obj.py#L353-L356"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.ImageObj.copy" title="Permalink to this definition">¶</a></dt>
+<code class="descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/visbrain_obj.py#L356-L359"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.ImageObj.copy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a copy of the object.</p>
 </dd></dl>
 
@@ -1186,7 +1186,7 @@ current monitor. Currently this is simply 1/60.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.ImageObj.preview">
-<code class="descname">preview</code><span class="sig-paren">(</span><em>bgcolor='black'</em>, <em>axis=False</em>, <em>xyz=False</em>, <em>show=True</em>, <em>obj=None</em>, <em>size=(1200</em>, <em>800)</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/visbrain_obj.py#L202-L235"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.ImageObj.preview" title="Permalink to this definition">¶</a></dt>
+<code class="descname">preview</code><span class="sig-paren">(</span><em>bgcolor='black'</em>, <em>axis=False</em>, <em>xyz=False</em>, <em>show=True</em>, <em>obj=None</em>, <em>size=(1200</em>, <em>800)</em>, <em>mpl=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/visbrain_obj.py#L202-L238"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.ImageObj.preview" title="Permalink to this definition">¶</a></dt>
 <dd><p>Previsualize the result.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1209,6 +1209,10 @@ object.</p>
 <dt><strong>size</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple | (1200, 800)</span></dt>
 <dd><p class="first last">Default size of the window.</p>
 </dd>
+<dt><strong>mpl</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool | False</span></dt>
+<dd><p class="first last">Use Matplotlib to display the object. This result in a non
+interactive figure.</p>
+</dd>
 <dt><strong>kwargs</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict | {}</span></dt>
 <dd><p class="first last">Optional arguments are passed to the VisbrainCanvas class.</p>
 </dd>
@@ -1221,7 +1225,7 @@ object.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.ImageObj.record_animation">
-<code class="descname">record_animation</code><span class="sig-paren">(</span><em>name</em>, <em>n_pic=10</em>, <em>bgcolor=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/visbrain_obj.py#L266-L290"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.ImageObj.record_animation" title="Permalink to this definition">¶</a></dt>
+<code class="descname">record_animation</code><span class="sig-paren">(</span><em>name</em>, <em>n_pic=10</em>, <em>bgcolor=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/visbrain_obj.py#L269-L293"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.ImageObj.record_animation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Record an animated object and save as a <a href="#id3"><span class="problematic" id="id4">*</span></a>.gif file.</p>
 <p>Note that this method :</p>
 <blockquote>
@@ -1253,7 +1257,7 @@ object.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.ImageObj.screenshot">
-<code class="descname">screenshot</code><span class="sig-paren">(</span><em>saveas</em>, <em>print_size=None</em>, <em>dpi=300.0</em>, <em>unit='centimeter'</em>, <em>factor=None</em>, <em>region=None</em>, <em>autocrop=False</em>, <em>bgcolor=None</em>, <em>transparent=False</em>, <em>obj=None</em>, <em>line_width=1.0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/visbrain_obj.py#L292-L351"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.ImageObj.screenshot" title="Permalink to this definition">¶</a></dt>
+<code class="descname">screenshot</code><span class="sig-paren">(</span><em>saveas</em>, <em>print_size=None</em>, <em>dpi=300.0</em>, <em>unit='centimeter'</em>, <em>factor=None</em>, <em>region=None</em>, <em>autocrop=False</em>, <em>bgcolor=None</em>, <em>transparent=False</em>, <em>obj=None</em>, <em>line_width=1.0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/visbrain_obj.py#L295-L354"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.ImageObj.screenshot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Take a screeshot of the scene.</p>
 <p>By default, the rendered canvas will have the size of your screen.
 The screenshot() method provides two ways to increase to exported image
@@ -1393,7 +1397,7 @@ object for the sceen rendering.</p>
         <div class="container">
             <img src="../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2018-12-20.</p>
+        <p>&copy; Copyright Last updated on 2018-12-25.</p>
     </footer>
 
   </body>

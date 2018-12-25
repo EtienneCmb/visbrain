@@ -976,8 +976,8 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">.path</span> <span class="k">import</span> <span class="n">path_to_tmp</span><span class="p">,</span> <span class="n">clean_tmp</span>
 <span class="kn">from</span> <span class="nn">..utils.color</span> <span class="k">import</span> <span class="n">color2vb</span>
+<span class="kn">from</span> <span class="nn">..config</span> <span class="k">import</span> <span class="n">CONFIG</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
 
@@ -1363,6 +1363,15 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Can not render the canvas. Try to decrease the &quot;</span>
                          <span class="s2">&quot;resolution&quot;</span><span class="p">)</span>
 
+    <span class="c1"># Set to the canvas it&#39;s previous size :</span>
+    <span class="n">canvas</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">_physical_size</span> <span class="o">=</span> <span class="n">backup_size</span>
+    <span class="n">canvas</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">backup_size</span>
+    <span class="n">canvas</span><span class="o">.</span><span class="n">bgcolor</span> <span class="o">=</span> <span class="n">backup_bgcolor</span>
+
+    <span class="c1"># Matplotlib render :</span>
+    <span class="k">if</span> <span class="n">CONFIG</span><span class="p">[</span><span class="s1">&#39;MPL_RENDER&#39;</span><span class="p">]</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">img</span>
+
     <span class="c1"># Remove alpha for files that are not png or tiff :</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;.png&#39;</span><span class="p">,</span> <span class="s1">&#39;.tiff&#39;</span><span class="p">]:</span>
         <span class="n">img</span> <span class="o">=</span> <span class="n">img</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
@@ -1375,11 +1384,6 @@
     <span class="n">imsave</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span>
     <span class="n">px</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">img</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Image of size </span><span class="si">%r</span><span class="s2">px successfully saved (</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">px</span><span class="p">,</span> <span class="n">filename</span><span class="p">))</span>
-
-    <span class="c1"># Set to the canvas it&#39;s previous size :</span>
-    <span class="n">canvas</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">_physical_size</span> <span class="o">=</span> <span class="n">backup_size</span>
-    <span class="n">canvas</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">backup_size</span>
-    <span class="n">canvas</span><span class="o">.</span><span class="n">bgcolor</span> <span class="o">=</span> <span class="n">backup_bgcolor</span>
 
 
 <span class="k">def</span> <span class="nf">write_fig_pyqt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
@@ -1414,12 +1418,9 @@
 <span class="k">def</span> <span class="nf">mpl_preview</span><span class="p">(</span><span class="n">canvas</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Preview canvas using Matplotlib.&quot;&quot;&quot;</span>
     <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-    <span class="kn">import</span> <span class="nn">matplotlib.image</span> <span class="k">as</span> <span class="nn">mpimg</span>
 
-    <span class="n">save_as</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path_to_tmp</span><span class="p">(),</span> <span class="s1">&#39;mpl_render.jpg&#39;</span><span class="p">)</span>
-    <span class="n">write_fig_canvas</span><span class="p">(</span><span class="n">save_as</span><span class="p">,</span> <span class="n">canvas</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">write_fig_canvas</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">canvas</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-    <span class="n">img</span> <span class="o">=</span> <span class="n">mpimg</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">save_as</span><span class="p">)</span>
     <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
     <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;bicubic&#39;</span><span class="p">)</span>
@@ -1428,7 +1429,6 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
     <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">pad</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">h_pad</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">w_pad</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-    <span class="n">clean_tmp</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -1451,7 +1451,7 @@
         <div class="container">
             <img src="../../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2018-12-20.</p>
+        <p>&copy; Copyright Last updated on 2018-12-25.</p>
     </footer>
 
   </body>

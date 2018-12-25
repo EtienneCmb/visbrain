@@ -974,7 +974,7 @@
 <h1>visbrain.objects.TimeSeries3DObj.preview<a class="headerlink" href="#visbrain-objects-timeseries3dobj-preview" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="visbrain.objects.TimeSeries3DObj.preview">
-<code class="descclassname">TimeSeries3DObj.</code><code class="descname">preview</code><span class="sig-paren">(</span><em>bgcolor='black'</em>, <em>axis=False</em>, <em>xyz=False</em>, <em>show=True</em>, <em>obj=None</em>, <em>size=(1200</em>, <em>800)</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/visbrain_obj.py#L202-L235"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.TimeSeries3DObj.preview" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">TimeSeries3DObj.</code><code class="descname">preview</code><span class="sig-paren">(</span><em>bgcolor='black'</em>, <em>axis=False</em>, <em>xyz=False</em>, <em>show=True</em>, <em>obj=None</em>, <em>size=(1200</em>, <em>800)</em>, <em>mpl=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/visbrain_obj.py#L202-L238"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.TimeSeries3DObj.preview" title="Permalink to this definition">¶</a></dt>
 <dd><p>Previsualize the result.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -996,6 +996,10 @@ object.</p>
 </dd>
 <dt><strong>size</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple | (1200, 800)</span></dt>
 <dd><p class="first last">Default size of the window.</p>
+</dd>
+<dt><strong>mpl</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool | False</span></dt>
+<dd><p class="first last">Use Matplotlib to display the object. This result in a non
+interactive figure.</p>
 </dd>
 <dt><strong>kwargs</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict | {}</span></dt>
 <dd><p class="first last">Optional arguments are passed to the VisbrainCanvas class.</p>
@@ -1030,7 +1034,7 @@ object.</p>
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2018-12-20.</p>
+        <p>&copy; Copyright Last updated on 2018-12-25.</p>
     </footer>
 
   </body>

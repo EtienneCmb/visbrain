@@ -19,6 +19,7 @@ New features
 * New object : :class:`visbrain.objects.VispyObj` makes VisPy's visuals compatibles with Visbrain's objects
 * :class:`visbrain.objects.SourceObj` control masked sources' radius
 * :class:`visbrain.objects.ConnectObj` finer control of transparency using input parameters `dynamic_order` and `dynamic_orientation`
+* Objects and scenes can be plotted inside notebooks. For now it results in a non-interactive figure
 
 Improvements
 ~~~~~~~~~~~~

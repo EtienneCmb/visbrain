@@ -1168,7 +1168,7 @@
         <span class="k">return</span> <span class="n">canvas</span>
 
     <span class="k">def</span> <span class="nf">preview</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                <span class="n">obj</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1200</span><span class="p">,</span> <span class="mi">800</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                <span class="n">obj</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1200</span><span class="p">,</span> <span class="mi">800</span><span class="p">),</span> <span class="n">mpl</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Previsualize the result.</span>
 
 <span class="sd">        Parameters</span>
@@ -1184,10 +1184,13 @@
 <span class="sd">            object.</span>
 <span class="sd">        size : tuple | (1200, 800)</span>
 <span class="sd">            Default size of the window.</span>
+<span class="sd">        mpl : bool | False</span>
+<span class="sd">            Use Matplotlib to display the object. This result in a non</span>
+<span class="sd">            interactive figure.</span>
 <span class="sd">        kwargs : dict | {}</span>
 <span class="sd">            Optional arguments are passed to the VisbrainCanvas class.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">CONFIG</span><span class="p">[</span><span class="s1">&#39;MPL_RENDER&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">CONFIG</span><span class="p">[</span><span class="s1">&#39;MPL_RENDER&#39;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">mpl</span><span class="p">:</span>
             <span class="n">canvas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_parent</span><span class="p">(</span><span class="n">bgcolor</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="n">mpl_preview</span><span class="p">(</span><span class="n">canvas</span><span class="o">.</span><span class="n">canvas</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">canvas</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">central_widget</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -1535,7 +1538,7 @@
         <div class="container">
             <img src="../../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2018-12-20.</p>
+        <p>&copy; Copyright Last updated on 2018-12-25.</p>
     </footer>
 
   </body>
