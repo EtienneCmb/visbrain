@@ -56,7 +56,7 @@ setup(
     ],
     extras_require={
         'full': ["mne", "tensorpac", "pandas", "xlrd", "scikit-image",
-                 "nibabel"],
+                 "nibabel", "imageio"],
         'sleep': ["mne", "tensorpac"],
         'roi': ["pandas", "xlrd"],
         'topo': ["scikit-image"]
