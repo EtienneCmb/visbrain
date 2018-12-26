@@ -292,6 +292,18 @@ class VisbrainObject(_VisbrainObj):
             self.camera.azimuth += 360. / n_pic
         writer.close()
 
+    def render(self):
+        """Render the canvas.
+
+        Returns
+        -------
+        img : array_like
+            Array of shape (n_rows, n_columns, 4) where 4 describes the RGBA
+            components.
+        """
+        canvas = self._get_parent(None, False, False)
+        return canvas.canvas.render()
+
     def screenshot(self, saveas, print_size=None, dpi=300., unit='centimeter',
                    factor=None, region=None, autocrop=False, bgcolor=None,
                    transparent=False, obj=None, line_width=1., **kwargs):
