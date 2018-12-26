@@ -51,10 +51,10 @@ Dependencies
 
 * NumPy and SciPy (>= 1.13)
 * Matplotlib (>= 1.5.5)
-* VisPy (>= 0.5.2)
+* VisPy (>= 0.5.3)
 * PyQt5
 * PyOpenGL
-Pillow
+* Pillow
 
 Optional dependencies
 ---------------------
@@ -65,15 +65,16 @@ Optional dependencies
 * MNE-python : alternative to read sleep data files
 * Tensorpac : compute and display phase-amplitude coupling
 * lspopt : multitaper spectrogram
+* imageio : for animated GIF export
 
 Regular installation
 --------------------
 
-Run the following command in a terminal :
+In order to install Visbrain, or to update it, run the following command in a terminal :
 
 .. code-block:: shell
 
-    pip install visbrain
+    pip install -U visbrain
 
 Develop mode
 ------------
