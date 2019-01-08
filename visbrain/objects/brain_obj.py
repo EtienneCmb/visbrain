@@ -10,7 +10,8 @@ from ._projection import _project_sources_data
 from ..visuals import BrainMesh
 from ..utils import (mesh_edges, smoothing_matrix, rotate_turntable)
 from ..io import (is_nibabel_installed, is_pandas_installed,
-                  add_brain_template, remove_brain_template, read_x3d)
+                  add_brain_template, remove_brain_template, read_x3d,
+                  read_gii, read_obj)
 
 logger = logging.getLogger('visbrain')
 
@@ -28,6 +29,8 @@ class BrainObj(VisbrainObject):
         path to a file with one the following extensions :
 
             * x3d (XML files)
+            * gii (Gifti files, require nibabel)
+            * obj (wavefront files)
     vertices : array_like | None
         Mesh vertices to use for the brain. Must be an array of shape
         (n_vertices, 3).
@@ -85,11 +88,16 @@ class BrainObj(VisbrainObject):
         # Load brain template :
         self._scale = _scale
         self.data_folder = 'templates'
-        if 'x3d' in name:
+        if any(k in name for k in ['.x3d', '.gii', '.obj']):
             filename = os.path.split(name)[1]
+            _, ext = os.path.splitext(name)
             self._name = filename
             logger.info("    Extracting vertices and faces from %s" % filename)
-            vertices, faces = read_x3d(name)
+            if ext == '.x3d': vertices, faces = read_x3d(name)  # noqa
+            elif ext == '.gii': vertices, faces = read_gii(name)  # noqa
+            elif ext == '.obj': vertices, faces = read_obj(name)  # noqa
+        elif '.gii' in name:
+            pass
         self.set_data(name, vertices, faces, normals, lr_index, hemisphere,
                       invert_normals, sulcus)
         self.translucent = translucent
