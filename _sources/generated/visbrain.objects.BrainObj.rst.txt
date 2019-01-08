@@ -27,6 +27,7 @@ visbrain.objects.BrainObj
       ~BrainObj.project_sources
       ~BrainObj.record_animation
       ~BrainObj.remove
+      ~BrainObj.render
       ~BrainObj.reset_camera
       ~BrainObj.rotate
       ~BrainObj.save

@@ -20,6 +20,7 @@ visbrain.objects.PacmapObj
       ~PacmapObj.describe_tree
       ~PacmapObj.preview
       ~PacmapObj.record_animation
+      ~PacmapObj.render
       ~PacmapObj.screenshot
       ~PacmapObj.set_data
       ~PacmapObj.set_shortcuts_to_canvas

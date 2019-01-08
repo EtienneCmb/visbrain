@@ -24,6 +24,7 @@ visbrain.objects.VolumeObj
       ~VolumeObj.preview
       ~VolumeObj.record_animation
       ~VolumeObj.remove
+      ~VolumeObj.render
       ~VolumeObj.save
       ~VolumeObj.screenshot
       ~VolumeObj.set_data

@@ -20,6 +20,7 @@ visbrain.objects.HypnogramObj
       ~HypnogramObj.describe_tree
       ~HypnogramObj.preview
       ~HypnogramObj.record_animation
+      ~HypnogramObj.render
       ~HypnogramObj.screenshot
       ~HypnogramObj.set_shortcuts_to_canvas
       ~HypnogramObj.set_stage

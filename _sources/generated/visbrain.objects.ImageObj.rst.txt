@@ -20,6 +20,7 @@ visbrain.objects.ImageObj
       ~ImageObj.describe_tree
       ~ImageObj.preview
       ~ImageObj.record_animation
+      ~ImageObj.render
       ~ImageObj.screenshot
       ~ImageObj.set_data
       ~ImageObj.set_shortcuts_to_canvas

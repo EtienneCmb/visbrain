@@ -20,6 +20,7 @@ visbrain.objects.GridSignalsObj
       ~GridSignalsObj.describe_tree
       ~GridSignalsObj.preview
       ~GridSignalsObj.record_animation
+      ~GridSignalsObj.render
       ~GridSignalsObj.screenshot
       ~GridSignalsObj.set_shortcuts_to_canvas
       ~GridSignalsObj.to_dict

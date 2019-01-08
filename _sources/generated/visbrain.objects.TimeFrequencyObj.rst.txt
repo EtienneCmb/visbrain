@@ -20,6 +20,7 @@ visbrain.objects.TimeFrequencyObj
       ~TimeFrequencyObj.describe_tree
       ~TimeFrequencyObj.preview
       ~TimeFrequencyObj.record_animation
+      ~TimeFrequencyObj.render
       ~TimeFrequencyObj.screenshot
       ~TimeFrequencyObj.set_data
       ~TimeFrequencyObj.set_shortcuts_to_canvas

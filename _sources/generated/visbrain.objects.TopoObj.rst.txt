@@ -21,6 +21,7 @@ visbrain.objects.TopoObj
       ~TopoObj.describe_tree
       ~TopoObj.preview
       ~TopoObj.record_animation
+      ~TopoObj.render
       ~TopoObj.screenshot
       ~TopoObj.set_data
       ~TopoObj.set_shortcuts_to_canvas

@@ -27,6 +27,7 @@ visbrain.objects.RoiObj
       ~RoiObj.project_sources
       ~RoiObj.record_animation
       ~RoiObj.remove
+      ~RoiObj.render
       ~RoiObj.reset
       ~RoiObj.save
       ~RoiObj.screenshot

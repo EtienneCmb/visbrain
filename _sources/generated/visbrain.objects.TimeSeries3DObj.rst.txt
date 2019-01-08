@@ -20,6 +20,7 @@ visbrain.objects.TimeSeries3DObj
       ~TimeSeries3DObj.describe_tree
       ~TimeSeries3DObj.preview
       ~TimeSeries3DObj.record_animation
+      ~TimeSeries3DObj.render
       ~TimeSeries3DObj.screenshot
       ~TimeSeries3DObj.set_shortcuts_to_canvas
       ~TimeSeries3DObj.to_dict

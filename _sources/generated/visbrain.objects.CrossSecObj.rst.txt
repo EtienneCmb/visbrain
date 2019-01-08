@@ -26,6 +26,7 @@ visbrain.objects.CrossSecObj
       ~CrossSecObj.preview
       ~CrossSecObj.record_animation
       ~CrossSecObj.remove
+      ~CrossSecObj.render
       ~CrossSecObj.save
       ~CrossSecObj.screenshot
       ~CrossSecObj.set_activation

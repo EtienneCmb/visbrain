@@ -20,6 +20,7 @@ visbrain.objects.VectorObj
       ~VectorObj.describe_tree
       ~VectorObj.preview
       ~VectorObj.record_animation
+      ~VectorObj.render
       ~VectorObj.screenshot
       ~VectorObj.set_shortcuts_to_canvas
       ~VectorObj.to_dict

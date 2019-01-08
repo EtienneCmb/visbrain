@@ -24,6 +24,7 @@ visbrain.objects.SourceObj
       ~SourceObj.preview
       ~SourceObj.project_sources
       ~SourceObj.record_animation
+      ~SourceObj.render
       ~SourceObj.screenshot
       ~SourceObj.set_shortcuts_to_canvas
       ~SourceObj.set_visible_sources

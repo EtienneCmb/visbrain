@@ -22,6 +22,7 @@ visbrain.objects.ConnectObj
       ~ConnectObj.get_nb_connections_per_node
       ~ConnectObj.preview
       ~ConnectObj.record_animation
+      ~ConnectObj.render
       ~ConnectObj.screenshot
       ~ConnectObj.set_shortcuts_to_canvas
       ~ConnectObj.to_dict

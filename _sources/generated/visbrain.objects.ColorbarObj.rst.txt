@@ -20,6 +20,7 @@ visbrain.objects.ColorbarObj
       ~ColorbarObj.describe_tree
       ~ColorbarObj.preview
       ~ColorbarObj.record_animation
+      ~ColorbarObj.render
       ~ColorbarObj.screenshot
       ~ColorbarObj.set_shortcuts_to_canvas
       ~ColorbarObj.to_dict

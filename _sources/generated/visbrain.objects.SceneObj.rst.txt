@@ -19,6 +19,7 @@ visbrain.objects.SceneObj
       ~SceneObj.link
       ~SceneObj.preview
       ~SceneObj.record_animation
+      ~SceneObj.render
       ~SceneObj.screenshot
    
    
