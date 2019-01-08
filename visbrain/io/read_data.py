@@ -217,5 +217,4 @@ def read_obj(path):
     faces = np.array(faces).squeeze() - 1
     if faces.shape[-1] == 4:  # quad index -> triangles (0 as reference)
         faces = np.r_[faces[:, [0, 1, 2]], faces[:, [0, 2, 3]]]
-    print(vertices.min(), vertices.max())
     return vertices, faces
