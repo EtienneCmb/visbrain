@@ -3,7 +3,7 @@ Plot x3d files
 ==============
 
 This example illustrate how to plot .x3d files. 6 brain templates are going to
-be downloaded (total of 26.3Mo). Additional templates can be donloaded from :
+be downloaded (total of 26.3Mo). Additional templates can be downloaded from :
 https://scalablebrainatlas.incf.org
 """
 from visbrain.objects import BrainObj, SceneObj
