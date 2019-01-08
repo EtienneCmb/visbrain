@@ -324,7 +324,7 @@ class BrainObj(VisbrainObject):
             Number of smoothing steps (smoothing is used if n_data < n_vtx).
             If None or 0, no smoothing is performed.
         file : string | None
-            Full path to the overlay file.
+            Full path to the overlay file. Can either be a nii.gz or gii file.
         hemisphrere : {None, 'both', 'left', 'right'}
             The hemisphere to use to add the overlay. If None, the method tries
             to infer the hemisphere from the file name.
@@ -394,18 +394,26 @@ class BrainObj(VisbrainObject):
                 sc[vertices] = data
         elif isinstance(file, str):
             assert os.path.isfile(file)
-            logger.info("    Add overlay to the {} brain template "
-                        "({})".format(self._name, file))
-            from visbrain.io import read_nifti
-            # Load data using Nibabel :
-            sc, _, _ = read_nifti(file)
-            sc = sc.ravel(order="F")
+            if '.nii' in file:
+                logger.info("    Add overlay from a NIFTI file")
+                from visbrain.io import read_nifti
+                # Load data using Nibabel :
+                sc, _, _ = read_nifti(file)
+                sc = sc.ravel(order="F")
+            elif '.gii' in file:
+                logger.info("    Add overlay from a GIFTI file")
+                is_nibabel_installed(raise_error=True)
+                import nibabel
+                nib = nibabel.load(file)
+                sc = nib.darrays[0].data.squeeze()
             hemisphere = 'both' if len(sc) == len(self.mesh) else hemisphere
             # Hemisphere :
             _, activ_vert = self._hemisphere_from_file(hemisphere, file)
         else:
             raise ValueError("Unknown activation type.")
         # Define the data to send to the vertices :
+        logger.info("    Data scaled between (%.3f, "
+                    "%.3f)" % (sc.min(), sc.max()))
         sm_data[activ_vert] = sc
         data_vec[activ_vert] = self._data_to_contour(sc, clim, n_contours)
         mask[activ_vert] = True
