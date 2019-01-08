@@ -10,7 +10,8 @@ from ._projection import _project_sources_data
 from ..visuals import BrainMesh
 from ..utils import (mesh_edges, smoothing_matrix, rotate_turntable)
 from ..io import (is_nibabel_installed, is_pandas_installed,
-                  add_brain_template, remove_brain_template, read_x3d)
+                  add_brain_template, remove_brain_template, read_x3d,
+                  read_gii, read_obj)
 
 logger = logging.getLogger('visbrain')
 
@@ -28,6 +29,8 @@ class BrainObj(VisbrainObject):
         path to a file with one the following extensions :
 
             * x3d (XML files)
+            * gii (Gifti files, require nibabel)
+            * obj (wavefront files)
     vertices : array_like | None
         Mesh vertices to use for the brain. Must be an array of shape
         (n_vertices, 3).
@@ -85,11 +88,16 @@ class BrainObj(VisbrainObject):
         # Load brain template :
         self._scale = _scale
         self.data_folder = 'templates'
-        if 'x3d' in name:
+        if any(k in name for k in ['.x3d', '.gii', '.obj']):
             filename = os.path.split(name)[1]
+            _, ext = os.path.splitext(name)
             self._name = filename
             logger.info("    Extracting vertices and faces from %s" % filename)
-            vertices, faces = read_x3d(name)
+            if ext == '.x3d': vertices, faces = read_x3d(name)  # noqa
+            elif ext == '.gii': vertices, faces = read_gii(name)  # noqa
+            elif ext == '.obj': vertices, faces = read_obj(name)  # noqa
+        elif '.gii' in name:
+            pass
         self.set_data(name, vertices, faces, normals, lr_index, hemisphere,
                       invert_normals, sulcus)
         self.translucent = translucent
@@ -316,7 +324,7 @@ class BrainObj(VisbrainObject):
             Number of smoothing steps (smoothing is used if n_data < n_vtx).
             If None or 0, no smoothing is performed.
         file : string | None
-            Full path to the overlay file.
+            Full path to the overlay file. Can either be a nii.gz or gii file.
         hemisphrere : {None, 'both', 'left', 'right'}
             The hemisphere to use to add the overlay. If None, the method tries
             to infer the hemisphere from the file name.
@@ -386,18 +394,26 @@ class BrainObj(VisbrainObject):
                 sc[vertices] = data
         elif isinstance(file, str):
             assert os.path.isfile(file)
-            logger.info("    Add overlay to the {} brain template "
-                        "({})".format(self._name, file))
-            from visbrain.io import read_nifti
-            # Load data using Nibabel :
-            sc, _, _ = read_nifti(file)
-            sc = sc.ravel(order="F")
+            if '.nii' in file:
+                logger.info("    Add overlay from a NIFTI file")
+                from visbrain.io import read_nifti
+                # Load data using Nibabel :
+                sc, _, _ = read_nifti(file)
+                sc = sc.ravel(order="F")
+            elif '.gii' in file:
+                logger.info("    Add overlay from a GIFTI file")
+                is_nibabel_installed(raise_error=True)
+                import nibabel
+                nib = nibabel.load(file)
+                sc = nib.darrays[0].data.squeeze()
             hemisphere = 'both' if len(sc) == len(self.mesh) else hemisphere
             # Hemisphere :
             _, activ_vert = self._hemisphere_from_file(hemisphere, file)
         else:
             raise ValueError("Unknown activation type.")
         # Define the data to send to the vertices :
+        logger.info("    Data scaled between (%.3f, "
+                    "%.3f)" % (sc.min(), sc.max()))
         sm_data[activ_vert] = sc
         data_vec[activ_vert] = self._data_to_contour(sc, clim, n_contours)
         mask[activ_vert] = True

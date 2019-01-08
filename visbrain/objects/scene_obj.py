@@ -658,6 +658,18 @@ class SceneObj(object):
                                      widget=self.canvas.central_widget)
         self.canvas.events.key_press.connect(key_pressed)
 
+    def render(self):
+        """Render the canvas.
+
+        Returns
+        -------
+        img : array_like
+            Array of shape (n_rows, n_columns, 4) where 4 describes the RGBA
+            components.
+        """
+        self._gl_uniform_transforms()
+        return self.canvas.render()
+
     def preview(self, mpl=False):
         """Previsualize the result.
 
