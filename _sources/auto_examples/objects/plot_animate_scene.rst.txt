@@ -193,7 +193,7 @@ Save the animation
     [...........                             ] 29.18002 | downloading       [.......................                 ] 58.36005 / downloading       [...................................     ] 87.54007 - downloading       [........................................] 100.00000 \ downloading   File saved as /home/circleci/.vispy/data/fonts/OpenSans-Bold.ttf.
 
 
-**Total running time of the script:** ( 0 minutes  14.263 seconds)
+**Total running time of the script:** ( 0 minutes  15.811 seconds)
 
 
 .. _sphx_glr_download_auto_examples_objects_plot_animate_scene.py:

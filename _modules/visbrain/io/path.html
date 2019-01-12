@@ -1025,7 +1025,8 @@
 
 <span class="k">def</span> <span class="nf">get_data_url_path</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Get the path to the data_url JSON file.&quot;&quot;&quot;</span>
-    <span class="n">url_path</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="vm">__name__</span><span class="p">]</span><span class="o">.</span><span class="vm">__file__</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;io&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">path_file</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="vm">__name__</span><span class="p">]</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span>
+    <span class="n">url_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path_file</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">url_path</span><span class="p">,</span> <span class="s1">&#39;data_url.json&#39;</span><span class="p">)</span>
 
 
@@ -1131,7 +1132,7 @@
         <div class="container">
             <img src="../../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-01-10.</p>
+        <p>&copy; Copyright Last updated on 2019-01-12.</p>
     </footer>
 
   </body>
