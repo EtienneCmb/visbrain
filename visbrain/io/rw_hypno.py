@@ -77,9 +77,9 @@ def hypno_time_to_sample(df, npts):
         index = np.abs(time.reshape(-1, 1) - time_idx.reshape(1, -1))
         index = np.r_[0, index.argmin(0) + 1]
     except MemoryError:
-        index = np.zeros((len(time_idx)+1), dtype=int)
+        index = np.zeros((len(time_idx) + 1), dtype=int)
         for ii, t in enumerate(time_idx):
-            index[ii+1] = np.argmin(np.abs(time-t)) + 1
+            index[ii + 1] = np.argmin(np.abs(time - t)) + 1
     # Fill the hypnogram :
     hypno = np.zeros((len(time),), dtype=int)
     for k in range(len(index) - 1):
