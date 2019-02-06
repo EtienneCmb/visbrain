@@ -73,8 +73,13 @@ def hypno_time_to_sample(df, npts):
         time = np.arange(npts) * time_idx[-1] / (npts - 1)
     sf_hyp = 1. / (time[1] - time[0])
     # Find closest time index :
-    index = np.abs(time.reshape(-1, 1) - time_idx.reshape(1, -1))
-    index = np.r_[0, index.argmin(0) + 1]
+    try:
+        index = np.abs(time.reshape(-1, 1) - time_idx.reshape(1, -1))
+        index = np.r_[0, index.argmin(0) + 1]
+    except MemoryError:
+        index = np.zeros((len(time_idx)+1))
+        for ii, t in enumerate(time_idx):
+            index[ii+1] = np.argmin(np.abs(time-t)) + 1
     # Fill the hypnogram :
     hypno = np.zeros((len(time),), dtype=int)
     for k in range(len(index) - 1):
