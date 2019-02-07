@@ -122,7 +122,7 @@ inspect in this file the index of the ROI that you're looking for.
     roi_to_find1('aal')                           # Switch to AAL
     ref_aal = roi_to_find1.get_labels(vb_path)    # Save AAL
     roi_to_find1('talairach')                     # Switch to Talairach
-    ref_tal = roi_to_find1.get_labels(vb_path)    # Save Talairach
+    # ref_tal = roi_to_find1.get_labels(vb_path)    # Save Talairach
 
 
 
@@ -395,7 +395,7 @@ Define and use your own region of interest
 
 
 
-**Total running time of the script:** ( 0 minutes  46.757 seconds)
+**Total running time of the script:** ( 0 minutes  42.481 seconds)
 
 
 .. _sphx_glr_download_auto_examples_objects_plot_roi_object.py:

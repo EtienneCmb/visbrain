@@ -80,7 +80,7 @@ ref_brod = roi_to_find1.get_labels(vb_path)   # Save Brodmann
 roi_to_find1('aal')                           # Switch to AAL
 ref_aal = roi_to_find1.get_labels(vb_path)    # Save AAL
 roi_to_find1('talairach')                     # Switch to Talairach
-ref_tal = roi_to_find1.get_labels(vb_path)    # Save Talairach
+# ref_tal = roi_to_find1.get_labels(vb_path)    # Save Talairach
 
 #####################################
 # **Method 2 :** explicitly search where is the ROI that you're looking for

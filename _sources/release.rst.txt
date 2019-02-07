@@ -7,6 +7,13 @@ Changelog
    :local:
    :depth: 1
 
+0.4.5
+-----
+
+Improvements
+~~~~~~~~~~~~
+* Protect Sleep from MemoryError for large sleep files (`PR32 <https://github.com/EtienneCmb/visbrain/pull/32>`_)
+
 0.4.4
 -----
 
