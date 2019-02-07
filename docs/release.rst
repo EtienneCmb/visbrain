@@ -12,7 +12,7 @@ Changelog
 
 Improvements
 ~~~~~~~~~~~~
-* Protect Sleep from MemoryError for large sleep files (`PR32 <https://github.com/EtienneCmb/visbrain/pull/32>`_)
+* Protect Sleep from MemoryError for large sleep files (`PR37 <https://github.com/EtienneCmb/visbrain/pull/37>`_)
 
 0.4.4
 -----
