@@ -61,6 +61,8 @@
         "human.x3d": "https://www.dropbox.com/s/qdscp6o6jhi32vg/human.x3d?dl=1",
         "brain.obj": "https://www.dropbox.com/s/gcgt6f93tnssdhd/brain.obj?dl=1",
         "lh.bert.inflated.gii": "https://www.dropbox.com/s/mijn26b0qn9mzdk/lh.bert.inflated.gii?dl=1",
-        "lh.bert.thickness.gii": "https://www.dropbox.com/s/26s9ym02xkv41cy/lh.bert.thickness.gii?dl=1"
+        "lh.bert.thickness.gii": "https://www.dropbox.com/s/26s9ym02xkv41cy/lh.bert.thickness.gii?dl=1",
+        "lh.inflated": "https://www.dropbox.com/s/m8z4kq8y1217osp/lh.inflated?dl=1",
+        "rh.inflated": "https://www.dropbox.com/s/2vqi3tj5ztfxezg/rh.inflated?dl=1"
     }
 }
