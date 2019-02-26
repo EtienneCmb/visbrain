@@ -16,7 +16,9 @@ NEEDED_FILES = dict(ANNOT_FILE_1='lh.aparc.annot',
                     X3D_FILE='ferret.x3d',
                     GII_FILE='lh.bert.inflated.gii',
                     GII_OVERLAY='lh.bert.thickness.gii',
-                    OBJ_FILE='brain.obj'
+                    OBJ_FILE='brain.obj',
+                    LH_FREESURFER='lh.inflated',
+                    RH_FREESURFER='rh.inflated'
                     )
 
 # BRAIN :
@@ -62,6 +64,12 @@ class TestBrainObj(_TestObjects):
         for k in ['X3D_FILE', 'GII_FILE', 'OBJ_FILE']:
             file = self.need_file(NEEDED_FILES[k])
             BrainObj(file)
+        # Test Freesurfer files
+        _lh = self.need_file(NEEDED_FILES['LH_FREESURFER'])
+        _rh = self.need_file(NEEDED_FILES['RH_FREESURFER'])
+        BrainObj(_lh)
+        BrainObj(_rh)
+        BrainObj((_lh, _rh))
 
     def test_custom_templates(self):
         """Test passing vertices, faces and normals."""

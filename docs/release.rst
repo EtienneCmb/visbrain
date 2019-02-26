@@ -10,8 +10,14 @@ Changelog
 0.4.5
 -----
 
+New features
+~~~~~~~~~~~~
+
+* :class:`visbrain.objects.BrainObj` natively support Freesurfer files
+
 Improvements
 ~~~~~~~~~~~~
+
 * Protect Sleep from MemoryError for large sleep files (`PR37 <https://github.com/EtienneCmb/visbrain/pull/37>`_)
 
 0.4.4
