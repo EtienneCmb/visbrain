@@ -100,7 +100,7 @@ class GridSignalsObj(VisbrainObject):
                 kw['title'], kw['axis'] = data.ch_names, -1
                 data = data.get_data()
                 self._name = 'MNE-Raw'
-            elif isinstance(data, mne.Epochs):
+            elif isinstance(data, (mne.Epochs, mne.EpochsArray)):
                 logger.info('    data is mne.Epochs')
                 channels = data.ch_names
                 data = np.swapaxes(data.get_data(), 0, 1)
@@ -117,7 +117,6 @@ class GridSignalsObj(VisbrainObject):
                 while np.prod(sh) > N_LIMIT:
                     sh = sh_ori.copy()
                     sh[axis] = int(sh[axis] / decimate)
-                    print(sh)
                     decimate += 1
                 decimate -= 1
             assert isinstance(decimate, int)
