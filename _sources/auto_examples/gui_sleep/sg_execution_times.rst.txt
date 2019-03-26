@@ -5,10 +5,10 @@
 
 Computation times
 =================
-**00:01.118** total execution time for **auto_examples_gui_sleep** files:
+**00:01.122** total execution time for **auto_examples_gui_sleep** files:
 
-- **00:00.830**: :ref:`sphx_glr_auto_examples_gui_sleep_plot_get_sleep_statistics.py` (``plot_get_sleep_statistics.py``)
-- **00:00.288**: :ref:`sphx_glr_auto_examples_gui_sleep_plot_hypnogram.py` (``plot_hypnogram.py``)
+- **00:00.818**: :ref:`sphx_glr_auto_examples_gui_sleep_plot_get_sleep_statistics.py` (``plot_get_sleep_statistics.py``)
+- **00:00.304**: :ref:`sphx_glr_auto_examples_gui_sleep_plot_hypnogram.py` (``plot_hypnogram.py``)
 - **00:00.000**: :ref:`sphx_glr_auto_examples_gui_sleep_basic_sleep.py` (``basic_sleep.py``)
 - **00:00.000**: :ref:`sphx_glr_auto_examples_gui_sleep_load_brainvision.py` (``load_brainvision.py``)
 - **00:00.000**: :ref:`sphx_glr_auto_examples_gui_sleep_load_edf.py` (``load_edf.py``)
