@@ -285,23 +285,23 @@ class UiAtlas(object):
 
     def _fcn_get_selected_rois(self):
         """Get the list of selected ROIs."""
-        _roiToAdd = []
+        _roitoadd = []
         all_idx = list(self.roi.get_labels()['index'])
         for num in range(self._roiModel.rowCount()):
             item = self._roiModel.item(num, 0)
             if item.checkState():
-                _roiToAdd.append(all_idx[num])
-        return _roiToAdd
+                _roitoadd.append(all_idx[num])
+        return _roitoadd
 
     def _fcn_apply_roi_selection(self, _, roi_name='roi'):
         """Apply ROI selection."""
         # Get the list of selected ROIs :
-        _roiToAdd = self._fcn_get_selected_rois()
+        _roitoadd = self._fcn_get_selected_rois()
         smooth = self._roiSmooth.value() * int(self._roiIsSmooth.isChecked())
         uni_col = bool(self._roiUniColor.isChecked())
 
-        if _roiToAdd:
-            self.roi.select_roi(_roiToAdd, smooth=smooth, unique_color=uni_col)
+        if _roitoadd:
+            self.roi.select_roi(_roitoadd, smooth=smooth, unique_color=uni_col)
             self.roi.camera = self._camera
             # Enable projection on ROI and related buttons :
             self._s_proj_on.model().item(1).setEnabled(True)

@@ -899,9 +899,9 @@ class CanvasShortcuts(object):
                     val_sym = self._PanAllAmpMax.value() - 2 * sign * delta
                     self._PanAllAmpMax.setValue(val_sym)
                 else:  # non-symetrical amplitudes
-                    for m, M in zip(self._yminSpin, self._ymaxSpin):
-                        m.setValue(m.value() + sign * delta)
-                        M.setValue(M.value() - sign * delta)
+                    for mi, ma in zip(self._yminSpin, self._ymaxSpin):
+                        mi.setValue(mi.value() + sign * delta)
+                        ma.setValue(ma.value() - sign * delta)
 
             # ------------  GRID/MAGNIFY ------------
             elif event.text.lower() == 'm':  # Magnify

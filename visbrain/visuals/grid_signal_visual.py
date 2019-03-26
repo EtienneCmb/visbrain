@@ -279,7 +279,7 @@ class GridSignalVisual(visuals.Visual):
     def _prepare_draw(self, view=None):
         """Function called everytime there's a camera update."""
         try:
-            import OpenGL.GL as GL
+            import OpenGL.GL as GL  # noqa
             GL.glLineWidth(self._width)
             if self._smooth_line:
                 GL.glEnable(GL.GL_LINE_SMOOTH)

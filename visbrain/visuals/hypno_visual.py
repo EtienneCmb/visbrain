@@ -210,7 +210,7 @@ class HypogramVisual(visuals.Visual):
     def _prepare_draw(self, view=None):
         """Function called everytime there's a camera update."""
         try:
-            import OpenGL.GL as GL
+            import OpenGL.GL as GL  # noqa
             GL.glLineWidth(self._line_width)
             if self._antialias:
                 GL.glEnable(GL.GL_LINE_SMOOTH)
