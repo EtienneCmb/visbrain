@@ -25,8 +25,7 @@ https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
 .. image:: ../../_static/examples/ex_brain_screenshot.png
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     import os
     import numpy as np
@@ -121,7 +120,10 @@ https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
     # Alternatively, you can display the GUI at the end, but it's not a necessity
     # vb.show()
 
-**Total running time of the script:** ( 0 minutes  0.000 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_auto_examples_gui_brain_08_screenshot.py:

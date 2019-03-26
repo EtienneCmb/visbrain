@@ -18,8 +18,7 @@ include :
     * Custom properties (i.e line width, colors, size...)
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     import numpy as np
 
@@ -41,8 +40,7 @@ Define sample data and scene
  space.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Define 5 sources
@@ -71,8 +69,7 @@ Basic plot
  Basic plot without further customizations
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Define time-series and picture objects
@@ -94,8 +91,7 @@ Subset selection
  or booleans
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Define a select variables using either intergers or boolean values
@@ -120,8 +116,7 @@ Shape and color properties
  Customize colors, time-series amplitude and width, pictures height and width
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Define time-series and picture objects
@@ -146,7 +141,10 @@ Shape and color properties
 
 
 
-**Total running time of the script:** ( 0 minutes  13.744 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  14.140 seconds)
 
 
 .. _sphx_glr_download_auto_examples_objects_plot_tspic_obj.py:

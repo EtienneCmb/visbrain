@@ -28,13 +28,11 @@ https://www.dropbox.com/s/bj1ra95rbksukro/sleep_edf.zip?dl=1
 
 .. image:: ../../_static/examples/ex_replace_detection_wonambi.png
 
-
 Load your file and create an instance of Sleep
 ##############################################################################
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     import os
@@ -62,13 +60,11 @@ Load your file and create an instance of Sleep
 Define new methods
 ##############################################################################
 
-
 Spindle function
 ~~~~~~~~~~~~~~~~
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Define a DetectSpindle instance :
@@ -93,8 +89,7 @@ Slow-waves function
 ~~~~~~~~~~~~~~~~~~~
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Define a DetectSlowWave instance :
@@ -121,8 +116,7 @@ Replace existing methods
  overwrite existing spindles and slow-waves detections.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Replace the spindle detection function :
@@ -133,7 +127,10 @@ Replace existing methods
     # Finally, open the graphical user interface :
     sp.show()
 
-**Total running time of the script:** ( 0 minutes  0.000 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_auto_examples_gui_sleep_replace_detection_wonambi.py:

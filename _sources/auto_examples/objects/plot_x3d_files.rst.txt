@@ -15,8 +15,7 @@ be downloaded (total of 26.3Mo). Additional templates can be downloaded from :
 https://scalablebrainatlas.incf.org
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     from visbrain.objects import BrainObj, SceneObj
     from visbrain.io import download_file
@@ -39,8 +38,7 @@ Ferret brain
  Neuroimage 152:575–589. [doi 10.1016/j.neuroimage.2017.03.009]
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     ferret_file = download_file('ferret.x3d', astype='example_data')
@@ -64,8 +62,7 @@ Macaque brain (1)
  Cortex 24(1):17-36. [doi 10.1093/cercor/bhs270]
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     macaque_file_1 = download_file('macaque_1.x3d', astype='example_data')
@@ -90,8 +87,7 @@ Macaque brain (2)
  Neuroinformatics 6:27. [doi 10.3389/fninf.2012.00027]
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     macaque_file_2 = download_file('macaque_2.x3d', astype='example_data')
@@ -113,8 +109,7 @@ Mouse brain
  [doi 10.1038/nature05453]
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     mouse_file = download_file('mouse.x3d', astype='example_data')
@@ -143,8 +138,7 @@ Rat brain
  [doi 10.1016/j.jneumeth.2014.11.005]
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     rat_file = download_file('rat.x3d', astype='example_data')
@@ -180,8 +174,7 @@ Human brain
  61(8):935-945
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     human_file = download_file('human.x3d', astype='example_data')
@@ -200,7 +193,10 @@ Human brain
 
 
 
-**Total running time of the script:** ( 0 minutes  28.167 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  27.506 seconds)
 
 
 .. _sphx_glr_download_auto_examples_objects_plot_x3d_files.py:

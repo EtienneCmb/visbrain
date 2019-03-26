@@ -16,8 +16,7 @@ vertices and faces.
 .. image:: ../../_static/examples/ex_add_brain_template.png
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     import numpy as np
 
@@ -59,7 +58,10 @@ vertices and faces.
     # If you want to remove the template :
     # b_obj.remove()
 
-**Total running time of the script:** ( 0 minutes  0.000 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_auto_examples_gui_brain_02_brain_using_vertices.py:

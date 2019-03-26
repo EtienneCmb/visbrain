@@ -18,8 +18,7 @@ https://www.dropbox.com/s/t2bo9ufvc3f8mbj/sleep_brainvision.zip?dl=1
 .. image:: ../../_static/examples/ex_LoadBrainVision.png
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     import os
     from visbrain.gui import Sleep
@@ -31,8 +30,7 @@ LOAD YOUR FILE
  Download dataset :
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     download_file("sleep_brainvision.zip", unzip=True, astype='example_data')
     target_path = path_to_visbrain_data(folder='example_data')
@@ -44,7 +42,10 @@ LOAD YOUR FILE
     # Open the GUI :
     Sleep(data=dfile, hypno=hfile, config_file=cfile).show()
 
-**Total running time of the script:** ( 0 minutes  0.000 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_auto_examples_gui_sleep_load_brainvision.py:

@@ -1038,10 +1038,10 @@ Inside visbrain, supported levels are 7, 12, 20, 36, 64, 122 and ROI.</li>
 <p class="last">ROI atlases are stored inside NumPy files that are downloaded when needed.
 Every ROI files is downloaded to the ~/visbrain_data/roi folder</p>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../generated/visbrain.objects.RoiObj.html#visbrain.objects.RoiObj" title="View documentation for visbrain.objects.RoiObj"><span class="n">RoiObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.ColorbarObj.html#visbrain.objects.ColorbarObj" title="View documentation for visbrain.objects.ColorbarObj"><span class="n">ColorbarObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">,</span> <a href="../../generated/visbrain.io.path_to_visbrain_data.html#visbrain.io.path_to_visbrain_data" title="View documentation for visbrain.io.path_to_visbrain_data"><span class="n">path_to_visbrain_data</span></a><span class="p">,</span> <span class="n">read_nifti</span>
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <a href="../../generated/visbrain.objects.RoiObj.html#visbrain.objects.RoiObj" title="View documentation for visbrain.objects.RoiObj"><span class="n">RoiObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.ColorbarObj.html#visbrain.objects.ColorbarObj" title="View documentation for visbrain.objects.ColorbarObj"><span class="n">ColorbarObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="k">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">,</span> <a href="../../generated/visbrain.io.path_to_visbrain_data.html#visbrain.io.path_to_visbrain_data" title="View documentation for visbrain.io.path_to_visbrain_data"><span class="n">path_to_visbrain_data</span></a><span class="p">,</span> <span class="n">read_nifti</span>
 </pre></div>
 </div>
 <div class="section" id="download-data">
@@ -1050,14 +1050,14 @@ Every ROI files is downloaded to the ~/visbrain_data/roi folder</p>
 <div>In order to work, this example need to download some data i.e coordinates of
 intracranial sources and a parcellates atlas (MIST) to illustrate how to
 define your own RoiObj</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get the path to the ~/visbrain_data/example_data folder</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get the path to the ~/visbrain_data/example_data folder</span>
 <span class="n">vb_path</span> <span class="o">=</span> <a href="../../generated/visbrain.io.path_to_visbrain_data.html#visbrain.io.path_to_visbrain_data" title="View documentation for visbrain.io.path_to_visbrain_data"><span class="n">path_to_visbrain_data</span></a><span class="p">(</span><span class="n">folder</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">)</span>
 <span class="c1"># Download (x, y, z) coordinates of intracranial sources</span>
 <span class="n">mat</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.load.html#numpy.load" title="View documentation for numpy.load"><span class="n">np</span><span class="o">.</span><span class="n">load</span></a><span class="p">(</span><a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">,</span> <span class="n">astype</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">))</span>
 <span class="n">xyz</span><span class="p">,</span> <span class="n">subjects</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;xyz&#39;</span><span class="p">],</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;subjects&#39;</span><span class="p">]</span>
 <span class="n">data</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.uniform.html#numpy.random.uniform" title="View documentation for numpy.random.uniform"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span></a><span class="p">(</span><span class="n">low</span><span class="o">=-</span><span class="mf">1.</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],))</span>
 <span class="c1"># Download the MIST parcellates</span>
-<a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">(</span><span class="s1">&#39;MIST_ROI.zip&#39;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">astype</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">)</span>
+<a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">(</span><span class="s1">&#39;MIST_ROI.zip&#39;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">astype</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1065,7 +1065,7 @@ define your own RoiObj</div></blockquote>
 <h2>Scene creation<a class="headerlink" href="#scene-creation" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div>First, we need to create the scene that will host objects</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Scene creation with a dark background and a custom size</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Scene creation with a dark background and a custom size</span>
 <span class="n">sc</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1400</span><span class="p">,</span> <span class="mi">1000</span><span class="p">))</span>
 <span class="c1"># In this example, we also illustrate the use of the colorbar object. Hence, we</span>
 <span class="c1"># centralize colorbar properties inside a dictionary</span>
@@ -1087,7 +1087,7 @@ interest</div></blockquote>
 <a class="reference internal" href="../../generated/visbrain.objects.RoiObj.html#visbrain.objects.RoiObj.get_labels" title="visbrain.objects.RoiObj.get_labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">visbrain.objects.RoiObj.get_labels</span></code></a> method to save every related ROI
 informations in an excel file. This first method implies that you manually
 inspect in this file the index of the ROI that you’re looking for.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">roi_to_find1</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.RoiObj.html#visbrain.objects.RoiObj" title="View documentation for visbrain.objects.RoiObj"><span class="n">RoiObj</span></a><span class="p">(</span><span class="s1">&#39;brodmann&#39;</span><span class="p">)</span>             <span class="c1"># Use Brodmann areas</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">roi_to_find1</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.RoiObj.html#visbrain.objects.RoiObj" title="View documentation for visbrain.objects.RoiObj"><span class="n">RoiObj</span></a><span class="p">(</span><span class="s1">&#39;brodmann&#39;</span><span class="p">)</span>             <span class="c1"># Use Brodmann areas</span>
 <span class="n">ref_brod</span> <span class="o">=</span> <span class="n">roi_to_find1</span><span class="o">.</span><span class="n">get_labels</span><span class="p">(</span><span class="n">vb_path</span><span class="p">)</span>   <span class="c1"># Save Brodmann</span>
 <span class="n">roi_to_find1</span><span class="p">(</span><span class="s1">&#39;aal&#39;</span><span class="p">)</span>                           <span class="c1"># Switch to AAL</span>
 <span class="n">ref_aal</span> <span class="o">=</span> <span class="n">roi_to_find1</span><span class="o">.</span><span class="n">get_labels</span><span class="p">(</span><span class="n">vb_path</span><span class="p">)</span>    <span class="c1"># Save AAL</span>
@@ -1098,10 +1098,10 @@ inspect in this file the index of the ROI that you’re looking for.</p>
 <p><strong>Method 2 :</strong> explicitly search where is the ROI that you’re looking for</p>
 <p>Here, we use the <a class="reference internal" href="../../generated/visbrain.objects.RoiObj.html#visbrain.objects.RoiObj.where_is" title="visbrain.objects.RoiObj.where_is"><code class="xref py py-class docutils literal notranslate"><span class="pre">visbrain.objects.RoiObj.where_is</span></code></a> method of the ROI
 object to explicitly search string patterns</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Method 2 : use the `where_is` method</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Method 2 : use the `where_is` method</span>
 <span class="n">roi_to_find1</span><span class="p">(</span><span class="s1">&#39;brodmann&#39;</span><span class="p">)</span>                      <span class="c1"># Switch to Brodmann</span>
 <span class="n">idx_ba6</span> <span class="o">=</span> <span class="n">roi_to_find1</span><span class="o">.</span><span class="n">where_is</span><span class="p">(</span><span class="s1">&#39;BA6&#39;</span><span class="p">)</span>        <span class="c1"># Find only BA6</span>
-<span class="k">print</span><span class="p">(</span><span class="n">ref_brod</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx_ba6</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ref_brod</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx_ba6</span><span class="p">])</span>
 <span class="n">roi_to_find1</span><span class="p">(</span><span class="s1">&#39;aal&#39;</span><span class="p">)</span>                           <span class="c1"># Switch to AAL</span>
 <span class="n">idx_sma</span> <span class="o">=</span> <span class="n">roi_to_find1</span><span class="o">.</span><span class="n">where_is</span><span class="p">(</span><span class="s1">&#39;Supp Motor Area&#39;</span><span class="p">)</span>
 </pre></div>
@@ -1119,13 +1119,13 @@ object to explicitly search string patterns</p>
 <a class="reference internal" href="../../generated/visbrain.objects.RoiObj.html#visbrain.objects.RoiObj.select_roi" title="visbrain.objects.RoiObj.select_roi"><code class="xref py py-class docutils literal notranslate"><span class="pre">visbrain.objects.RoiObj.select_roi</span></code></a> method to extract the mesh (i.e
 vertices and faces) of the ROI. Here, we illustrate this question with the
 brodmann 6 ROI</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the brodmann 6 atlas, get the index of BA6 and extract the mesh</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the brodmann 6 atlas, get the index of BA6 and extract the mesh</span>
 <span class="n">roi_brod</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.RoiObj.html#visbrain.objects.RoiObj" title="View documentation for visbrain.objects.RoiObj"><span class="n">RoiObj</span></a><span class="p">(</span><span class="s1">&#39;brodmann&#39;</span><span class="p">)</span>
 <span class="n">idx_ba6</span> <span class="o">=</span> <span class="n">roi_brod</span><span class="o">.</span><span class="n">where_is</span><span class="p">(</span><span class="s1">&#39;BA6&#39;</span><span class="p">)</span>
 <span class="n">roi_brod</span><span class="o">.</span><span class="n">select_roi</span><span class="p">(</span><span class="n">select</span><span class="o">=</span><span class="n">idx_ba6</span><span class="p">)</span>
 <span class="c1"># Define a brain object and add this brain and ROI objects to the scene</span>
 <span class="n">b_obj</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;B1&#39;</span><span class="p">)</span>
-<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">b_obj</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">use_this_cam</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">b_obj</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">use_this_cam</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                   <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Brodmann area 6 mesh&#39;</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">roi_brod</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
@@ -1136,11 +1136,11 @@ brodmann 6 ROI</div></blockquote>
 <blockquote>
 <div>If you need, you can set a unique color per plotted ROI mesh. Here, we plot
 the left and right insula and thalamus and set a unique color to each</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the AAL atlas</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the AAL atlas</span>
 <span class="n">roi_aal</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.RoiObj.html#visbrain.objects.RoiObj" title="View documentation for visbrain.objects.RoiObj"><span class="n">RoiObj</span></a><span class="p">(</span><span class="s1">&#39;aal&#39;</span><span class="p">)</span>
 <span class="c1"># Select indicies 29, 30, 77 and 78 (respectively insula left, right and</span>
 <span class="c1"># thalamus left and right)</span>
-<span class="n">roi_aal</span><span class="o">.</span><span class="n">select_roi</span><span class="p">(</span><span class="n">select</span><span class="o">=</span><span class="p">[</span><span class="mi">29</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">78</span><span class="p">],</span> <span class="n">unique_color</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">roi_aal</span><span class="o">.</span><span class="n">select_roi</span><span class="p">(</span><span class="n">select</span><span class="o">=</span><span class="p">[</span><span class="mi">29</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">78</span><span class="p">],</span> <span class="n">unique_color</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
 <span class="c1"># Add the ROI to the scene</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">roi_aal</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rotate</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="n">zoom</span><span class="o">=.</span><span class="mi">4</span><span class="p">,</span>
                   <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Select and plot multiple ROI with unique colors&#39;</span><span class="p">)</span>
@@ -1154,7 +1154,7 @@ the left and right insula and thalamus and set a unique color to each</div></blo
 <code class="xref py py-class docutils literal notranslate"><span class="pre">visbrain.object.SourceObj.project_sources</span></code> to project the activity
 onto the surface of the ROI. Here, we extract the mesh of the default mode
 network (DMN) and project source’s activity on it</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the roi object using the MIST at resolution 7</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the roi object using the MIST at resolution 7</span>
 <span class="n">roi_dmn</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.RoiObj.html#visbrain.objects.RoiObj" title="View documentation for visbrain.objects.RoiObj"><span class="n">RoiObj</span></a><span class="p">(</span><span class="s1">&#39;mist_7&#39;</span><span class="p">)</span>
 <span class="n">roi_dmn</span><span class="o">.</span><span class="n">get_labels</span><span class="p">(</span><span class="n">save_to_path</span><span class="o">=</span><span class="n">vb_path</span><span class="p">)</span>  <span class="c1"># save the labels</span>
 <span class="n">dmn_idx</span> <span class="o">=</span> <span class="n">roi_dmn</span><span class="o">.</span><span class="n">where_is</span><span class="p">(</span><span class="s1">&#39;Default mode network&#39;</span><span class="p">)</span>
@@ -1180,7 +1180,7 @@ reconstruction…) you can use the SourceObj to defined those sources and
 then, the RoiObj to identify where are those sources located using the ROI
 volume. Here, we use the MIST at the <cite>ROI</cite> resolution to identify where are
 located those sources</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the MIST object at the ROI level</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the MIST object at the ROI level</span>
 <span class="n">roi_mist</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.RoiObj.html#visbrain.objects.RoiObj" title="View documentation for visbrain.objects.RoiObj"><span class="n">RoiObj</span></a><span class="p">(</span><span class="s1">&#39;mist_ROI&#39;</span><span class="p">)</span>
 <span class="c1"># roi_mist.get_labels(save_to_path=vb_path)  # save the labels</span>
 <span class="c1"># Define the source object and analyse those sources using the MIST</span>
@@ -1213,17 +1213,17 @@ areas, AAL and MIST at level 7 :</p>
 <blockquote>
 <div>Here, we illustrate how to only select sources that are inside the
 somatomotor network.</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the roi MIST object at level 7</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the roi MIST object at level 7</span>
 <span class="n">somato_str</span> <span class="o">=</span> <span class="s1">&#39;Somatomotor network&#39;</span>
 <span class="n">roi_somato</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.RoiObj.html#visbrain.objects.RoiObj" title="View documentation for visbrain.objects.RoiObj"><span class="n">RoiObj</span></a><span class="p">(</span><span class="s1">&#39;mist_7&#39;</span><span class="p">)</span>
 <span class="n">idx_somato</span> <span class="o">=</span> <span class="n">roi_somato</span><span class="o">.</span><span class="n">where_is</span><span class="p">(</span><span class="n">somato_str</span><span class="p">)</span>
-<span class="n">roi_somato</span><span class="o">.</span><span class="n">select_roi</span><span class="p">(</span><span class="n">idx_somato</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">roi_somato</span><span class="o">.</span><span class="n">select_roi</span><span class="p">(</span><span class="n">idx_somato</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="c1"># Define the source object and analyse anatomical informations</span>
 <span class="n">s_somato</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">(</span><span class="s1">&#39;somato&#39;</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
 <span class="n">analysis</span> <span class="o">=</span> <span class="n">s_somato</span><span class="o">.</span><span class="n">analyse_sources</span><span class="p">(</span><span class="n">roi_somato</span><span class="p">,</span> <span class="n">keep_only</span><span class="o">=</span><span class="n">somato_str</span><span class="p">)</span>
 <span class="n">s_somato</span><span class="o">.</span><span class="n">color_sources</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">)</span>
 <span class="c1"># Add those objects to the scene</span>
-<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">roi_somato</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">use_this_cam</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">rotate</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">roi_somato</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">use_this_cam</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rotate</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span>
                   <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Display only sources inside the</span><span class="se">\n</span><span class="s1">somatomotor network&#39;</span><span class="p">,</span>
                   <span class="n">zoom</span><span class="o">=.</span><span class="mi">6</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">s_somato</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -1237,10 +1237,10 @@ somatomotor network.</div></blockquote>
 object. To do this, you need a volume (i.e an array with three dimensions)
 and an array of labels. Here, for the sake of illustration, we explain how
 to rebuild the MIST at the ROI resolution.</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download the MIST_ROI.zip archive. See the README inside the archive</span>
-<span class="n">nifti_file</span> <span class="o">=</span> <a href="../../generated/visbrain.io.path_to_visbrain_data.html#visbrain.io.path_to_visbrain_data" title="View documentation for visbrain.io.path_to_visbrain_data"><span class="n">path_to_visbrain_data</span></a><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="s1">&#39;MIST_ROI.nii.gz&#39;</span><span class="p">,</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download the MIST_ROI.zip archive. See the README inside the archive</span>
+<span class="n">nifti_file</span> <span class="o">=</span> <a href="../../generated/visbrain.io.path_to_visbrain_data.html#visbrain.io.path_to_visbrain_data" title="View documentation for visbrain.io.path_to_visbrain_data"><span class="n">path_to_visbrain_data</span></a><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="s1">&#39;MIST_ROI.nii.gz&#39;</span><span class="p">,</span>
                                    <span class="n">folder</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">)</span>
-<span class="n">csv_file</span> <span class="o">=</span> <a href="../../generated/visbrain.io.path_to_visbrain_data.html#visbrain.io.path_to_visbrain_data" title="View documentation for visbrain.io.path_to_visbrain_data"><span class="n">path_to_visbrain_data</span></a><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="s1">&#39;MIST_ROI.csv&#39;</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">)</span>
+<span class="n">csv_file</span> <span class="o">=</span> <a href="../../generated/visbrain.io.path_to_visbrain_data.html#visbrain.io.path_to_visbrain_data" title="View documentation for visbrain.io.path_to_visbrain_data"><span class="n">path_to_visbrain_data</span></a><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="s1">&#39;MIST_ROI.csv&#39;</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">)</span>
 <span class="c1"># Read the .csv file :</span>
 <span class="n">arr</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.genfromtxt.html#numpy.genfromtxt" title="View documentation for numpy.genfromtxt"><span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span></a><span class="p">(</span><span class="n">csv_file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
 <span class="c1"># Get column names, labels and index :</span>
@@ -1254,7 +1254,7 @@ to rebuild the MIST at the ROI resolution.</div></blockquote>
 <span class="n">label</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">roi_labels</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
 <span class="n">label</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">roi_labels</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
 <span class="c1"># Get the volume and the hdr transformation :</span>
-<span class="n">vol</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">hdr</span> <span class="o">=</span> <span class="n">read_nifti</span><span class="p">(</span><span class="n">nifti_file</span><span class="p">,</span> <span class="n">hdr_as_array</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">vol</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">hdr</span> <span class="o">=</span> <span class="n">read_nifti</span><span class="p">(</span><span class="n">nifti_file</span><span class="p">,</span> <span class="n">hdr_as_array</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="c1"># Define the ROI object and save it :</span>
 <span class="n">roi_custom</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.RoiObj.html#visbrain.objects.RoiObj" title="View documentation for visbrain.objects.RoiObj"><span class="n">RoiObj</span></a><span class="p">(</span><span class="s1">&#39;custom_roi&#39;</span><span class="p">,</span> <span class="n">vol</span><span class="o">=</span><span class="n">vol</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">roi_index</span><span class="p">,</span>
                     <span class="n">hdr</span><span class="o">=</span><span class="n">hdr</span><span class="p">)</span>
@@ -1273,12 +1273,12 @@ to rebuild the MIST at the ROI resolution.</div></blockquote>
 reload it using the name you’ve used (here we’ve used the <cite>custom_roi</cite>
 name which means that you can reload it later using RoiObj(‘custom_roi’))</p>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Finally, display the scene</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Finally, display the scene</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">preview</span><span class="p">()</span>
 </pre></div>
 </div>
 <img alt="../../_images/sphx_glr_plot_roi_object_001.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_roi_object_001.png" />
-<p><strong>Total running time of the script:</strong> ( 0 minutes  43.913 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  42.114 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-objects-plot-roi-object-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" download="" href="../../_downloads/01486b7f4097a14343da8c3de86bb345/plot_roi_object.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_roi_object.py</span></code></a></div>
@@ -1310,7 +1310,7 @@ name which means that you can reload it later using RoiObj(‘custom_roi’))</p
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-02-07.</p>
+        <p>&copy; Copyright Last updated on 2019-03-26.</p>
     </footer>
 
   </body>

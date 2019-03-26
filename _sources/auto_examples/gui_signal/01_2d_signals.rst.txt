@@ -36,8 +36,7 @@ Shortcuts
 .. image:: ../../_static/examples/ex_2d_signal.png
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     from visbrain.gui import Signal
     from visbrain.utils import generate_eeg
@@ -77,7 +76,10 @@ Shortcuts
            title=title, grid_titles=gtitles, grid_font_size=gfz,
            grid_lw=glw).show()
 
-**Total running time of the script:** ( 0 minutes  0.000 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_auto_examples_gui_signal_01_2d_signals.py:

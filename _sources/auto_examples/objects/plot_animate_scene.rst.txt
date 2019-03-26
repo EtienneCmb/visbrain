@@ -14,8 +14,7 @@ This example illustrate how to animate objects inside the scene. Note that
 animations can only be used with 3D objects.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     import numpy as np
 
@@ -35,8 +34,7 @@ Download data and create the scene
  objects. We first create the scene with a black background, a fixed size
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Download intracranial EEG electodes
@@ -64,8 +62,7 @@ Animate a single brain object
  Here we set an animation for a single brain object.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     b_obj_1 = BrainObj('inflated', translucent=False)
@@ -83,8 +80,7 @@ Animate multiple objects
  Here we animate multiple objects inside a subplot
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     s_obj_1 = SourceObj('s1', xyz, data=data)
@@ -107,8 +103,7 @@ Animate sources
  Visbrain can also be animated. We illustrate this with a source object
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Define connectivity links and sources
@@ -137,8 +132,7 @@ Configure the animation rate
  second
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Define a connectivity object and a brain object :
@@ -169,8 +163,7 @@ Save the animation
  animations as a gif file
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # sc.record_animation('animate_example.gif', n_pic=10)
@@ -193,7 +186,10 @@ Save the animation
     [...........                             ] 29.18002 | downloading       [.......................                 ] 58.36005 / downloading       [...................................     ] 87.54007 - downloading       [........................................] 100.00000 \ downloading   File saved as /home/circleci/.vispy/data/fonts/OpenSans-Bold.ttf.
 
 
-**Total running time of the script:** ( 0 minutes  15.606 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  15.093 seconds)
 
 
 .. _sphx_glr_download_auto_examples_objects_plot_animate_scene.py:

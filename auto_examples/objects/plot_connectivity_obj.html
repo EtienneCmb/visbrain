@@ -1013,10 +1013,10 @@
 <li>Color connectivity links using custom colors</li>
 </ul>
 </div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../generated/visbrain.objects.ConnectObj.html#visbrain.objects.ConnectObj" title="View documentation for visbrain.objects.ConnectObj"><span class="n">ConnectObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <a href="../../generated/visbrain.objects.ConnectObj.html#visbrain.objects.ConnectObj" title="View documentation for visbrain.objects.ConnectObj"><span class="n">ConnectObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="k">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a>
 </pre></div>
 </div>
 <div class="section" id="download-data-and-define-the-scene">
@@ -1024,7 +1024,7 @@
 <blockquote>
 <div>First, we download a connectivity dataset consisting of the location of each
 node (104) and the connectivity strength between every node (104, 104)</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download data</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download data</span>
 <span class="n">arch</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.load.html#numpy.load" title="View documentation for numpy.load"><span class="n">np</span><span class="o">.</span><span class="n">load</span></a><span class="p">(</span><a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">(</span><span class="s1">&#39;phase_sync_delta.npz&#39;</span><span class="p">,</span> <span class="n">astype</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">))</span>
 <span class="n">nodes</span><span class="p">,</span> <span class="n">edges</span> <span class="o">=</span> <span class="n">arch</span><span class="p">[</span><span class="s1">&#39;nodes&#39;</span><span class="p">],</span> <span class="n">arch</span><span class="p">[</span><span class="s1">&#39;edges&#39;</span><span class="p">]</span>
 <span class="c1"># Create the scene with a black background</span>
@@ -1039,7 +1039,7 @@ node (104) and the connectivity strength between every node (104, 104)</div></bl
 node (iEEG site) and the connectivity strength between those nodes. The first
 coloring method illustrated bellow consist in coloring connections based on
 a colormap</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Coloring method</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Coloring method</span>
 <span class="n">color_by</span> <span class="o">=</span> <span class="s1">&#39;strength&#39;</span>
 <span class="c1"># Because we don&#39;t want to plot every connections, we only keep connections</span>
 <span class="c1"># above .7</span>
@@ -1052,7 +1052,7 @@ a colormap</div></blockquote>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">c_default</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Color by connectivity strength&#39;</span><span class="p">)</span>
 <span class="c1"># And add connect, source and brain objects to the scene</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">s_obj</span><span class="p">)</span>
-<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;B3&#39;</span><span class="p">),</span> <span class="n">use_this_cam</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;B3&#39;</span><span class="p">),</span> <span class="n">use_this_cam</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1063,20 +1063,20 @@ a colormap</div></blockquote>
 connections per node. Here, we also illustrate that colors can also by
 <cite>dynamic</cite> (i.e stronger connections are opaque and weak connections are more
 translucent)</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Coloring method</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Coloring method</span>
 <span class="n">color_by</span> <span class="o">=</span> <span class="s1">&#39;count&#39;</span>
 <span class="c1"># Weak connections -&gt; alpha = .1 // strong connections -&gt; alpha = 1.</span>
 <span class="n">dynamic</span> <span class="o">=</span> <span class="p">(</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>
 <span class="c1"># Define the connectivity and source object</span>
 <span class="n">c_count</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.ConnectObj.html#visbrain.objects.ConnectObj" title="View documentation for visbrain.objects.ConnectObj"><span class="n">ConnectObj</span></a><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="n">select</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="mf">4.</span><span class="p">,</span>
-                     <span class="n">color_by</span><span class="o">=</span><span class="n">color_by</span><span class="p">,</span> <span class="n">antialias</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="n">dynamic</span><span class="p">)</span>
+                     <span class="n">color_by</span><span class="o">=</span><span class="n">color_by</span><span class="p">,</span> <span class="n">antialias</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="n">dynamic</span><span class="p">)</span>
 <span class="n">s_obj_c</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">(</span><span class="s1">&#39;sources&#39;</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;olive&#39;</span><span class="p">,</span> <span class="n">radius_min</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span>
                     <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;square&#39;</span><span class="p">)</span>
 <span class="c1"># And add connect, source and brain objects to the scene</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">c_count</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                   <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Color by number of connections per node&#39;</span><span class="p">)</span>
-<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">s_obj_c</span><span class="p">,</span> <span class="n">use_this_cam</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;B3&#39;</span><span class="p">),</span> <span class="n">use_this_cam</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">s_obj_c</span><span class="p">,</span> <span class="n">use_this_cam</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;B3&#39;</span><span class="p">),</span> <span class="n">use_this_cam</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1086,7 +1086,7 @@ translucent)</div></blockquote>
 <div>Finally, you can define your own colors which mean that for a specific
 connectivity strength, you can manually set a unique color. The provided
 dataset has values between [0., 1.]</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># First, we take a copy of the connectivity array</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># First, we take a copy of the connectivity array</span>
 <span class="n">edges_copy</span> <span class="o">=</span> <span class="n">edges</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="c1"># Then, we force edges to take fixed values</span>
 <span class="c1"># ====================   =========  ===========</span>
@@ -1102,7 +1102,7 @@ dataset has values between [0., 1.]</div></blockquote>
 <span class="n">edges_copy</span><span class="p">[</span><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.logical_and.html#numpy.logical_and" title="View documentation for numpy.logical_and"><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span></a><span class="p">(</span><span class="n">edges_copy</span> <span class="o">&gt;=</span> <span class="o">.</span><span class="mi">74</span><span class="p">,</span> <span class="n">edges_copy</span> <span class="o">&lt;</span> <span class="o">.</span><span class="mi">78</span><span class="p">)]</span> <span class="o">=</span> <span class="mf">2.</span>
 <span class="c1"># Now we use a dctionary to set one color per value.</span>
 <span class="n">ccol</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="bp">None</span><span class="p">:</span> <span class="s1">&#39;lightgray&#39;</span><span class="p">,</span>
+    <span class="kc">None</span><span class="p">:</span> <span class="s1">&#39;lightgray&#39;</span><span class="p">,</span>
     <span class="mf">2.</span><span class="p">:</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span>
     <span class="mf">3.</span><span class="p">:</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span>
     <span class="mf">4.</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span>
@@ -1116,14 +1116,14 @@ dataset has values between [0., 1.]</div></blockquote>
 <span class="c1"># Add objects to the scene</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">c_cuscol</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Custom colors&#39;</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">s_obj_cu</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;white&#39;</span><span class="p">),</span> <span class="n">use_this_cam</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;white&#39;</span><span class="p">),</span> <span class="n">use_this_cam</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="c1"># Finally, display the scene</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">preview</span><span class="p">()</span>
 </pre></div>
 </div>
 <img alt="../../_images/sphx_glr_plot_connectivity_obj_001.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_connectivity_obj_001.png" />
-<p><strong>Total running time of the script:</strong> ( 0 minutes  9.152 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  8.424 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-objects-plot-connectivity-obj-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" download="" href="../../_downloads/e66fc3bcedd50b7d2c6bb1493fcec8ed/plot_connectivity_obj.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_connectivity_obj.py</span></code></a></div>
@@ -1155,7 +1155,7 @@ dataset has values between [0., 1.]</div></blockquote>
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-02-07.</p>
+        <p>&copy; Copyright Last updated on 2019-03-26.</p>
     </footer>
 
   </body>

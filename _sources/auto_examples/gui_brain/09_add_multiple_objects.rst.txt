@@ -18,8 +18,7 @@ https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
 .. image:: ../../_static/examples/ex_add_multiple_objects.png
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     from __future__ import print_function
     import numpy as np
@@ -54,8 +53,7 @@ SOURCES
 ##############################################################################
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     """Create a first source object with uniform red square markers
     """
@@ -108,8 +106,7 @@ CONNECTIVITY
 ##############################################################################
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Function in order to create random connection dataset for each
@@ -147,7 +144,10 @@ CONNECTIVITY
                connect_obj=[c_obl_l, c_obj_rb])
     vb.show()
 
-**Total running time of the script:** ( 0 minutes  0.000 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_auto_examples_gui_brain_09_add_multiple_objects.py:

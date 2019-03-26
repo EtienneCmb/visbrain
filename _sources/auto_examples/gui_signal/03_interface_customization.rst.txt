@@ -15,8 +15,7 @@ Use custom color, font size...
 .. image:: ../../_static/examples/ex_custom_interface.png
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     from visbrain.gui import Signal
     from visbrain.utils import generate_eeg
@@ -49,7 +48,10 @@ Use custom color, font size...
     sg = Signal(data, sf=sf, axis=-1, **kwargs)
     sg.show()
 
-**Total running time of the script:** ( 0 minutes  0.000 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_auto_examples_gui_signal_03_interface_customization.py:

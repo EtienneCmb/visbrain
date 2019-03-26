@@ -15,8 +15,7 @@ Superimposition of all the signals.
 .. image:: ../../_static/examples/ex_butterfly.png
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     import numpy as np
     from visbrain.gui import Signal
@@ -43,7 +42,10 @@ Superimposition of all the signals.
     Signal(data, time=time, form='butterfly', xlabel='Time (ms)',
            ylabel='Amplitude (uV)', color='darkgray').show()
 
-**Total running time of the script:** ( 0 minutes  0.000 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_auto_examples_gui_signal_06_butterfly.py:

@@ -22,8 +22,7 @@ Note that this example uses MNE-Python, hence, it need to be installed to be
 fully functional.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     import numpy as np
     from itertools import product
@@ -46,8 +45,7 @@ Scene creation
  objects. We first create the scene with a black background, a fixed size
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Scene creation
@@ -66,8 +64,7 @@ Generate random data
  dataset
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     sf = 512.       # sampling frequency
@@ -100,8 +97,7 @@ Plot MNE-Python data
  epochs in a grid.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Create MNE data
@@ -152,8 +148,7 @@ Configure your plotting type
  of time-series using the `n_signals` inut parameter
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     plt_as = 'col'  # {'grid', 'row', 'col'}
@@ -172,7 +167,10 @@ Configure your plotting type
 
 
 
-**Total running time of the script:** ( 0 minutes  13.600 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  13.558 seconds)
 
 
 .. _sphx_glr_download_auto_examples_objects_plot_gridsignals_obj.py:

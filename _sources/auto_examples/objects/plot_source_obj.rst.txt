@@ -31,8 +31,7 @@ The source objects can interact with several other objects :
       to get anatomical informations of sources
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     import numpy as np
 
@@ -51,15 +50,13 @@ The source objects can interact with several other objects :
     sources reflect electrode, in MEG it could be sensors or source
     reconstruction.
 
-
 Download data
 ##############################################################################
  To illustrate the functionalities of the source object, here, we download an
  intracranial dataset consisting of 583 deep recording sites.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Download the file and get the (x, y, z) MNI coordinates of the 583 recording
@@ -81,8 +78,7 @@ Scene creation
  So here, we define a scene that is going to centralize objects in subplots
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Define the default camera state used for each subplot
@@ -108,8 +104,7 @@ Basic source object
  modifications of the inputs
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Create the source objects and add this object to the scene
@@ -129,8 +124,7 @@ Text, symbol and color control
  symbol
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # The color definition could either be uniform (e.g 'green', 'blue'...), a list
@@ -156,8 +150,7 @@ Assigning data to sources and radius control
  the dynamic of radius sources
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Create some random data of shape (n_sources,)
@@ -184,8 +177,7 @@ Mask sources
  with a different color (using `mask_color`).
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Define the mask for sources that have a x coordinate between [-20, 20] and
@@ -212,8 +204,7 @@ Get anatomical informations of sources
  and use it to get the anatomical informations of each source
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # First, create a basic source object
@@ -248,8 +239,7 @@ Color sources, using predefined colors, according to the AAL location
  Automated Anatomical Labeling (AAL)
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     """Analyse where sources are located using the AAL ROI template and color
@@ -286,8 +276,7 @@ Color sources according to data
  according to a data vector
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Define the source object
@@ -316,8 +305,7 @@ Project source's activity on the surface of the brain
  source's activity across several intracranially implanted subjects
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Define the source and brain objects
@@ -339,8 +327,7 @@ Project masked source's activity on the surface of the brain
  sources
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Define the source and brain objects
@@ -363,8 +350,7 @@ Project source's activity on the surface of the DMN
  then, we project source's activity onto the surface of the DMN
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Define the source and brain objects
@@ -394,8 +380,7 @@ Project source's repartition on the surface of the brain
  which mean the number of contributing sources per vertex
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Define the source and brain objects
@@ -421,8 +406,7 @@ Display only sources in the left hemisphere
  hemisphere
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Define the source object
@@ -446,8 +430,7 @@ Force sources to fit to the surface of the brain
  hemisphere and color them accordingly
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Define the Brain and Source objects
@@ -479,8 +462,7 @@ Display only sources inside the brain
  brain
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     s_obj_inside = SourceObj('In', xyz, symbol='cross', color='firebrick')
@@ -498,8 +480,7 @@ Take a screenshot of the scene
 ##############################################################################
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Screenshot of the scene
@@ -520,7 +501,10 @@ Take a screenshot of the scene
 
 
 
-**Total running time of the script:** ( 0 minutes  58.769 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  57.063 seconds)
 
 
 .. _sphx_glr_download_auto_examples_objects_plot_source_obj.py:

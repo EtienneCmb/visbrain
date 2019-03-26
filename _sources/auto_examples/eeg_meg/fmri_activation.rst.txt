@@ -19,8 +19,7 @@ https://pysurfer.github.io/auto_examples/plot_fmri_activation.html#sphx-glr-auto
 .. image:: ../../_static/examples/ex_eegmeg_fmri_activations.png
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     from visbrain.gui import Brain
     from visbrain.objects import BrainObj
@@ -38,7 +37,10 @@ https://pysurfer.github.io/auto_examples/plot_fmri_activation.html#sphx-glr-auto
     vb.rotate('left')
     vb.show()
 
-**Total running time of the script:** ( 0 minutes  0.000 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_auto_examples_eeg_meg_fmri_activation.py:

@@ -1007,14 +1007,14 @@
 <p>Download source’s coordinates (xyz_sample.npz) :
 <a class="reference external" href="https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1">https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1</a></p>
 <img alt="../../_images/ex_add_multiple_objects.png" src="../../_images/ex_add_multiple_objects.png" />
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">visbrain.gui</span> <span class="kn">import</span> <a href="../../generated/visbrain.gui.Brain.html#visbrain.gui.Brain" title="View documentation for visbrain.gui.Brain"><span class="n">Brain</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.ConnectObj.html#visbrain.objects.ConnectObj" title="View documentation for visbrain.objects.ConnectObj"><span class="n">ConnectObj</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.gui</span> <span class="k">import</span> <a href="../../generated/visbrain.gui.Brain.html#visbrain.gui.Brain" title="View documentation for visbrain.gui.Brain"><span class="n">Brain</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.ConnectObj.html#visbrain.objects.ConnectObj" title="View documentation for visbrain.objects.ConnectObj"><span class="n">ConnectObj</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="k">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a>
 
-<span class="k">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
 <span class="c1"># Create an empty kwargs dictionnary :</span>
 <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
@@ -1037,7 +1037,7 @@
 </div>
 <div class="section" id="sources">
 <h2>SOURCES<a class="headerlink" href="#sources" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Create a first source object with uniform red square markers</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Create a first source object with uniform red square markers</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="n">s_obj_l</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">(</span><span class="s1">&#39;S_left&#39;</span><span class="p">,</span> <span class="n">s_xyz_l</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data_l</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span>
                     <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;disc&#39;</span><span class="p">,</span> <span class="n">edge_width</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span>
@@ -1052,7 +1052,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="n">s_obj_rb</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">(</span><span class="s1">&#39;S_right_back&#39;</span><span class="p">,</span> <span class="n">s_xyz_rb</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;arrow&#39;</span><span class="p">,</span> <span class="n">radius_min</span><span class="o">=</span><span class="mf">20.</span><span class="p">,</span>
                      <span class="n">edge_width</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">text_color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">text_size</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
-                     <span class="n">text_bold</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                     <span class="n">text_bold</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="sd">&quot;&quot;&quot;Analyse where the source are located using the Brodmann area (BA) atlas.</span>
 <span class="sd">This method returns a pandas.DataFrame</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -1079,7 +1079,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="n">custom_color</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Frontal&#39;</span><span class="p">:</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;Temporal&#39;</span><span class="p">:</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;Sub-lobar&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">}</span>
 <span class="n">color_others</span> <span class="o">=</span> <span class="s1">&#39;gray&#39;</span>  <span class="c1"># color of every sources that are not in custom_color</span>
-<span class="n">hide_others</span> <span class="o">=</span> <span class="bp">False</span>    <span class="c1"># hide every sources that are not in custom_color</span>
+<span class="n">hide_others</span> <span class="o">=</span> <span class="kc">False</span>    <span class="c1"># hide every sources that are not in custom_color</span>
 <span class="n">s_obj_rf</span><span class="o">.</span><span class="n">color_sources</span><span class="p">(</span><span class="n">analysis</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">color_by</span><span class="o">=</span><span class="s1">&#39;lobe&#39;</span><span class="p">,</span> <span class="n">roi_to_color</span><span class="o">=</span><span class="n">custom_color</span><span class="p">,</span>
                        <span class="n">color_others</span><span class="o">=</span><span class="n">color_others</span><span class="p">,</span> <span class="n">hide_others</span><span class="o">=</span><span class="n">hide_others</span><span class="p">)</span>
 </pre></div>
@@ -1087,7 +1087,7 @@
 </div>
 <div class="section" id="connectivity">
 <h2>CONNECTIVITY<a class="headerlink" href="#connectivity" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Function in order to create random connection dataset for each</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Function in order to create random connection dataset for each</span>
 <span class="c1"># source object :</span>
 
 
@@ -1096,12 +1096,12 @@
     <span class="c1"># Create a random connection dataset :</span>
     <span class="n">connect</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.uniform.html#numpy.random.uniform" title="View documentation for numpy.random.uniform"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span></a><span class="p">(</span><span class="o">-</span><span class="mf">100.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">,</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xyz</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">xyz</span><span class="p">)))</span>
     <span class="c1"># Mask the connection aray :</span>
-    <span class="n">connect</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ma.masked_array.html#numpy.ma.masked_array" title="View documentation for numpy.ma.masked_array"><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_array</span></a><span class="p">(</span><span class="n">connect</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="n">connect</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ma.masked_array.html#numpy.ma.masked_array" title="View documentation for numpy.ma.masked_array"><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_array</span></a><span class="p">(</span><span class="n">connect</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
     <span class="c1"># Hide lower triangle :</span>
-    <span class="n">connect</span><span class="o">.</span><span class="n">mask</span><span class="p">[</span><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.tril_indices_from.html#numpy.tril_indices_from" title="View documentation for numpy.tril_indices_from"><span class="n">np</span><span class="o">.</span><span class="n">tril_indices_from</span></a><span class="p">(</span><span class="n">connect</span><span class="o">.</span><span class="n">mask</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">connect</span><span class="o">.</span><span class="n">mask</span><span class="p">[</span><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.tril_indices_from.html#numpy.tril_indices_from" title="View documentation for numpy.tril_indices_from"><span class="n">np</span><span class="o">.</span><span class="n">tril_indices_from</span></a><span class="p">(</span><span class="n">connect</span><span class="o">.</span><span class="n">mask</span><span class="p">)]</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="c1"># Hide connexions that are not between min and max :</span>
     <span class="n">connect</span><span class="o">.</span><span class="n">mask</span><span class="p">[</span><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.logical_or.html#numpy.logical_or" title="View documentation for numpy.logical_or"><span class="n">np</span><span class="o">.</span><span class="n">logical_or</span></a><span class="p">(</span><span class="n">connect</span><span class="o">.</span><span class="n">data</span> <span class="o">&lt;</span> <span class="nb">min</span><span class="p">,</span>
-                               <span class="n">connect</span><span class="o">.</span><span class="n">data</span> <span class="o">&gt;</span> <span class="nb">max</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">True</span>
+                               <span class="n">connect</span><span class="o">.</span><span class="n">data</span> <span class="o">&gt;</span> <span class="nb">max</span><span class="p">)]</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">return</span> <span class="n">connect</span>
 
 
@@ -1123,7 +1123,7 @@
 <span class="n">vb</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-gui-brain-09-add-multiple-objects-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" download="" href="../../_downloads/e6a42ed9f36080dc37dd46d89a002a03/09_add_multiple_objects.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">09_add_multiple_objects.py</span></code></a></div>
@@ -1155,7 +1155,7 @@
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-02-07.</p>
+        <p>&copy; Copyright Last updated on 2019-03-26.</p>
     </footer>
 
   </body>

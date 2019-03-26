@@ -1003,23 +1003,23 @@
 <p>See the original example :</p>
 <p><a class="reference external" href="https://pysurfer.github.io/auto_examples/plot_meg_inverse_solution.html#sphx-glr-auto-examples-plot-meg-inverse-solution-py">https://pysurfer.github.io/auto_examples/plot_meg_inverse_solution.html#sphx-glr-auto-examples-plot-meg-inverse-solution-py</a></p>
 <img alt="../../_images/ex_eegmeg_meg_inverse.png" src="../../_images/ex_eegmeg_meg_inverse.png" />
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain.gui</span> <span class="kn">import</span> <a href="../../generated/visbrain.gui.Brain.html#visbrain.gui.Brain" title="View documentation for visbrain.gui.Brain"><span class="n">Brain</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">,</span> <a href="../../generated/visbrain.io.read_stc.html#visbrain.io.read_stc" title="View documentation for visbrain.io.read_stc"><span class="n">read_stc</span></a>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain.gui</span> <span class="k">import</span> <a href="../../generated/visbrain.gui.Brain.html#visbrain.gui.Brain" title="View documentation for visbrain.gui.Brain"><span class="n">Brain</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="k">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">,</span> <a href="../../generated/visbrain.io.read_stc.html#visbrain.io.read_stc" title="View documentation for visbrain.io.read_stc"><span class="n">read_stc</span></a>
 
 <span class="sd">&quot;&quot;&quot;Download file if needed :</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="n">stc_file</span> <span class="o">=</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">(</span><span class="s1">&#39;meg_source_estimate-lh.stc&#39;</span><span class="p">,</span> <span class="n">astype</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">)</span>
 
 <span class="c1"># Read the *.stc file :</span>
-<span class="nb">file</span> <span class="o">=</span> <a href="../../generated/visbrain.io.read_stc.html#visbrain.io.read_stc" title="View documentation for visbrain.io.read_stc"><span class="n">read_stc</span></a><span class="p">(</span><span class="n">stc_file</span><span class="p">)</span>
+<span class="n">file</span> <span class="o">=</span> <a href="../../generated/visbrain.io.read_stc.html#visbrain.io.read_stc" title="View documentation for visbrain.io.read_stc"><span class="n">read_stc</span></a><span class="p">(</span><span class="n">stc_file</span><span class="p">)</span>
 
 <span class="c1"># Get the data and vertices from the file :</span>
-<span class="n">data</span> <span class="o">=</span> <span class="nb">file</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][:,</span> <span class="mi">2</span><span class="p">]</span>
-<span class="n">vertices</span> <span class="o">=</span> <span class="nb">file</span><span class="p">[</span><span class="s1">&#39;vertices&#39;</span><span class="p">]</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">file</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][:,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="n">vertices</span> <span class="o">=</span> <span class="n">file</span><span class="p">[</span><span class="s1">&#39;vertices&#39;</span><span class="p">]</span>
 
 <span class="c1"># Define a brain object and add the data to the mesh :</span>
-<span class="n">b_obj</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;inflated&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">hemisphere</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+<span class="n">b_obj</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;inflated&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">hemisphere</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
 <span class="n">b_obj</span><span class="o">.</span><span class="n">add_activation</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="n">vertices</span><span class="p">,</span> <span class="n">smoothing_steps</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
                      <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="mf">13.</span><span class="p">,</span> <span class="mf">22.</span><span class="p">),</span> <span class="n">hide_under</span><span class="o">=</span><span class="mf">13.</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;plasma&#39;</span><span class="p">,</span>
                      <span class="n">hemisphere</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
@@ -1030,7 +1030,7 @@
 <span class="n">vb</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eeg-meg-meg-inverse-solution-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" download="" href="../../_downloads/1fc95d4187f810018760f379df3e08c8/meg_inverse_solution.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">meg_inverse_solution.py</span></code></a></div>
@@ -1061,7 +1061,7 @@
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-02-07.</p>
+        <p>&copy; Copyright Last updated on 2019-03-26.</p>
     </footer>
 
   </body>

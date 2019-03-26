@@ -19,8 +19,7 @@ project the source's activity on it.
 .. image:: ../../_static/examples/ex_region_of_interest.png
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     from __future__ import print_function
     import numpy as np
@@ -89,7 +88,10 @@ project the source's activity on it.
     # Show the interface :
     vb.show()
 
-**Total running time of the script:** ( 0 minutes  0.000 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_auto_examples_gui_brain_05_region_of_interest.py:

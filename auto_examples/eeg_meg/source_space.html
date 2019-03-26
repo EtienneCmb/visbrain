@@ -1011,13 +1011,13 @@ function</p>
 <img alt="../../_images/ex_eegmeg_plot_source_space.png" src="../../_images/ex_eegmeg_plot_source_space.png" />
 <div class="section" id="load-fif-file-in-the-mne-python-dataset">
 <h2>Load .fif file in the MNE-python dataset<a class="headerlink" href="#load-fif-file-in-the-mne-python-dataset" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">mne.datasets</span> <span class="kn">import</span> <span class="n">sample</span>
+<span class="kn">from</span> <span class="nn">mne.datasets</span> <span class="k">import</span> <span class="n">sample</span>
 
-<span class="kn">from</span> <span class="nn">visbrain.gui</span> <span class="kn">import</span> <a href="../../generated/visbrain.gui.Brain.html#visbrain.gui.Brain" title="View documentation for visbrain.gui.Brain"><span class="n">Brain</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.mne</span> <span class="kn">import</span> <a href="../../generated/visbrain.mne.mne_plot_source_space.html#visbrain.mne.mne_plot_source_space" title="View documentation for visbrain.mne.mne_plot_source_space"><span class="n">mne_plot_source_space</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.gui</span> <span class="k">import</span> <a href="../../generated/visbrain.gui.Brain.html#visbrain.gui.Brain" title="View documentation for visbrain.gui.Brain"><span class="n">Brain</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.mne</span> <span class="k">import</span> <a href="../../generated/visbrain.mne.mne_plot_source_space.html#visbrain.mne.mne_plot_source_space" title="View documentation for visbrain.mne.mne_plot_source_space"><span class="n">mne_plot_source_space</span></a>
 
 <span class="c1"># Define path :</span>
 <span class="n">main_path</span> <span class="o">=</span> <span class="n">sample</span><span class="o">.</span><span class="n">data_path</span><span class="p">()</span>
@@ -1032,7 +1032,7 @@ function</p>
 <h2>Active data<a class="headerlink" href="#active-data" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div>Active data defined for illustration.</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">active_data</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.arange.html#numpy.arange" title="View documentation for numpy.arange"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><span class="mi">20484</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">active_data</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.arange.html#numpy.arange" title="View documentation for numpy.arange"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><span class="mi">20484</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1040,7 +1040,7 @@ function</p>
 <h2>Additional inputs<a class="headerlink" href="#additional-inputs" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div>Additional inputs for BrainObj :</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">kw_b_obj</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">translucent</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">hemisphere</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">kw_b_obj</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">translucent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">hemisphere</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
 <span class="c1"># Additional inputs for SourceObj :</span>
 <span class="n">kw_s_obj</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;square&#39;</span><span class="p">)</span>
 <span class="c1"># Additional inputs for activations (colormap, clim...) :</span>
@@ -1056,11 +1056,11 @@ function</p>
 <div>Note that here, we use <cite>show=False</cite>. In that case, a
 <a class="reference internal" href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="visbrain.objects.BrainObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">visbrain.objects.BrainObj</span></code></a> and a <a class="reference internal" href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="visbrain.objects.SourceObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">visbrain.objects.SourceObj</span></code></a>
 are returned.</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">b_obj</span><span class="p">,</span> <span class="n">s_obj</span> <span class="o">=</span> <a href="../../generated/visbrain.mne.mne_plot_source_space.html#visbrain.mne.mne_plot_source_space" title="View documentation for visbrain.mne.mne_plot_source_space"><span class="n">mne_plot_source_space</span></a><span class="p">(</span><span class="n">fif_file</span><span class="p">,</span> <span class="n">active_data</span><span class="o">=</span><span class="n">active_data</span><span class="p">,</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">b_obj</span><span class="p">,</span> <span class="n">s_obj</span> <span class="o">=</span> <a href="../../generated/visbrain.mne.mne_plot_source_space.html#visbrain.mne.mne_plot_source_space" title="View documentation for visbrain.mne.mne_plot_source_space"><span class="n">mne_plot_source_space</span></a><span class="p">(</span><span class="n">fif_file</span><span class="p">,</span> <span class="n">active_data</span><span class="o">=</span><span class="n">active_data</span><span class="p">,</span>
                                      <span class="n">kw_brain_obj</span><span class="o">=</span><span class="n">kw_b_obj</span><span class="p">,</span>
                                      <span class="n">kw_source_obj</span><span class="o">=</span><span class="n">kw_s_obj</span><span class="p">,</span>
                                      <span class="n">kw_activation</span><span class="o">=</span><span class="n">kw_activation</span><span class="p">,</span>
-                                     <span class="n">show</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+                                     <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1070,12 +1070,12 @@ are returned.</div></blockquote>
 <div>Note that here, we pass the source object to Brain but by default we set it
 as not visible. But if you don’t need to see it, simply remove the
 <cite>source_obj=s_obj</cite></div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">s_obj</span><span class="o">.</span><span class="n">visible_obj</span> <span class="o">=</span> <span class="bp">False</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">s_obj</span><span class="o">.</span><span class="n">visible_obj</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="n">brain</span> <span class="o">=</span> <a href="../../generated/visbrain.gui.Brain.html#visbrain.gui.Brain" title="View documentation for visbrain.gui.Brain"><span class="n">Brain</span></a><span class="p">(</span><span class="n">brain_obj</span><span class="o">=</span><span class="n">b_obj</span><span class="p">,</span> <span class="n">source_obj</span><span class="o">=</span><span class="n">s_obj</span><span class="p">)</span>
 <span class="n">brain</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eeg-meg-source-space-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" download="" href="../../_downloads/cc9a2205af12fba55aefdef2de25f48f/source_space.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">source_space.py</span></code></a></div>
@@ -1107,7 +1107,7 @@ as not visible. But if you don’t need to see it, simply remove the
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-02-07.</p>
+        <p>&copy; Copyright Last updated on 2019-03-26.</p>
     </footer>
 
   </body>

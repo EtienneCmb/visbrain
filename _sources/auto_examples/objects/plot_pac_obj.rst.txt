@@ -23,7 +23,6 @@ The PacmapObj can be use to visualize three things :
 
 
 
-
 .. image:: /auto_examples/objects/images/sphx_glr_plot_pac_obj_001.png
     :class: sphx-glr-single-img
 
@@ -54,7 +53,7 @@ The PacmapObj can be use to visualize three things :
 |
 
 
-.. code-block:: python
+.. code-block:: default
 
     import numpy as np
 
@@ -105,7 +104,10 @@ The PacmapObj can be use to visualize three things :
                       title='Optimal amplitude frequency')
     sc.preview()
 
-**Total running time of the script:** ( 0 minutes  10.605 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  10.378 seconds)
 
 
 .. _sphx_glr_download_auto_examples_objects_plot_pac_obj.py:

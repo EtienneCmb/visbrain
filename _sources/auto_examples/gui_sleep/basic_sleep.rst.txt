@@ -20,14 +20,16 @@ Two windows will then appear :
 .. image:: ../../_static/examples/ex_basic_sleep.png
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     from visbrain.gui import Sleep
 
     Sleep().show()
 
-**Total running time of the script:** ( 0 minutes  0.000 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_auto_examples_gui_sleep_basic_sleep.py:

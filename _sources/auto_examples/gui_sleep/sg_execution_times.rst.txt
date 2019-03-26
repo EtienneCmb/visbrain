@@ -1,0 +1,20 @@
+
+:orphan:
+
+.. _sphx_glr_auto_examples_gui_sleep_sg_execution_times:
+
+Computation times
+=================
+**00:01.118** total execution time for **auto_examples_gui_sleep** files:
+
+- **00:00.830**: :ref:`sphx_glr_auto_examples_gui_sleep_plot_get_sleep_statistics.py` (``plot_get_sleep_statistics.py``)
+- **00:00.288**: :ref:`sphx_glr_auto_examples_gui_sleep_plot_hypnogram.py` (``plot_hypnogram.py``)
+- **00:00.000**: :ref:`sphx_glr_auto_examples_gui_sleep_basic_sleep.py` (``basic_sleep.py``)
+- **00:00.000**: :ref:`sphx_glr_auto_examples_gui_sleep_load_brainvision.py` (``load_brainvision.py``)
+- **00:00.000**: :ref:`sphx_glr_auto_examples_gui_sleep_load_edf.py` (``load_edf.py``)
+- **00:00.000**: :ref:`sphx_glr_auto_examples_gui_sleep_load_elan.py` (``load_elan.py``)
+- **00:00.000**: :ref:`sphx_glr_auto_examples_gui_sleep_load_matlab.py` (``load_matlab.py``)
+- **00:00.000**: :ref:`sphx_glr_auto_examples_gui_sleep_load_rec.py` (``load_rec.py``)
+- **00:00.000**: :ref:`sphx_glr_auto_examples_gui_sleep_load_using_mne.py` (``load_using_mne.py``)
+- **00:00.000**: :ref:`sphx_glr_auto_examples_gui_sleep_replace_detection_basic.py` (``replace_detection_basic.py``)
+- **00:00.000**: :ref:`sphx_glr_auto_examples_gui_sleep_replace_detection_wonambi.py` (``replace_detection_wonambi.py``)

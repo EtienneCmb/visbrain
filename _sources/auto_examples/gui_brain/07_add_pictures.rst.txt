@@ -19,8 +19,7 @@ https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
 .. image:: ../../_static/examples/ex_pictures.png
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     import numpy as np
 
@@ -77,7 +76,10 @@ https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
     vb = Brain(picture_obj=pic, source_obj=s_obj)
     vb.show()
 
-**Total running time of the script:** ( 0 minutes  0.000 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_auto_examples_gui_brain_07_add_pictures.py:

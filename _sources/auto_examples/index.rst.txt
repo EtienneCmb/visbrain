@@ -1,5 +1,9 @@
 :orphan:
 
+
+
+.. _sphx_glr_auto_examples:
+
 .. _general_examples:
 
 .. warning::
@@ -16,6 +20,10 @@ Examples
 .. raw:: html
 
     <div style='clear:both'></div>
+
+
+
+.. _sphx_glr_auto_examples_objects:
 
 SceneObj : combine objects into subplots
 ----------------------------------------
@@ -291,6 +299,10 @@ subplots.
 
     <div style='clear:both'></div>
 
+
+
+.. _sphx_glr_auto_examples_gui_brain:
+
 Graphical user interface : Brain
 --------------------------------
 
@@ -564,6 +576,10 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 
     <div style='clear:both'></div>
 
+
+
+.. _sphx_glr_auto_examples_gui_sleep:
+
 Graphical user interface : Sleep
 --------------------------------
 
@@ -797,6 +813,10 @@ Examples demonstrating how to use Sleep and how to load files.
 
     <div style='clear:both'></div>
 
+
+
+.. _sphx_glr_auto_examples_gui_signal:
+
 Graphical user interface : Signal
 ---------------------------------
 
@@ -950,6 +970,10 @@ Examples demonstrating how to use the Signal module.
 
     <div style='clear:both'></div>
 
+
+
+.. _sphx_glr_auto_examples_eeg_meg:
+
 EEG/MEG Examples
 ----------------
 
@@ -1082,6 +1106,10 @@ EEG/MEG examples (reproduction of MNE and PySurfer examples).
 .. raw:: html
 
     <div style='clear:both'></div>
+
+
+
+.. _sphx_glr_auto_examples_figure:
 
 Figure Examples
 ---------------

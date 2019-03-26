@@ -1006,16 +1006,16 @@
 <p>Required dataset at :
 <a class="reference external" href="https://www.dropbox.com/s/95xvdqivpgk90hg/sleep_elan.zip?dl=1">https://www.dropbox.com/s/95xvdqivpgk90hg/sleep_elan.zip?dl=1</a></p>
 <img alt="../../_images/ex_LoadElan.png" src="../../_images/ex_LoadElan.png" />
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">visbrain.gui</span> <span class="kn">import</span> <a href="../../generated/visbrain.gui.Sleep.html#visbrain.gui.Sleep" title="View documentation for visbrain.gui.Sleep"><span class="n">Sleep</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">,</span> <a href="../../generated/visbrain.io.path_to_visbrain_data.html#visbrain.io.path_to_visbrain_data" title="View documentation for visbrain.io.path_to_visbrain_data"><span class="n">path_to_visbrain_data</span></a>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">visbrain.gui</span> <span class="k">import</span> <a href="../../generated/visbrain.gui.Sleep.html#visbrain.gui.Sleep" title="View documentation for visbrain.gui.Sleep"><span class="n">Sleep</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="k">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">,</span> <a href="../../generated/visbrain.io.path_to_visbrain_data.html#visbrain.io.path_to_visbrain_data" title="View documentation for visbrain.io.path_to_visbrain_data"><span class="n">path_to_visbrain_data</span></a>
 </pre></div>
 </div>
 <div class="section" id="load-your-file">
 <h2>LOAD YOUR FILE<a class="headerlink" href="#load-your-file" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div>Download dataset :</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">(</span><span class="s2">&quot;sleep_elan.zip&quot;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">astype</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">(</span><span class="s2">&quot;sleep_elan.zip&quot;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">astype</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">)</span>
 <span class="n">target_path</span> <span class="o">=</span> <a href="../../generated/visbrain.io.path_to_visbrain_data.html#visbrain.io.path_to_visbrain_data" title="View documentation for visbrain.io.path_to_visbrain_data"><span class="n">path_to_visbrain_data</span></a><span class="p">(</span><span class="n">folder</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">)</span>
 
 <span class="n">dfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target_path</span><span class="p">,</span> <span class="s1">&#39;sub-02.eeg&#39;</span><span class="p">)</span>
@@ -1025,7 +1025,7 @@
 <a href="../../generated/visbrain.gui.Sleep.html#visbrain.gui.Sleep" title="View documentation for visbrain.gui.Sleep"><span class="n">Sleep</span></a><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">dfile</span><span class="p">,</span> <span class="n">hypno</span><span class="o">=</span><span class="n">hfile</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-gui-sleep-load-elan-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" download="" href="../../_downloads/3de0cce76cf5f0e49aecf34995b0781f/load_elan.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">load_elan.py</span></code></a></div>
@@ -1057,7 +1057,7 @@
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-02-07.</p>
+        <p>&copy; Copyright Last updated on 2019-03-26.</p>
     </footer>
 
   </body>

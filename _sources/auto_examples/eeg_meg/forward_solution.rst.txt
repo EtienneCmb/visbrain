@@ -15,8 +15,7 @@ Plot source estimation.
 .. image:: ../../_static/examples/ex_eegmeg_mne_forward_solution.png
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     import os
 
@@ -55,7 +54,10 @@ Plot source estimation.
                                kw_brain_obj=kw_b_obj, kw_source_obj=kw_s_obj,
                                active_data=12, show=True)
 
-**Total running time of the script:** ( 0 minutes  0.000 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_auto_examples_eeg_meg_forward_solution.py:

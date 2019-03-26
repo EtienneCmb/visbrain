@@ -16,8 +16,7 @@ Download the archive :
 https://www.dropbox.com/s/jsjct54ynvdjzfq/figure.zip?dl=1
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     import os
 
@@ -85,7 +84,10 @@ https://www.dropbox.com/s/jsjct54ynvdjzfq/figure.zip?dl=1
     # Finally, display the figure :
     f.show()
 
-**Total running time of the script:** ( 0 minutes  0.000 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_auto_examples_figure_1_LayoutExample.py:

@@ -1005,18 +1005,18 @@
 <div class="sphx-glr-example-title section" id="matplotlib-plot-of-an-hypnogram">
 <span id="sphx-glr-auto-examples-gui-sleep-plot-hypnogram-py"></span><h1>Matplotlib plot of an hypnogram<a class="headerlink" href="#matplotlib-plot-of-an-hypnogram" title="Permalink to this headline">¶</a></h1>
 <p>Plot a hypnogram using matplotlib.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <a href="../../generated/visbrain.io.write_fig_hyp.html#visbrain.io.write_fig_hyp" title="View documentation for visbrain.io.write_fig_hyp"><span class="n">write_fig_hyp</span></a><span class="p">,</span> <span class="n">read_hypno</span><span class="p">,</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="k">import</span> <a href="../../generated/visbrain.io.write_fig_hyp.html#visbrain.io.write_fig_hyp" title="View documentation for visbrain.io.write_fig_hyp"><span class="n">write_fig_hyp</span></a><span class="p">,</span> <span class="n">read_hypno</span><span class="p">,</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a>
 </pre></div>
 </div>
 <div class="section" id="plotting-properties">
 <h2>Plotting properties<a class="headerlink" href="#plotting-properties" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div>Define plotting properties</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">grid</span> <span class="o">=</span> <span class="bp">True</span>     <span class="c1"># display the grid</span>
-<span class="n">ascolor</span> <span class="o">=</span> <span class="bp">True</span>  <span class="c1"># plt as color or in black and white</span>
-<span class="nb">file</span> <span class="o">=</span> <span class="bp">None</span>     <span class="c1"># Name of the file to be saved example : &#39;myfile.png&#39;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">grid</span> <span class="o">=</span> <span class="kc">True</span>     <span class="c1"># display the grid</span>
+<span class="n">ascolor</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># plt as color or in black and white</span>
+<span class="n">file</span> <span class="o">=</span> <span class="kc">None</span>     <span class="c1"># Name of the file to be saved example : &#39;myfile.png&#39;</span>
 </pre></div>
 </div>
 </div>
@@ -1024,7 +1024,7 @@
 <h2>Hypnogram data<a class="headerlink" href="#hypnogram-data" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div>For the illustration, a hypnogram is downloaded</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">path_to_hypno</span> <span class="o">=</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">(</span><span class="s2">&quot;s101_jbe.hyp&quot;</span><span class="p">,</span> <span class="n">astype</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">path_to_hypno</span> <span class="o">=</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">(</span><span class="s2">&quot;s101_jbe.hyp&quot;</span><span class="p">,</span> <span class="n">astype</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">)</span>
 <span class="n">data</span><span class="p">,</span> <span class="n">sf</span> <span class="o">=</span> <span class="n">read_hypno</span><span class="p">(</span><span class="n">path_to_hypno</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1034,12 +1034,12 @@
 <blockquote>
 <div>Plot the hypnogram. If file is None, the window is displayed otherwise the
 figure is saved</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><a href="../../generated/visbrain.io.write_fig_hyp.html#visbrain.io.write_fig_hyp" title="View documentation for visbrain.io.write_fig_hyp"><span class="n">write_fig_hyp</span></a><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">grid</span><span class="p">,</span> <span class="n">ascolor</span><span class="o">=</span><span class="n">ascolor</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="nb">file</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="../../generated/visbrain.io.write_fig_hyp.html#visbrain.io.write_fig_hyp" title="View documentation for visbrain.io.write_fig_hyp"><span class="n">write_fig_hyp</span></a><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">grid</span><span class="p">,</span> <span class="n">ascolor</span><span class="o">=</span><span class="n">ascolor</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">file</span><span class="p">)</span>
 <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="View documentation for matplotlib.pyplot.show"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
 <img alt="../../_images/sphx_glr_plot_hypnogram_001.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_hypnogram_001.png" />
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.151 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.288 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-gui-sleep-plot-hypnogram-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" download="" href="../../_downloads/6365b08683ff951292218c53702e291b/plot_hypnogram.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_hypnogram.py</span></code></a></div>
@@ -1071,7 +1071,7 @@ figure is saved</div></blockquote>
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-02-07.</p>
+        <p>&copy; Copyright Last updated on 2019-03-26.</p>
     </footer>
 
   </body>

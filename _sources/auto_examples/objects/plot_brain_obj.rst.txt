@@ -25,8 +25,7 @@ software (https://github.com/nipy/PySurfer/). Parcellation file comes from
 MNE-Python (https://github.com/mne-tools/mne-python).
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     import numpy as np
 
@@ -45,8 +44,7 @@ Scene creation
  objects. We first create the scene with a black background, a fixed size
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Scene creation
@@ -71,8 +69,7 @@ Scene creation
     this feature, we provide a set of intracranial MNI coordinates.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Download iEEG coordinates and define some random data
@@ -93,8 +90,7 @@ Basic brain using MNI template
  inflated, white and shere).
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Translucent inflated BrainObj with both hemispheres displayed
@@ -116,8 +112,7 @@ Select the left or the right hemisphere
  'both' hemispheres.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Opaque left hemispehre of the white matter
@@ -137,8 +132,7 @@ Projection iEEG data on the surface of the brain
  on the surface of the brain
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # First, define a brain object used for the projection
@@ -166,15 +160,13 @@ Projection iEEG data on the surface of the brain
     Here, we used s_obj.project_sources(b_obj) to project source's activity
     on the surface. We could also have used to b_obj.project_sources(s_obj)
 
-
 Parcellize the brain
 ##############################################################################
  Here, we parcellize the brain (using all parcellated included in the file).
  Note that those parcellates files comes from MNE-python.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Download the annotation file of the left hemisphere lh.aparc.a2009s.annot
@@ -198,7 +190,6 @@ Parcellize the brain
     Those annotations files from MNE-python are only compatibles with the
     inflated, white and sphere templates
 
-
 Send data to parcellates
 ##############################################################################
  Again, we download an annotation file, but this time for the right hemisphere
@@ -206,8 +197,7 @@ Send data to parcellates
  to some specific parcellates
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Download the annotation file of the right hemisphere rh.aparc.annot
@@ -248,8 +238,7 @@ Custom brain template
  visbrain. But you can define your own brain template using vertices and faces
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Download the vertices, faces and normals
@@ -282,15 +271,13 @@ Custom brain template
     slower. Then, you can save your template using `BrainObj.save`. This can
     be convenient to reload your template later.
 
-
 fMRI activation
 ##############################################################################
  Add fMRI activations (included in a nii.gz file) to the surface. The provided
  file comes from MNE-python
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Download the lh.sig.nii.gz file
@@ -314,8 +301,7 @@ MEG inverse solution
  Finally, plot MEG inverse solution. The provided file comes from MNE-python
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Dowload meg_source_estimate-rh.stc file and load the data
@@ -352,8 +338,7 @@ MEG inverse solution
  automatize figure generation.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Link the rotation of subplots (row=0, col=1) and (row=1, col=2)
@@ -379,7 +364,10 @@ MEG inverse solution
     [............                            ] 30.15090 | downloading       [........................                ] 60.30180 / downloading       [....................................    ] 90.45271 - downloading       [........................................] 100.00000 \ downloading   File saved as /home/circleci/.vispy/data/fonts/OpenSans-Regular.ttf.
 
 
-**Total running time of the script:** ( 0 minutes  53.470 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  53.012 seconds)
 
 
 .. _sphx_glr_download_auto_examples_objects_plot_brain_obj.py:

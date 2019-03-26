@@ -1009,10 +1009,10 @@
 <span id="sphx-glr-auto-examples-objects-plot-animate-scene-py"></span><h1>Animate objects in the scene<a class="headerlink" href="#animate-objects-in-the-scene" title="Permalink to this headline">¶</a></h1>
 <p>This example illustrate how to animate objects inside the scene. Note that
 animations can only be used with 3D objects.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <span class="p">(</span><a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.ConnectObj.html#visbrain.objects.ConnectObj" title="View documentation for visbrain.objects.ConnectObj"><span class="n">ConnectObj</span></a><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <span class="p">(</span><a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.ConnectObj.html#visbrain.objects.ConnectObj" title="View documentation for visbrain.objects.ConnectObj"><span class="n">ConnectObj</span></a><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="k">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a>
 </pre></div>
 </div>
 <div class="section" id="download-data-and-create-the-scene">
@@ -1020,7 +1020,7 @@ animations can only be used with 3D objects.</p>
 <blockquote>
 <div>The SceneObj is Matplotlib subplot like in which, you can add visbrain’s
 objects. We first create the scene with a black background, a fixed size</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download intracranial EEG electodes</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download intracranial EEG electodes</span>
 <span class="n">mat</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.load.html#numpy.load" title="View documentation for numpy.load"><span class="n">np</span><span class="o">.</span><span class="n">load</span></a><span class="p">(</span><a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">,</span> <span class="n">astype</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">))</span>
 <span class="n">xyz</span><span class="p">,</span> <span class="n">subjects</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;xyz&#39;</span><span class="p">],</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;subjects&#39;</span><span class="p">]</span>
 <span class="n">n_sources</span> <span class="o">=</span> <span class="n">xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -1028,7 +1028,7 @@ objects. We first create the scene with a black background, a fixed size</div></
 <span class="c1"># Generate random data and random connectivity</span>
 <span class="n">data</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.uniform.html#numpy.random.uniform" title="View documentation for numpy.random.uniform"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span></a><span class="p">(</span><span class="n">low</span><span class="o">=-</span><span class="mf">1.</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_sources</span><span class="p">,))</span>
 <span class="n">conn</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.triu.html#numpy.triu" title="View documentation for numpy.triu"><span class="n">np</span><span class="o">.</span><span class="n">triu</span></a><span class="p">(</span><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.uniform.html#numpy.random.uniform" title="View documentation for numpy.random.uniform"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span></a><span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="p">(</span><span class="n">n_sources</span><span class="p">,</span> <span class="n">n_sources</span><span class="p">)))</span>
-<span class="n">conn_select</span> <span class="o">=</span> <span class="p">(</span><span class="o">-.</span><span class="mo">005</span> <span class="o">&lt;</span> <span class="n">conn</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">conn</span> <span class="o">&lt;</span> <span class="o">.</span><span class="mo">005</span><span class="p">)</span>
+<span class="n">conn_select</span> <span class="o">=</span> <span class="p">(</span><span class="o">-.</span><span class="mi">005</span> <span class="o">&lt;</span> <span class="n">conn</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">conn</span> <span class="o">&lt;</span> <span class="o">.</span><span class="mi">005</span><span class="p">)</span>
 
 <span class="c1"># Scene creation</span>
 <span class="n">sc</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a><span class="p">()</span>
@@ -1039,7 +1039,7 @@ objects. We first create the scene with a black background, a fixed size</div></
 <h2>Animate a single brain object<a class="headerlink" href="#animate-a-single-brain-object" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div>Here we set an animation for a single brain object.</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">b_obj_1</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;inflated&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">b_obj_1</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;inflated&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">b_obj_1</span><span class="o">.</span><span class="n">animate</span><span class="p">()</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">b_obj_1</span><span class="p">,</span> <span class="n">rotate</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Animate a single object&#39;</span><span class="p">)</span>
 </pre></div>
@@ -1049,12 +1049,12 @@ objects. We first create the scene with a black background, a fixed size</div></
 <h2>Animate multiple objects<a class="headerlink" href="#animate-multiple-objects" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div>Here we animate multiple objects inside a subplot</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">s_obj_1</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">(</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">s_obj_1</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">(</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
 <span class="n">b_obj_2</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
 <span class="n">b_obj_2</span><span class="o">.</span><span class="n">animate</span><span class="p">()</span>
 
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">s_obj_1</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Animate multiple objects&#39;</span><span class="p">)</span>
-<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">b_obj_2</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rotate</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">use_this_cam</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">b_obj_2</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rotate</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">use_this_cam</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1063,10 +1063,10 @@ objects. We first create the scene with a black background, a fixed size</div></
 <blockquote>
 <div>Previous subplots are using the brain object. But every 3D objects in
 Visbrain can also be animated. We illustrate this with a source object</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define connectivity links and sources</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define connectivity links and sources</span>
 <span class="n">c_obj_1</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.ConnectObj.html#visbrain.objects.ConnectObj" title="View documentation for visbrain.objects.ConnectObj"><span class="n">ConnectObj</span></a><span class="p">(</span><span class="s1">&#39;c1&#39;</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">conn</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="n">conn_select</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">),</span>
                      <span class="n">dynamic_orientation</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">dynamic_order</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">,</span>
-                     <span class="n">antialias</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                     <span class="n">antialias</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">s_obj_2</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">(</span><span class="s1">&#39;s2&#39;</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">radius_min</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span> <span class="n">radius_max</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 <span class="n">s_obj_2</span><span class="o">.</span><span class="n">color_sources</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;inferno&#39;</span><span class="p">)</span>
 
@@ -1075,7 +1075,7 @@ Visbrain can also be animated. We illustrate this with a source object</div></bl
 
 <span class="c1"># Add objects to the scene</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">c_obj_1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Animate a source object&#39;</span><span class="p">)</span>
-<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">s_obj_2</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rotate</span><span class="o">=</span><span class="s1">&#39;front&#39;</span><span class="p">,</span> <span class="n">use_this_cam</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">zoom</span><span class="o">=.</span><span class="mi">7</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">s_obj_2</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rotate</span><span class="o">=</span><span class="s1">&#39;front&#39;</span><span class="p">,</span> <span class="n">use_this_cam</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">zoom</span><span class="o">=.</span><span class="mi">7</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1084,9 +1084,9 @@ Visbrain can also be animated. We illustrate this with a source object</div></bl
 <blockquote>
 <div>Here, we configure animations so that there’s a 60° rotation update every
 second</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define a connectivity object and a brain object :</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define a connectivity object and a brain object :</span>
 <span class="n">c_obj_2</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.ConnectObj.html#visbrain.objects.ConnectObj" title="View documentation for visbrain.objects.ConnectObj"><span class="n">ConnectObj</span></a><span class="p">(</span><span class="s1">&#39;c1&#39;</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">conn</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="n">conn_select</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">),</span>
-                     <span class="n">dynamic_orientation</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">,</span> <span class="n">antialias</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                     <span class="n">dynamic_orientation</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">,</span> <span class="n">antialias</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">b_obj_3</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
 
 <span class="c1"># Animate the brain with 10 iterations of 60° rotation update every second</span>
@@ -1097,7 +1097,7 @@ second</div></blockquote>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">c_obj_2</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                   <span class="n">title</span><span class="o">=</span><span class="s1">&#39;1s refresh rate with a 60° rotation update&#39;</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">b_obj_3</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rotate</span><span class="o">=</span><span class="s1">&#39;front&#39;</span><span class="p">,</span>
-                  <span class="n">use_this_cam</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                  <span class="n">use_this_cam</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1106,7 +1106,7 @@ second</div></blockquote>
 <blockquote>
 <div>Finally, the <cite>visbrain.objects.SceneObj.record_animation</cite> allows to export
 animations as a gif file</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># sc.record_animation(&#39;animate_example.gif&#39;, n_pic=10)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># sc.record_animation(&#39;animate_example.gif&#39;, n_pic=10)</span>
 
 <span class="n">sc</span><span class="o">.</span><span class="n">preview</span><span class="p">()</span>
 </pre></div>
@@ -1121,7 +1121,7 @@ animations as a gif file</div></blockquote>
 [........................................] 100.00000 \ downloading   File saved as /home/circleci/.vispy/data/fonts/OpenSans-Bold.ttf.
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  15.606 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  15.093 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-objects-plot-animate-scene-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" download="" href="../../_downloads/7623b39140334393ec55fe28c2bdfba5/plot_animate_scene.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_animate_scene.py</span></code></a></div>
@@ -1153,7 +1153,7 @@ animations as a gif file</div></blockquote>
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-02-07.</p>
+        <p>&copy; Copyright Last updated on 2019-03-26.</p>
     </footer>
 
   </body>

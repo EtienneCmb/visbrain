@@ -17,8 +17,7 @@ Use and control image, time-frequency maps and spectrogram.
       wavelet based time-frequency maps or multi-taper)
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     import numpy as np
     from visbrain.objects import (ImageObj, TimeFrequencyObj, ColorbarObj,
@@ -36,8 +35,7 @@ Scene creation
  colorbar width...)
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     CBAR_STATE = dict(cbtxtsz=12, txtsz=10., width=.1, rect=(-0.2, -2., 1., 4.),
@@ -56,8 +54,7 @@ Create sample data
  sine signal with a main frequency at 25hz
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Define a (10, 10) image
@@ -82,8 +79,7 @@ Plot an image
  Most basic plot of the image without further customization
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     im_basic = ImageObj('ex1', image)
@@ -101,8 +97,7 @@ Interpolated image
  VisPy website (vispy.visuals.ImageVisual)
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     im_interp = ImageObj('ex2', image, interpolation='bicubic')
@@ -120,8 +115,7 @@ Color properties
  thresholding, colormap control...)
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Create the image object
@@ -143,8 +137,7 @@ Spectrogram
  Extract time-frequency properties using the Fourier transform
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     spec = TimeFrequencyObj('spec', data, sf, method='fourier', cmap='RdBu_r')
@@ -161,8 +154,7 @@ Time-frequency map
  Extract time-frequency properties using the wavelet convolution
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     tf = TimeFrequencyObj('tf', data, sf, method='wavelet')
@@ -180,8 +172,7 @@ Multi-taper
  lspopt package)
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     tf_mt = TimeFrequencyObj('mt', data, sf, method='multitaper', overlap=.7,
@@ -201,7 +192,10 @@ Multi-taper
 
 
 
-**Total running time of the script:** ( 0 minutes  31.582 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  30.844 seconds)
 
 
 .. _sphx_glr_download_auto_examples_objects_plot_im_tf_spec_obj.py:

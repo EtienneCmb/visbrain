@@ -1031,11 +1031,11 @@ phase.</li>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">tensorpac.utils</span> <span class="kn">import</span> <span class="n">pac_signals_wavelet</span>
+<span class="kn">from</span> <span class="nn">tensorpac.utils</span> <span class="k">import</span> <span class="n">pac_signals_wavelet</span>
 
-<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../generated/visbrain.objects.PacmapObj.html#visbrain.objects.PacmapObj" title="View documentation for visbrain.objects.PacmapObj"><span class="n">PacmapObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <a href="../../generated/visbrain.objects.PacmapObj.html#visbrain.objects.PacmapObj" title="View documentation for visbrain.objects.PacmapObj"><span class="n">PacmapObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a>
 
 <span class="sd">&quot;&quot;&quot;Generate artificillly coupled signals :</span>
 <span class="sd">- First coupling between 10hz phase with a 80hz amplitude</span>
@@ -1050,7 +1050,7 @@ phase.</li>
 
 <span class="n">sc</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1200</span><span class="p">,</span> <span class="mi">600</span><span class="p">))</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2"># =============================================================================</span>
 <span class="s2">#                              Comodulogram</span>
 <span class="s2"># =============================================================================</span>
@@ -1059,7 +1059,7 @@ phase.</li>
                          <span class="n">f_amp</span><span class="o">=</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;bicubic&#39;</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">pac_obj_como</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">zoom</span><span class="o">=.</span><span class="mi">9</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Comodulogram&#39;</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2"># =============================================================================</span>
 <span class="s2">#                         Optimal phase frequency</span>
 <span class="s2"># =============================================================================</span>
@@ -1069,7 +1069,7 @@ phase.</li>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">pac_pha_como</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">zoom</span><span class="o">=.</span><span class="mi">9</span><span class="p">,</span>
                   <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Optimal phase frequency&#39;</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2"># =============================================================================</span>
 <span class="s2">#                         Optimal amplitude frequency</span>
 <span class="s2"># =============================================================================</span>
@@ -1081,7 +1081,7 @@ phase.</li>
 <span class="n">sc</span><span class="o">.</span><span class="n">preview</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  10.605 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  10.378 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-objects-plot-pac-obj-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" download="" href="../../_downloads/46b26738daca3862d3486a6a40db2a61/plot_pac_obj.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_pac_obj.py</span></code></a></div>
@@ -1112,7 +1112,7 @@ phase.</li>
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-02-07.</p>
+        <p>&copy; Copyright Last updated on 2019-03-26.</p>
     </footer>
 
   </body>

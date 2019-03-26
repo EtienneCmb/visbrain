@@ -3,6 +3,26 @@
 Cite Visbrain
 =============
 
+Please reference Visbrain using its dedicated article in `Frontiers in Neuroinformatics <https://www.frontiersin.org/articles/10.3389/fninf.2019.00014/full>`_.
+
+Bibtex entry :
+
+.. code-block:: latex
+
+  @ARTICLE{10.3389/fninf.2019.00014,
+  AUTHOR={Combrisson, Etienne and Vallat, Raphael and O'Reilly, Christian and Jas, Mainak and Pascarella, Annalisa and Saive, Anne-lise and Thiery, Thomas and Meunier, David and Altukhov, Dmitrii and Lajnef, Tarek and Ruby, Perrine and Guillot, Aymeric and Jerbi, Karim},   
+  TITLE={Visbrain: A Multi-Purpose GPU-Accelerated Open-Source Suite for Multimodal Brain Data Visualization},      
+  JOURNAL={Frontiers in Neuroinformatics},      
+  VOLUME={13},      
+  PAGES={14},     
+  YEAR={2019},      
+  URL={https://www.frontiersin.org/article/10.3389/fninf.2019.00014},       
+  DOI={10.3389/fninf.2019.00014},      
+  ISSN={1662-5196},   
+  ABSTRACT={We present Visbrain, a Python open-source package that offers a comprehensive visualization suite for neuroimaging and electrophysiological brain data. Visbrain consists of two levels of abstraction: 1) objects which represent highly configurable neuro-oriented visual primitives (3D brain, sources connectivity, etc.) and 2) graphical user interfaces for higher level interactions. The object level offers flexible and modular tools to produce and automate the production of figures using an approach similar to that of Matplotlib with subplots.. The second level visually connects these objects by controlling properties and interactions through graphical interfaces. The current release of Visbrain (version 0.4.2) contains 14 different objects and three responsive graphical user interfaces, built with PyQt: Signal, for the inspection of time-series and spectral properties, Brain for any type of visualization involving a 3D brain and Sleep for polysomnographic data visualization and sleep analysis. Each module has been developed in tight collaboration with end-users, i.e. primarily neuroscientists and domain experts, who bring their experience to make Visbrain as transparent as possible to the recording modalities (e.g. intracranial EEG, scalp-EEG, MEG, anatomical and functional MRI). Visbrain is developed on top of VisPy, a Python package providing high-performance 2D and 3D visualization by leveraging the computational power of the graphics card. Visbrain is available on Github and comes with a documentation, examples, and datasets (http://visbrain.org).}
+  }
+
+
 Cite Sleep
 ----------
 

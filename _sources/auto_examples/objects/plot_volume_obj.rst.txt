@@ -18,8 +18,7 @@ Illustration of the main functionalities and inputs of the volume object :
     * Load an MRI (nii.gz) file
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     from visbrain.objects import VolumeObj, SceneObj
     from visbrain.io import download_file
@@ -39,8 +38,7 @@ MIP rendering
  MIP rendering with an opaque fire colormap
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     v_obj_mip = VolumeObj('brodmann', method='mip', cmap='OpaqueFire')
@@ -57,8 +55,7 @@ Translucent rendering
  Translucent rendering with a translucent fire colormap
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     v_obj_trans = VolumeObj('aal', method='translucent', cmap='TransFire')
@@ -76,8 +73,7 @@ Additive rendering
  Additive rendering with a translucent grays colormap
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     v_obj_add = VolumeObj('talairach', method='additive', cmap='TransGrays')
@@ -94,8 +90,7 @@ Iso rendering
  Iso rendering. Note that here, no threshold are used
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     v_obj_iso = VolumeObj('brodmann', method='iso')
@@ -112,8 +107,7 @@ Volume thresholding
  Similarly to the example above, here, we use a threshold to cut the volume
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     path = download_file('GG-853-WM-0.7mm.nii.gz', astype='example_data')
@@ -133,8 +127,7 @@ Select volume levels
  select only certain levels
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     v_obj_select = VolumeObj('brodmann', method='iso', cmap='OpaqueFire',
@@ -152,8 +145,7 @@ MRI file : mip rendering
 ##############################################################################
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     path = download_file('GG-853-GM-0.7mm.nii.gz', astype='example_data')
@@ -171,8 +163,7 @@ MRI file : translucent rendering
 ##############################################################################
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     path = download_file('GG-853-WM-0.7mm.nii.gz', astype='example_data')
@@ -191,7 +182,10 @@ MRI file : translucent rendering
 
 
 
-**Total running time of the script:** ( 0 minutes  32.304 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  29.859 seconds)
 
 
 .. _sphx_glr_download_auto_examples_objects_plot_volume_obj.py:

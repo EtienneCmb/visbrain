@@ -14,8 +14,7 @@ This script generate some figures using the Brain module. Those exported
 pictures are going to be set in a layout in the 1_LayoutExample.py script.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     import numpy as np
     from visbrain.gui import Brain
@@ -86,7 +85,10 @@ pictures are going to be set in a layout in the 1_LayoutExample.py script.
 
     vb.show()
 
-**Total running time of the script:** ( 0 minutes  0.000 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_auto_examples_figure_0_GeneratePictures.py:

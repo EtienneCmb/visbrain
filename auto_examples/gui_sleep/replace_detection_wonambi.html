@@ -1024,17 +1024,17 @@ you’re using the new method and not the default method.</p>
 <img alt="../../_images/ex_replace_detection_wonambi.png" src="../../_images/ex_replace_detection_wonambi.png" />
 <div class="section" id="load-your-file-and-create-an-instance-of-sleep">
 <h2>Load your file and create an instance of Sleep<a class="headerlink" href="#load-your-file-and-create-an-instance-of-sleep" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">visbrain.gui</span> <span class="kn">import</span> <a href="../../generated/visbrain.gui.Sleep.html#visbrain.gui.Sleep" title="View documentation for visbrain.gui.Sleep"><span class="n">Sleep</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">,</span> <a href="../../generated/visbrain.io.path_to_visbrain_data.html#visbrain.io.path_to_visbrain_data" title="View documentation for visbrain.io.path_to_visbrain_data"><span class="n">path_to_visbrain_data</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.gui</span> <span class="k">import</span> <a href="../../generated/visbrain.gui.Sleep.html#visbrain.gui.Sleep" title="View documentation for visbrain.gui.Sleep"><span class="n">Sleep</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="k">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">,</span> <a href="../../generated/visbrain.io.path_to_visbrain_data.html#visbrain.io.path_to_visbrain_data" title="View documentation for visbrain.io.path_to_visbrain_data"><span class="n">path_to_visbrain_data</span></a>
 
-<span class="kn">from</span> <span class="nn">wonambi.detect.spindle</span> <span class="kn">import</span> <span class="n">DetectSpindle</span><span class="p">,</span> <span class="n">detect_Moelle2011</span>
-<span class="kn">from</span> <span class="nn">wonambi.detect.slowwave</span> <span class="kn">import</span> <span class="n">DetectSlowWave</span><span class="p">,</span> <span class="n">detect_Massimini2004</span>
+<span class="kn">from</span> <span class="nn">wonambi.detect.spindle</span> <span class="k">import</span> <span class="n">DetectSpindle</span><span class="p">,</span> <span class="n">detect_Moelle2011</span>
+<span class="kn">from</span> <span class="nn">wonambi.detect.slowwave</span> <span class="k">import</span> <span class="n">DetectSlowWave</span><span class="p">,</span> <span class="n">detect_Massimini2004</span>
 
 <span class="c1"># Download the file :</span>
-<a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">(</span><span class="s1">&#39;sleep_edf.zip&#39;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">astype</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">)</span>
+<a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">(</span><span class="s1">&#39;sleep_edf.zip&#39;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">astype</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">)</span>
 <span class="n">target_path</span> <span class="o">=</span> <a href="../../generated/visbrain.io.path_to_visbrain_data.html#visbrain.io.path_to_visbrain_data" title="View documentation for visbrain.io.path_to_visbrain_data"><span class="n">path_to_visbrain_data</span></a><span class="p">(</span><span class="n">folder</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">)</span>
 
 <span class="c1"># Get data path :</span>
@@ -1051,7 +1051,7 @@ you’re using the new method and not the default method.</p>
 <h2>Define new methods<a class="headerlink" href="#define-new-methods" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="spindle-function">
 <h3>Spindle function<a class="headerlink" href="#spindle-function" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define a DetectSpindle instance :</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define a DetectSpindle instance :</span>
 <span class="n">opts_spin</span> <span class="o">=</span> <span class="n">DetectSpindle</span><span class="p">(</span><span class="s1">&#39;Moelle2011&#39;</span><span class="p">)</span>
 <span class="c1"># Define the function to replace :</span>
 <span class="k">def</span> <span class="nf">fcn_spindle</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">hypno</span><span class="p">):</span>  <span class="c1"># noqa</span>
@@ -1072,7 +1072,7 @@ you’re using the new method and not the default method.</p>
 </div>
 <div class="section" id="slow-waves-function">
 <h3>Slow-waves function<a class="headerlink" href="#slow-waves-function" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define a DetectSlowWave instance :</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define a DetectSlowWave instance :</span>
 <span class="n">opts_sw</span> <span class="o">=</span> <span class="n">DetectSlowWave</span><span class="p">(</span><span class="s1">&#39;Massimini2004&#39;</span><span class="p">)</span>
 <span class="c1"># Define the function to replace :</span>
 <span class="k">def</span> <span class="nf">fcn_slowwave</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">hypno</span><span class="p">):</span>  <span class="c1"># noqa</span>
@@ -1097,7 +1097,7 @@ you’re using the new method and not the default method.</p>
 <blockquote>
 <div>Now we use the <a class="reference internal" href="../../generated/visbrain.gui.Sleep.html#visbrain.gui.Sleep.replace_detections" title="visbrain.gui.Sleep.replace_detections"><code class="xref py py-class docutils literal notranslate"><span class="pre">visbrain.gui.Sleep.replace_detections</span></code></a> method to
 overwrite existing spindles and slow-waves detections.</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Replace the spindle detection function :</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Replace the spindle detection function :</span>
 <span class="n">sp</span><span class="o">.</span><span class="n">replace_detections</span><span class="p">(</span><span class="s1">&#39;spindle&#39;</span><span class="p">,</span> <span class="n">fcn_spindle</span><span class="p">)</span>
 <span class="c1"># Replace the slow-wave detection function :</span>
 <span class="n">sp</span><span class="o">.</span><span class="n">replace_detections</span><span class="p">(</span><span class="s1">&#39;sw&#39;</span><span class="p">,</span> <span class="n">fcn_slowwave</span><span class="p">)</span>
@@ -1106,7 +1106,7 @@ overwrite existing spindles and slow-waves detections.</div></blockquote>
 <span class="n">sp</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-gui-sleep-replace-detection-wonambi-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" download="" href="../../_downloads/7365b621f541fb6838cb2c1b59cc48e9/replace_detection_wonambi.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">replace_detection_wonambi.py</span></code></a></div>
@@ -1138,7 +1138,7 @@ overwrite existing spindles and slow-waves detections.</div></blockquote>
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-02-07.</p>
+        <p>&copy; Copyright Last updated on 2019-03-26.</p>
     </footer>
 
   </body>

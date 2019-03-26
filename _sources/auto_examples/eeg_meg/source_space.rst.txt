@@ -15,13 +15,11 @@ function
 
 .. image:: ../../_static/examples/ex_eegmeg_plot_source_space.png
 
-
 Load .fif file in the MNE-python dataset
 ##############################################################################
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     import os
     import numpy as np
@@ -44,8 +42,7 @@ Active data
  Active data defined for illustration.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     active_data = np.arange(20484)
 
@@ -55,8 +52,7 @@ Additional inputs
  Additional inputs for BrainObj :
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     kw_b_obj = dict(translucent=False, hemisphere='both')
     # Additional inputs for SourceObj :
@@ -74,8 +70,7 @@ Get the brain and source objects
  are returned.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     b_obj, s_obj = mne_plot_source_space(fif_file, active_data=active_data,
@@ -92,15 +87,17 @@ Pass the brain and source objects to the :class:`visbrain.Brain` module
  `source_obj=s_obj`
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     s_obj.visible_obj = False
     brain = Brain(brain_obj=b_obj, source_obj=s_obj)
     brain.show()
 
-**Total running time of the script:** ( 0 minutes  0.000 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_auto_examples_eeg_meg_source_space.py:

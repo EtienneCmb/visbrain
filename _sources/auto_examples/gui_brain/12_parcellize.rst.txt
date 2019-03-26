@@ -19,8 +19,7 @@ used in this example.
 .. image:: ../../_static/examples/ex_parcellates.png
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     import numpy as np
 
@@ -70,7 +69,10 @@ used in this example.
     """
     Brain(brain_obj=b_obj).show()
 
-**Total running time of the script:** ( 0 minutes  0.000 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_auto_examples_gui_brain_12_parcellize.py:

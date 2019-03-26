@@ -1010,11 +1010,11 @@ vectors :</p>
 <p>Download source’s coordinates (xyz_sample.npz) :
 <a class="reference external" href="https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1">https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1</a></p>
 <img alt="../../_images/ex_vectors.png" src="../../_images/ex_vectors.png" />
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">visbrain.gui</span> <span class="kn">import</span> <a href="../../generated/visbrain.gui.Brain.html#visbrain.gui.Brain" title="View documentation for visbrain.gui.Brain"><span class="n">Brain</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../generated/visbrain.objects.VectorObj.html#visbrain.objects.VectorObj" title="View documentation for visbrain.objects.VectorObj"><span class="n">VectorObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.gui</span> <span class="k">import</span> <a href="../../generated/visbrain.gui.Brain.html#visbrain.gui.Brain" title="View documentation for visbrain.gui.Brain"><span class="n">Brain</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <a href="../../generated/visbrain.objects.VectorObj.html#visbrain.objects.VectorObj" title="View documentation for visbrain.objects.VectorObj"><span class="n">VectorObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="k">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a>
 
 <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
 
@@ -1034,16 +1034,16 @@ vectors :</p>
 <span class="n">data</span> <span class="o">=</span> <span class="n">xyz</span><span class="p">[</span><span class="n">sl_1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>            <span class="c1"># Data attached to each vctor</span>
 
 <span class="n">v_obj1</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.VectorObj.html#visbrain.objects.VectorObj" title="View documentation for visbrain.objects.VectorObj"><span class="n">VectorObj</span></a><span class="p">(</span><span class="s1">&#39;v1&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">arrow_start</span><span class="p">,</span> <span class="n">arrow_end</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
-                   <span class="n">antialias</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">arrow_size</span><span class="o">=</span><span class="mf">6.</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="mf">6.</span><span class="p">,</span>
+                   <span class="n">antialias</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">arrow_size</span><span class="o">=</span><span class="mf">6.</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="mf">6.</span><span class="p">,</span>
                    <span class="n">arrow_type</span><span class="o">=</span><span class="s1">&#39;triangle_60&#39;</span><span class="p">)</span>
 <span class="n">s_obj</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">(</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span> <span class="n">xyz</span><span class="p">[</span><span class="n">sl_1</span><span class="p">,</span> <span class="p">:],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">radius_min</span><span class="o">=</span><span class="mf">10.</span><span class="p">)</span>
 
 <span class="sd">&quot;&quot;&quot;The second vector object is the symetric of the first one but this time the</span>
 <span class="sd">data are inferred from the norm of each vector.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="n">v_obj2</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.VectorObj.html#visbrain.objects.VectorObj" title="View documentation for visbrain.objects.VectorObj"><span class="n">VectorObj</span></a><span class="p">(</span><span class="s1">&#39;v2&#39;</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="n">arrow_start</span><span class="p">,</span> <span class="o">-</span><span class="n">arrow_end</span><span class="p">],</span> <span class="n">inferred_data</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="n">v_obj2</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.VectorObj.html#visbrain.objects.VectorObj" title="View documentation for visbrain.objects.VectorObj"><span class="n">VectorObj</span></a><span class="p">(</span><span class="s1">&#39;v2&#39;</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="n">arrow_start</span><span class="p">,</span> <span class="o">-</span><span class="n">arrow_end</span><span class="p">],</span> <span class="n">inferred_data</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                    <span class="n">line_width</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span> <span class="n">arrow_size</span><span class="o">=</span><span class="mf">6.</span><span class="p">,</span> <span class="n">arrow_type</span><span class="o">=</span><span class="s1">&#39;angle_90&#39;</span><span class="p">,</span>
-                   <span class="n">antialias</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;inferno&#39;</span><span class="p">)</span>
+                   <span class="n">antialias</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;inferno&#39;</span><span class="p">)</span>
 <span class="n">s_obj2</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">(</span><span class="s1">&#39;s2&#39;</span><span class="p">,</span> <span class="o">-</span><span class="n">xyz</span><span class="p">[</span><span class="n">sl_1</span><span class="p">,</span> <span class="p">:],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">radius_min</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 
 
@@ -1064,7 +1064,7 @@ vectors :</p>
 <span class="n">select</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.logical_and.html#numpy.logical_and" title="View documentation for numpy.logical_and"><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span></a><span class="p">(</span><span class="n">data</span> <span class="o">&gt;=</span> <span class="mf">60.</span><span class="p">,</span> <span class="n">data</span> <span class="o">&lt;=</span> <span class="mf">60.2</span><span class="p">)</span>
 
 <span class="n">v_obj3</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.VectorObj.html#visbrain.objects.VectorObj" title="View documentation for visbrain.objects.VectorObj"><span class="n">VectorObj</span></a><span class="p">(</span><span class="s1">&#39;v3&#39;</span><span class="p">,</span> <span class="n">arrows</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="n">select</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span>
-                   <span class="n">arrow_size</span><span class="o">=</span><span class="mf">7.</span><span class="p">,</span> <span class="n">arrow_type</span><span class="o">=</span><span class="s1">&#39;inhibitor_round&#39;</span><span class="p">,</span> <span class="n">antialias</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                   <span class="n">arrow_size</span><span class="o">=</span><span class="mf">7.</span><span class="p">,</span> <span class="n">arrow_type</span><span class="o">=</span><span class="s1">&#39;inhibitor_round&#39;</span><span class="p">,</span> <span class="n">antialias</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                    <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">60.05</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
 <span class="c1"># Finally, re-select both brain hemispheres.</span>
 <span class="n">b_obj</span><span class="o">.</span><span class="n">hemisphere</span> <span class="o">=</span> <span class="s1">&#39;both&#39;</span>
@@ -1074,7 +1074,7 @@ vectors :</p>
 <span class="n">vb</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-gui-brain-11-add-vectors-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" download="" href="../../_downloads/b0e5dfce56ec5e2cfd91aedb7974c68f/11_add_vectors.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">11_add_vectors.py</span></code></a></div>
@@ -1105,7 +1105,7 @@ vectors :</p>
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-02-07.</p>
+        <p>&copy; Copyright Last updated on 2019-03-26.</p>
     </footer>
 
   </body>

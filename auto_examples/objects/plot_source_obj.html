@@ -1042,10 +1042,10 @@ surface of region of interest. In addition, ROI objects can also be used
 to get anatomical informations of sources</li>
 </ul>
 </div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.ColorbarObj.html#visbrain.objects.ColorbarObj" title="View documentation for visbrain.objects.ColorbarObj"><span class="n">ColorbarObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.RoiObj.html#visbrain.objects.RoiObj" title="View documentation for visbrain.objects.RoiObj"><span class="n">RoiObj</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.ColorbarObj.html#visbrain.objects.ColorbarObj" title="View documentation for visbrain.objects.ColorbarObj"><span class="n">ColorbarObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.RoiObj.html#visbrain.objects.RoiObj" title="View documentation for visbrain.objects.RoiObj"><span class="n">RoiObj</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="k">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a>
 </pre></div>
 </div>
 <div class="admonition warning">
@@ -1060,7 +1060,7 @@ reconstruction.</p>
 <blockquote>
 <div>To illustrate the functionalities of the source object, here, we download an
 intracranial dataset consisting of 583 deep recording sites.</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download the file and get the (x, y, z) MNI coordinates of the 583 recording</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download the file and get the (x, y, z) MNI coordinates of the 583 recording</span>
 <span class="c1"># sites</span>
 <span class="n">mat</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.load.html#numpy.load" title="View documentation for numpy.load"><span class="n">np</span><span class="o">.</span><span class="n">load</span></a><span class="p">(</span><a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">,</span> <span class="n">astype</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">))</span>
 <span class="n">xyz</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;xyz&#39;</span><span class="p">]</span>
@@ -1074,7 +1074,7 @@ intracranial dataset consisting of 583 deep recording sites.</div></blockquote>
 <blockquote>
 <div>As said in other tutorials, the scene is equivalent with Matplotlib subplots.
 So here, we define a scene that is going to centralize objects in subplots</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the default camera state used for each subplot</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the default camera state used for each subplot</span>
 <span class="n">CAM_STATE</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">azimuth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>        <span class="c1"># azimuth angle</span>
                  <span class="n">elevation</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>     <span class="c1"># elevation angle</span>
                  <span class="n">scale_factor</span><span class="o">=</span><span class="mi">180</span>  <span class="c1"># distance to the camera</span>
@@ -1092,7 +1092,7 @@ So here, we define a scene that is going to centralize objects in subplots</div>
 <blockquote>
 <div>The first example consist of only plotting the source, without any
 modifications of the inputs</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the source objects and add this object to the scene</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the source objects and add this object to the scene</span>
 <span class="n">s_obj_basic</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">(</span><span class="s1">&#39;Basic&#39;</span><span class="p">,</span> <span class="n">xyz</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">s_obj_basic</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Default configuration&#39;</span><span class="p">,</span>
                   <span class="o">**</span><span class="n">S_KW</span><span class="p">)</span>
@@ -1104,14 +1104,14 @@ modifications of the inputs</div></blockquote>
 <blockquote>
 <div>Now, we attach text to each source (bold and yellow) and use a gray squares
 symbol</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># The color definition could either be uniform (e.g &#39;green&#39;, &#39;blue&#39;...), a list</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># The color definition could either be uniform (e.g &#39;green&#39;, &#39;blue&#39;...), a list</span>
 <span class="c1"># of colors or an array of RGB(A) colors</span>
 <span class="c1"># s_color = &#39;blue&#39;  # uniform definition</span>
 <span class="n">s_color</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;#D72638&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;#3772FF&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;#008148&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">200</span> <span class="o">+</span> \
     <span class="p">[</span><span class="s2">&quot;#C17D11&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">183</span>  <span class="c1"># list definition</span>
 <span class="c1"># Define the source object and add this object to the scene</span>
 <span class="n">s_obj_col</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">(</span><span class="s1">&#39;S2&#39;</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">text_size</span><span class="o">=</span><span class="mf">4.</span><span class="p">,</span> <span class="n">text_color</span><span class="o">=</span><span class="s1">&#39;yellow&#39;</span><span class="p">,</span>
-                      <span class="n">text_bold</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">s_color</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;square&#39;</span><span class="p">)</span>
+                      <span class="n">text_bold</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">s_color</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;square&#39;</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">s_obj_col</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">row_span</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                   <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Text, color and symbol&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">S_KW</span><span class="p">)</span>
 </pre></div>
@@ -1122,7 +1122,7 @@ symbol</div></blockquote>
 <blockquote>
 <div>This example illustrate how to assign some data to sources and how to control
 the dynamic of radius sources</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create some random data of shape (n_sources,)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create some random data of shape (n_sources,)</span>
 <span class="n">rnd_data</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.uniform.html#numpy.random.uniform" title="View documentation for numpy.random.uniform"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span></a><span class="p">(</span><span class="n">low</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_sources</span><span class="p">,))</span>
 <span class="c1"># Control the radius range of sources</span>
 <span class="n">radius_min</span> <span class="o">=</span> <span class="mf">7.</span>
@@ -1141,7 +1141,7 @@ the dynamic of radius sources</div></blockquote>
 <blockquote>
 <div>Sometimes, it could be usefull to mask some sources and display those sources
 with a different color (using <cite>mask_color</cite>).</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the mask for sources that have a x coordinate between [-20, 20] and</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the mask for sources that have a x coordinate between [-20, 20] and</span>
 <span class="c1"># set the color of those masked sources to orange</span>
 <span class="n">mask</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.logical_and.html#numpy.logical_and" title="View documentation for numpy.logical_and"><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span></a><span class="p">(</span><span class="n">xyz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mf">20.</span><span class="p">,</span> <span class="n">xyz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mf">20.</span><span class="p">)</span>
 <span class="n">mask_color</span> <span class="o">=</span> <span class="s1">&#39;orange&#39;</span>
@@ -1160,7 +1160,7 @@ with a different color (using <cite>mask_color</cite>).</div></blockquote>
 <div>The region of interest object (RoiObj) is basically a volume where each voxel
 is known to be part of an anatomical region. Hence, you can define the RoiObj
 and use it to get the anatomical informations of each source</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># First, create a basic source object</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># First, create a basic source object</span>
 <span class="n">s_obj_ba</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">(</span><span class="s1">&#39;S4&#39;</span><span class="p">,</span> <span class="n">xyz</span><span class="p">)</span>
 <span class="c1"># Then, we define a region of interest object (RoiObj). We use brodmann areas</span>
 <span class="c1"># but you should take a look to the complete tutorial on ROIs because visbrain</span>
@@ -1187,7 +1187,7 @@ and use it to get the anatomical informations of each source</div></blockquote>
 <blockquote>
 <div>Similarly to the example above, here, we color sources according to the
 Automated Anatomical Labeling (AAL)</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Analyse where sources are located using the AAL ROI template and color</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Analyse where sources are located using the AAL ROI template and color</span>
 <span class="sd">only the precentral left (green), right (orange), insula right (blue). Others</span>
 <span class="sd">ROI are turn into white.</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -1216,13 +1216,13 @@ Automated Anatomical Labeling (AAL)</div></blockquote>
 <blockquote>
 <div>A more simple example, but it’s also possible to color your sources
 according to a data vector</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the source object</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the source object</span>
 <span class="n">s_obj_data</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">(</span><span class="s1">&#39;S3&#39;</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">rnd_data</span><span class="p">,</span> <span class="n">radius_min</span><span class="o">=</span><span class="n">radius_min</span><span class="p">,</span>
                        <span class="n">radius_max</span><span class="o">=</span><span class="n">radius_max</span><span class="p">)</span>
 <span class="c1"># Color sources according to a data vector</span>
 <span class="n">s_obj_data</span><span class="o">.</span><span class="n">color_sources</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">rnd_data</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),)</span>
 <span class="c1"># Get the colorbar of the source object</span>
-<span class="n">cb_data</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.ColorbarObj.html#visbrain.objects.ColorbarObj" title="View documentation for visbrain.objects.ColorbarObj"><span class="n">ColorbarObj</span></a><span class="p">(</span><span class="n">s_obj_data</span><span class="p">,</span> <span class="n">cblabel</span><span class="o">=</span><span class="s1">&#39;Random data&#39;</span><span class="p">,</span> <span class="n">border</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="n">cb_data</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.ColorbarObj.html#visbrain.objects.ColorbarObj" title="View documentation for visbrain.objects.ColorbarObj"><span class="n">ColorbarObj</span></a><span class="p">(</span><span class="n">s_obj_data</span><span class="p">,</span> <span class="n">cblabel</span><span class="o">=</span><span class="s1">&#39;Random data&#39;</span><span class="p">,</span> <span class="n">border</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                       <span class="o">**</span><span class="n">CBAR_STATE</span><span class="p">)</span>
 <span class="c1"># Add the source and colorbar objects to the scene</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">s_obj_data</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Color sources using data&#39;</span><span class="p">,</span>
@@ -1237,9 +1237,9 @@ according to a data vector</div></blockquote>
 <div>As explained in the BrainObj tutorial, source’s activity can be projected on
 the surface of the brain which can be particularly convenient for represent
 source’s activity across several intracranially implanted subjects</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the source and brain objects</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the source and brain objects</span>
 <span class="n">s_proj</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">(</span><span class="s1">&#39;proj&#39;</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">rnd_data</span><span class="p">)</span>
-<span class="n">b_proj</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;B3&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">b_proj</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;B3&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="c1"># Project source&#39;s activity on the surface of the brain</span>
 <span class="n">s_proj</span><span class="o">.</span><span class="n">project_sources</span><span class="p">(</span><span class="n">b_proj</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;inferno&#39;</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">b_proj</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Project source&#39;s activity&quot;</span><span class="p">)</span>
@@ -1251,9 +1251,9 @@ source’s activity across several intracranially implanted subjects</div></bloc
 <blockquote>
 <div>This is the exact same example as above, except that we also project masked
 sources</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the source and brain objects</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the source and brain objects</span>
 <span class="n">s_mask</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">(</span><span class="s1">&#39;mask&#39;</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">rnd_data</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">mask_color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
-<span class="n">b_mask</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;B3&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">b_mask</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;B3&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="c1"># Project source&#39;s activity on the surface of the brain</span>
 <span class="n">s_mask</span><span class="o">.</span><span class="n">project_sources</span><span class="p">(</span><span class="n">b_mask</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">15.</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">b_mask</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
@@ -1266,7 +1266,7 @@ sources</div></blockquote>
 <blockquote>
 <div>Here, we first use the MIST ROI to get represent the default mode network and
 then, we project source’s activity onto the surface of the DMN</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the source and brain objects</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the source and brain objects</span>
 <span class="n">s_dmn</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">(</span><span class="s1">&#39;dmn&#39;</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">rnd_data</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">mask_color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
 <span class="n">b_mask</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;B3&#39;</span><span class="p">)</span>
 <span class="c1"># Define the MIST roi object</span>
@@ -1277,7 +1277,7 @@ then, we project source’s activity onto the surface of the DMN</div></blockquo
 <span class="n">roi_dmn</span><span class="o">.</span><span class="n">select_roi</span><span class="p">(</span><span class="n">dmn_idx</span><span class="p">)</span>
 <span class="c1"># Project source&#39;s activity on the surface of the DMN</span>
 <span class="n">s_dmn</span><span class="o">.</span><span class="n">project_sources</span><span class="p">(</span><span class="n">roi_dmn</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">15.</span><span class="p">)</span>
-<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">b_mask</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">use_this_cam</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">row_span</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">b_mask</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">use_this_cam</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">row_span</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                   <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Project source&#39;s activity</span><span class="se">\n</span><span class="s2">on the DMN&quot;</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">roi_dmn</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">row_span</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
@@ -1288,14 +1288,14 @@ then, we project source’s activity onto the surface of the DMN</div></blockquo
 <blockquote>
 <div>Similarly to the example above, we project here the repartition of sources
 which mean the number of contributing sources per vertex</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the source and brain objects</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the source and brain objects</span>
 <span class="n">s_rep</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">(</span><span class="s1">&#39;proj&#39;</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">rnd_data</span><span class="p">)</span>
-<span class="n">b_rep</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;B3&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">b_rep</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;B3&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="c1"># Project source&#39;s activity on the surface of the brain</span>
 <span class="n">s_rep</span><span class="o">.</span><span class="n">project_sources</span><span class="p">(</span><span class="n">b_rep</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="s1">&#39;repartition&#39;</span><span class="p">)</span>
 <span class="c1"># Get the colorbar of the brain object</span>
 <span class="n">cb_rep</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.ColorbarObj.html#visbrain.objects.ColorbarObj" title="View documentation for visbrain.objects.ColorbarObj"><span class="n">ColorbarObj</span></a><span class="p">(</span><span class="n">b_rep</span><span class="p">,</span> <span class="n">cblabel</span><span class="o">=</span><span class="s1">&#39;Number of sources</span><span class="se">\n</span><span class="s1">per vertex&#39;</span><span class="p">,</span>
-                     <span class="n">border</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="o">**</span><span class="n">CBAR_STATE</span><span class="p">)</span>
+                     <span class="n">border</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">CBAR_STATE</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">b_rep</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Project source&#39;s repartition&quot;</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">cb_rep</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
@@ -1306,7 +1306,7 @@ which mean the number of contributing sources per vertex</div></blockquote>
 <blockquote>
 <div>In this little example, we illustrate how to only display sources in the left
 hemisphere</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the source object</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the source object</span>
 <span class="n">s_obj_left</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">(</span><span class="s1">&#39;S_left&#39;</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#ab4642&#39;</span><span class="p">)</span>
 <span class="c1"># Select only sources that belong to the left hemisphere and add the object to</span>
 <span class="c1"># the scene</span>
@@ -1322,9 +1322,9 @@ hemisphere</div></blockquote>
 <div>First, we force sources to fit to the white matter of the brain. Then, we use
 the talaich ROI to identify which sources belong to the left or right
 hemisphere and color them accordingly</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the Brain and Source objects</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the Brain and Source objects</span>
 <span class="n">s_obj_fit</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">(</span><span class="s1">&#39;Fit&#39;</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;diamond&#39;</span><span class="p">)</span>
-<span class="n">b_obj_fit</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">b_obj_fit</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="c1"># Get the vertices of the brain object and force sources to fit to those</span>
 <span class="c1"># vertices</span>
 <span class="n">b_obj_vert</span> <span class="o">=</span> <span class="n">b_obj_fit</span><span class="o">.</span><span class="n">vertices</span>
@@ -1337,7 +1337,7 @@ hemisphere and color them accordingly</div></blockquote>
 <span class="c1"># Finally, add those objects to the scene</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">s_obj_fit</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                   <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Force sources to fit to the</span><span class="se">\n</span><span class="s2">surface of the brain&quot;</span><span class="p">)</span>
-<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">b_obj_fit</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">use_this_cam</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">b_obj_fit</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">use_this_cam</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1346,7 +1346,7 @@ hemisphere and color them accordingly</div></blockquote>
 <blockquote>
 <div>In this little example, we illustrate how to only display sources inside the
 brain</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">s_obj_inside</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">(</span><span class="s1">&#39;In&#39;</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;cross&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;firebrick&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">s_obj_inside</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">(</span><span class="s1">&#39;In&#39;</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;cross&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;firebrick&#39;</span><span class="p">)</span>
 <span class="n">s_obj_inside</span><span class="o">.</span><span class="n">set_visible_sources</span><span class="p">(</span><span class="s1">&#39;inside&#39;</span><span class="p">,</span> <span class="n">b_obj_vert</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">s_obj_inside</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
                   <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Display only sources inside the brain&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">S_KW</span><span class="p">)</span>
@@ -1355,7 +1355,7 @@ brain</div></blockquote>
 </div>
 <div class="section" id="take-a-screenshot-of-the-scene">
 <h2>Take a screenshot of the scene<a class="headerlink" href="#take-a-screenshot-of-the-scene" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Screenshot of the scene</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Screenshot of the scene</span>
 <span class="c1"># sc.screenshot(&#39;ex_source_obj.png&#39;, transparent=True)</span>
 
 <span class="c1"># If you need, you can link the rotation off all cameras but this can</span>
@@ -1367,7 +1367,7 @@ brain</div></blockquote>
 </pre></div>
 </div>
 <img alt="../../_images/sphx_glr_plot_source_obj_001.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_source_obj_001.png" />
-<p><strong>Total running time of the script:</strong> ( 0 minutes  58.769 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  57.063 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-objects-plot-source-obj-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" download="" href="../../_downloads/a5bcb687f50b938ff3696ee27ccfae1a/plot_source_obj.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_source_obj.py</span></code></a></div>
@@ -1399,7 +1399,7 @@ brain</div></blockquote>
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-02-07.</p>
+        <p>&copy; Copyright Last updated on 2019-03-26.</p>
     </footer>
 
   </body>

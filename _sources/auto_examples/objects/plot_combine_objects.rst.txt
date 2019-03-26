@@ -17,8 +17,7 @@ fMRI activations comes from the PySurfer software
 (https://github.com/nipy/PySurfer/).
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     import numpy as np
 
@@ -43,8 +42,7 @@ Scene creation
 ##############################################################################
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     CAM_STATE = dict(azimuth=0,        # azimuth angle
@@ -64,8 +62,7 @@ fMRI activation
 ##############################################################################
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     file = download_file('lh.sig.nii.gz', astype='example_data')
@@ -85,8 +82,7 @@ Region Of Interest (ROI)
 ##############################################################################
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     roi_aal = RoiObj('aal')
@@ -104,8 +100,7 @@ Sources
 ##############################################################################
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     s_obj = SourceObj('FirstSources', xyz, data=data)
@@ -123,8 +118,7 @@ Sources
 ##############################################################################
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     ts, _ = generate_eeg(n_pts=100, n_channels=xyz.shape[0])
@@ -145,8 +139,7 @@ Sources
 ##############################################################################
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     pic = np.random.rand(xyz.shape[0], 20, 20)
@@ -165,8 +158,7 @@ Connectivity
 ##############################################################################
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     arch = np.load(download_file('phase_sync_delta.npz', astype='example_data'))
@@ -189,8 +181,7 @@ Cross-sections
 ##############################################################################
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     cs_brod = CrossSecObj('brodmann', interpolation='nearest',
@@ -210,7 +201,10 @@ Cross-sections
 
 
 
-**Total running time of the script:** ( 0 minutes  31.585 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  30.438 seconds)
 
 
 .. _sphx_glr_download_auto_examples_objects_plot_combine_objects.py:

@@ -15,8 +15,7 @@ Export all of the time-frequency maps, psd of a dataset.
 .. image:: ../../_static/examples/ex_screenshot.png
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     import numpy as np
 
@@ -54,7 +53,10 @@ Export all of the time-frequency maps, psd of a dataset.
         sig.screenshot('tf_' + str(k) + '.png', dpi=600, autocrop=True)
     sig.show()
 
-**Total running time of the script:** ( 0 minutes  0.000 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_auto_examples_gui_signal_05_screenshot.py:

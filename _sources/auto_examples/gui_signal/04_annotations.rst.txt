@@ -21,8 +21,7 @@ https://drive.google.com/file/d/0B6vtJiCQZUBvMG95RHNXbDEwaGs/view?usp=sharing
 .. image:: ../../_static/examples/ex_annotations.png
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     from visbrain.gui import Signal
     from visbrain.utils import generate_eeg
@@ -43,7 +42,10 @@ https://drive.google.com/file/d/0B6vtJiCQZUBvMG95RHNXbDEwaGs/view?usp=sharing
 
     Signal(data, sf=sf, axis=-1, line_lw=2., annotations=annotations).show()
 
-**Total running time of the script:** ( 0 minutes  0.000 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_auto_examples_gui_signal_04_annotations.py:

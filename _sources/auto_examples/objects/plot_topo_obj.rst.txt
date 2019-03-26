@@ -20,8 +20,7 @@ object i.e :
   * Display connectivity
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     import numpy as np
 
@@ -41,8 +40,7 @@ Download data
  channels defined by there xy coordinates.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     path = download_file('topoplot_data.npz', astype='example_data')
@@ -65,8 +63,7 @@ Creation of the scene
  Create a scene with a white background
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     sc = SceneObj(bgcolor='white', size=(1600, 900))
@@ -82,8 +79,7 @@ Topoplot based on channel names
  First definition using channel names only
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Define some EEG channels and set one data value per channel
@@ -109,8 +105,7 @@ Topoplot based on channel (x, y) coordinates
  Second definition using channel (x, y) coordinates
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Create the topoplot and the object :
@@ -135,8 +130,7 @@ Custom extrema colors
  'green'
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Define the topoplot object
@@ -164,8 +158,7 @@ Connect channels
  `visbrain.objects.ConnectObj` object.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Create the topoplot and colorbar objects
@@ -196,8 +189,7 @@ Topoplot with regulary spaced levels
  you need to install `scikit-image <https://scikit-image.org/>`_
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Create the topoplot object :
@@ -222,8 +214,7 @@ Topoplot with custom levels
  spaced anymore but they are manually defined, just as color.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # First level is going to be red, the second one green and the last one blue
@@ -252,7 +243,10 @@ Topoplot with custom levels
 
 
 
-**Total running time of the script:** ( 1 minutes  6.608 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 1 minutes  3.062 seconds)
 
 
 .. _sphx_glr_download_auto_examples_objects_plot_topo_obj.py:

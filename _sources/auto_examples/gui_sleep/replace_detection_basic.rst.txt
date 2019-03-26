@@ -24,13 +24,11 @@ https://www.dropbox.com/s/bj1ra95rbksukro/sleep_edf.zip?dl=1
 
 .. image:: ../../_static/examples/ex_replace_detection_basic.png
 
-
 Load your file and create an instance of Sleep
 ##############################################################################
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     import os
@@ -55,18 +53,15 @@ Load your file and create an instance of Sleep
 Define new methods
 ##############################################################################
 
-
 Spindle function
 ~~~~~~~~~~~~~~~~
-
 
 This function does NOT perform a real spindle detection. It's purpose is to
 show how to replace the default detection behavior by a custom function.
 It just highlights samples between [0, 100], [200, 300] and [400, 500].
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     def fcn_spindle(data, sf, time, hypno):  # noqa
@@ -80,15 +75,13 @@ It just highlights samples between [0, 100], [200, 300] and [400, 500].
 Rapid eye movement function
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
 This function does NOT perform a real REM detection. It illustrates how to
 replace the default detection behavior by a basic thresholding function.
 Note that the function returns a boolean array indicating samples that are
 above a specific threshold.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     def fcn_rem(data, sf, time, hypno):  # noqa
@@ -105,8 +98,7 @@ Replace existing methods
  overwrite existing spindles and REM detections.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Replace the spindle detection function :
@@ -117,7 +109,10 @@ Replace existing methods
     # Finally, open the graphical user interface :
     sp.show()
 
-**Total running time of the script:** ( 0 minutes  0.000 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_auto_examples_gui_sleep_replace_detection_basic.py:

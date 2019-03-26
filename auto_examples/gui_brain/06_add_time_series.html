@@ -1004,11 +1004,11 @@ time-series can then be controlled from the GUI in the Sources/Time-series tab.<
 <p>Download source’s coordinates (xyz_sample.npz) :
 <a class="reference external" href="https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1">https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1</a></p>
 <img alt="../../_images/ex_time_series.png" src="../../_images/ex_time_series.png" />
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">visbrain.gui</span> <span class="kn">import</span> <a href="../../generated/visbrain.gui.Brain.html#visbrain.gui.Brain" title="View documentation for visbrain.gui.Brain"><span class="n">Brain</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../generated/visbrain.objects.TimeSeries3DObj.html#visbrain.objects.TimeSeries3DObj" title="View documentation for visbrain.objects.TimeSeries3DObj"><span class="n">TimeSeries3DObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.gui</span> <span class="k">import</span> <a href="../../generated/visbrain.gui.Brain.html#visbrain.gui.Brain" title="View documentation for visbrain.gui.Brain"><span class="n">Brain</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <a href="../../generated/visbrain.objects.TimeSeries3DObj.html#visbrain.objects.TimeSeries3DObj" title="View documentation for visbrain.objects.TimeSeries3DObj"><span class="n">TimeSeries3DObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="k">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a>
 
 <span class="c1"># Load the xyz coordinates and corresponding subject name :</span>
 
@@ -1037,7 +1037,7 @@ time-series can then be controlled from the GUI in the Sources/Time-series tab.<
 <span class="c1"># Use a boolean vector to hide/display time-series :</span>
 <span class="n">ts_to_mask</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">23</span><span class="p">]</span>
 <span class="n">ts_select</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ones.html#numpy.ones" title="View documentation for numpy.ones"><span class="n">np</span><span class="o">.</span><span class="n">ones</span></a><span class="p">((</span><span class="n">s_xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
-<span class="n">ts_select</span><span class="p">[</span><span class="n">ts_to_mask</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">ts_select</span><span class="p">[</span><span class="n">ts_to_mask</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="c1"># Time-series (TS) graphical properties :</span>
 <span class="n">ts_amp</span> <span class="o">=</span> <span class="mf">5.4</span>            <span class="c1"># TS graphical amplitude</span>
@@ -1056,7 +1056,7 @@ time-series can then be controlled from the GUI in the Sources/Time-series tab.<
 <span class="n">vb</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-gui-brain-06-add-time-series-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" download="" href="../../_downloads/829a52f49380754420ee431665ef386c/06_add_time_series.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">06_add_time_series.py</span></code></a></div>
@@ -1087,7 +1087,7 @@ time-series can then be controlled from the GUI in the Sources/Time-series tab.<
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-02-07.</p>
+        <p>&copy; Copyright Last updated on 2019-03-26.</p>
     </footer>
 
   </body>

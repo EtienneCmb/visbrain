@@ -1004,12 +1004,12 @@ and connect them.</p>
 <p>Download source’s coordinates (xyz_sample.npz) :
 <a class="reference external" href="https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1">https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1</a></p>
 <img alt="../../_images/ex_connectivity.png" src="../../_images/ex_connectivity.png" />
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">visbrain.gui</span> <span class="kn">import</span> <a href="../../generated/visbrain.gui.Brain.html#visbrain.gui.Brain" title="View documentation for visbrain.gui.Brain"><span class="n">Brain</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.ConnectObj.html#visbrain.objects.ConnectObj" title="View documentation for visbrain.objects.ConnectObj"><span class="n">ConnectObj</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.gui</span> <span class="k">import</span> <a href="../../generated/visbrain.gui.Brain.html#visbrain.gui.Brain" title="View documentation for visbrain.gui.Brain"><span class="n">Brain</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.ConnectObj.html#visbrain.objects.ConnectObj" title="View documentation for visbrain.objects.ConnectObj"><span class="n">ConnectObj</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="k">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a>
 
 <span class="c1"># Create an empty kwargs dictionnary :</span>
 <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
@@ -1051,17 +1051,17 @@ and connect them.</p>
 <span class="n">select</span><span class="p">[(</span><span class="n">connect</span> <span class="o">&gt;</span> <span class="n">umin</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">connect</span> <span class="o">&lt;</span> <span class="n">umax</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>
 
 <span class="c1"># 2 - Using masking (True: hide, 1: display):</span>
-<span class="n">connect</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ma.masked_array.html#numpy.ma.masked_array" title="View documentation for numpy.ma.masked_array"><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_array</span></a><span class="p">(</span><span class="n">connect</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="n">connect</span><span class="o">.</span><span class="n">mask</span><span class="p">[</span><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.where.html#numpy.where" title="View documentation for numpy.where"><span class="n">np</span><span class="o">.</span><span class="n">where</span></a><span class="p">((</span><span class="n">connect</span> <span class="o">&gt;</span> <span class="n">umin</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">connect</span> <span class="o">&lt;</span> <span class="n">umax</span><span class="p">))]</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">connect</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ma.masked_array.html#numpy.ma.masked_array" title="View documentation for numpy.ma.masked_array"><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_array</span></a><span class="p">(</span><span class="n">connect</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">connect</span><span class="o">.</span><span class="n">mask</span><span class="p">[</span><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.where.html#numpy.where" title="View documentation for numpy.where"><span class="n">np</span><span class="o">.</span><span class="n">where</span></a><span class="p">((</span><span class="n">connect</span> <span class="o">&gt;</span> <span class="n">umin</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">connect</span> <span class="o">&lt;</span> <span class="n">umax</span><span class="p">))]</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s1">&#39;1 and 2 equivalent :&#39;</span><span class="p">,</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.array_equal.html#numpy.array_equal" title="View documentation for numpy.array_equal"><span class="n">np</span><span class="o">.</span><span class="n">array_equal</span></a><span class="p">(</span><span class="n">select</span><span class="p">,</span> <span class="o">~</span><span class="n">connect</span><span class="o">.</span><span class="n">mask</span> <span class="o">+</span> <span class="mi">0</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;1 and 2 equivalent :&#39;</span><span class="p">,</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.array_equal.html#numpy.array_equal" title="View documentation for numpy.array_equal"><span class="n">np</span><span class="o">.</span><span class="n">array_equal</span></a><span class="p">(</span><span class="n">select</span><span class="p">,</span> <span class="o">~</span><span class="n">connect</span><span class="o">.</span><span class="n">mask</span> <span class="o">+</span> <span class="mi">0</span><span class="p">))</span>
 
 <span class="sd">&quot;&quot;&quot;Create the connectivity object :</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="n">c_obj</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.ConnectObj.html#visbrain.objects.ConnectObj" title="View documentation for visbrain.objects.ConnectObj"><span class="n">ConnectObj</span></a><span class="p">(</span><span class="s1">&#39;ConnectObj1&#39;</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">connect</span><span class="p">,</span> <span class="n">color_by</span><span class="o">=</span><span class="s1">&#39;strength&#39;</span><span class="p">,</span>
                    <span class="n">dynamic</span><span class="o">=</span><span class="p">(</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gnuplot&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">umin</span> <span class="o">+</span> <span class="o">.</span><span class="mi">2</span><span class="p">,</span>
                    <span class="n">vmax</span><span class="o">=</span><span class="n">umax</span> <span class="o">-</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span>
-                   <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="n">umin</span><span class="p">,</span> <span class="n">umax</span><span class="p">),</span> <span class="n">antialias</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                   <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="n">umin</span><span class="p">,</span> <span class="n">umax</span><span class="p">),</span> <span class="n">antialias</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="sd">&quot;&quot;&quot;Finally, pass source and connectivity objects to Brain :</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -1070,7 +1070,7 @@ and connect them.</p>
 <span class="n">vb</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-gui-brain-04-connectivity-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" download="" href="../../_downloads/9685e7266f1ab0a5821f34f34011719b/04_connectivity.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">04_connectivity.py</span></code></a></div>
@@ -1101,7 +1101,7 @@ and connect them.</p>
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-02-07.</p>
+        <p>&copy; Copyright Last updated on 2019-03-26.</p>
     </footer>
 
   </body>

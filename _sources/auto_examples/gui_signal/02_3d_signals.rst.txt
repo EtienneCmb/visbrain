@@ -23,8 +23,7 @@ channels, 10 trials of 4000 points each. The 2D grid will have a shape of
 .. image:: ../../_static/examples/ex_3d_signal.png
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     from itertools import product
     from visbrain.gui import Signal
@@ -66,7 +65,10 @@ channels, 10 trials of 4000 points each. The 2D grid will have a shape of
            title=title, grid_titles=gtitles, grid_font_size=gfz,
            grid_color=gc).show()
 
-**Total running time of the script:** ( 0 minutes  0.000 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_auto_examples_gui_signal_02_3d_signals.py:

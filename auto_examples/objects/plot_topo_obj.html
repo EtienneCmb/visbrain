@@ -1020,10 +1020,10 @@ levels with custom colors)</li>
 <li>Display connectivity</li>
 </ul>
 </div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../generated/visbrain.objects.TopoObj.html#visbrain.objects.TopoObj" title="View documentation for visbrain.objects.TopoObj"><span class="n">TopoObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.ColorbarObj.html#visbrain.objects.ColorbarObj" title="View documentation for visbrain.objects.ColorbarObj"><span class="n">ColorbarObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <a href="../../generated/visbrain.objects.TopoObj.html#visbrain.objects.TopoObj" title="View documentation for visbrain.objects.TopoObj"><span class="n">TopoObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.ColorbarObj.html#visbrain.objects.ColorbarObj" title="View documentation for visbrain.objects.ColorbarObj"><span class="n">ColorbarObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="k">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a>
 </pre></div>
 </div>
 <div class="section" id="download-data">
@@ -1032,14 +1032,14 @@ levels with custom colors)</li>
 <div>First, we download the data. A directory should be created to
 ~/visbrain_data/example_data. This example contains beta power for several
 channels defined by there xy coordinates.</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">path</span> <span class="o">=</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">(</span><span class="s1">&#39;topoplot_data.npz&#39;</span><span class="p">,</span> <span class="n">astype</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">path</span> <span class="o">=</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">(</span><span class="s1">&#39;topoplot_data.npz&#39;</span><span class="p">,</span> <span class="n">astype</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">)</span>
 <span class="n">mat</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.load.html#numpy.load" title="View documentation for numpy.load"><span class="n">np</span><span class="o">.</span><span class="n">load</span></a><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 <span class="n">xy</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;xyz&#39;</span><span class="p">],</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
 <span class="n">channels</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))]</span>
 <span class="c1"># Plotting properties shared across topoplots and colorbar :</span>
 <span class="n">kw_top</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">margin</span><span class="o">=</span><span class="mi">15</span> <span class="o">/</span> <span class="mi">100</span><span class="p">,</span> <span class="n">chan_offset</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.</span><span class="p">),</span> <span class="n">chan_size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 <span class="n">kw_cbar</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">cbtxtsz</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">txtsz</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">width</span><span class="o">=.</span><span class="mi">3</span><span class="p">,</span> <span class="n">txtcolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">cbtxtsh</span><span class="o">=</span><span class="mf">1.8</span><span class="p">,</span>
-               <span class="n">rect</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">),</span> <span class="n">border</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+               <span class="n">rect</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">),</span> <span class="n">border</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1047,7 +1047,7 @@ channels defined by there xy coordinates.</div></blockquote>
 <h2>Creation of the scene<a class="headerlink" href="#creation-of-the-scene" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div>Create a scene with a white background</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sc</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a><span class="p">(</span><span class="n">bgcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1600</span><span class="p">,</span> <span class="mi">900</span><span class="p">))</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sc</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a><span class="p">(</span><span class="n">bgcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1600</span><span class="p">,</span> <span class="mi">900</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -1055,7 +1055,7 @@ channels defined by there xy coordinates.</div></blockquote>
 <h2>Topoplot based on channel names<a class="headerlink" href="#topoplot-based-on-channel-names" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div>First definition using channel names only</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define some EEG channels and set one data value per channel</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define some EEG channels and set one data value per channel</span>
 <span class="n">ch_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;C3&#39;</span><span class="p">,</span> <span class="s1">&#39;C4&#39;</span><span class="p">,</span> <span class="s1">&#39;Cz&#39;</span><span class="p">,</span> <span class="s1">&#39;Fz&#39;</span><span class="p">,</span> <span class="s1">&#39;Pz&#39;</span><span class="p">]</span>
 <span class="n">data_names</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
 <span class="c1"># Create the topoplot and the associated colorbar</span>
@@ -1073,7 +1073,7 @@ channels defined by there xy coordinates.</div></blockquote>
 <h2>Topoplot based on channel (x, y) coordinates<a class="headerlink" href="#topoplot-based-on-channel-x-y-coordinates" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div>Second definition using channel (x, y) coordinates</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the topoplot and the object :</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the topoplot and the object :</span>
 <span class="n">t_obj_1</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.TopoObj.html#visbrain.objects.TopoObj" title="View documentation for visbrain.objects.TopoObj"><span class="n">TopoObj</span></a><span class="p">(</span><span class="s1">&#39;topo&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="n">channels</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="n">xy</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">,</span>
                   <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">),</span> <span class="o">**</span><span class="n">kw_top</span><span class="p">)</span>
 <span class="n">cb_obj_1</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.ColorbarObj.html#visbrain.objects.ColorbarObj" title="View documentation for visbrain.objects.ColorbarObj"><span class="n">ColorbarObj</span></a><span class="p">(</span><span class="n">t_obj_1</span><span class="p">,</span> <span class="n">cblabel</span><span class="o">=</span><span class="s1">&#39;Beta power&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kw_cbar</span><span class="p">)</span>
@@ -1090,7 +1090,7 @@ channels defined by there xy coordinates.</div></blockquote>
 <div>Here, we use custom colors for extrema i.e every values under <cite>vmin=2.</cite> is
 going to be set to the color ‘slateblue’ and every values over <cite>vmax=2.8</cite> to
 ‘green’</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the topoplot object</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the topoplot object</span>
 <span class="n">t_obj_2</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.TopoObj.html#visbrain.objects.TopoObj" title="View documentation for visbrain.objects.TopoObj"><span class="n">TopoObj</span></a><span class="p">(</span><span class="s1">&#39;topo&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="n">xy</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;inferno&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span>
                   <span class="n">under</span><span class="o">=</span><span class="s1">&#39;slateblue&#39;</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">2.8</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;olive&#39;</span><span class="p">,</span>
                   <span class="o">**</span><span class="n">kw_top</span><span class="p">)</span>
@@ -1110,7 +1110,7 @@ going to be set to the color ‘slateblue’ and every values over <cite>vmax=2.
 (n_channels, n_channels) describing connectivity strength between channels.
 Note that the <cite>visbrain.objects.TopoObj.connect</cite> method basically use the
 <cite>visbrain.objects.ConnectObj</cite> object.</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the topoplot and colorbar objects</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the topoplot and colorbar objects</span>
 <span class="n">t_obj_3</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.TopoObj.html#visbrain.objects.TopoObj" title="View documentation for visbrain.objects.TopoObj"><span class="n">TopoObj</span></a><span class="p">(</span><span class="s1">&#39;topo&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="n">xy</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kw_top</span><span class="p">)</span>
 <span class="n">cb_obj_3</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.ColorbarObj.html#visbrain.objects.ColorbarObj" title="View documentation for visbrain.objects.ColorbarObj"><span class="n">ColorbarObj</span></a><span class="p">(</span><span class="n">t_obj_3</span><span class="p">,</span> <span class="n">cblabel</span><span class="o">=</span><span class="s1">&#39;Beta power&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kw_cbar</span><span class="p">)</span>
 <span class="c1"># Create the 2D array of connectivity links :</span>
@@ -1118,7 +1118,7 @@ Note that the <cite>visbrain.objects.TopoObj.connect</cite> method basically use
 <span class="c1"># Select only connectivity links with a connectivity strength under 1.97</span>
 <span class="n">select</span> <span class="o">=</span> <span class="n">connect</span> <span class="o">&lt;</span> <span class="mf">1.97</span>
 <span class="c1"># Connect the selected channels :</span>
-<span class="n">t_obj_3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">connect</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="n">select</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;inferno&#39;</span><span class="p">,</span> <span class="n">antialias</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="n">t_obj_3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">connect</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="n">select</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;inferno&#39;</span><span class="p">,</span> <span class="n">antialias</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">line_width</span><span class="o">=</span><span class="mf">4.</span><span class="p">)</span>
 <span class="c1"># Add the topoplot and the colorbar to the scene :</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">t_obj_3</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Display connectivity&#39;</span><span class="p">,</span>
@@ -1133,7 +1133,7 @@ Note that the <cite>visbrain.objects.TopoObj.connect</cite> method basically use
 <div>Here, we create a topoplot with 10 regulary spaced levels. The color of each
 level is based on the ‘bwr’ colormap. Note that in order to work properly,
 you need to install <a class="reference external" href="https://scikit-image.org/">scikit-image</a></div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the topoplot object :</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the topoplot object :</span>
 <span class="n">t_obj_4</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.TopoObj.html#visbrain.objects.TopoObj" title="View documentation for visbrain.objects.TopoObj"><span class="n">TopoObj</span></a><span class="p">(</span><span class="s1">&#39;topo&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="n">xy</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">level_colors</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">,</span>
                   <span class="o">**</span><span class="n">kw_top</span><span class="p">)</span>
 <span class="c1"># Get the colorbar based on the color properties of the topoplot :</span>
@@ -1150,7 +1150,7 @@ you need to install <a class="reference external" href="https://scikit-image.org
 <blockquote>
 <div>The only difference with the previous plot is that levels are not regulary
 spaced anymore but they are manually defined, just as color.</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># First level is going to be red, the second one green and the last one blue</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># First level is going to be red, the second one green and the last one blue</span>
 <span class="n">level_colors</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.array.html#numpy.array" title="View documentation for numpy.array"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">([[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">]])</span>
 <span class="n">levels</span> <span class="o">=</span> <span class="p">[</span><span class="mf">2.</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">]</span>
 <span class="c1"># Create the topoplot object :</span>
@@ -1170,7 +1170,7 @@ spaced anymore but they are manually defined, just as color.</div></blockquote>
 </pre></div>
 </div>
 <img alt="../../_images/sphx_glr_plot_topo_obj_001.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_topo_obj_001.png" />
-<p><strong>Total running time of the script:</strong> ( 1 minutes  6.608 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  3.062 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-objects-plot-topo-obj-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" download="" href="../../_downloads/cdcbcfe909f1a9546901a1816be06d85/plot_topo_obj.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_topo_obj.py</span></code></a></div>
@@ -1202,7 +1202,7 @@ spaced anymore but they are manually defined, just as color.</div></blockquote>
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-02-07.</p>
+        <p>&copy; Copyright Last updated on 2019-03-26.</p>
     </footer>
 
   </body>

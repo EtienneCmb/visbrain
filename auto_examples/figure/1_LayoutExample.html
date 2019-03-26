@@ -1002,12 +1002,12 @@
 <p>Arange pictures in a grid.</p>
 <p>Download the archive :
 <a class="reference external" href="https://www.dropbox.com/s/jsjct54ynvdjzfq/figure.zip?dl=1">https://www.dropbox.com/s/jsjct54ynvdjzfq/figure.zip?dl=1</a></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 
-<span class="kn">from</span> <span class="nn">visbrain.gui</span> <span class="kn">import</span> <a href="../../generated/visbrain.gui.Figure.html#visbrain.gui.Figure" title="View documentation for visbrain.gui.Figure"><span class="n">Figure</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.gui</span> <span class="k">import</span> <a href="../../generated/visbrain.gui.Figure.html#visbrain.gui.Figure" title="View documentation for visbrain.gui.Figure"><span class="n">Figure</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="k">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a>
 
-<span class="n">fig_path</span> <span class="o">=</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">(</span><span class="s2">&quot;figure.zip&quot;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">astype</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">)</span>
+<span class="n">fig_path</span> <span class="o">=</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">(</span><span class="s2">&quot;figure.zip&quot;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">astype</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">)</span>
 <span class="n">fig_path</span> <span class="o">=</span> <span class="n">fig_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;figure.zip&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
 <span class="c1"># Files to load :</span>
@@ -1020,11 +1020,11 @@
           <span class="s1">&#39;Connectivity&#39;</span><span class="p">,</span> <span class="s1">&#39;Cortical repartition&#39;</span><span class="p">,</span> <span class="s1">&#39;Cortical projection&#39;</span><span class="p">]</span>
 
 <span class="c1"># X-labels / Y-labels :</span>
-<span class="n">xlabels</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s1">&#39;Looks nice&#39;</span><span class="p">,</span> <span class="s1">&#39;Looks good&#39;</span><span class="p">,</span> <span class="s1">&#39;Repartition&#39;</span><span class="p">,</span> <span class="s1">&#39;ROI&#39;</span><span class="p">]</span>
-<span class="n">ylabels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Dirty&#39;</span><span class="p">,</span> <span class="s1">&#39;Better&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s1">&#39;Brodmann area 4 and 6&#39;</span><span class="p">]</span>
+<span class="n">xlabels</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Looks nice&#39;</span><span class="p">,</span> <span class="s1">&#39;Looks good&#39;</span><span class="p">,</span> <span class="s1">&#39;Repartition&#39;</span><span class="p">,</span> <span class="s1">&#39;ROI&#39;</span><span class="p">]</span>
+<span class="n">ylabels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Dirty&#39;</span><span class="p">,</span> <span class="s1">&#39;Better&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Brodmann area 4 and 6&#39;</span><span class="p">]</span>
 
 <span class="c1"># Background color of each axis :</span>
-<span class="n">ax_bgcolor</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;slateblue&#39;</span><span class="p">,</span> <span class="s1">&#39;olive&#39;</span><span class="p">,</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="s1">&#39;darkgray&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">]</span>
+<span class="n">ax_bgcolor</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;slateblue&#39;</span><span class="p">,</span> <span class="s1">&#39;olive&#39;</span><span class="p">,</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="s1">&#39;darkgray&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
 
 
 <span class="n">f</span> <span class="o">=</span> <a href="../../generated/visbrain.gui.Figure.html#visbrain.gui.Figure" title="View documentation for visbrain.gui.Figure"><span class="n">Figure</span></a><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">titles</span><span class="o">=</span><span class="n">titles</span><span class="p">,</span> <span class="n">xlabels</span><span class="o">=</span><span class="n">xlabels</span><span class="p">,</span> <span class="n">ylabels</span><span class="o">=</span><span class="n">ylabels</span><span class="p">,</span>
@@ -1069,7 +1069,7 @@
 <span class="n">f</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-figure-1-layoutexample-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" download="" href="../../_downloads/0276c3c7d44210530ab8340e60cd4a5b/1_LayoutExample.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">1_LayoutExample.py</span></code></a></div>
@@ -1100,7 +1100,7 @@
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-02-07.</p>
+        <p>&copy; Copyright Last updated on 2019-03-26.</p>
     </footer>
 
   </body>

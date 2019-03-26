@@ -34,8 +34,7 @@ List of supported ROI atlases :
     Every ROI files is downloaded to the ~/visbrain_data/roi folder
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     import numpy as np
 
@@ -55,8 +54,7 @@ Download data
  define your own RoiObj
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Get the path to the ~/visbrain_data/example_data folder
@@ -79,8 +77,7 @@ Scene creation
  First, we need to create the scene that will host objects
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Scene creation with a dark background and a custom size
@@ -104,7 +101,6 @@ Find the index of a region of interest
  brodmann 4). Here, we illustrate how to find the index of a region of
  interest
 
-
 **Method 1 :** export all ROI labels and indices in an excel file
 
 This first method load a ROI atlas then, we use the
@@ -113,8 +109,7 @@ informations in an excel file. This first method implies that you manually
 inspect in this file the index of the ROI that you're looking for.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     roi_to_find1 = RoiObj('brodmann')             # Use Brodmann areas
@@ -136,8 +131,7 @@ Here, we use the :class:`visbrain.objects.RoiObj.where_is` method of the ROI
 object to explicitly search string patterns
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Method 2 : use the `where_is` method
@@ -169,8 +163,7 @@ Extract the mesh of an ROI
  brodmann 6 ROI
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Load the brodmann 6 atlas, get the index of BA6 and extract the mesh
@@ -195,8 +188,7 @@ Set a unique color per ROI mesh
  the left and right insula and thalamus and set a unique color to each
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Load the AAL atlas
@@ -222,8 +214,7 @@ Project source's data onto the surface of ROI mesh
  network (DMN) and project source's activity on it
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Define the roi object using the MIST at resolution 7
@@ -258,8 +249,7 @@ Get anatomical informations of sources
  located those sources
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Define the MIST object at the ROI level
@@ -295,15 +285,13 @@ Get anatomical informations of sources
 
         s_obj.analyse_sources([brod_roi, brod_aal, brod_mist])
 
-
 Select sources that are inside an ROI
 ##############################################################################
  Here, we illustrate how to only select sources that are inside the
  somatomotor network.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Define the roi MIST object at level 7
@@ -335,8 +323,7 @@ Define and use your own region of interest
  to rebuild the MIST at the ROI resolution.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Download the MIST_ROI.zip archive. See the README inside the archive
@@ -380,8 +367,7 @@ Define and use your own region of interest
     name which means that you can reload it later using RoiObj('custom_roi'))
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Finally, display the scene
@@ -395,7 +381,10 @@ Define and use your own region of interest
 
 
 
-**Total running time of the script:** ( 0 minutes  43.913 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  42.114 seconds)
 
 
 .. _sphx_glr_download_auto_examples_objects_plot_roi_object.py:

@@ -17,8 +17,7 @@ Illustration of the main functionalities and inputs of the connectivity object:
     * Color connectivity links using custom colors
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     import numpy as np
 
@@ -37,8 +36,7 @@ Download data and define the scene
  node (104) and the connectivity strength between every node (104, 104)
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Download data
@@ -61,8 +59,7 @@ Color by connectivity strength
  a colormap
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Coloring method
@@ -94,8 +91,7 @@ Color by number of connections per node
  translucent)
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # Coloring method
@@ -126,8 +122,7 @@ Custom colors
  dataset has values between [0., 1.]
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     # First, we take a copy of the connectivity array
@@ -173,7 +168,10 @@ Custom colors
 
 
 
-**Total running time of the script:** ( 0 minutes  9.152 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  8.424 seconds)
 
 
 .. _sphx_glr_download_auto_examples_objects_plot_connectivity_obj.py:

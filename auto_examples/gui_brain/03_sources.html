@@ -1005,11 +1005,11 @@ attach some data to sources and project this activity onto the surface
 (cortical projection). Alternatively, you can run the cortical repartition
 which is defined as the number of contributing sources per vertex.</p>
 <img alt="../../_images/ex_sources.png" src="../../_images/ex_sources.png" />
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">visbrain.gui</span> <span class="kn">import</span> <a href="../../generated/visbrain.gui.Brain.html#visbrain.gui.Brain" title="View documentation for visbrain.gui.Brain"><span class="n">Brain</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.gui</span> <span class="k">import</span> <a href="../../generated/visbrain.gui.Brain.html#visbrain.gui.Brain" title="View documentation for visbrain.gui.Brain"><span class="n">Brain</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="k">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a>
 
 <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
 
@@ -1057,7 +1057,7 @@ which is defined as the number of contributing sources per vertex.</p>
 <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;text_color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;#f39c12&quot;</span>       <span class="c1"># Set to yellow the text color</span>
 <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;text_size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.5</span>              <span class="c1"># Size of the text</span>
 <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;text_translate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;text_bold&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;text_bold&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
 
 <span class="sd">&quot;&quot;&quot;Create the source object. If you want to previsualize the result without</span>
 <span class="sd">opening Brain, use s_obj.preview()</span>
@@ -1071,7 +1071,7 @@ which is defined as the number of contributing sources per vertex.</p>
 
 <span class="sd">&quot;&quot;&quot;Colorbar properties</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="n">cb_kw</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">cblabel</span><span class="o">=</span><span class="s2">&quot;Project source activity&quot;</span><span class="p">,</span> <span class="n">cbtxtsz</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span> <span class="n">border</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="p">)</span>
+<span class="n">cb_kw</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">cblabel</span><span class="o">=</span><span class="s2">&quot;Project source activity&quot;</span><span class="p">,</span> <span class="n">cbtxtsz</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span> <span class="n">border</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="p">)</span>
 
 <span class="sd">&quot;&quot;&quot;Define a brain object with the B3 template and project source&#39;s activity</span>
 <span class="sd">onto the surface</span>
@@ -1087,7 +1087,7 @@ which is defined as the number of contributing sources per vertex.</p>
 <span class="n">vb</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-gui-brain-03-sources-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" download="" href="../../_downloads/2236e249d7ac55326a7389dcd28b0b84/03_sources.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">03_sources.py</span></code></a></div>
@@ -1118,7 +1118,7 @@ which is defined as the number of contributing sources per vertex.</p>
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-02-07.</p>
+        <p>&copy; Copyright Last updated on 2019-03-26.</p>
     </footer>
 
   </body>

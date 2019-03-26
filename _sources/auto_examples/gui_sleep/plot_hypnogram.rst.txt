@@ -13,8 +13,7 @@ Matplotlib plot of an hypnogram
 Plot a hypnogram using matplotlib.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     import matplotlib.pyplot as plt
 
@@ -31,8 +30,7 @@ Plotting properties
  Define plotting properties
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     grid = True     # display the grid
@@ -50,8 +48,7 @@ Hypnogram data
  For the illustration, a hypnogram is downloaded
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     path_to_hypno = download_file("s101_jbe.hyp", astype='example_data')
@@ -69,8 +66,7 @@ Plot the hypnogram
  figure is saved
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     write_fig_hyp(data, sf, grid=grid, ascolor=ascolor, file=file)
@@ -84,7 +80,10 @@ Plot the hypnogram
 
 
 
-**Total running time of the script:** ( 0 minutes  0.151 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  0.288 seconds)
 
 
 .. _sphx_glr_download_auto_examples_gui_sleep_plot_hypnogram.py:
