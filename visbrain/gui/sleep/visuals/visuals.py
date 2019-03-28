@@ -511,6 +511,8 @@ class Spectrogram(PrepareData):
             # =================== COLOR ===================
             # Get clim :
             _mesh = mesh[sls, :]
+            is_finite = np.isfinite(_mesh)
+            _mesh[~is_finite] = np.percentile(_mesh[is_finite], 5)
             contrast = 1. if contrast is None else contrast
             clim = (contrast * _mesh.min(), contrast * _mesh.max())
             # Turn mesh into color array for selected frequencies:
