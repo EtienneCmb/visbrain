@@ -2,6 +2,7 @@
 import logging
 import os
 import sys
+import pkg_resources
 
 logger = logging.getLogger('visbrain')
 
@@ -35,12 +36,10 @@ def path_to_visbrain_data(file=None, folder=None):
     file = '' if not isinstance(file, str) else file
     return os.path.join(vb_path, file)
 
-
 def get_data_url_path():
     """Get the path to the data_url JSON file."""
-    path_file = str(sys.modules[__name__].__file__)
-    url_path = os.path.dirname(os.path.dirname(path_file))
-    return os.path.join(url_path, 'data_url.json')
+    data_url_filepath = pkg_resources.resource_filename('visbrain','data_url.json')
+    return data_url_filepath
 
 
 def get_files_in_folders(*args, with_ext=False, with_path=False, file=None,
