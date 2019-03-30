@@ -241,7 +241,7 @@ def _spm_matrix(p):
     # Rotation 2 :
     r2 = np.array([[np.cos(p[4]), 0, np.sin(p[4]), 0],
                    [0, 1, 0, 0],
-                   [-np.sin([p[4]]), 0, np.cos(p[4]), 0],
+                   [-np.sin(p[4]), 0, np.cos(p[4]), 0],
                    [0, 0, 0, 1]])
     # Rotation 3 :
     r3 = np.array([[np.cos(p[5]), np.sin(p[5]), 0, 0],
