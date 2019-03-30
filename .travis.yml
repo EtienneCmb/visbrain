@@ -76,13 +76,7 @@ before_script:
     - sleep 3 # give xvfb some time to start
 
 script:
-    - if [[ "${TEST}" == "standard" ]]; then
-          pytest;
-      elif [[ "${TEST}" == "flake" ]]; then
-          flake8;
-      elif [[ "${TEST}" == "examples" ]]; then
-          make examples;
-      fi;
+    - pytest --cov
 
 
 notifications:
