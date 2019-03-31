@@ -25,10 +25,18 @@ matrix:
     #   python: '3.7'
     - env: TEST=flake
       os: linux
+      addons:
+        apt:
+          packages:
+          - libxkbcommon-x11-0
     # - env: TEST=standard
     #   os: osx
     - env: TEST=examples
       os: linux
+      addons:
+        apt:
+          packages:
+          - libxkbcommon-x11-0
   allow_failures:
     - env: TEST=flake
 
