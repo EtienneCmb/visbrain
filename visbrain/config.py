@@ -20,8 +20,8 @@ PROFILER = Profiler()
 
 # PyQt application
 PYQT_APP = QtWidgets.QApplication.instance()
-# if PYQT_APP is None:
-#     PYQT_APP = QtWidgets.QApplication([''])
+if PYQT_APP is None:
+    PYQT_APP = QtWidgets.QApplication([''])
 CONFIG['PYQT_APP'] = PYQT_APP
 CONFIG['SHOW_PYQT_APP'] = True
 
