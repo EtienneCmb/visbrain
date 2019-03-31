@@ -1,11 +1,5 @@
 language: python
 
-cache:
-  pip: true
-  apt: true
-  directories:
-    - ~/visbrain_data
-
 sudo: false
 dist: trusty
 python:
