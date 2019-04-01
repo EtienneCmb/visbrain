@@ -8,14 +8,19 @@ This file contain functions to load :
 - CSV (*.csv)
 - JSON (*.json)
 """
+import os
+import logging
+
 import numpy as np
 
 from .dependencies import is_nibabel_installed
 
+logger = logging.getLogger('visbrain')
+
 
 __all__ = ('read_mat', 'read_pickle', 'read_npy', 'read_npz', 'read_txt',
            'read_csv', 'read_json', 'read_stc', 'read_x3d', 'read_gii',
-           'read_obj')
+           'read_obj', 'is_freesurfer_mesh_file', 'read_freesurfer_mesh')
 
 
 def read_mat(path, vars=None):
@@ -135,6 +140,7 @@ def read_x3d(path):
     """
     from lxml import etree
     import re
+    logger.info('    X3D file detected')
 
     # Read root node :
     tree = etree.parse(path, parser=etree.ETCompatXMLParser(huge_tree=True))
@@ -174,6 +180,7 @@ def read_gii(path):
     """
     is_nibabel_installed(raise_error=True)
     import nibabel
+    logger.info('    GIFTI file detected')
     arch = nibabel.load(path)
     return arch.darrays[0].data, arch.darrays[1].data
 
@@ -198,6 +205,7 @@ def read_obj(path):
     https://en.wikibooks.org/wiki/OpenGL_Programming/Modern_OpenGL_Tutorial_Load_OBJ
     https://www.pygame.org/wiki/OBJFileLoader
     """
+    logger.info('    OBJ file detected')
     vertices, faces = [], []
     for line in open(path, "r"):
         if line.startswith('#'): continue  # noqa
@@ -218,3 +226,80 @@ def read_obj(path):
     if faces.shape[-1] == 4:  # quad index -> triangles (0 as reference)
         faces = np.r_[faces[:, [0, 1, 2]], faces[:, [0, 2, 3]]]
     return vertices, faces
+
+
+def is_freesurfer_mesh_file(files):
+    """Test if a file or list of files are a Freesurfer meshes.
+
+    Parameters
+    ----------
+    files : str | list
+        File or list of files
+
+    Returns
+    -------
+    is_file : bool
+        Get if it's a Freesurfer file or not
+    """
+    files = [files] if isinstance(files, str) else files
+    extensions = ['.inflated', '.curv', '.white', '.orig', '.pial']
+    def _fcn_fs_file(file):  # noqa
+        is_lr = any([k in file for k in ['lh.', 'rh.']])
+        is_ext = os.path.splitext(file)[1] in extensions
+        return is_lr and is_ext
+    return all([_fcn_fs_file(k) for k in files])
+
+
+def read_freesurfer_mesh(files):
+    """Read Freesurfer mesh files and.
+
+    Parameters
+    ----------
+    files : str | list
+        Single Freesurfer file (e.g. 'lh.inflated') or list of files
+        (e.g ['rh.inflated', 'lh.inflated'])
+
+    Returns
+    -------
+    vert : array_like
+        Vertices of shape (n_vertices, 3)
+    faces : array_like
+        Faces of shape (n_faces, 3)
+    lr_index : array_like
+        Left / right indices of shape (n_vertices,)
+    """
+    is_nibabel_installed(raise_error=True)
+    logger.info('Freesurfer file detected')
+    import nibabel as nib
+    if isinstance(files, str):  # single file
+        files = [files]
+    assert len(files) in [1, 2], ("One or two freesurfer files should be "
+                                  "provided")
+    head = [os.path.split(k)[1] for k in files]
+    hemi = dict()
+    for f, h in zip(files, head):
+        _hemi = h.split('.')[0]
+        (_vert, _faces) = nib.freesurfer.read_geometry(f)
+        if _hemi == 'lh':
+            _vert[:, 0] -= np.max(_vert[:, 0])
+        else:
+            _vert[:, 0] -= np.min(_vert[:, 0])
+        hemi[_hemi] = (_vert, _faces)
+    # Vertices / faces construction depend on the number of files provided
+    if len(hemi) == 1:  # one file provided
+        _hemi = list(hemi.keys())[0]
+        (vert, faces) = list(hemi.values())[0]
+        fcn = np.ones if _hemi == 'lh' else np.zeros
+        lr_index = fcn((vert.shape[0],), dtype=bool)
+        logger.info('    Build the %s hemisphere' % _hemi)
+    else:               # left and right hemisphere are provided
+        # Vertices / faces construction
+        (v_l, f_l), (v_r, f_r) = hemi['lh'], hemi['rh']
+        vert = np.r_[v_l, v_r]
+        faces = np.r_[f_l, f_r + f_l.max() + 1]
+        # Left / right construction
+        l_index = np.ones((v_l.shape[0],), dtype=bool)
+        r_index = np.zeros((v_l.shape[0],), dtype=bool)
+        lr_index = np.r_[l_index, r_index]
+        logger.info('    Build left and right hemispheres')
+    return vert, faces, lr_index

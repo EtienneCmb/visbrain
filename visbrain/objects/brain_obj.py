@@ -11,7 +11,8 @@ from ..visuals import BrainMesh
 from ..utils import (mesh_edges, smoothing_matrix, rotate_turntable)
 from ..io import (is_nibabel_installed, is_pandas_installed,
                   add_brain_template, remove_brain_template, read_x3d,
-                  read_gii, read_obj)
+                  read_gii, read_obj, is_freesurfer_mesh_file,
+                  read_freesurfer_mesh)
 
 logger = logging.getLogger('visbrain')
 
@@ -28,9 +29,16 @@ class BrainObj(VisbrainObject):
         vertices and faces must be defined. The name parameter can also be the
         path to a file with one the following extensions :
 
+            * By default, visbrain includes six human brain templates ('B1',
+              'B2', 'B3' and three coming from freesurfer 'inflated', 'white'
+              and 'sphere'). If name is one of those, the template is
+              downloaded
             * x3d (XML files)
             * gii (Gifti files, require nibabel)
             * obj (wavefront files)
+            * Freesurfer files. For example, you can provide 'lf.inflated' if
+              you only want one hemisphere or ['lh.inflated', 'rh.inflated']
+              for both
     vertices : array_like | None
         Mesh vertices to use for the brain. Must be an array of shape
         (n_vertices, 3).
@@ -68,8 +76,14 @@ class BrainObj(VisbrainObject):
     Examples
     --------
     >>> from visbrain.objects import BrainObj
+    >>> # Use one of default human brain template.
     >>> b = BrainObj('white', hemisphere='right', translucent=False)
-    >>> b.preview(axis=True)
+    >>> b.preview()
+    >>> # Alternatively, you can also provide path to a file. For example :
+    >>> files = ['lh.inflated', 'rh.inflated']  # freesurfer files
+    >>> b2 = BrainObj(files)
+    >>> b2.preview(is_freesurfer_mesh_file,
+    )
     """
 
     ###########################################################################
@@ -83,6 +97,10 @@ class BrainObj(VisbrainObject):
                  sulcus=False, invert_normals=False, transform=None,
                  parent=None, verbose=None, _scale=1., **kw):
         """Init."""
+        # Check if it's a Freesurfer file
+        if is_freesurfer_mesh_file(name):
+            vertices, faces, lr_index = read_freesurfer_mesh(name)
+            name = 'freesurfer'
         # Init Visbrain object base class :
         VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)
         # Load brain template :

@@ -1,30 +1,39 @@
 language: python
+sudo: false
+dist: trusty
+python:
+    - '3.6'
 
 cache:
   pip: true
   apt: true
   directories:
-    - ~/visbrain_data
+    - $HOME/.cache/pip
+    - $HOME/.cache/sphinx
+    - $HOME/visbrain_data
 
-sudo: false
-dist: trusty
-python:
-    - '3.6'
+addons:
+  apt:
+    packages:
+    # this became necessary to use matplotlib and qt5.12
+    # https://github.com/matplotlib/matplotlib/pull/13412
+    - qtbase5-dev
+    - libxkbcommon-x11-0
 
 
 matrix:
   include:
     - env: TEST=standard
       os: linux
+    - env: TEST=flake
+      os: linux
+    - env: TEST=examples
+      os: linux
     # - env: TEST=standard
     #   os: linux
     #   python: '3.7'
-    - env: TEST=flake
-      os: linux
     # - env: TEST=standard
     #   os: osx
-    - env: TEST=examples
-      os: linux
   allow_failures:
     - env: TEST=flake
 
@@ -51,9 +60,11 @@ install:
     # Create the py3 environnement ;
     - conda create -q -n testenv python=$TRAVIS_PYTHON_VERSION numpy scipy pip cython
     - source activate testenv
+    # Blacklist PyQt 5.12
+    - pip install --retries 3 "pyqt5<5.12.0"
     # Install dependencies :
     - if [ "${TEST}" == "standard" ] || [ "${TEST}" == "examples" ]; then
-        pip install codecov pytest pytest-cov pytest-sugar pytest-travis-fold openpyxl xlrd;
+        pip install codecov pytest pytest-cov pytest-sugar pytest-travis-fold pytest-faulthandler openpyxl xlrd;
         pip install mne nibabel pandas tensorpac scikit-image imageio lxml;
         pip install git+https://github.com/hbldh/lspopt.git#egg=lspopt;
       fi;
