@@ -1,15 +1,17 @@
 language: python
+sudo: false
+dist: trusty
+python:
+    - '3.6'
 
 cache:
   pip: true
   apt: true
   directories:
-    - ~/visbrain_data
+    - $HOME/.cache/pip
+    - $HOME/.cache/sphinx
+    - $HOME/visbrain_data
 
-sudo: false
-dist: trusty
-python:
-    - '3.6'
 addons:
   apt:
     packages:
@@ -59,7 +61,7 @@ install:
     - conda create -q -n testenv python=$TRAVIS_PYTHON_VERSION numpy scipy pip cython
     - source activate testenv
     # Blacklist PyQt 5.12
-    - pip install --retries 3 "pyqt5!=5.12.0"
+    - pip install --retries 3 "pyqt5<5.12.0"
     # Install dependencies :
     - if [ "${TEST}" == "standard" ] || [ "${TEST}" == "examples" ]; then
         pip install codecov pytest pytest-cov pytest-sugar pytest-travis-fold pytest-faulthandler openpyxl xlrd;
