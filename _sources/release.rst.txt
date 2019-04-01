@@ -10,9 +10,17 @@ Changelog
 0.4.5
 -----
 
+New features
+~~~~~~~~~~~~
+
+* :class:`visbrain.objects.BrainObj` natively support Freesurfer files
+
 Improvements
 ~~~~~~~~~~~~
+
 * Protect Sleep from MemoryError for large sleep files (`PR37 <https://github.com/EtienneCmb/visbrain/pull/37>`_)
+* Improve spectrogram in case of non finite values (`PR39 <https://github.com/EtienneCmb/visbrain/pull/39>`_)
+* Fix path to the url file for pyenv (`PR41 <https://github.com/EtienneCmb/visbrain/pull/41>`_)
 
 0.4.4
 -----
