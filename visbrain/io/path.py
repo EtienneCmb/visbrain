@@ -1,8 +1,7 @@
 """Set of functions for path definitions."""
 import logging
 import os
-import sys
-import pkg_resources
+from pkg_resources import resource_filename
 
 logger = logging.getLogger('visbrain')
 
@@ -36,9 +35,10 @@ def path_to_visbrain_data(file=None, folder=None):
     file = '' if not isinstance(file, str) else file
     return os.path.join(vb_path, file)
 
+
 def get_data_url_path():
     """Get the path to the data_url JSON file."""
-    data_url_filepath = pkg_resources.resource_filename('visbrain','data_url.json')
+    data_url_filepath = resource_filename('visbrain', 'data_url.json')
     return data_url_filepath
 
 
