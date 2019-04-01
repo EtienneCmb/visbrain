@@ -10,25 +10,28 @@ sudo: false
 dist: trusty
 python:
     - '3.6'
+addons:
+  apt:
+    packages:
+    # this became necessary to use matplotlib and qt5.12
+    # https://github.com/matplotlib/matplotlib/pull/13412
+    - qtbase5-dev
+    - libxkbcommon-x11-0
 
 
 matrix:
   include:
     - env: TEST=standard
       os: linux
-      # addons:
-      #   apt:
-      #     packages:
-      #     - libxkbcommon-x11-0
+    - env: TEST=flake
+      os: linux
+    - env: TEST=examples
+      os: linux
     # - env: TEST=standard
     #   os: linux
     #   python: '3.7'
-    - env: TEST=flake
-      os: linux
     # - env: TEST=standard
     #   os: osx
-    - env: TEST=examples
-      os: linux
   allow_failures:
     - env: TEST=flake
 
