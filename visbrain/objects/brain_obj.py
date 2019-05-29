@@ -151,6 +151,8 @@ class BrainObj(VisbrainObject):
             else:
                 sulcus_file = self._df_get_file('sulcus.npy')
             sulcus = np.load(sulcus_file)
+        elif isinstance(sulcus, np.ndarray):
+            sulcus = sulcus
         else:
             sulcus = None
         # _______________________ CHECKING _______________________
