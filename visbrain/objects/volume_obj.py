@@ -99,7 +99,7 @@ class _Volume(VisbrainObject):
                 # Load file :
                 if isinstance(to_load, str):
                     self._name = os.path.split(to_load)[1].split('.npz')[0]
-                    arch = np.load(to_load)
+                    arch = np.load(to_load, allow_pickle=True)
                     vol, hdr = arch['vol'], arch['hdr']
                     labels, index = arch['labels'], arch['index']
                     system = 'tal' if 'talairach' in to_load else 'mni'

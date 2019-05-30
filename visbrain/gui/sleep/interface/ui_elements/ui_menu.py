@@ -415,7 +415,8 @@ class UiMenu(HelpMenu):
         if filename is None:
             filename = dialog_load(self, "Import detections", '',
                                    "NumPy (*.npy);;All files (*.*)")
-        self._detect.dict = np.ndarray.tolist(np.load(filename))
+        self._detect.dict = np.ndarray.tolist(np.load(filename,
+                                                      allow_pickle=True))
         # Made canvas visbles :
         for k in self._detect:
             if self._detect[k]['index'].size:
