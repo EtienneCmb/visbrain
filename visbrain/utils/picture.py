@@ -1,6 +1,7 @@
 """Set of functions for picture managment."""
 import numpy as np
-from scipy.misc import imresize
+
+from ..io import is_sc_image_installed
 
 
 __all__ = ('piccrop', 'picresize')
@@ -63,6 +64,8 @@ def picresize(im, axis=0, extend=False):
     Inspect each picture in the list, get all shapes and use the smallest or
     the largest picture as the reference for resizing all other pictures.
 
+    This function requires scikit-image package.
+
     Parameters
     ----------
     im : list
@@ -80,6 +83,8 @@ def picresize(im, axis=0, extend=False):
     imr : list
         List of resized pictures.
     """
+    is_sc_image_installed(raise_error=True)
+    from skimage.transform import resize
     # ================= Checking =================
     if not isinstance(im, list):
         raise ValueError("im must be a list of pictures.")
@@ -91,4 +96,4 @@ def picresize(im, axis=0, extend=False):
     factors = sh.max() / sh if extend else sh.min() / sh
 
     # ================= Resize =================
-    return [imresize(k, i) for k, i in zip(im, factors)]
+    return [resize(k, i) for k, i in zip(im, factors)]

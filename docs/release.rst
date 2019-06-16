@@ -26,6 +26,7 @@ Improvements
 Bug fixes
 ~~~~~~~~~
 * Fix `allow_pickle`
+* Fix imresize from the scipy package
 
 0.4.4
 -----
