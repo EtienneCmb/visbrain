@@ -3,7 +3,7 @@
 import numpy as np
 import os
 
-from scipy.misc import imread
+from matplotlib.pyplot import imread
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
