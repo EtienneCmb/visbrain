@@ -130,7 +130,7 @@ class Signal(_PyQtModule, UiInit, UiElements, Visuals):
                  display_grid=True, display_signal=True, annotations=None,
                  annot_txtsz=18., annot_marksz=16., annot_color='#2ecc71',
                  grid_lw=1., grid_smooth=False, grid_titles=None,
-                 grid_font_size=10., grid_color='random', grid_shape=None,
+                 grid_font_size=10., grid_color='black', grid_shape=None,
                  grid_titles_color='black', verbose=None, **kwargs):
         """Init."""
         dscb = ['_grid_canvas.canvas.scene', '_signal_canvas.canvas.scene']
