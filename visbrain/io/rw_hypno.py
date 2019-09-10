@@ -21,7 +21,8 @@ import os
 import logging
 import numpy as np
 
-from ..utils import vispy_array, transient
+from ..utils.sleep.hypnoprocessing import transient
+from ..utils.mesh import vispy_array
 from ..io import is_pandas_installed, is_xlrd_installed
 
 __all__ = ('oversample_hypno', 'write_hypno', 'read_hypno')

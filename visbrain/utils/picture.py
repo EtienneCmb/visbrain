@@ -94,6 +94,14 @@ def picresize(im, axis=0, extend=False):
     # ================= Shapes =================
     sh = np.array([float(k.shape[axis]) for k in im])
     factors = sh.max() / sh if extend else sh.min() / sh
+    sh_n = [np.round(np.array(k.shape) * i).astype(int) for k, i in zip(
+        im, factors)]
 
     # ================= Resize =================
-    return [resize(k, i) for k, i in zip(im, factors)]
+    lst = []
+    for k in range(len(im)):
+        if np.array_equal(im[k].shape, sh_n[k]):
+            lst += [im[k]]
+        else:
+            lst += [resize(im[k], sh_n[k])]
+    return lst

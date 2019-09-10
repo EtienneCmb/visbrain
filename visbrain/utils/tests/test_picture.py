@@ -32,6 +32,6 @@ class TestPicture(object):
         s_1 = picresize(im, axis=1)
         s_1_ex = picresize(im, axis=1, extend=True)
         self._compare_shapes(s_0, [(10, 20), (10, 13), (10, 12)])
-        self._compare_shapes(s_1, [(10, 20), (15, 20), (16, 20)])
-        self._compare_shapes(s_0_ex, [(50, 100), (50, 66), (50, 60)])
+        self._compare_shapes(s_1, [(10, 20), (15, 20), (17, 20)])
+        self._compare_shapes(s_0_ex, [(50, 100), (50, 67), (50, 60)])
         self._compare_shapes(s_1_ex, [(30, 60), (45, 60), (50, 60)])

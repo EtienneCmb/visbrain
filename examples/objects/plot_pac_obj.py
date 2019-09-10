@@ -15,7 +15,7 @@ The PacmapObj can be use to visualize three things :
 """
 import numpy as np
 
-from tensorpac.utils import pac_signals_wavelet
+from tensorpac.signals import pac_signals_wavelet
 
 from visbrain.objects import PacmapObj, SceneObj
 
@@ -26,8 +26,10 @@ from visbrain.objects import PacmapObj, SceneObj
 The final signal is the concatenation of both
 """
 sf = 1024.
-s_1 = pac_signals_wavelet(sf=sf, fpha=10., famp=80., ntrials=1, npts=5000)[0]
-s_2 = pac_signals_wavelet(sf=sf, fpha=5., famp=100., ntrials=1, npts=5000)[0]
+s_1 = pac_signals_wavelet(sf=sf, f_pha=10., f_amp=80., n_epochs=1,
+                          n_times=5000)[0]
+s_2 = pac_signals_wavelet(sf=sf, f_pha=5., f_amp=100., n_epochs=1,
+                          n_times=5000)[0]
 sig = np.c_[s_1, s_2]
 
 sc = SceneObj(size=(1200, 600))

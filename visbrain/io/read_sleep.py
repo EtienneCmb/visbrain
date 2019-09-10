@@ -23,7 +23,9 @@ from .rw_utils import get_file_ext
 from .write_data import write_csv
 from ..config import PROFILER
 from ..io import merge_annotations
-from ..utils import get_dsf, vispy_array, sleepstats
+from ..utils.others import get_dsf
+from ..utils.mesh import vispy_array
+from ..utils.sleep.hypnoprocessing import sleepstats
 
 logger = logging.getLogger('visbrain')
 

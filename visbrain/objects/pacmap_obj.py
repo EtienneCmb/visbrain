@@ -118,10 +118,10 @@ class PacmapObj(ImageObj):
             sections = time.copy()[::n_window][1::]
             time = np.array(np.array_split(time, sections)[0:-1]).mean(1).T
             time /= sf
-            data = np.array(np.array_split(data, sections)[0:-1]).T
+            data = np.array(np.array_split(data, sections)[0:-1])
         # Define the pac object and compute pac :
-        p = Pac(idpac=idpac, fpha=f_pha, famp=f_amp, **kwargs)
-        pac = np.squeeze(p.filterfit(sf, data, njobs=1, axis=0))
+        p = Pac(idpac=idpac, f_pha=f_pha, f_amp=f_amp, **kwargs)
+        pac = np.squeeze(p.filterfit(sf, data, n_jobs=1))
         pac[np.isnan(pac)] = 0.
         assert pac.ndim == 2
         # Get x-axis and y-axis :
