@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Butterfly plot &#8212; visbrain 0.4.4 documentation</title>
+    <title>Butterfly plot &#8212; visbrain 0.4.5 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
@@ -40,7 +40,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html"><span><img src="../../_static/visbrain_128x128.png"></span>
           visbrain</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.4.4</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.4.5</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -1018,11 +1018,11 @@
 
 <span class="sd">&quot;&quot;&quot;Generate a random dataset to illustrate the butterfly</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="n">phy</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.uniform.html#numpy.random.uniform" title="View documentation for numpy.random.uniform"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span></a><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <a href="http://docs.scipy.org/doc/numpy/reference/constants.html#numpy.pi" title="View documentation for numpy.pi"><span class="n">np</span><span class="o">.</span><span class="n">pi</span></a> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="n">n_sines</span><span class="p">)</span>
-<span class="n">f_sines</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.uniform.html#numpy.random.uniform" title="View documentation for numpy.random.uniform"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span></a><span class="p">(</span><span class="n">f_sines</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">f_sines</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="n">n_sines</span><span class="p">,</span> <span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">phy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <a href="http://docs.scipy.org/doc/numpy/reference/constants.html#numpy.pi" title="View documentation for numpy.pi"><span class="n">np</span><span class="o">.</span><span class="n">pi</span></a> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="n">n_sines</span><span class="p">)</span>
+<span class="n">f_sines</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">f_sines</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">f_sines</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="n">n_sines</span><span class="p">,</span> <span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">data</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.sin.html#numpy.sin" title="View documentation for numpy.sin"><span class="n">np</span><span class="o">.</span><span class="n">sin</span></a><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <a href="http://docs.scipy.org/doc/numpy/reference/constants.html#numpy.pi" title="View documentation for numpy.pi"><span class="n">np</span><span class="o">.</span><span class="n">pi</span></a> <span class="o">*</span> <span class="n">f_sines</span> <span class="o">*</span> <span class="n">time_2d</span> <span class="o">+</span> <span class="n">phy</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-<span class="n">data</span> <span class="o">+=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.rand.html#numpy.random.rand" title="View documentation for numpy.random.rand"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span></a><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">/</span> <span class="mf">100.</span>
-<span class="n">data</span> <span class="o">*=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.uniform.html#numpy.random.uniform" title="View documentation for numpy.random.uniform"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span></a><span class="p">(</span><span class="o">.</span><span class="mi">7</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">,</span> <span class="p">(</span><span class="n">n_sines</span><span class="p">,</span> <span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">/</span> <span class="mf">100.</span>
+<span class="n">data</span> <span class="o">*=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">.</span><span class="mi">7</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">,</span> <span class="p">(</span><span class="n">n_sines</span><span class="p">,</span> <span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
 <a href="../../generated/visbrain.gui.Signal.html#visbrain.gui.Signal" title="View documentation for visbrain.gui.Signal"><span class="n">Signal</span></a><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="s1">&#39;butterfly&#39;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Time (ms)&#39;</span><span class="p">,</span>
        <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Amplitude (uV)&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkgray&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -1031,13 +1031,13 @@
 <p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-gui-signal-06-butterfly-py">
 <div class="sphx-glr-download docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/7dfc1eda8434d9c7d91b7012d86d1331/06_butterfly.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">06_butterfly.py</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/6464c0dac1632196167f089e457b14d5/06_butterfly.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">06_butterfly.py</span></code></a></p>
 </div>
 <div class="sphx-glr-download docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/804bb15f70bf91131b4364bd08337423/06_butterfly.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">06_butterfly.ipynb</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/c7a4d3d57436848876ea0b1a156f82b5/06_butterfly.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">06_butterfly.ipynb</span></code></a></p>
 </div>
 </div>
-<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
 </div>
 
 
@@ -1061,7 +1061,7 @@
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-05-30.</p>
+        <p>&copy; Copyright Last updated on 2019-09-10.</p>
     </footer>
 
   </body>

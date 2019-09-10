@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Add multiple objects to the scene &#8212; visbrain 0.4.4 documentation</title>
+    <title>Add multiple objects to the scene &#8212; visbrain 0.4.5 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
@@ -40,7 +40,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html"><span><img src="../../_static/visbrain_128x128.png"></span>
           visbrain</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.4.4</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.4.5</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -1033,7 +1033,7 @@
 <span class="n">s_xyz_rb</span> <span class="o">=</span> <span class="n">s_xyz</span><span class="p">[</span><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.logical_and.html#numpy.logical_and" title="View documentation for numpy.logical_and"><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span></a><span class="p">(</span><span class="n">s_xyz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">s_xyz</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">),</span> <span class="p">:]</span>
 <span class="n">s_xyz_rf</span> <span class="o">=</span> <span class="n">s_xyz</span><span class="p">[</span><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.logical_and.html#numpy.logical_and" title="View documentation for numpy.logical_and"><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span></a><span class="p">(</span><span class="n">s_xyz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">s_xyz</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">),</span> <span class="p">:]</span>
 
-<span class="n">data_l</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.uniform.html#numpy.random.uniform" title="View documentation for numpy.random.uniform"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span></a><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">s_xyz_l</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">data_l</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">s_xyz_l</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
 <div class="section" id="sources">
@@ -1095,7 +1095,7 @@
 <span class="k">def</span> <span class="nf">create_connect</span><span class="p">(</span><span class="n">xyz</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Create connectivity dataset.&quot;&quot;&quot;</span>
     <span class="c1"># Create a random connection dataset :</span>
-    <span class="n">connect</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.uniform.html#numpy.random.uniform" title="View documentation for numpy.random.uniform"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span></a><span class="p">(</span><span class="o">-</span><span class="mf">100.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">,</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xyz</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">xyz</span><span class="p">)))</span>
+    <span class="n">connect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">100.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">,</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xyz</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">xyz</span><span class="p">)))</span>
     <span class="c1"># Mask the connection aray :</span>
     <span class="n">connect</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ma.masked_array.html#numpy.ma.masked_array" title="View documentation for numpy.ma.masked_array"><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_array</span></a><span class="p">(</span><span class="n">connect</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
     <span class="c1"># Hide lower triangle :</span>
@@ -1127,13 +1127,13 @@
 <p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-gui-brain-09-add-multiple-objects-py">
 <div class="sphx-glr-download docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/e6a42ed9f36080dc37dd46d89a002a03/09_add_multiple_objects.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">09_add_multiple_objects.py</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/a72551e4701b15d5a9f93c54557270df/09_add_multiple_objects.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">09_add_multiple_objects.py</span></code></a></p>
 </div>
 <div class="sphx-glr-download docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/c0c2c184a75fa0fa5fb2c29bd00ea9e9/09_add_multiple_objects.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">09_add_multiple_objects.ipynb</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/423807b7caf42e218615862d661da081/09_add_multiple_objects.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">09_add_multiple_objects.ipynb</span></code></a></p>
 </div>
 </div>
-<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
 </div>
 </div>
 
@@ -1158,7 +1158,7 @@
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-05-30.</p>
+        <p>&copy; Copyright Last updated on 2019-09-10.</p>
     </footer>
 
   </body>

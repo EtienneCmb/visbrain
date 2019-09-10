@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Image, time-frequency map and spectrogram objects &#8212; visbrain 0.4.4 documentation</title>
+    <title>Image, time-frequency map and spectrogram objects &#8212; visbrain 0.4.5 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
@@ -40,7 +40,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html"><span><img src="../../_static/visbrain_128x128.png"></span>
           visbrain</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.4.4</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.4.5</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -1050,7 +1050,7 @@ sine signal with a main frequency at 25hz</p>
 <span class="c1"># Define a 25hz sine</span>
 <span class="n">n</span><span class="p">,</span> <span class="n">sf</span> <span class="o">=</span> <span class="mi">512</span><span class="p">,</span> <span class="mi">256</span>
 <span class="n">time</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.arange.html#numpy.arange" title="View documentation for numpy.arange"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">/</span> <span class="n">sf</span>  <span class="c1"># time vector</span>
-<span class="n">data</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.sin.html#numpy.sin" title="View documentation for numpy.sin"><span class="n">np</span><span class="o">.</span><span class="n">sin</span></a><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <a href="http://docs.scipy.org/doc/numpy/reference/constants.html#numpy.pi" title="View documentation for numpy.pi"><span class="n">np</span><span class="o">.</span><span class="n">pi</span></a> <span class="o">*</span> <span class="mf">25.</span> <span class="o">*</span> <span class="n">time</span><span class="p">)</span> <span class="o">+</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.rand.html#numpy.random.rand" title="View documentation for numpy.random.rand"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span></a><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.sin.html#numpy.sin" title="View documentation for numpy.sin"><span class="n">np</span><span class="o">.</span><span class="n">sin</span></a><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <a href="http://docs.scipy.org/doc/numpy/reference/constants.html#numpy.pi" title="View documentation for numpy.pi"><span class="n">np</span><span class="o">.</span><span class="n">pi</span></a> <span class="o">*</span> <span class="mf">25.</span> <span class="o">*</span> <span class="n">time</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1128,16 +1128,16 @@ lspopt package)</p>
 </pre></div>
 </div>
 <img alt="../../_images/sphx_glr_plot_im_tf_spec_obj_001.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_im_tf_spec_obj_001.png" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  31.999 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  32.101 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-objects-plot-im-tf-spec-obj-py">
 <div class="sphx-glr-download docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/61c5557586558e23ec4673a93f90e07c/plot_im_tf_spec_obj.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_im_tf_spec_obj.py</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/517bf2594ef47e94e2364f02b7d49f1b/plot_im_tf_spec_obj.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_im_tf_spec_obj.py</span></code></a></p>
 </div>
 <div class="sphx-glr-download docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/9c699612ec90f42b401e8d0ba711a106/plot_im_tf_spec_obj.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_im_tf_spec_obj.ipynb</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/eae9fafc05597aa3ac86b60a14848a2d/plot_im_tf_spec_obj.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_im_tf_spec_obj.ipynb</span></code></a></p>
 </div>
 </div>
-<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
 </div>
 </div>
 
@@ -1162,7 +1162,7 @@ lspopt package)</p>
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-05-30.</p>
+        <p>&copy; Copyright Last updated on 2019-09-10.</p>
     </footer>
 
   </body>

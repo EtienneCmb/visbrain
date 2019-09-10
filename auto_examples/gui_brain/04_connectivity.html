@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Connect deep sources &#8212; visbrain 0.4.4 documentation</title>
+    <title>Connect deep sources &#8212; visbrain 0.4.5 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
@@ -40,7 +40,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html"><span><img src="../../_static/visbrain_128x128.png"></span>
           visbrain</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.4.4</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.4.5</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -1024,7 +1024,7 @@ and connect them.</p>
 <span class="n">N</span> <span class="o">=</span> <span class="n">xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Number of electrodes</span>
 
 <span class="c1"># Now, create some random data between [-50,50]</span>
-<span class="n">data</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.uniform.html#numpy.random.uniform" title="View documentation for numpy.random.uniform"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span></a><span class="p">(</span><span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">subjects</span><span class="p">))</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">subjects</span><span class="p">))</span>
 
 <span class="sd">&quot;&quot;&quot;Create the source object :</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -1036,7 +1036,7 @@ and connect them.</p>
 <span class="sd">This array should be either upper or lower triangular to avoid</span>
 <span class="sd">redondant connections.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="n">connect</span> <span class="o">=</span> <span class="mi">1000</span> <span class="o">*</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.rand.html#numpy.random.rand" title="View documentation for numpy.random.rand"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span></a><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>               <span class="c1"># Random array of connections</span>
+<span class="n">connect</span> <span class="o">=</span> <span class="mi">1000</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>               <span class="c1"># Random array of connections</span>
 <span class="n">connect</span><span class="p">[</span><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.tril_indices_from.html#numpy.tril_indices_from" title="View documentation for numpy.tril_indices_from"><span class="n">np</span><span class="o">.</span><span class="n">tril_indices_from</span></a><span class="p">(</span><span class="n">connect</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Set to zero inferior triangle</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
@@ -1074,13 +1074,13 @@ and connect them.</p>
 <p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-gui-brain-04-connectivity-py">
 <div class="sphx-glr-download docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/9685e7266f1ab0a5821f34f34011719b/04_connectivity.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">04_connectivity.py</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/6be764ea24254e8e2c61538c12a3c547/04_connectivity.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">04_connectivity.py</span></code></a></p>
 </div>
 <div class="sphx-glr-download docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/8aeaf27ac9d038857e1db4687b7018b9/04_connectivity.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">04_connectivity.ipynb</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/7ee93e8a8f4953dc2e7fd1c2dd6aa6bc/04_connectivity.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">04_connectivity.ipynb</span></code></a></p>
 </div>
 </div>
-<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
 </div>
 
 
@@ -1104,7 +1104,7 @@ and connect them.</p>
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-05-30.</p>
+        <p>&copy; Copyright Last updated on 2019-09-10.</p>
     </footer>
 
   </body>

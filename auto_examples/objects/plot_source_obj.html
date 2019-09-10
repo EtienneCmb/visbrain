@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Source object (SourceObj) : complete tutorial &#8212; visbrain 0.4.4 documentation</title>
+    <title>Source object (SourceObj) : complete tutorial &#8212; visbrain 0.4.5 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
@@ -40,7 +40,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html"><span><img src="../../_static/visbrain_128x128.png"></span>
           visbrain</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.4.4</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.4.5</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -1129,11 +1129,11 @@ symbol</p>
 the dynamic of radius sources</p>
 </div></blockquote>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create some random data of shape (n_sources,)</span>
-<span class="n">rnd_data</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.uniform.html#numpy.random.uniform" title="View documentation for numpy.random.uniform"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span></a><span class="p">(</span><span class="n">low</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_sources</span><span class="p">,))</span>
+<span class="n">rnd_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_sources</span><span class="p">,))</span>
 <span class="c1"># Control the radius range of sources</span>
 <span class="n">radius_min</span> <span class="o">=</span> <span class="mf">7.</span>
 <span class="n">radius_max</span> <span class="o">=</span> <span class="mf">25.</span>
-<span class="n">s_color</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.uniform.html#numpy.random.uniform" title="View documentation for numpy.random.uniform"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span></a><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="p">(</span><span class="n">n_sources</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>  <span class="c1"># array definition</span>
+<span class="n">s_color</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="p">(</span><span class="n">n_sources</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>  <span class="c1"># array definition</span>
 <span class="c1"># Define the source object and add this object to the scene</span>
 <span class="n">s_rad</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">(</span><span class="s1">&#39;rad&#39;</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">s_color</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">rnd_data</span><span class="p">,</span>
                   <span class="n">radius_min</span><span class="o">=</span><span class="n">radius_min</span><span class="p">,</span> <span class="n">radius_max</span><span class="o">=</span><span class="n">radius_max</span><span class="p">)</span>
@@ -1384,16 +1384,16 @@ brain</p>
 </pre></div>
 </div>
 <img alt="../../_images/sphx_glr_plot_source_obj_001.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_source_obj_001.png" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  1.620 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  1.710 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-objects-plot-source-obj-py">
 <div class="sphx-glr-download docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/a5bcb687f50b938ff3696ee27ccfae1a/plot_source_obj.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_source_obj.py</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/5e6da1ed82118b91c90c05028e7441d6/plot_source_obj.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_source_obj.py</span></code></a></p>
 </div>
 <div class="sphx-glr-download docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/62b1c3274ddb49d19e739e784f1c2c0c/plot_source_obj.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_source_obj.ipynb</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/c0eefb270d11544799a256a51c2ba243/plot_source_obj.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_source_obj.ipynb</span></code></a></p>
 </div>
 </div>
-<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
 </div>
 </div>
 
@@ -1418,7 +1418,7 @@ brain</p>
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-05-30.</p>
+        <p>&copy; Copyright Last updated on 2019-09-10.</p>
     </footer>
 
   </body>

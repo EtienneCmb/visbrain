@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>visbrain.gui.Brain &#8212; visbrain 0.4.4 documentation</title>
+    <title>visbrain.gui.Brain &#8212; visbrain 0.4.5 documentation</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
@@ -40,7 +40,7 @@
         </button>
         <a class="navbar-brand" href="../index.html"><span><img src="../_static/visbrain_128x128.png"></span>
           visbrain</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.4.4</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.4.5</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -1001,7 +1001,7 @@
 <h1>visbrain.gui.Brain<a class="headerlink" href="#visbrain-gui-brain" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="visbrain.gui.Brain">
-<em class="property">class </em><code class="descclassname">visbrain.gui.</code><code class="descname">Brain</code><span class="sig-paren">(</span><em>bgcolor='black'</em>, <em>verbose=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/gui/brain/brain.html#Brain"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/brain.py#L23-L152"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">visbrain.gui.</code><code class="sig-name descname">Brain</code><span class="sig-paren">(</span><em class="sig-param">bgcolor='black'</em>, <em class="sig-param">verbose=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/gui/brain/brain.html#Brain"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/brain.py#L23-L152"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain" title="Permalink to this definition">¶</a></dt>
 <dd><p>Visualization of brain-data on a standard MNI brain.</p>
 <p>By default the Brain module display a standard MNI brain. Then, this brain
 can interact with several objects :</p>
@@ -1072,7 +1072,7 @@ belong.</p>
 </dl>
 <dl class="method">
 <dt id="visbrain.gui.Brain.add_mesh">
-<code class="descname">add_mesh</code><span class="sig-paren">(</span><em>self</em>, <em>name</em>, <em>vertices</em>, <em>faces</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L292-L309"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.add_mesh" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_mesh</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">name</em>, <em class="sig-param">vertices</em>, <em class="sig-param">faces</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L292-L309"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.add_mesh" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a mesh to the scene.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1092,7 +1092,7 @@ belong.</p>
 
 <dl class="method">
 <dt id="visbrain.gui.Brain.background_color">
-<code class="descname">background_color</code><span class="sig-paren">(</span><em>self</em>, <em>color=(0.1</em>, <em>0.1</em>, <em>0.1)</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L70-L99"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.background_color" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">background_color</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">color=(0.1</em>, <em class="sig-param">0.1</em>, <em class="sig-param">0.1)</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L70-L99"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.background_color" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the background color of the main canvas and the colorbar.</p>
 <p>The main canvas is defined as the canvas where all objects are
 displayed. The colorbar has it own canvas and the background set will
@@ -1124,7 +1124,7 @@ a matplotlib color (string) or a hexadecimal color (string).</p>
 
 <dl class="method">
 <dt id="visbrain.gui.Brain.brain_control">
-<code class="descname">brain_control</code><span class="sig-paren">(</span><em>self</em>, <em>template=None</em>, <em>hemisphere=None</em>, <em>translucent=None</em>, <em>alpha=None</em>, <em>visible=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L212-L274"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.brain_control" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">brain_control</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">template=None</em>, <em class="sig-param">hemisphere=None</em>, <em class="sig-param">translucent=None</em>, <em class="sig-param">alpha=None</em>, <em class="sig-param">visible=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L212-L274"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.brain_control" title="Permalink to this definition">¶</a></dt>
 <dd><p>Control the type of brain to use.</p>
 <p>Use this method to switch between several brain templates. Then, you
 can to display selected hemisphere (left or right).</p>
@@ -1168,7 +1168,7 @@ Otherwise use ‘both’.</p>
 
 <dl class="method">
 <dt id="visbrain.gui.Brain.brain_list">
-<code class="descname">brain_list</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L276-L290"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.brain_list" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">brain_list</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L276-L290"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.brain_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the list of available mesh brain templates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -1188,7 +1188,7 @@ Otherwise use ‘both’.</p>
 
 <dl class="method">
 <dt id="visbrain.gui.Brain.cbar_autoscale">
-<code class="descname">cbar_autoscale</code><span class="sig-paren">(</span><em>self</em>, <em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L685-L698"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.cbar_autoscale" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">cbar_autoscale</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L685-L698"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.cbar_autoscale" title="Permalink to this definition">¶</a></dt>
 <dd><p>Autoscale the colorbar to the best limits.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1204,7 +1204,7 @@ either the cortical projection, use ‘Projection’. And
 
 <dl class="method">
 <dt id="visbrain.gui.Brain.cbar_control">
-<code class="descname">cbar_control</code><span class="sig-paren">(</span><em>self</em>, <em>name</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L591-L650"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.cbar_control" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">cbar_control</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">name</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L591-L650"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.cbar_control" title="Permalink to this definition">¶</a></dt>
 <dd><p>Control the colorbar of a specific object.</p>
 <p>Optional parameters let to None are going to be ignored.</p>
 <dl class="field-list simple">
@@ -1258,7 +1258,7 @@ using the over parameter.</p>
 
 <dl class="method">
 <dt id="visbrain.gui.Brain.cbar_export">
-<code class="descname">cbar_export</code><span class="sig-paren">(</span><em>self</em>, <em>filename=None</em>, <em>export_only=None</em>, <em>get_dict=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L700-L728"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.cbar_export" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">cbar_export</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">filename=None</em>, <em class="sig-param">export_only=None</em>, <em class="sig-param">get_dict=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L700-L728"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.cbar_export" title="Permalink to this definition">¶</a></dt>
 <dd><p>Export colorbars in a text file or in a dictionary.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1283,7 +1283,7 @@ going to be saved.</p>
 
 <dl class="method">
 <dt id="visbrain.gui.Brain.cbar_list">
-<code class="descname">cbar_list</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L672-L683"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.cbar_list" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">cbar_list</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L672-L683"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.cbar_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the list of objects for which the colorbar can be controlled.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -1297,7 +1297,7 @@ going to be saved.</p>
 
 <dl class="method">
 <dt id="visbrain.gui.Brain.cbar_select">
-<code class="descname">cbar_select</code><span class="sig-paren">(</span><em>self</em>, <em>name</em>, <em>visible=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L652-L670"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.cbar_select" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">cbar_select</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">name</em>, <em class="sig-param">visible=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L652-L670"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.cbar_select" title="Permalink to this definition">¶</a></dt>
 <dd><p>Select and display a colorbar.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1315,7 +1315,7 @@ either the cortical projection, use ‘Projection’. And
 
 <dl class="method">
 <dt id="visbrain.gui.Brain.connect_control">
-<code class="descname">connect_control</code><span class="sig-paren">(</span><em>self</em>, <em>name</em>, <em>color_by=None</em>, <em>dynamic=None</em>, <em>alpha=None</em>, <em>line_width=None</em>, <em>visible=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L533-L566"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.connect_control" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">connect_control</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">name</em>, <em class="sig-param">color_by=None</em>, <em class="sig-param">dynamic=None</em>, <em class="sig-param">alpha=None</em>, <em class="sig-param">line_width=None</em>, <em class="sig-param">visible=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L533-L566"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.connect_control" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update connectivity object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1350,7 +1350,7 @@ vmin, under, vmax, over).</p>
 
 <dl class="method">
 <dt id="visbrain.gui.Brain.cortical_projection">
-<code class="descname">cortical_projection</code><span class="sig-paren">(</span><em>self</em>, <em>radius=10.0</em>, <em>project_on='brain'</em>, <em>contribute=False</em>, <em>mask_color='orange'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L381-L410"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.cortical_projection" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">cortical_projection</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">radius=10.0</em>, <em class="sig-param">project_on='brain'</em>, <em class="sig-param">contribute=False</em>, <em class="sig-param">mask_color='orange'</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L381-L410"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.cortical_projection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Project sources activity.</p>
 <p>This method can be used to project the sources activity either onto the
 brain or on region of interest.</p>
@@ -1387,7 +1387,7 @@ brain or ‘roi’ to project on region of interest (if defined).</p>
 
 <dl class="method">
 <dt id="visbrain.gui.Brain.cortical_repartition">
-<code class="descname">cortical_repartition</code><span class="sig-paren">(</span><em>self</em>, <em>radius=10.0</em>, <em>project_on='brain'</em>, <em>contribute=False</em>, <em>mask_color='orange'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L412-L432"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.cortical_repartition" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">cortical_repartition</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">radius=10.0</em>, <em class="sig-param">project_on='brain'</em>, <em class="sig-param">contribute=False</em>, <em class="sig-param">mask_color='orange'</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L412-L432"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.cortical_repartition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Project the number of contributing sources per vertex.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1411,7 +1411,7 @@ brain or ‘roi’ to project on region of interest (if defined).</p>
 
 <dl class="method">
 <dt id="visbrain.gui.Brain.load_config">
-<code class="descname">load_config</code><span class="sig-paren">(</span><em>self</em>, <em>config</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L187-L195"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.load_config" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">load_config</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">config</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L187-L195"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.load_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load a configuration file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1425,7 +1425,7 @@ brain or ‘roi’ to project on region of interest (if defined).</p>
 
 <dl class="method">
 <dt id="visbrain.gui.Brain.pictures_control">
-<code class="descname">pictures_control</code><span class="sig-paren">(</span><em>self</em>, <em>name</em>, <em>width=None</em>, <em>height=None</em>, <em>translate=None</em>, <em>visible=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L505-L526"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.pictures_control" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">pictures_control</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">name</em>, <em class="sig-param">width=None</em>, <em class="sig-param">height=None</em>, <em class="sig-param">translate=None</em>, <em class="sig-param">visible=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L505-L526"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.pictures_control" title="Permalink to this definition">¶</a></dt>
 <dd><p>Control pictures settings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1446,7 +1446,7 @@ vmin, under, vmax, over).</p>
 
 <dl class="method">
 <dt id="visbrain.gui.Brain.rotate">
-<code class="descname">rotate</code><span class="sig-paren">(</span><em>self</em>, <em>fixed='top'</em>, <em>custom=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L37-L68"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.rotate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">rotate</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">fixed='top'</em>, <em class="sig-param">custom=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L37-L68"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.rotate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Rotate the scene elements using a predefined or a custom rotation.</p>
 <p>The rotation is applied on every objects on the scene.</p>
 <dl class="field-list">
@@ -1485,7 +1485,7 @@ respectively describing the (azimuth, elevation).</p>
 
 <dl class="method">
 <dt id="visbrain.gui.Brain.save_config">
-<code class="descname">save_config</code><span class="sig-paren">(</span><em>self</em>, <em>config</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L197-L205"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.save_config" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">save_config</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">config</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L197-L205"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.save_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save a configuration file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1499,7 +1499,7 @@ respectively describing the (azimuth, elevation).</p>
 
 <dl class="method">
 <dt id="visbrain.gui.Brain.screenshot">
-<code class="descname">screenshot</code><span class="sig-paren">(</span><em>self</em>, <em>saveas</em>, <em>canvas='main'</em>, <em>print_size=None</em>, <em>dpi=300.0</em>, <em>unit='centimeter'</em>, <em>factor=None</em>, <em>region=None</em>, <em>autocrop=False</em>, <em>bgcolor=None</em>, <em>transparent=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L101-L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.screenshot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">screenshot</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">saveas</em>, <em class="sig-param">canvas='main'</em>, <em class="sig-param">print_size=None</em>, <em class="sig-param">dpi=300.0</em>, <em class="sig-param">unit='centimeter'</em>, <em class="sig-param">factor=None</em>, <em class="sig-param">region=None</em>, <em class="sig-param">autocrop=False</em>, <em class="sig-param">bgcolor=None</em>, <em class="sig-param">transparent=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L101-L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.screenshot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Take a screeshot of the selected canvas.</p>
 <p>By default, the rendered canvas will have the size of your screen.
 The screenshot() method provides two ways to increase to exported image
@@ -1565,13 +1565,13 @@ background.</p>
 
 <dl class="method">
 <dt id="visbrain.gui.Brain.show">
-<code class="descname">show</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/_pyqt_module.py#L75-L110"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.show" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">show</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/_pyqt_module.py#L75-L110"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>Display the graphical user interface.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="visbrain.gui.Brain.sources_control">
-<code class="descname">sources_control</code><span class="sig-paren">(</span><em>self</em>, <em>name</em>, <em>data=None</em>, <em>color=None</em>, <em>symbol=None</em>, <em>radius_min=None</em>, <em>radius_max=None</em>, <em>edge_color=None</em>, <em>edge_width=None</em>, <em>alpha=None</em>, <em>mask=None</em>, <em>mask_color=None</em>, <em>visible=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L316-L340"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.sources_control" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">sources_control</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">name</em>, <em class="sig-param">data=None</em>, <em class="sig-param">color=None</em>, <em class="sig-param">symbol=None</em>, <em class="sig-param">radius_min=None</em>, <em class="sig-param">radius_max=None</em>, <em class="sig-param">edge_color=None</em>, <em class="sig-param">edge_width=None</em>, <em class="sig-param">alpha=None</em>, <em class="sig-param">mask=None</em>, <em class="sig-param">mask_color=None</em>, <em class="sig-param">visible=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L316-L340"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.sources_control" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set data to sources and control source’s properties.</p>
 <p>See the definition of SourceObj for the description of input
 parameters.</p>
@@ -1586,7 +1586,7 @@ parameters.</p>
 
 <dl class="method">
 <dt id="visbrain.gui.Brain.sources_display">
-<code class="descname">sources_display</code><span class="sig-paren">(</span><em>self</em>, <em>name=None</em>, <em>select='all'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L342-L366"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.sources_display" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">sources_display</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">name=None</em>, <em class="sig-param">select='all'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L342-L366"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.sources_display" title="Permalink to this definition">¶</a></dt>
 <dd><p>Select sources to display.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1611,7 +1611,7 @@ applied to all sources.</p>
 
 <dl class="method">
 <dt id="visbrain.gui.Brain.sources_fit_to_vertices">
-<code class="descname">sources_fit_to_vertices</code><span class="sig-paren">(</span><em>self</em>, <em>name=None</em>, <em>fit_to='brain'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L434-L446"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.sources_fit_to_vertices" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">sources_fit_to_vertices</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">name=None</em>, <em class="sig-param">fit_to='brain'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L434-L446"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.sources_fit_to_vertices" title="Permalink to this definition">¶</a></dt>
 <dd><p>Force sources coordinates to fit to a selected object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1627,7 +1627,7 @@ applied to all sources.</p>
 
 <dl class="method">
 <dt id="visbrain.gui.Brain.sources_to_convex_hull">
-<code class="descname">sources_to_convex_hull</code><span class="sig-paren">(</span><em>self</em>, <em>xyz</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L448-L465"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.sources_to_convex_hull" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">sources_to_convex_hull</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">xyz</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L448-L465"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.sources_to_convex_hull" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert a set of sources into a convex hull.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1654,7 +1654,7 @@ applied to all sources.</p>
 
 <dl class="method">
 <dt id="visbrain.gui.Brain.time_series_control">
-<code class="descname">time_series_control</code><span class="sig-paren">(</span><em>self</em>, <em>name</em>, <em>color=None</em>, <em>line_width=None</em>, <em>amplitude=None</em>, <em>width=None</em>, <em>translate=None</em>, <em>visible=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L472-L498"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.time_series_control" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">time_series_control</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">name</em>, <em class="sig-param">color=None</em>, <em class="sig-param">line_width=None</em>, <em class="sig-param">amplitude=None</em>, <em class="sig-param">width=None</em>, <em class="sig-param">translate=None</em>, <em class="sig-param">visible=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/brain/user.py#L472-L498"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Brain.time_series_control" title="Permalink to this definition">¶</a></dt>
 <dd><p>Control time-series settings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1680,79 +1680,79 @@ applied to all sources.</p>
 
 <div class="section" id="examples-using-visbrain-gui-brain">
 <h2>Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.gui.Brain</span></code><a class="headerlink" href="#examples-using-visbrain-gui-brain" title="Permalink to this headline">¶</a></h2>
-<div class="sphx-glr-thumbcontainer" tooltip="Control the brain i.e the brain template to use, the transparency and the hemisphere."><div class="figure align-center" id="id1">
+<div class="sphx-glr-thumbcontainer" tooltip="Control the brain i.e the brain template to use, the transparency and the hemisphere."><div class="figure align-default" id="id1">
 <img alt="../_images/sphx_glr_00_brain_control_thumb.png" src="../_images/sphx_glr_00_brain_control_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/gui_brain/00_brain_control.html#sphx-glr-auto-examples-gui-brain-00-brain-control-py"><span class="std std-ref">Brain control</span></a></span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Control the cross-section panel and the volume using a Nifti file. The nibabel package should a..."><div class="figure align-center" id="id2">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Control the cross-section panel and the volume using a Nifti file. The nibabel package should a..."><div class="figure align-default" id="id2">
 <img alt="../_images/sphx_glr_01_cross_sections_and_volume_thumb.png" src="../_images/sphx_glr_01_cross_sections_and_volume_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/gui_brain/01_cross_sections_and_volume.html#sphx-glr-auto-examples-gui-brain-01-cross-sections-and-volume-py"><span class="std std-ref">Cross-sections and volume control</span></a></span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to define a custom brain template using your own vertices and faces..."><div class="figure align-center" id="id3">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to define a custom brain template using your own vertices and faces..."><div class="figure align-default" id="id3">
 <img alt="../_images/sphx_glr_02_brain_using_vertices_thumb.png" src="../_images/sphx_glr_02_brain_using_vertices_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/gui_brain/02_brain_using_vertices.html#sphx-glr-auto-examples-gui-brain-02-brain-using-vertices-py"><span class="std std-ref">Define a brain template using vertices and faces</span></a></span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Add sources to the scene. This script also illustrate most of the controls for sources. Each so..."><div class="figure align-center" id="id4">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Add sources to the scene. This script also illustrate most of the controls for sources. Each so..."><div class="figure align-default" id="id4">
 <img alt="../_images/sphx_glr_03_sources_thumb.png" src="../_images/sphx_glr_03_sources_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/gui_brain/03_sources.html#sphx-glr-auto-examples-gui-brain-03-sources-py"><span class="std std-ref">Add deep sources</span></a></span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Display and customize connectivity. To this end, we define some deep sources and connect them."><div class="figure align-center" id="id5">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Display and customize connectivity. To this end, we define some deep sources and connect them."><div class="figure align-default" id="id5">
 <img alt="../_images/sphx_glr_04_connectivity_thumb.png" src="../_images/sphx_glr_04_connectivity_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/gui_brain/04_connectivity.html#sphx-glr-auto-examples-gui-brain-04-connectivity-py"><span class="std std-ref">Connect deep sources</span></a></span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to display Region Of Interest (ROI)."><div class="figure align-center" id="id6">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to display Region Of Interest (ROI)."><div class="figure align-default" id="id6">
 <img alt="../_images/sphx_glr_05_region_of_interest_thumb.png" src="../_images/sphx_glr_05_region_of_interest_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/gui_brain/05_region_of_interest.html#sphx-glr-auto-examples-gui-brain-05-region-of-interest-py"><span class="std std-ref">Add Region of interest (ROI)</span></a></span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display time-series attached to sources. The time-series can th..."><div class="figure align-center" id="id7">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display time-series attached to sources. The time-series can th..."><div class="figure align-default" id="id7">
 <img alt="../_images/sphx_glr_06_add_time_series_thumb.png" src="../_images/sphx_glr_06_add_time_series_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/gui_brain/06_add_time_series.html#sphx-glr-auto-examples-gui-brain-06-add-time-series-py"><span class="std std-ref">Add time series</span></a></span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display small pictures attached to sources. The pictures can th..."><div class="figure align-center" id="id8">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display small pictures attached to sources. The pictures can th..."><div class="figure align-default" id="id8">
 <img alt="../_images/sphx_glr_07_add_pictures_thumb.png" src="../_images/sphx_glr_07_add_pictures_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/gui_brain/07_add_pictures.html#sphx-glr-auto-examples-gui-brain-07-add-pictures-py"><span class="std std-ref">Add pictures</span></a></span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Offline rendering of selected canvas."><div class="figure align-center" id="id9">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Offline rendering of selected canvas."><div class="figure align-default" id="id9">
 <img alt="../_images/sphx_glr_08_screenshot_thumb.png" src="../_images/sphx_glr_08_screenshot_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/gui_brain/08_screenshot.html#sphx-glr-auto-examples-gui-brain-08-screenshot-py"><span class="std std-ref">Screenshot example</span></a></span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Add multiple source&#x27;s and connectivity object to the scene."><div class="figure align-center" id="id10">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Add multiple source&#x27;s and connectivity object to the scene."><div class="figure align-default" id="id10">
 <img alt="../_images/sphx_glr_09_add_multiple_objects_thumb.png" src="../_images/sphx_glr_09_add_multiple_objects_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/gui_brain/09_add_multiple_objects.html#sphx-glr-auto-examples-gui-brain-09-add-multiple-objects-py"><span class="std std-ref">Add multiple objects to the scene</span></a></span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Import a custom Nifti volume that can be then used in the cross-section or volume tab. To this ..."><div class="figure align-center" id="id11">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Import a custom Nifti volume that can be then used in the cross-section or volume tab. To this ..."><div class="figure align-default" id="id11">
 <img alt="../_images/sphx_glr_10_add_nifti_volume_thumb.png" src="../_images/sphx_glr_10_add_nifti_volume_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/gui_brain/10_add_nifti_volume.html#sphx-glr-auto-examples-gui-brain-10-add-nifti-volume-py"><span class="std std-ref">Add Nifti volume</span></a></span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Add vectors to the scene. This example demonstrate the two methods to defined vectors :"><div class="figure align-center" id="id12">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Add vectors to the scene. This example demonstrate the two methods to defined vectors :"><div class="figure align-default" id="id12">
 <img alt="../_images/sphx_glr_11_add_vectors_thumb.png" src="../_images/sphx_glr_11_add_vectors_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/gui_brain/11_add_vectors.html#sphx-glr-auto-examples-gui-brain-11-add-vectors-py"><span class="std std-ref">Add vectors</span></a></span><a class="headerlink" href="#id12" title="Permalink to this image">¶</a></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Parcellize the brain surface using .annot files. This example use Nibabel to read the .annot fi..."><div class="figure align-center" id="id13">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Parcellize the brain surface using .annot files. This example use Nibabel to read the .annot fi..."><div class="figure align-default" id="id13">
 <img alt="../_images/sphx_glr_12_parcellize_thumb.png" src="../_images/sphx_glr_12_parcellize_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/gui_brain/12_parcellize.html#sphx-glr-auto-examples-gui-brain-12-parcellize-py"><span class="std std-ref">Parcellize brain surface</span></a></span><a class="headerlink" href="#id13" title="Permalink to this image">¶</a></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Display a conjunction map from a nii.gz file (NiBabel required)."><div class="figure align-center" id="id14">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Display a conjunction map from a nii.gz file (NiBabel required)."><div class="figure align-default" id="id14">
 <img alt="../_images/sphx_glr_conjunction_map_thumb.png" src="../_images/sphx_glr_conjunction_map_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/eeg_meg/conjunction_map.html#sphx-glr-auto-examples-eeg-meg-conjunction-map-py"><span class="std std-ref">Display conjunction map</span></a></span><a class="headerlink" href="#id14" title="Permalink to this image">¶</a></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Display fMRI activations from a nii.gz file (NiBabel required)."><div class="figure align-center" id="id15">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Display fMRI activations from a nii.gz file (NiBabel required)."><div class="figure align-default" id="id15">
 <img alt="../_images/sphx_glr_fmri_activation_thumb.png" src="../_images/sphx_glr_fmri_activation_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/eeg_meg/fmri_activation.html#sphx-glr-auto-examples-eeg-meg-fmri-activation-py"><span class="std std-ref">Display fMRI activation</span></a></span><a class="headerlink" href="#id15" title="Permalink to this image">¶</a></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Plot MEG inverse solution."><div class="figure align-center" id="id16">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Plot MEG inverse solution."><div class="figure align-default" id="id16">
 <img alt="../_images/sphx_glr_meg_inverse_solution_thumb.png" src="../_images/sphx_glr_meg_inverse_solution_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/eeg_meg/meg_inverse_solution.html#sphx-glr-auto-examples-eeg-meg-meg-inverse-solution-py"><span class="std std-ref">Plot MEG inverse solution</span></a></span><a class="headerlink" href="#id16" title="Permalink to this image">¶</a></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Plot from a .fif file using the :class:`visbrain.mne.mne_plot_source_space` function"><div class="figure align-center" id="id17">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Plot from a .fif file using the visbrain.mne.mne_plot_source_space function"><div class="figure align-default" id="id17">
 <img alt="../_images/sphx_glr_source_space_thumb.png" src="../_images/sphx_glr_source_space_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/eeg_meg/source_space.html#sphx-glr-auto-examples-eeg-meg-source-space-py"><span class="std std-ref">Plot source space</span></a></span><a class="headerlink" href="#id17" title="Permalink to this image">¶</a></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Plot vector-valued MEG inverse solution."><div class="figure align-center" id="id18">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Plot vector-valued MEG inverse solution."><div class="figure align-default" id="id18">
 <img alt="../_images/sphx_glr_vector_based_meg_inverse_thumb.png" src="../_images/sphx_glr_vector_based_meg_inverse_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/eeg_meg/vector_based_meg_inverse.html#sphx-glr-auto-examples-eeg-meg-vector-based-meg-inverse-py"><span class="std std-ref">Plot vector-valued MEG inverse solution</span></a></span><a class="headerlink" href="#id18" title="Permalink to this image">¶</a></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This script generate some figures using the Brain module. Those exported pictures are going to ..."><div class="figure align-center" id="id19">
+</div><div class="sphx-glr-thumbcontainer" tooltip="This script generate some figures using the Brain module. Those exported pictures are going to ..."><div class="figure align-default" id="id19">
 <img alt="../_images/sphx_glr_0_GeneratePictures_thumb.png" src="../_images/sphx_glr_0_GeneratePictures_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/figure/0_GeneratePictures.html#sphx-glr-auto-examples-figure-0-generatepictures-py"><span class="std std-ref">Generate pictures</span></a></span><a class="headerlink" href="#id19" title="Permalink to this image">¶</a></p>
 </div>
@@ -1780,7 +1780,7 @@ applied to all sources.</p>
         <div class="container">
             <img src="../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-05-30.</p>
+        <p>&copy; Copyright Last updated on 2019-09-10.</p>
     </footer>
 
   </body>

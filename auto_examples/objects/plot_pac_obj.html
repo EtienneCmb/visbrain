@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Phase-Amplitude Coupling (PAC) object &#8212; visbrain 0.4.4 documentation</title>
+    <title>Phase-Amplitude Coupling (PAC) object &#8212; visbrain 0.4.5 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
@@ -40,7 +40,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html"><span><img src="../../_static/visbrain_128x128.png"></span>
           visbrain</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.4.4</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.4.5</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -1018,15 +1018,25 @@ phase.</p></li>
 #                              Comodulogram
 # =============================================================================
 
+Phase Amplitude Coupling object defined
+    Extract phases (n_pha=54) and amplitudes (n_amps=80)
+    true PAC estimation using ndPac (Ozkurt et al. 2012)
 
 # =============================================================================
 #                         Optimal phase frequency
 # =============================================================================
 
+Phase Amplitude Coupling object defined
+    Extract phases (n_pha=54) and amplitudes (n_amps=1)
+    true PAC estimation using ndPac (Ozkurt et al. 2012)
 
 # =============================================================================
 #                         Optimal amplitude frequency
 # =============================================================================
+
+Phase Amplitude Coupling object defined
+    Extract phases (n_pha=1) and amplitudes (n_amps=80)
+    true PAC estimation using ndPac (Ozkurt et al. 2012)
 </pre></div>
 </div>
 <div class="line-block">
@@ -1034,7 +1044,7 @@ phase.</p></li>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">tensorpac.utils</span> <span class="k">import</span> <span class="n">pac_signals_wavelet</span>
+<span class="kn">from</span> <span class="nn">tensorpac.signals</span> <span class="k">import</span> <span class="n">pac_signals_wavelet</span>
 
 <span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <a href="../../generated/visbrain.objects.PacmapObj.html#visbrain.objects.PacmapObj" title="View documentation for visbrain.objects.PacmapObj"><span class="n">PacmapObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a>
 
@@ -1045,8 +1055,10 @@ phase.</p></li>
 <span class="sd">The final signal is the concatenation of both</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="n">sf</span> <span class="o">=</span> <span class="mf">1024.</span>
-<span class="n">s_1</span> <span class="o">=</span> <span class="n">pac_signals_wavelet</span><span class="p">(</span><span class="n">sf</span><span class="o">=</span><span class="n">sf</span><span class="p">,</span> <span class="n">fpha</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">famp</span><span class="o">=</span><span class="mf">80.</span><span class="p">,</span> <span class="n">ntrials</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">npts</span><span class="o">=</span><span class="mi">5000</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">s_2</span> <span class="o">=</span> <span class="n">pac_signals_wavelet</span><span class="p">(</span><span class="n">sf</span><span class="o">=</span><span class="n">sf</span><span class="p">,</span> <span class="n">fpha</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span> <span class="n">famp</span><span class="o">=</span><span class="mf">100.</span><span class="p">,</span> <span class="n">ntrials</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">npts</span><span class="o">=</span><span class="mi">5000</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">s_1</span> <span class="o">=</span> <span class="n">pac_signals_wavelet</span><span class="p">(</span><span class="n">sf</span><span class="o">=</span><span class="n">sf</span><span class="p">,</span> <span class="n">f_pha</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">f_amp</span><span class="o">=</span><span class="mf">80.</span><span class="p">,</span> <span class="n">n_epochs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                          <span class="n">n_times</span><span class="o">=</span><span class="mi">5000</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">s_2</span> <span class="o">=</span> <span class="n">pac_signals_wavelet</span><span class="p">(</span><span class="n">sf</span><span class="o">=</span><span class="n">sf</span><span class="p">,</span> <span class="n">f_pha</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span> <span class="n">f_amp</span><span class="o">=</span><span class="mf">100.</span><span class="p">,</span> <span class="n">n_epochs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                          <span class="n">n_times</span><span class="o">=</span><span class="mi">5000</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">sig</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.c_.html#numpy.c_" title="View documentation for numpy.c_"><span class="n">np</span><span class="o">.</span><span class="n">c_</span></a><span class="p">[</span><span class="n">s_1</span><span class="p">,</span> <span class="n">s_2</span><span class="p">]</span>
 
 <span class="n">sc</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1200</span><span class="p">,</span> <span class="mi">600</span><span class="p">))</span>
@@ -1082,16 +1094,16 @@ phase.</p></li>
 <span class="n">sc</span><span class="o">.</span><span class="n">preview</span><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  9.971 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  10.789 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-objects-plot-pac-obj-py">
 <div class="sphx-glr-download docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/46b26738daca3862d3486a6a40db2a61/plot_pac_obj.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_pac_obj.py</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/942cc2b48988007e78a01a1b085ab513/plot_pac_obj.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_pac_obj.py</span></code></a></p>
 </div>
 <div class="sphx-glr-download docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/deaa6a2e85dba99360ca5139da9df844/plot_pac_obj.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_pac_obj.ipynb</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/d76c29d3bcd2655c096eec51fb7337bc/plot_pac_obj.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_pac_obj.ipynb</span></code></a></p>
 </div>
 </div>
-<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
 </div>
 
 
@@ -1115,7 +1127,7 @@ phase.</p></li>
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-05-30.</p>
+        <p>&copy; Copyright Last updated on 2019-09-10.</p>
     </footer>
 
   </body>

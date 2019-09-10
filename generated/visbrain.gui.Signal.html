@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>visbrain.gui.Signal &#8212; visbrain 0.4.4 documentation</title>
+    <title>visbrain.gui.Signal &#8212; visbrain 0.4.5 documentation</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
@@ -40,7 +40,7 @@
         </button>
         <a class="navbar-brand" href="../index.html"><span><img src="../_static/visbrain_128x128.png"></span>
           visbrain</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.4.4</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.4.5</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -1001,7 +1001,7 @@
 <h1>visbrain.gui.Signal<a class="headerlink" href="#visbrain-gui-signal" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="visbrain.gui.Signal">
-<em class="property">class </em><code class="descclassname">visbrain.gui.</code><code class="descname">Signal</code><span class="sig-paren">(</span><em>data</em>, <em>axis=-1</em>, <em>time=None</em>, <em>sf=1.0</em>, <em>enable_grid=True</em>, <em>form='line'</em>, <em>color='black'</em>, <em>line_lw=1.0</em>, <em>line_smooth=False</em>, <em>marker_symbol='disc'</em>, <em>marker_size=10.0</em>, <em>hist_nbins=10</em>, <em>tf_norm=0</em>, <em>tf_baseline=None</em>, <em>tf_interp='gaussian'</em>, <em>tf_cmap='viridis'</em>, <em>tf_av_window=None</em>, <em>tf_av_overlap=0.0</em>, <em>tf_clim=None</em>, <em>psd_nperseg=256</em>, <em>psd_noverlap=128</em>, <em>display_grid=True</em>, <em>display_signal=True</em>, <em>annotations=None</em>, <em>annot_txtsz=18.0</em>, <em>annot_marksz=16.0</em>, <em>annot_color='#2ecc71'</em>, <em>grid_lw=1.0</em>, <em>grid_smooth=False</em>, <em>grid_titles=None</em>, <em>grid_font_size=10.0</em>, <em>grid_color='random'</em>, <em>grid_shape=None</em>, <em>grid_titles_color='black'</em>, <em>verbose=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/gui/signal/signal.html#Signal"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/signal/signal.py#L17-L408"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Signal" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">visbrain.gui.</code><code class="sig-name descname">Signal</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">axis=-1</em>, <em class="sig-param">time=None</em>, <em class="sig-param">sf=1.0</em>, <em class="sig-param">enable_grid=True</em>, <em class="sig-param">form='line'</em>, <em class="sig-param">color='black'</em>, <em class="sig-param">line_lw=1.0</em>, <em class="sig-param">line_smooth=False</em>, <em class="sig-param">marker_symbol='disc'</em>, <em class="sig-param">marker_size=10.0</em>, <em class="sig-param">hist_nbins=10</em>, <em class="sig-param">tf_norm=0</em>, <em class="sig-param">tf_baseline=None</em>, <em class="sig-param">tf_interp='gaussian'</em>, <em class="sig-param">tf_cmap='viridis'</em>, <em class="sig-param">tf_av_window=None</em>, <em class="sig-param">tf_av_overlap=0.0</em>, <em class="sig-param">tf_clim=None</em>, <em class="sig-param">psd_nperseg=256</em>, <em class="sig-param">psd_noverlap=128</em>, <em class="sig-param">display_grid=True</em>, <em class="sig-param">display_signal=True</em>, <em class="sig-param">annotations=None</em>, <em class="sig-param">annot_txtsz=18.0</em>, <em class="sig-param">annot_marksz=16.0</em>, <em class="sig-param">annot_color='#2ecc71'</em>, <em class="sig-param">grid_lw=1.0</em>, <em class="sig-param">grid_smooth=False</em>, <em class="sig-param">grid_titles=None</em>, <em class="sig-param">grid_font_size=10.0</em>, <em class="sig-param">grid_color='black'</em>, <em class="sig-param">grid_shape=None</em>, <em class="sig-param">grid_titles_color='black'</em>, <em class="sig-param">verbose=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/gui/signal/signal.html#Signal"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/signal/signal.py#L17-L408"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Signal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Signal inspection module (data mining).</p>
 <p>The Signal module can be used to relatively large datasets of
 time-series. Two layout are provided :</p>
@@ -1114,7 +1114,7 @@ platform.</p>
 </dl>
 <dl class="method">
 <dt id="visbrain.gui.Signal.screenshot">
-<code class="descname">screenshot</code><span class="sig-paren">(</span><em>self</em>, <em>filename='screenshot.png'</em>, <em>canvas='signal'</em>, <em>autocrop=False</em>, <em>region=None</em>, <em>print_size=None</em>, <em>unit='centimeter'</em>, <em>dpi=300.0</em>, <em>factor=1.0</em>, <em>bgcolor=None</em>, <em>transparent=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/gui/signal/signal.html#Signal.screenshot"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/signal/signal.py#L324-L364"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Signal.screenshot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">screenshot</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">filename='screenshot.png'</em>, <em class="sig-param">canvas='signal'</em>, <em class="sig-param">autocrop=False</em>, <em class="sig-param">region=None</em>, <em class="sig-param">print_size=None</em>, <em class="sig-param">unit='centimeter'</em>, <em class="sig-param">dpi=300.0</em>, <em class="sig-param">factor=1.0</em>, <em class="sig-param">bgcolor=None</em>, <em class="sig-param">transparent=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/gui/signal/signal.html#Signal.screenshot"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/signal/signal.py#L324-L364"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Signal.screenshot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Take a screenshot of the scene.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1152,7 +1152,7 @@ multiply the resolution of your screen.</p>
 
 <dl class="method">
 <dt id="visbrain.gui.Signal.set_signal_form">
-<code class="descname">set_signal_form</code><span class="sig-paren">(</span><em>self</em>, <em>form='line'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/gui/signal/signal.html#Signal.set_signal_form"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/signal/signal.py#L398-L408"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Signal.set_signal_form" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_signal_form</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">form='line'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/gui/signal/signal.html#Signal.set_signal_form"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/signal/signal.py#L398-L408"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Signal.set_signal_form" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set plotting method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1166,13 +1166,13 @@ multiply the resolution of your screen.</p>
 
 <dl class="method">
 <dt id="visbrain.gui.Signal.set_signal_index">
-<code class="descname">set_signal_index</code><span class="sig-paren">(</span><em>self</em>, <em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/gui/signal/signal.html#Signal.set_signal_index"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/signal/signal.py#L394-L396"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Signal.set_signal_index" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_signal_index</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/gui/signal/signal.html#Signal.set_signal_index"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/signal/signal.py#L394-L396"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Signal.set_signal_index" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the index of the signal.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="visbrain.gui.Signal.set_xlim">
-<code class="descname">set_xlim</code><span class="sig-paren">(</span><em>self</em>, <em>xstart</em>, <em>xend</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/gui/signal/signal.html#Signal.set_xlim"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/signal/signal.py#L366-L378"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Signal.set_xlim" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_xlim</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">xstart</em>, <em class="sig-param">xend</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/gui/signal/signal.html#Signal.set_xlim"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/signal/signal.py#L366-L378"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Signal.set_xlim" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fix limits of the x-axis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1188,7 +1188,7 @@ multiply the resolution of your screen.</p>
 
 <dl class="method">
 <dt id="visbrain.gui.Signal.set_ylim">
-<code class="descname">set_ylim</code><span class="sig-paren">(</span><em>self</em>, <em>ystart</em>, <em>yend</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/gui/signal/signal.html#Signal.set_ylim"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/signal/signal.py#L380-L392"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Signal.set_ylim" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_ylim</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">ystart</em>, <em class="sig-param">yend</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/gui/signal/signal.html#Signal.set_ylim"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/signal/signal.py#L380-L392"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Signal.set_ylim" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fix limits of the y-axis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1204,13 +1204,13 @@ multiply the resolution of your screen.</p>
 
 <dl class="method">
 <dt id="visbrain.gui.Signal.show">
-<code class="descname">show</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/_pyqt_module.py#L75-L110"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Signal.show" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">show</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/_pyqt_module.py#L75-L110"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Signal.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>Display the graphical user interface.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="visbrain.gui.Signal.update_cameras">
-<code class="descname">update_cameras</code><span class="sig-paren">(</span><em>self</em>, <em>g_rect=None</em>, <em>s_rect=None</em>, <em>update='both'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/gui/signal/signal.html#Signal.update_cameras"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/signal/signal.py#L305-L322"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Signal.update_cameras" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">update_cameras</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">g_rect=None</em>, <em class="sig-param">s_rect=None</em>, <em class="sig-param">update='both'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visbrain/gui/signal/signal.html#Signal.update_cameras"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/gui/signal/signal.py#L305-L322"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.gui.Signal.update_cameras" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update cameras.</p>
 </dd></dl>
 
@@ -1218,31 +1218,31 @@ multiply the resolution of your screen.</p>
 
 <div class="section" id="examples-using-visbrain-gui-signal">
 <h2>Examples using <code class="docutils literal notranslate"><span class="pre">visbrain.gui.Signal</span></code><a class="headerlink" href="#examples-using-visbrain-gui-signal" title="Permalink to this headline">¶</a></h2>
-<div class="sphx-glr-thumbcontainer" tooltip="Plot a basic vector. Then, you can visualize this vector as a continuous line, markers, histogr..."><div class="figure align-center" id="id1">
+<div class="sphx-glr-thumbcontainer" tooltip="Plot a basic vector. Then, you can visualize this vector as a continuous line, markers, histogr..."><div class="figure align-default" id="id1">
 <img alt="../_images/sphx_glr_00_1d_signal_thumb.png" src="../_images/sphx_glr_00_1d_signal_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/gui_signal/00_1d_signal.html#sphx-glr-auto-examples-gui-signal-00-1d-signal-py"><span class="std std-ref">Plot a 1D signal</span></a></span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Dispose a two dimensional array of data into a grid."><div class="figure align-center" id="id2">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Dispose a two dimensional array of data into a grid."><div class="figure align-default" id="id2">
 <img alt="../_images/sphx_glr_01_2d_signals_thumb.png" src="../_images/sphx_glr_01_2d_signals_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/gui_signal/01_2d_signals.html#sphx-glr-auto-examples-gui-signal-01-2d-signals-py"><span class="std std-ref">Plot a 2D array of data</span></a></span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Plot and inspect a 3D array of data."><div class="figure align-center" id="id3">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Plot and inspect a 3D array of data."><div class="figure align-default" id="id3">
 <img alt="../_images/sphx_glr_02_3d_signals_thumb.png" src="../_images/sphx_glr_02_3d_signals_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/gui_signal/02_3d_signals.html#sphx-glr-auto-examples-gui-signal-02-3d-signals-py"><span class="std std-ref">Plot a 3D array of data</span></a></span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Use custom color, font size..."><div class="figure align-center" id="id4">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Use custom color, font size..."><div class="figure align-default" id="id4">
 <img alt="../_images/sphx_glr_03_interface_customization_thumb.png" src="../_images/sphx_glr_03_interface_customization_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/gui_signal/03_interface_customization.html#sphx-glr-auto-examples-gui-signal-03-interface-customization-py"><span class="std std-ref">Interface customization</span></a></span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Import annotations from a text file and annotate trials."><div class="figure align-center" id="id5">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Import annotations from a text file and annotate trials."><div class="figure align-default" id="id5">
 <img alt="../_images/sphx_glr_04_annotations_thumb.png" src="../_images/sphx_glr_04_annotations_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/gui_signal/04_annotations.html#sphx-glr-auto-examples-gui-signal-04-annotations-py"><span class="std std-ref">Import, save and add annotations</span></a></span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Export all of the time-frequency maps, psd of a dataset."><div class="figure align-center" id="id6">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Export all of the time-frequency maps, psd of a dataset."><div class="figure align-default" id="id6">
 <img alt="../_images/sphx_glr_05_screenshot_thumb.png" src="../_images/sphx_glr_05_screenshot_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/gui_signal/05_screenshot.html#sphx-glr-auto-examples-gui-signal-05-screenshot-py"><span class="std std-ref">Screenshot tutorial</span></a></span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Superimposition of all the signals."><div class="figure align-center" id="id7">
+</div><div class="sphx-glr-thumbcontainer" tooltip="Superimposition of all the signals."><div class="figure align-default" id="id7">
 <img alt="../_images/sphx_glr_06_butterfly_thumb.png" src="../_images/sphx_glr_06_butterfly_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/gui_signal/06_butterfly.html#sphx-glr-auto-examples-gui-signal-06-butterfly-py"><span class="std std-ref">Butterfly plot</span></a></span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
 </div>
@@ -1270,7 +1270,7 @@ multiply the resolution of your screen.</p>
         <div class="container">
             <img src="../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-05-30.</p>
+        <p>&copy; Copyright Last updated on 2019-09-10.</p>
     </footer>
 
   </body>

@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Topoplot object (TopoObj) : complete tutorial &#8212; visbrain 0.4.4 documentation</title>
+    <title>Topoplot object (TopoObj) : complete tutorial &#8212; visbrain 0.4.5 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
@@ -40,7 +40,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html"><span><img src="../../_static/visbrain_128x128.png"></span>
           visbrain</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.4.4</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.4.5</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -1044,6 +1044,11 @@ channels defined by there xy coordinates.</p>
                <span class="n">rect</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">),</span> <span class="n">border</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>STATUS :   0.0%    0 / 1876
+STATUS : 100.0% 8192 / 1876
+</pre></div>
+</div>
 </div>
 <div class="section" id="creation-of-the-scene">
 <h2>Creation of the scene<a class="headerlink" href="#creation-of-the-scene" title="Permalink to this headline">¶</a></h2>
@@ -1070,6 +1075,48 @@ channels defined by there xy coordinates.</p>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">t_obj</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Definition using channel names&#39;</span><span class="p">,</span>
                   <span class="n">title_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">width_max</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">cb_obj</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">width_max</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>STATUS :   0.0%      0 / 311220
+STATUS :   2.6%   8192 / 311220
+STATUS :   5.3%  16384 / 311220
+STATUS :   7.9%  24576 / 311220
+STATUS :  10.5%  32768 / 311220
+STATUS :  13.2%  40960 / 311220
+STATUS :  15.8%  49152 / 311220
+STATUS :  18.4%  57344 / 311220
+STATUS :  21.1%  65536 / 311220
+STATUS :  23.7%  73728 / 311220
+STATUS :  26.3%  81920 / 311220
+STATUS :  29.0%  90112 / 311220
+STATUS :  31.6%  98304 / 311220
+STATUS :  34.2% 106496 / 311220
+STATUS :  36.9% 114688 / 311220
+STATUS :  39.5% 122880 / 311220
+STATUS :  42.1% 131072 / 311220
+STATUS :  44.7% 139264 / 311220
+STATUS :  47.4% 147456 / 311220
+STATUS :  50.0% 155648 / 311220
+STATUS :  52.6% 163840 / 311220
+STATUS :  55.3% 172032 / 311220
+STATUS :  57.9% 180224 / 311220
+STATUS :  60.5% 188416 / 311220
+STATUS :  63.2% 196608 / 311220
+STATUS :  65.8% 204800 / 311220
+STATUS :  68.4% 212992 / 311220
+STATUS :  71.1% 221184 / 311220
+STATUS :  73.7% 229376 / 311220
+STATUS :  76.3% 237568 / 311220
+STATUS :  79.0% 245760 / 311220
+STATUS :  81.6% 253952 / 311220
+STATUS :  84.2% 262144 / 311220
+STATUS :  86.9% 270336 / 311220
+STATUS :  89.5% 278528 / 311220
+STATUS :  92.1% 286720 / 311220
+STATUS :  94.8% 294912 / 311220
+STATUS :  97.4% 303104 / 311220
+STATUS : 100.0% 311296 / 311220
 </pre></div>
 </div>
 </div>
@@ -1179,16 +1226,16 @@ spaced anymore but they are manually defined, just as color.</p>
 </pre></div>
 </div>
 <img alt="../../_images/sphx_glr_plot_topo_obj_001.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_topo_obj_001.png" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  16.215 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  8.665 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-objects-plot-topo-obj-py">
 <div class="sphx-glr-download docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/cdcbcfe909f1a9546901a1816be06d85/plot_topo_obj.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_topo_obj.py</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/b363df54d0adc4f957b7c29261e7811c/plot_topo_obj.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_topo_obj.py</span></code></a></p>
 </div>
 <div class="sphx-glr-download docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/3aed0769abbb9f298069fb6348cac886/plot_topo_obj.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_topo_obj.ipynb</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/aac8f3784bd329f8921735494ad77970/plot_topo_obj.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_topo_obj.ipynb</span></code></a></p>
 </div>
 </div>
-<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
 </div>
 </div>
 
@@ -1213,7 +1260,7 @@ spaced anymore but they are manually defined, just as color.</p>
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-05-30.</p>
+        <p>&copy; Copyright Last updated on 2019-09-10.</p>
     </footer>
 
   </body>

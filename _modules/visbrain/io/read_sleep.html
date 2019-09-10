@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>visbrain.io.read_sleep &#8212; visbrain 0.4.4 documentation</title>
+    <title>visbrain.io.read_sleep &#8212; visbrain 0.4.5 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/gallery.css" />
@@ -38,7 +38,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/visbrain_128x128.png"></span>
           visbrain</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.4.4</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.4.5</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -1001,21 +1001,26 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">io</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">datetime</span>
-<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">iqr</span>
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span class="n">warn</span>
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
 
-<span class="kn">from</span> <span class="nn">.dependencies</span> <span class="k">import</span> <span class="n">is_mne_installed</span>
-<span class="kn">from</span> <span class="nn">.dialog</span> <span class="k">import</span> <span class="n">dialog_load</span>
-<span class="kn">from</span> <span class="nn">.mneio</span> <span class="k">import</span> <span class="n">mne_switch</span>
-<span class="kn">from</span> <span class="nn">.rw_hypno</span> <span class="k">import</span> <span class="p">(</span><span class="n">read_hypno</span><span class="p">,</span> <span class="n">oversample_hypno</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">.rw_utils</span> <span class="k">import</span> <span class="n">get_file_ext</span>
-<span class="kn">from</span> <span class="nn">.write_data</span> <span class="k">import</span> <span class="n">write_csv</span>
-<span class="kn">from</span> <span class="nn">..config</span> <span class="k">import</span> <span class="n">PROFILER</span>
-<span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">merge_annotations</span>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">get_dsf</span><span class="p">,</span> <span class="n">vispy_array</span><span class="p">,</span> <span class="n">sleepstats</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">iqr</span>
+
+<span class="kn">from</span> <span class="nn">visbrain.io.dependencies</span> <span class="k">import</span> <span class="n">is_mne_installed</span>
+<span class="kn">from</span> <span class="nn">visbrain.io.dialog</span> <span class="k">import</span> <span class="n">dialog_load</span>
+<span class="kn">from</span> <span class="nn">visbrain.io.mneio</span> <span class="k">import</span> <span class="n">mne_switch</span>
+<span class="kn">from</span> <span class="nn">visbrain.io.rw_hypno</span> <span class="k">import</span> <span class="p">(</span><span class="n">read_hypno</span><span class="p">,</span> <span class="n">oversample_hypno</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">visbrain.io.rw_utils</span> <span class="k">import</span> <span class="n">get_file_ext</span>
+<span class="kn">from</span> <span class="nn">visbrain.io.write_data</span> <span class="k">import</span> <span class="n">write_csv</span>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="k">import</span> <span class="n">merge_annotations</span>
+
+<span class="kn">from</span> <span class="nn">visbrain.utils.others</span> <span class="k">import</span> <span class="n">get_dsf</span>
+<span class="kn">from</span> <span class="nn">visbrain.utils.mesh</span> <span class="k">import</span> <span class="n">vispy_array</span>
+<span class="kn">from</span> <span class="nn">visbrain.utils.sleep.hypnoprocessing</span> <span class="k">import</span> <span class="n">sleepstats</span>
+
+<span class="kn">from</span> <span class="nn">visbrain.config</span> <span class="k">import</span> <span class="n">PROFILER</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
 
@@ -1741,7 +1746,7 @@
         <div class="container">
             <img src="../../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-05-30.</p>
+        <p>&copy; Copyright Last updated on 2019-09-10.</p>
     </footer>
 
   </body>

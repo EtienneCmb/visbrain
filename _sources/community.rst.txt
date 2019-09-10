@@ -17,4 +17,3 @@ If you have questions, there is a public gitter chat with several rooms :
 * About the `website <https://gitter.im/visbrain-python/Website?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
 * About the `Brain module <https://gitter.im/visbrain-python/Brain?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
 * About the `Sleep module <https://gitter.im/visbrain-python/Sleep?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
-* About the `Topo module <https://gitter.im/visbrain-python/Topo?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
