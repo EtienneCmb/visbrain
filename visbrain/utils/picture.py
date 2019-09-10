@@ -1,8 +1,6 @@
 """Set of functions for picture managment."""
 import numpy as np
 
-from ..io import is_sc_image_installed
-
 
 __all__ = ('piccrop', 'picresize')
 
@@ -83,6 +81,7 @@ def picresize(im, axis=0, extend=False):
     imr : list
         List of resized pictures.
     """
+    from visbrain.io import is_sc_image_installed
     is_sc_image_installed(raise_error=True)
     from skimage.transform import resize
     # ================= Checking =================

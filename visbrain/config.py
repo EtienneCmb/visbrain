@@ -6,7 +6,9 @@ import logging
 from PyQt5 import QtWidgets
 from vispy import app as visapp
 
-from .utils import Profiler, set_log_level
+from visbrain.utils.others import Profiler
+from visbrain.utils.logging import set_log_level
+
 
 # Set 'info' as the default logging level
 logger = logging.getLogger('visbrain')

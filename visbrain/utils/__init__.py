@@ -8,7 +8,7 @@ from .memory import *
 from .mesh import *
 from .others import *
 from .physio import *
-from .picture import *
+from .picture import (piccrop, picresize)
 from .sigproc import *
 from .sleep import *
 from .transform import *

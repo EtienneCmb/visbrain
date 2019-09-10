@@ -9,23 +9,26 @@ This file contain functions to load :
 """
 import os
 import io
-import numpy as np
-import datetime
-from scipy.stats import iqr
 from warnings import warn
 import logging
+import datetime
 
-from .dependencies import is_mne_installed
-from .dialog import dialog_load
-from .mneio import mne_switch
-from .rw_hypno import (read_hypno, oversample_hypno)
-from .rw_utils import get_file_ext
-from .write_data import write_csv
-from ..config import PROFILER
-from ..io import merge_annotations
-from ..utils.others import get_dsf
-from ..utils.mesh import vispy_array
-from ..utils.sleep.hypnoprocessing import sleepstats
+import numpy as np
+from scipy.stats import iqr
+
+from visbrain.io.dependencies import is_mne_installed
+from visbrain.io.dialog import dialog_load
+from visbrain.io.mneio import mne_switch
+from visbrain.io.rw_hypno import (read_hypno, oversample_hypno)
+from visbrain.io.rw_utils import get_file_ext
+from visbrain.io.write_data import write_csv
+from visbrain.io import merge_annotations
+
+from visbrain.utils.others import get_dsf
+from visbrain.utils.mesh import vispy_array
+from visbrain.utils.sleep.hypnoprocessing import sleepstats
+
+from visbrain.config import PROFILER
 
 logger = logging.getLogger('visbrain')
 

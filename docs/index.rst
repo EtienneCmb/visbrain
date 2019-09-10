@@ -17,6 +17,12 @@
 .. image:: https://badge.fury.io/py/visbrain.svg
   :target: https://badge.fury.io/py/visbrain
 
+.. image:: https://pepy.tech/badge/visbrain
+  :target: https://pepy.tech/project/visbrain
+
+.. image:: https://badges.gitter.im/visbrain-python/chatroom.svg
+  :target: https://gitter.im/visbrain-python/chatroom?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
+
 .. raw:: html
 
   <br>

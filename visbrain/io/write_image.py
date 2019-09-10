@@ -310,7 +310,7 @@ def write_fig_canvas(filename, canvas, widget=None, autocrop=False,
     transparent : bool | False
         Use transparent background.
     """
-    from ..utils import piccrop
+    from visbrain.utils import piccrop
     from vispy.io import imsave
 
     # Get the size of the canvas and backend :
