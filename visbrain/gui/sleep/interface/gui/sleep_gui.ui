@@ -4509,13 +4509,56 @@ display</string>
                 </spacer>
                </item>
                <item row="2" column="8">
+                <widget class="QLabel" name="label_3_1">
+                 <property name="text">
+                  <string>Scoring Window</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="9">
+                <widget class="QDoubleSpinBox" name="_ScorWin">
+                 <property name="decimals">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <double>1000.000000000000000</double>
+                 </property>
+                 <property name="value">
+                  <double>30.000000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="10">
+                <widget class="QLabel" name="label_4_1">
+                 <property name="text">
+                  <string>sec</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="11">
+                <spacer name="horizontalSpacer_5_1">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::Expanding</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="2" column="12">
                 <widget class="QLabel" name="label_5">
                  <property name="text">
                   <string>Slider step</string>
                  </property>
                 </widget>
                </item>
-               <item row="2" column="9">
+               <item row="2" column="13">
                 <widget class="QDoubleSpinBox" name="_SigSlStep">
                  <property name="decimals">
                   <number>1</number>
@@ -4528,14 +4571,14 @@ display</string>
                  </property>
                 </widget>
                </item>
-               <item row="2" column="10">
+               <item row="2" column="14">
                 <widget class="QLabel" name="label_6">
                  <property name="text">
                   <string>sec</string>
                  </property>
                 </widget>
                </item>
-               <item row="2" column="11">
+               <item row="2" column="15">
                 <spacer name="horizontalSpacer_6">
                  <property name="orientation">
                   <enum>Qt::Horizontal</enum>
@@ -4548,14 +4591,14 @@ display</string>
                  </property>
                 </spacer>
                </item>
-               <item row="2" column="12">
+               <item row="2" column="16">
                 <widget class="QLabel" name="label_31">
                  <property name="text">
                   <string>Rule</string>
                  </property>
                 </widget>
                </item>
-               <item row="2" column="13">
+               <item row="2" column="17">
                 <widget class="QComboBox" name="_slRules">
                  <property name="currentIndex">
                   <number>1</number>
@@ -4577,7 +4620,7 @@ display</string>
                  </item>
                 </widget>
                </item>
-               <item row="2" column="14">
+               <item row="2" column="18">
                 <spacer name="horizontalSpacer_3">
                  <property name="orientation">
                   <enum>Qt::Horizontal</enum>
@@ -4590,7 +4633,7 @@ display</string>
                  </property>
                 </spacer>
                </item>
-               <item row="2" column="15">
+               <item row="2" column="19">
                 <widget class="QCheckBox" name="_slGrid">
                  <property name="text">
                   <string>Grid</string>
@@ -4600,14 +4643,14 @@ display</string>
                  </property>
                 </widget>
                </item>
-               <item row="2" column="16">
+               <item row="2" column="20">
                 <widget class="QCheckBox" name="_slAbsTime">
                  <property name="text">
                   <string>Absolute time</string>
                  </property>
                 </widget>
                </item>
-               <item row="2" column="17">
+               <item row="2" column="21">
                 <widget class="QCheckBox" name="_slMagnify">
                  <property name="text">
                   <string>Magnify</string>
