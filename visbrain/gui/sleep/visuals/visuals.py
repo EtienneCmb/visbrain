@@ -918,32 +918,32 @@ class CanvasShortcuts(object):
 
             # ------------ SCORING ------------
             elif event.text.lower() == 'a':  # Art
-                self._add_stage_on_win(-1)
+                self._add_stage_on_scorwin(-1)
                 self._SlGoto.setValue(self._SlGoto.value(
                 ) + self._SigSlStep.value())
                 logger.info("Art stage inserted")
             elif event.text.lower() == 'w':  # Wake
-                self._add_stage_on_win(0)
+                self._add_stage_on_scorwin(0)
                 self._SlGoto.setValue(self._SlGoto.value(
                 ) + self._SigSlStep.value())
                 logger.info("Wake stage inserted")
             elif event.text == '1':
-                self._add_stage_on_win(1)
+                self._add_stage_on_scorwin(1)
                 self._SlGoto.setValue(self._SlGoto.value(
                 ) + self._SigSlStep.value())
                 logger.info("N1 stage inserted")
             elif event.text == '2':
-                self._add_stage_on_win(2)
+                self._add_stage_on_scorwin(2)
                 self._SlGoto.setValue(self._SlGoto.value(
                 ) + self._SigSlStep.value())
                 logger.info("N2 stage inserted")
             elif event.text == '3':
-                self._add_stage_on_win(3)
+                self._add_stage_on_scorwin(3)
                 self._SlGoto.setValue(self._SlGoto.value(
                 ) + self._SigSlStep.value())
                 logger.info("N3 stage inserted")
             elif event.text.lower() == 'r':
-                self._add_stage_on_win(4)
+                self._add_stage_on_scorwin(4)
                 self._SlGoto.setValue(self._SlGoto.value(
                 ) + self._SigSlStep.value())
                 logger.info("REM stage inserted")
