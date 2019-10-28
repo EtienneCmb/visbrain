@@ -108,6 +108,8 @@ class UiSettings(object):
         # ================= GUI =================
         # Update Go to :
         self._SlGoto.setValue(val * step)
+        # Update maximum value of Scoring Window :
+        self._ScorWin.setMaximum(win)
 
         # ================= ZOOMING =================
         if iszoom:
