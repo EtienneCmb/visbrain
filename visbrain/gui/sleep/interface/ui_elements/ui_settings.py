@@ -41,6 +41,15 @@ class UiSettings(object):
         # Annotation from the navigation bar :
         self._AnnotateRun.clicked.connect(self._fcn_annotate_nav)
 
+    @staticmethod
+    def _scoring_window_xlim(xlim, scorwin):
+        """Define scoring window xlim from scoring window size and SigWin."""
+        xhalf = (xlim[1] - xlim[0])/2 + xlim[0]
+        return (
+            max(xlim[0], xhalf - scorwin/2),
+            min(xlim[1], xhalf + scorwin/2)
+        ) # Centered to display window
+
     # =====================================================================
     # SLIDER
     # =====================================================================
@@ -234,17 +243,20 @@ class UiSettings(object):
     # =====================================================================
     # HYPNO
     # =====================================================================
-    def _add_stage_on_win(self, stage):
-        """Change the stage on the current window."""
+    def _add_stage_on_scorwin(self, stage):
+        """Change the stage on the current scoring window."""
         # Get the window :
         win = self._SigWin.value()
         val = self._SlVal.value()
         step = self._SigSlStep.value()
         xlim = (val * step, val * step + win)
+        # Get the scoring window :
+        scorwin = self._ScorWin.value()
+        xlim_scor = self._scoring_window_xlim(xlim, scorwin)
         # Find closest time index :
         t = [0, 0]
-        t[0] = int(round(np.abs(self._time - xlim[0]).argmin()))
-        t[1] = int(round(np.abs(self._time - xlim[1]).argmin()))
+        t[0] = int(round(np.abs(self._time - xlim_scor[0]).argmin()))
+        t[1] = int(round(np.abs(self._time - xlim_scor[1]).argmin()))
         # Set the stage :
         self._hypno[t[0]:t[1]] = stage
         self._hyp.set_stage(t[0], t[1], stage)
