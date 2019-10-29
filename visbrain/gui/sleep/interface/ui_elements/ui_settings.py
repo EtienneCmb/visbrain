@@ -19,9 +19,13 @@ class UiSettings(object):
         self._slOnStart = False
         self._fcn_slider_settings()
         self._SlVal.valueChanged.connect(self._fcn_slider_move)
-        # Function applied when slider's settings changed :
-        self._SigWin.valueChanged.connect(self._fcn_slider_move)
+        # Function applied when the display window changed :
+        self._SigWin.valueChanged.connect(self._fcn_sigwin_settings)
         self._SigWin.setKeyboardTracking(False)
+        # Function applied when the scoring window changed :
+        self._ScorWin.valueChanged.connect(self._fcn_scorwin_settings)
+        self._ScorWin.setKeyboardTracking(False)
+        # Function applied when the slider settings changed
         self._SigSlStep.valueChanged.connect(self._fcn_slider_settings)
         self._SigSlStep.setKeyboardTracking(False)
         # Spin box for window selection :
@@ -33,6 +37,7 @@ class UiSettings(object):
         self._slGrid.clicked.connect(self._fcn_grid_toggle)
         # Text format :
         self._slTxtFormat = "Window : [ {start} ; {end} ] {unit} || " + \
+                            "Scoring : [ {start_scor} ; {end_scor} ] {unit} || " + \
                             "Sleep stage : {conv}"
         # Absolute time :
         self._slAbsTime.clicked.connect(self._fcn_slider_move)
@@ -51,8 +56,45 @@ class UiSettings(object):
         ) # Centered to display window
 
     # =====================================================================
-    # SLIDER
+    # SLIDER, DISPLAY WINDOW AND SCORING WINDOW
     # =====================================================================
+    def _update_text_info(self, xlim, xlim_scor, hypcol, stage):
+        # Get unit and convert:
+        if self._slAbsTime.isChecked():
+            xlim = np.asarray(xlim) + self._toffset
+            start = str(datetime.datetime.utcfromtimestamp(
+                xlim[0])).split(' ')[1]
+            stend = str(datetime.datetime.utcfromtimestamp(
+                xlim[1])).split(' ')[1]
+            start_scor = str(datetime.datetime.utcfromtimestamp(
+                xlim_scor[0])).split(' ')[1]
+            stend_scor = str(datetime.datetime.utcfromtimestamp(
+                xlim_scor[1])).split(' ')[1]
+            txt = "Window : [ " + start + " ; " + stend + " ] || " + \
+                "Scoring : [ " + start_scor + " ; " + stend_scor + " ] || " + \
+                "Sleep stage : " + stage
+        else:
+            unit = self._slRules.currentText()
+            if unit == 'seconds':
+                fact = 1.
+            elif unit == 'minutes':
+                fact = 60.
+            elif unit == 'hours':
+                fact = 3600.
+            xconv = np.round(1000. * np.array(xlim) / fact) / 1000.
+            xconv_scor = np.round(1000. * np.array(xlim_scor) / fact) / 1000.
+            # Format string :
+            txt = self._slTxtFormat.format(
+                start=str(xconv[0]), end=str(xconv[1]),
+                start_scor=str(xconv_scor[0]), end_scor=str(xconv_scor[1]),
+                unit=unit,
+                conv=stage)
+        # Set text :
+        self._SlText.setText(txt)
+        self._SlText.setFont(self._font)
+        self._SlText.setStyleSheet("QLabel {color: " +
+                                   hypcol + ";}")
+
     def _fcn_slider_move(self):
         """Function applied when the slider move."""
         # ================= INDEX =================
@@ -61,6 +103,8 @@ class UiSettings(object):
         step = self._SigSlStep.value()
         win = self._SigWin.value()
         xlim = (val * step, val * step + win)
+        scorwin = self._ScorWin.value()
+        xlim_scor = self._scoring_window_xlim(xlim, scorwin)
         iszoom = self.menuDispZoom.isChecked()
         unit = str(self._slRules.currentText())
         # Find closest time index :
@@ -79,6 +123,8 @@ class UiSettings(object):
         sl = slice(t[0], t[1])
         self._chan.set_data(self._sf, self._data, self._time, sl=sl,
                             ylim=self._ylims)
+        # Redraw the scoring window indicators
+        self._update_scorwin_indicator()
 
         # ---------------------------------------
         is_indic_checked = self.menuDispIndic.isChecked()
@@ -117,8 +163,6 @@ class UiSettings(object):
         # ================= GUI =================
         # Update Go to :
         self._SlGoto.setValue(val * step)
-        # Update maximum value of Scoring Window :
-        self._ScorWin.setMaximum(win)
 
         # ================= ZOOMING =================
         if iszoom:
@@ -134,33 +178,7 @@ class UiSettings(object):
             self._timecam.rect = (xlim[0], 0., win, 1.)
 
         # ================= TEXT INFO =================
-        # Get unit and convert:
-        if self._slAbsTime.isChecked():
-            xlim = np.asarray(xlim) + self._toffset
-            start = str(datetime.datetime.utcfromtimestamp(
-                xlim[0])).split(' ')[1]
-            stend = str(datetime.datetime.utcfromtimestamp(
-                xlim[1])).split(' ')[1]
-            txt = "Window : [ " + start + " ; " + stend + " ] || Sleep " + \
-                "stage : " + stage
-        else:
-            unit = self._slRules.currentText()
-            if unit == 'seconds':
-                fact = 1.
-            elif unit == 'minutes':
-                fact = 60.
-            elif unit == 'hours':
-                fact = 3600.
-            xconv = np.round(1000. * np.array(xlim) / fact) / 1000.
-            # Format string :
-            txt = self._slTxtFormat.format(start=str(xconv[0]),
-                                           end=str(xconv[1]), unit=unit,
-                                           conv=stage)
-        # Set text :
-        self._SlText.setText(txt)
-        self._SlText.setFont(self._font)
-        self._SlText.setStyleSheet("QLabel {color: " +
-                                   hypcol + ";}")
+        self._update_text_info(xlim, xlim_scor, hypcol, stage)
 
         # ================= HYPNO LABELS =================
         for k in self._hypYLabels:
@@ -194,6 +212,39 @@ class UiSettings(object):
                 self._hyp.set_grid(self._time, win)
         else:
             self._slOnStart = True
+
+    def _fcn_sigwin_settings(self):
+        """Function applied when changing the display window size."""
+        # Change maximum allowed value of the scoring window
+        win = self._SigWin.value()
+        self._ScorWin.setMaximum(win)
+        # Redraw stuff as if we were moving the slider
+        self._fcn_slider_move()
+
+    def _fcn_scorwin_settings(self):
+        """Function applied when changing the scoring window size."""
+        ## Change value of slider step to make it equal to the scoring window
+        scorwin = self._ScorWin.value()
+        self._SigSlStep.setValue(scorwin)
+        ## Change the text info:
+        # Gather values of parameters of interest
+        # Slider/windows 
+        val = self._SlVal.value()
+        step = self._SigSlStep.value()
+        win = self._SigWin.value()
+        xlim = (val * step, val * step + win)
+        scorwin = self._ScorWin.value()
+        xlim_scor = self._scoring_window_xlim(xlim, scorwin)
+        # Find closest time index :
+        t = [0, 0]
+        t[0] = int(round(np.abs(self._time - xlim[0]).argmin()))
+        t[1] = int(round(np.abs(self._time - xlim[1]).argmin()))
+        # hypnogram
+        hypref = int(self._hypno[t[0]])
+        hypconv = self._hconv[hypref]
+        hypcol = self._hypcolor[hypconv]
+        stage = str(self._hypYLabels[hypconv + 2].text())
+        self._update_text_info(xlim, xlim_scor, hypcol, stage)
 
     def _fcn_slider_win_selection(self):
         """Move slider using window spin."""
