@@ -95,6 +95,19 @@ class UiSettings(object):
         self._SlText.setStyleSheet("QLabel {color: " +
                                    hypcol + ";}")
 
+    def _update_scorwin_indicator(self):
+        # Get scoring window x_start x_end
+        val = self._SlVal.value()
+        step = self._SigSlStep.value()
+        win = self._SigWin.value()
+        xlim = (val * step, val * step + win)
+        scorwin = self._ScorWin.value()
+        xlim_scor = self._scoring_window_xlim(xlim, scorwin)
+        # Redraw the bars
+        for i, chan in self._chan:
+            self._chan.scorwin_ind[i].set_data(xlim_scor[0], xlim_scor[1],
+                                               self._ylims[i, :])
+
     def _fcn_slider_move(self):
         """Function applied when the slider move."""
         # ================= INDEX =================
@@ -245,6 +258,8 @@ class UiSettings(object):
         hypcol = self._hypcolor[hypconv]
         stage = str(self._hypYLabels[hypconv + 2].text())
         self._update_text_info(xlim, xlim_scor, hypcol, stage)
+        ## Redraw the scoring window indicator bars
+        self._update_scorwin_indicator()
 
     def _fcn_slider_win_selection(self):
         """Move slider using window spin."""
