@@ -43,6 +43,8 @@ class UiSettings(object):
         self._slAbsTime.clicked.connect(self._fcn_slider_move)
         # Magnify :
         self._slMagnify.clicked.connect(self._fcn_slider_magnify)
+        # Visible scoring window indicator :
+        self._ScorWinVisible.clicked.connect(self._fcn_scorwin_indicator_toggle)
         # Annotation from the navigation bar :
         self._AnnotateRun.clicked.connect(self._fcn_annotate_nav)
 
@@ -103,10 +105,12 @@ class UiSettings(object):
         xlim = (val * step, val * step + win)
         scorwin = self._ScorWin.value()
         xlim_scor = self._scoring_window_xlim(xlim, scorwin)
-        # Redraw the bars
+        # Move bars
         for i, chan in self._chan:
             self._chan.scorwin_ind[i].set_data(xlim_scor[0], xlim_scor[1],
                                                self._ylims[i, :])
+        # Toggle bar visibility
+        self._fcn_scorwin_indicator_toggle()
 
     def _fcn_slider_move(self):
         """Function applied when the slider move."""
@@ -287,6 +291,16 @@ class UiSettings(object):
         # Toggle grid for each channel :
         for k in self._chan.grid:
             k.visible = viz
+
+    # =====================================================================
+    # DISPLAY SCORING WINDOW INDICATOR BARS
+    # =====================================================================
+    def _fcn_scorwin_indicator_toggle(self):
+        """Toggle visibility of scoring window indicators."""
+        viz = self._ScorWinVisible.isChecked()
+        for i, chan in self._chan:
+            self._chan.scorwin_ind[i].mesh_start.visible = viz
+            self._chan.scorwin_ind[i].mesh_end.visible = viz
 
     # =====================================================================
     # RULER
