@@ -4662,6 +4662,16 @@ display</string>
                    </property>
                   </widget>
                  </item>
+                 <item>
+                  <widget class="QCheckBox" name="_ScorWinVisible">
+                   <property name="text">
+                    <string>Display scoring window</string>
+                   </property>
+                   <property name="checked">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
                 </layout>
                </item>
               </layout>
