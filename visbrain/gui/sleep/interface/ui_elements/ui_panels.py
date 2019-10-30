@@ -62,6 +62,28 @@ class UiPanels(object):
         PROFILER("Channel amplitudes", level=2)
 
         # =====================================================================
+        # WINDOW HYPNOGRAM (hypnogram of displayed data)
+        # =====================================================================
+        self._winHypCanvas = AxisCanvas(axis=self._ax, name='WinHypnogram',
+                                     fcn=[self.on_mouse_wheel], use_pad=True)
+        self._WinHypW, self._WinHypLayout = self._create_compatible_w("WinHypW", "WinHypL")
+        self._WinHypLayout.addWidget(self._winHypCanvas.canvas.native)
+        self._chanGrid.addWidget(self._WinHypW, len(self) + 1, 1, 1, 1)
+        # Add label :
+        self._winHypLabel = QtWidgets.QWidget()
+        layout = QtWidgets.QVBoxLayout(self._winHypLabel)
+        layout.setContentsMargins(0, 0, 0, 0)
+        self._winHypYLabels = []
+        for k in [''] + self._href + ['']:
+            label = QtWidgets.QLabel()
+            label.setText(self._addspace + k)
+            label.setFont(self._font)
+            layout.addWidget(label)
+            self._winHypYLabels.append(label)
+        self._chanGrid.addWidget(self._winHypLabel, len(self) + 1, 0, 1, 1)
+        PROFILER("WindowHypnogram", level=2)
+
+        # =====================================================================
         # SPECTROGRAM
         # =====================================================================
         # Main canvas for the spectrogram :
@@ -70,12 +92,12 @@ class UiPanels(object):
         self._SpecW, self._SpecLayout = self._create_compatible_w("SpecW",
                                                                   "SpecL")
         self._SpecLayout.addWidget(self._specCanvas.canvas.native)
-        self._chanGrid.addWidget(self._SpecW, len(self) + 1, 1, 1, 1)
+        self._chanGrid.addWidget(self._SpecW, len(self) + 2, 1, 1, 1)
         # Add label :
         self._specLabel = QtWidgets.QLabel(self.centralwidget)
         self._specLabel.setText(self._addspace + self._channels[0])
         self._specLabel.setFont(self._font)
-        self._chanGrid.addWidget(self._specLabel, len(self) + 1, 0, 1, 1)
+        self._chanGrid.addWidget(self._specLabel, len(self) + 2, 0, 1, 1)
         # Add list of colormaps :
         self._cmap_lst = mpl_cmap()
         self._PanSpecCmap.addItems(self._cmap_lst)
@@ -107,7 +129,7 @@ class UiPanels(object):
                                      fcn=[self.on_mouse_wheel], use_pad=True)
         self._HypW, self._HypLayout = self._create_compatible_w("HypW", "HypL")
         self._HypLayout.addWidget(self._hypCanvas.canvas.native)
-        self._chanGrid.addWidget(self._HypW, len(self) + 2, 1, 1, 1)
+        self._chanGrid.addWidget(self._HypW, len(self) + 3, 1, 1, 1)
         # Add label :
         self._hypLabel = QtWidgets.QWidget()
         layout = QtWidgets.QVBoxLayout(self._hypLabel)
@@ -119,7 +141,7 @@ class UiPanels(object):
             label.setFont(self._font)
             layout.addWidget(label)
             self._hypYLabels.append(label)
-        self._chanGrid.addWidget(self._hypLabel, len(self) + 2, 0, 1, 1)
+        self._chanGrid.addWidget(self._hypLabel, len(self) + 3, 0, 1, 1)
         PROFILER("Hypnogram", level=2)
         # Connect :
         self._PanHypnoReset.clicked.connect(self._fcn_hypno_clean)
@@ -163,12 +185,12 @@ class UiPanels(object):
         self._TimeLayout.addWidget(self._TimeAxis.canvas.native)
         self._TimeAxisW.setMaximumHeight(400)
         self._TimeAxisW.setMinimumHeight(50)
-        self._chanGrid.addWidget(self._TimeAxisW, len(self) + 3, 1, 1, 1)
+        self._chanGrid.addWidget(self._TimeAxisW, len(self) + 4, 1, 1, 1)
         # Add label :
         self._timeLabel = QtWidgets.QLabel(self.centralwidget)
         self._timeLabel.setText(self._addspace + 'Time')
         self._timeLabel.setFont(self._font)
-        self._chanGrid.addWidget(self._timeLabel, len(self) + 3, 0, 1, 1)
+        self._chanGrid.addWidget(self._timeLabel, len(self) + 4, 0, 1, 1)
         PROFILER("Time axis", level=2)
 
     # =====================================================================
