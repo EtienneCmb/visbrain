@@ -239,7 +239,8 @@ class ChannelPlot(PrepareData):
 
         # Create one line per channel :
         pos = np.zeros((1, 3), dtype=np.float32)
-        self.mesh, self.report, self.grid, self.peak = [], [], [], []
+        self.mesh, self.report, self.grid, self.peak, self.scorwin_ind = \
+            [], [], [], [], []
         self.loc, self.node = [], []
         for i, k in enumerate(channels):
             # ----------------------------------------------
@@ -278,6 +279,12 @@ class ChannelPlot(PrepareData):
                                            parent=parent[i].wc.scene)
             grid.set_gl_state('translucent')
             self.grid.append(grid)
+
+            # ----------------------------------------------
+            # Create a scoring window indicator :
+            scorwin_ind = ScorWinIndicator(parent=node, name=k + '_scorwin_ind',
+                                           visible=True)
+            self.scorwin_ind.append(scorwin_ind)
 
     def __iter__(self):
         """Iterate over visible mesh."""
@@ -824,6 +831,69 @@ class Indicator(object):
         self.mesh.parent = None
         self.mesh = None
 
+"""
+###############################################################################
+# SCORING WINDOW INDICATOR
+###############################################################################
+The scoring window indicators can be used to show the limits of the current
+scoring window on each of the channel plots. On each of the channel plots, the 
+scoring window indicator consists in two vertical bars marking the start and end
+of the window"""
+
+
+class ScorWinIndicator(object):
+    """Create a visual indicator of scoring window (for channel plots)."""
+
+    def __init__(self, name='scorwinindicator', alpha=.75, visible=True,
+        parent=None, color='red', barwidth=.20):
+        # width of the vertical bars
+        self.barwidth = barwidth
+        # Create two vispy image object for the start and end of window
+        # "Start mesh" : first vertical bar
+        image_start = color2vb(color, alpha=alpha)[np.newaxis, ...]
+        self.mesh_start = scene.visuals.Image(data=image_start, name=name,
+                                              parent=parent)
+        self.mesh_start.transform = vist.STTransform()
+        self.mesh_start.visible = visible
+        # "End mesh" : second vertical bar
+        image_end = color2vb(color, alpha=alpha)[np.newaxis, ...]
+        self.mesh_end = scene.visuals.Image(data=image_end, name=name,
+                                            parent=parent)
+        self.mesh_end.transform = vist.STTransform()
+        self.mesh_end.visible = visible
+
+    def set_data(self, x_start, x_end, ylim):
+        """Move the vertical bars
+
+        Parameters
+        ----------
+        x_start: float
+            A float indicating where the "start" bar is centered
+        x_end: float
+            A float indicating where the "end" bar is centered
+        ylim : tuple
+            A tuple of two floats indicating the vertical limits of both bars
+        """
+        # xlim of each bar
+        xlim_start = (x_start - self.barwidth/2, x_start + self.barwidth/2)
+        xlim_end = (x_end - self.barwidth/2, x_end + self.barwidth/2)
+        # Displacement for each bar
+        tox_start = (xlim_start[0], ylim[0], -1.)
+        sc_start = (xlim_start[1] - xlim_start[0], ylim[1] - ylim[0], 1.)
+        tox_end = (xlim_end[0], ylim[0], -1.)
+        sc_end = (xlim_end[1] - xlim_end[0], ylim[1] - ylim[0], 1.)
+        # Move the two bars
+        self.mesh_start.transform.translate = tox_start
+        self.mesh_start.transform.scale = sc_start
+        self.mesh_end.transform.translate = tox_end
+        self.mesh_end.transform.scale = sc_end
+
+    def clean(self):
+        """Clean indicators."""
+        self.mesh_start.parent = None
+        self.mesh_start = None
+        self.mesh_end.parent = None
+        self.mesh_end = None
 
 """
 ###############################################################################
