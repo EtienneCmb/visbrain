@@ -334,6 +334,8 @@ class UiPanels(object):
                     self._chan.x[1] - self._chan.x[0],
                     self._ylims[k, 1] - self._ylims[k, 0])
             self._chanCam[k].rect = rect
+        # Redraw scoring window indicators
+        self._update_scorwin_indicator()
 
     def _fcn_all_amp(self):
         """Set all channel amplitudes."""
