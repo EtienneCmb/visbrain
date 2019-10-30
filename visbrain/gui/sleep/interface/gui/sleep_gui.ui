@@ -4331,12 +4331,12 @@ display</string>
                 <number>7</number>
                </property>
                <property name="verticalSpacing">
-                <number>9</number>
+                <number>2</number>
                </property>
                <item row="0" column="0" colspan="18">
                 <layout class="QHBoxLayout" name="horizontalLayout_22">
                  <property name="topMargin">
-                  <number>6</number>
+                  <number>3</number>
                  </property>
                  <item>
                   <widget class="QLabel" name="_txtCursor">
@@ -4633,29 +4633,36 @@ display</string>
                  </property>
                 </spacer>
                </item>
-               <item row="2" column="19">
-                <widget class="QCheckBox" name="_slGrid">
-                 <property name="text">
-                  <string>Grid</string>
+               <item row="3" column="0" colspan="18">
+                <layout class="QHBoxLayout" name="horizontalLayout_22_1">
+                 <property name="bottomMargin">
+                  <number>3</number>
                  </property>
-                 <property name="checked">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="20">
-                <widget class="QCheckBox" name="_slAbsTime">
-                 <property name="text">
-                  <string>Absolute time</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="21">
-                <widget class="QCheckBox" name="_slMagnify">
-                 <property name="text">
-                  <string>Magnify</string>
-                 </property>
-                </widget>
+                 <item>
+                  <widget class="QCheckBox" name="_slGrid">
+                   <property name="text">
+                    <string>Grid</string>
+                   </property>
+                   <property name="checked">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="_slAbsTime">
+                   <property name="text">
+                    <string>Absolute time</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="_slMagnify">
+                   <property name="text">
+                    <string>Magnify</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </item>
               </layout>
              </item>
