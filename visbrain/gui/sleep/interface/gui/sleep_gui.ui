@@ -4780,6 +4780,7 @@ display</string>
     </property>
     <addaction name="menuDispSettings"/>
     <addaction name="menuDispSpec"/>
+    <addaction name="menuDispWinHypno"/>
     <addaction name="menuDispHypno"/>
     <addaction name="menuDispTimeax"/>
     <addaction name="menuDispNavbar"/>
@@ -5099,6 +5100,17 @@ display</string>
    </property>
    <property name="shortcut">
     <string>S</string>
+   </property>
+  </action>
+  <action name="menuDispWinHypno">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Window Hypnogram</string>
    </property>
   </action>
   <action name="menuDispHypno">

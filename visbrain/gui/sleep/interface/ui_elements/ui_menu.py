@@ -69,7 +69,9 @@ class UiMenu(HelpMenu):
         self.q_widget.setVisible(True)
         # Spectrogram :
         self.menuDispSpec.triggered.connect(self._disptog_spec)
-        # Hypnogram :
+        # Window Hypnogram :
+        self.menuDispWinHypno.triggered.connect(self._disptog_winhyp)
+        # (Pan) Hypnogram :
         self.menuDispHypno.triggered.connect(self._disptog_hyp)
         # Time axis :
         self.menuDispTimeax.triggered.connect(self._disptog_timeax)
@@ -515,6 +517,13 @@ class UiMenu(HelpMenu):
         viz = self.menuDispSpec.isChecked()
         self._SpecW.setVisible(viz)
         self._specLabel.setVisible(viz)
+
+    def _disptog_winhyp(self):
+        """Toggle method for display / hide the window hypnogram.
+        """
+        viz = self.menuDispWinHypno.isChecked()
+        self._WinHypW.setVisible(viz)
+        self._winHypLabel.setVisible(viz)
 
     def _disptog_hyp(self):
         """Toggle method for display / hide the hypnogram.
