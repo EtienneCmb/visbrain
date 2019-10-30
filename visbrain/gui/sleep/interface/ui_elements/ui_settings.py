@@ -243,6 +243,8 @@ class UiSettings(object):
         ## Change value of slider step to make it equal to the scoring window
         scorwin = self._ScorWin.value()
         self._SigSlStep.setValue(scorwin)
+        ## Make the scoring window visible
+        self._ScorWinVisible.setChecked(True)
         ## Change the text info:
         # Gather values of parameters of interest
         # Slider/windows 
