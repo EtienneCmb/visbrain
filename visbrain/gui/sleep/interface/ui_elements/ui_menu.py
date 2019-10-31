@@ -268,6 +268,7 @@ class UiMenu(HelpMenu):
             config['Goto'] = self._SlGoto.value()
             config['Magnify'] = self._slMagnify.isChecked()
             config['AbsTime'] = self._slAbsTime.isChecked()
+            config['Display_Scoring_Window'] = self._ScorWinVisible.isChecked()
             config['Grid'] = self._slGrid.isChecked()
             config['Unit'] = self._slRules.currentIndex()
             save_config_json(filename, config)
@@ -393,6 +394,7 @@ class UiMenu(HelpMenu):
                 _try("self._slMagnify.setChecked(config['Magnify'])")
                 _try("self._slAbsTime.setChecked(config['AbsTime'])")
                 _try("self._slGrid.setChecked(config['Grid'])")
+                _try("self._ScorWinVisible.setChecked(config['Display_Scoring_Window'])")
                 _try("self._slRules.setCurrentIndex(config['Unit'])")
                 # Update display
                 self._fcn_chan_viz()
