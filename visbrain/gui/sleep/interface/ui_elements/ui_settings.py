@@ -385,6 +385,10 @@ class UiSettings(object):
         self._hyp.set_stage(*args, **kwargs)
         self._winhyp.set_stage(*args, **kwargs)
 
+    def _set_hyp_data(self, *args, **kwargs):
+        self._hyp.set_data(*args, **kwargs)
+        self._winhyp.set_data(*args, **kwargs)
+
 
     # =====================================================================
     # Annotate

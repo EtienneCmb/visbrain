@@ -509,7 +509,8 @@ class UiPanels(object):
     def _fcn_set_hypno_lw(self):
         """Change the line width of the hypnogram."""
         self._hyp.width = self._PanHypnoLw.value()
-        self._hyp.set_data(self._sf, self._hypno, self._time)
+        self._winhyp.width = self._PanHypnoLw.value()
+        self._set_hyp_data(self._sf, self._hypno, self._time)
 
     def _fcn_set_hypno_color(self):
         """Change the color of the hypnogram."""
@@ -521,8 +522,9 @@ class UiPanels(object):
         # Get color :
         zp = zip(color.keys(), color.values())
         self._hyp.color = {k: color2vb(color=i) for k, i in zp}
-        # Update hypnogram
-        self._hyp.set_data(self._sf, self._hypno, self._time)
+        self._winhyp.color = self._hyp.color
+        # Update hypnograms
+        self._set_hyp_data(self._sf, self._hypno, self._time)
 
     def _fcn_hypno_clean(self):
         """Clean the hypnogram."""
@@ -536,6 +538,7 @@ class UiPanels(object):
         if reply == QtWidgets.QMessageBox.Yes:
             self._hypno = np.zeros((len(self._hyp),), dtype=np.float32)
             self._hyp.clean(self._sf, self._time)
+            self._winhyp.clean(self._sf, self._time)
             # Update info table :
             self._fcn_info_update()
             # Update scoring table :
