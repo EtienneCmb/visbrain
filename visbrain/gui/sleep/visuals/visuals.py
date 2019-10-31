@@ -732,6 +732,12 @@ class Hypnogram(object):
         self.edit.set_data(pos=posedit, face_color='gray')
 
     # ----------- RECT -----------
+    def set_rect_x(self, start, end):
+        """Change the rect horizontal delimitation."""
+        rect = self.rect
+        # (x_start, y_start, x_size, y_size)
+        self.rect = (start, rect[1], end - start, rect[3])
+
     @property
     def rect(self):
         """Get the rect value."""

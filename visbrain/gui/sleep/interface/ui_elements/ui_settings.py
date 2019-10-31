@@ -143,6 +143,9 @@ class UiSettings(object):
         # Redraw the scoring window indicators
         self._update_scorwin_indicator()
 
+        # Update display signal on window histogram (move camera)
+        self._winhyp.set_rect_x(*xlim)
+
         # ---------------------------------------
         is_indic_checked = self.menuDispIndic.isChecked()
         # Update spectrogram indicator :
@@ -371,12 +374,17 @@ class UiSettings(object):
         t[1] = int(round(np.abs(self._time - xlim_scor[1]).argmin()))
         # Set the stage :
         self._hypno[t[0]:t[1]] = stage
-        self._hyp.set_stage(t[0], t[1], stage)
+        self._set_hyp_stage(t[0], t[1], stage)
         # # Update info table :
         self._fcn_info_update()
         # Update scoring table :
         self._fcn_hypno_to_score()
         # self._fcn_score_to_hypno()
+
+    def _set_hyp_stage(self, *args, **kwargs):
+        self._hyp.set_stage(*args, **kwargs)
+        self._winhyp.set_stage(*args, **kwargs)
+
 
     # =====================================================================
     # Annotate
