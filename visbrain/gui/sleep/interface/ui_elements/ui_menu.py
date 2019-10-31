@@ -325,7 +325,7 @@ class UiMenu(HelpMenu):
             # Load the hypnogram :
             self._hypno, _ = read_hypno(filename, time=self._time)
             self._hypno = oversample_hypno(self._hypno, self._N)[::self._dsf]
-            self._hyp.set_data(self._sf, self._hypno, self._time)
+            self._set_hyp_data(self._sf, self._hypno, self._time)
             # Update info table :
             self._fcn_info_update()
             # Update scoring table :
