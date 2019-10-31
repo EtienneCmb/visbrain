@@ -412,6 +412,7 @@ class UiMenu(HelpMenu):
                 self._disptog_indic()
                 self._disptog_zoom()
                 self._fcn_grid_toggle()
+                self._fcn_scorwin_indicator_toggle()
                 self._fcn_update_amp_info()
                 self._fcn_chan_auto_amp()
                 self._fcn_chan_sym_amp()
