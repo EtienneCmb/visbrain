@@ -59,8 +59,9 @@ class UiScoring(object):
                 # Update pos if not None :
                 if tstart is not None:
                     self._hypno[tstart:tend] = stage
-                    self._hyp.set_stage(tstart, tend, stage)
+                    self._set_hyp_stage(tstart, tend, stage)
             self._hyp.edit.update()
+            self._winhyp.edit.update()
             # Update sleep info :
             self._fcn_info_update()
 
