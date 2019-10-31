@@ -331,6 +331,9 @@ class UiSettings(object):
             # Hide the scoring window indicators
             self._ScorWinVisible.setChecked(False)
             self._fcn_scorwin_indicator_toggle()
+            # Hide the Window Hypnogram
+            self.menuDispWinHypno.setChecked(False)
+            self._disptog_winhyp()
         # If unlocking
         else:
             # Show the scoring window
