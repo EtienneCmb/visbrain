@@ -4672,6 +4672,16 @@ display</string>
                    </property>
                   </widget>
                  </item>
+                 <item>
+                  <widget class="QCheckBox" name="_LockScorSigWins">
+                   <property name="text">
+                    <string>Lock scoring to display</string>
+                   </property>
+                   <property name="checked">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
                 </layout>
                </item>
               </layout>

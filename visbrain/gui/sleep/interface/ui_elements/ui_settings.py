@@ -45,6 +45,8 @@ class UiSettings(object):
         self._slMagnify.clicked.connect(self._fcn_slider_magnify)
         # Visible scoring window indicator :
         self._ScorWinVisible.clicked.connect(self._fcn_scorwin_indicator_toggle)
+        # Lock scoring window to the display window
+        self._LockScorSigWins.clicked.connect(self._fcn_lock_scorwin_sigwin)
         # Annotation from the navigation bar :
         self._AnnotateRun.clicked.connect(self._fcn_annotate_nav)
 
@@ -109,8 +111,6 @@ class UiSettings(object):
         for i, chan in self._chan:
             self._chan.scorwin_ind[i].set_data(xlim_scor[0], xlim_scor[1],
                                                self._ylims[i, :])
-        # Toggle bar visibility
-        self._fcn_scorwin_indicator_toggle()
 
     def _fcn_slider_move(self):
         """Function applied when the slider move."""
@@ -235,16 +235,27 @@ class UiSettings(object):
         # Change maximum allowed value of the scoring window
         win = self._SigWin.value()
         self._ScorWin.setMaximum(win)
+        # In "Lock" mode
+        if self._LockScorSigWins.isChecked():
+            # Change the scoring window value without unlocking
+            self._ScorWin.blockSignals(True)
+            self._ScorWin.setValue(win)
+            self._ScorWin.blockSignals(False)
+            # Change the slider step size
+            self._SigSlStep.setValue(win)
         # Redraw stuff as if we were moving the slider
         self._fcn_slider_move()
 
     def _fcn_scorwin_settings(self):
         """Function applied when changing the scoring window size."""
+        ## Unlock the scoring window
+        self._LockScorSigWins.setChecked(False)
+        ## Make the scoring window visible
+        self._ScorWinVisible.setChecked(True)
+        self._fcn_scorwin_indicator_toggle()
         ## Change value of slider step to make it equal to the scoring window
         scorwin = self._ScorWin.value()
         self._SigSlStep.setValue(scorwin)
-        ## Make the scoring window visible
-        self._ScorWinVisible.setChecked(True)
         ## Change the text info:
         # Gather values of parameters of interest
         # Slider/windows 
@@ -303,6 +314,25 @@ class UiSettings(object):
         for i, chan in self._chan:
             self._chan.scorwin_ind[i].mesh_start.visible = viz
             self._chan.scorwin_ind[i].mesh_end.visible = viz
+
+    # =====================================================================
+    # LOCK SCORING WINDOW TO DISPLAY WINDOW
+    # =====================================================================
+    def _fcn_lock_scorwin_sigwin(self):
+        """Toggle locking of scoring window to display window."""
+        locked = self._LockScorSigWins.isChecked()
+        # If locking
+        if locked:
+            # Set _ScorWin to _SigWin
+            self._ScorWin.setValue(self._SigWin.value())
+            # Hide the scoring window indicators
+            self._ScorWinVisible.setChecked(False)
+            self._fcn_scorwin_indicator_toggle()
+        # If unlocking
+        else:
+            # Show the scoring window
+            self._ScorWinVisible.setChecked(True)
+            self._fcn_scorwin_indicator_toggle()
 
     # =====================================================================
     # RULER
