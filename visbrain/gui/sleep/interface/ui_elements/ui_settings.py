@@ -83,9 +83,9 @@ class UiSettings(object):
     @property
     def _hypref(self):
         """Return ref value of "current" stage."""
-        # "Current" is at start of display window
-        xlim = self._xlim
-        t = self.data_index(xlim)
+        # "Current" is at start of scoring window
+        xlim_scor = self._xlim_scor
+        t = self.data_index(xlim_scor)
         return int(self._hypno[t[0]])
 
     @property
