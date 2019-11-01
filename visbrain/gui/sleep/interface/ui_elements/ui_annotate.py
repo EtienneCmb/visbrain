@@ -21,11 +21,8 @@ class UiAnnotate(object):
         self._AnnotateTable.setRowCount(self._AnnotateTable.rowCount() + 1)
         rw = self._AnnotateTable.rowCount() - 1
         if xlim is None:
-            # Get the current window :
-            val = self._SlVal.value()
-            step = self._SigSlStep.value()
-            win = self._SigWin.value()
-            xlim = (val * step, val * step + win)
+            # Get the current scoring window :
+            xlim = self._xlim_scor
         # Automatically set the window :
         self._AnnotateTable.setItem(rw, 0, QtWidgets.QTableWidgetItem(
             str(xlim[0])))
