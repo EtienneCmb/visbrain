@@ -347,8 +347,10 @@ class UiSettings(object):
         locked = self._LockScorSigWins.isChecked()
         # If locking
         if locked:
-            # Set _ScorWin to _SigWin
+            # Set _ScorWin to _SigWin without unlocking
+            self._ScorWin.blockSignals(True)
             self._ScorWin.setValue(self._SigWin.value())
+            self._ScorWin.blockSignals(False)
             # Hide the scoring window indicators
             self._ScorWinVisible.setChecked(False)
             self._fcn_scorwin_indicator_toggle()
