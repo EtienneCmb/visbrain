@@ -155,7 +155,13 @@ class UiSettings(object):
         # Change width of bars (so they don't become too small or too big) when
         # display window changes
         def barwidth():
-            return self._SigWin.value() * 0.2 / 30.0
+            return min(
+                self._SigWin.value() * 0.2 / 30.0, # Constant apparent value
+                max(
+                    0.05,
+                    (xlim_scor[1] - xlim_scor[0])/2 - 0.05
+                ), # Skinny bars if the scoring window is v small
+            )
         # Redraw bars
         for i, chan in self._chan:
             self._chan.scorwin_ind[i].set_data(xlim_scor[0], xlim_scor[1],

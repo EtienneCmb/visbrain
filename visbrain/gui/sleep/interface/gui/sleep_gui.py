@@ -1765,6 +1765,7 @@ class Ui_MainWindow(object):
         self.gridLayout_7.addWidget(self.label_3_1, 2, 8, 1, 1)
         self._ScorWin = QtWidgets.QDoubleSpinBox(self._slFrame)
         self._ScorWin.setDecimals(1)
+        self._ScorWin.setMinimum(0.1)
         self._ScorWin.setMaximum(1000.0)
         self._ScorWin.setProperty("value", 30.0)
         self._ScorWin.setObjectName("_ScorWin")
