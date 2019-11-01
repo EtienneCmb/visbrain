@@ -149,12 +149,18 @@ class UiSettings(object):
                                    hypcol + ";}")
 
     def _update_scorwin_indicator(self):
+        """Change location and width of scoring window indicator bars."""
         # Get scoring window x_start x_end
         xlim_scor = self._xlim_scor
-        # Move bars
+        # Change width of bars (so they don't become too small or too big) when
+        # display window changes
+        def barwidth():
+            return self._SigWin.value() * 0.2 / 30.0
+        # Redraw bars
         for i, chan in self._chan:
             self._chan.scorwin_ind[i].set_data(xlim_scor[0], xlim_scor[1],
-                                               self._ylims[i, :])
+                                               self._ylims[i, :],
+                                               barwidth = barwidth())
 
     def _fcn_slider_move(self):
         """Function applied when the slider move."""

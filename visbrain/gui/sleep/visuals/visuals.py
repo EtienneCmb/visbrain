@@ -868,8 +868,8 @@ class ScorWinIndicator(object):
         self.mesh_end.transform = vist.STTransform()
         self.mesh_end.visible = visible
 
-    def set_data(self, x_start, x_end, ylim):
-        """Move the vertical bars
+    def set_data(self, x_start, x_end, ylim, barwidth=None):
+        """Redraw the vertical bars
 
         Parameters
         ----------
@@ -879,7 +879,12 @@ class ScorWinIndicator(object):
             A float indicating where the "end" bar is centered
         ylim : tuple
             A tuple of two floats indicating the vertical limits of both bars
+        barwidth: float
+            A float indicating the new width of the indicator bars
         """
+        # Change barwidth
+        if barwidth is not None:
+            self.barwidth = barwidth
         # xlim of each bar
         xlim_start = (x_start - self.barwidth/2, x_start + self.barwidth/2)
         xlim_end = (x_end - self.barwidth/2, x_end + self.barwidth/2)
