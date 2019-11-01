@@ -351,6 +351,8 @@ class UiSettings(object):
             self._ScorWin.blockSignals(True)
             self._ScorWin.setValue(self._SigWin.value())
             self._ScorWin.blockSignals(False)
+            # Set stepsize to _SigWin
+            self._SigSlStep.setValue(self._SigWin.value())
             # Hide the scoring window indicators
             self._ScorWinVisible.setChecked(False)
             self._fcn_scorwin_indicator_toggle()
