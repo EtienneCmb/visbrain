@@ -50,19 +50,68 @@ class UiSettings(object):
         # Annotation from the navigation bar :
         self._AnnotateRun.clicked.connect(self._fcn_annotate_nav)
 
-    @staticmethod
-    def _scoring_window_xlim(xlim, scorwin):
-        """Define scoring window xlim from scoring window size and SigWin."""
+    # =====================================================================
+    # Properties and utility functions
+    # =====================================================================
+
+    @property
+    def _xlim(self):
+        """Display window xlim: (start, end)."""
+        val = self._SlVal.value()
+        step = self._SigSlStep.value()
+        win = self._SigWin.value()
+        return (val * step, val * step + win)
+
+    @property
+    def _xlim_scor(self):
+        """Scoring window xlim: (start, end) from _ScorWin and _SigWin."""
+        scorwin = self._ScorWin.value()
+        xlim = self._xlim
         xhalf = (xlim[1] - xlim[0])/2 + xlim[0]
         return (
             max(xlim[0], xhalf - scorwin/2),
             min(xlim[1], xhalf + scorwin/2)
         ) # Centered to display window
 
+    def data_index(self, xlim):
+        """Closest time index of data from xlim."""
+        t = [0, 0]
+        t[0] = int(round(np.abs(self._time - xlim[0]).argmin()))
+        t[1] = int(round(np.abs(self._time - xlim[1]).argmin()))
+        return t
+
+    @property
+    def _hypref(self):
+        """Return ref value of "current" stage."""
+        # "Current" is at start of display window
+        xlim = self._xlim
+        t = self.data_index(xlim)
+        return int(self._hypno[t[0]])
+
+    @property
+    def _hypconv(self):
+        """Return converted value of "current" stage."""
+        return self._hconv[self._hypref]
+
+    @property
+    def _stage_name(self):
+        """Return name of "current" stage."""
+        return str(self._hypYLabels[self._hypconv + 2].text())
+
+    @property
+    def _stage_color(self):
+        """Return color of "current" stage."""
+        return self._hypcolor[self._hypconv]
+
     # =====================================================================
     # SLIDER, DISPLAY WINDOW AND SCORING WINDOW
     # =====================================================================
-    def _update_text_info(self, xlim, xlim_scor, hypcol, stage):
+    def _update_text_info(self):
+        """Redraw the text info in the settings pane."""
+        xlim = self._xlim
+        xlim_scor = self._xlim_scor
+        stage = self._stage_name
+        hypcol = self._stage_color
         # Get unit and convert:
         if self._slAbsTime.isChecked():
             xlim = np.asarray(xlim) + self._toffset
@@ -101,12 +150,7 @@ class UiSettings(object):
 
     def _update_scorwin_indicator(self):
         # Get scoring window x_start x_end
-        val = self._SlVal.value()
-        step = self._SigSlStep.value()
-        win = self._SigWin.value()
-        xlim = (val * step, val * step + win)
-        scorwin = self._ScorWin.value()
-        xlim_scor = self._scoring_window_xlim(xlim, scorwin)
+        xlim_scor = self._xlim_scor
         # Move bars
         for i, chan in self._chan:
             self._chan.scorwin_ind[i].set_data(xlim_scor[0], xlim_scor[1],
@@ -116,23 +160,17 @@ class UiSettings(object):
         """Function applied when the slider move."""
         # ================= INDEX =================
         # Get slider variables :
-        val = self._SlVal.value()
-        step = self._SigSlStep.value()
         win = self._SigWin.value()
-        xlim = (val * step, val * step + win)
-        scorwin = self._ScorWin.value()
-        xlim_scor = self._scoring_window_xlim(xlim, scorwin)
+        xlim = self._xlim
+        xlim_scor = self._xlim_scor
         iszoom = self.menuDispZoom.isChecked()
         unit = str(self._slRules.currentText())
-        # Find closest time index :
-        t = [0, 0]
-        t[0] = int(round(np.abs(self._time - xlim[0]).argmin()))
-        t[1] = int(round(np.abs(self._time - xlim[1]).argmin()))
+        # Find closest data time index for display window start/end
+        t = self.data_index(xlim)
         # Hypnogram info :
-        hypref = int(self._hypno[t[0]])
-        hypconv = self._hconv[hypref]
-        hypcol = self._hypcolor[hypconv]
-        stage = str(self._hypYLabels[hypconv + 2].text())
+        stage = self._stage_name
+        hypconv = self._hypconv
+        hypcol = self._stage_color
 
         # ================= MESH UPDATES =================
         # ---------------------------------------
@@ -182,7 +220,7 @@ class UiSettings(object):
 
         # ================= GUI =================
         # Update Go to :
-        self._SlGoto.setValue(val * step)
+        self._SlGoto.setValue(xlim[0])
 
         # ================= ZOOMING =================
         if iszoom:
@@ -198,7 +236,7 @@ class UiSettings(object):
             self._timecam.rect = (xlim[0], 0., win, 1.)
 
         # ================= TEXT INFO =================
-        self._update_text_info(xlim, xlim_scor, hypcol, stage)
+        self._update_text_info()
 
         # ================= HYPNO LABELS =================
         for k in self._hypYLabels:
@@ -260,24 +298,7 @@ class UiSettings(object):
         scorwin = self._ScorWin.value()
         self._SigSlStep.setValue(scorwin)
         ## Change the text info:
-        # Gather values of parameters of interest
-        # Slider/windows 
-        val = self._SlVal.value()
-        step = self._SigSlStep.value()
-        win = self._SigWin.value()
-        xlim = (val * step, val * step + win)
-        scorwin = self._ScorWin.value()
-        xlim_scor = self._scoring_window_xlim(xlim, scorwin)
-        # Find closest time index :
-        t = [0, 0]
-        t[0] = int(round(np.abs(self._time - xlim[0]).argmin()))
-        t[1] = int(round(np.abs(self._time - xlim[1]).argmin()))
-        # hypnogram
-        hypref = int(self._hypno[t[0]])
-        hypconv = self._hconv[hypref]
-        hypcol = self._hypcolor[hypconv]
-        stage = str(self._hypYLabels[hypconv + 2].text())
-        self._update_text_info(xlim, xlim_scor, hypcol, stage)
+        self._update_text_info()
         ## Redraw the scoring window indicator bars
         self._update_scorwin_indicator()
 
@@ -363,18 +384,10 @@ class UiSettings(object):
     # =====================================================================
     def _add_stage_on_scorwin(self, stage):
         """Change the stage on the current scoring window."""
-        # Get the window :
-        win = self._SigWin.value()
-        val = self._SlVal.value()
-        step = self._SigSlStep.value()
-        xlim = (val * step, val * step + win)
-        # Get the scoring window :
-        scorwin = self._ScorWin.value()
-        xlim_scor = self._scoring_window_xlim(xlim, scorwin)
-        # Find closest time index :
-        t = [0, 0]
-        t[0] = int(round(np.abs(self._time - xlim_scor[0]).argmin()))
-        t[1] = int(round(np.abs(self._time - xlim_scor[1]).argmin()))
+        # Get the scoring window xlim
+        xlim_scor = self._xlim_scor
+        # Find closest data time index from xlim
+        t = self.data_index(xlim_scor)
         # Set the stage :
         self._hypno[t[0]:t[1]] = stage
         self._set_hyp_stage(t[0], t[1], stage)
