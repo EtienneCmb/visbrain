@@ -325,6 +325,8 @@ class UiPanels(object):
             self._fcn_chan_amplitude()
         else:
             self._chan.update()
+        # Redraw scoring window indicators
+        self._update_scorwin_indicator()
 
     def _fcn_chan_sym_amp(self):
         """Use symetric amplitudes."""
