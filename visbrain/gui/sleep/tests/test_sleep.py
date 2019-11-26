@@ -64,6 +64,24 @@ class TestSleep(_TestVisbrain):
         sp._fcn_annotate_rm()
         # Go to :
         sp._fcn_annotate_goto()
+    
+    def test_ui_settings(self):
+        """Test method for setting changes."""
+        # Test settings in "locked" mode
+        sp._fcn_slider_move()
+        sp._fcn_slider_settings()
+        sp._fcn_sigwin_settings()
+        # Change scoring window settings (unlocks) and show window hypnogram
+        sp._fcn_scorwin_settings()
+        sp.menuDispWinHypno.setChecked(True)
+        sp._disptog_winhyp()
+        # Test settings in "unlocked" mode
+        sp._fcn_slider_move()
+        sp._fcn_slider_settings()
+        sp._fcn_sigwin_settings()
+        # Re-lock scoring window to display window (makes winhyp disappear)
+        sp._LockScorSigWins.setChecked(True)
+        sp._fcn_lock_scorwin_sigwin()
 
     ###########################################################################
     #                                SAVE
