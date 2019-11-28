@@ -163,9 +163,12 @@ class UiSettings(object):
                 ), # Skinny bars if the scoring window is v small
             )
         # Redraw bars
-        for i, chan in self._chan:
+        for i, _ in self._chan:
+            # Get current ylims of channel cameras from their `rect`
+            cam_rect = self._chanCam[i].rect
+            ycam = (cam_rect.bottom, cam_rect.top)
             self._chan.scorwin_ind[i].set_data(xlim_scor[0], xlim_scor[1],
-                                               self._ylims[i, :],
+                                               ycam,
                                                barwidth = barwidth())
 
     def _fcn_slider_move(self):
