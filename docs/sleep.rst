@@ -13,10 +13,8 @@ Sleep
 
 Checkout the API of the :class:`visbrain.gui.Sleep` class. If you need help with the :class:`Sleep` module, ask your questions in the dedicated `gitter Sleep chat <https://gitter.im/visbrain-python/Sleep?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
 
-.. raw:: html
-
-    <img alt="_static/sleep/sleep_main.png" src="_static/sleep/sleep_main.png" align="center"></p>
-  </div>
+.. figure::  _static/sleep/sleep_main.png
+   :align:   center
 
 .. contents:: Contents
    :local:
@@ -130,16 +128,20 @@ The contextual menu allows to perform several functions such as the loading and 
 **Main window** :
     * Polysomnographic data
     * Spectrogram (= time-frequency) of the whole recording
-    * Hypnogram
+    * Whole recording hypnogram
+    * Display window hypnogram (*hidden by default*)
     * Topoplot (*hidden by default*)
 
 **Navigation bar** :
     * *Go to* : go to the time location of your choice
-    * *Window* : length of the displayed time window
-    * *Slider step* : step between each consecutive window
+    * *[Display] Window* : length of the displayed time window
+    * *Scoring window* : length of the scoring time window 
+    * *Slider step* : step between each consecutive display windows
     * *Rule* : display unit in second, minute or hours
     * *Grid* : display the grid on the hypnogram and channel plot
     * *Magnify* : apply a zoom on the signal (e.g. useful to examine short events such as spindles). Alternatively, you can use CTRL + click at any time to zoom on a specific signal and time point.
+    * *Display scoring window* : Hide or display vertical bars onto the data to indicate the limits of the current scoring window.
+    * *Lock scoring to display* : When this option is selected (default), the scoring window is equal to the display window. When this option is off, the epoch used for scoring can be independent from the displayed epoch. See :ref:`hypnogram_scoring`..
 
 **Settings panel** :
 The setting panels is where most of the (advanced) functions of the software are! Among other things, you can control which channel to display, adjust the amplitudes, customize the spectrogram and hypnogram, compute the duration of each sleep stage, add annotations to the recording, and perform a bunch of semi-automatic detection (spindles, K-complexes...). See the section :ref:`sleep_settings_panel` for a description of each tab.
@@ -571,34 +573,6 @@ Hypnogram scoring
 
 Sleep offers two possibilities to score the hypnogram: using shortcuts or using the :ref:`scoretable`.
 
-.. figure::  _static/sleep/sleep_scoring.png
-   :align:   center
-
-   Hypnogram scoring.
-
-.. _navigation:
-
-Navigation
-^^^^^^^^^^
-
-This is probably the most useful editing method. While you are scrolling through your data, simply press on your keyboard to insert a sleep stage. Use the key below :
-
-==============          =================
-Keys                    Description
-==============          =================
-a                       Artefact
-w                       Wake stage
-1                       N1 stage
-2                       N2 stage
-3                       N3 stage
-r                       REM stage
-==============          =================
-
-After pressing one of those keys, the software will automatically scroll through to the next epoch so that you can continue scoring.
-
-.. warning::
-   If no canvas are selected the shortcuts might not work. Simply click on a canvas (on a channel / spectrogram / hypnogram) before starting to score to avoid this issue.
-
 .. _scoretable:
 
 Scoring table
@@ -614,6 +588,60 @@ At the end of the hypnogram, you can **Add line** or **Remove line** when a line
 
 .. note::
     You can export either the raw hypnogram values, the hypnogram scoring table, or a high-quality figure of the hypnogram using the  *Files > Save* contextual menu.
+
+.. _navigation:
+
+Navigation
+^^^^^^^^^^
+
+This is probably the most useful editing method, as it allows scoring while scrolling through your data. 
+
+To insert a sleep stage, use the keys below :
+
+==============          =================
+Keys                    Description
+==============          =================
+a                       Artefact
+w                       Wake stage
+1                       N1 stage
+2                       N2 stage
+3                       N3 stage
+r                       REM stage
+==============          =================
+
+After pressing one of those keys, the software will score accordingly the current "Scoring window", and scroll through to the next epoch so that you can continue scoring.
+
+The software supports two modes of scoring, to allow scoring of both human or animal data:
+
+* **In "locked" mode (option "Lock scoring to display" checked), the "scoring
+window" is always equal to the display window**, and pressing a key will score
+the whole displayed epoch. By default in this mode, the slider step is equal
+to the duration of the displayed epoch. This mode is useful for scoring human datasets.
+
+* **In "unlocked" mode (option "Lock scoring to display" unchecked), the "scoring
+window" is independent from the display window**, letting the user score short
+epochs while visualizing the data around the scored epochs. The limits of the
+scoring window are indicated by vertical bars on the channel plots (which can be
+hidden by toggling the "Display scoring window" option). By displaying the
+"Window Hypnogram" (in the menu options), the user can also see the hypnogram
+stages within the whole displayed epoch, and thus around the scored epoch. This is
+typically useful for scoring animal datasets. By default in this mode, the
+slider step is equal to the duration of the scoring window. The software will
+switch automatically to the "unlocked" mode when explicitly changing the scoring
+window size. 
+
+
+.. warning::
+   If no canvas are selected the shortcuts might not work. Simply click on a canvas (on a channel / spectrogram / hypnogram) before starting to score to avoid this issue.
+
+.. figure::  _static/sleep/sleep_scoring_locked.png
+   :align:   center
+   Score the whole displayed epoch
+
+.. figure::  _static/sleep/sleep_scoring_unlocked.png
+   :align:   center
+   Score the epoch within the centered "scoring window"
+
 
 .. ----------------------------------------------------------------------------
 ..                              DETECTIONS
