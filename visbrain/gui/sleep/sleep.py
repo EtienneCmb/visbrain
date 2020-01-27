@@ -241,13 +241,10 @@ class Sleep(_PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
         self._chanCam = []
         for k in range(len(self)):
             self._chanCam.append(FixedCam())  # viscam.PanZoomCamera()
-        # ------------------- Window Hypnogram -------------------
-        self._winhypcam = FixedCam()  # viscam.PanZoomCamera()
-        self._winHypCanvas.set_camera(self._winhypcam)
         # ------------------- Spectrogram -------------------
         self._speccam = FixedCam()  # viscam.PanZoomCamera()
         self._specCanvas.set_camera(self._speccam)
-        # ------------------- (Pan) Hypnogram -------------------
+        # ------------------- Hypnogram -------------------
         self._hypcam = FixedCam()  # viscam.PanZoomCamera()
         self._hypCanvas.set_camera(self._hypcam)
         # ------------------- Topoplot -------------------
@@ -258,8 +255,8 @@ class Sleep(_PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
         self._TimeAxis.set_camera(self._timecam)
 
         # Keep all cams :
-        self._allCams = (self._chanCam, self._winhypcam, self._speccam,
-                         self._hypcam, self._topocam, self._timecam)
+        self._allCams = (self._chanCam, self._speccam, self._hypcam,
+                         self._topocam, self._timecam)
 
     def _fcns_on_creation(self):
         """Applied on creation."""
@@ -269,14 +266,12 @@ class Sleep(_PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
         self._fcn_slider_move()
         self._chanChecks[0].setChecked(True)
         self._hypLabel.setVisible(self.menuDispHypno.isChecked())
-        self._winHypLabel.setVisible(self.menuDispWinHypno.isChecked())
         self._fcn_chan_viz()
         self._fcn_chan_sym_amp()
         self._fcn_info_update()
         self._fcn_hypno_to_score()
-        # Set objects visibility
+        # Set objects visible :
         self._SpecW.setVisible(True)
-        self._WinHypW.setVisible(self.menuDispWinHypno.isChecked())
         self._HypW.setVisible(True)
         self._TimeAxisW.setVisible(True)
         # File to load :
