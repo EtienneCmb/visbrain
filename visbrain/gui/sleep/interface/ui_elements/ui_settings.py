@@ -36,15 +36,19 @@ class UiSettings(object):
         # Grid toggle :
         self._slGrid.clicked.connect(self._fcn_grid_toggle)
         # Text format :
-        self._slTxtFormat = "Window : [ {start} ; {end} ] {unit} || " + \
-                            "Scoring : [ {start_scor} ; {end_scor} ] {unit} || " + \
-                            "Sleep stage : {conv}"
+        self._slTxtFormat = (
+            "Window : [ {start} ; {end} ] {unit} || " +
+            "Scoring : [ {start_scor} ; {end_scor} ] {unit} || " +
+            "Sleep stage : {conv}"
+        )
         # Absolute time :
         self._slAbsTime.clicked.connect(self._fcn_slider_move)
         # Magnify :
         self._slMagnify.clicked.connect(self._fcn_slider_magnify)
         # Visible scoring window indicator :
-        self._ScorWinVisible.clicked.connect(self._fcn_scorwin_indicator_toggle)
+        self._ScorWinVisible.clicked.connect(
+            self._fcn_scorwin_indicator_toggle
+        )
         # Lock scoring window to the display window
         self._LockScorSigWins.clicked.connect(self._fcn_lock_scorwin_sigwin)
         # Annotation from the navigation bar :
@@ -67,11 +71,11 @@ class UiSettings(object):
         """Scoring window xlim: (start, end) from _ScorWin and _SigWin."""
         scorwin = self._ScorWin.value()
         xlim = self._xlim
-        xhalf = (xlim[1] - xlim[0])/2 + xlim[0]
+        xhalf = (xlim[1] - xlim[0]) / 2 + xlim[0]
         return (
-            max(xlim[0], xhalf - scorwin/2),
-            min(xlim[1], xhalf + scorwin/2)
-        ) # Centered to display window
+            max(xlim[0], xhalf - scorwin / 2),
+            min(xlim[1], xhalf + scorwin / 2)
+        )  # Centered to display window
 
     def data_index(self, xlim):
         """Closest time index of data from xlim."""
@@ -152,15 +156,16 @@ class UiSettings(object):
         """Change location and width of scoring window indicator bars."""
         # Get scoring window x_start x_end
         xlim_scor = self._xlim_scor
+
         # Change width of bars (so they don't become too small or too big) when
         # display window changes
         def barwidth():
             return min(
-                self._SigWin.value() * 0.2 / 30.0, # Constant apparent value
+                self._SigWin.value() * 0.2 / 30.0,  # Constant apparent value
                 max(
                     0.05,
-                    (xlim_scor[1] - xlim_scor[0])/2 - 0.05
-                ), # Skinny bars if the scoring window is v small
+                    (xlim_scor[1] - xlim_scor[0]) / 2 - 0.05
+                ),  # Skinny bars if the scoring window is v small
             )
         # Redraw bars
         for i, _ in self._chan:
@@ -169,7 +174,7 @@ class UiSettings(object):
             ycam = (cam_rect.bottom, cam_rect.top)
             self._chan.scorwin_ind[i].set_data(xlim_scor[0], xlim_scor[1],
                                                ycam,
-                                               barwidth = barwidth())
+                                               barwidth=barwidth())
 
     def _fcn_slider_move(self):
         """Function applied when the slider move."""
@@ -177,13 +182,11 @@ class UiSettings(object):
         # Get slider variables :
         win = self._SigWin.value()
         xlim = self._xlim
-        xlim_scor = self._xlim_scor
         iszoom = self.menuDispZoom.isChecked()
         unit = str(self._slRules.currentText())
         # Find closest data time index for display window start/end
         t = self.data_index(xlim)
         # Hypnogram info :
-        stage = self._stage_name
         hypconv = self._hypconv
         hypcol = self._stage_color
 
@@ -304,17 +307,17 @@ class UiSettings(object):
 
     def _fcn_scorwin_settings(self):
         """Function applied when changing the scoring window size."""
-        ## Unlock the scoring window
+        # Unlock the scoring window
         self._LockScorSigWins.setChecked(False)
-        ## Make the scoring window visible
+        # Make the scoring window visible
         self._ScorWinVisible.setChecked(True)
         self._fcn_scorwin_indicator_toggle()
-        ## Change value of slider step to make it equal to the scoring window
+        # Change value of slider step to make it equal to the scoring window
         scorwin = self._ScorWin.value()
         self._SigSlStep.setValue(scorwin)
-        ## Change the text info:
+        # Change the text info:
         self._update_text_info()
-        ## Redraw the scoring window indicator bars
+        # Redraw the scoring window indicator bars
         self._update_scorwin_indicator()
 
     def _fcn_slider_win_selection(self):

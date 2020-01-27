@@ -64,7 +64,7 @@ class TestSleep(_TestVisbrain):
         sp._fcn_annotate_rm()
         # Go to :
         sp._fcn_annotate_goto()
-    
+
     def test_ui_settings(self):
         """Test method for setting changes."""
         # Test settings in "locked" mode
