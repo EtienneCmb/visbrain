@@ -398,7 +398,8 @@ class UiMenu(HelpMenu):
                 _try("self._slMagnify.setChecked(config['Magnify'])")
                 _try("self._slAbsTime.setChecked(config['AbsTime'])")
                 _try("self._slGrid.setChecked(config['Grid'])")
-                _try("self._ScorWinVisible.setChecked(config['Display_Scoring_Window'])")
+                _try("self._ScorWinVisible.setChecked("
+                     "config['Display_Scoring_Window'])")
                 _try("self._slRules.setCurrentIndex(config['Unit'])")
                 # Update display
                 self._fcn_chan_viz()

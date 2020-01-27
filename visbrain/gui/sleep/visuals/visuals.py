@@ -282,7 +282,8 @@ class ChannelPlot(PrepareData):
 
             # ----------------------------------------------
             # Create a scoring window indicator :
-            scorwin_ind = ScorWinIndicator(parent=node, name=k + '_scorwin_ind',
+            scorwin_ind = ScorWinIndicator(parent=node,
+                                           name=k + '_scorwin_ind',
                                            visible=True)
             self.scorwin_ind.append(scorwin_ind)
 
@@ -837,21 +838,23 @@ class Indicator(object):
         self.mesh.parent = None
         self.mesh = None
 
+
 """
 ###############################################################################
 # SCORING WINDOW INDICATOR
 ###############################################################################
 The scoring window indicators can be used to show the limits of the current
-scoring window on each of the channel plots. On each of the channel plots, the 
-scoring window indicator consists in two vertical bars marking the start and end
-of the window"""
+scoring window on each of the channel plots. On each of the channel plots, the
+scoring window indicator consists in two vertical bars marking the start and
+end of the window
+"""
 
 
 class ScorWinIndicator(object):
     """Create a visual indicator of scoring window (for channel plots)."""
 
     def __init__(self, name='scorwinindicator', alpha=.75, visible=True,
-        parent=None, color='red', barwidth=.20):
+                 parent=None, color='red', barwidth=.20):
         # width of the vertical bars
         self.barwidth = barwidth
         # Create two vispy image object for the start and end of window
@@ -886,8 +889,8 @@ class ScorWinIndicator(object):
         if barwidth is not None:
             self.barwidth = barwidth
         # xlim of each bar
-        xlim_start = (x_start - self.barwidth/2, x_start + self.barwidth/2)
-        xlim_end = (x_end - self.barwidth/2, x_end + self.barwidth/2)
+        xlim_start = (x_start - self.barwidth / 2, x_start + self.barwidth / 2)
+        xlim_end = (x_end - self.barwidth / 2, x_end + self.barwidth / 2)
         # Displacement for each bar
         tox_start = (xlim_start[0], ylim[0], -1.)
         sc_start = (xlim_start[1] - xlim_start[0], ylim[1] - ylim[0], 1.)
@@ -905,6 +908,7 @@ class ScorWinIndicator(object):
         self.mesh_start = None
         self.mesh_end.parent = None
         self.mesh_end = None
+
 
 """
 ###############################################################################
