@@ -69,9 +69,7 @@ class UiMenu(HelpMenu):
         self.q_widget.setVisible(True)
         # Spectrogram :
         self.menuDispSpec.triggered.connect(self._disptog_spec)
-        # Window Hypnogram :
-        self.menuDispWinHypno.triggered.connect(self._disptog_winhyp)
-        # (Pan) Hypnogram :
+        # Hypnogram :
         self.menuDispHypno.triggered.connect(self._disptog_hyp)
         # Time axis :
         self.menuDispTimeax.triggered.connect(self._disptog_timeax)
@@ -254,7 +252,6 @@ class UiMenu(HelpMenu):
             config['Spec_Con'] = self._PanSpecCon.value()
             config['Spec_Interp'] = self._PanSpecInterp.currentIndex()
             # Hypnogram/time axis/navigation/topo/indic/zoom :
-            config['Win_Hyp_Visible'] = self.menuDispWinHypno.isChecked()
             config['Hyp_Visible'] = self.menuDispHypno.isChecked()
             config['Time_Visible'] = self.menuDispTimeax.isChecked()
             config['Topo_Visible'] = self.menuDispTopo.isChecked()
@@ -326,7 +323,7 @@ class UiMenu(HelpMenu):
             # Load the hypnogram :
             self._hypno, _ = read_hypno(filename, time=self._time)
             self._hypno = oversample_hypno(self._hypno, self._N)[::self._dsf]
-            self._set_hyp_data(self._sf, self._hypno, self._time)
+            self._hyp.set_data(self._sf, self._hypno, self._time)
             # Update info table :
             self._fcn_info_update()
             # Update scoring table :
@@ -382,7 +379,6 @@ class UiMenu(HelpMenu):
                      "config['Spec_Interp'])")
                 # Hypnogram/time axis/navigation/topo/indic/zoom :
                 _try("self.menuDispHypno.setChecked(config['Hyp_Visible'])")
-                _try("self.menuDispWinHypno.setChecked(config['Win_Hyp_Visible'])")
                 _try("self.menuDispTimeax.setChecked(config['Time_Visible'])")
                 _try("self.menuDispTopo.setChecked(config['Topo_Visible'])")
                 _try("self.menuDispNavbar.setChecked(config['Nav_Visible'])")
@@ -407,7 +403,6 @@ class UiMenu(HelpMenu):
                 self._fcn_spec_set_data()
                 self._disptog_spec()
                 self._disptog_hyp()
-                self._disptog_winhyp()
                 self._disptog_timeax()
                 self._disptog_topo()
                 self._disptog_indic()
@@ -522,13 +517,6 @@ class UiMenu(HelpMenu):
         viz = self.menuDispSpec.isChecked()
         self._SpecW.setVisible(viz)
         self._specLabel.setVisible(viz)
-
-    def _disptog_winhyp(self):
-        """Toggle method for display / hide the window hypnogram.
-        """
-        viz = self.menuDispWinHypno.isChecked()
-        self._WinHypW.setVisible(viz)
-        self._winHypLabel.setVisible(viz)
 
     def _disptog_hyp(self):
         """Toggle method for display / hide the hypnogram.

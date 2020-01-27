@@ -71,15 +71,13 @@ class TestSleep(_TestVisbrain):
         sp._fcn_slider_move()
         sp._fcn_slider_settings()
         sp._fcn_sigwin_settings()
-        # Change scoring window settings (unlocks) and show window hypnogram
+        # Change scoring window settings (unlocks)
         sp._fcn_scorwin_settings()
-        sp.menuDispWinHypno.setChecked(True)
-        sp._disptog_winhyp()
         # Test settings in "unlocked" mode
         sp._fcn_slider_move()
         sp._fcn_slider_settings()
         sp._fcn_sigwin_settings()
-        # Re-lock scoring window to display window (makes winhyp disappear)
+        # Re-lock scoring window to display window
         sp._LockScorSigWins.setChecked(True)
         sp._fcn_lock_scorwin_sigwin()
 

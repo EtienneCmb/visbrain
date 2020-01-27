@@ -199,9 +199,6 @@ class UiSettings(object):
         # Redraw the scoring window indicators
         self._update_scorwin_indicator()
 
-        # Update display signal on window histogram (move camera)
-        self._winhyp.set_rect_x(*xlim)
-
         # ---------------------------------------
         is_indic_checked = self.menuDispIndic.isChecked()
         # Update spectrogram indicator :
@@ -374,9 +371,6 @@ class UiSettings(object):
             # Hide the scoring window indicators
             self._ScorWinVisible.setChecked(False)
             self._fcn_scorwin_indicator_toggle()
-            # Hide the Window Hypnogram
-            self.menuDispWinHypno.setChecked(False)
-            self._disptog_winhyp()
         # If unlocking
         else:
             # Show the scoring window
@@ -412,21 +406,12 @@ class UiSettings(object):
         t = self.data_index(xlim_scor)
         # Set the stage :
         self._hypno[t[0]:t[1]] = stage
-        self._set_hyp_stage(t[0], t[1], stage)
+        self._hyp.set_stage(t[0], t[1], stage)
         # # Update info table :
         self._fcn_info_update()
         # Update scoring table :
         self._fcn_hypno_to_score()
         # self._fcn_score_to_hypno()
-
-    def _set_hyp_stage(self, *args, **kwargs):
-        self._hyp.set_stage(*args, **kwargs)
-        self._winhyp.set_stage(*args, **kwargs)
-
-    def _set_hyp_data(self, *args, **kwargs):
-        self._hyp.set_data(*args, **kwargs)
-        self._winhyp.set_data(*args, **kwargs)
-
 
     # =====================================================================
     # Annotate

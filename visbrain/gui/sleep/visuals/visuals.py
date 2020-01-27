@@ -733,12 +733,6 @@ class Hypnogram(object):
         self.edit.set_data(pos=posedit, face_color='gray')
 
     # ----------- RECT -----------
-    def set_rect_x(self, start, end):
-        """Change the rect horizontal delimitation."""
-        rect = self.rect
-        # (x_start, y_start, x_size, y_size)
-        self.rect = (start, rect[1], end - start, rect[3])
-
     @property
     def rect(self):
         """Get the rect value."""
@@ -1150,17 +1144,9 @@ class Visuals(CanvasShortcuts):
                                  fcn=self._fcn_slider_move)
         PROFILER('Channels', level=1)
 
-        # =================== WINDOW HYPNOGRAM ============
-        # Create a hypnogram object :
-        self._winhyp = Hypnogram(time, camera=cameras[1], color=self._hypcolor,
-                              width=self._lwhyp, hconv=self._hconv,
-                              parent=self._winHypCanvas.wc.scene)
-        self._winhyp.set_data(sf, hypno, time)
-        PROFILER('WindowHypnogram', level=1)
-
         # =================== SPECTROGRAM ===================
         # Create a spectrogram object :
-        self._spec = Spectrogram(camera=cameras[2],
+        self._spec = Spectrogram(camera=cameras[1],
                                  fcn=self._fcn_spec_set_data,
                                  parent=self._specCanvas.wc.scene)
         self._spec.set_data(sf, data[0, ...], time, cmap=self._defcmap)
@@ -1173,7 +1159,7 @@ class Visuals(CanvasShortcuts):
 
         # =================== HYPNOGRAM ===================
         # Create a hypnogram object :
-        self._hyp = Hypnogram(time, camera=cameras[3], color=self._hypcolor,
+        self._hyp = Hypnogram(time, camera=cameras[2], color=self._hypcolor,
                               width=self._lwhyp, hconv=self._hconv,
                               parent=self._hypCanvas.wc.scene)
         self._hyp.set_data(sf, hypno, time)
@@ -1197,14 +1183,13 @@ class Visuals(CanvasShortcuts):
         self._topo = TopoSleep(channels=self._channels, margin=.2,
                                parent=self._topoCanvas.wc.scene)
         # Set camera properties :
-        cameras[4].rect = self._topo.rect
-        cameras[4].aspect = 1.
-        # TODO: Check _pan_pick
+        cameras[3].rect = self._topo.rect
+        cameras[3].aspect = 1.
         self._pan_pick.model().item(3).setEnabled(any(self._topo._keeponly))
         PROFILER('Topoplot', level=1)
 
         # =================== SHORTCUTS ===================
-        vbcanvas = self._chanCanvas + [self._winHypCanvas, self._specCanvas, self._hypCanvas]
+        vbcanvas = self._chanCanvas + [self._specCanvas, self._hypCanvas]
         for k in vbcanvas:
             CanvasShortcuts.__init__(self, k.canvas)
         self._shpopup.set_shortcuts(self.sh)
