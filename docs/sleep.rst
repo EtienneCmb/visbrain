@@ -128,8 +128,7 @@ The contextual menu allows to perform several functions such as the loading and 
 **Main window** :
     * Polysomnographic data
     * Spectrogram (= time-frequency) of the whole recording
-    * Whole recording hypnogram
-    * Display window hypnogram (*hidden by default*)
+    * Hypnogram
     * Topoplot (*hidden by default*)
 
 **Navigation bar** :
@@ -622,13 +621,13 @@ to the duration of the displayed epoch. This mode is useful for scoring human da
 window" is independent from the display window**, letting the user score short
 epochs while visualizing the data around the scored epochs. The limits of the
 scoring window are indicated by vertical bars on the channel plots (which can be
-hidden by toggling the "Display scoring window" option). By displaying the
-"Window Hypnogram" (in the menu options), the user can also see the hypnogram
-stages within the whole displayed epoch, and thus around the scored epoch. This is
-typically useful for scoring animal datasets. By default in this mode, the
-slider step is equal to the duration of the scoring window. The software will
-switch automatically to the "unlocked" mode when explicitly changing the scoring
-window size. 
+hidden by toggling the "Display scoring window" option). By entering the "Zoom"
+mode ("Zoom" in the menu options or shortcut "z"), the user can also zoom into
+the hypnogram to visualize the stages within the whole displayed epoch, and thus
+around the scored epoch. This is typically useful for scoring animal datasets.
+By default in this mode, the slider step is equal to the duration of the scoring
+window. The software will switch automatically to the "unlocked" mode when
+explicitly changing the scoring window size. 
 
 
 .. warning::
@@ -642,6 +641,9 @@ window size.
    :align:   center
    Score the epoch within the centered "scoring window"
 
+.. figure::  _static/sleep/sleep_scoring_unlocked_zoom.png
+   :align:   center
+   Use the "Zoom" mode to visualize the hypnogram around the scored epoch
 
 .. ----------------------------------------------------------------------------
 ..                              DETECTIONS
