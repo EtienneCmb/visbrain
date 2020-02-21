@@ -203,7 +203,7 @@ class ReadSleepData(object):
         self._data = vispy_array(data)
         self._hypno = vispy_array(hypno)
         self._time = vispy_array(time)
-        self._channels = chanc
+        self._channels = channels
         self._href = href
         self._hconv = conv
         PROFILER("Check data", level=1)
