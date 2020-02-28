@@ -7,6 +7,14 @@ Changelog
    :local:
    :depth: 1
 
+0.4.6
+-----
+
+New features
+~~~~~~~~~~~~
+
+* Allow decoupling of the `scoring_window` and `display_window` to facilitate scoring of animal data in shorter epochs
+
 0.4.5
 -----
 
