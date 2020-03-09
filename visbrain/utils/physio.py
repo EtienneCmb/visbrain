@@ -93,8 +93,18 @@ def rereferencing(data, chans, reference, to_ignore=None):
     return data, chan, consider
 
 
-def bipolarization(data, chans, to_ignore=None, sep='.'):
+def bipolarization(data, chans, to_ignore=None):
     """Bipolarize data.
+
+    Channel labels are cleaned and for each channel a "name" and "number" are
+    extracted using the following steps:
+        1- Remove spaces and remove everything after "-" or "." in channel name
+        2- Set as channel "number" the last series of digits in the label
+        3- Set as channel "name" everything in the cleaned label preceding the
+            channel number
+    For example the name and number of channel "EEG1,2-A1" are "EEG1," and "2".
+    Bipolarization is done by substracting channels with the same name for
+    successive numbers.
 
     Parameters
     ----------
@@ -104,10 +114,6 @@ def bipolarization(data, chans, to_ignore=None, sep='.'):
         List of channel names of length nchan.
     to_ignore : list | None
         List of channels to ignore in the bipolarization.
-    sep : string | '.'
-        Separator to simplify electrode names by removing undesired name
-        after the sep. For example, if channel = ['h1.025', 'h2.578']
-        and sep='.', the final name will be 'h2-h1'.
 
     Returns
     -------
@@ -125,17 +131,25 @@ def bipolarization(data, chans, to_ignore=None, sep='.'):
 
     # Preprocess channel names by separating channel names / number:
     chnames, chnums = [], []
-    for num, k in enumerate(chans):
-        # Remove spaces and separation :
-        chans[num] = k.strip().replace(' ', '').split(sep)[0]
+    for num, c in enumerate(chans):
+        # Remove spaces and everything after "." and "-"
+        c = c.split('.')[0]
+        c = c.split('-')[0]
+        c = c.strip().replace(' ', '')
         # Get only the name / number :
-        if findall(r'\d+', k):
-            number = findall(r'\d+', k)[0]
-            chnums.append(number)
-            chnames.append(k.split(number)[0])
+        if findall(r'\d+', c):
+            # Last series of digits in label are the channel "number"
+            number = findall(r'\d+', c)[-1]
+            # Everything before the channel number is the channel "name"
+            # (Everything after channel number disappears)
+            name = number.join(c.split(number)[0:-1])
         else:
-            chnums.append('')
-            chnames.append(k)
+            number = ''
+            name = c
+        chnums.append(number)
+        chnames.append(name)
+        # Save the cleaned channel label
+        chans[num] = name + number
 
     # Find if some channels have to be ignored :
     if to_ignore is None:
