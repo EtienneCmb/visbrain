@@ -26,17 +26,19 @@ def find_non_eeg(channels, pattern=['eog', 'emg', 'ecg', 'abd']):
 
     Returns
     -------
-    iseeg : array_like
-        NumPy vector of boolean values.
+    noneeg : array_like
+        NumPy vector of boolean values. True if any of the strings in `pattern`
+        is found in the channel label string
     """
     # Set channels in lower case :
     channels = np.char.lower(np.asarray(channels))
     # Pre-allocation :
-    iseeg = np.zeros((len(channels),), dtype=bool)
+    noneeg = np.zeros((len(channels),), dtype=bool)
     # Search patterns :
     for k in pattern:
-        iseeg += np.invert(np.char.find(channels, k).astype(bool))
-    return iseeg
+        # Add to non-eeg if we find the pattern anywhere in the channel string
+        noneeg += np.char.find(channels, k) >= 0
+    return noneeg
 
 
 ###############################################################################
