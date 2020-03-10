@@ -78,7 +78,7 @@ class UiTools(object):
     def _fcn_ref_apply(self):
         """Apply re-referencing."""
         # By default, ingore non-eeg channel :
-        to_ignore = self._noneeg
+        to_ignore = list(self._noneeg)
         if self._ToolsRefIgn.isChecked():
             for num, k in enumerate(self._reChecks):
                 # Get the position of this channel :
@@ -90,11 +90,14 @@ class UiTools(object):
         idx = int(self._ToolsRefMeth.currentIndex())
         # Single channel :
         if idx == 0:  # Single channel
-            # Get selected channel :
-            idchan = idx = self._ToolsRefLst.currentIndex()
+            # Get selected channel for re-referencing:
+            # index of ref amongst candidate channels (~noneeg)
+            idchan_eeg = idx = self._ToolsRefLst.currentIndex()
+            # overall index of reference channel
+            idchan_all = np.where(~self._noneeg)[0][idchan_eeg]
             # Re-referencing :
             self._data, self._channels, consider = rereferencing(
-                self._data, self._channels, idchan,
+                self._data, self._channels, idchan_all,
                 to_ignore)
             self._chanChecks[idx].setChecked(False)
         elif idx == 1:  # Common average
