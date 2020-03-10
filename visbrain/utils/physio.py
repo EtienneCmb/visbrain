@@ -14,14 +14,14 @@ __all__ = ('find_non_eeg', 'rereferencing', 'bipolarization', 'commonaverage',
 logger = logging.getLogger('visbrain')
 
 
-def find_non_eeg(channels, pattern=['eog', 'emg', 'ecg', 'abd']):
+def find_non_eeg(channels, pattern=['eog', 'emg', 'ecg', 'abd', 'lfp']):
     """Find non-EEG channels.
 
     Parameters
     ----------
     channels : list
         List of channel names.
-    pattern : list | ['eog', 'emg', 'ecg', 'abd']
+    pattern : list | ['eog', 'emg', 'ecg', 'abd', 'lfp']
         List of patterns for non-EEG channels.
 
     Returns
