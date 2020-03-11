@@ -69,7 +69,8 @@ jobs:
         - run:
             name: Run the tests
             command: |
-              pytest --cov;
+              source activate testenv;
+              pytest;
         - run:
             name: Build the documentation
             command: |
