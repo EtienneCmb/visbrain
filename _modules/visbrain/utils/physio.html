@@ -899,33 +899,33 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../release.html#bug-fixes">Bug fixes</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../release.html#id2">0.4.4</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id3">New features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id4">Improvements</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id5">Bug fixes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../release.html#id4">0.4.4</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id5">New features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id6">Improvements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id7">Bug fixes</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../release.html#id6">0.4.3</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id7">New features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id8">Improvements</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id9">Bug fixes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../release.html#id8">0.4.3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id9">New features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id10">Improvements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id11">Bug fixes</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../release.html#id10">0.4.1</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id11">New features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id12">Improvements</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id13">Bug fixes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../release.html#id12">0.4.1</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id13">New features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id14">Improvements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id15">Bug fixes</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../release.html#id14">0.4.0</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id15">New features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id16">Improvements</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id17">Bug fixes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../release.html#id16">0.4.0</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id17">New features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id18">Improvements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id19">Bug fixes</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../release.html#id18">0.3.8</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id19">New features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id20">Improvements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../release.html#id20">0.3.8</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id21">New features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../release.html#id22">Improvements</a></li>
 </ul>
 </li>
 </ul>
@@ -1006,29 +1006,31 @@
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">find_non_eeg</span><span class="p">(</span><span class="n">channels</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;eog&#39;</span><span class="p">,</span> <span class="s1">&#39;emg&#39;</span><span class="p">,</span> <span class="s1">&#39;ecg&#39;</span><span class="p">,</span> <span class="s1">&#39;abd&#39;</span><span class="p">]):</span>
+<span class="k">def</span> <span class="nf">find_non_eeg</span><span class="p">(</span><span class="n">channels</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;eog&#39;</span><span class="p">,</span> <span class="s1">&#39;emg&#39;</span><span class="p">,</span> <span class="s1">&#39;ecg&#39;</span><span class="p">,</span> <span class="s1">&#39;abd&#39;</span><span class="p">,</span> <span class="s1">&#39;lfp&#39;</span><span class="p">]):</span>
     <span class="sd">&quot;&quot;&quot;Find non-EEG channels.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    channels : list</span>
 <span class="sd">        List of channel names.</span>
-<span class="sd">    pattern : list | [&#39;eog&#39;, &#39;emg&#39;, &#39;ecg&#39;, &#39;abd&#39;]</span>
+<span class="sd">    pattern : list | [&#39;eog&#39;, &#39;emg&#39;, &#39;ecg&#39;, &#39;abd&#39;, &#39;lfp&#39;]</span>
 <span class="sd">        List of patterns for non-EEG channels.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    iseeg : array_like</span>
-<span class="sd">        NumPy vector of boolean values.</span>
+<span class="sd">    noneeg : array_like</span>
+<span class="sd">        NumPy vector of boolean values. True if any of the strings in `pattern`</span>
+<span class="sd">        is found in the channel label string</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Set channels in lower case :</span>
     <span class="n">channels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">char</span><span class="o">.</span><span class="n">lower</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">channels</span><span class="p">))</span>
     <span class="c1"># Pre-allocation :</span>
-    <span class="n">iseeg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">channels</span><span class="p">),),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="n">noneeg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">channels</span><span class="p">),),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
     <span class="c1"># Search patterns :</span>
     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">pattern</span><span class="p">:</span>
-        <span class="n">iseeg</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">invert</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">char</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">channels</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">iseeg</span>
+        <span class="c1"># Add to non-eeg if we find the pattern anywhere in the channel string</span>
+        <span class="n">noneeg</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">char</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">channels</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="n">noneeg</span>
 
 
 <span class="c1">###############################################################################</span>
@@ -1085,8 +1087,18 @@
     <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">chan</span><span class="p">,</span> <span class="n">consider</span></div>
 
 
-<div class="viewcode-block" id="bipolarization"><a class="viewcode-back" href="../../../generated/visbrain.utils.bipolarization.html#visbrain.utils.bipolarization">[docs]</a><span class="k">def</span> <span class="nf">bipolarization</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">chans</span><span class="p">,</span> <span class="n">to_ignore</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="bipolarization"><a class="viewcode-back" href="../../../generated/visbrain.utils.bipolarization.html#visbrain.utils.bipolarization">[docs]</a><span class="k">def</span> <span class="nf">bipolarization</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">chans</span><span class="p">,</span> <span class="n">to_ignore</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Bipolarize data.</span>
+
+<span class="sd">    Channel labels are cleaned and for each channel a &quot;name&quot; and &quot;number&quot; are</span>
+<span class="sd">    extracted using the following steps:</span>
+<span class="sd">        1- Remove spaces and remove everything after &quot;-&quot; or &quot;.&quot; in channel name</span>
+<span class="sd">        2- Set as channel &quot;number&quot; the last series of digits in the label</span>
+<span class="sd">        3- Set as channel &quot;name&quot; everything in the cleaned label preceding the</span>
+<span class="sd">            channel number</span>
+<span class="sd">    For example the name and number of channel &quot;EEG1,2-A1&quot; are &quot;EEG1,&quot; and &quot;2&quot;.</span>
+<span class="sd">    Bipolarization is done by substracting channels with the same name for</span>
+<span class="sd">    successive numbers.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1096,10 +1108,6 @@
 <span class="sd">        List of channel names of length nchan.</span>
 <span class="sd">    to_ignore : list | None</span>
 <span class="sd">        List of channels to ignore in the bipolarization.</span>
-<span class="sd">    sep : string | &#39;.&#39;</span>
-<span class="sd">        Separator to simplify electrode names by removing undesired name</span>
-<span class="sd">        after the sep. For example, if channel = [&#39;h1.025&#39;, &#39;h2.578&#39;]</span>
-<span class="sd">        and sep=&#39;.&#39;, the final name will be &#39;h2-h1&#39;.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -1117,17 +1125,25 @@
 
     <span class="c1"># Preprocess channel names by separating channel names / number:</span>
     <span class="n">chnames</span><span class="p">,</span> <span class="n">chnums</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">num</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">chans</span><span class="p">):</span>
-        <span class="c1"># Remove spaces and separation :</span>
-        <span class="n">chans</span><span class="p">[</span><span class="n">num</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">sep</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">num</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">chans</span><span class="p">):</span>
+        <span class="c1"># Remove spaces and everything after &quot;.&quot; and &quot;-&quot;</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
         <span class="c1"># Get only the name / number :</span>
-        <span class="k">if</span> <span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\d+&#39;</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
-            <span class="n">number</span> <span class="o">=</span> <span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\d+&#39;</span><span class="p">,</span> <span class="n">k</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">chnums</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
-            <span class="n">chnames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">number</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\d+&#39;</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+            <span class="c1"># Last series of digits in label are the channel &quot;number&quot;</span>
+            <span class="n">number</span> <span class="o">=</span> <span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\d+&#39;</span><span class="p">,</span> <span class="n">c</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="c1"># Everything before the channel number is the channel &quot;name&quot;</span>
+            <span class="c1"># (Everything after channel number disappears)</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">number</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">number</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">chnums</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-            <span class="n">chnames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+            <span class="n">number</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">c</span>
+        <span class="n">chnums</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+        <span class="n">chnames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="c1"># Save the cleaned channel label</span>
+        <span class="n">chans</span><span class="p">[</span><span class="n">num</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="n">number</span>
 
     <span class="c1"># Find if some channels have to be ignored :</span>
     <span class="k">if</span> <span class="n">to_ignore</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

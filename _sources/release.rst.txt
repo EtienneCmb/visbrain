@@ -19,12 +19,15 @@ New features
 Improvements
 ~~~~~~~~~~~~
 
+* Update automatic detection of non-eeg channels used during re-referencing (`PR63 <https://github.com/EtienneCmb/visbrain/pull/63>`_)
+* "Clean" channel labels only during bipolar re-referencing in Sleep (`PR63 <https://github.com/EtienneCmb/visbrain/pull/63>`_)
 * Protect Sleep from MemoryError for large sleep files (`PR37 <https://github.com/EtienneCmb/visbrain/pull/37>`_)
 * Improve spectrogram in case of non finite values (`PR39 <https://github.com/EtienneCmb/visbrain/pull/39>`_)
 * Fix path to the url file for pyenv (`PR41 <https://github.com/EtienneCmb/visbrain/pull/41>`_)
 
 Bug fixes
 ~~~~~~~~~
+* Fix use of wrong channel during re-referencing to specific channel (`PR63 <https://github.com/EtienneCmb/visbrain/pull/63>`_)
 * Fix `allow_pickle`
 * Fix imresize from the scipy package
 
