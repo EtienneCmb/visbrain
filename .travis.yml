@@ -65,13 +65,14 @@ install:
     # Install dependencies :
     - if [ "${TEST}" == "standard" ] || [ "${TEST}" == "examples" ]; then
         pip install codecov pytest pytest-cov pytest-sugar pytest-travis-fold pytest-faulthandler openpyxl xlrd;
-        pip install mne nibabel pandas tensorpac scikit-image imageio lxml;
+        pip install mne nibabel pandas tensorpac imageio lxml;
+        conda install -c conda-forge scikit-image;
         pip install git+https://github.com/hbldh/lspopt.git#egg=lspopt;
       fi;
     - if [ "${TEST}" == "flake" ]; then
         pip install flake8 pep8-naming;
       fi;
-    # Install latest version vispy :
+    # Install latest version vispy
     - pip install git+https://github.com/vispy/vispy.git
     - pip install PyOpenGL PyOpenGL_accelerate
     # - pip install -q freetype-py husl pypng cassowary imageio

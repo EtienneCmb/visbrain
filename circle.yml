@@ -18,7 +18,7 @@ jobs:
             command: |
               /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1400x900x24 -ac +extension GLX +render -noreset;
               echo "export DISPLAY=:99" >> $BASH_ENV;
-        - run: sudo apt-get install libgl1-mesa-glx libegl1-mesa libxrandr2 libxrandr2 libxss1 libxcursor1 libxcomposite1 libasound2 libxi6 libxtst6 qt5-default;
+        - run: sudo apt-get update && sudo apt-get install libgl1-mesa-glx libegl1-mesa libxrandr2 libxrandr2 libxss1 libxcursor1 libxcomposite1 libasound2 libxi6 libxtst6 qt5-default;
         - restore_cache:
             keys:
               - data-cache
@@ -48,9 +48,10 @@ jobs:
               pip install -U pip;
               pip install git+https://github.com/vispy/vispy.git;
               pip install pytest pytest-travis-fold;
-              pip install mne nibabel pandas openpyxl tensorpac xlrd scikit-image;
+              pip install mne nibabel pandas openpyxl tensorpac xlrd;
+              conda install -c conda-forge scikit-image;
               pip install git+https://github.com/hbldh/lspopt.git#egg=lspopt;
-              pip install sphinx sphinx-gallery sphinx_bootstrap_theme lxml;
+              pip install sphinx sphinx-gallery==0.4.0 sphinx_bootstrap_theme lxml;
               pip install numpydoc;
               echo $PATH;
               echo $CIRCLE_BRANCH;
@@ -65,6 +66,11 @@ jobs:
             command: |
               source activate testenv;
               python setup.py develop;
+        - run:
+            name: Run the tests
+            command: |
+              source activate testenv;
+              pytest;
         - run:
             name: Build the documentation
             command: |
