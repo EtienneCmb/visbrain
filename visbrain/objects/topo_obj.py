@@ -347,7 +347,7 @@ class TopoObj(VisbrainObject):
                 if level_colors in cmaps:
                     level_colors = array2colormap(levels, cmap=level_colors)
             grid[nmask] = np.inf
-            is_sc_image_installed(True)
+            is_sc_image_installed(raise_error=True)
             self.iso = visuals.Isocurve(data=grid, parent=self.node_head,
                                         levels=levels, color_lev=level_colors,
                                         width=2.)
