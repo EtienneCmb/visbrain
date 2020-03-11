@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="_static/visbrain_styles.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -1116,7 +1116,7 @@ To install Python, you should try <a class="reference external" href="https://co
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <span class="n">BrainObj</span>
 
 <span class="c1"># Create a brain object and display it :</span>
-<span class="n">b_obj</span> <span class="o">=</span> <span class="n">BrainObj</span><span class="p">(</span><span class="s1">&#39;B1&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">b_obj</span> <span class="o">=</span> <span class="n">BrainObj</span><span class="p">(</span><span class="s1">&#39;B1&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="c1"># Display the brain object :</span>
 <span class="n">b_obj</span><span class="o">.</span><span class="n">preview</span><span class="p">()</span>
@@ -1137,11 +1137,11 @@ To install Python, you should try <a class="reference external" href="https://co
   </div>
   <div id="collapse_combine" class="panel-collapse collapse">
     <div class="panel-body"><p>Objects can be combined in a scene (see <a class="reference internal" href="generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="visbrain.objects.SceneObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">visbrain.objects.SceneObj</span></code></a>) to create a figure with several panels.</p>
-<h3>How to combine objects in separate panels?</h3><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<h3>How to combine objects in separate panels?</h3><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <span class="n">SceneObj</span><span class="p">,</span> <span class="n">BrainObj</span><span class="p">,</span> <span class="n">ImageObj</span><span class="p">,</span> <span class="n">ColorbarObj</span>
 
 <span class="c1"># Create a brain object :</span>
-<span class="n">b_obj</span> <span class="o">=</span> <span class="n">BrainObj</span><span class="p">(</span><span class="s1">&#39;B1&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">b_obj</span> <span class="o">=</span> <span class="n">BrainObj</span><span class="p">(</span><span class="s1">&#39;B1&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="c1"># Create a 200x200 image :</span>
 <span class="n">im</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
@@ -1163,11 +1163,11 @@ To install Python, you should try <a class="reference external" href="https://co
 <div class="figure align-center">
 <img alt="_images/tuto_2-1.png" src="_images/tuto_2-1.png" />
 </div>
-<h3>How to stack several objects inside the same panel?</h3><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<h3>How to stack several objects inside the same panel?</h3><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <span class="n">SceneObj</span><span class="p">,</span> <span class="n">BrainObj</span><span class="p">,</span> <span class="n">SourceObj</span>
 
 <span class="c1"># Create a brain object :</span>
-<span class="n">b_obj</span> <span class="o">=</span> <span class="n">BrainObj</span><span class="p">(</span><span class="s1">&#39;B1&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">b_obj</span> <span class="o">=</span> <span class="n">BrainObj</span><span class="p">(</span><span class="s1">&#39;B1&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># Create a first source object with red square symbols :</span>
 <span class="n">s1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
@@ -1325,7 +1325,7 @@ To install Python, you should try <a class="reference external" href="https://co
         <div class="container">
             <img src="_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-09-10.</p>
+        <p>&copy; Copyright Last updated on 2020-03-11.</p>
     </footer>
 
   </body>

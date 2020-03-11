@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/visbrain_styles.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -995,14 +995,14 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">product</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
 
-<span class="kn">from</span> <span class="nn">vispy</span> <span class="k">import</span> <span class="n">scene</span>
+<span class="kn">from</span> <span class="nn">vispy</span> <span class="kn">import</span> <span class="n">scene</span>
 
-<span class="kn">from</span> <span class="nn">.visbrain_obj</span> <span class="k">import</span> <span class="n">VisbrainObject</span>
-<span class="kn">from</span> <span class="nn">..visuals.grid_signal_visual</span> <span class="k">import</span> <span class="n">GridSignal</span>
-<span class="kn">from</span> <span class="nn">..io.dependencies</span> <span class="k">import</span> <span class="n">is_mne_installed</span>
-<span class="kn">from</span> <span class="nn">..utils.cameras</span> <span class="k">import</span> <span class="n">ScrollCamera</span>
+<span class="kn">from</span> <span class="nn">.visbrain_obj</span> <span class="kn">import</span> <span class="n">VisbrainObject</span>
+<span class="kn">from</span> <span class="nn">..visuals.grid_signal_visual</span> <span class="kn">import</span> <span class="n">GridSignal</span>
+<span class="kn">from</span> <span class="nn">..io.dependencies</span> <span class="kn">import</span> <span class="n">is_mne_installed</span>
+<span class="kn">from</span> <span class="nn">..utils.cameras</span> <span class="kn">import</span> <span class="n">ScrollCamera</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
 
@@ -1071,7 +1071,7 @@
 <span class="sd">        Verbosity level.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="GridSignalsObj.__init__"><a class="viewcode-back" href="../../../generated/GridSignalsObj/visbrain.objects.GridSignalsObj.__init__.html#visbrain.objects.GridSignalsObj.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">plt_as</span><span class="o">=</span><span class="s1">&#39;grid&#39;</span><span class="p">,</span> <span class="n">n_signals</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span>
+<div class="viewcode-block" id="GridSignalsObj.__init__"><a class="viewcode-back" href="../../../generated/GridSignalsObj/visbrain.objects.GridSignalsObj.__init__.html#visbrain.objects.GridSignalsObj.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">plt_as</span><span class="o">=</span><span class="s1">&#39;grid&#39;</span><span class="p">,</span> <span class="n">n_signals</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span>
                  <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">title_bold</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">title_visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">decimate</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -1167,7 +1167,7 @@
         <div class="container">
             <img src="../../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-09-10.</p>
+        <p>&copy; Copyright Last updated on 2020-03-11.</p>
     </footer>
 
   </body>

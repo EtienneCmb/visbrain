@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/visbrain_styles.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -994,12 +994,12 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.spatial.distance</span> <span class="k">import</span> <span class="n">cdist</span>
+<span class="kn">from</span> <span class="nn">scipy.spatial.distance</span> <span class="kn">import</span> <span class="n">cdist</span>
 
-<span class="kn">from</span> <span class="nn">vispy.geometry</span> <span class="k">import</span> <span class="n">MeshData</span>
-<span class="kn">from</span> <span class="nn">vispy.geometry.isosurface</span> <span class="k">import</span> <span class="n">isosurface</span>
+<span class="kn">from</span> <span class="nn">vispy.geometry</span> <span class="kn">import</span> <span class="n">MeshData</span>
+<span class="kn">from</span> <span class="nn">vispy.geometry.isosurface</span> <span class="kn">import</span> <span class="n">isosurface</span>
 
-<span class="kn">from</span> <span class="nn">.sigproc</span> <span class="k">import</span> <span class="n">smooth_3d</span>
+<span class="kn">from</span> <span class="nn">.sigproc</span> <span class="kn">import</span> <span class="n">smooth_3d</span>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;vispy_array&#39;</span><span class="p">,</span> <span class="s1">&#39;convert_meshdata&#39;</span><span class="p">,</span> <span class="s1">&#39;volume_to_mesh&#39;</span><span class="p">,</span>
@@ -1158,7 +1158,7 @@
 <span class="sd">    smooth_mat : sparse matrix</span>
 <span class="sd">        smoothing matrix with size N x len(vertices)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">sparse</span>
+    <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">sparse</span>
 
     <span class="n">e</span> <span class="o">=</span> <span class="n">adj_mat</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">e</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">data</span> <span class="o">==</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
@@ -1207,7 +1207,7 @@
 <span class="sd">    edges : sparse matrix</span>
 <span class="sd">        The adjacency matrix.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">sparse</span>
+    <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">sparse</span>
     <span class="n">npoints</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">faces</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="n">nfaces</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">faces</span><span class="p">)</span>
     <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">faces</span><span class="o">.</span><span class="n">T</span>
@@ -1282,7 +1282,7 @@
         <div class="container">
             <img src="../../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-09-10.</p>
+        <p>&copy; Copyright Last updated on 2020-03-11.</p>
     </footer>
 
   </body>

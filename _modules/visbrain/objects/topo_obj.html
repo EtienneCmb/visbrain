@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/visbrain_styles.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -994,16 +994,16 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="k">import</span> <span class="n">interp2d</span>
+<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp2d</span>
 
-<span class="kn">from</span> <span class="nn">vispy</span> <span class="k">import</span> <span class="n">scene</span>
-<span class="kn">from</span> <span class="nn">vispy.scene</span> <span class="k">import</span> <span class="n">visuals</span>
+<span class="kn">from</span> <span class="nn">vispy</span> <span class="kn">import</span> <span class="n">scene</span>
+<span class="kn">from</span> <span class="nn">vispy.scene</span> <span class="kn">import</span> <span class="n">visuals</span>
 <span class="kn">import</span> <span class="nn">vispy.visuals.transforms</span> <span class="k">as</span> <span class="nn">vist</span>
 
-<span class="kn">from</span> <span class="nn">.visbrain_obj</span> <span class="k">import</span> <span class="n">VisbrainObject</span>
-<span class="kn">from</span> <span class="nn">..objects</span> <span class="k">import</span> <span class="n">ConnectObj</span>
-<span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">download_file</span><span class="p">,</span> <span class="n">is_sc_image_installed</span>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">array2colormap</span><span class="p">,</span> <span class="n">color2vb</span><span class="p">,</span> <span class="n">mpl_cmap</span><span class="p">,</span> <span class="n">normalize</span><span class="p">,</span>
+<span class="kn">from</span> <span class="nn">.visbrain_obj</span> <span class="kn">import</span> <span class="n">VisbrainObject</span>
+<span class="kn">from</span> <span class="nn">..objects</span> <span class="kn">import</span> <span class="n">ConnectObj</span>
+<span class="kn">from</span> <span class="nn">..io</span> <span class="kn">import</span> <span class="n">download_file</span><span class="p">,</span> <span class="n">is_sc_image_installed</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="p">(</span><span class="n">array2colormap</span><span class="p">,</span> <span class="n">color2vb</span><span class="p">,</span> <span class="n">mpl_cmap</span><span class="p">,</span> <span class="n">normalize</span><span class="p">,</span>
                      <span class="n">vpnormalize</span><span class="p">,</span> <span class="n">vprecenter</span><span class="p">)</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
@@ -1086,7 +1086,7 @@
     <span class="c1">###########################################################################</span>
     <span class="c1">###########################################################################</span>
 
-<div class="viewcode-block" id="TopoObj.__init__"><a class="viewcode-back" href="../../../generated/TopoObj/visbrain.objects.TopoObj.__init__.html#visbrain.objects.TopoObj.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="s1">&#39;cartesian&#39;</span><span class="p">,</span>
+<div class="viewcode-block" id="TopoObj.__init__"><a class="viewcode-back" href="../../../generated/TopoObj/visbrain.objects.TopoObj.__init__.html#visbrain.objects.TopoObj.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="s1">&#39;cartesian&#39;</span><span class="p">,</span>
                  <span class="n">levels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">level_colors</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;degree&#39;</span><span class="p">,</span>
                  <span class="n">line_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span> <span class="n">chan_size</span><span class="o">=</span><span class="mf">12.</span><span class="p">,</span>
                  <span class="n">chan_offset</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">),</span> <span class="n">chan_mark_color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span>
@@ -1231,11 +1231,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">levels</span><span class="p">,</span> <span class="n">level_colors</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span>
                       <span class="n">vmax</span><span class="p">,</span> <span class="n">over</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the number of channels.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nchan</span>
 
-    <span class="k">def</span> <span class="nf">__bool__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__bool__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return if coordinates exist.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_xyz&#39;</span><span class="p">)</span>
 
@@ -1339,7 +1339,7 @@
                 <span class="k">if</span> <span class="n">level_colors</span> <span class="ow">in</span> <span class="n">cmaps</span><span class="p">:</span>
                     <span class="n">level_colors</span> <span class="o">=</span> <span class="n">array2colormap</span><span class="p">(</span><span class="n">levels</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">level_colors</span><span class="p">)</span>
             <span class="n">grid</span><span class="p">[</span><span class="n">nmask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
-            <span class="n">is_sc_image_installed</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">is_sc_image_installed</span><span class="p">(</span><span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">iso</span> <span class="o">=</span> <span class="n">visuals</span><span class="o">.</span><span class="n">Isocurve</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">grid</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_head</span><span class="p">,</span>
                                         <span class="n">levels</span><span class="o">=</span><span class="n">levels</span><span class="p">,</span> <span class="n">color_lev</span><span class="o">=</span><span class="n">level_colors</span><span class="p">,</span>
                                         <span class="n">width</span><span class="o">=</span><span class="mf">2.</span><span class="p">)</span>
@@ -1561,7 +1561,7 @@
         <div class="container">
             <img src="../../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-09-10.</p>
+        <p>&copy; Copyright Last updated on 2020-03-11.</p>
     </footer>
 
   </body>

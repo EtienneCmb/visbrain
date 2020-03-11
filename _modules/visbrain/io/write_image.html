@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/visbrain_styles.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -1000,8 +1000,8 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">..utils.color</span> <span class="k">import</span> <span class="n">color2vb</span>
-<span class="kn">from</span> <span class="nn">..config</span> <span class="k">import</span> <span class="n">CONFIG</span>
+<span class="kn">from</span> <span class="nn">..utils.color</span> <span class="kn">import</span> <span class="n">color2vb</span>
+<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">CONFIG</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
 
@@ -1167,8 +1167,8 @@
 <span class="sd">        Dots per inches</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-    <span class="kn">from</span> <span class="nn">..utils.sleep</span> <span class="k">import</span> <span class="n">spindlesdetect</span>
-    <span class="kn">from</span> <span class="nn">..utils.filtering</span> <span class="k">import</span> <span class="n">filt</span>
+    <span class="kn">from</span> <span class="nn">..utils.sleep</span> <span class="kn">import</span> <span class="n">spindlesdetect</span>
+    <span class="kn">from</span> <span class="nn">..utils.filtering</span> <span class="kn">import</span> <span class="n">filt</span>
 
     <span class="c1"># Define an empty hypno hypnogram if None :</span>
     <span class="n">hypno</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="k">if</span> <span class="n">hypno</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">hypno</span>
@@ -1302,8 +1302,8 @@
 <span class="sd">    transparent : bool | False</span>
 <span class="sd">        Use transparent background.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">visbrain.utils</span> <span class="k">import</span> <span class="n">piccrop</span>
-    <span class="kn">from</span> <span class="nn">vispy.io</span> <span class="k">import</span> <span class="n">imsave</span>
+    <span class="kn">from</span> <span class="nn">visbrain.utils</span> <span class="kn">import</span> <span class="n">piccrop</span>
+    <span class="kn">from</span> <span class="nn">vispy.io</span> <span class="kn">import</span> <span class="n">imsave</span>
 
     <span class="c1"># Get the size of the canvas and backend :</span>
     <span class="n">c_size</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">size</span>
@@ -1420,7 +1420,7 @@
 <span class="sd">    filename : string</span>
 <span class="sd">        The picture file name.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">PyQt5</span> <span class="k">import</span> <span class="n">QtWidgets</span><span class="p">,</span> <span class="n">QtCore</span>
+    <span class="kn">from</span> <span class="nn">PyQt5</span> <span class="kn">import</span> <span class="n">QtWidgets</span><span class="p">,</span> <span class="n">QtCore</span>
 
     <span class="c1"># Screnshot function :</span>
     <span class="k">def</span> <span class="nf">_take_screenshot</span><span class="p">():</span>
@@ -1475,7 +1475,7 @@
         <div class="container">
             <img src="../../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-09-10.</p>
+        <p>&copy; Copyright Last updated on 2020-03-11.</p>
     </footer>
 
   </body>

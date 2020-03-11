@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/visbrain_styles.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -998,7 +998,7 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
-<span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">is_mne_installed</span>
+<span class="kn">from</span> <span class="nn">..io</span> <span class="kn">import</span> <span class="n">is_mne_installed</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
 
@@ -1026,7 +1026,7 @@
              <span class="n">kw_source_obj</span><span class="p">,</span> <span class="n">kw_activation</span><span class="p">,</span> <span class="n">show</span><span class="p">):</span>
     <span class="c1"># Define a brain object and a source object :</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;    Define a Brain and Source objects&#39;</span><span class="p">)</span>
-    <span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <span class="n">BrainObj</span><span class="p">,</span> <span class="n">SourceObj</span><span class="p">,</span> <span class="n">SceneObj</span>
+    <span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <span class="n">BrainObj</span><span class="p">,</span> <span class="n">SourceObj</span><span class="p">,</span> <span class="n">SceneObj</span>
     <span class="n">brain_obj</span><span class="p">,</span> <span class="n">source_obj</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_brain&#39;</span><span class="p">,</span> <span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_sources&#39;</span>
     <span class="n">b_obj</span> <span class="o">=</span> <span class="n">BrainObj</span><span class="p">(</span><span class="n">brain_obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kw_brain_obj</span><span class="p">)</span>
     <span class="n">s_obj</span> <span class="o">=</span> <span class="n">SourceObj</span><span class="p">(</span><span class="n">source_obj</span><span class="p">,</span> <span class="n">sources</span><span class="p">,</span> <span class="o">**</span><span class="n">kw_source_obj</span><span class="p">)</span>
@@ -1040,7 +1040,7 @@
     <span class="c1"># Return either a scene or a BrainObj and SourceObj :</span>
     <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Display inside the Brain GUI</span>
         <span class="c1"># Define a Brain instance :</span>
-        <span class="kn">from</span> <span class="nn">visbrain.gui</span> <span class="k">import</span> <span class="n">Brain</span>
+        <span class="kn">from</span> <span class="nn">visbrain.gui</span> <span class="kn">import</span> <span class="n">Brain</span>
         <span class="n">brain</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">(</span><span class="n">brain_obj</span><span class="o">=</span><span class="n">b_obj</span><span class="p">,</span> <span class="n">source_obj</span><span class="o">=</span><span class="n">s_obj</span><span class="p">)</span>
         <span class="n">brain</span><span class="o">.</span><span class="n">_brain_template</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
         <span class="c1"># By default, display colorbar if activation :</span>
@@ -1112,7 +1112,7 @@
     <span class="c1"># Test that mne is installed and import :</span>
     <span class="n">is_mne_installed</span><span class="p">(</span><span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="kn">import</span> <span class="nn">mne</span>
-    <span class="kn">from</span> <span class="nn">mne.source_space</span> <span class="k">import</span> <span class="n">head_to_mni</span>
+    <span class="kn">from</span> <span class="nn">mne.source_space</span> <span class="kn">import</span> <span class="n">head_to_mni</span>
     <span class="c1"># Read the forward solution :</span>
     <span class="n">fwd</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">read_forward_solution</span><span class="p">(</span><span class="n">fwd_file</span><span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Read the forward solution&#39;</span><span class="p">)</span>
@@ -1186,7 +1186,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Test that mne is installed and import :</span>
     <span class="n">is_mne_installed</span><span class="p">(</span><span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="kn">from</span> <span class="nn">mne</span> <span class="k">import</span> <span class="n">read_source_spaces</span>
+    <span class="kn">from</span> <span class="nn">mne</span> <span class="kn">import</span> <span class="n">read_source_spaces</span>
     <span class="k">assert</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fif_file</span><span class="p">)</span>
     <span class="n">src</span> <span class="o">=</span> <span class="n">read_source_spaces</span><span class="p">(</span><span class="n">fif_file</span><span class="p">)</span>
     <span class="c1"># Build vertices / faces :</span>
@@ -1220,7 +1220,7 @@
         <div class="container">
             <img src="../../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-09-10.</p>
+        <p>&copy; Copyright Last updated on 2020-03-11.</p>
     </footer>
 
   </body>

@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/visbrain_styles.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -994,11 +994,11 @@
 <span class="kn">import</span> <span class="nn">os</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">vispy</span> <span class="k">import</span> <span class="n">scene</span>
+<span class="kn">from</span> <span class="nn">vispy</span> <span class="kn">import</span> <span class="n">scene</span>
 
-<span class="kn">from</span> <span class="nn">.visbrain_obj</span> <span class="k">import</span> <span class="n">VisbrainObject</span>
-<span class="kn">from</span> <span class="nn">..visuals</span> <span class="k">import</span> <span class="n">Hypnogram</span>
-<span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">read_hypno</span>
+<span class="kn">from</span> <span class="nn">.visbrain_obj</span> <span class="kn">import</span> <span class="n">VisbrainObject</span>
+<span class="kn">from</span> <span class="nn">..visuals</span> <span class="kn">import</span> <span class="n">Hypnogram</span>
+<span class="kn">from</span> <span class="nn">..io</span> <span class="kn">import</span> <span class="n">read_hypno</span>
 
 
 <div class="viewcode-block" id="HypnogramObj"><a class="viewcode-back" href="../../../generated/visbrain.objects.HypnogramObj.html#visbrain.objects.HypnogramObj">[docs]</a><span class="k">class</span> <span class="nc">HypnogramObj</span><span class="p">(</span><span class="n">VisbrainObject</span><span class="p">):</span>
@@ -1052,7 +1052,7 @@
 <span class="sd">    &gt;&gt;&gt; h_obj.preview(axis=True)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="HypnogramObj.__init__"><a class="viewcode-back" href="../../../generated/HypnogramObj/visbrain.objects.HypnogramObj.__init__.html#visbrain.objects.HypnogramObj.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">datafile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+<div class="viewcode-block" id="HypnogramObj.__init__"><a class="viewcode-back" href="../../../generated/HypnogramObj/visbrain.objects.HypnogramObj.__init__.html#visbrain.objects.HypnogramObj.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">datafile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
                  <span class="n">wake</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n2</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n3</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">rem</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">art_visual</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">wake_visual</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                  <span class="n">rem_visual</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n1_visual</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">n2_visual</span><span class="o">=-</span><span class="mi">3</span><span class="p">,</span> <span class="n">n3_visual</span><span class="o">=-</span><span class="mi">4</span><span class="p">,</span>
                  <span class="n">art_color</span><span class="o">=</span><span class="s1">&#39;#8bbf56&#39;</span><span class="p">,</span> <span class="n">wake_color</span><span class="o">=</span><span class="s1">&#39;#56bf8b&#39;</span><span class="p">,</span>
@@ -1142,7 +1142,7 @@
         <div class="container">
             <img src="../../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-09-10.</p>
+        <p>&copy; Copyright Last updated on 2020-03-11.</p>
     </footer>
 
   </body>

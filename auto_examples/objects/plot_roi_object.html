@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/visbrain_styles.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -1041,8 +1041,8 @@ Every ROI files is downloaded to the ~/visbrain_data/roi folder</p>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <a href="../../generated/visbrain.objects.RoiObj.html#visbrain.objects.RoiObj" title="View documentation for visbrain.objects.RoiObj"><span class="n">RoiObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.ColorbarObj.html#visbrain.objects.ColorbarObj" title="View documentation for visbrain.objects.ColorbarObj"><span class="n">ColorbarObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="k">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">,</span> <a href="../../generated/visbrain.io.path_to_visbrain_data.html#visbrain.io.path_to_visbrain_data" title="View documentation for visbrain.io.path_to_visbrain_data"><span class="n">path_to_visbrain_data</span></a><span class="p">,</span> <span class="n">read_nifti</span>
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../generated/visbrain.objects.RoiObj.html#visbrain.objects.RoiObj" title="View documentation for visbrain.objects.RoiObj"><span class="n">RoiObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.ColorbarObj.html#visbrain.objects.ColorbarObj" title="View documentation for visbrain.objects.ColorbarObj"><span class="n">ColorbarObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SourceObj.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">,</span> <a href="../../generated/visbrain.io.path_to_visbrain_data.html#visbrain.io.path_to_visbrain_data" title="View documentation for visbrain.io.path_to_visbrain_data"><span class="n">path_to_visbrain_data</span></a><span class="p">,</span> <span class="n">read_nifti</span>
 </pre></div>
 </div>
 <div class="section" id="download-data">
@@ -1060,15 +1060,6 @@ define your own RoiObj</p>
 <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=-</span><span class="mf">1.</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],))</span>
 <span class="c1"># Download the MIST parcellates</span>
 <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">(</span><span class="s1">&#39;MIST_ROI.zip&#39;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">astype</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>STATUS :   0.0%     0 / 33895
-STATUS :  24.2%  8192 / 33895
-STATUS :  48.3% 16384 / 33895
-STATUS :  72.5% 24576 / 33895
-STATUS :  96.7% 32768 / 33895
-STATUS : 100.0% 40960 / 33895
 </pre></div>
 </div>
 </div>
@@ -1106,59 +1097,6 @@ inspect in this file the index of the ROI that you’re looking for.</p>
 <span class="n">ref_aal</span> <span class="o">=</span> <span class="n">roi_to_find1</span><span class="o">.</span><span class="n">get_labels</span><span class="p">(</span><span class="n">vb_path</span><span class="p">)</span>    <span class="c1"># Save AAL</span>
 <span class="n">roi_to_find1</span><span class="p">(</span><span class="s1">&#39;talairach&#39;</span><span class="p">)</span>                     <span class="c1"># Switch to Talairach</span>
 <span class="c1"># ref_tal = roi_to_find1.get_labels(vb_path)    # Save Talairach</span>
-</pre></div>
-</div>
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>STATUS :   0.0%      0 / 395520
-STATUS :   2.1%   8192 / 395520
-STATUS :   4.1%  16384 / 395520
-STATUS :   6.2%  24576 / 395520
-STATUS :   8.3%  32768 / 395520
-STATUS :  10.4%  40960 / 395520
-STATUS :  12.4%  49152 / 395520
-STATUS :  14.5%  57344 / 395520
-STATUS :  16.6%  65536 / 395520
-STATUS :  18.6%  73728 / 395520
-STATUS :  20.7%  81920 / 395520
-STATUS :  22.8%  90112 / 395520
-STATUS :  24.9%  98304 / 395520
-STATUS :  26.9% 106496 / 395520
-STATUS :  29.0% 114688 / 395520
-STATUS :  31.1% 122880 / 395520
-STATUS :  33.1% 131072 / 395520
-STATUS :  35.2% 139264 / 395520
-STATUS :  37.3% 147456 / 395520
-STATUS :  39.4% 155648 / 395520
-STATUS :  41.4% 163840 / 395520
-STATUS :  43.5% 172032 / 395520
-STATUS :  45.6% 180224 / 395520
-STATUS :  47.6% 188416 / 395520
-STATUS :  49.7% 196608 / 395520
-STATUS :  51.8% 204800 / 395520
-STATUS :  53.9% 212992 / 395520
-STATUS :  55.9% 221184 / 395520
-STATUS :  58.0% 229376 / 395520
-STATUS :  60.1% 237568 / 395520
-STATUS :  62.1% 245760 / 395520
-STATUS :  64.2% 253952 / 395520
-STATUS :  66.3% 262144 / 395520
-STATUS :  68.3% 270336 / 395520
-STATUS :  70.4% 278528 / 395520
-STATUS :  72.5% 286720 / 395520
-STATUS :  74.6% 294912 / 395520
-STATUS :  76.6% 303104 / 395520
-STATUS :  78.7% 311296 / 395520
-STATUS :  80.8% 319488 / 395520
-STATUS :  82.8% 327680 / 395520
-STATUS :  84.9% 335872 / 395520
-STATUS :  87.0% 344064 / 395520
-STATUS :  89.1% 352256 / 395520
-STATUS :  91.1% 360448 / 395520
-STATUS :  93.2% 368640 / 395520
-STATUS :  95.3% 376832 / 395520
-STATUS :  97.3% 385024 / 395520
-STATUS :  99.4% 393216 / 395520
-STATUS : 100.0% 401408 / 395520
 </pre></div>
 </div>
 <p><strong>Method 2 :</strong> explicitly search where is the ROI that you’re looking for</p>
@@ -1238,51 +1176,6 @@ network (DMN) and project source’s activity on it</p>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">roi_dmn</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">rotate</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="n">zoom</span><span class="o">=.</span><span class="mi">4</span><span class="p">,</span>
                   <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Project source&#39;s activity onto the DMN&quot;</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">cb_dmn</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">width_max</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
-</pre></div>
-</div>
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>STATUS :   0.0%      0 / 335120
-STATUS :   2.4%   8192 / 335120
-STATUS :   4.9%  16384 / 335120
-STATUS :   7.3%  24576 / 335120
-STATUS :   9.8%  32768 / 335120
-STATUS :  12.2%  40960 / 335120
-STATUS :  14.7%  49152 / 335120
-STATUS :  17.1%  57344 / 335120
-STATUS :  19.6%  65536 / 335120
-STATUS :  22.0%  73728 / 335120
-STATUS :  24.4%  81920 / 335120
-STATUS :  26.9%  90112 / 335120
-STATUS :  29.3%  98304 / 335120
-STATUS :  31.8% 106496 / 335120
-STATUS :  34.2% 114688 / 335120
-STATUS :  36.7% 122880 / 335120
-STATUS :  39.1% 131072 / 335120
-STATUS :  41.6% 139264 / 335120
-STATUS :  44.0% 147456 / 335120
-STATUS :  46.4% 155648 / 335120
-STATUS :  48.9% 163840 / 335120
-STATUS :  51.3% 172032 / 335120
-STATUS :  53.8% 180224 / 335120
-STATUS :  56.2% 188416 / 335120
-STATUS :  58.7% 196608 / 335120
-STATUS :  61.1% 204800 / 335120
-STATUS :  63.6% 212992 / 335120
-STATUS :  66.0% 221184 / 335120
-STATUS :  68.4% 229376 / 335120
-STATUS :  70.9% 237568 / 335120
-STATUS :  73.3% 245760 / 335120
-STATUS :  75.8% 253952 / 335120
-STATUS :  78.2% 262144 / 335120
-STATUS :  80.7% 270336 / 335120
-STATUS :  83.1% 278528 / 335120
-STATUS :  85.6% 286720 / 335120
-STATUS :  88.0% 294912 / 335120
-STATUS :  90.4% 303104 / 335120
-STATUS :  92.9% 311296 / 335120
-STATUS :  95.3% 319488 / 335120
-STATUS :  97.8% 327680 / 335120
-STATUS : 100.0% 335872 / 335120
 </pre></div>
 </div>
 </div>
@@ -1395,7 +1288,7 @@ name which means that you can reload it later using RoiObj(‘custom_roi’))</p
 </pre></div>
 </div>
 <img alt="../../_images/sphx_glr_plot_roi_object_001.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_roi_object_001.png" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  51.888 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  41.713 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-objects-plot-roi-object-py">
 <div class="sphx-glr-download docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/b8d43ee45ce3d2abbbd66bfa1193e3b9/plot_roi_object.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_roi_object.py</span></code></a></p>
@@ -1429,7 +1322,7 @@ name which means that you can reload it later using RoiObj(‘custom_roi’))</p
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-09-10.</p>
+        <p>&copy; Copyright Last updated on 2020-03-11.</p>
     </footer>
 
   </body>

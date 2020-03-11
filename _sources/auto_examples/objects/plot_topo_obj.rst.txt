@@ -56,14 +56,6 @@ Download data
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    STATUS :   0.0%    0 / 1876    STATUS : 100.0% 8192 / 1876
-
 
 
 Creation of the scene
@@ -105,14 +97,6 @@ Topoplot based on channel names
 
 
 
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    STATUS :   0.0%      0 / 311220    STATUS :   2.6%   8192 / 311220    STATUS :   5.3%  16384 / 311220    STATUS :   7.9%  24576 / 311220    STATUS :  10.5%  32768 / 311220    STATUS :  13.2%  40960 / 311220    STATUS :  15.8%  49152 / 311220    STATUS :  18.4%  57344 / 311220    STATUS :  21.1%  65536 / 311220    STATUS :  23.7%  73728 / 311220    STATUS :  26.3%  81920 / 311220    STATUS :  29.0%  90112 / 311220    STATUS :  31.6%  98304 / 311220    STATUS :  34.2% 106496 / 311220    STATUS :  36.9% 114688 / 311220    STATUS :  39.5% 122880 / 311220    STATUS :  42.1% 131072 / 311220    STATUS :  44.7% 139264 / 311220    STATUS :  47.4% 147456 / 311220    STATUS :  50.0% 155648 / 311220    STATUS :  52.6% 163840 / 311220    STATUS :  55.3% 172032 / 311220    STATUS :  57.9% 180224 / 311220    STATUS :  60.5% 188416 / 311220    STATUS :  63.2% 196608 / 311220    STATUS :  65.8% 204800 / 311220    STATUS :  68.4% 212992 / 311220    STATUS :  71.1% 221184 / 311220    STATUS :  73.7% 229376 / 311220    STATUS :  76.3% 237568 / 311220    STATUS :  79.0% 245760 / 311220    STATUS :  81.6% 253952 / 311220    STATUS :  84.2% 262144 / 311220    STATUS :  86.9% 270336 / 311220    STATUS :  89.5% 278528 / 311220    STATUS :  92.1% 286720 / 311220    STATUS :  94.8% 294912 / 311220    STATUS :  97.4% 303104 / 311220    STATUS : 100.0% 311296 / 311220
 
 
 
@@ -262,7 +246,7 @@ Topoplot with custom levels
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  8.665 seconds)
+   **Total running time of the script:** ( 1 minutes  13.977 seconds)
 
 
 .. _sphx_glr_download_auto_examples_objects_plot_topo_obj.py:

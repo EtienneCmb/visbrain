@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/visbrain_styles.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -1011,8 +1011,8 @@
 <p>This example illustrate how to plot .x3d files. 6 brain templates are going to
 be downloaded (total of 26.3Mo). Additional templates can be downloaded from :
 <a class="reference external" href="https://scalablebrainatlas.incf.org">https://scalablebrainatlas.incf.org</a></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="k">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a>
 
 
 <span class="n">sc</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1500</span><span class="p">,</span> <span class="mi">800</span><span class="p">))</span>
@@ -1029,192 +1029,6 @@ Neuroimage 152:575–589. [doi 10.1016/j.neuroimage.2017.03.009]</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ferret_file</span> <span class="o">=</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a><span class="p">(</span><span class="s1">&#39;ferret.x3d&#39;</span><span class="p">,</span> <span class="n">astype</span><span class="o">=</span><span class="s1">&#39;example_data&#39;</span><span class="p">)</span>
 <span class="n">b_ferret_obj</span> <span class="o">=</span> <a href="../../generated/visbrain.objects.BrainObj.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="n">ferret_file</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">b_ferret_obj</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Ferret brain (Hutchinson et al. 2017)&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>STATUS :   0.0%       0 / 1484339
-STATUS :   0.6%    8192 / 1484339
-STATUS :   1.1%   16384 / 1484339
-STATUS :   1.7%   24576 / 1484339
-STATUS :   2.2%   32768 / 1484339
-STATUS :   2.8%   40960 / 1484339
-STATUS :   3.3%   49152 / 1484339
-STATUS :   3.9%   57344 / 1484339
-STATUS :   4.4%   65536 / 1484339
-STATUS :   5.0%   73728 / 1484339
-STATUS :   5.5%   81920 / 1484339
-STATUS :   6.1%   90112 / 1484339
-STATUS :   6.6%   98304 / 1484339
-STATUS :   7.2%  106496 / 1484339
-STATUS :   7.7%  114688 / 1484339
-STATUS :   8.3%  122880 / 1484339
-STATUS :   8.8%  131072 / 1484339
-STATUS :   9.4%  139264 / 1484339
-STATUS :   9.9%  147456 / 1484339
-STATUS :  10.5%  155648 / 1484339
-STATUS :  11.0%  163840 / 1484339
-STATUS :  11.6%  172032 / 1484339
-STATUS :  12.1%  180224 / 1484339
-STATUS :  12.7%  188416 / 1484339
-STATUS :  13.2%  196608 / 1484339
-STATUS :  13.8%  204800 / 1484339
-STATUS :  14.3%  212992 / 1484339
-STATUS :  14.9%  221184 / 1484339
-STATUS :  15.5%  229376 / 1484339
-STATUS :  16.0%  237568 / 1484339
-STATUS :  16.6%  245760 / 1484339
-STATUS :  17.1%  253952 / 1484339
-STATUS :  17.7%  262144 / 1484339
-STATUS :  18.2%  270336 / 1484339
-STATUS :  18.8%  278528 / 1484339
-STATUS :  19.3%  286720 / 1484339
-STATUS :  19.9%  294912 / 1484339
-STATUS :  20.4%  303104 / 1484339
-STATUS :  21.0%  311296 / 1484339
-STATUS :  21.5%  319488 / 1484339
-STATUS :  22.1%  327680 / 1484339
-STATUS :  22.6%  335872 / 1484339
-STATUS :  23.2%  344064 / 1484339
-STATUS :  23.7%  352256 / 1484339
-STATUS :  24.3%  360448 / 1484339
-STATUS :  24.8%  368640 / 1484339
-STATUS :  25.4%  376832 / 1484339
-STATUS :  25.9%  385024 / 1484339
-STATUS :  26.5%  393216 / 1484339
-STATUS :  27.0%  401408 / 1484339
-STATUS :  27.6%  409600 / 1484339
-STATUS :  28.1%  417792 / 1484339
-STATUS :  28.7%  425984 / 1484339
-STATUS :  29.3%  434176 / 1484339
-STATUS :  29.8%  442368 / 1484339
-STATUS :  30.4%  450560 / 1484339
-STATUS :  30.9%  458752 / 1484339
-STATUS :  31.5%  466944 / 1484339
-STATUS :  32.0%  475136 / 1484339
-STATUS :  32.6%  483328 / 1484339
-STATUS :  33.1%  491520 / 1484339
-STATUS :  33.7%  499712 / 1484339
-STATUS :  34.2%  507904 / 1484339
-STATUS :  34.8%  516096 / 1484339
-STATUS :  35.3%  524288 / 1484339
-STATUS :  35.9%  532480 / 1484339
-STATUS :  36.4%  540672 / 1484339
-STATUS :  37.0%  548864 / 1484339
-STATUS :  37.5%  557056 / 1484339
-STATUS :  38.1%  565248 / 1484339
-STATUS :  38.6%  573440 / 1484339
-STATUS :  39.2%  581632 / 1484339
-STATUS :  39.7%  589824 / 1484339
-STATUS :  40.3%  598016 / 1484339
-STATUS :  40.8%  606208 / 1484339
-STATUS :  41.4%  614400 / 1484339
-STATUS :  41.9%  622592 / 1484339
-STATUS :  42.5%  630784 / 1484339
-STATUS :  43.0%  638976 / 1484339
-STATUS :  43.6%  647168 / 1484339
-STATUS :  44.2%  655360 / 1484339
-STATUS :  44.7%  663552 / 1484339
-STATUS :  45.3%  671744 / 1484339
-STATUS :  45.8%  679936 / 1484339
-STATUS :  46.4%  688128 / 1484339
-STATUS :  46.9%  696320 / 1484339
-STATUS :  47.5%  704512 / 1484339
-STATUS :  48.0%  712704 / 1484339
-STATUS :  48.6%  720896 / 1484339
-STATUS :  49.1%  729088 / 1484339
-STATUS :  49.7%  737280 / 1484339
-STATUS :  50.2%  745472 / 1484339
-STATUS :  50.8%  753664 / 1484339
-STATUS :  51.3%  761856 / 1484339
-STATUS :  51.9%  770048 / 1484339
-STATUS :  52.4%  778240 / 1484339
-STATUS :  53.0%  786432 / 1484339
-STATUS :  53.5%  794624 / 1484339
-STATUS :  54.1%  802816 / 1484339
-STATUS :  54.6%  811008 / 1484339
-STATUS :  55.2%  819200 / 1484339
-STATUS :  55.7%  827392 / 1484339
-STATUS :  56.3%  835584 / 1484339
-STATUS :  56.8%  843776 / 1484339
-STATUS :  57.4%  851968 / 1484339
-STATUS :  57.9%  860160 / 1484339
-STATUS :  58.5%  868352 / 1484339
-STATUS :  59.1%  876544 / 1484339
-STATUS :  59.6%  884736 / 1484339
-STATUS :  60.2%  892928 / 1484339
-STATUS :  60.7%  901120 / 1484339
-STATUS :  61.3%  909312 / 1484339
-STATUS :  61.8%  917504 / 1484339
-STATUS :  62.4%  925696 / 1484339
-STATUS :  62.9%  933888 / 1484339
-STATUS :  63.5%  942080 / 1484339
-STATUS :  64.0%  950272 / 1484339
-STATUS :  64.6%  958464 / 1484339
-STATUS :  65.1%  966656 / 1484339
-STATUS :  65.7%  974848 / 1484339
-STATUS :  66.2%  983040 / 1484339
-STATUS :  66.8%  991232 / 1484339
-STATUS :  67.3%  999424 / 1484339
-STATUS :  67.9% 1007616 / 1484339
-STATUS :  68.4% 1015808 / 1484339
-STATUS :  69.0% 1024000 / 1484339
-STATUS :  69.5% 1032192 / 1484339
-STATUS :  70.1% 1040384 / 1484339
-STATUS :  70.6% 1048576 / 1484339
-STATUS :  71.2% 1056768 / 1484339
-STATUS :  71.7% 1064960 / 1484339
-STATUS :  72.3% 1073152 / 1484339
-STATUS :  72.9% 1081344 / 1484339
-STATUS :  73.4% 1089536 / 1484339
-STATUS :  74.0% 1097728 / 1484339
-STATUS :  74.5% 1105920 / 1484339
-STATUS :  75.1% 1114112 / 1484339
-STATUS :  75.6% 1122304 / 1484339
-STATUS :  76.2% 1130496 / 1484339
-STATUS :  76.7% 1138688 / 1484339
-STATUS :  77.3% 1146880 / 1484339
-STATUS :  77.8% 1155072 / 1484339
-STATUS :  78.4% 1163264 / 1484339
-STATUS :  78.9% 1171456 / 1484339
-STATUS :  79.5% 1179648 / 1484339
-STATUS :  80.0% 1187840 / 1484339
-STATUS :  80.6% 1196032 / 1484339
-STATUS :  81.1% 1204224 / 1484339
-STATUS :  81.7% 1212416 / 1484339
-STATUS :  82.2% 1220608 / 1484339
-STATUS :  82.8% 1228800 / 1484339
-STATUS :  83.3% 1236992 / 1484339
-STATUS :  83.9% 1245184 / 1484339
-STATUS :  84.4% 1253376 / 1484339
-STATUS :  85.0% 1261568 / 1484339
-STATUS :  85.5% 1269760 / 1484339
-STATUS :  86.1% 1277952 / 1484339
-STATUS :  86.6% 1286144 / 1484339
-STATUS :  87.2% 1294336 / 1484339
-STATUS :  87.8% 1302528 / 1484339
-STATUS :  88.3% 1310720 / 1484339
-STATUS :  88.9% 1318912 / 1484339
-STATUS :  89.4% 1327104 / 1484339
-STATUS :  90.0% 1335296 / 1484339
-STATUS :  90.5% 1343488 / 1484339
-STATUS :  91.1% 1351680 / 1484339
-STATUS :  91.6% 1359872 / 1484339
-STATUS :  92.2% 1368064 / 1484339
-STATUS :  92.7% 1376256 / 1484339
-STATUS :  93.3% 1384448 / 1484339
-STATUS :  93.8% 1392640 / 1484339
-STATUS :  94.4% 1400832 / 1484339
-STATUS :  94.9% 1409024 / 1484339
-STATUS :  95.5% 1417216 / 1484339
-STATUS :  96.0% 1425408 / 1484339
-STATUS :  96.6% 1433600 / 1484339
-STATUS :  97.1% 1441792 / 1484339
-STATUS :  97.7% 1449984 / 1484339
-STATUS :  98.2% 1458176 / 1484339
-STATUS :  98.8% 1466368 / 1484339
-STATUS :  99.3% 1474560 / 1484339
-STATUS :  99.9% 1482752 / 1484339
-STATUS : 100.0% 1490944 / 1484339
 </pre></div>
 </div>
 </div>
@@ -4375,7 +4189,7 @@ STATUS : 100.0% 3244032 / 3244632
 STATUS : 100.0% 3252224 / 3244632
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  30.493 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  31.462 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-objects-plot-x3d-files-py">
 <div class="sphx-glr-download docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/35f85e9db18b8846715982e1c689febd/plot_x3d_files.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_x3d_files.py</span></code></a></p>
@@ -4409,7 +4223,7 @@ STATUS : 100.0% 3252224 / 3244632
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-09-10.</p>
+        <p>&copy; Copyright Last updated on 2020-03-11.</p>
     </footer>
 
   </body>

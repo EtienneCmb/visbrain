@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/visbrain_styles.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -1023,8 +1023,8 @@ levels with custom colors)</p></li>
 </div></blockquote>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <a href="../../generated/visbrain.objects.TopoObj.html#visbrain.objects.TopoObj" title="View documentation for visbrain.objects.TopoObj"><span class="n">TopoObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.ColorbarObj.html#visbrain.objects.ColorbarObj" title="View documentation for visbrain.objects.ColorbarObj"><span class="n">ColorbarObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="k">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../generated/visbrain.objects.TopoObj.html#visbrain.objects.TopoObj" title="View documentation for visbrain.objects.TopoObj"><span class="n">TopoObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.ColorbarObj.html#visbrain.objects.ColorbarObj" title="View documentation for visbrain.objects.ColorbarObj"><span class="n">ColorbarObj</span></a><span class="p">,</span> <a href="../../generated/visbrain.objects.SceneObj.html#visbrain.objects.SceneObj" title="View documentation for visbrain.objects.SceneObj"><span class="n">SceneObj</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <a href="../../generated/visbrain.io.download_file.html#visbrain.io.download_file" title="View documentation for visbrain.io.download_file"><span class="n">download_file</span></a>
 </pre></div>
 </div>
 <div class="section" id="download-data">
@@ -1042,11 +1042,6 @@ channels defined by there xy coordinates.</p>
 <span class="n">kw_top</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">margin</span><span class="o">=</span><span class="mi">15</span> <span class="o">/</span> <span class="mi">100</span><span class="p">,</span> <span class="n">chan_offset</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.</span><span class="p">),</span> <span class="n">chan_size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 <span class="n">kw_cbar</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">cbtxtsz</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">txtsz</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">width</span><span class="o">=.</span><span class="mi">3</span><span class="p">,</span> <span class="n">txtcolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">cbtxtsh</span><span class="o">=</span><span class="mf">1.8</span><span class="p">,</span>
                <span class="n">rect</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">),</span> <span class="n">border</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</pre></div>
-</div>
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>STATUS :   0.0%    0 / 1876
-STATUS : 100.0% 8192 / 1876
 </pre></div>
 </div>
 </div>
@@ -1075,48 +1070,6 @@ STATUS : 100.0% 8192 / 1876
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">t_obj</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Definition using channel names&#39;</span><span class="p">,</span>
                   <span class="n">title_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">width_max</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">cb_obj</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">width_max</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-</pre></div>
-</div>
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>STATUS :   0.0%      0 / 311220
-STATUS :   2.6%   8192 / 311220
-STATUS :   5.3%  16384 / 311220
-STATUS :   7.9%  24576 / 311220
-STATUS :  10.5%  32768 / 311220
-STATUS :  13.2%  40960 / 311220
-STATUS :  15.8%  49152 / 311220
-STATUS :  18.4%  57344 / 311220
-STATUS :  21.1%  65536 / 311220
-STATUS :  23.7%  73728 / 311220
-STATUS :  26.3%  81920 / 311220
-STATUS :  29.0%  90112 / 311220
-STATUS :  31.6%  98304 / 311220
-STATUS :  34.2% 106496 / 311220
-STATUS :  36.9% 114688 / 311220
-STATUS :  39.5% 122880 / 311220
-STATUS :  42.1% 131072 / 311220
-STATUS :  44.7% 139264 / 311220
-STATUS :  47.4% 147456 / 311220
-STATUS :  50.0% 155648 / 311220
-STATUS :  52.6% 163840 / 311220
-STATUS :  55.3% 172032 / 311220
-STATUS :  57.9% 180224 / 311220
-STATUS :  60.5% 188416 / 311220
-STATUS :  63.2% 196608 / 311220
-STATUS :  65.8% 204800 / 311220
-STATUS :  68.4% 212992 / 311220
-STATUS :  71.1% 221184 / 311220
-STATUS :  73.7% 229376 / 311220
-STATUS :  76.3% 237568 / 311220
-STATUS :  79.0% 245760 / 311220
-STATUS :  81.6% 253952 / 311220
-STATUS :  84.2% 262144 / 311220
-STATUS :  86.9% 270336 / 311220
-STATUS :  89.5% 278528 / 311220
-STATUS :  92.1% 286720 / 311220
-STATUS :  94.8% 294912 / 311220
-STATUS :  97.4% 303104 / 311220
-STATUS : 100.0% 311296 / 311220
 </pre></div>
 </div>
 </div>
@@ -1226,7 +1179,7 @@ spaced anymore but they are manually defined, just as color.</p>
 </pre></div>
 </div>
 <img alt="../../_images/sphx_glr_plot_topo_obj_001.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_topo_obj_001.png" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  8.665 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  13.977 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-objects-plot-topo-obj-py">
 <div class="sphx-glr-download docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/b363df54d0adc4f957b7c29261e7811c/plot_topo_obj.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_topo_obj.py</span></code></a></p>
@@ -1260,7 +1213,7 @@ spaced anymore but they are manually defined, just as color.</p>
         <div class="container">
             <img src="../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-09-10.</p>
+        <p>&copy; Copyright Last updated on 2020-03-11.</p>
     </footer>
 
   </body>

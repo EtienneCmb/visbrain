@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/visbrain_styles.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
@@ -994,12 +994,12 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">.ui_elements</span> <span class="k">import</span> <span class="n">UiElements</span><span class="p">,</span> <span class="n">UiInit</span>
-<span class="kn">from</span> <span class="nn">.visuals</span> <span class="k">import</span> <span class="n">Visuals</span>
-<span class="kn">from</span> <span class="nn">visbrain.utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">safely_set_cbox</span><span class="p">,</span> <span class="n">color2tuple</span><span class="p">,</span> <span class="n">color2vb</span><span class="p">,</span> <span class="n">mpl_cmap</span><span class="p">,</span>
+<span class="kn">from</span> <span class="nn">.ui_elements</span> <span class="kn">import</span> <span class="n">UiElements</span><span class="p">,</span> <span class="n">UiInit</span>
+<span class="kn">from</span> <span class="nn">.visuals</span> <span class="kn">import</span> <span class="n">Visuals</span>
+<span class="kn">from</span> <span class="nn">visbrain.utils</span> <span class="kn">import</span> <span class="p">(</span><span class="n">safely_set_cbox</span><span class="p">,</span> <span class="n">color2tuple</span><span class="p">,</span> <span class="n">color2vb</span><span class="p">,</span> <span class="n">mpl_cmap</span><span class="p">,</span>
                             <span class="n">toggle_enable_tab</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="k">import</span> <span class="n">write_fig_canvas</span>
-<span class="kn">from</span> <span class="nn">visbrain._pyqt_module</span> <span class="k">import</span> <span class="n">_PyQtModule</span>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">write_fig_canvas</span>
+<span class="kn">from</span> <span class="nn">visbrain._pyqt_module</span> <span class="kn">import</span> <span class="n">_PyQtModule</span>
 <span class="c1"># get_screen_size</span>
 
 
@@ -1113,7 +1113,7 @@
 <span class="sd">        platform.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">enable_grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">enable_grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">form</span><span class="o">=</span><span class="s1">&#39;line&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">line_lw</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">line_smooth</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">marker_symbol</span><span class="o">=</span><span class="s1">&#39;disc&#39;</span><span class="p">,</span> <span class="n">marker_size</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">hist_nbins</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
                  <span class="n">tf_norm</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tf_baseline</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tf_interp</span><span class="o">=</span><span class="s1">&#39;gaussian&#39;</span><span class="p">,</span>
@@ -1239,7 +1239,7 @@
             <span class="k">assert</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">annotations</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_load_annotations</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">annotations</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Iterate over signal dimension.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_signal</span><span class="o">.</span><span class="n">_navidx</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
             <span class="k">yield</span> <span class="n">k</span>
@@ -1420,7 +1420,7 @@
         <div class="container">
             <img src="../../../../_static/baniere.png" alt="Ban" height="80">
         </div>
-        <p>&copy; Copyright Last updated on 2019-09-10.</p>
+        <p>&copy; Copyright Last updated on 2020-03-11.</p>
     </footer>
 
   </body>
