@@ -5,18 +5,18 @@
 
 Computation times
 =================
-**07:13.636** total execution time for **auto_examples_objects** files:
+**07:45.442** total execution time for **auto_examples_objects** files:
 
-- **01:15.585**: :ref:`sphx_glr_auto_examples_objects_plot_topo_obj.py` (``plot_topo_obj.py``)
-- **01:08.501**: :ref:`sphx_glr_auto_examples_objects_plot_source_obj.py` (``plot_source_obj.py``)
-- **00:49.130**: :ref:`sphx_glr_auto_examples_objects_plot_brain_obj.py` (``plot_brain_obj.py``)
-- **00:44.918**: :ref:`sphx_glr_auto_examples_objects_plot_volume_obj.py` (``plot_volume_obj.py``)
-- **00:41.119**: :ref:`sphx_glr_auto_examples_objects_plot_roi_object.py` (``plot_roi_object.py``)
-- **00:33.838**: :ref:`sphx_glr_auto_examples_objects_plot_im_tf_spec_obj.py` (``plot_im_tf_spec_obj.py``)
-- **00:32.710**: :ref:`sphx_glr_auto_examples_objects_plot_x3d_files.py` (``plot_x3d_files.py``)
-- **00:25.705**: :ref:`sphx_glr_auto_examples_objects_plot_combine_objects.py` (``plot_combine_objects.py``)
-- **00:18.709**: :ref:`sphx_glr_auto_examples_objects_plot_tspic_obj.py` (``plot_tspic_obj.py``)
-- **00:13.995**: :ref:`sphx_glr_auto_examples_objects_plot_gridsignals_obj.py` (``plot_gridsignals_obj.py``)
-- **00:11.111**: :ref:`sphx_glr_auto_examples_objects_plot_animate_scene.py` (``plot_animate_scene.py``)
-- **00:09.561**: :ref:`sphx_glr_auto_examples_objects_plot_pac_obj.py` (``plot_pac_obj.py``)
-- **00:08.755**: :ref:`sphx_glr_auto_examples_objects_plot_connectivity_obj.py` (``plot_connectivity_obj.py``)
+- **01:21.931**: :ref:`sphx_glr_auto_examples_objects_plot_topo_obj.py` (``plot_topo_obj.py``)
+- **01:09.449**: :ref:`sphx_glr_auto_examples_objects_plot_source_obj.py` (``plot_source_obj.py``)
+- **00:55.154**: :ref:`sphx_glr_auto_examples_objects_plot_brain_obj.py` (``plot_brain_obj.py``)
+- **00:45.855**: :ref:`sphx_glr_auto_examples_objects_plot_roi_object.py` (``plot_roi_object.py``)
+- **00:40.306**: :ref:`sphx_glr_auto_examples_objects_plot_volume_obj.py` (``plot_volume_obj.py``)
+- **00:38.836**: :ref:`sphx_glr_auto_examples_objects_plot_im_tf_spec_obj.py` (``plot_im_tf_spec_obj.py``)
+- **00:33.850**: :ref:`sphx_glr_auto_examples_objects_plot_x3d_files.py` (``plot_x3d_files.py``)
+- **00:28.807**: :ref:`sphx_glr_auto_examples_objects_plot_combine_objects.py` (``plot_combine_objects.py``)
+- **00:19.576**: :ref:`sphx_glr_auto_examples_objects_plot_tspic_obj.py` (``plot_tspic_obj.py``)
+- **00:17.946**: :ref:`sphx_glr_auto_examples_objects_plot_gridsignals_obj.py` (``plot_gridsignals_obj.py``)
+- **00:12.518**: :ref:`sphx_glr_auto_examples_objects_plot_animate_scene.py` (``plot_animate_scene.py``)
+- **00:10.990**: :ref:`sphx_glr_auto_examples_objects_plot_pac_obj.py` (``plot_pac_obj.py``)
+- **00:10.222**: :ref:`sphx_glr_auto_examples_objects_plot_connectivity_obj.py` (``plot_connectivity_obj.py``)
