@@ -13,7 +13,7 @@ Changelog
 New features
 ~~~~~~~~~~~~
 
-* Allow decoupling of the `scoring_window` and `display_window` to facilitate scoring of animal data in shorter epochs
+* Allow decoupling of the `scoring_window` and `display_window` to facilitate scoring of animal data in shorter epochs (`PR53 <https://github.com/EtienneCmb/visbrain/pull/53>`_)
 
 0.4.5
 -----
