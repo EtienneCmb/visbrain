@@ -56,7 +56,7 @@ class ReadSleepData(object):
             upath = os.path.split(data)[0]
         else:
             upath = ''
-            
+
         data_file = None
         hypno_file = None
 
@@ -94,7 +94,7 @@ class ReadSleepData(object):
             n_channels, n_pts_after = data.shape
             logger.info(info % (file + ext, sf, n, downsample, n_pts_after,
                                 n_channels))
-            
+
             PROFILER("Data file loaded", level=1)
 
         elif isinstance(data, np.ndarray):  # array of data is defined
@@ -148,13 +148,13 @@ class ReadSleepData(object):
         _translate = QtCore.QCoreApplication.translate
         window_title = _translate("MainWindow", "Sleep")
         if data_file:
-            window_title += ' | {}: {}'.format(_translate("MainWindow", 
+            window_title += ' | {}: {}'.format(_translate("MainWindow",
                                                           "File"), data_file)
         if hypno_file:
-            window_title += ' | {}: {}'.format(_translate("MainWindow", 
-                                                    "Hypnogram"), hypno_file)
+            window_title += ' | {}: {}'.format(_translate("MainWindow",
+                                                          "Hypnogram"), 
+                                                          hypno_file)
         self.setWindowTitle(window_title)
-            
 
         # ========================== CHECKING ==========================
         # ---------- DATA ----------
