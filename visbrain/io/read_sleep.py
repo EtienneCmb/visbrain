@@ -152,8 +152,8 @@ class ReadSleepData(object):
                                                           "File"), data_file)
         if hypno_file:
             window_title += ' | {}: {}'.format(_translate("MainWindow",
-                                                          "Hypnogram"), 
-                                                          hypno_file)
+                                                          "Hypnogram"),
+                                               hypno_file)
         self.setWindowTitle(window_title)
 
         # ========================== CHECKING ==========================
