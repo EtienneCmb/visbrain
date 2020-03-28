@@ -95,7 +95,7 @@ class ReadSleepData(object):
             window_title = _translate("MainWindow", "Sleep")
             window_title += ' | {}: '.format(_translate("MainWindow", "File"))
             window_title += '{}'.format(data_str)
-            window_title += ' | Hypno: {}'.format(hypno)
+            window_title += ' | Hypnogram: {}'.format(hypno) if hypno else ''
             self.setWindowTitle(window_title)
             
             PROFILER("Data file loaded", level=1)
