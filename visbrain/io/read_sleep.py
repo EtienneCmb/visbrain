@@ -56,10 +56,14 @@ class ReadSleepData(object):
             upath = os.path.split(data)[0]
         else:
             upath = ''
+            
+        data_file = None
+        hypno_file = None
 
         if isinstance(data, str):  # file is defined
             # ---------- USE SLEEP or MNE ----------
             # Find file extension :
+            data_file = data
             file, ext = get_file_ext(data)
             # Force to use MNE if preload is False :
             use_mne = True if not preload else use_mne
@@ -90,13 +94,6 @@ class ReadSleepData(object):
             n_channels, n_pts_after = data.shape
             logger.info(info % (file + ext, sf, n, downsample, n_pts_after,
                                 n_channels))
-            
-            _translate = QtCore.QCoreApplication.translate
-            window_title = _translate("MainWindow", "Sleep")
-            window_title += ' | {}: '.format(_translate("MainWindow", "File"))
-            window_title += '{}'.format(data_str)
-            window_title += ' | Hypnogram: {}'.format(hypno) if hypno else ''
-            self.setWindowTitle(window_title)
             
             PROFILER("Data file loaded", level=1)
 
@@ -141,10 +138,23 @@ class ReadSleepData(object):
                 raise ValueError("Then length of the hypnogram must be the "
                                  "same as raw data")
         if isinstance(hypno, str):  # (*.hyp / *.txt / *.csv)
+            hypno_file = hypno
             hypno, _ = read_hypno(hypno, time=time, datafile=file)
             # Oversample then downsample :
             hypno = oversample_hypno(hypno, self._N)[::dsf]
             PROFILER("Hypnogram file loaded", level=1)
+
+        # set new window title with file name of data and hypnogram
+        _translate = QtCore.QCoreApplication.translate
+        window_title = _translate("MainWindow", "Sleep")
+        if data_file:
+            window_title += ' | {}: {}'.format(_translate("MainWindow", 
+                                                          "File"), data_file)
+        if hypno_file:
+            window_title += ' | {}: {}'.format(_translate("MainWindow", 
+                                                    "Hypnogram"), hypno_file)
+        self.setWindowTitle(window_title)
+            
 
         # ========================== CHECKING ==========================
         # ---------- DATA ----------
