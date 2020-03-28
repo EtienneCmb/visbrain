@@ -13,6 +13,8 @@ from warnings import warn
 import logging
 import datetime
 
+from PyQt5 import QtCore
+
 import numpy as np
 from scipy.stats import iqr
 
@@ -88,6 +90,14 @@ class ReadSleepData(object):
             n_channels, n_pts_after = data.shape
             logger.info(info % (file + ext, sf, n, downsample, n_pts_after,
                                 n_channels))
+            
+            _translate = QtCore.QCoreApplication.translate
+            window_title = _translate("MainWindow", "Sleep")
+            window_title += ' | {}: '.format(_translate("MainWindow", "File"))
+            window_title += '{}'.format(data_str)
+            window_title += ' | Hypno: {}'.format(hypno)
+            self.setWindowTitle(window_title)
+            
             PROFILER("Data file loaded", level=1)
 
         elif isinstance(data, np.ndarray):  # array of data is defined
