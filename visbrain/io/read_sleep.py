@@ -145,12 +145,19 @@ class ReadSleepData(object):
             PROFILER("Hypnogram file loaded", level=1)
 
         # set new window title with file name of data and hypnogram
+        def folder_and_file(path): # helper function to display first parent
+            fullfolder, filename = os.path.split(path)
+            only_parent = os.path.split(fullfolder)[1]
+            return os.path.join(only_parent, filename)
+        
         _translate = QtCore.QCoreApplication.translate
         window_title = _translate("MainWindow", "Sleep")
         if data_file:
+            data_file = folder_and_file(data_file)
             window_title += ' | {}: {}'.format(_translate("MainWindow",
                                                           "File"), data_file)
         if hypno_file:
+            hypno_file = folder_and_file(hypno_file)
             window_title += ' | {}: {}'.format(_translate("MainWindow",
                                                           "Hypnogram"),
                                                hypno_file)
