@@ -14,7 +14,7 @@ import logging
 import datetime
 
 import numpy as np
-from scipy.stats import iqr
+from scipy.stats import iqr, rankdata
 
 from visbrain.io.dependencies import is_mne_installed
 from visbrain.io.dialog import dialog_load
@@ -194,7 +194,11 @@ class ReadSleepData(object):
         self._hvalues = np.array(hvalues)
         self._hcolors = np.array(hcolors)
         self._hshortcuts = np.array(hshortcuts)
-        self._hYranks = np.array(hYranks)  # Display order on hyp (top to bottm)
+        # Display order on hyp from top (0) to bottom (nstates - 1)
+        self._hYranks = np.array([
+            int(rank - 1)
+            for rank in rankdata(np.array(hYranks))
+        ])  # -1 because 1-indexed after rankdata()
         self._hYrankperm = np.argsort(hYranks)  # Display index to real index
         PROFILER("Check data", level=1)
 

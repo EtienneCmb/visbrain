@@ -241,7 +241,8 @@ class UiSettings(object):
         if iszoom:
             xlim_diff = xlim[1] - xlim[0]
             # Histogram :
-            self._hypcam.rect = (xlim[0], -5, xlim_diff, 7.)
+            self._hypcam.rect = (xlim[0], -len(self._hvalues),
+                                 xlim_diff, len(self._hvalues) + 1)
             # Spectrogram :
             self._speccam.rect = (xlim[0], self._spec.freq[0], xlim_diff,
                                   self._spec.freq[-1] - self._spec.freq[0])

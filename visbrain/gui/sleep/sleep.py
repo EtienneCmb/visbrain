@@ -106,7 +106,6 @@ class Sleep(_PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
         # Check all data :
         self._config_file = config_file
         self._annot_mark = np.array([])
-        self._hconvinv = {v: k for k, v in self._hconv.items()}
         self._ax = axis
         # ---------- Default line width ----------
         self._lw = 1.
@@ -115,15 +114,6 @@ class Sleep(_PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
         self._defstd = 5.
         # ---------- Default colors ----------
         self._chancolor = '#292824'
-        # self._hypcolor = '#292824'
-        # Hypnogram color :
-        self._hypcolor = {-1: '#8bbf56', 0: '#56bf8b', 1: '#aabcce',
-                          2: '#405c79', 3: '#0b1c2c', 4: '#bf5656'}
-        # Convert color :
-        if self._hconv != self._hconvinv:
-            hypc = self._hypcolor.copy()
-            for k in self._hconv.keys():
-                self._hypcolor[k] = hypc[self._hconvinv[k]]
         self._indicol = '#e74c3c'
         # Default spectrogram colormap :
         self._defcmap = 'viridis'

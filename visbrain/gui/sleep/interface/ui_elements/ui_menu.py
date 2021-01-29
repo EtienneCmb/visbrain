@@ -574,8 +574,10 @@ class UiMenu(HelpMenu):
                                   self._spec.freq[-1] - self._spec.freq[0])
             self._specInd.mesh.visible = self.menuDispIndic.isChecked()
             # Hypnogram camera :
-            self._hypcam.rect = (self._time.min(), -5.,
-                                 self._time.max() - self._time.min(), 7.)
+            self._hypcam.rect = (self._time.min(),
+                                 -len(self._hvalues),
+                                 self._time.max() - self._time.min(),
+                                 len(self._hvalues) + 1)
             # Time camera :
             self._timecam.rect = (self._time.min(), 0.,
                                   self._time.max() - self._time.min(), 1.)

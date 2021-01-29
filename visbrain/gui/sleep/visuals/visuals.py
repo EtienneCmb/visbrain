@@ -3,19 +3,21 @@
 This file contains and initialize visual objects (channel plot, spectrogram,
 hypnogram, indicator, shortcuts)
 """
-import numpy as np
-import scipy.signal as scpsig
 import itertools
 import logging
 
-from vispy import scene
+import numpy as np
+import scipy.signal as scpsig
+from scipy.stats import rankdata
+
 import vispy.visuals.transforms as vist
+from visbrain.config import PROFILER
+from visbrain.utils import PrepareData, cmap_to_glsl, color2vb
+from visbrain.utils.sleep.event import _index_to_events
+from visbrain.visuals import TFmapsMesh, TopoMesh
+from vispy import scene
 
 from .marker import Markers
-from visbrain.utils import (color2vb, PrepareData, cmap_to_glsl)
-from visbrain.utils.sleep.event import _index_to_events
-from visbrain.visuals import TopoMesh, TFmapsMesh
-from visbrain.config import PROFILER
 
 logger = logging.getLogger('visbrain')
 
@@ -586,19 +588,30 @@ class Spectrogram(PrepareData):
 class Hypnogram(object):
     """Create a hypnogram object."""
 
-    def __init__(self, time, camera, color='#292824', width=2., parent=None,
-                 hconv=None):
+    def __init__(self, time, camera, width=2., hcolors=None, hvalues=None,
+                 hYranks=None, parent=None):
         # Keep camera :
         self._camera = camera
+        # Display Y position for each of the vigilance state values:
+        # 0 (first, top) to -(n-1) (last, bottom)
+        self.hYpos = {
+            value: -float(rank)
+            for value, rank in zip(
+                hvalues,
+                rankdata(hYranks) - 1  # rankdata is 1-indexed
+            )
+        }
+        # Camera rectangle. yPos are 0 to -(nstates - 1)
         self._rect = (0., 0., 0., 0.)
-        self.rect = (time.min(), -5., time.max() - time.min(), 7.)
+        self.rect = (time.min(), -len(hvalues),
+                     time.max() - time.min(), len(hvalues) + 1)
         self.width = width
         self.n = len(time)
-        self._hconv = hconv
-        self._hconvinv = {v: k for k, v in self._hconv.items()}
-        # Get color :
-        self.color = {k: color2vb(color=i) for k, i in zip(color.keys(),
-                                                           color.values())}
+        # Color for each of the vigilance state value
+        self.hcolors = {
+            value: color2vb(color=col)
+            for value, col in zip(hvalues, hcolors)
+        }  # Display color per vigilance state: {int: (1,4)-nparray}
         # Create a default line :
         pos = np.array([[0, 0], [0, 100]])
         self.mesh = scene.visuals.Line(pos, name='hypnogram', method='gl',
@@ -623,7 +636,7 @@ class Hypnogram(object):
     # -------------------------------------------------------------------------
     # SETTING METHODS
     # -------------------------------------------------------------------------
-    def set_data(self, sf, data, time, convert=True):
+    def set_data(self, sf, data, time):
         """Set data to the hypnogram.
 
         Parameters
@@ -631,48 +644,38 @@ class Hypnogram(object):
         sf: float
             The sampling frequency.
         data: array_like
-            The data to send. Must be a row vector.
+            Vigilance state values to sent. Must be a row vector.
         time: array_like
             The time vector
-        convert : bool | True
-            Specify if hypnogram data have to be converted.
         """
-        # Hypno conversion :
-        if (self._hconv != self._hconvinv) and convert:
-            data = self.hyp_to_gui(data)
-        # Build color array :
-        color = np.zeros((len(data), 4), dtype=np.float32)
-        for k, v in zip(self.color.keys(), self.color.values()):
-            # Set the stage color :
-            color[data == k, :] = v
-        # Avoid gradient color :
-        color[1::, :] = color[0:-1, :]
+        data_pos = np.array([self.hYpos[v] for v in data])
+        # Build color array: (nsamples, 4)-nparray
+        data_colors = np.array([self.hcolors[v] for v in data]).squeeze()
         # Set data to the mesh :
-        self.mesh.set_data(pos=np.vstack((time, -data)).T, width=self.width,
-                           color=color)
+        self.mesh.set_data(pos=np.vstack((time, data_pos)).T,
+                           width=self.width, color=data_colors)
         self.mesh.update()
 
-    def set_stage(self, stfrom, stend, stage):
-        """Add a stage in a specific interval.
+    def set_state(self, stfrom, stend, value):
+        """Add a vigilance state in a specific interval.
 
-        This method only set the stage without updating the entire
+        This method only set the vigilance state without updating the entire
         hypnogram.
 
         Parameters
         ----------
         stfrom : int
-            The index where the stage start.
+            The index where the state start.
         stend : int
-            The index where the stage end.
-        stage : int
-            Stage value.
+            The index where the state end.
+        value : int
+            State value.
         """
-        # Convert the stage :
-        stagec = self._hconv[stage]
+        state_ypos = self.hYpos[value]
         # Update color :
-        self.mesh.color[stfrom + 1:stend + 1, :] = self.color[stagec]
+        self.mesh.color[stfrom + 1:stend + 1, :] = self.hcolors[value]
         # Only update the needed part :
-        self.mesh.pos[stfrom:stend, 1] = -float(stagec)
+        self.mesh.pos[stfrom:stend, 1] = state_ypos
         self.mesh.update()
 
     def set_grid(self, time, length=30., y=1.):
@@ -687,7 +690,7 @@ class Hypnogram(object):
     # CONVERSION METHODS
     # -------------------------------------------------------------------------
     def hyp_to_gui(self, data):
-        """Convert hypnogram data to the GUI.
+        """Convert hypnogram data to Y position on the GUI
 
         Parameters
         ----------
@@ -696,19 +699,12 @@ class Hypnogram(object):
 
         Returns
         -------
-        datac : array_like
-            Converted data
+        data_rank : array_like
         """
-        # Backup copy :
-        datac = data.copy()
-        data = np.zeros_like(datac)
-        # Fill new data :
-        for k in self._hconv.keys():
-            data[datac == k] = self._hconv[k]
-        return data
+        return np.array([self.hYpos[v] for v in data])
 
     def gui_to_hyp(self):
-        """Convert GUI hypnogram into data.
+        """Convert GUI hypnogram Y positions into hypnogram state values.
 
         Returns
         -------
@@ -716,12 +712,12 @@ class Hypnogram(object):
             The converted data.
         """
         # Get latest data version :
-        datac = -self.mesh.pos[:, 1]
-        data = np.zeros_like(datac)
-        # Fill new data :
-        for k in self._hconvinv.keys():
-            data[datac == k] = self._hconvinv[k]
-        return data
+        data_ypos = self.mesh.pos[:, 1]
+        # Value from Y position
+        hYpos_inv = {
+            pos: value for value, pos in self.hYpos.items()
+        }
+        return np.array([hYpos_inv[r] for r in data_ypos])
 
     def clean(self, sf, time):
         """Clean indicators."""
@@ -1159,8 +1155,9 @@ class Visuals(CanvasShortcuts):
 
         # =================== HYPNOGRAM ===================
         # Create a hypnogram object :
-        self._hyp = Hypnogram(time, camera=cameras[2], color=self._hypcolor,
-                              width=self._lwhyp, hconv=self._hconv,
+        self._hyp = Hypnogram(time, camera=cameras[2], width=self._lwhyp,
+                              hcolors=self._hcolors, hvalues=self._hvalues,
+                              hYranks=self._hYranks,
                               parent=self._hypCanvas.wc.scene)
         self._hyp.set_data(sf, hypno, time)
         PROFILER('Hypnogram', level=1)
