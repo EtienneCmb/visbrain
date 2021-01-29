@@ -52,9 +52,12 @@ class Sleep(_PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
     axis : bool | False
         Specify if each axis have to contains its own axis. Be carefull
         with this option, the rendering can be much slower.
-    href : list | ['art', 'wake', 'rem', 'n1', 'n2', 'n3']
-        List of sleep stages. This list can be used to changed the display
-        order into the GUI.
+    states_config_file : string | #TODO
+        Path to the configuration file (.json) describing the vigilance states
+        and associated value, color, shortcut, and display order. Refer to
+        #TODO for details on expected format. Default configuration file
+        #contains the following states: ['art', 'wake', 'rem', 'n1', 'n2',
+        #'n3']
     preload : bool | True
         Preload data into memory. For large datasets, turn this parameter to
         True.
@@ -80,8 +83,8 @@ class Sleep(_PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
 
     def __init__(self, data=None, hypno=None, config_file=None,
                  annotations=None, channels=None, sf=None, downsample=100.,
-                 axis=True, href=['art', 'wake', 'rem', 'n1', 'n2', 'n3'],
-                 preload=True, use_mne=False, kwargs_mne={}, verbose=None):
+                 axis=True, states_config_file=None, preload=True,
+                 use_mne=False, kwargs_mne={}, verbose=None):
         """Init."""
         _PyQtModule.__init__(self, verbose=verbose, icon='sleep_icon.svg')
         # ====================== APP CREATION ======================
@@ -95,9 +98,9 @@ class Sleep(_PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
 
         # ====================== LOAD FILE ======================
         PROFILER("Import file", as_type='title')
-        ReadSleepData.__init__(self, data, channels, sf, hypno, href, preload,
-                               use_mne, downsample, kwargs_mne,
-                               annotations)
+        ReadSleepData.__init__(self, data, channels, sf, hypno,
+                               states_config_file, preload, use_mne,
+                               downsample, kwargs_mne, annotations)
 
         # ====================== VARIABLES ======================
         # Check all data :
