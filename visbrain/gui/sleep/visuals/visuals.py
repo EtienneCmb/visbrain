@@ -921,34 +921,50 @@ class CanvasShortcuts(object):
 
     def __init__(self, canvas):
         """Init."""
-        self.sh = [('n', 'Go to the next window'),
-                   ('b', 'Go to the previous window'),
-                   ('-', 'Decrease amplitude'),
-                   ('+', 'Increase amplitude'),
-                   ('s', 'Display / hide spectrogram'),
-                   ('t', 'Display / hide topoplot'),
-                   ('h', 'Display / hide hypnogram'),
-                   ('p', 'Display / hide navigation bar'),
-                   ('x', 'Display / hide time axis'),
-                   ('g', 'Display / hide time grid'),
-                   ('z', 'Enable / disable zooming'),
-                   ('i', 'Enable / disable indicators'),
-                   ('a', 'Scoring: set current window to Art (-1)'),
-                   ('w', 'Scoring: set current window to Wake (0)'),
-                   ('1', 'Scoring: set current window to N1 (1)'),
-                   ('2', 'Scoring: set current window to N2 (2)'),
-                   ('3', 'Scoring: set current window to N3 (3)'),
-                   ('r', 'Scoring: set current window to REM (4)'),
-                   ('Double clik', 'Insert annotation'),
-                   ('CTRL + left click', 'Magnify signal under the cursor'),
-                   ('CTRL + Num', 'Display the channel Num'),
-                   ('CTRL + s', 'Save hypnogram'),
-                   ('CTRL + t', 'Display shortcuts'),
-                   ('CTRL + e', 'Display documentation'),
-                   ('CTRL + d', 'Display / hide setting panel'),
-                   ('CTRL + n', 'Take a screenshot'),
-                   ('CTRL + q', 'Close Sleep graphical interface'),
-                   ]
+        # Hardcoded shortcuts
+        sh = [
+            ('n', 'Go to the next window'),
+            ('b', 'Go to the previous window'),
+            ('-', 'Decrease amplitude'),
+            ('+', 'Increase amplitude'),
+            ('s', 'Display / hide spectrogram'),
+            ('t', 'Display / hide topoplot'),
+            ('h', 'Display / hide hypnogram'),
+            ('p', 'Display / hide navigation bar'),
+            ('x', 'Display / hide time axis'),
+            ('g', 'Display / hide time grid'),
+            ('z', 'Enable / disable zooming'),
+            ('i', 'Enable / disable indicators'),
+            ('Double clik', 'Insert annotation'),
+            ('CTRL + left click', 'Magnify signal under the cursor'),
+            ('CTRL + Num', 'Display the channel Num'),
+            ('CTRL + s', 'Save hypnogram'),
+            ('CTRL + t', 'Display shortcuts'),
+            ('CTRL + e', 'Display documentation'),
+            ('CTRL + d', 'Display / hide setting panel'),
+            ('CTRL + n', 'Take a screenshot'),
+            ('CTRL + q', 'Close Sleep graphical interface'),
+        ]
+        # Check and add flexible scoring shortcuts
+        other_sh = [s for s, _ in sh]
+        if any([scoring_sh in other_sh for scoring_sh in self._hshortcuts]):
+            raise ValueError(
+                "One of the user-defined shortcuts for scoring is reserved. "
+                "Please select another key in vigilance state config. \n\n"
+                f"User-defined scoring keys: {self._hshortcuts}\n"
+                f"Reserved keys: {other_sh}"
+            )
+        if not all([len(sh) == 1 for sh in self._hshortcuts]):
+            raise ValueError(
+                "Please use only simple keys as scoring shortcuts. \n\n"
+                f"User-defined scoring keys: {self._hshortcuts}\n"
+            )
+        self.sh = [
+            (f"'{sh}'", f"Scoring: set current window to {state} ({value})")
+            for sh, state, value in zip(
+                self._hshortcuts, self._hstates, self._hvalues
+            )
+        ] + sh
 
         # Add shortcuts to vbCanvas :
         @canvas.events.key_press.connect
@@ -992,36 +1008,17 @@ class CanvasShortcuts(object):
                 self._fcn_grid_toggle()
 
             # ------------ SCORING ------------
-            elif event.text.lower() == 'a':  # Art
-                self._add_stage_on_scorwin(-1)
-                self._SlGoto.setValue(self._SlGoto.value(
-                ) + self._SigSlStep.value())
-                logger.info("Art stage inserted")
-            elif event.text.lower() == 'w':  # Wake
-                self._add_stage_on_scorwin(0)
-                self._SlGoto.setValue(self._SlGoto.value(
-                ) + self._SigSlStep.value())
-                logger.info("Wake stage inserted")
-            elif event.text == '1':
-                self._add_stage_on_scorwin(1)
-                self._SlGoto.setValue(self._SlGoto.value(
-                ) + self._SigSlStep.value())
-                logger.info("N1 stage inserted")
-            elif event.text == '2':
-                self._add_stage_on_scorwin(2)
-                self._SlGoto.setValue(self._SlGoto.value(
-                ) + self._SigSlStep.value())
-                logger.info("N2 stage inserted")
-            elif event.text == '3':
-                self._add_stage_on_scorwin(3)
-                self._SlGoto.setValue(self._SlGoto.value(
-                ) + self._SigSlStep.value())
-                logger.info("N3 stage inserted")
-            elif event.text.lower() == 'r':
-                self._add_stage_on_scorwin(4)
-                self._SlGoto.setValue(self._SlGoto.value(
-                ) + self._SigSlStep.value())
-                logger.info("REM stage inserted")
+            else:
+                for sh, state, value in zip(
+                    self._hshortcuts, self._hstates, self._hvalues
+                ):
+                    if event.text.lower() == sh.lower():
+                        self._add_stage_on_scorwin(value)
+                        self._SlGoto.setValue(self._SlGoto.value(
+                        ) + self._SigSlStep.value())
+                        logger.info(
+                            f"`{state}` vigilance state inserted ({value})"
+                        )
 
         @canvas.events.mouse_release.connect
         def on_mouse_release(event):
