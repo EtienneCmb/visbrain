@@ -412,8 +412,7 @@ class UiSettings(object):
         # # Update info table :
         self._fcn_info_update()
         # Update scoring table :
-        # TODO
-        # self._fcn_hypno_to_score()
+        self._fcn_hypno_to_score()
         # self._fcn_score_to_hypno()
 
     # =====================================================================
