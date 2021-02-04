@@ -39,7 +39,7 @@ class UiSettings(object):
         self._slTxtFormat = (
             "Window : [ {start} ; {end} ] {unit} || " +
             "Scoring : [ {start_scor} ; {end_scor} ] {unit} || " +
-            "Sleep stage : {conv}"
+            "Vigilance state : {state}"
         )
         # Absolute time :
         self._slAbsTime.clicked.connect(self._fcn_slider_move)
@@ -86,26 +86,27 @@ class UiSettings(object):
 
     @property
     def _hypref(self):
-        """Return ref value of "current" stage."""
+        """Return ref value of "current" vigilance state."""
         # "Current" is at start of scoring window
         xlim_scor = self._xlim_scor
         t = self.data_index(xlim_scor)
         return int(self._hypno[t[0]])
 
     @property
-    def _hypconv(self):
-        """Return converted value of "current" stage."""
-        return self._hconv[self._hypref]
+    def _state_yrank(self):
+        """Return y rank of "current" vigilance state."""
+        return self._hYranks[np.where(self._hvalues == self._hypref)[0]][0]
 
     @property
-    def _stage_name(self):
-        """Return name of "current" stage."""
-        return str(self._hypYLabels[self._hypconv + 2].text())
+    def _state_name(self):
+        """Return name of "current" vigilance state."""
+        return self._hstates[np.where(self._hvalues == self._hypref)[0]][0]
 
     @property
-    def _stage_color(self):
-        """Return color of "current" stage."""
-        return self._hypcolor[self._hypconv]
+    def _state_color(self):
+        """Return color of "current" vigilance state."""
+        return self._hcolors[np.where(self._hvalues == self._hypref)[0]][0]
+
 
     # =====================================================================
     # SLIDER, DISPLAY WINDOW AND SCORING WINDOW
@@ -114,8 +115,8 @@ class UiSettings(object):
         """Redraw the text info in the settings pane."""
         xlim = self._xlim
         xlim_scor = self._xlim_scor
-        stage = self._stage_name
-        hypcol = self._stage_color
+        state = self._state_name
+        hypcol = self._state_color
         # Get unit and convert:
         if self._slAbsTime.isChecked():
             xlim = np.asarray(xlim) + self._toffset
@@ -129,7 +130,7 @@ class UiSettings(object):
                 xlim_scor[1])).split(' ')[1]
             txt = "Window : [ " + start + " ; " + stend + " ] || " + \
                 "Scoring : [ " + start_scor + " ; " + stend_scor + " ] || " + \
-                "Sleep stage : " + stage
+                "Vigilance state : " + state
         else:
             unit = self._slRules.currentText()
             if unit == 'seconds':
@@ -145,7 +146,7 @@ class UiSettings(object):
                 start=str(xconv[0]), end=str(xconv[1]),
                 start_scor=str(xconv_scor[0]), end_scor=str(xconv_scor[1]),
                 unit=unit,
-                conv=stage)
+                state=state)
         # Set text :
         self._SlText.setText(txt)
         self._SlText.setFont(self._font)
@@ -187,8 +188,8 @@ class UiSettings(object):
         # Find closest data time index for display window start/end
         t = self.data_index(xlim)
         # Hypnogram info :
-        hypconv = self._hypconv
-        hypcol = self._stage_color
+        hypYrank = self._state_yrank
+        hypcol = self._state_color
 
         # ================= MESH UPDATES =================
         # ---------------------------------------
@@ -257,8 +258,8 @@ class UiSettings(object):
         # ================= HYPNO LABELS =================
         for k in self._hypYLabels:
             k.setStyleSheet("QLabel")
-        self._hypYLabels[hypconv + 2].setStyleSheet("QLabel {color: " +
-                                                    hypcol + ";}")
+        self._hypYLabels[hypYrank + 1].setStyleSheet("QLabel {color: " +
+                                                     hypcol + ";}")
 
     def _fcn_slider_settings(self):
         """Function applied to change slider settings."""
@@ -399,15 +400,15 @@ class UiSettings(object):
     # =====================================================================
     # HYPNO
     # =====================================================================
-    def _add_stage_on_scorwin(self, stage):
+    def _add_stage_on_scorwin(self, state):
         """Change the stage on the current scoring window."""
         # Get the scoring window xlim
         xlim_scor = self._xlim_scor
         # Find closest data time index from xlim
         t = self.data_index(xlim_scor)
         # Set the stage :
-        self._hypno[t[0]:t[1]] = stage
-        self._hyp.set_stage(t[0], t[1], stage)
+        self._hypno[t[0]:t[1]] = state
+        self._hyp.set_state(t[0], t[1], state)
         # # Update info table :
         self._fcn_info_update()
         # Update scoring table :
