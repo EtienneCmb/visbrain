@@ -608,7 +608,7 @@ class Hypnogram(object):
         self.width = width
         self.n = len(time)
         # Color for each of the vigilance state value
-        self.hcolors = {
+        self._hcolors = {
             value: color2vb(color=col)
             for value, col in zip(hvalues, hcolors)
         }  # Display color per vigilance state: {int: (1,4)-nparray}
@@ -728,7 +728,7 @@ class Hypnogram(object):
         posedit = np.full((1, 3), -10., dtype=np.float32)
         self.edit.set_data(pos=posedit, face_color='gray')
 
-    # ----------- RECT -----------
+    # ----------- Properties -----------
     @property
     def rect(self):
         """Get the rect value."""
@@ -739,6 +739,21 @@ class Hypnogram(object):
         """Set rect value."""
         self._rect = value
         self._camera.rect = value
+
+    @property
+    def hcolors(self):
+        """Return {value: (4,1)-array} hypnogram colors map."""
+        return self._hcolors
+
+    @hcolors.setter
+    def hcolors(self, value):
+        """Set new {value: (4,1)-array} hypnogram colors map and redraw hyp"""
+        self._hcolors = value
+        # Redraw hypnogram
+        hdata = self.gui_to_hyp()  # (nsamples,1) array
+        data_colors = np.array([self.hcolors[v] for v in hdata]).squeeze()
+        self.mesh.set_data(color=data_colors)
+        self.mesh.update()
 
 
 """

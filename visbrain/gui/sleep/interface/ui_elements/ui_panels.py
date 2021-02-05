@@ -495,17 +495,18 @@ class UiPanels(object):
     def _fcn_set_hypno_color(self):
         """Change the color of the hypnogram."""
         if not(self._PanHypnoColor.isChecked()):
-            # TODO
-            color = {-1: '#292824', 0: '#292824', 1: '#292824',
-                     2: '#292824', 3: '#292824', 4: '#292824'}
+            hcolors = {
+                hvalue: color2vb('#292824')
+                for hvalue in self._hvalues
+            }
         else:
-            color = self._hcolors
-        # TODO
-        # # Get color :
-        # zp = zip(color.keys(), color.values())
-        # self._hyp.color = {k: color2vb(color=i) for k, i in zp}
-        # # Update hypnogram
-        # self._hyp.set_data(self._sf, self._hypno, self._time)
+            hcolors = {
+                hvalue: color2vb(hcolor)
+                for hvalue, hcolor in zip(self._hvalues, self._hcolors)
+            }
+        # Set new color map and redraw
+        self._hyp.hcolors = hcolors
+
 
     def _fcn_hypno_clean(self):
         """Clean the hypnogram."""
