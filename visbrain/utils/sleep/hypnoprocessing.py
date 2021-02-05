@@ -23,15 +23,15 @@ def transient(data, xvec=None):
     st : array_like
         Either the transient index (as type int) if xvec is None, or the
         converted version if xvec is not None.
-    stages : array_like
-        The stages for each segment.
+    values : array_like
+        The vigilance state value for each segment.
     """
     # Transient detection :
     t = list(np.nonzero(np.abs(data[:-1] - data[1:]))[0])
     # Add first and last points :
     idx = np.vstack((np.array([-1] + t) + 1, np.array(t + [len(data) - 1]))).T
-    # Get stages :
-    stages = data[idx[:, 0]]
+    # Get state values :
+    states = data[idx[:, 0]]
     # Convert (if needed) :
     if (xvec is not None) and (len(xvec) == len(data)):
         st = idx.copy().astype(float)
@@ -40,10 +40,10 @@ def transient(data, xvec=None):
     else:
         st = idx
 
-    return np.array(t), st, stages.astype(int)
+    return np.array(t), st, states.astype(int)
 
 
-def sleepstats(hypno, sf_hyp):
+def sleepstats(hypno, sf_hyp, hstates, hvalues):
     """Compute sleep stats from an hypnogram vector.
 
     Sleep statistics specifications:
@@ -78,6 +78,10 @@ def sleepstats(hypno, sf_hyp):
         Hypnogram vector
     sf_hyp : float
         The sampling frequency of the hypnogram
+    hstates: list
+        List of vigilance state labels
+    hvalues: list
+        List of vigilance state values in hypnogram
 
     Returns
     -------
@@ -94,19 +98,18 @@ def sleepstats(hypno, sf_hyp):
     stats['TDT'] = np.where(hypno != 0)[0].max() if np.nonzero(
         hypno)[0].size else tov
 
+    state_values = {
+        label: value for label, value in zip(hstates, hvalues)
+    }
+
     # Duration of each sleep stages
-    stats['Art'] = hypno[hypno == -1].size
-    stats['W'] = hypno[hypno == 0].size
-    stats['N1'] = hypno[hypno == 1].size
-    stats['N2'] = hypno[hypno == 2].size
-    stats['N3'] = hypno[hypno == 3].size
-    stats['REM'] = hypno[hypno == 4].size
+    for label, value in state_values.items():
+        stats[label] = hypno[hypno == value].size
 
     # Sleep stage latencies
-    stats['LatN1'] = np.where(hypno == 1)[0].min() if 1 in hypno else tov
-    stats['LatN2'] = np.where(hypno == 2)[0].min() if 2 in hypno else tov
-    stats['LatN3'] = np.where(hypno == 3)[0].min() if 3 in hypno else tov
-    stats['LatREM'] = np.where(hypno == 4)[0].min() if 4 in hypno else tov
+    for label, value in state_values.items():
+        stats[f'Lat{label}'] = \
+            np.where(hypno == value)[0].min() if value in hypno else tov
 
     if not np.isnan(stats['LatN1']) and not np.isnan(stats['TDT']):
         hypno_s = hypno[stats['LatN1']:stats['TDT']]
