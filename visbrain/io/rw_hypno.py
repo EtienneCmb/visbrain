@@ -17,13 +17,16 @@ Read hypnogram data
         -> Tieme :
             -> .txt, .hyp
 """
-import os
 import logging
+import os
+
 import numpy as np
 
-from ..utils.sleep.hypnoprocessing import transient
-from ..utils.mesh import vispy_array
+from PyQt5 import QtWidgets
+
 from ..io import is_pandas_installed, is_xlrd_installed
+from ..utils.mesh import vispy_array
+from ..utils.sleep.hypnoprocessing import transient
 
 __all__ = ('oversample_hypno', 'write_hypno', 'read_hypno')
 
@@ -36,7 +39,7 @@ logger = logging.getLogger('visbrain')
 ###############################################################################
 ###############################################################################
 
-def hypno_time_to_sample(df, npts):
+def hypno_time_to_sample(df, npts, hstates, hvalues):
     """Convert the hypnogram from a defined timings to a number of samples.
 
     Parameters
@@ -46,6 +49,10 @@ def hypno_time_to_sample(df, npts):
     npts : int, array_like
         Number of time points in the final hypnogram. Alternatively, if npts is
         an array it will be interprated as the time vector.
+    hstates: list[str]
+        List of vigilance state labels.
+    hvalues: list[int]
+        Hypnogram value for each vigilance state.
 
     Returns
     -------
@@ -61,11 +68,9 @@ def hypno_time_to_sample(df, npts):
     df = df.iloc[drop_rows.astype(bool)]
     df.is_copy = False  # avoid pandas warning
     # Replace text by numerical values :
-    to_replace = ['Wake', 'N1', 'N2', 'N3', 'REM', 'Art']
-    values = [0, 1, 2, 3, 4, -1]
-    df.replace(to_replace, values, inplace=True)
-    # Get stages and time index :
-    stages = np.array(df['Stage']).astype(str)
+    df.replace(hstates, hvalues, inplace=True)
+    # Get states and time index :
+    states = np.array(df['State']).astype(str)
     time_idx = np.array(df['Time']).astype(float)
     # Compute time vector and sampling frequency :
     if isinstance(npts, np.ndarray):
@@ -84,11 +89,11 @@ def hypno_time_to_sample(df, npts):
     # Fill the hypnogram :
     hypno = np.zeros((len(time),), dtype=int)
     for k in range(len(index) - 1):
-        hypno[index[k]:index[k + 1]] = int(stages[k])
+        hypno[index[k]:index[k + 1]] = int(states[k])
     return hypno, time, sf_hyp
 
 
-def hypno_sample_to_time(hypno, time):
+def hypno_sample_to_time(hypno, time, hstates, hvalues):
     """Convert the hypnogram from a number of samples to a defined timings.
 
     Parameters
@@ -97,6 +102,10 @@ def hypno_sample_to_time(hypno, time):
         Hypnogram data.
     time : array_like
         The time vector.
+    hstates: list[str]
+        List of vigilance state labels.
+    hvalues: list[int]
+        Hypnogram value for each vigilance state.
 
     Returns
     -------
@@ -107,10 +116,14 @@ def hypno_sample_to_time(hypno, time):
     is_pandas_installed(True)
     import pandas as pd
     # Transient detection :
-    _, tr, stages = transient(hypno, time)
+    _, tr, values = transient(hypno, time)
+    # Corresponding states
+    states_map = {
+        value: lbl for lbl, value in zip(hstates, hvalues)
+    }
+    states = np.array([states_map[value] for value in values])
     # Save the hypnogram :
-    items = np.array(['Wake', 'N1', 'N2', 'N3', 'REM', 'Art'])
-    return pd.DataFrame({'Stage': items[stages], 'Time': tr[:, 1]})
+    return pd.DataFrame({'State': states, 'Time': tr[:, 1]})
 
 
 def oversample_hypno(hypno, n):
@@ -150,8 +163,41 @@ def oversample_hypno(hypno, n):
 ###############################################################################
 ###############################################################################
 
+def test_compatible_with_df_hyp(hstates, hvalues, test_equal=True):
+    """Test that hypnogram config compatible with Sleep's default.
+
+    Default state config is {
+        'Wake': 0,
+        'N1': 1,
+        'N2': 2,
+        'N3': 3,
+        'REM': 4,
+        'Art': -1
+    }
+
+    Parameters
+    ----------
+    hstates: list[str]
+        List of vigilance state labels
+        (default ['Wake', 'N1', 'N2', 'N3', 'REM', 'Art'])
+    hvalues: list[int]
+        Hypnogram value for each vigilance state (default [0, 1, 2, 3, 4, -1]).
+    test_equal: bool
+        If true, we test for equality of state cfg. If false, we test that
+        the inputted config is a superset of the default config (ie, all
+        default keys are present with identical values)
+    """
+    value_map = {
+        lbl: value for lbl, value in zip(hstates, hvalues)
+    }
+    df_map = {'Wake': 0, 'N1': 1, 'N2': 2, 'N3': 3, 'REM': 4, 'Art': -1}
+    if test_equal:
+        return value_map == df_map
+    return df_map.items() <= value_map.items()
+
+
 def write_hypno(filename, hypno, version='time', sf=100., npts=1, window=1.,
-                time=None, info=None):
+                time=None, info=None, hstates=None, hvalues=None):
     """Save hypnogram data.
 
     Parameters
@@ -172,11 +218,26 @@ def write_hypno(filename, hypno, version='time', sf=100., npts=1, window=1.,
         The time vector.
     info : dict | None
         Additional informations to add to the file (prepend with *).
+    hstates: list[str]
+        List of vigilance state labels
+        (default ['Wake', 'N1', 'N2', 'N3', 'REM', 'Art'])
+    hvalues: list[int]
+        Hypnogram value for each vigilance state (default [0, 1, 2, 3, 4, -1]).
     """
     # Checking :
     assert isinstance(filename, str)
     assert isinstance(hypno, np.ndarray)
     assert version in ['time', 'sample']
+    if hstates is None and hvalues is None:
+        hstates = ['Wake', 'N1', 'N2', 'N3', 'REM', 'Art']
+        hvalues = [0, 1, 2, 3, 4, -1]
+    else:
+        if not (hstates is not None and hvalues is not None):
+            raise ValueError(
+                "All or none of the `hstates` and `hvalues` kwargs should be "
+                "specified."
+            )
+        assert len(hstates) == len(hvalues)
     # Extract file extension :
     _, ext = os.path.splitext(filename)
     # Switch between time and sample version :
@@ -186,17 +247,30 @@ def write_hypno(filename, hypno, version='time', sf=100., npts=1, window=1.,
         hypno = hypno[::step].astype(int)
         # Export :
         if ext == '.txt':
-            _write_hypno_txt_sample(filename, hypno, window=window)
+            _write_hypno_txt_sample(filename, hypno, hstates, hvalues,
+                                    window=window)
         elif ext == '.hyp':
-            _write_hypno_hyp_sample(filename, hypno, sf=sf, npts=npts)
+            # Only for default hypnogram
+            if test_compatible_with_df_hyp(hstates, hvalues, test_equal=True):
+                _write_hypno_hyp_sample(filename, hypno, sf=sf, npts=npts)
+            else:
+                msg = (f"Elan `.hyp` hypnogram format is only available for "
+                       f"Sleep's default vigilance state configuration: "
+                       f"(['Art' (-1), 'Wake' (0), 'N1' (1), 'N2' (2), 'N3' "
+                       f"(3), 'REM' (4)]). Please try again using a different"
+                       f" format.")
+                msgBox = QtWidgets.QMessageBox()
+                msgBox.setText(msg)
+                msgBox.exec()
+                raise ValueError(msg)
     elif version is 'time':  # v2 = time
         # Get the DataFrame :
-        df = hypno_sample_to_time(hypno, time)
+        df = hypno_sample_to_time(hypno, time, hstates, hvalues)
         if isinstance(info, dict):
             is_pandas_installed(True)
             import pandas as pd
             info = {'*' + k: i for k, i in info.items()}
-            df_info = pd.DataFrame({'Stage': list(info.keys()),
+            df_info = pd.DataFrame({'State': list(info.keys()),
                                     'Time': list(info.values())})
             df = df_info.append(df)
         if ext in ['.txt', '.csv']:
@@ -211,7 +285,7 @@ def write_hypno(filename, hypno, version='time', sf=100., npts=1, window=1.,
     logger.info("Hypnogram saved (%s)" % filename)
 
 
-def _write_hypno_txt_sample(filename, hypno, window=1.):
+def _write_hypno_txt_sample(filename, hypno, hstates, hvalues, window=1.):
     """Save hypnogram in txt file format (txt).
 
     Header is in file filename_description.txt
@@ -222,6 +296,10 @@ def _write_hypno_txt_sample(filename, hypno, window=1.):
         Filename (with full path) of the file to save
     hypno : array_like
         Hypnogram array, same length as data
+    hstates: list[str]
+        List of vigilance state labels
+    hvalues: list[int]
+        Hypnogram value for each vigilance state
     window : float | 1
         Time window (second) of each point in the hypno
         Default is one value per second
@@ -236,8 +314,11 @@ def _write_hypno_txt_sample(filename, hypno, window=1.):
     np.savetxt(filename, hypno, fmt='%s')
 
     # Save header file
-    hdr = np.array([['time ' + str(window)], ['W 0'], ['N1 1'], ['N2 2'],
-                    ['N3 3'], ['REM 4'], ['Art -1']]).flatten()
+    hdr = np.array([
+        ['time ' + str(window)] + [
+            f"{lbl} {value}" for lbl, value in zip(hstates, hvalues)
+        ]
+    ]).flatten()
     np.savetxt(descript, hdr, fmt='%s')
 
 
