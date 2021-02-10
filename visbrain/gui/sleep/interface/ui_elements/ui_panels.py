@@ -112,9 +112,15 @@ class UiPanels(object):
         self._hypLabel = QtWidgets.QWidget()
         layout = QtWidgets.QVBoxLayout(self._hypLabel)
         layout.setContentsMargins(0, 0, 0, 0)
-        # TODO: Set smaller margins if many states
+        # State labels: "<label> ('<shortcut>')"
+        ylabels = [
+            f"{lbl} ('{sh}')" for lbl, sh in zip(
+                self._hstates[self._hYrankperm],
+                self._hshortcuts[self._hYrankperm],
+            )
+        ]
         self._hypYLabels = []
-        for k in [''] + list(self._hstates[self._hYrankperm]) + ['']:
+        for k in [''] + ylabels + ['']:
             label = QtWidgets.QLabel()
             label.setText(self._addspace + k)
             label.setFont(self._font)
