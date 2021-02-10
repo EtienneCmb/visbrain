@@ -197,7 +197,8 @@ def test_compatible_with_df_hyp(hstates, hvalues, test_equal=True):
 
 
 def write_hypno(filename, hypno, version='time', sf=100., npts=1, window=1.,
-                time=None, info=None, hstates=None, hvalues=None):
+                time=None, info=None, hstates=None, hvalues=None,
+                popup=True):
     """Save hypnogram data.
 
     Parameters
@@ -223,6 +224,9 @@ def write_hypno(filename, hypno, version='time', sf=100., npts=1, window=1.,
         (default ['Wake', 'N1', 'N2', 'N3', 'REM', 'Art'])
     hvalues: list[int]
         Hypnogram value for each vigilance state (default [0, 1, 2, 3, 4, -1]).
+    popup: bool
+        Display info window for error messages, avoids dangerous silent
+        failing when writing hypnogram (default True)
     """
     # Checking :
     assert isinstance(filename, str)
@@ -259,9 +263,10 @@ def write_hypno(filename, hypno, version='time', sf=100., npts=1, window=1.,
                        f"(['Art' (-1), 'Wake' (0), 'N1' (1), 'N2' (2), 'N3' "
                        f"(3), 'REM' (4)]). Please try again using a different"
                        f" format.")
-                msgBox = QtWidgets.QMessageBox()
-                msgBox.setText(msg)
-                msgBox.exec()
+                if popup:
+                    msgBox = QtWidgets.QMessageBox()
+                    msgBox.setText(msg)
+                    msgBox.exec
                 raise ValueError(msg)
     elif version is 'time':  # v2 = time
         # Get the DataFrame :
@@ -355,7 +360,8 @@ def _write_hypno_hyp_sample(filename, hypno, sf=100., npts=1):
 ###############################################################################
 
 
-def read_hypno(filename, time=None, datafile=None, hstates=None, hvalues=None):
+def read_hypno(filename, time=None, datafile=None, hstates=None, hvalues=None,
+               popup=True):
     """Load hypnogram file.
 
     EDF+ (`.edf`/`.txt`) and Elan (`.hyp`) style hypnograms can only be loaded
@@ -387,6 +393,9 @@ def read_hypno(filename, time=None, datafile=None, hstates=None, hvalues=None):
     hvalues: list[int]
         Hypnogram value for each vigilance state in Sleep GUI (default
         [0, 1, 2, 3, 4, -1]).
+    popup: bool
+        Display info window for error messages, avoids dangerous silent
+        failing when writing hypnogram (default True)
 
     Returns
     -------
@@ -424,9 +433,10 @@ def read_hypno(filename, time=None, datafile=None, hstates=None, hvalues=None):
                    f"the default config "
                    f"(`Sleep(.., states_config_file=None)`).\n\n"
                    f"Current config: {list(zip(hstates, hvalues))}.\n")
-            msgBox = QtWidgets.QMessageBox()
-            msgBox.setText(msg)
-            msgBox.exec()
+            if popup:
+                msgBox = QtWidgets.QMessageBox()
+                msgBox.setText(msg)
+                msgBox.exec()
             raise ValueError(msg)
     # Load the hypnogram :
     if ext == '.hyp':  # v1 = Elan
@@ -439,7 +449,8 @@ def read_hypno(filename, time=None, datafile=None, hstates=None, hvalues=None):
             # Check that the hyp was saved with a compatible
             # state_label/state_value mapping while loading
             hypno, sf_hyp = _read_hypno_txt_sample(filename, hstates=hstates,
-                                                   hvalues=hvalues)
+                                                   hvalues=hvalues,
+                                                   popup=popup)
         else:  # v2
             msg = (f"Error while loading hypnogram at `{filename}`: "
                    "Some hypnogram states present in file are absent in "
@@ -456,11 +467,12 @@ def read_hypno(filename, time=None, datafile=None, hstates=None, hvalues=None):
                 if not state.startswith("*")
             ]
             if not all([state in hstates for state in loaded_hyp_states]):
-                msgBox = QtWidgets.QMessageBox()
-                msgBox.setText(msg.format(
-                    **{'loaded_states': loaded_hyp_states}
-                ))
-                msgBox.exec()
+                if popup:
+                    msgBox = QtWidgets.QMessageBox()
+                    msgBox.setText(msg.format(
+                        **{'loaded_states': loaded_hyp_states}
+                    ))
+                    msgBox.exec()
                 raise ValueError(msg.format(
                     **{'loaded_states': loaded_hyp_states}
                 ))
@@ -474,11 +486,12 @@ def read_hypno(filename, time=None, datafile=None, hstates=None, hvalues=None):
             if not state.startswith("*")
         ]
         if not all([state in hstates for state in loaded_hyp_states]):
-            msgBox = QtWidgets.QMessageBox()
-            msgBox.setText(msg.format(
-                **{'loaded_states': loaded_hyp_states}
-            ))
-            msgBox.exec()
+            if popup:
+                msgBox = QtWidgets.QMessageBox()
+                msgBox.setText(msg.format(
+                    **{'loaded_states': loaded_hyp_states}
+                ))
+                msgBox.exec()
             raise ValueError(msg.format(
                 **{'loaded_states': loaded_hyp_states}
             ))
@@ -522,7 +535,7 @@ def _read_hypno_hyp_sample(path):
     return hypno, sf_hyp
 
 
-def _read_hypno_txt_sample(path, hstates=None, hvalues=None):
+def _read_hypno_txt_sample(path, hstates=None, hvalues=None, popup=True):
     """Read text files (.txt / .csv) hypnogram.
 
     Parameters
@@ -590,9 +603,10 @@ def _read_hypno_txt_sample(path, hstates=None, hvalues=None):
                    f"the default config "
                    f"(`Sleep(.., states_config_file=None)`).\n\n"
                    f"Current config: {values_map}.\n")
-            msgBox = QtWidgets.QMessageBox()
-            msgBox.setText(msg)
-            msgBox.exec()
+            if popup:
+                msgBox = QtWidgets.QMessageBox()
+                msgBox.setText(msg)
+                msgBox.exec()
             raise ValueError(msg)
         keys_to_swap = [
             key for key in [
@@ -619,9 +633,10 @@ def _read_hypno_txt_sample(path, hstates=None, hvalues=None):
                    f"again.\n\n"
                    f"Config in file: {desc}\n"
                    f"Sleep's states config: {values_map}")
-            msgBox = QtWidgets.QMessageBox()
-            msgBox.setText(msg)
-            msgBox.exec()
+            if popup:
+                msgBox = QtWidgets.QMessageBox()
+                msgBox.setText(msg)
+                msgBox.exec()
             raise ValueError(msg)
 
     return hypno, sf_hyp
