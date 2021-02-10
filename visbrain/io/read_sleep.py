@@ -142,7 +142,9 @@ class ReadSleepData(object):
                 raise ValueError("Then length of the hypnogram must be the "
                                  "same as raw data")
         if isinstance(hypno, str):  # (*.hyp / *.txt / *.csv)
-            hypno, _ = read_hypno(hypno, time=time, datafile=file)
+            hypno, _ = read_hypno(hypno, time=time, datafile=file,
+                                  hstates=np.array(hstates),
+                                  hvalues=np.array(hvalues))
             # Oversample then downsample :
             hypno = oversample_hypno(hypno, self._N)[::dsf]
             PROFILER("Hypnogram file loaded", level=1)
