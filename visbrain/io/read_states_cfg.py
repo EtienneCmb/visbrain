@@ -6,7 +6,7 @@ import yaml
 
 DF_STATES_CFG = {
     "Art": {
-        "color": "red",
+        "color": 'red',
         "shortcut": "a",
         "value": -1,
         "display_order": 0,
@@ -18,25 +18,25 @@ DF_STATES_CFG = {
         "display_order": 1,
     },
     "REM": {
-        "color": "green",
+        "color": '#bf5656',
         "shortcut": "r",
         "value": 4,
         "display_order": 2,
     },
     "N1": {
-        "color": "lightblue",
+        "color": '#aabcce',
         "shortcut": "1",
         "value": 1,
         "display_order": 3,
     },
     "N2": {
-        "color": "blue",
+        "color": '#405c79',
         "shortcut": "2",
         "value": 2,
         "display_order": 4,
     },
     "N3": {
-        "color": "darkblue",
+        "color": '#0b1c2c',
         "shortcut": "3",
         "value": 3,
         "display_order": 5,
