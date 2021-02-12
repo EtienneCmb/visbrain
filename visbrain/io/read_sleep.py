@@ -163,16 +163,19 @@ class ReadSleepData(object):
             channels = ['chan' + str(k) for k in range(nchan)]
 
         # ---------- HYPNOGRAM ----------
+        # Default state
+        df_value = 0 if 0 in hvalues else min(hvalues)  # TODO user-defined?
+        # Check all hypno values are recognized
+        if not all([v in hvalues for v in np.unique(hypno)]):
+            warn("\nSome hypnogram values are not recognized. Check your "
+                 f"states config: {states_cfg}.\n\n"
+                 "Empty hypnogram will be used instead (default value = "
+                 f"`{df_value}`)")
+            hypno = None
         if hypno is None:
-            hypno = np.zeros((npts,), dtype=np.float32)
-        else:
-            n = len(hypno)
-            # Check all hypno values are recognized
-            if not all([v in hvalues for v in np.unique(hypno)]):
-                warn("\nSome hypnogram values are not recognized. Check your "
-                     f"states config: {states_cfg}.\n\n"
-                     "Empty hypnogram will be used instead")
-                hypno = np.zeros((npts,), dtype=np.float32)
+            hypno = np.ones((npts,), dtype=np.float32)
+            hypno = df_value * hypno
+        n = len(hypno)
 
         # ---------- SCALING ----------
         # Assume that the inter-quartile amplitude of EEG data is ~50 uV
