@@ -419,6 +419,9 @@ Note that the keys listed in the `Shortcuts` section are reserved and can't be u
   
   Sleep(states_config_file='path/to/my/states_cfg_file.yml').show()
 
+.. figure::  _static/sleep/flex_vigilance_states.png
+   :align:   center
+
 If the `states_config_file` kwarg is not specified, Sleep will use the default
 configuration.
 
