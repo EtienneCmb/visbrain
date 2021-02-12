@@ -52,12 +52,12 @@ class Sleep(_PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
     axis : bool | False
         Specify if each axis have to contains its own axis. Be carefull
         with this option, the rendering can be much slower.
-    states_config_file : string | #TODO
-        Path to the configuration file (.json) describing the vigilance states
-        and associated value, color, shortcut, and display order. Refer to
-        #TODO for details on expected format. Default configuration file
-        #contains the following states: ['art', 'wake', 'rem', 'n1', 'n2',
-        #'n3']
+    states_config_file : path-like | None
+        Path to the configuration file (.yaml) describing the vigilance states
+        and associated value, color, shortcut, and display order on GUI. Refer
+        to the documentation for an exemple. The default configuration
+        contains the following states: ['Art', 'Wake', 'REM', 'N1', 'N2', 'N3']
+        and their associated values: [-1, 0, 4, 1, 2, 3]
     preload : bool | True
         Preload data into memory. For large datasets, turn this parameter to
         True.
