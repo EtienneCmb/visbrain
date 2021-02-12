@@ -14,13 +14,14 @@ import logging
 import datetime
 
 import numpy as np
-from scipy.stats import iqr
+from scipy.stats import iqr, rankdata
 
 from visbrain.io.dependencies import is_mne_installed
 from visbrain.io.dialog import dialog_load
 from visbrain.io.mneio import mne_switch
 from visbrain.io.rw_hypno import (read_hypno, oversample_hypno)
 from visbrain.io.rw_utils import get_file_ext
+from visbrain.io.read_states_cfg import load_states_cfg
 from visbrain.io.write_data import write_csv
 from visbrain.io import merge_annotations
 
@@ -38,8 +39,8 @@ __all__ = ['ReadSleepData', 'get_sleep_stats']
 class ReadSleepData(object):
     """Main class for reading sleep data."""
 
-    def __init__(self, data, channels, sf, hypno, href, preload, use_mne,
-                 downsample, kwargs_mne, annotations):
+    def __init__(self, data, channels, sf, hypno, states_config_file, preload,
+                 use_mne, downsample, kwargs_mne, annotations):
         """Init."""
         # ========================== LOAD DATA ==========================
         # Dialog window if data is None :
@@ -116,6 +117,16 @@ class ReadSleepData(object):
         time = np.arange(n)[::dsf] / sf
         self._sf = float(downsample) if downsample is not None else float(sf)
 
+        # ---------- LOAD STATES CONFIG ----------
+        states_cfg = load_states_cfg(states_config_file)
+        hstates = list(states_cfg.keys())
+        hvalues, hcolors, hYranks, hshortcuts = zip(*[
+            [
+                states_cfg[state][field]
+                for field in ['value', 'color', 'display_order', 'shortcut']
+            ] for state in hstates
+        ])
+
         # ========================== LOAD HYPNOGRAM ==========================
         # Dialog window for hypnogram :
         if hypno is None:
@@ -131,7 +142,9 @@ class ReadSleepData(object):
                 raise ValueError("Then length of the hypnogram must be the "
                                  "same as raw data")
         if isinstance(hypno, str):  # (*.hyp / *.txt / *.csv)
-            hypno, _ = read_hypno(hypno, time=time, datafile=file)
+            hypno, _ = read_hypno(hypno, time=time, datafile=file,
+                                  hstates=np.array(hstates),
+                                  hvalues=np.array(hvalues))
             # Oversample then downsample :
             hypno = oversample_hypno(hypno, self._N)[::dsf]
             PROFILER("Hypnogram file loaded", level=1)
@@ -149,42 +162,20 @@ class ReadSleepData(object):
                  "channel names will be used instead.")
             channels = ['chan' + str(k) for k in range(nchan)]
 
-        # ---------- STAGE ORDER ----------
-        # href checking :
-        absref = ['art', 'wake', 'n1', 'n2', 'n3', 'rem']
-        absint = [-1, 0, 1, 2, 3, 4]
-        if href is None:
-            href = absref
-        elif (href is not None) and isinstance(href, list):
-            # Force lower case :
-            href = [k.lower() for k in href]
-            # Check that all stage are present :
-            for k in absref:
-                if k not in href:
-                    raise ValueError(k + " not found in href.")
-            # Force capitalize :
-            href = [k.capitalize() for k in href]
-            href[href.index('Rem')] = 'REM'
-        else:
-            raise ValueError("The href parameter must be a list of string and"
-                             " must contain 'art', 'wake', 'n1', 'n2', 'n3' "
-                             "and 'rem'")
-        # Conversion variable :
-        absref = ['Art', 'Wake', 'N1', 'N2', 'N3', 'REM']
-        conv = {absint[absref.index(k)]: absint[i] for i, k in enumerate(href)}
-
         # ---------- HYPNOGRAM ----------
+        # Default state
+        df_value = 0 if 0 in hvalues else min(hvalues)  # TODO user-defined?
+        # Check all hypno values are recognized
+        if not all([v in hvalues for v in np.unique(hypno)]):
+            warn("\nSome hypnogram values are not recognized. Check your "
+                 f"states config: {states_cfg}.\n\n"
+                 "Empty hypnogram will be used instead (default value = "
+                 f"`{df_value}`)")
+            hypno = None
         if hypno is None:
-            hypno = np.zeros((npts,), dtype=np.float32)
-        else:
-            n = len(hypno)
-            # Check hypno values :
-            if (hypno.min() < -1.) or (hypno.max() > 4) or (n != npts):
-                warn("\nHypnogram values must be comprised between -1 and 4 "
-                     "(see Iber et al. 2007). Use:\n-1 -> Art (optional)\n 0 "
-                     "-> Wake\n 1 -> N1\n 2 -> N2\n 3 -> N4\n 4 -> REM\nEmpty "
-                     "hypnogram will be used instead")
-                hypno = np.zeros((npts,), dtype=np.float32)
+            hypno = np.ones((npts,), dtype=np.float32)
+            hypno = df_value * hypno
+        n = len(hypno)
 
         # ---------- SCALING ----------
         # Assume that the inter-quartile amplitude of EEG data is ~50 uV
@@ -204,8 +195,16 @@ class ReadSleepData(object):
         self._hypno = vispy_array(hypno)
         self._time = vispy_array(time)
         self._channels = channels
-        self._href = href
-        self._hconv = conv
+        self._hstates = np.array(hstates)  # Names
+        self._hvalues = np.array(hvalues)
+        self._hcolors = np.array(hcolors)
+        self._hshortcuts = np.array(hshortcuts)
+        # Display order on hyp from top (0) to bottom (nstates - 1)
+        self._hYranks = np.array([
+            int(rank - 1)
+            for rank in rankdata(np.array(hYranks))
+        ])  # -1 because 1-indexed after rankdata()
+        self._hYrankperm = np.argsort(hYranks)  # Display index to real index
         PROFILER("Check data", level=1)
 
 

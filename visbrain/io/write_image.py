@@ -4,12 +4,14 @@
 - write_fig_canvas : Export a canvas as a figure
 - write_fig_pyqt : Export a GUI window as a figure
 """
-import os
 import logging
-import numpy as np
+import os
 
-from ..utils.color import color2vb
+import numpy as np
+from scipy.stats import rankdata
+
 from ..config import CONFIG
+from ..utils.color import color2vb
 
 logger = logging.getLogger('visbrain')
 
@@ -18,8 +20,8 @@ __all__ = ('write_fig_hyp', 'write_fig_spindles', 'write_fig_canvas',
 
 
 def write_fig_hyp(data, sf, file=None, start_s=0, grid=False, ascolor=False,
-                  dpi=300, colors={-1: '#8bbf56', 0: '#56bf8b', 1: '#aabcce',
-                                   2: '#405c79', 3: '#0b1c2c', 4: '#bf5656'}):
+                  dpi=300, hstates=None, hvalues=None, hcolors=None,
+                  hYranks=None):
     """Export hypnogram to a high-res png figure.
 
     Parameters
@@ -39,12 +41,51 @@ def write_fig_hyp(data, sf, file=None, start_s=0, grid=False, ascolor=False,
         Plot in color
     dpi : int | 600
         Dots per inches
-    color : dict | {}
-        Color for each sleep stage. Default is : {-1: '#8bbf56', 0: '#56bf8b',
-        1: '#aabcce', 2: '#405c79', 3: '#0b1c2c', 4: '#bf5656'}
+    hstates: list[str]
+        List of vigilance state labels.
+    hvalues: list[int]
+        Hypnogram value for each vigilance state.
+    hcolors: list[int]
+        Hypnogram color for each vigilance state. Default is ['#8bbf56',
+        '#56bf8b', '#aabcce', '#405c79', '#0b1c2c', '#bf5656']
+    hYranks: list
+        List of Y position ranks on hypnogram for each state.
     """
     import matplotlib.pyplot as plt
     import datetime
+
+    # Kwargs
+    hkwargs = [hstates, hvalues, hcolors, hYranks]
+    if all([k is None for k in hkwargs]):
+        hstates = ['Wake', 'N1', 'N2', 'N3', 'REM', 'Art']
+        hvalues = [0, 1, 2, 3, 4, -1]
+        hcolors = [
+            '#8bbf56', '#56bf8b', '#aabcce', '#405c79', '#0b1c2c', '#bf5656'
+        ]
+        hYranks = [0, 2, 3, 4, 1, -1]
+    else:
+        if not all([k is not None for k in hkwargs]):
+            raise ValueError(
+                "All or none of the following kwargs should be specified at "
+                f"the same time: ['hstates', 'hvalues', 'hcolors', 'hYranks']."
+            )
+        if not len(set([len(k) for k in hkwargs])) == 1:
+            raise ValueError(
+                "Lengths differ for ['hstates', 'hvalues', 'hcolors', "
+                "'hYranks'] kwargs"
+            )  # All same length
+    if not all([value in hvalues for value in data]):
+        raise ValueError("Some hypnogram values are not recognized. Please "
+                         f"check `hvalues` kwarg.\n\n"
+                         f"hvalues = {hvalues}\n"
+                         f"Hypno unique values = {np.unique(data)}")
+
+    # Color
+    if not ascolor:
+        hcolors = ['black' for i in range(len(hcolors))]
+
+    # Rank. `rankdata` is 1-indexed
+    hYranks = np.array([int(rank - 1) for rank in rankdata(np.array(hYranks))])
 
     # Internal copy :
     hypno = data.copy()
@@ -52,17 +93,6 @@ def write_fig_hyp(data, sf, file=None, start_s=0, grid=False, ascolor=False,
     # Downsample to get one value per second
     sf = int(sf)
     hypno = hypno[::sf]
-
-    # Put REM between Wake and N1 sleep
-    hypno[hypno >= 1] += 1
-    hypno[hypno == 5] = 1
-    idx_rem = np.where(hypno == 1)[0]
-    val_rem = np.zeros(hypno.size)
-    val_rem[:] = np.nan
-    val_rem[idx_rem] = 1
-
-    # Find if artefacts are present in hypno
-    art = True if -1 in hypno else False
 
     # Start plotting
     fig, ax = plt.subplots(figsize=(8, 3), edgecolor='k')
@@ -83,44 +113,28 @@ def write_fig_hyp(data, sf, file=None, start_s=0, grid=False, ascolor=False,
     xlabels_str = [s.replace('1 day, ', '') for s in xlabels_str]
     plt.xlim(0, len(hypno))
     plt.xticks(xticks, xlabels_str)
-    if not ascolor:
-        plt.plot(hypno, 'k', ls='steps', linewidth=lw)
-    else:
-        for k, i in colors.items():
-            # Quick and dirty switch :
-            if k == 1:
-                q = 2
-            elif k == 4:
-                q = 1
-            elif k in [2, 3]:
-                q = k + 1
-            else:
-                q = k
-            mask = np.ones((len(hypno),), dtype=bool)
-            idxm = np.where(hypno == q)[0] + 1
-            idxm[idxm >= len(hypno)] = len(hypno) - 1
-            mask[idxm] = False
-            plt.plot(np.ma.masked_array(hypno, mask=mask), i, ls='steps',
-                     linewidth=lw)
 
-    # Plot REM epochs
-    remcol = 'k' if not ascolor else colors[4]
-    for i in np.arange(0.6, 1, 0.01):
-        plt.plot(np.arange(len(hypno)), i * val_rem, remcol, linewidth=lw)
+    # Plot whole hypnogram in black
+    hYpos = {float(value): rank for value, rank in zip(hvalues, hYranks)}
+    hypno_Ypos = np.array([hYpos[float(v)] for v in hypno])
+    plt.plot(hypno_Ypos, color='black', drawstyle='steps', linewidth=lw)
 
-    # Y-Ticks and Labels
-    if art:
-        ylabels = ['Art', 'Wake', 'REM', 'N1', 'N2', 'N3']
-        plt.yticks([-1, 0, 1, 2, 3, 4], ylabels)
-        plt.ylim(-1.5, 4.5)
-    else:
-        ylabels = ['', 'Wake', 'REM', 'N1', 'N2', 'N3']
-        plt.yticks([-0.5, 0, 1, 2, 3, 4], ylabels)
-        plt.ylim(-.5, 4.5)
+    # Iterate on states to update color and line width
+    for i, label in enumerate(hstates):
+        value = hvalues[i]
+        color = hcolors[i]
+        idx = np.where(hypno == value)[0]
+        mask = np.ones((len(hypno),), dtype=bool)
+        mask[idx] = False
+        plt.plot(np.ma.masked_array(hypno_Ypos, mask=mask), color=color,
+                 drawstyle='steps', linewidth=lw)
+
+    plt.yticks(hYranks, hstates)
+    plt.ylim(min(hYranks) - 0.5, max(hYranks) + 0.5)
 
     # X-Ticks and Labels
     plt.xlabel("Time")
-    plt.ylabel("Sleep Stage")
+    plt.ylabel("Vigilance state")
 
     # Grid
     if grid:

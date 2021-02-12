@@ -25,42 +25,46 @@ class UiScoring(object):
         self._hypno = self._hyp.gui_to_hyp()
         # Avoid updating data while setting cell :
         self._scoreSet = False
-        items = ['Wake', 'N1', 'N2', 'N3', 'REM', 'Art']
         # Remove every info in the table :
         self._scoreTable.setRowCount(0)
         # Find unit conversion :
         fact = self._get_fact_from_unit()
-        # Find transients :
-        _, idx, stages = transient(self._hypno, self._time / fact)
+        # Find transient's index, state value and state label
+        _, idx, state_values = transient(self._hypno, self._time / fact)
+        labels_map = {
+            value: lbl for value, lbl in zip(self._hvalues, self._hstates)
+        }
+        state_labels = [labels_map[value] for value in state_values]
         idx = np.round(10. * idx) / 10.
         # Set length of the table :
-        self._scoreTable.setRowCount(len(stages))
+        self._scoreTable.setRowCount(len(state_values))
         # Fill the table :
-        for k in range(len(stages)):
+        for k in range(len(state_values)):
             # Add stage start / end :
             self._scoreTable.setItem(k, 0, QtWidgets.QTableWidgetItem(
                 str(idx[k, 0])))
             self._scoreTable.setItem(k, 1, QtWidgets.QTableWidgetItem(
                 str(idx[k, 1])))
-            # Add stage :
+            # Add state :
             self._scoreTable.setItem(k, 2, QtWidgets.QTableWidgetItem(
-                items[stages[k]]))
+                state_labels[k]))
         self._scoreSet = True
 
     def _fcn_score_to_hypno(self):
         """Update hypno data from hypno score."""
         if self._scoreSet:
-            # Reset hypnogram :
-            self._hypno = np.zeros((len(self._time)), dtype=np.float32)
+            # Reset hypnogram (not directly to avoid losing data if failure)
+            hypno = np.zeros((len(self._time)), dtype=np.float32)
             # Loop over table row :
             for k in range(self._scoreTable.rowCount()):
                 # Get tstart / tend / stage :
-                tstart, tend, stage = self._get_score_marker(k)
+                tstart, tend, value = self._get_score_marker(k)
                 # Update pos if not None :
                 if tstart is not None:
-                    self._hypno[tstart:tend] = stage
-                    self._hyp.set_stage(tstart, tend, stage)
+                    hypno[tstart:tend] = value
+                    self._hyp.set_state(tstart, tend, value)
             self._hyp.edit.update()
+            self._hypno = hypno
             # Update sleep info :
             self._fcn_info_update()
 
@@ -81,10 +85,13 @@ class UiScoring(object):
             Time start (in sample)
         tend : float
             Time end (in sample).
-        stage : int
-            The stage.
+        value : int
+            The state value
         """
-        it = {'art': -1., 'wake': 0., 'n1': 1., 'n2': 2., 'n3': 3., 'rem': 4.}
+        state_values_map = {
+            lbl.lower(): value
+            for lbl, value in zip(self._hstates, self._hvalues)
+        }
         # Get unit :
         fact = self._get_fact_from_unit()
         # Get selected row :
@@ -93,23 +100,27 @@ class UiScoring(object):
         # Define error message if bad editing :
         errmsg = "\nTable score error. Starting and ending time must be " + \
                  "float numbers (with time start < time end) and stage " + \
-                 "must be Wake, N1, N2, N3, REM or Art"
+                 f"must be in {self._hstates}"
         # Get row data and update if possible:
         tstart_item = self._scoreTable.item(idx, 0)
         tend_item = self._scoreTable.item(idx, 1)
-        stage_item = self._scoreTable.item(idx, 2)
-        if tstart_item and tend_item and stage_item:
+        state_item = self._scoreTable.item(idx, 2)
+        if tstart_item and tend_item and state_item:
             # ============= PROPER FORMAT =============
-            if all([bool(str(tstart_item.text())), bool(str(tend_item.text())),
-                    str(stage_item.text()).lower() in it.keys()]):
+            if all([
+                bool(str(tstart_item.text())),
+                bool(str(tend_item.text())),
+                str(state_item.text()).lower() in [st.lower()
+                                                   for st in self._hstates]
+            ]):
                 try:
                     # Get start / end / stage :
                     tstart = int(float(str(tstart_item.text(
                     ))) * fact * self._sf)
                     tend = int(float(str(tend_item.text())) * fact * self._sf)
-                    stage = it[str(stage_item.text()).lower()]
+                    value = state_values_map[str(state_item.text()).lower()]
 
-                    return tstart, tend, stage
+                    return tstart, tend, value
                 except:
                     raise ValueError(errmsg)
             else:

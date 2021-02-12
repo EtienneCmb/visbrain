@@ -1,0 +1,45 @@
+???:
+  value: 42  # Value on 'sample'-style hypnogram
+  shortcut: 6  # Single key press
+  display_order: -3.14  # It's the rank across states that matters
+  color: yellow  # 'matplotlib' colors are accepted. "black" if missing key
+Art: 
+  value: -1
+  shortcut: a
+  display_order: 0
+  color: '#8bbf56'
+Wake: 
+  value: 0
+  shortcut: w
+  display_order: 1
+  color: '#56bf8b'
+REM: 
+  value: 4
+  shortcut: r
+  display_order: 2
+  color: '#bf5656'
+N1: 
+  value: 1
+  shortcut: 1
+  display_order: 3
+  color: '#aabcce'
+N2: 
+  value: 2
+  shortcut: 2
+  display_order: 4
+  color: '#405c79'
+N3: 
+  value: 3
+  shortcut: 3
+  display_order: 5
+  color: '#0b1c2c'
+N4: 
+  value: 6
+  shortcut: 4
+  display_order: 6
+  color: lightblue
+N5: 
+  value: 7
+  shortcut: 5
+  display_order: 7
+  # color: 'black'   # 

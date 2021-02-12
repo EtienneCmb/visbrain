@@ -68,6 +68,7 @@ Main features
             <div class="alert alert-dismissible alert-primary">
               <b>Hypnogram</b>
               <ul>
+                <li>Flexible definition of vigilance states</li>
                 <li>Load, edit and save</li>
                 <li>Real-time computation of sleep statistics</li>
                 <li>Export high-quality hypnogram figure</li>
@@ -143,7 +144,7 @@ The contextual menu allows to perform several functions such as the loading and 
     * *Lock scoring to display* : When this option is selected (default), the scoring window is equal to the display window. When this option is off, the epoch used for scoring can be independent from the displayed epoch. See :ref:`hypnogram_scoring`..
 
 **Settings panel** :
-The setting panels is where most of the (advanced) functions of the software are! Among other things, you can control which channel to display, adjust the amplitudes, customize the spectrogram and hypnogram, compute the duration of each sleep stage, add annotations to the recording, and perform a bunch of semi-automatic detection (spindles, K-complexes...). See the section :ref:`sleep_settings_panel` for a description of each tab.
+The setting panels is where most of the (advanced) functions of the software are! Among other things, you can control which channel to display, adjust the amplitudes, customize the spectrogram and hypnogram, compute the duration of each vigilance state, add annotations to the recording, and perform a bunch of semi-automatic detection (spindles, K-complexes...). See the section :ref:`sleep_settings_panel` for a description of each tab.
 
 .. _sleep_settings_panel:
 
@@ -238,15 +239,15 @@ The Infos panel displays the recording infos (e.g. name and downsampling frequen
     * Wake After Sleep Onset (WASO) : duration of wake periods within SPT
     * Sleep Efficiency (SE) : TST / TDT * 100 (%)
     * Total Sleep Time (TST) : SPT - WASO
-    * W, N1, N2, N3 and REM : sleep stages duration
-    * Latencies : latencies of sleep stages from the beginning of the record
+    * Vigilance state duration: "Wake", "N1", "N2", "N3" and "REM" by default
+    * Latencies of vigilance states from the beginning of the record: "LatWake", "LatN1", "LatN2", "LatN3" and "LatREM" by default
 
 .. _scoringtab:
 
 Scoring
 +++++++
 
-This tab contains the scoring table, i.e. where each stage start and finish. For further informations about how to score your hypnogram see :ref:`hypnogram_scoring`.
+This tab contains the scoring table, i.e. where each state start and finish. For further informations about how to score your hypnogram see :ref:`hypnogram_scoring`.
 
 .. _detectiontab:
 
@@ -279,12 +280,6 @@ mouse wheel             Move the current window
 double left click       Add annotation under mouse cursor
 \-                      Decrease amplitude
 \+                      Increase amplitude
-a                       Score the current epoch as Artefact
-w                       Score the current epoch as Wake
-1                       Score the current epoch as N1
-2                       Score the current epoch as N2
-3                       Score the current epoch as N3
-r                       Score the current epoch as REM
 b                       Previous window
 n                       Next window
 s                       Display / hide spectrogram
@@ -303,6 +298,21 @@ CTRL + n                Screenshot window
 CTRL + e                Display documentation
 CTRL + t                Display shortcuts window
 CTRL + q                Close the window
+===================     =======================================================
+
+Some shortcuts are used for scoring the current epoch and may be modified by
+the user (see `Hypnogram` section). By default, the vigilance states and their
+corresponding shortcuts are the following:
+
+===================     =======================================================
+Keys                    Description
+===================     =======================================================
+a                       Score the current epoch as Artefact
+w                       Score the current epoch as Wake
+1                       Score the current epoch as N1
+2                       Score the current epoch as N2
+3                       Score the current epoch as N3
+r                       Score the current epoch as REM
 ===================     =======================================================
 
 .. ##########################################################################
@@ -357,7 +367,66 @@ If you have a file format that is currently not supported, :class:`Sleep` also p
     Sleep(data='mydata.edf', hypno='myhypno.csv', downsample=128).show()
 
 Hypnogram
-^^^^^^^^^
+~~~~~~~~~
+
+
+User-defined vigilance states configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+By default, Sleep uses the guidelines of Iber et al. 2007 for vigilance states
+nomenclature. Each vigilance state has an associated shortcuts for scoring, and
+numerical value on point-per-second hypnograms (see below), as follows::
+
+==========    ======  ======================================================
+State         Value   Shortcut
+==========    ======  ======================================================
+Wake          0       'w'
+Art           \-1     'a'
+N1            1       '1'
+N2            2       '2'
+N3            3       '3'
+REM           4       '4'
+
+However, Sleep also offers the possibility to specify custom configuration for
+vigilance states:
+
+* 1. Create a `yaml <http://https://learnxinyminutes.com/docs/yaml/>`_ file
+  formatted as follows:
+
+.. code-block:: yaml
+  state_1:  # Label of vigilance state
+    value: 1  # Associated value on 'point-per-second'-style hypnogram. Mandatory key
+    shortcut: 1  # Must require a single key-press. Mandatory key
+    display_order: 1  # Position on GUI. Mandatory key
+    color: 'red'  # matplotlib color, hexadecimal color or tuple of RGB. default is "black"
+  state_2:   # Must be unique
+    value: 2  # Must be unique
+    shortcut: 2  # Must be unique
+    display_order: 2.0  # Must be unique
+    # color: 'black'  # 'black' if key is missing
+  state_3: 
+    value: 42
+    shortcut: w
+    display_order: 1.00005  # It's not the value but the rank across states that matters. 
+    color: '#56bf8b'
+
+Note that the keys listed in the `Shortcuts` section are reserved and can't be used as shortcuts for scoring.
+
+* 2. Specify the path to you vigilance states configuration file when creating a `Sleep` instance with the `states_config_file` kwarg as follows:
+
+.. code-block:: python
+  from visbrain.gui import Sleep
+  
+  Sleep(states_config_file='path/to/my/states_cfg_file.yml').show()
+
+.. figure::  _static/sleep/flex_vigilance_states.png
+   :align:   center
+
+If the `states_config_file` kwarg is not specified, Sleep will use the default
+configuration.
+
+Supported hypnogram formats
+^^^^^^^^^^^^^^
 
 One of the main objective of Sleep is to **facilitate the sharing of data** across laboratories. This involves being able to accomodate for a variety of hypnogram format (unfortunately, there is no current gold standard on how to save hypnogram data). Here's the list of supported extensions for hypnogram files :
 
@@ -367,15 +436,20 @@ One of the main objective of Sleep is to **facilitate the sharing of data** acro
 * **.edf** (EDF+)
 * **.hyp** (`ELAN <http://elan.lyon.inserm.fr>`_)
 
+
 .. warning::
-   Please note that Sleep uses the guidelines of *Iber et al. 2007* for sleep stage nomenclature (Wake, N1, N2, N3, REM and Artefact). If your hypnogram includes both NREM-S3 and NREM-S4 sleep stages you can add “N4” categories with the corresponding values in the description file. However, keep in mind that S3 and S4 will be merged into N3 during the import to the Sleep module. That also means that if you load and then save your hypnogram in Sleep, you will loose differentiation between S3 and S4 so be sure not to overwrite your original file!
+  Note that during loading of edf-style (.edf or .txt) and Elan-style (.hyp) hypnograms, NREM-S3 and NREM-S4 sleep states will be merged into the N3 vigilance state. That also means that if you load and then save your hypnogram in Sleep, you will loose differentiation between S3 and S4 so be sure not to overwrite your original file!
+
+.. warning::
+  Note also that `edf` and `ELAN` style hypnogram can only be saved or loaded
+  with the default configuration for vigilance states. 
 
 
 Save hypnogram
 ^^^^^^^^^^^^^^
 
 .. important::
-  Since release v0.4, the default hypnogram export format uses stage duration rather than point-per-second encoding. This format avoids potential errors caused by downsampling and confusion in the values assigned to each sleep stage (which can drastically differ between two labs, e.g. N2 sleep can be encoded with the value 2 in one lab, and -2 in another lab). However, for retro-compatibility, we still allow user to save and load hypnogram in point-per-second format. Please see the image below to see the difference between stage-duration and point-per-second encoding.
+  Since release v0.4, the default hypnogram export format uses stage duration rather than point-per-second encoding. This format avoids potential errors caused by downsampling and confusion in the values assigned to each vigilance state (which can drastically differ between two labs, e.g. N2 sleep can be encoded with the value 2 in one lab, and -2 in another lab). However, for retro-compatibility, we still allow user to save and load hypnogram in point-per-second format. Please see the image below to see the difference between stage-duration and point-per-second encoding. 
 
 .. figure::  _static/sleep/hypno_encoding.png
    :align:   center
@@ -399,7 +473,7 @@ Stage                    Duration
 
 The subject was awake from 0 to 500 seconds, then fell in N1 sleep between 500 to 750 seconds, then in N2 sleep between 750 to 2000 seconds, then in N3 sleep and so on. The subject was awakened in REM sleep, and the recording was stopped shortly after. The total duration of the recording (in seconds) corresponds to the last value of the hypnogram, in that case 30100 seconds.
 
-The main advantages of using such an encoding format for the hypnogram is that it avoids any confusion related to the values used for each sleep stage, and drastically reduces the hypnogram file length without loosing any information. Please note that the software contains command-line functions to convert between point-per-second and stage-duration encoding.
+The main advantages of using such an encoding format for the hypnogram is that it avoids any confusion related to the values used for each vigilance state, and drastically reduces the hypnogram file length without loosing any information. Please note that the software contains command-line functions to convert between point-per-second and stage-duration encoding.
 
 .. tip::
   If you want to add any relevant informations / comments to the hypnogram, you can do so by adding lines preceded by an asterisk directly within the text file. Sleep will not read any line in the hypnogram that starts with an asterisk mark. For example, you can add the name of the scorer::
@@ -413,11 +487,13 @@ The main advantages of using such an encoding format for the hypnogram is that i
 Elan .hyp format
 ++++++++++++++++
 
-Alternatively, if you prefer point-per-second encoding, you can save your data in .hyp format, which can be read with any text editor. Sleep will create a single .hyp file with 4 header rows and the values presented above for the sleep stages, with the exception that the value assigned to REM sleep will be 5 for compatibility with Elan hypnogram reader.
+Alternatively, if you prefer point-per-second encoding, you can save your data in .hyp format, which can be read with any text editor. Sleep will create a single .hyp file with 4 header rows and the values presented above for the vigilance states, with the exception that the value assigned to REM sleep will be 5 for compatibility with Elan hypnogram reader.
 
+This format (as well as EDF format) can only be saved or loaded in Sleep when
+using the default configuration for vigilance states.
 
 .. important::
-   If your hypnogram was created using another software, and is encoded in point-per-second, it is important that Sleep knows which value is associated with each sleep stage (e.g. 2 = N2 sleep, 4 = REM sleep). To do that, you need to create a simple text file in the same directory as the original hypnogram file,  named: *HYPNOFILENAME_description.txt*. Checkout this `example <https://drive.google.com/file/d/0B6vtJiCQZUBvYUFnQS1HWHhjSkE/view?usp=sharing>`_.
+   If your hypnogram was created using another software, and is encoded in point-per-second, it is important that Sleep knows which value is associated with each vigilance state (e.g. 2 = N2 sleep, 4 = REM sleep). To do that, you need to create a simple text file in the same directory as the original hypnogram file,  named: *HYPNOFILENAME_description.txt*. Checkout this `example <https://drive.google.com/file/d/0B6vtJiCQZUBvYUFnQS1HWHhjSkE/view?usp=sharing>`_.
 
    **This text file should contain the following information :**
 
@@ -595,7 +671,7 @@ Navigation
 
 This is probably the most useful editing method, as it allows scoring while scrolling through your data. 
 
-To insert a sleep stage, use the keys below :
+To insert a vigilance state, use the keys below :
 
 ==============          =================
 Keys                    Description
@@ -663,7 +739,7 @@ The Detection panel offers several semi-automatic algorithms for the detection o
   * All : apply detection on all channels (even those that are hidden)
 
 .. note::
-   After performing one of the detection, go to the *Location* tab to see infos about each detected events (starting and ending points, duration, sleep stage). Select the event to jump to it. Finally, you can export the location table using the File > Save contextual menu.
+   After performing one of the detection, go to the *Location* tab to see infos about each detected events (starting and ending points, duration, vigilance state). Select the event to jump to it. Finally, you can export the location table using the File > Save contextual menu.
 
 Two examples of automatic event detection are shown below.
 
@@ -705,7 +781,7 @@ Perform a peak detection.
 
 
 .. important::
-  Please note that the software does not yet allow to automatically score sleep stages. However, if you are interested to collaborate and / or implement your own algorithm, please feel free to contact us.
+  Please note that the software does not yet allow to automatically score vigilance states. However, if you are interested to collaborate and / or implement your own algorithm, please feel free to contact us.
 
 .. _replace_detection:
 

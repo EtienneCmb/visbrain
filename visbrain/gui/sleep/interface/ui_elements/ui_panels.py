@@ -112,8 +112,15 @@ class UiPanels(object):
         self._hypLabel = QtWidgets.QWidget()
         layout = QtWidgets.QVBoxLayout(self._hypLabel)
         layout.setContentsMargins(0, 0, 0, 0)
+        # State labels: "<label> ('<shortcut>')"
+        ylabels = [
+            f"{lbl} ('{sh}')" for lbl, sh in zip(
+                self._hstates[self._hYrankperm],
+                self._hshortcuts[self._hYrankperm],
+            )
+        ]
         self._hypYLabels = []
-        for k in [''] + self._href + ['']:
+        for k in [''] + ylabels + ['']:
             label = QtWidgets.QLabel()
             label.setText(self._addspace + k)
             label.setFont(self._font)
@@ -241,16 +248,16 @@ class UiPanels(object):
             # Add ymin spinbox :
             self._yminSpin[i] = QtWidgets.QDoubleSpinBox(self._PanScrollChan)
             self._yminSpin[i].setDecimals(1)
-            self._yminSpin[i].setMinimum(10. * self['min'][i])
-            self._yminSpin[i].setMaximum(10. * self['max'][i])
+            self._yminSpin[i].setMinimum(-10. * abs(self['min'][i]))
+            self._yminSpin[i].setMaximum(10. * abs(self['max'][i]))
             self._yminSpin[i].setProperty("value", -int(fact * self['std'][i]))
             self._yminSpin[i].setSingleStep(1.)
             self._PanChanLay.addWidget(self._yminSpin[i], i, 3, 1, 1)
             # Add ymax spinbox :
             self._ymaxSpin[i] = QtWidgets.QDoubleSpinBox(self._PanScrollChan)
             self._ymaxSpin[i].setDecimals(1)
-            self._ymaxSpin[i].setMinimum(10. * self['min'][i])
-            self._ymaxSpin[i].setMaximum(10. * self['max'][i])
+            self._ymaxSpin[i].setMinimum(- 10. * abs(self['min'][i]))
+            self._ymaxSpin[i].setMaximum(10. * abs(self['max'][i]))
             self._ymaxSpin[i].setSingleStep(1.)
             self._ymaxSpin[i].setProperty("value", int(fact * self['std'][i]))
             self._PanChanLay.addWidget(self._ymaxSpin[i], i, 4, 1, 1)
@@ -494,15 +501,18 @@ class UiPanels(object):
     def _fcn_set_hypno_color(self):
         """Change the color of the hypnogram."""
         if not(self._PanHypnoColor.isChecked()):
-            color = {-1: '#292824', 0: '#292824', 1: '#292824',
-                     2: '#292824', 3: '#292824', 4: '#292824'}
+            hcolors = {
+                hvalue: color2vb('#292824')
+                for hvalue in self._hvalues
+            }
         else:
-            color = self._hypcolor
-        # Get color :
-        zp = zip(color.keys(), color.values())
-        self._hyp.color = {k: color2vb(color=i) for k, i in zp}
-        # Update hypnogram
-        self._hyp.set_data(self._sf, self._hypno, self._time)
+            hcolors = {
+                hvalue: color2vb(hcolor)
+                for hvalue, hcolor in zip(self._hvalues, self._hcolors)
+            }
+        # Set new color map and redraw
+        self._hyp.hcolors = hcolors
+
 
     def _fcn_hypno_clean(self):
         """Clean the hypnogram."""

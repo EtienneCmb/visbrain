@@ -31,5 +31,13 @@ data, sf = read_hypno(path_to_hypno)
 # Plot the hypnogram. If file is None, the window is displayed otherwise the
 # figure is saved
 
-write_fig_hyp(data, sf, grid=grid, ascolor=ascolor, file=file)
+# Fill the following for custom states specification
+hstates = None
+hvalues = None
+hcolors = None
+hYranks = None
+
+write_fig_hyp(data, sf, grid=grid, ascolor=ascolor, file=file,
+              hstates=hstates, hvalues=hvalues, hcolors=hcolors,
+              hYranks=hYranks)
 plt.show()

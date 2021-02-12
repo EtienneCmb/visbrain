@@ -17,7 +17,8 @@ class UiInfo(object):
         """Complete the table sleep info."""
         table = self._infoTable
         # Get sleep stats :
-        stats = sleepstats(self._hyp.gui_to_hyp(), self._sf)
+        stats = sleepstats(self._hyp.gui_to_hyp(), self._sf,
+                           self._hstates, self._hvalues)
 
         # Add global informations to stats dict
         is_file = isinstance(self._file, str)

@@ -52,9 +52,12 @@ class Sleep(_PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
     axis : bool | False
         Specify if each axis have to contains its own axis. Be carefull
         with this option, the rendering can be much slower.
-    href : list | ['art', 'wake', 'rem', 'n1', 'n2', 'n3']
-        List of sleep stages. This list can be used to changed the display
-        order into the GUI.
+    states_config_file : path-like | None
+        Path to the configuration file (.yaml) describing the vigilance states
+        and associated value, color, shortcut, and display order on GUI. Refer
+        to the documentation for an exemple. The default configuration
+        contains the following states: ['Art', 'Wake', 'REM', 'N1', 'N2', 'N3']
+        and their associated values: [-1, 0, 4, 1, 2, 3]
     preload : bool | True
         Preload data into memory. For large datasets, turn this parameter to
         True.
@@ -80,8 +83,8 @@ class Sleep(_PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
 
     def __init__(self, data=None, hypno=None, config_file=None,
                  annotations=None, channels=None, sf=None, downsample=100.,
-                 axis=True, href=['art', 'wake', 'rem', 'n1', 'n2', 'n3'],
-                 preload=True, use_mne=False, kwargs_mne={}, verbose=None):
+                 axis=True, states_config_file=None, preload=True,
+                 use_mne=False, kwargs_mne={}, verbose=None):
         """Init."""
         _PyQtModule.__init__(self, verbose=verbose, icon='sleep_icon.svg')
         # ====================== APP CREATION ======================
@@ -95,15 +98,14 @@ class Sleep(_PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
 
         # ====================== LOAD FILE ======================
         PROFILER("Import file", as_type='title')
-        ReadSleepData.__init__(self, data, channels, sf, hypno, href, preload,
-                               use_mne, downsample, kwargs_mne,
-                               annotations)
+        ReadSleepData.__init__(self, data, channels, sf, hypno,
+                               states_config_file, preload, use_mne,
+                               downsample, kwargs_mne, annotations)
 
         # ====================== VARIABLES ======================
         # Check all data :
         self._config_file = config_file
         self._annot_mark = np.array([])
-        self._hconvinv = {v: k for k, v in self._hconv.items()}
         self._ax = axis
         # ---------- Default line width ----------
         self._lw = 1.
@@ -112,15 +114,6 @@ class Sleep(_PyQtModule, ReadSleepData, UiInit, Visuals, UiElements,
         self._defstd = 5.
         # ---------- Default colors ----------
         self._chancolor = '#292824'
-        # self._hypcolor = '#292824'
-        # Hypnogram color :
-        self._hypcolor = {-1: '#8bbf56', 0: '#56bf8b', 1: '#aabcce',
-                          2: '#405c79', 3: '#0b1c2c', 4: '#bf5656'}
-        # Convert color :
-        if self._hconv != self._hconvinv:
-            hypc = self._hypcolor.copy()
-            for k in self._hconv.keys():
-                self._hypcolor[k] = hypc[self._hconvinv[k]]
         self._indicol = '#e74c3c'
         # Default spectrogram colormap :
         self._defcmap = 'viridis'

@@ -124,7 +124,8 @@ class UiMenu(HelpMenu):
             if isinstance(self._file, str):
                 info['Datafile'] = self._file
             write_hypno(filename, self._hypno, version=version, sf=self._sfori,
-                        npts=self._N, time=self._time, info=info)
+                        npts=self._N, time=self._time, info=info,
+                        hstates=self._hstates, hvalues=self._hvalues)
 
     def _save_hyp_fig(self, *args, filename=None, **kwargs):
         """Save a 600 dpi .png figure of the hypnogram."""
@@ -136,7 +137,9 @@ class UiMenu(HelpMenu):
             grid = self._slGrid.isChecked()
             ascolor = self._PanHypnoColor.isChecked()
             write_fig_hyp(hypno, self._sf, file=filename,
-                          start_s=self._toffset, grid=grid, ascolor=ascolor)
+                          start_s=self._toffset, grid=grid, ascolor=ascolor,
+                          hstates=self._hstates, hvalues=self._hvalues,
+                          hcolors=self._hcolors, hYranks=self._hYranks)
 
     # ______________________ STATS INFO TABLE ______________________
     def _save_info_table(self, *args, filename=None):
@@ -321,7 +324,9 @@ class UiMenu(HelpMenu):
                                    "All files (*.*)")
         if filename:
             # Load the hypnogram :
-            self._hypno, _ = read_hypno(filename, time=self._time)
+            self._hypno, _ = read_hypno(filename, time=self._time,
+                                        hstates=self._hstates,
+                                        hvalues=self._hvalues)
             self._hypno = oversample_hypno(self._hypno, self._N)[::self._dsf]
             self._hyp.set_data(self._sf, self._hypno, self._time)
             # Update info table :
@@ -574,8 +579,10 @@ class UiMenu(HelpMenu):
                                   self._spec.freq[-1] - self._spec.freq[0])
             self._specInd.mesh.visible = self.menuDispIndic.isChecked()
             # Hypnogram camera :
-            self._hypcam.rect = (self._time.min(), -5.,
-                                 self._time.max() - self._time.min(), 7.)
+            self._hypcam.rect = (self._time.min(),
+                                 -len(self._hvalues),
+                                 self._time.max() - self._time.min(),
+                                 len(self._hvalues) + 1)
             # Time camera :
             self._timecam.rect = (self._time.min(), 0.,
                                   self._time.max() - self._time.min(), 1.)
