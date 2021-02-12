@@ -111,7 +111,10 @@ def sleepstats(hypno, sf_hyp, hstates, hvalues):
         stats[f'Lat{label}'] = \
             np.where(hypno == value)[0].min() if value in hypno else tov
 
-    if not np.isnan(stats['LatN1']) and not np.isnan(stats['TDT']):
+    if ('LatN1' in stats
+        and not np.isnan(stats['LatN1'])
+        and not np.isnan(stats['TDT'])
+    ):
         hypno_s = hypno[stats['LatN1']:stats['TDT']]
 
         stats['SPT'] = hypno_s.size
