@@ -105,9 +105,11 @@ class UiMenu(HelpMenu):
                    "Click 'Yes' to use the new format and 'No' to use the old "
                    "format. For more information, visit the doc at "
                    "visbrain.org/sleep")
-            reply = QtWidgets.QMessageBox.question(self, 'Message', msg,
-                                                   QtWidgets.QMessageBox.Yes,
-                                                   QtWidgets.QMessageBox.No)
+            reply = QtWidgets.QMessageBox.question(
+                self, 'Message', msg,
+                buttons=(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No),
+                defaultButton=QtWidgets.QMessageBox.Yes,
+            )
         if reply == QtWidgets.QMessageBox.No:  # v1 = sample
             dialog_ext = "Text file (*.txt);;Elan file (*.hyp)"
             version = 'sample'
