@@ -4,17 +4,14 @@ import os
 from setuptools import setup, find_packages
 
 __version__ = "0.4.6"
-NAME = 'visbrain'
+NAME = 'visbrain_sw'
 AUTHOR = "Visbrain developpers"
-MAINTAINER = "Etienne Combrisson"
-EMAIL = 'e.combrisson@gmail.com'
+MAINTAINER = ""
+EMAIL = ''
 KEYWORDS = "brain MNI GPU visualization data OpenGL vispy neuroscience " + \
            "sleep data-mining"
 DESCRIPTION = "Hardware-accelerated visualization suite for " + \
               "brain-data in Python"
-URL = 'http://visbrain.org/'
-DOWNLOAD_URL = "https://github.com/EtienneCmb/visbrain/archive/" + \
-               "v" + __version__ + ".tar.gz"
 # Data path :
 HERE = os.path.abspath(os.path.dirname(__file__))
 PACKAGE_DATA = {}
@@ -40,7 +37,7 @@ setup(
     download_url=DOWNLOAD_URL,
     # PACKAGE / DATA
     packages=find_packages(),
-    package_dir={'visbrain': 'visbrain'},
+    package_dir={'visbrain_sw': 'visbrain_sw'},
     package_data=PACKAGE_DATA,
     include_package_data=True,
     platforms='any',
