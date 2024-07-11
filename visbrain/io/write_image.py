@@ -84,7 +84,7 @@ def write_fig_hyp(data, sf, file=None, start_s=0, grid=False, ascolor=False,
     plt.xlim(0, len(hypno))
     plt.xticks(xticks, xlabels_str)
     if not ascolor:
-        plt.plot(hypno, 'k', ls='steps', linewidth=lw)
+        plt.plot(hypno, 'k', ds='steps', linewidth=lw)
     else:
         for k, i in colors.items():
             # Quick and dirty switch :
@@ -100,7 +100,7 @@ def write_fig_hyp(data, sf, file=None, start_s=0, grid=False, ascolor=False,
             idxm = np.where(hypno == q)[0] + 1
             idxm[idxm >= len(hypno)] = len(hypno) - 1
             mask[idxm] = False
-            plt.plot(np.ma.masked_array(hypno, mask=mask), i, ls='steps',
+            plt.plot(np.ma.masked_array(hypno, mask=mask), i, ds='steps',
                      linewidth=lw)
 
     # Plot REM epochs
