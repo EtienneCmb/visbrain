@@ -72,11 +72,18 @@ class VisPyDiagnostics:
     gl_version: str | None = None
     renderer: str | None = None
     error: str | None = None
+    max_texture_size: int | None = None
+    max_texture_3d_size: int | None = None
+    max_texture_units: int | None = None
+    shader_compiled: bool | None = None
+    shader_error: str | None = None
+    fallback_reason: str | None = None
+    headless_attempts: list[dict[str, Any]] = field(default_factory=list)
 
     def payload(self) -> dict[str, Any]:
         """Return diagnostic metadata suitable for structured logging."""
 
-        return {
+        payload: dict[str, Any] = {
             "requested_backend": self.requested_backend,
             "resolved_backend": self.resolved_backend,
             "available": self.available,
@@ -84,7 +91,18 @@ class VisPyDiagnostics:
             "gl_version": self.gl_version,
             "renderer": self.renderer,
             "error": self.error,
+            "max_texture_size": self.max_texture_size,
+            "max_texture_3d_size": self.max_texture_3d_size,
+            "max_texture_units": self.max_texture_units,
+            "shader_compiled": self.shader_compiled,
+            "shader_error": self.shader_error,
+            "fallback_reason": self.fallback_reason,
         }
+        if self.headless_attempts:
+            payload["headless_attempts"] = [
+                dict(item) for item in self.headless_attempts
+            ]
+        return payload
 
 
 _VISPY_WARNING_MESSAGES: set[str] = set()
@@ -131,13 +149,63 @@ def _query_gl_capabilities(diag: VisPyDiagnostics) -> None:
         return
 
     try:
-        info = gloo.gl.gl_info
+        gl_mod = gloo.gl
+        info = gl_mod.gl_info
         has_context = bool(getattr(info, "have_context", False))
         diag.gl_version = info.get_version()
         diag.renderer = info.get_renderer()
     except Exception as exc:  # pragma: no cover - best effort query
         diag.error = diag.error or _format_exception(exc)
         has_context = False
+    else:
+        if has_context:
+            getter = getattr(gl_mod, "glGetIntegerv", None)
+
+            def _query_limit(name: str) -> int | None:
+                if getter is None:
+                    return None
+                constant = getattr(gl_mod, name, None)
+                if constant is None:
+                    return None
+                try:
+                    value = getter(constant)
+                except Exception:  # pragma: no cover - defensive
+                    return None
+                if isinstance(value, (list, tuple)):
+                    value = value[0]
+                try:
+                    return int(value)
+                except Exception:  # pragma: no cover - defensive
+                    return None
+
+            diag.max_texture_size = _query_limit("GL_MAX_TEXTURE_SIZE")
+            diag.max_texture_3d_size = _query_limit("GL_MAX_3D_TEXTURE_SIZE")
+            diag.max_texture_units = _query_limit("GL_MAX_TEXTURE_IMAGE_UNITS")
+
+            program_cls = getattr(gloo, "Program", None)
+            if program_cls is not None:
+                vert = "void main() { gl_Position = vec4(0.0); }"
+                frag = "void main() { gl_FragColor = vec4(1.0); }"
+                program = None
+                try:
+                    program = program_cls(vert, frag)
+                    builder = getattr(program, "_build", None)
+                    activator = getattr(program, "activate", None)
+                    if callable(builder):
+                        builder()
+                    elif callable(activator):
+                        activator()
+                    diag.shader_compiled = True
+                except Exception as shader_exc:
+                    diag.shader_compiled = False
+                    diag.shader_error = _format_exception(shader_exc)
+                finally:
+                    delete = getattr(program, "delete", None)
+                    if callable(delete):
+                        try:
+                            delete()
+                        except Exception:  # pragma: no cover - defensive
+                            pass
 
     diag.context_available = diag.context_available and has_context
 
@@ -146,6 +214,12 @@ def probe_vispy_environment(config: "VisbrainConfig") -> VisPyDiagnostics:
     """Inspect the VisPy backend and OpenGL runtime status."""
 
     diagnostics = VisPyDiagnostics(requested_backend=config.vispy_backend)
+    if config._headless_attempts:
+        diagnostics.headless_attempts = [
+            dict(attempt) for attempt in config._headless_attempts
+        ]
+    if config._pending_fallback_reason:
+        diagnostics.fallback_reason = config._pending_fallback_reason
 
     if _VISPY_APP_ERROR is not None:
         diagnostics.error = _format_exception(_VISPY_APP_ERROR)
@@ -185,42 +259,56 @@ def probe_vispy_environment(config: "VisbrainConfig") -> VisPyDiagnostics:
 
 def select_headless_backend(
     config: "VisbrainConfig", *, candidates: Sequence[str] = _HEADLESS_BACKENDS
-) -> str | None:
+) -> tuple[str | None, str | None]:
     """Attempt to select an offscreen backend in headless environments."""
 
+    attempts: list[dict[str, Any]] = []
+
     if _VISPY_APP_ERROR is not None:
-        logger.debug(
-            "vispy.headless skipped due to import failure: %s",
-            _format_exception(_VISPY_APP_ERROR),
-        )
-        return None
+        reason = _format_exception(_VISPY_APP_ERROR)
+        payload = {
+            "success": False,
+            "backend": None,
+            "error": reason,
+        }
+        attempts.append(payload)
+        logger.info("vispy.headless %s", payload)
+        config._headless_attempts = attempts
+        return None, f"VisPy import failed: {reason}"
 
     for candidate in candidates:
+        attempt = {"backend": candidate}
         try:
             visapp.application.Application(candidate)
         except Exception as exc:
-            logger.debug(
-                "vispy.headless candidate rejected",
-                exc_info=(exc.__class__, exc, exc.__traceback__),
-            )
+            attempt["success"] = False
+            attempt["error"] = _format_exception(exc)
+            logger.info("vispy.headless %s", attempt)
+            attempts.append(attempt)
             continue
-        config_backend = candidate
+
+        attempt["success"] = True
+        logger.info("vispy.headless %s", attempt)
+        attempts.append(attempt)
+
         if vispy_config is not None:
             try:
-                vispy_config["default_backend"] = config_backend
+                vispy_config["default_backend"] = candidate
             except Exception as cfg_exc:  # pragma: no cover - defensive
                 logger.debug(
                     "vispy.config update failed for backend %s: %s",
-                    config_backend,
+                    candidate,
                     _format_exception(cfg_exc),
                 )
-        logger.info("vispy.headless backend=%s", config_backend)
-        return config_backend
+        config._headless_attempts = attempts
+        reason = f"Configured headless backend '{candidate}'"
+        return candidate, reason
 
-    _warn_once(
-        "No suitable headless VisPy backend (EGL/OSMesa) was found."
-    )
-    return None
+    config._headless_attempts = attempts
+    reason = "No suitable headless VisPy backend (EGL/OSMesa) was found."
+    _warn_once(reason)
+    logger.warning("vispy.headless %s", {"attempts": attempts, "success": False})
+    return None, reason
 
 
 @dataclass
@@ -243,6 +331,15 @@ class VisbrainConfig:
     )
     vispy_diagnostics: VisPyDiagnostics = field(
         default_factory=VisPyDiagnostics, init=False, repr=False
+    )
+    vispy_diagnostics_payload: dict[str, Any] = field(
+        default_factory=dict, init=False, repr=False
+    )
+    _headless_attempts: list[dict[str, Any]] = field(
+        default_factory=list, init=False, repr=False
+    )
+    _pending_fallback_reason: str | None = field(
+        default=None, init=False, repr=False
     )
 
     def __post_init__(self) -> None:
@@ -277,6 +374,11 @@ class VisbrainConfig:
 
         diagnostics = probe_vispy_environment(self)
         self.vispy_diagnostics = diagnostics
+        self.vispy_diagnostics_payload = diagnostics.payload()
+        self._headless_attempts = [
+            dict(attempt) for attempt in diagnostics.headless_attempts
+        ]
+        self._pending_fallback_reason = diagnostics.fallback_reason
         if log:
             _log_vispy_diagnostics(diagnostics)
         return diagnostics
@@ -287,7 +389,10 @@ class VisbrainConfig:
         if self.show_gui:
             return
         previous = self.vispy_backend
-        fallback = select_headless_backend(self)
+        self._headless_attempts = []
+        self._pending_fallback_reason = None
+        fallback, reason = select_headless_backend(self)
+        self._pending_fallback_reason = reason
         if fallback and fallback != previous:
             self.vispy_backend = fallback
             if self._vispy_app is not None:
@@ -312,9 +417,16 @@ class VisbrainConfig:
         )
         duplicate._pyqt_app = self._pyqt_app
         duplicate._vispy_app = self._vispy_app
-        duplicate.vispy_diagnostics = VisPyDiagnostics(
-            **vars(self.vispy_diagnostics)
-        )
+        diag_data = vars(self.vispy_diagnostics).copy()
+        diag_data["headless_attempts"] = [
+            dict(attempt) for attempt in self.vispy_diagnostics.headless_attempts
+        ]
+        duplicate.vispy_diagnostics = VisPyDiagnostics(**diag_data)
+        duplicate.vispy_diagnostics_payload = dict(self.vispy_diagnostics_payload)
+        duplicate._headless_attempts = [
+            dict(attempt) for attempt in self._headless_attempts
+        ]
+        duplicate._pending_fallback_reason = self._pending_fallback_reason
         return duplicate
 
     # ------------------------------------------------------------------
@@ -399,6 +511,9 @@ class VisbrainConfig:
                 error=_format_exception(_VISPY_APP_ERROR),
             )
             self.vispy_diagnostics = diagnostics
+            self.vispy_diagnostics_payload = diagnostics.payload()
+            self._headless_attempts = []
+            self._pending_fallback_reason = diagnostics.fallback_reason
             _log_vispy_diagnostics(diagnostics)
             if force:
                 raise RuntimeError(
@@ -419,6 +534,9 @@ class VisbrainConfig:
                 error=_format_exception(exc),
             )
             self.vispy_diagnostics = diagnostics
+            self.vispy_diagnostics_payload = diagnostics.payload()
+            self._headless_attempts = []
+            self._pending_fallback_reason = diagnostics.fallback_reason
             _log_vispy_diagnostics(diagnostics)
             if force:
                 raise
