@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import numpy as np
 import pytest
 
@@ -94,3 +96,18 @@ def test_facade_save_helpers(sleep_facade, tmp_path):
     numpy_annotations = np.array([2.0, 4.0, 6.0])
     sleep_facade._load_annotation_table(filename=numpy_annotations)
     assert sleep_facade._AnnotateTable.rowCount() == numpy_annotations.size
+
+
+def test_sleep_cache_session_reuse(sleep_facade):
+    """Tmp sessions are stable within a run and cleaned on demand."""
+
+    first_session = sleep_facade._path_to_tmp_folder()
+    second_session = sleep_facade._path_to_tmp_folder()
+    assert first_session == second_session
+    assert Path(first_session).exists()
+
+    sleep_facade._clean_tmp_folder()
+    assert not Path(first_session).exists()
+
+    third_session = sleep_facade._path_to_tmp_folder()
+    assert third_session != first_session
