@@ -17,7 +17,9 @@ class TestDownload(object):
 
         monkeypatch.setattr('visbrain.io.download.request.urlretrieve',
                             _fake_urlretrieve)
-        path = download_file('Px.npy', astype='example_data', to_path=tmp_path)
+        path = download_file(
+            'Px.npy', astype='example_data', to_path=tmp_path, allow_download=True
+        )
         assert Path(path).is_file()
         assert Path(path) == target
 
@@ -32,7 +34,12 @@ class TestDownload(object):
 
         monkeypatch.setattr('visbrain.io.download.request.urlretrieve',
                             _fake_urlretrieve)
-        download_file(name, filename="text.npz", to_path=tmp_path)
+        download_file(
+            name,
+            filename="text.npz",
+            to_path=tmp_path,
+            allow_download=True,
+        )
         assert dest.is_file()
 
     def test_cli_list(self, capsys):
