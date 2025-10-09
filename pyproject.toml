@@ -104,3 +104,8 @@ extend-exclude = [
 [tool.ruff.lint]
 select = ["E", "F"]
 ignore = ["E722", "E741", "F632"]
+
+[tool.pytest.ini_options]
+markers = [
+    "performance: Performance-sensitive regression or micro-benchmark tests.",
+]

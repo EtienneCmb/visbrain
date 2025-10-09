@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import datetime
+import time
 
 import numpy as np
 
@@ -203,3 +204,161 @@ def test_async_loader_dialog_main_thread(
     assert app is not None
     assert all(thread is app.thread() for thread in dialog_threads)
     assert invocations, "invoke_in_gui_thread should wrap dialog calls"
+    assert sleep_controller._model.file == str(dummy_path)
+
+
+def test_async_loader_accepts_bids_directory(
+    sleep_controller,
+    synthetic_sleep_arrays,
+    bids_sleep_directory,
+    qtbot,
+    monkeypatch,
+):
+    """BIDS recordings selected in dialogs hydrate the model correctly."""
+
+    data, hypno, channels, sf = synthetic_sleep_arrays
+    calls: dict[str, object] = {}
+
+    class DummyDataset:
+        def __init__(
+            self,
+            data_arg,
+            channels_arg,
+            sf_arg,
+            hypno_arg,
+            href_arg,
+            preload,
+            use_mne,
+            downsample,
+            kwargs_mne,
+            annotations,
+        ):
+            base_data, base_hypno, base_channels, base_sf = synthetic_sleep_arrays
+            calls["data"] = data_arg
+            calls["kwargs_mne"] = dict(kwargs_mne)
+            self.data = base_data.copy()
+            self.hypno = base_hypno.copy()
+            self.time = np.arange(base_data.shape[1], dtype=np.float32) / base_sf
+            self.channels = list(channels_arg or base_channels)
+            self.href = list(href_arg or ["art", "wake", "rem", "n1", "n2", "n3"])
+            self.hconv = {idx: idx for idx, _ in enumerate(self.href)}
+            self.sf = float(sf_arg or base_sf)
+            self.sfori = float(sf_arg or base_sf)
+            self.dsf = int(downsample or base_sf)
+            self.n_points = self.data.shape[1]
+            self.file = str(data_arg) if isinstance(data_arg, str) else None
+            self.annotations = np.array(annotations) if annotations is not None else np.empty((0, 1))
+
+    monkeypatch.setattr("visbrain.gui.sleep.controller.SleepDataset", DummyDataset)
+
+    future = sleep_controller.load_dataset_async(
+        data=str(bids_sleep_directory.recording),
+        channels=channels,
+        sf=sf,
+        hypno=hypno.copy(),
+        href=list(sleep_controller._model.href),
+        preload=True,
+        use_mne=True,
+        downsample=sf,
+        kwargs_mne={"bids_root": str(bids_sleep_directory.root)},
+        annotations=None,
+    )
+
+    qtbot.waitUntil(future.done, timeout=3000)
+    future.result(timeout=0.1)
+
+    assert calls["data"] == str(bids_sleep_directory.recording)
+    assert calls["kwargs_mne"]["bids_root"] == str(bids_sleep_directory.root)
+    assert sleep_controller._model.file == str(bids_sleep_directory.recording)
+
+
+def test_async_loader_error_logging(
+    sleep_controller, qtbot, caplog, monkeypatch
+):
+    """Failures raised in worker threads surface through controller logs."""
+
+    class ExplodingDataset:
+        def __init__(*args, **kwargs):  # noqa: D401 - stub signature
+            raise RuntimeError("loader boom")
+
+    monkeypatch.setattr("visbrain.gui.sleep.controller.SleepDataset", ExplodingDataset)
+    caplog.set_level("ERROR", logger="visbrain")
+
+    future = sleep_controller.load_dataset_async(
+        data=np.zeros((2, 10), dtype=np.float32),
+        channels=["C1", "C2"],
+        sf=100.0,
+        hypno=np.zeros(10, dtype=np.float32),
+        href=["art", "wake"],
+        preload=True,
+        use_mne=False,
+        downsample=100.0,
+        kwargs_mne={},
+        annotations=None,
+    )
+
+    with pytest.raises(RuntimeError):
+        future.result(timeout=1.0)
+
+    qtbot.waitUntil(
+        lambda: any("Asynchronous sleep load failed" in record.message for record in caplog.records),
+        timeout=1000,
+    )
+    assert sleep_controller._model.file is None
+
+
+@pytest.mark.performance
+def test_async_loader_threading_benchmark(
+    sleep_controller, synthetic_sleep_arrays, monkeypatch
+):
+    """Threaded loads should return control faster than inline execution."""
+
+    from visbrain.io import background
+
+    data, hypno, channels, sf = synthetic_sleep_arrays
+
+    class SlowSleepDataset(SleepDataset):
+        def __init__(self, *args, **kwargs):
+            time.sleep(0.05)
+            super().__init__(*args, **kwargs)
+
+    monkeypatch.setattr("visbrain.gui.sleep.controller.SleepDataset", SlowSleepDataset)
+
+    background.shutdown_loader_threads(wait=True)
+    monkeypatch.setenv("VISBRAIN_BACKGROUND_WORKERS", "0")
+    start_inline = time.perf_counter()
+    future_inline = sleep_controller.load_dataset_async(
+        data=data.copy(),
+        channels=list(channels),
+        sf=sf,
+        hypno=hypno.copy(),
+        href=list(sleep_controller._model.href),
+        preload=True,
+        use_mne=False,
+        downsample=sf,
+        kwargs_mne={},
+        annotations=None,
+    )
+    inline_elapsed = time.perf_counter() - start_inline
+    future_inline.result(timeout=5.0)
+
+    monkeypatch.setenv("VISBRAIN_BACKGROUND_WORKERS", "1")
+    background.shutdown_loader_threads(wait=True)
+    start_threaded = time.perf_counter()
+    future_threaded = sleep_controller.load_dataset_async(
+        data=data.copy(),
+        channels=list(channels),
+        sf=sf,
+        hypno=hypno.copy(),
+        href=list(sleep_controller._model.href),
+        preload=True,
+        use_mne=False,
+        downsample=sf,
+        kwargs_mne={},
+        annotations=None,
+    )
+    threaded_elapsed = time.perf_counter() - start_threaded
+    future_threaded.result(timeout=5.0)
+
+    print(f"inline_call={inline_elapsed:.4f}s threaded_call={threaded_elapsed:.4f}s")
+    assert threaded_elapsed < inline_elapsed * 0.5

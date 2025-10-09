@@ -6,7 +6,7 @@ import importlib.util
 import sys
 import types
 from pathlib import Path
-from typing import Iterator, TYPE_CHECKING
+from typing import Iterator, NamedTuple, TYPE_CHECKING
 
 import numpy as np
 import pytest
@@ -171,6 +171,42 @@ def _install_test_stubs() -> None:
 
 _install_test_stubs()
 
+
+class BidsDataset(NamedTuple):
+    """Paths composing a synthetic BIDS directory used in tests."""
+
+    root: Path
+    recording: Path
+
+
+@pytest.fixture
+def isolated_cache_dir(monkeypatch, tmp_path_factory) -> Path:
+    """Point the cache manager at a throwaway directory for the test run."""
+
+    root = tmp_path_factory.mktemp("visbrain-cache")
+    monkeypatch.setenv("VISBRAIN_DATA_DIR", str(root))
+    from visbrain.io.path import cache_manager
+
+    cache_manager.cleanup_all()
+    cache_manager.cleanup_all(category="data")
+    yield root
+    cache_manager.cleanup_all()
+    cache_manager.cleanup_all(category="data")
+
+
+@pytest.fixture
+def bids_sleep_directory(tmp_path_factory) -> BidsDataset:
+    """Create a tiny BIDS-like hierarchy with placeholder recordings."""
+
+    root = tmp_path_factory.mktemp("bids-sleep")
+    eeg_dir = root / "sub-01" / "ses-test" / "eeg"
+    eeg_dir.mkdir(parents=True)
+    recording = eeg_dir / "sub-01_ses-test_task-rest_run-1_eeg.edf"
+    recording.write_bytes(b"EDF")
+    (eeg_dir / "sub-01_ses-test_task-rest_run-1_eeg.json").write_text("{}")
+    (eeg_dir / "participants.tsv").write_text("participant_id\nsub-01\n")
+    return BidsDataset(root=root, recording=recording)
+
 # Import after patching optional dependencies so the modules load deterministically.
 from visbrain.gui.sleep.model import SleepDataset  # noqa: E402
 
@@ -250,7 +286,7 @@ def sleep_controller(
 
 @pytest.fixture
 def sleep_facade(
-    synthetic_sleep_arrays, qtbot
+    synthetic_sleep_arrays, qtbot, isolated_cache_dir
 ) -> Iterator["Sleep"]:
     """End-to-end :class:`Sleep` instance wired to synthetic arrays."""
 

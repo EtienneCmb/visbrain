@@ -69,3 +69,52 @@ Rollout checkpoints
 * Ship gallery examples that exercise ``SleepController.load_dataset_async`` and
   include GPU diagnostics in their narratives, ensuring the runtime checks land
   alongside the regenerated Qt 6 widgets from Phase 3.
+
+
+Manual smoke tests
+------------------
+
+Two short scripts accompany the automated coverage so maintainers can sanity
+check the threaded loaders and the diagnostics overlays without waiting for the
+full test matrix:
+
+* **Brain GUI:**
+
+  .. code-block:: console
+
+     python - <<'PY'
+     from visbrain.gui import Brain
+     from visbrain.io.path import cache_manager
+
+     cache_manager.cleanup_all()
+     brain = Brain(show_settings=False)
+     brain._apply_theme()
+     print("Brain diagnostics:", brain._description_hooks)
+     brain.close()
+     PY
+
+  This exercise confirms the cache session opens, theming works in headless
+  mode and the description hooks surface diagnostics.
+
+* **Sleep GUI:**
+
+  .. code-block:: console
+
+     python - <<'PY'
+     import numpy as np
+     from visbrain.gui import Sleep
+     from visbrain.io.background import shutdown_loader_threads
+
+     data = np.random.default_rng(0).standard_normal((2, 400))
+     hypno = np.zeros(400, dtype=float)
+     sleep = Sleep(data=data, hypno=hypno, sf=100.0, downsample=100.0)
+     future = sleep.controller.load_dataset_async(data=data, channels=["Cz", "Pz"], sf=100.0, hypno=hypno)
+     future.result(timeout=5.0)
+     print("Sleep diagnostics:", sleep.controller._model.datainfo.keys())
+     shutdown_loader_threads(wait=True)
+     sleep.view.close()
+     PY
+
+  The script triggers both inline and threaded load paths, letting the operator
+  verify that the stats table populates and the shared executor shuts down
+  cleanly afterwards.
