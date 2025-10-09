@@ -53,7 +53,36 @@ def _install_test_stubs() -> None:
         def _mne_switch(*args, **kwargs):  # pragma: no cover - deterministic stub
             raise RuntimeError("MNE backend is unavailable in tests")
 
+        def _build_sleep_payload(
+            sf,
+            downsample,
+            dsf,
+            data,
+            channels,
+            n,
+            start_time,
+            annotations,
+            *,
+            metadata=None,
+        ):
+            return {
+                "sf": sf,
+                "downsample": downsample,
+                "dsf": dsf,
+                "data": data,
+                "channels": channels,
+                "n": n,
+                "start_time": start_time,
+                "annotations": annotations,
+                "metadata": metadata or {},
+            }
+
+        def _finalize_raw(raw, **kwargs):  # pragma: no cover - deterministic stub
+            return raw
+
         mneio_module.mne_switch = _mne_switch
+        mneio_module.build_sleep_payload = _build_sleep_payload
+        mneio_module.finalize_raw = _finalize_raw
         sys.modules["visbrain.io.mneio"] = mneio_module
 
     if "visbrain.utils.mesh" not in sys.modules:
@@ -104,11 +133,24 @@ def _install_test_stubs() -> None:
             def __call__(self, *args, **kwargs):  # pragma: no cover - stub
                 return None
 
+        class _Config:
+            def __init__(self) -> None:
+                self.show_gui = True
+                self.background_workers = True
+
+        _CONFIG = _Config()
+
         def configure_headless():  # pragma: no cover - stub for fixture import
+            _CONFIG.show_gui = False
+            _CONFIG.background_workers = False
             return types.SimpleNamespace(show_pyqt_app=False, show_gui=False)
+
+        def get_config():  # pragma: no cover - stub for fixture import
+            return _CONFIG
 
         config_module.PROFILER = _Profiler()
         config_module.configure_headless = configure_headless
+        config_module.get_config = get_config
         sys.modules["visbrain.config"] = config_module
 
     if "visbrain.io" not in sys.modules:
@@ -201,6 +243,9 @@ def sleep_controller(
 
     controller = SleepController(sleep_dataset, sleep_view, axis=True)
     yield controller
+    from visbrain.io.background import shutdown_loader_threads
+
+    shutdown_loader_threads(wait=True)
 
 
 @pytest.fixture
