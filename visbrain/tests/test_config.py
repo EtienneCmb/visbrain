@@ -345,3 +345,33 @@ def test_configure_from_environ_invalid_value(caplog):
         "Invalid value for VISBRAIN_SHOW_GUI" in record.message
         for record in caplog.records
     )
+
+
+def test_config_copy_preserves_diagnostics_payload():
+    """Copies should keep the full diagnostics snapshot and payload."""
+
+    cfg_mod = _reload_config()
+    base = cfg_mod.VisbrainConfig()
+    base.vispy_diagnostics = cfg_mod.VisPyDiagnostics(
+        requested_backend="egl",
+        resolved_backend="egl",
+        available=True,
+        context_available=True,
+        fallback_reason="Configured headless backend 'egl'",
+        headless_attempts=[{"backend": "egl", "success": True}],
+        shader_compiled=True,
+    )
+    base.vispy_diagnostics_payload = base.vispy_diagnostics.payload()
+    base._headless_attempts = [
+        {"backend": "egl", "success": True}
+    ]
+    base._pending_fallback_reason = base.vispy_diagnostics.fallback_reason
+
+    clone = base.copy()
+
+    assert (
+        clone.vispy_diagnostics.fallback_reason
+        == base.vispy_diagnostics.fallback_reason
+    )
+    assert clone.vispy_diagnostics.headless_attempts[0]["backend"] == "egl"
+    assert clone.vispy_diagnostics_payload["shader_compiled"] is True
