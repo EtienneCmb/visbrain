@@ -27,7 +27,8 @@ from visbrain.gui import Sleep
 from visbrain.io import download_file, path_to_visbrain_data
 
 # Download the file :
-download_file('sleep_edf.zip', unzip=True, astype='example_data')
+download_file('sleep_edf.zip', unzip=True, astype='example_data',
+              allow_download=True)
 target_path = path_to_visbrain_data(folder='example_data')
 
 # Get data path :

@@ -107,6 +107,16 @@ purged automatically after workflows finish. The downloader exposes ``--dest``
 and ``--use-pwd`` switches to override the target directory when integrating
 with project-specific storage.
 
+Sample data downloads
+++++++++++++++++++++
+
+.. note::
+
+   Network downloads are opt-in. Set ``VISBRAIN_ALLOW_DOWNLOADS=1`` in the
+   environment (or pass ``allow_download=True`` directly) when a workflow needs
+   to fetch assets. Examples in ``examples/`` now enable the flag explicitly
+   wherever they expect to pull sample datasets.
+
 BIDS-aware sleep loading
 ------------------------
 

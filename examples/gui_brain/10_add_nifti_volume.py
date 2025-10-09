@@ -22,8 +22,10 @@ from visbrain.io import download_file
 
 """Download two NIFTI files
 """
-path_1 = download_file('GG-853-GM-0.7mm.nii.gz', astype='example_data')
-path_2 = download_file('GG-853-WM-0.7mm.nii.gz', astype='example_data')
+path_1 = download_file('GG-853-GM-0.7mm.nii.gz', astype='example_data',
+                        allow_download=True)
+path_2 = download_file('GG-853-WM-0.7mm.nii.gz', astype='example_data',
+                        allow_download=True)
 
 """Define four sources sources and a Source object
 """

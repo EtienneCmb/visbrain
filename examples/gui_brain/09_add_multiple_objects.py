@@ -22,7 +22,8 @@ print(__doc__)
 kwargs = {}
 
 # Load the xyz coordinates and corresponding subject name :
-mat = np.load(download_file('xyz_sample.npz', astype='example_data'))
+mat = np.load(download_file('xyz_sample.npz', astype='example_data',
+                            allow_download=True))
 s_xyz, subjects = mat['xyz'], mat['subjects']
 
 """

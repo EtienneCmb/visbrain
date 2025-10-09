@@ -96,6 +96,17 @@ store the datasets in a custom location. The downloader accepts ``--list`` to
 show all available assets and honours ``--dest`` or ``--use-pwd`` when you
 prefer to download into a project-specific directory.
 
+Sample data downloads
+---------------------
+
+.. note::
+
+   Online downloads are disabled by default. Export
+   ``VISBRAIN_ALLOW_DOWNLOADS=1`` (or pass ``allow_download=True`` to
+   :func:`visbrain.io.download_file`) when fetching sample datasets. Shipping
+   examples set this flag explicitly whenever they need to retrieve assets so
+   their intent is unambiguous.
+
 Local data helpers
 ------------------
 

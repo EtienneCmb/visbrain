@@ -24,7 +24,8 @@ from visbrain.io import download_file, path_to_visbrain_data
 #                               LOAD YOUR FILE
 ###############################################################################
 # Download dataset :
-download_file("sleep_brainvision.zip", unzip=True, astype='example_data')
+download_file("sleep_brainvision.zip", unzip=True, astype='example_data',
+              allow_download=True)
 target_path = path_to_visbrain_data(folder='example_data')
 
 dfile = os.path.join(target_path, 'sub-02.vhdr')

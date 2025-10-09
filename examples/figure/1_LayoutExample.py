@@ -12,7 +12,8 @@ import os
 from visbrain.gui import Figure
 from visbrain.io import download_file
 
-fig_path = download_file("figure.zip", unzip=True, astype='example_data')
+fig_path = download_file("figure.zip", unzip=True, astype='example_data',
+                         allow_download=True)
 fig_path = fig_path.split("figure.zip")[0]
 
 # Files to load :

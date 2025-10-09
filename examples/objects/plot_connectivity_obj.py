@@ -20,7 +20,8 @@ from visbrain.io import download_file
 # node (104) and the connectivity strength between every node (104, 104)
 
 # Download data
-arch = np.load(download_file('phase_sync_delta.npz', astype='example_data'))
+arch = np.load(download_file('phase_sync_delta.npz', astype='example_data',
+                             allow_download=True))
 nodes, edges = arch['nodes'], arch['edges']
 # Create the scene with a black background
 sc = SceneObj(size=(1500, 600))

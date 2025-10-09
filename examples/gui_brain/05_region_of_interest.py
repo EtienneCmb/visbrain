@@ -20,8 +20,10 @@ from visbrain.io import download_file
 """Download the location of sources closed to the thalamus and the power of
 alpha oscillations
 """
-thalamus_xyz = download_file('thalamus.txt', astype='example_data')
-thalamus_data = download_file('Px.npy', astype='example_data')
+thalamus_xyz = download_file('thalamus.txt', astype='example_data',
+                             allow_download=True)
+thalamus_data = download_file('Px.npy', astype='example_data',
+                              allow_download=True)
 s_xyz = np.loadtxt(thalamus_xyz)
 s_data = np.load(thalamus_data).mean(1)
 

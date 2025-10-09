@@ -54,7 +54,8 @@ sc.add_to_subplot(v_obj_iso, row=0, col=3, title='Iso rendering', zoom=.7)
 ###############################################################################
 # Similarly to the example above, here, we use a threshold to cut the volume
 
-path = download_file('GG-853-WM-0.7mm.nii.gz', astype='example_data')
+path = download_file('GG-853-WM-0.7mm.nii.gz', astype='example_data',
+                     allow_download=True)
 vol_obj_th = VolumeObj(path, method='iso', threshold=.1)
 sc.add_to_subplot(vol_obj_th, row=1, col=0, title='Threshold selection',
                   zoom=.7)
@@ -74,7 +75,8 @@ sc.add_to_subplot(v_obj_select, row=1, col=1, zoom=.7,
 # MRI file : mip rendering
 ###############################################################################
 
-path = download_file('GG-853-GM-0.7mm.nii.gz', astype='example_data')
+path = download_file('GG-853-GM-0.7mm.nii.gz', astype='example_data',
+                     allow_download=True)
 v_obj_nii = VolumeObj(path, method='mip', cmap='OpaqueGrays', threshold=.7)
 sc.add_to_subplot(v_obj_nii, row=1, col=2, title='MRI file (MIP rendering)',
                   zoom=.7)
@@ -83,7 +85,8 @@ sc.add_to_subplot(v_obj_nii, row=1, col=2, title='MRI file (MIP rendering)',
 # MRI file : translucent rendering
 ###############################################################################
 
-path = download_file('GG-853-WM-0.7mm.nii.gz', astype='example_data')
+path = download_file('GG-853-WM-0.7mm.nii.gz', astype='example_data',
+                     allow_download=True)
 vol_obj_sec = VolumeObj(path, method='translucent', cmap='TransGrays')
 sc.add_to_subplot(vol_obj_sec, row=1, col=3, zoom=.7,
                   title='MRI file (translucent rendering)')

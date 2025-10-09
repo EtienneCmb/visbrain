@@ -18,7 +18,8 @@ from visbrain.io import read_stc, download_file
 
 """Download file if needed
 """
-stc_file = download_file('meg_source_estimate-lh.stc', astype='example_data')
+stc_file = download_file('meg_source_estimate-lh.stc', astype='example_data',
+                         allow_download=True)
 
 # Read the *.stc file :
 file = read_stc(stc_file)
