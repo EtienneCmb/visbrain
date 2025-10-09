@@ -97,8 +97,45 @@ surface meshes, etc.) stay optional and are fetched explicitly with the
     python -m visbrain.io.download --list
     python -m visbrain.io.download sleep_rec.zip --type example_data
 
-Downloads land in a platform-specific cache or the location configured via the
-``VISBRAIN_DATA_DIR`` environment variable. The command exposes ``--dest`` and
-``--use-pwd`` switches to override the target directory when integrating with
-project-specific storage.
+Downloads land in a platform-specific cache managed by
+:class:`visbrain.io.cache.CacheManager`. Durable resources use the ``data``
+category under ``VISBRAIN_DATA_DIR`` (falling back to ``%APPDATA%/Visbrain`` on
+Windows, ``~/Library/Application Support/Visbrain`` on macOS and
+``~/.local/share/visbrain`` on Linux). Scratch artefacts (temporary exports,
+download staging areas, etc.) flow through the ``tmp`` category so they can be
+purged automatically after workflows finish. The downloader exposes ``--dest``
+and ``--use-pwd`` switches to override the target directory when integrating
+with project-specific storage.
+
+BIDS-aware sleep loading
+------------------------
+
+The :class:`visbrain.gui.Sleep` controller understands complete BIDS datasets
+through the :mod:`visbrain.io.read_sleep` helpers. Forward a dataset root while
+opting into MNE-based loading and provide entity filters to resolve a specific
+recording::
+
+   from visbrain.gui import Sleep
+
+   Sleep(
+       data='/path/to/bids_root',
+       use_mne=True,
+       kwargs_mne={
+           'bids_entities': {'subject': '01', 'task': 'rest'},
+           'bids_resolve': 'first',
+       },
+   ).show()
+
+The loader accepts explicit :class:`mne_bids.BIDSPath` instances, dictionaries
+of entities or relative filenames. When multiple recordings match the filters
+you can choose ``bids_resolve="first"``, ``"last"`` or a numeric index to pick
+the desired run.
+
+Diagnosing GPU availability
+---------------------------
+
+Run ``python -m visbrain info`` to collect the VisPy/OpenGL diagnostics tracked
+by :mod:`visbrain.config`. The command prints the resolved backend, GL limits
+and shader compilation results alongside actionable guidance, or ``--json`` can
+emit the raw payload for automated health checks.
 
