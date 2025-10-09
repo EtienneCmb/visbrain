@@ -88,10 +88,13 @@ Visbrain's writable cache::
 
 The cache lives in a platform-appropriate directory (``%APPDATA%/Visbrain`` on
 Windows, ``~/Library/Application Support/Visbrain`` on macOS and
-``~/.local/share/visbrain`` on Linux). Set ``VISBRAIN_DATA_DIR`` to store the
-datasets in a custom location. The downloader accepts ``--list`` to show all
-available assets and honours ``--dest`` or ``--use-pwd`` when you prefer to
-download into a project-specific directory.
+``~/.local/share/visbrain`` on Linux) and is orchestrated by
+:class:`visbrain.io.cache.CacheManager`. Durable downloads land in the ``data``
+category while scratch files use ``tmp`` so tests and demos can clean up after
+themselves with ``cache_manager.cleanup_owner``. Set ``VISBRAIN_DATA_DIR`` to
+store the datasets in a custom location. The downloader accepts ``--list`` to
+show all available assets and honours ``--dest`` or ``--use-pwd`` when you
+prefer to download into a project-specific directory.
 
 Local data helpers
 ------------------
