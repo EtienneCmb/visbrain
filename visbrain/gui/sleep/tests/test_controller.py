@@ -146,6 +146,22 @@ def test_async_loader_dialog_main_thread(
 
     dialog_threads = []
 
+    import visbrain.gui.threading as gui_threading
+
+    invocations = []
+
+    original_invoke = gui_threading.invoke_in_gui_thread
+
+    def tracking_invoke(func, *args, **kwargs):
+        invocations.append(func)
+        return original_invoke(func, *args, **kwargs)
+
+    monkeypatch.setattr(
+        gui_threading,
+        "invoke_in_gui_thread",
+        tracking_invoke,
+    )
+
     def fake_dialog(self, title, default, filters):
         dialog_threads.append(QtCore.QThread.currentThread())
         return str(dummy_path)
@@ -186,3 +202,4 @@ def test_async_loader_dialog_main_thread(
     app = QtWidgets.QApplication.instance()
     assert app is not None
     assert all(thread is app.thread() for thread in dialog_threads)
+    assert invocations, "invoke_in_gui_thread should wrap dialog calls"

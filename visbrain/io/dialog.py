@@ -3,12 +3,28 @@
 * dialog_save : Open a window to save a file
 * dialog_load : Open a window to load a file
 """
-from visbrain.qt import QtWidgets
 import os
 
+from visbrain.gui.threading import invoke_in_gui_thread
+from visbrain.qt import QtWidgets
 from .rw_utils import safety_save
 
 __all__ = ['dialog_save', 'dialog_load', 'dialog_color']
+
+
+def _invoke_dialog(function, *args, **kwargs):
+    """Execute ``function`` on the GUI thread when a Qt app is running."""
+
+    if QtWidgets is None:
+        return function(*args, **kwargs)
+
+    qapp_cls = getattr(QtWidgets, "QApplication", None)
+    instance = getattr(qapp_cls, "instance", None)
+    app = instance() if callable(instance) else None
+    if app is None:
+        return function(*args, **kwargs)
+
+    return invoke_in_gui_thread(function, *args, **kwargs)
 
 
 def dialog_save(self, name='Save file', default='file',
@@ -36,7 +52,13 @@ def dialog_save(self, name='Save file', default='file',
     if isinstance(allext, (list, tuple)):
         allext = ';;'.join(allext)
     # Open the window :
-    file, ext = QtWidgets.QFileDialog.getSaveFileName(self, name, default, allext)
+    file, ext = _invoke_dialog(
+        QtWidgets.QFileDialog.getSaveFileName,
+        self,
+        name,
+        default,
+        allext,
+    )
     # By default, use the extension in the ruler :
     file = os.path.splitext(str(file))[0]
     ext = os.path.splitext(str(ext))[1][0:-1].lower()
@@ -65,10 +87,16 @@ def dialog_load(self, name='Open file', default='file',
         Filename for opening.
     """
     # Open the window :
-    file, _ = QtWidgets.QFileDialog.getOpenFileName(self, name, default, allext)
+    file, _ = _invoke_dialog(
+        QtWidgets.QFileDialog.getOpenFileName,
+        self,
+        name,
+        default,
+        allext,
+    )
     return str(file)
 
 
 def dialog_color():
     """Open a QColorDialog window."""
-    return QtWidgets.QColorDialog.getColor().name()
+    return _invoke_dialog(QtWidgets.QColorDialog.getColor).name()

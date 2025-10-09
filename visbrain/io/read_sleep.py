@@ -25,7 +25,8 @@ from visbrain.io.rw_hypno import (read_hypno, oversample_hypno)
 from visbrain.io.rw_utils import get_file_ext
 from visbrain.io.write_data import write_csv
 from visbrain.io.read_annotations import merge_annotations
-from visbrain.io.background import call_on_main_thread, run_in_loader_thread
+from visbrain.gui.threading import invoke_in_gui_thread
+from visbrain.io.background import run_in_loader_thread
 
 from visbrain.utils.others import get_dsf
 from visbrain.utils.mesh import vispy_array
@@ -75,14 +76,6 @@ _BIDS_ENTITY_MAP = {
 }
 
 __all__ = ['ReadSleepData', 'get_sleep_stats']
-
-
-def _invoke_dialog(func, *args, **kwargs):
-    """Ensure Qt dialogs execute on the GUI thread."""
-
-    return call_on_main_thread(func, *args, **kwargs)
-
-
 _PAYLOAD_FIELDS = (
     "sf",
     "downsample",
@@ -304,7 +297,7 @@ class ReadSleepData(object):
 
         # Dialog window if data is None :
         if data is None:
-            data = _invoke_dialog(
+            data = invoke_in_gui_thread(
                 dialog_load,
                 self,
                 "Open dataset",
@@ -431,7 +424,7 @@ class ReadSleepData(object):
         # ========================== LOAD HYPNOGRAM ==========================
         # Dialog window for hypnogram :
         if hypno is None:
-            hypno = _invoke_dialog(
+            hypno = invoke_in_gui_thread(
                 dialog_load,
                 self,
                 "Open hypnogram",

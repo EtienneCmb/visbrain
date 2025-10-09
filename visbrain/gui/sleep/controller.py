@@ -8,7 +8,7 @@ from concurrent.futures import Future
 import numpy as np
 
 from visbrain.config import PROFILER
-from visbrain.io.background import call_on_main_thread
+from visbrain.gui.threading import invoke_in_gui_thread
 from visbrain.utils import MouseEventControl, color2vb
 
 from .interface import UiElements
@@ -281,7 +281,7 @@ class SleepController(UiElements, Visuals, MouseEventControl):
             except BaseException as exc:  # pragma: no cover - defensive
                 self._logger.error("Asynchronous sleep load failed", exc_info=exc)
                 return
-            call_on_main_thread(self._hydrate_from_dataset, dataset)
+            invoke_in_gui_thread(self._hydrate_from_dataset, dataset)
 
         future.add_done_callback(_dispatch)
         return future
