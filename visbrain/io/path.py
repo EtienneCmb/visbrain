@@ -11,12 +11,13 @@ from typing import Optional
 from importlib import resources
 
 from visbrain.data import bundled_path
+from . import cache as _cache_module
 
 logger = logging.getLogger('visbrain')
 
 
-__all__ = ['path_to_visbrain_data', 'get_files_in_folders', 'path_to_tmp',
-           'clean_tmp', 'get_data_url_path']
+__all__ = ['cache_manager', 'path_to_visbrain_data', 'get_files_in_folders',
+           'path_to_tmp', 'clean_tmp', 'get_data_url_path']
 
 
 _ENV_DATA_HOME = "VISBRAIN_DATA_DIR"
@@ -62,6 +63,16 @@ def _path_from_home(file: Optional[str] = None, folder: Optional[str] = None,
             target.parent.mkdir(parents=True, exist_ok=True)
         return target
     return base
+
+
+_cache_module.cache_manager = _cache_module.CacheManager(
+    {
+        'tmp': lambda create: _path_from_home(folder='tmp', create=create),
+        'data': lambda create: _path_from_home(create=create),
+    },
+    default_category='tmp',
+)
+cache_manager = _cache_module.cache_manager
 
 
 def _path_from_bundle(file: Optional[str] = None,
@@ -110,11 +121,12 @@ def path_to_visbrain_data(file=None, folder=None, *, create=False,
         if bundled is not None:
             return str(bundled)
 
-    path = _path_from_home(file=file, folder=folder, create=create)
-    if create and not path.exists():
-        path.parent.mkdir(parents=True, exist_ok=True)
-        if file:
-            path.touch(exist_ok=True)
+    path = cache_manager.get_path(
+        folder=folder,
+        file=file,
+        create=create,
+        category='data',
+    )
     if not path.exists() and not create and file:
         logger.debug("Requested visbrain data file missing: %s", path)
     return str(path)
@@ -195,17 +207,12 @@ def path_to_tmp(file=None, folder=None):
     tmp_path = _path_from_home(folder='tmp', create=True)
     folder = None if not isinstance(folder, str) else folder
     file = None if not isinstance(file, str) else file
-    if folder:
-        tmp_path = tmp_path / folder
-        tmp_path.mkdir(parents=True, exist_ok=True)
-    if file:
-        return str(tmp_path / file)
-    return str(tmp_path)
+    path = cache_manager.get_path(folder=folder, file=file, create=True)
+    return str(path)
 
 
 def clean_tmp():
     """Clean the tmp folder."""
-    tmp_path = _path_from_home(folder='tmp')
-    if tmp_path.exists():
-        import shutil
-        shutil.rmtree(tmp_path)
+    tmp_path = cache_manager.root_path(create=False)
+    cache_manager.cleanup_all()
+    return str(tmp_path)

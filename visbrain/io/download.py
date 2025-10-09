@@ -12,13 +12,16 @@ import zipfile
 from warnings import warn
 
 from .rw_config import load_config_json
-from .path import get_data_url_path, path_to_visbrain_data
+from .path import cache_manager, get_data_url_path
 
 
 logger = logging.getLogger('visbrain')
 
 
 __all__ = ["download_file", "available_downloads", "main"]
+
+
+_ENV_ALLOW_DOWNLOADS = "VISBRAIN_ALLOW_DOWNLOADS"
 
 
 def available_downloads() -> dict[str, dict[str, str]]:
@@ -68,8 +71,26 @@ def reporthook(blocknum, blocksize, totalsize):
         sys.stderr.write("\rread %d" % (readsofar,))
 
 
+def _env_flag(name: str) -> bool:
+    value = os.environ.get(name)
+    if value is None:
+        return False
+    return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _ensure_download_opt_in(explicit: bool | None) -> None:
+    if explicit:
+        return
+    if _env_flag(_ENV_ALLOW_DOWNLOADS):
+        return
+    raise PermissionError(
+        "Dataset downloads require explicit opt-in. Set the VISBRAIN_ALLOW_DOWNLOADS "
+        "environment variable or pass allow_download=True."
+    )
+
+
 def download_file(name, astype=None, filename=None, to_path=None, unzip=False,
-                  remove_archive=False, use_pwd=False):
+                  remove_archive=False, use_pwd=False, allow_download=None):
     """Download a file into the Visbrain data cache.
 
     Parameters
@@ -89,22 +110,31 @@ def download_file(name, astype=None, filename=None, to_path=None, unzip=False,
         Remove archive after unzip.
     use_pwd : bool | False
         Download the file to the current directory.
+    allow_download : bool | None
+        Explicit opt-in flag enabling network downloads. When omitted, the
+        :envvar:`VISBRAIN_ALLOW_DOWNLOADS` environment variable must evaluate to
+        ``true``.
 
     Returns
     -------
     path_to_file : string
         Path to the downloaded file.
     """
+    _ensure_download_opt_in(allow_download)
+
     # Default visbrain-path to data (platform specific cache):
     if use_pwd:
-        vb_path = Path.cwd()
+        dest_dir = Path.cwd()
     elif to_path is not None:
-        vb_path = Path(to_path)
+        dest_dir = Path(to_path)
     else:
-        vb_path = Path(path_to_visbrain_data(folder=astype, create=True,
-                                             allow_bundled=False))
-        vb_path = vb_path if vb_path.suffix else Path(vb_path)
-        to_path = str(vb_path)
+        if not isinstance(astype, str):
+            raise ValueError("astype must be provided when using the default cache")
+        dest_dir = cache_manager.get_path(
+            folder=astype,
+            create=True,
+            category='data',
+        )
     if bool(name.find('http') + 1):
         if filename is None:
             filename = os.path.split(name)[1]
@@ -113,30 +143,24 @@ def download_file(name, astype=None, filename=None, to_path=None, unzip=False,
     else:
         assert isinstance(name, str) and isinstance(astype, str)
         filename, url = name, get_data_url(name, astype)
-        if to_path is None:
-            to_path = Path(path_to_visbrain_data(folder=astype, create=True,
-                                                 allow_bundled=False))
-        else:
-            to_path = Path(to_path)
-    to_path = Path(to_path)
-    to_path.mkdir(parents=True, exist_ok=True)
-    path_to_file = to_path / filename
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    path_to_file = dest_dir / filename
     to_download = not path_to_file.is_file()
 
     # Dowload file if needed :
     if to_download:
         logger.info('Downloading %s' % path_to_file)
         # Check if directory exists else creates it
-        if not to_path.exists():
-            logger.info('Folder %s created' % to_path)
-            to_path.mkdir(parents=True, exist_ok=True)
+        if not dest_dir.exists():
+            logger.info('Folder %s created' % dest_dir)
+            dest_dir.mkdir(parents=True, exist_ok=True)
         # Download file :
         fh, _ = request.urlretrieve(url, str(path_to_file), reporthook=reporthook)
         # Unzip file :
         if unzip:
             # Unzip archive :
             zip_file_object = zipfile.ZipFile(fh, 'r')
-            zip_file_object.extractall(path=str(to_path))
+            zip_file_object.extractall(path=str(dest_dir))
             zip_file_object.close()
             logger.info('Unzip archive')
             if remove_archive:  # Remove archive :
@@ -274,6 +298,7 @@ def main(argv: list[str] | None = None) -> int:
             unzip=unzip,
             remove_archive=not args.keep_archive if unzip else False,
             use_pwd=args.use_pwd,
+            allow_download=True,
         )
     return 0
 

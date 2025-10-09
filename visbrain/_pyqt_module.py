@@ -9,7 +9,9 @@ from .qt import QtGui, QtWidgets, guard_qapp_lifecycle
 
 from .utils import set_widget_size, set_log_level
 from .config import PROFILER, get_config, qt_app, vispy_app
-from .io import path_to_tmp, clean_tmp, path_to_visbrain_data
+from pathlib import Path
+
+from .io import cache_manager, path_to_visbrain_data
 from .resources import load_icon
 from .gui.theme import theme_manager
 
@@ -38,6 +40,8 @@ class _PyQtModule(object):
         # Log level and profiler creation (if verbose='debug')
         set_log_level(verbose)
         path_to_visbrain_data(create=True, allow_bundled=False)
+        self._cache_owner = f"pyqt:{id(self)}"
+        self._cache_session: Path | None = None
         self._create_tmp_folder()
         if logger.level == 10:
             import faulthandler
@@ -55,15 +59,25 @@ class _PyQtModule(object):
     ###########################################################################
 
     def _path_to_tmp_folder(self):
-        return path_to_tmp()
+        return str(self._ensure_tmp_session())
 
     def _create_tmp_folder(self):
-        tmp_path = path_to_tmp()
-        logger.debug("tmp folder created (%s)." % tmp_path)
+        session_path = self._ensure_tmp_session()
+        logger.debug("tmp folder created (%s)." % session_path)
 
     def _clean_tmp_folder(self):
-        tmp_path = clean_tmp()
-        logger.debug("tmp folder cleaned (%s)." % tmp_path)
+        session = self._cache_session
+        cache_manager.cleanup_owner(self._cache_owner)
+        self._cache_session = None
+        logger.debug("tmp folder cleaned (%s)." % session)
+
+    def _ensure_tmp_session(self) -> Path:
+        if self._cache_session is None or not self._cache_session.exists():
+            self._cache_session = cache_manager.new_session(
+                self._cache_owner,
+                prefix='pyqt',
+            )
+        return self._cache_session
 
     ###########################################################################
     #                            SHOW // CLOSE

@@ -134,7 +134,7 @@ class _VisbrainObj(CbarBase, _VisbrainShortcuts):
 
     def _df_download_file(self, file):
         """Download a file."""
-        return download_file(file, astype=self._data_folder)
+        return download_file(file, astype=self._data_folder, allow_download=True)
 
     # ----------- DATA_FOLDER -----------
     @property

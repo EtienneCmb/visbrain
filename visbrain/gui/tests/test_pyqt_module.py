@@ -1,10 +1,12 @@
 """Tests for the :mod:`visbrain._pyqt_module` helpers."""
 from __future__ import annotations
 
+from pathlib import Path
 from typing import List, Tuple
 
 from visbrain._pyqt_module import _PyQtModule
 from visbrain.config import get_config, qt_app
+from visbrain.io.path import cache_manager
 from visbrain.resources import load_icon
 from visbrain.qt import QtGui, QtWidgets
 
@@ -34,12 +36,15 @@ class _DummyWindow(QtWidgets.QMainWindow, _PyQtModule):
         return super()._pyqt_title(title, msg, symbol)
 
 
-def test_icon_loader_and_description_hooks():
+def test_icon_loader_and_description_hooks(monkeypatch, tmp_path):
     """Icons load without temporary files and description hooks execute."""
 
     cfg = get_config()
     original_show = cfg.show_gui
     cfg.show_gui = False
+    monkeypatch.setenv("VISBRAIN_DATA_DIR", str(tmp_path))
+    cache_manager.cleanup_all()
+    cache_manager.cleanup_all(category='data')
     try:
         with qt_app(force=True):
             icon = load_icon("brain_icon.svg")
@@ -47,6 +52,8 @@ def test_icon_loader_and_description_hooks():
             assert not icon.isNull()
 
             window = _DummyWindow()
+            session_dir = Path(window._path_to_tmp_folder())
+            assert session_dir.exists()
             window.show()
 
             descriptions = [msg for _, msg in window.tree_logs]
@@ -56,6 +63,11 @@ def test_icon_loader_and_description_hooks():
             window_icon = window.windowIcon()
             assert isinstance(window_icon, QtGui.QIcon)
             assert not window_icon.isNull()
+
+            assert window._cache_session is None
+            assert not session_dir.exists()
+            tmp_root = cache_manager.root_path(create=False)
+            assert tmp_root.exists()
 
             window.close()
             window.deleteLater()
