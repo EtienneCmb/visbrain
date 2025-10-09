@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import logging
+from concurrent.futures import Future
 
 import numpy as np
 
 from visbrain.config import PROFILER
+from visbrain.io.background import call_on_main_thread
 from visbrain.utils import MouseEventControl, color2vb
 
 from .interface import UiElements
@@ -259,13 +261,7 @@ class SleepController(UiElements, Visuals, MouseEventControl):
         else:
             kwargs_mne = dict(kwargs_mne)
 
-        def _on_result(dataset: SleepDataset) -> None:
-            self._hydrate_from_dataset(dataset)
-
-        def _on_error(exc: BaseException) -> None:  # pragma: no cover - defensive
-            self._logger.error("Asynchronous sleep load failed", exc_info=exc)
-
-        return self._async_loader.submit(
+        future = self._async_loader.submit(
             SleepDataset,
             data,
             channels,
@@ -277,9 +273,18 @@ class SleepController(UiElements, Visuals, MouseEventControl):
             downsample,
             kwargs_mne,
             annotations,
-            on_result=_on_result,
-            on_error=_on_error,
         )
+
+        def _dispatch(done: Future) -> None:
+            try:
+                dataset = done.result()
+            except BaseException as exc:  # pragma: no cover - defensive
+                self._logger.error("Asynchronous sleep load failed", exc_info=exc)
+                return
+            call_on_main_thread(self._hydrate_from_dataset, dataset)
+
+        future.add_done_callback(_dispatch)
+        return future
 
     def _hydrate_from_dataset(self, dataset: SleepDataset) -> None:
         """Populate the current model with arrays from *dataset*."""

@@ -232,6 +232,7 @@ class VisbrainConfig:
     qt_api: str | None = QT_API
     vispy_backend: str | None = None
     show_gui: bool = True
+    background_workers: bool = True
     mpl_render: bool = False
     theme: str = "dark"
     _pyqt_app: Optional[QtWidgets.QApplication] = field(
@@ -304,6 +305,7 @@ class VisbrainConfig:
             log_search=self.log_search,
             qt_api=self.qt_api,
             vispy_backend=self.vispy_backend,
+            background_workers=self.background_workers,
             show_gui=self.show_gui,
             mpl_render=self.mpl_render,
             theme=self.theme,
@@ -464,6 +466,7 @@ class _AppContextState:
 
 # Global configuration handle exposed to consumers of :mod:`visbrain.config`.
 _SHOW_GUI_ENVVAR = "VISBRAIN_SHOW_GUI"
+_BACKGROUND_ENVVAR = "VISBRAIN_BACKGROUND_WORKERS"
 
 
 def _parse_bool_flag(value: str) -> bool:
@@ -502,6 +505,18 @@ def configure_from_environ(
                 "Invalid value for %s: %s" % (_SHOW_GUI_ENVVAR, raw_show)
             )
 
+    raw_background = env.get(_BACKGROUND_ENVVAR)
+    if raw_background is not None:
+        try:
+            cfg.background_workers = _parse_bool_flag(raw_background)
+        except ValueError:
+            logger.error(
+                "Invalid value for %s: %s"
+                % (_BACKGROUND_ENVVAR, raw_background)
+            )
+    elif not cfg.show_gui:
+        cfg.background_workers = False
+
     if cfg.show_gui:
         cfg.refresh_vispy_diagnostics(log=True)
     else:
@@ -532,6 +547,8 @@ def configure_headless(
     env = environ if environ is not None else os.environ
     if force or _SHOW_GUI_ENVVAR not in env:
         env[_SHOW_GUI_ENVVAR] = "0"
+    if force or _BACKGROUND_ENVVAR not in env:
+        env[_BACKGROUND_ENVVAR] = "0"
     return configure_from_environ(environ=env, config=config)
 
 

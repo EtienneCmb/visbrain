@@ -12,12 +12,8 @@ import io
 from warnings import warn
 import logging
 import datetime
+from concurrent.futures import Future
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
-
-try:
-    from visbrain.qt import QtCore, QtWidgets
-except Exception:  # pragma: no cover - optional Qt dependency
-    QtCore = QtWidgets = None  # type: ignore[assignment]
 
 import numpy as np
 from scipy.stats import iqr
@@ -29,6 +25,7 @@ from visbrain.io.rw_hypno import (read_hypno, oversample_hypno)
 from visbrain.io.rw_utils import get_file_ext
 from visbrain.io.write_data import write_csv
 from visbrain.io.read_annotations import merge_annotations
+from visbrain.io.background import call_on_main_thread, run_in_loader_thread
 
 from visbrain.utils.others import get_dsf
 from visbrain.utils.mesh import vispy_array
@@ -83,44 +80,7 @@ __all__ = ['ReadSleepData', 'get_sleep_stats']
 def _invoke_dialog(func, *args, **kwargs):
     """Ensure Qt dialogs execute on the GUI thread."""
 
-    if QtCore is None or QtWidgets is None:
-        return func(*args, **kwargs)
-
-    app = QtWidgets.QApplication.instance()
-    if app is None:
-        return func(*args, **kwargs)
-
-    current_thread = QtCore.QThread.currentThread()
-    gui_thread = app.thread()
-    if gui_thread is None or gui_thread is current_thread:
-        return func(*args, **kwargs)
-
-    class _Invoker(QtCore.QObject):
-        def __init__(self) -> None:
-            super().__init__()
-            self._result: Any = None
-            self._error: Optional[BaseException] = None
-
-        @QtCore.Slot()
-        def invoke(self) -> None:  # pragma: no cover - exercised via GUI thread
-            try:
-                self._result = func(*args, **kwargs)
-            except BaseException as exc:  # pragma: no cover - defensive
-                self._error = exc
-
-        def result(self) -> Any:
-            if self._error is not None:
-                raise self._error
-            return self._result
-
-    proxy = _Invoker()
-    proxy.moveToThread(gui_thread)
-    QtCore.QMetaObject.invokeMethod(
-        proxy,
-        'invoke',
-        QtCore.Qt.BlockingQueuedConnection,
-    )
-    return proxy.result()
+    return call_on_main_thread(func, *args, **kwargs)
 
 
 _PAYLOAD_FIELDS = (
@@ -321,6 +281,12 @@ def _resolve_bids_strategy(
 
 class ReadSleepData(object):
     """Main class for reading sleep data."""
+
+    @classmethod
+    def load_async(cls, *args, **kwargs) -> Future["ReadSleepData"]:
+        """Instantiate ``cls`` in the shared loader executor."""
+
+        return run_in_loader_thread(cls, *args, **kwargs)
 
     def __init__(self, data, channels, sf, hypno, href, preload, use_mne,
                  downsample, kwargs_mne, annotations):
