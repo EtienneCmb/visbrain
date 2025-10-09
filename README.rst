@@ -4,7 +4,7 @@ Visbrain
 
 **Visbrain** was an open-source python 3 package dedicated to brain signals visualization. It was based on top of `VisPy <http://vispy.org/>`_ and the Qt 6 stack exposed through PySide6 and was distributed under the 3-Clause BSD license. With an on line `documentation <http://visbrain.org>`_, `examples and datasets <http://visbrain.org/auto_examples/>`_ and can also be downloaded from `PyPi <https://pypi.python.org/pypi/visbrain/>`_.
 
-This is not so true nowdays, as time goes by, eons come and go, links phades into history, and in to stories an mythology.
+This is not so true nowdays, as time goes by, eons come and go, links phades into history, and into stories an mythology.
 
 This is a heaviliy AI-based attempt at re-awake this project (as in - first we'll let the ai loose in the system, and then try to fix what it did, if needed), it will take time, and maybe, or even probably, fail. But should it succede, it could be nice.
 
