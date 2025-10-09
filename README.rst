@@ -2,31 +2,11 @@
 Visbrain
 ========
 
-.. image:: https://travis-ci.org/EtienneCmb/visbrain.svg?branch=master
-    :target: https://travis-ci.org/EtienneCmb/visbrain
+**Visbrain** was an open-source python 3 package dedicated to brain signals visualization. It was based on top of `VisPy <http://vispy.org/>`_ and the Qt 6 stack exposed through PySide6 and was distributed under the 3-Clause BSD license. With an on line `documentation <http://visbrain.org>`_, `examples and datasets <http://visbrain.org/auto_examples/>`_ and can also be downloaded from `PyPi <https://pypi.python.org/pypi/visbrain/>`_.
 
-.. image:: https://ci.appveyor.com/api/projects/status/fdxhhmpagms1so8l/branch/master?svg=true
-    :target: https://ci.appveyor.com/project/EtienneCmb/visbrain/branch/master
+This is not so true nowdays, as time goes by, eons come and go, links phades into history, and in to stories an mythology.
 
-.. image:: https://circleci.com/gh/EtienneCmb/visbrain/tree/master.svg?style=svg
-    :target: https://circleci.com/gh/EtienneCmb/visbrain/tree/master
-
-.. image:: https://codecov.io/gh/EtienneCmb/visbrain/branch/master/graph/badge.svg
-    :target: https://codecov.io/gh/EtienneCmb/visbrain
-
-.. image:: https://badge.fury.io/py/visbrain.svg
-    :target: https://badge.fury.io/py/visbrain
-
-.. image:: https://pepy.tech/badge/visbrain
-    :target: https://pepy.tech/project/visbrain
-
-.. image:: https://badges.gitter.im/visbrain-python/chatroom.svg
-    :target: https://gitter.im/visbrain-python/chatroom?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
-
-.. figure::  https://github.com/EtienneCmb/visbrain/blob/master/docs/_static/ico/visbrain.png
-    :align:  center
-
-**Visbrain** is an open-source python 3 package dedicated to brain signals visualization. It is based on top of `VisPy <http://vispy.org/>`_ and the Qt 6 stack exposed through PySide6 and is distributed under the 3-Clause BSD license. We also provide an on line `documentation <http://visbrain.org>`_, `examples and datasets <http://visbrain.org/auto_examples/>`_ and can also be downloaded from `PyPi <https://pypi.python.org/pypi/visbrain/>`_.
+This is a heaviliy AI-based attempt at re-awake this project (as in - first we'll let the ai loose in the system, and then try to fix what it did, if needed), it will take time, and maybe, or even probably, fail. But should it succede, it could be nice.
 
 Modernization roadmap
 ---------------------
