@@ -21,7 +21,8 @@ sc = SceneObj(size=(1500, 800))
 # templates of the adult ferret brain and tools for voxelwise analysis"
 # Neuroimage 152:575–589. [doi 10.1016/j.neuroimage.2017.03.009]
 
-ferret_file = download_file('ferret.x3d', astype='example_data')
+ferret_file = download_file('ferret.x3d', astype='example_data',
+                            allow_download=True)
 b_ferret_obj = BrainObj(ferret_file, translucent=False)
 sc.add_to_subplot(b_ferret_obj, title='Ferret brain (Hutchinson et al. 2017)')
 
@@ -36,7 +37,8 @@ sc.add_to_subplot(b_ferret_obj, title='Ferret brain (Hutchinson et al. 2017)')
 # directed interareal connectivity matrix for macaque cerebral cortex." Cereb
 # Cortex 24(1):17-36. [doi 10.1093/cercor/bhs270]
 
-macaque_file_1 = download_file('macaque_1.x3d', astype='example_data')
+macaque_file_1 = download_file('macaque_1.x3d', astype='example_data',
+                               allow_download=True)
 b_macaque_obj_1 = BrainObj(macaque_file_1, translucent=False)
 sc.add_to_subplot(b_macaque_obj_1, col=1,
                   title='Macaque brain (Markov et al. 2014)')
@@ -52,7 +54,8 @@ sc.add_to_subplot(b_macaque_obj_1, col=1,
 # Brain Image Parcellation and Spatial Normalization." Frontiers in
 # Neuroinformatics 6:27. [doi 10.3389/fninf.2012.00027]
 
-macaque_file_2 = download_file('macaque_2.x3d', astype='example_data')
+macaque_file_2 = download_file('macaque_2.x3d', astype='example_data',
+                               allow_download=True)
 b_macaque_obj_2 = BrainObj(macaque_file_2, translucent=False)
 sc.add_to_subplot(b_macaque_obj_2, col=2,
                   title="Macaque brain (Dubach et al. 2014),\n(Rohlfing et al."
@@ -65,7 +68,8 @@ sc.add_to_subplot(b_macaque_obj_2, col=2,
 # expression in the adult mouse brain." Nature 445(7124):168-76.
 # [doi 10.1038/nature05453]
 
-mouse_file = download_file('mouse.x3d', astype='example_data')
+mouse_file = download_file('mouse.x3d', astype='example_data',
+                           allow_download=True)
 b_mouse_obj = BrainObj(mouse_file, translucent=False)
 sc.add_to_subplot(b_mouse_obj, row=1, title='Mouse brain (Lein et al. 2007)')
 
@@ -85,7 +89,8 @@ sc.add_to_subplot(b_mouse_obj, row=1, title='Mouse brain (Lein et al. 2007)')
 # Journal of Neuroscience Methods 240:161-169.
 # [doi 10.1016/j.jneumeth.2014.11.005]
 
-rat_file = download_file('rat.x3d', astype='example_data')
+rat_file = download_file('rat.x3d', astype='example_data',
+                         allow_download=True)
 b_rat_obj = BrainObj(rat_file, translucent=False)
 sc.add_to_subplot(b_rat_obj, row=1, col=1, zoom=.9,
                   title="Rat brain (Papp et al. 2014),\n(Kjonigsen et al. "
@@ -112,7 +117,8 @@ sc.add_to_subplot(b_rat_obj, row=1, col=1, zoom=.9,
 # schizophrenia: sex effects and genetic vulnerability." Biol Psychiatry
 # 61(8):935-945
 
-human_file = download_file('human.x3d', astype='example_data')
+human_file = download_file('human.x3d', astype='example_data',
+                           allow_download=True)
 b_human_obj = BrainObj(human_file, translucent=False)
 sc.add_to_subplot(b_human_obj, row=1, col=2, zoom=.9,
                   title="Human brain (Makris et al. 2006), (Frazier et al. "

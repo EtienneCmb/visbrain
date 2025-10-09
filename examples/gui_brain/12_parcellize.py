@@ -21,8 +21,10 @@ file1 = 'lh.aparc.a2009s.annot'
 file2 = 'rh.aparc.annot'
 
 # Download files if needed :
-path_to_file1 = download_file(file1, astype='example_data')
-path_to_file2 = download_file(file2, astype='example_data')
+path_to_file1 = download_file(file1, astype='example_data',
+                              allow_download=True)
+path_to_file2 = download_file(file2, astype='example_data',
+                              allow_download=True)
 
 # Define a brain object :
 b_obj = BrainObj('inflated', hemisphere='both', translucent=False,

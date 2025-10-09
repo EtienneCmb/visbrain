@@ -18,7 +18,8 @@ from visbrain.io import download_file
 # objects. We first create the scene with a black background, a fixed size
 
 # Download intracranial EEG electodes
-mat = np.load(download_file('xyz_sample.npz', astype='example_data'))
+mat = np.load(download_file('xyz_sample.npz', astype='example_data',
+                            allow_download=True))
 xyz, subjects = mat['xyz'], mat['subjects']
 n_sources = xyz.shape[0]
 

@@ -44,7 +44,8 @@ KW = dict(title_size=14., zoom=1.2)
 #     this feature, we provide a set of intracranial MNI coordinates.
 
 # Download iEEG coordinates and define some random data
-mat = np.load(download_file('xyz_sample.npz', astype='example_data'))
+mat = np.load(download_file('xyz_sample.npz', astype='example_data',
+                            allow_download=True))
 xyz, subjects = mat['xyz'], mat['subjects']
 data = np.random.rand(xyz.shape[0])
 
@@ -106,7 +107,8 @@ sc.add_to_subplot(cb_proj, row=0, col=3, width_max=200)
 # Note that those parcellates files comes from MNE-python.
 
 # Download the annotation file of the left hemisphere lh.aparc.a2009s.annot
-path_to_file1 = download_file('lh.aparc.a2009s.annot', astype='example_data')
+path_to_file1 = download_file('lh.aparc.a2009s.annot', astype='example_data',
+                              allow_download=True)
 # Define the brain object (now you should know how to do it)
 b_obj_parl = BrainObj('inflated', hemisphere='left', translucent=False)
 # Print parcellates included in the file
@@ -129,7 +131,8 @@ sc.add_to_subplot(b_obj_parl, row=1, col=1, rotate='left',
 # to some specific parcellates
 
 # Download the annotation file of the right hemisphere rh.aparc.annot
-path_to_file2 = download_file('rh.aparc.annot', astype='example_data')
+path_to_file2 = download_file('rh.aparc.annot', astype='example_data',
+                              allow_download=True)
 # Define the brain object (again... I know, this is redundant)
 b_obj_parr = BrainObj('inflated', hemisphere='right', translucent=False)
 # Print parcellates included in the file
@@ -161,7 +164,8 @@ sc.add_to_subplot(cb_parr, row=1, col=3, width_max=200)
 # visbrain. But you can define your own brain template using vertices and faces
 
 # Download the vertices, faces and normals
-mat = np.load(download_file('Custom.npz', astype='example_data'))
+mat = np.load(download_file('Custom.npz', astype='example_data',
+                            allow_download=True))
 vert, faces, norms = mat['vertices'], mat['faces'], mat['normals']
 # By default, vertices are in millimeters so we multiply by 1000.
 vert *= 1000.
@@ -192,7 +196,8 @@ sc.add_to_subplot(b_obj_custom, row=2, col=0, title='Use a custom template',
 # file comes from MNE-python
 
 # Download the lh.sig.nii.gz file
-file = download_file('lh.sig.nii.gz', astype='example_data')
+file = download_file('lh.sig.nii.gz', astype='example_data',
+                     allow_download=True)
 # Define the [...] you know
 b_obj_fmri = BrainObj('inflated', translucent=False, sulcus=True)
 # Add fMRI activation and hide every activation that is under 5.
@@ -208,7 +213,8 @@ sc.add_to_subplot(b_obj_fmri, row=2, col=1, title='Add fMRI activation',
 
 # Dowload meg_source_estimate-rh.stc file and load the data
 file = read_stc(download_file('meg_source_estimate-rh.stc',
-                              astype='example_data'))
+                              astype='example_data',
+                              allow_download=True))
 # Get the data of index 2 and the vertices
 data = file['data'][:, 2]
 vertices = file['vertices']

@@ -16,8 +16,10 @@ from visbrain.io import download_file
 
 """Download files if needed
 """
-file_1 = download_file('lh.sig.nii.gz', astype='example_data')
-file_2 = download_file('lh.alt_sig.nii.gz', astype='example_data')
+file_1 = download_file('lh.sig.nii.gz', astype='example_data',
+                       allow_download=True)
+file_2 = download_file('lh.alt_sig.nii.gz', astype='example_data',
+                       allow_download=True)
 
 b_obj = BrainObj('inflated', translucent=False, sulcus=True)
 b_obj.add_activation(file=file_1, clim=(4., 30.), hide_under=4, cmap='Reds_r',

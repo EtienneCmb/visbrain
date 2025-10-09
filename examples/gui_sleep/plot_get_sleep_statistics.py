@@ -11,7 +11,8 @@ from visbrain.io import download_file, get_sleep_stats
 ###############################################################################
 # Download a hypnogram example
 
-path_to_hypno = download_file("s101_jbe.hyp", astype='example_data')
+path_to_hypno = download_file("s101_jbe.hyp", astype='example_data',
+                               allow_download=True)
 
 ###############################################################################
 # Get sleep statistics

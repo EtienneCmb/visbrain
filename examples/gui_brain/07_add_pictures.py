@@ -19,7 +19,8 @@ from visbrain.io import download_file
 kwargs = {}
 # Load the xyz coordinates and corresponding subject name :
 
-s_xyz = np.load(download_file('xyz_sample.npz', astype='example_data'))['xyz']
+s_xyz = np.load(download_file('xyz_sample.npz', astype='example_data',
+                              allow_download=True))['xyz']
 s_xyz = s_xyz[4::10, ...]
 n_sources = s_xyz.shape[0]
 

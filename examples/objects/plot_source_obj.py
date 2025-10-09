@@ -42,7 +42,8 @@ from visbrain.io import download_file
 
 # Download the file and get the (x, y, z) MNI coordinates of the 583 recording
 # sites
-mat = np.load(download_file('xyz_sample.npz', astype='example_data'))
+mat = np.load(download_file('xyz_sample.npz', astype='example_data',
+                            allow_download=True))
 xyz = mat['xyz']
 n_sources = xyz.shape[0]
 text = ['S' + str(k) for k in range(n_sources)]

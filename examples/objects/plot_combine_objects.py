@@ -17,7 +17,8 @@ from visbrain.io import download_file
 from visbrain.utils import generate_eeg
 
 # Get the path to Visbrain data and download deep sources
-mat = np.load(download_file('xyz_sample.npz', astype='example_data'))
+mat = np.load(download_file('xyz_sample.npz', astype='example_data',
+                            allow_download=True))
 xyz, subjects = mat['xyz'], mat['subjects']
 data = np.random.uniform(low=-1., high=1., size=(xyz.shape[0],))
 
@@ -36,7 +37,8 @@ sc = SceneObj(camera_state=CAM_STATE, size=(1400, 1000))
 # fMRI activation
 ###############################################################################
 
-file = download_file('lh.sig.nii.gz', astype='example_data')
+file = download_file('lh.sig.nii.gz', astype='example_data',
+                     allow_download=True)
 b_obj_fmri = BrainObj('inflated', translucent=False, sulcus=True)
 b_obj_fmri.add_activation(file=file, clim=(5., 20.), hide_under=5,
                           cmap='viridis', hemisphere='left')
@@ -87,7 +89,8 @@ sc.add_to_subplot(BrainObj('B2'), use_this_cam=True, row=1, col=2)
 # Connectivity
 ###############################################################################
 
-arch = np.load(download_file('phase_sync_delta.npz', astype='example_data'))
+arch = np.load(download_file('phase_sync_delta.npz', astype='example_data',
+                             allow_download=True))
 nodes, edges = arch['nodes'], arch['edges']
 c_count = ConnectObj('default', nodes, edges, select=edges > .7,
                      color_by='count', antialias=True, line_width=2.,
