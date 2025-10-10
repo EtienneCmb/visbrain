@@ -7,6 +7,18 @@ Changelog
    :local:
    :depth: 1
 
+Automation
+----------
+
+The continuous integration and release checks now run through GitHub Actions.
+The :doc:`development <development>` workflow triggers the
+``ci`` pipeline (``.github/workflows/ci.yml``) on every pull request and push to
+``master`` to exercise the lint and test suites across the supported platforms.
+Publishing a release tag activates ``wheels``
+(``.github/workflows/wheels.yml``), which builds and verifies the
+installation artifacts before they land on PyPI.  Ensure both workflows are
+green before drafting release notes or promoting a build.
+
 0.4.6
 -----
 

@@ -2,14 +2,11 @@
 
   <br>
 
-.. image:: https://travis-ci.org/EtienneCmb/visbrain.svg?branch=master
-    :target: https://travis-ci.org/EtienneCmb/visbrain
+.. image:: https://github.com/EtienneCmb/visbrain/actions/workflows/ci.yml/badge.svg?branch=master
+    :target: https://github.com/EtienneCmb/visbrain/actions/workflows/ci.yml
 
-.. image:: https://ci.appveyor.com/api/projects/status/fdxhhmpagms1so8l/branch/master?svg=true
-    :target: https://ci.appveyor.com/project/EtienneCmb/visbrain/branch/master
-
-.. image:: https://circleci.com/gh/EtienneCmb/visbrain/tree/master.svg?style=svg
-    :target: https://circleci.com/gh/EtienneCmb/visbrain/tree/master
+.. image:: https://github.com/EtienneCmb/visbrain/actions/workflows/wheels.yml/badge.svg?branch=master
+    :target: https://github.com/EtienneCmb/visbrain/actions/workflows/wheels.yml
 
 .. image:: https://codecov.io/gh/EtienneCmb/visbrain/branch/master/graph/badge.svg
   :target: https://codecov.io/gh/EtienneCmb/visbrain
