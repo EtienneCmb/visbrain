@@ -61,3 +61,26 @@ creates namespaced directories under two categories:
 Utilities such as ``path_to_visbrain_data`` and the download CLI already use
 these helpers; new code should avoid hard-coding paths so clean-up policies
 remain centralised.
+
+
+Screenshot regression suite
+---------------------------
+
+The automated screenshot comparisons under
+``visbrain/gui/tests/test_regressions.py`` verify that the Qt and VisPy front
+ends render deterministically. Baseline PNGs live in
+``visbrain/gui/tests/baseline`` and should be treated as fixtures:
+
+* ``brain.png`` — the full Brain GUI.
+* ``signal.png`` — the Signal GUI waveform browser.
+* ``sleep.png`` — the Sleep scoring interface.
+* ``brain-visual-canvas.png`` — a minimal :class:`~visbrain.visuals.brain_visual.BrainVisual`
+  hosted in a :class:`~visbrain.objects.scene_obj.VisbrainCanvas` scene.
+* ``figure.png`` — the matplotlib-backed Figure GUI.
+
+Regenerate the images locally with::
+
+   VISBRAIN_UPDATE_SCREENSHOTS=1 pytest -m screenshot
+
+New screenshots should be documented in this list so reviewers understand which
+component each baseline represents.

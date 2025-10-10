@@ -107,5 +107,7 @@ ignore = ["E722", "E741", "F632"]
 
 [tool.pytest.ini_options]
 markers = [
+    "gui: tests that require a Qt/OpenGL stack.",
+    "screenshot: Qt/VisPy screenshot regression tests.",
     "performance: Performance-sensitive regression or micro-benchmark tests.",
 ]
