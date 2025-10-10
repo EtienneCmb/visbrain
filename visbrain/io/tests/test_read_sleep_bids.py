@@ -66,45 +66,66 @@ def _fake_mne_bids(monkeypatch):
     return module
 
 
-@pytest.fixture
-def bids_root(tmp_path):
-    root = tmp_path / 'bids'
-    eeg_dir = root / 'sub-01' / 'eeg'
-    eeg_dir.mkdir(parents=True)
-    (eeg_dir / 'sub-01_task-rest_run-01_eeg.edf').write_bytes(b'')
-    (eeg_dir / 'sub-01_task-rest_run-02_eeg.edf').write_bytes(b'')
-    return root
+def _add_bids_recording(dataset, run_label='2'):
+    """Create an additional placeholder recording for *dataset*."""
+
+    recording = dataset.recording
+    if 'run-1' not in recording.name:
+        raise AssertionError('Unexpected fixture naming convention')
+    new_recording = recording.with_name(
+        recording.name.replace('run-1', f'run-{run_label}')
+    )
+    new_recording.write_bytes(b'EDF')
+    metadata = new_recording.with_suffix('.json')
+    metadata.write_text('{}')
+    return new_recording
 
 
-def test_match_bids_candidate_resolve_last(bids_root):
-    candidates = _discover_bids_files(str(bids_root))
-    _, summary = _match_bids_candidate(candidates, {}, str(bids_root), resolve='last')
-    assert summary['selected'].endswith('run-02_eeg.edf')
+def test_match_bids_candidate_resolve_last(bids_sleep_directory):
+    extra_recording = _add_bids_recording(bids_sleep_directory, run_label='2')
+    root = str(bids_sleep_directory.root)
+    candidates = _discover_bids_files(root)
+    _, summary = _match_bids_candidate(candidates, {}, root, resolve='last')
+    assert summary['selected'] == os.path.relpath(str(extra_recording), root)
     assert summary['strategy'] == 'last'
 
 
-def test_match_bids_candidate_reports_available(bids_root):
-    candidates = _discover_bids_files(str(bids_root))
+def test_match_bids_candidate_reports_available(bids_sleep_directory):
+    _add_bids_recording(bids_sleep_directory, run_label='2')
+    root = str(bids_sleep_directory.root)
+    candidates = _discover_bids_files(root)
     with pytest.raises(FileNotFoundError) as err:
-        _match_bids_candidate(candidates, {'run': '99'}, str(bids_root))
+        _match_bids_candidate(candidates, {'run': '99'}, root)
     message = str(err.value)
-    assert 'run-01' in message
-    assert 'run-02' in message
+    assert 'run-1' in message
+    assert 'run-2' in message
 
 
-def test_load_bids_directory_metadata(bids_root):
+def test_load_bids_directory_metadata(bids_sleep_directory):
+    root = str(bids_sleep_directory.root)
+    expected_rel = os.path.relpath(
+        str(bids_sleep_directory.recording),
+        root,
+    )
+    requested_entities = {'run': '1', 'task': 'rest'}
     payload = _load_bids_directory(
-        str(bids_root),
+        root,
         downsample=50.0,
-        kwargs_mne={'bids_entities': {'run': '01'}, 'bids_resolve': 'first'},
+        kwargs_mne={
+            'bids_entities': requested_entities,
+            'bids_resolve': 'first',
+        },
     )
     metadata = payload['metadata']
-    assert metadata['bids']['selected'].endswith('run-01_eeg.edf')
-    assert metadata['bids']['strategy'] in {'first', 'unique-match'}
-    assert metadata['source'].endswith('.edf')
+    assert metadata['bids']['selected'] == expected_rel
+    assert metadata['bids']['selected_abspath'] == str(bids_sleep_directory.recording)
+    assert metadata['bids']['strategy'] == 'unique-match'
+    assert metadata['bids']['requested_entities'] == requested_entities
+    assert metadata['bids']['resolve'] == 'first'
+    assert metadata['source'] == str(bids_sleep_directory.recording)
 
 
-def test_sleep_switch_bids_fallback(monkeypatch, bids_root):
+def test_sleep_switch_bids_fallback(monkeypatch, bids_sleep_directory):
     def failing_loader(*args, **kwargs):  # pragma: no cover - invoked in test
         raise RuntimeError('forced failure')
 
@@ -133,12 +154,18 @@ def test_sleep_switch_bids_fallback(monkeypatch, bids_root):
     )
 
     payload = sleep_switch(
-        str(bids_root),
+        str(bids_sleep_directory.root),
         '',
         100.0,
-        kwargs_mne={'bids_entities': {'run': '01'}},
+        kwargs_mne={'bids_entities': {'run': '1'}},
     )
     metadata = payload['metadata']
     assert 'fallback' in metadata
-    assert metadata['fallback']['selected'].endswith('run-01_eeg.edf')
+    expected_rel = os.path.relpath(
+        str(bids_sleep_directory.recording),
+        str(bids_sleep_directory.root),
+    )
+    assert metadata['fallback']['selected'] == expected_rel
+    assert metadata['fallback']['strategy'] == 'first'
     assert metadata['fallback']['reason'] == 'forced failure'
+    assert metadata['source'] == str(bids_sleep_directory.recording)
