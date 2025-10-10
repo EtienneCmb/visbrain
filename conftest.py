@@ -26,6 +26,17 @@ pytest_plugins = ["pytest_cov"]
 # not crash the interpreter.
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 os.environ.setdefault("MPLBACKEND", "Agg")
+os.environ.setdefault("OBJC_DISABLE_INITIALIZE_FORK_SAFETY", "YES")
+os.environ.setdefault("NO_AT_BRIDGE", "1")
+
+# Make VisPy harmless in headless mode
+os.environ.setdefault("VISPY_APP_BACKEND", "pyside6")  # or 'PyQt6' if you prefer
+os.environ.setdefault("VISPY_TESTING_APP", "true")
+
+# Ensure Matplotlib chooses non-GUI before pyplot is ever imported
+import matplotlib
+if matplotlib.get_backend().lower() == "macosx":
+    matplotlib.use("Agg")
 
 try:
     from visbrain.config import configure_headless
