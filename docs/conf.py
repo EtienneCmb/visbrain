@@ -15,31 +15,41 @@
 
 import inspect
 import os
-from os.path import relpath, dirname
 import sys
 from datetime import date
-import importlib.util
+from contextlib import ExitStack
+from importlib import resources
+from os.path import relpath, dirname
 from pathlib import Path
 
-import sphinx_bootstrap_theme
 from sphinx_gallery.sorting import FileNameSortKey, ExplicitOrder
 from numpydoc import numpydoc, docscrape
 
-_ICONS_PATH = Path(__file__).resolve().parents[1] / "visbrain" / "resources" / "icons.py"
-_ICONS_SPEC = importlib.util.spec_from_file_location("visbrain.resources.icons", _ICONS_PATH)
-if _ICONS_SPEC is not None and _ICONS_SPEC.loader is not None:
-    _ICONS_MODULE = importlib.util.module_from_spec(_ICONS_SPEC)
-    _ICONS_SPEC.loader.exec_module(_ICONS_MODULE)
-    sys.modules["visbrain.resources.icons"] = _ICONS_MODULE
-
 import visbrain
 from visbrain.config import get_config
+
+_RESOURCE_PACKAGE = "visbrain.resources.docs"
+_RESOURCE_STACK = ExitStack()
+_DOCS_ROOT = Path(__file__).resolve().parent
+_EXAMPLES_ROOT = Path(__file__).resolve().parents[1] / 'examples'
+
+
+def _resource_dir(*parts: str) -> str:
+    """Return a filesystem path for a packaged documentation asset."""
+
+    traversable = resources.files(_RESOURCE_PACKAGE)
+    for part in parts:
+        traversable = traversable.joinpath(part)
+    return str(_RESOURCE_STACK.enter_context(resources.as_file(traversable)))
+
+
+_STATIC_ROOT = Path(_resource_dir('static'))
+_ICO_ROOT = _STATIC_ROOT / 'ico'
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 # sys.path.insert(0, os.path.abspath('../'))
-sys.path.insert(0, os.path.abspath('sphinxext'))
 
 # -- General configuration ------------------------------------------------
 
@@ -72,25 +82,26 @@ autodoc_default_flags = ['members', 'inherited-members', 'no-undoc-members']
 
 sphinx_gallery_conf = {
     # path to your examples scripts
-    'examples_dirs': '../examples',
-    'plot_gallery': False,
+    'examples_dirs': str(_EXAMPLES_ROOT),
+    'plot_gallery': True,
     'reference_url': {
         'visbrain': None,
         'matplotlib': 'http://matplotlib.org',
         'numpy': 'http://docs.scipy.org/doc/numpy',
         'scipy': 'http://docs.scipy.org/doc/scipy/reference',
     },
-    'gallery_dirs': 'auto_examples',
-    'backreferences_dir': 'generated',
-    'default_thumb_file': '_static/ico/visbrain.png',
-    'subsection_order': ExplicitOrder(['../examples/objects',
-                                       '../examples/gui_brain',
-                                       '../examples/gui_sleep',
-                                       '../examples/gui_signal',
-                                       '../examples/eeg_meg',
-                                       '../examples/figure']),
+    'gallery_dirs': str(_DOCS_ROOT / 'auto_examples'),
+    'backreferences_dir': str(_DOCS_ROOT / 'generated'),
+    'subsection_order': ExplicitOrder([
+        str(_EXAMPLES_ROOT / 'objects'),
+        str(_EXAMPLES_ROOT / 'gui_brain'),
+        str(_EXAMPLES_ROOT / 'gui_sleep'),
+        str(_EXAMPLES_ROOT / 'gui_signal'),
+        str(_EXAMPLES_ROOT / 'eeg_meg'),
+        str(_EXAMPLES_ROOT / 'figure'),
+    ]),
     'within_subsection_order': FileNameSortKey,
-    'doc_module': ('visbrain'),
+    'doc_module': ('visbrain',),
     # 'thumbnail_size': (100, 100),
 }
 
@@ -99,7 +110,7 @@ numpydoc_class_members_toctree = False
 numpydoc_use_blockquotes = False
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = [_resource_dir('templates')]
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
@@ -177,33 +188,17 @@ todo_include_todos = True
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'bootstrap'
+html_theme = 'furo'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
-    'bootstrap_version': "3",
-    'navbar_sidebarrel': False,
-    'navbar_pagenav': True,
-    'navbar_pagenav_name': "Page",
-    'globaltoc_depth': -1,
-    'globaltoc_includehidden': "true",
-    'source_link_position': "nav",
-    'navbar_links': [
-        ("Documentation", "documentation"),
-        ("FAQ", "faq"),
-        ("Examples", "auto_examples/index"),
-        ("API", "api"),
-        ("Community", "community"),
-    ],
-    'navbar_class': "navbar",
-    'bootswatch_theme': "sandstone",
-    'navbar_fixed_top': True,
+    'sidebar_hide_name': False,
+    'navigation_with_keys': True,
+    'light_logo': 'ico/visbrain.png',
+    'dark_logo': 'ico/visbrain.png',
 }
-
-# Add any paths that contain custom themes here, relative to this directory.
-html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
 
 # The name for this set of Sphinx documents.
 # "<project> v<release> documentation" by default.
@@ -214,17 +209,17 @@ html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-html_logo = '_static/ico/visbrain_128x128.png'
+html_logo = str(_ICO_ROOT / 'visbrain.png')
 
 # The name of an image file (relative to this directory) to use as a favicon of
 # the docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-html_favicon = '_static/ico/favicon.ico'
+html_favicon = str(_ICO_ROOT / 'favicon.ico')
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = [str(_STATIC_ROOT)]
 
 # Add any extra paths that contain custom files (such as robots.txt or
 # .htaccess) here, relative to this directory. These files are copied
@@ -401,8 +396,20 @@ texinfo_documents = [
 # Source code links (adapted from SciPy (doc/source/conf.py))
 # -----------------------------------------------------------------------------
 
+nitpicky = True
+nitpick_ignore = [
+    ('py:class', 'QWidget'),
+    ('py:class', 'QApplication'),
+]
+
+
+def _cleanup_resources(app, exception):
+    _RESOURCE_STACK.close()
+
+
 def setup(app):
     app.add_css_file("visbrain_styles.css")
+    app.connect('build-finished', _cleanup_resources)
 
 
 def linkcode_resolve(domain, info):
