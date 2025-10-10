@@ -44,9 +44,19 @@ workflows:
 
 .. code-block:: console
 
-   tox -e lint     # run Ruff
-   tox -e tests    # run the pytest suite headlessly
-   tox -e package  # build sdist/wheel artifacts
+   tox -e lint           # run Ruff
+   tox -e lint-format    # confirm Black and Ruff formatting
+   tox -e type           # run the MyPy type checks
+   tox -e tests          # run the pytest suite headlessly
+   tox -e tests-gui      # run the GUI tests that need a display server
+   tox -e tests-screenshot  # compare the Qt/VisPy screenshot baselines
+   tox -e package        # build sdist/wheel artifacts
+
+Screenshot baselines live under ``visbrain/gui/tests/baseline``. When a GUI
+change legitimately alters the visuals, refresh them locally and include the
+updated PNGs in your commit::
+
+   VISBRAIN_UPDATE_SCREENSHOTS=1 tox -e tests-screenshot
 
 The ``Makefile`` exposes matching shortcuts (``make lint``, ``make test`` and
 ``make build_dist``) for projects that rely on the historical targets.

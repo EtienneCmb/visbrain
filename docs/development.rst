@@ -9,15 +9,41 @@ automation described below::
 
    python -m pip install -r requirements/dev.txt
 
+Pre-commit workflow
+-------------------
+
 The repository uses :mod:`pre_commit` to run Ruff, Black, MyPy, end-of-file
-fixes, and a packaging smoke test.  Install the git hook locally so changes are
+fixes, and a packaging smoke test. Install the git hook locally so changes are
 validated automatically::
 
    pre-commit install
 
-You can manually trigger the full suite against every file with::
+Invoke the checks manually when rebasing or editing historic commits::
 
    pre-commit run --all-files
+
+Hook execution mirrors the ``tox -e lint`` and ``tox -e lint-format`` targets,
+so keeping the hook active ensures that the CI style jobs stay green. Run
+``pre-commit run --all-files`` before pushing when you edit code outside the
+usual workflow or after an interactive rebase.
+
+Tox environments
+----------------
+
+``tox`` drives the canonical automation entry points. The most common
+environments are:
+
+* ``lint`` – runs Ruff in linting mode.
+* ``lint-format`` – enforces the Ruff/Black formatting profile.
+* ``type`` – executes MyPy with the repository configuration.
+* ``tests`` – launches the headless pytest suite.
+* ``tests-gui`` – runs the GUI-focused pytest markers that require an X server
+  (the CI container provisions Xvfb automatically).
+* ``tests-screenshot`` – executes the deterministic screenshot comparisons.
+* ``package`` – builds the source distribution and wheel artefacts.
+
+The ``Makefile`` exposes compatibility shortcuts for a subset of environments:
+``make lint``, ``make test``, ``make test-gui``, and ``make build_dist``.
 
 Qt interface regeneration
 -------------------------
@@ -81,8 +107,8 @@ these helpers; new code should avoid hard-coding paths so clean-up policies
 remain centralised.
 
 
-Screenshot regression suite
----------------------------
+Screenshot regression harness
+-----------------------------
 
 The automated screenshot comparisons under
 ``visbrain/gui/tests/test_regressions.py`` verify that the Qt and VisPy front
@@ -96,9 +122,14 @@ ends render deterministically. Baseline PNGs live in
   hosted in a :class:`~visbrain.objects.scene_obj.VisbrainCanvas` scene.
 * ``figure.png`` — the matplotlib-backed Figure GUI.
 
+Run the harness through ``tox`` during feature development::
+
+   tox -e tests-screenshot
+
 Regenerate the images locally with::
 
-   VISBRAIN_UPDATE_SCREENSHOTS=1 pytest -m screenshot
+   VISBRAIN_UPDATE_SCREENSHOTS=1 tox -e tests-screenshot
 
 New screenshots should be documented in this list so reviewers understand which
-component each baseline represents.
+component each baseline represents and committed alongside the code that
+changes the visuals.
