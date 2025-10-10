@@ -124,3 +124,24 @@ markers = [
     "screenshot: Qt/VisPy screenshot regression tests.",
     "performance: Performance-sensitive regression or micro-benchmark tests.",
 ]
+
+[tool.black]
+target-version = ["py39"]
+line-length = 88
+
+[tool.mypy]
+python_version = "3.9"
+namespace_packages = true
+explicit_package_bases = true
+warn_unused_configs = true
+
+[[tool.mypy.overrides]]
+module = [
+    "PySide6",
+    "PySide6.*",
+    "shiboken6",
+    "shiboken6.*",
+    "vispy",
+    "vispy.*",
+]
+ignore_missing_imports = true
