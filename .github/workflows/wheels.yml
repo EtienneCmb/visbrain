@@ -20,6 +20,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install system dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgl1 libglu1-mesa libegl1 libxkbcommon-x11-0
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -52,12 +58,13 @@ jobs:
           pip install --upgrade pip
           pip install dist/*.whl
           python - <<'PY'
-import importlib
-import pkgutil
-pkg = importlib.import_module('visbrain')
-print('Loaded', pkg.__name__, 'from', pkg.__file__)
-print('Available submodules:', [m.name for m in pkgutil.iter_modules(pkg.__path__)])
-PY
+          import importlib
+          import pkgutil
+
+          pkg = importlib.import_module('visbrain')
+          print('Loaded', pkg.__name__, 'from', pkg.__file__)
+          print('Available submodules:', [m.name for m in pkgutil.iter_modules(pkg.__path__)])
+          PY
 
       - name: Smoke test wheel installation (Windows)
         if: runner.os == 'Windows'

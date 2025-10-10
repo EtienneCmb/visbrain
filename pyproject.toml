@@ -145,3 +145,43 @@ module = [
     "vispy.*",
 ]
 ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = [
+    "scipy",
+    "scipy.*",
+    "mne",
+    "mne.*",
+    "pandas",
+    "pandas.*",
+    "tensorpac",
+    "tensorpac.*",
+    "imageio",
+    "imageio.*",
+    "nibabel",
+    "nibabel.*",
+]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = [
+    "visbrain.tests.*",
+    "visbrain.gui.tests.*",
+    "visbrain.gui.sleep.tests.*",
+]
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = [
+    "visbrain.config",
+    "visbrain.data",
+    "visbrain.data.*",
+    "visbrain.io.dependencies",
+    "visbrain.io.read_data",
+    "visbrain.io.read_sleep",
+    "visbrain._pyqt_module",
+    "visbrain.gui.*",
+    "visbrain.visuals.*",
+    "visbrain.objects.*",
+]
+ignore_errors = true
