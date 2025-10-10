@@ -58,7 +58,11 @@ if sip is not None:  # pragma: no cover - skip when sip missing
     except AttributeError:  # pragma: no cover - sip without setter
         pass
 
-from visbrain.utils.gui.popup import HelpMenu, ScreenshotPopup, ShortcutPopup
+from visbrain.utils.gui.popup import (  # noqa: E402
+    HelpMenu,
+    ScreenshotPopup,
+    ShortcutPopup,
+)
 
 
 pytestmark = [
