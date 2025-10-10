@@ -192,6 +192,8 @@ class UiInit(QtWidgets.QMainWindow, Ui_MainWindow):
         ):
             widget.setFocusPolicy(QtCore.Qt.StrongFocus)
             widget.setAccessibleName(name)
+            if isinstance(description, (tuple, list)):
+                description = " ".join(description)
             widget.setAccessibleDescription(description)
 
         # Initialize shortcuts :
