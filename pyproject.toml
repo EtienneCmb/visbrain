@@ -102,8 +102,21 @@ extend-exclude = [
 ]
 
 [tool.ruff.lint]
-select = ["E", "F"]
+select = [
+    "E",
+    "F",
+    "T20",
+]
 ignore = ["E722", "E741", "F632"]
+
+[tool.ruff.lint.per-file-ignores]
+"tools/generate_qt_ui.py" = ["T201"]
+"visbrain/__main__.py" = ["T201"]
+"visbrain/config.py" = ["T201"]
+"visbrain/gui/sleep/tests/test_controller.py" = ["T201"]
+"visbrain/io/download.py" = ["T201"]
+"visbrain/io/read_sleep.py" = ["T201"]
+"visbrain/utils/memory.py" = ["T201"]
 
 [tool.pytest.ini_options]
 markers = [
