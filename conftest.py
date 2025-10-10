@@ -7,13 +7,14 @@ repository.
 from __future__ import annotations
 
 import os
+import warnings
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Iterable
 
 import pytest
 
-from _pytest.mark.expression import Expression
-
+# Ensure coverage flags remain available when plugin auto-loading is disabled.
+pytest_plugins = ["pytest_cov"]
 
 # -----------------------------------------------------------------------------
 # Headless Qt configuration
@@ -38,43 +39,33 @@ _GUI_MARKER_PATHS = (
     _REPO_ROOT / "visbrain" / "io" / "tests",
     _REPO_ROOT / "visbrain" / "utils" / "sleep" / "tests",
     _REPO_ROOT / "visbrain" / "utils" / "tests",
+    _REPO_ROOT / "visbrain" / "tests" / "test_gui_lifecycle.py",
+    _REPO_ROOT / "visbrain" / "tests" / "test_icons.py",
+    _REPO_ROOT / "visbrain" / "tests" / "test_opengl_diagnostics.py",
+    _REPO_ROOT / "visbrain" / "resources" / "tests",
 )
 
 
 def _expression_allows_gui(config: pytest.Config) -> bool:
     """Return True when GUI-heavy tests should be collected."""
 
-    expr = getattr(config.option, "markexpr", "") or ""
+    expr = (getattr(config.option, "markexpr", "") or "").lower()
     if not expr:
         return True
 
-    try:
-        parsed = Expression(expr)
-    except Exception:  # pragma: no cover - fallback for unexpected syntax
-        lowered = expr.lower()
-        # Treat plain "not gui" or "not screenshot" toggles as opt-outs.
-        if "not gui" in lowered and "gui" not in lowered.replace("not gui", ""):
-            return False
-        if "not screenshot" in lowered and "screenshot" not in lowered.replace(
-            "not screenshot", ""
-        ):
-            return False
+    if "not gui" in expr and "gui" not in expr.replace("not gui", ""):
+        return False
+    if "not screenshot" in expr and "screenshot" not in expr.replace(
+        "not screenshot", ""
+    ):
+        return False
+
+    # When the expression explicitly targets GUI or screenshot markers we keep
+    # them; otherwise, err on the side of collecting to preserve legacy
+    # behaviour.
+    if "gui" in expr or "screenshot" in expr:
         return True
-
-    def _evaluate(*, gui: bool, screenshot: bool) -> bool:
-        def matcher(name: str, **_: Any) -> bool:
-            if name == "gui":
-                return gui
-            if name == "screenshot":
-                return screenshot
-            return False
-
-        return parsed.evaluate(matcher)
-
-    # GUI-only tests expose the ``gui`` marker, whereas the screenshot suite
-    # combines ``gui`` and ``screenshot``. Collect the modules whenever either
-    # marker combination survives the expression filter.
-    return _evaluate(gui=True, screenshot=False) or _evaluate(gui=True, screenshot=True)
+    return True
 
 
 _RUNNING_GUI_TESTS = True
@@ -91,6 +82,24 @@ def pytest_configure(config: pytest.Config) -> None:
     )
     global _RUNNING_GUI_TESTS
     _RUNNING_GUI_TESTS = _expression_allows_gui(config)
+    if _RUNNING_GUI_TESTS:
+        if os.environ.get("VISBRAIN_ENABLE_PYTEST_QT"):
+            try:
+                config.pluginmanager.import_plugin("pytestqt.plugin")
+            except Exception as exc:  # pragma: no cover - environment-specific
+                warnings.warn(
+                    "pytest-qt plugin could not be imported; GUI tests will be skipped."
+                    f"\nReason: {exc}",
+                    RuntimeWarning,
+                )
+                _RUNNING_GUI_TESTS = False
+        else:
+            warnings.warn(
+                "GUI tests were requested but pytest-qt autoloading is disabled."
+                " Set VISBRAIN_ENABLE_PYTEST_QT=1 to enable them.",
+                RuntimeWarning,
+            )
+            _RUNNING_GUI_TESTS = False
 
 
 def _is_under(path: Path, parents: Iterable[Path]) -> bool:
