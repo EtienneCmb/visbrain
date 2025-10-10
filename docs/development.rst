@@ -1,6 +1,24 @@
 Development workflow
 ====================
 
+Tooling bootstrap
+-----------------
+
+Install the shared development toolchain before running any of the
+automation described below::
+
+   python -m pip install -r requirements/dev.txt
+
+The repository uses :mod:`pre_commit` to run Ruff, Black, MyPy, end-of-file
+fixes, and a packaging smoke test.  Install the git hook locally so changes are
+validated automatically::
+
+   pre-commit install
+
+You can manually trigger the full suite against every file with::
+
+   pre-commit run --all-files
+
 Qt interface regeneration
 -------------------------
 

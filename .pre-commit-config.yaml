@@ -1,0 +1,30 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.5
+    hooks:
+      - id: ruff
+  - repo: https://github.com/psf/black
+    rev: 24.4.2
+    hooks:
+      - id: black
+        args: [--check, --diff]
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.10.0
+    hooks:
+      - id: mypy
+        args:
+          - --config-file
+          - pyproject.toml
+          - --no-strict-optional
+          - tools.generate_qt_ui
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: end-of-file-fixer
+  - repo: local
+    hooks:
+      - id: build-check
+        name: Verify package build metadata
+        entry: bash -c 'PYTHONPATH="tools/build_shim${PYTHONPATH:+:$PYTHONPATH}" python -m build --check'
+        language: system
+        pass_filenames: false

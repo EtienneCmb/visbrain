@@ -11,6 +11,9 @@ jobs:
             python -m pip install --upgrade pip
             python -m pip install tox
       - run:
+          name: Pre-commit
+          command: tox -e pre-commit
+      - run:
           name: Lint
           command: tox -e lint
       - run:
