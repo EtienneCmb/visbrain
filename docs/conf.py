@@ -44,6 +44,7 @@ def _resource_dir(*parts: str) -> str:
 
 
 _STATIC_ROOT = Path(_resource_dir('static'))
+_ICO_ROOT = _STATIC_ROOT / 'ico'
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -195,6 +196,8 @@ html_theme = 'furo'
 html_theme_options = {
     'sidebar_hide_name': False,
     'navigation_with_keys': True,
+    'light_logo': 'ico/visbrain.png',
+    'dark_logo': 'ico/visbrain.png',
 }
 
 # The name for this set of Sphinx documents.
@@ -206,12 +209,12 @@ html_theme_options = {
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-html_logo = None
+html_logo = str(_ICO_ROOT / 'visbrain.png')
 
 # The name of an image file (relative to this directory) to use as a favicon of
 # the docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-html_favicon = None
+html_favicon = str(_ICO_ROOT / 'favicon.ico')
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
