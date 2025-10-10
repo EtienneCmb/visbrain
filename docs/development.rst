@@ -9,6 +9,15 @@ automation described below::
 
    python -m pip install -r requirements/dev.txt
 
+When authoring documentation, install the optional Sphinx toolchain with
+either::
+
+   python -m pip install .[docs]
+
+or::
+
+   python -m pip install -r requirements/docs.txt
+
 Pre-commit workflow
 -------------------
 
