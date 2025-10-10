@@ -12,6 +12,7 @@ from typing import Any, Callable, ContextManager, Iterator
 
 import imageio.v3 as iio
 import numpy as np
+from PIL import Image
 
 from visbrain.config import get_config, qt_app, vispy_app
 from visbrain.qt import QtCore, QtGui, QtWidgets
@@ -175,11 +176,13 @@ def render_spec(spec: GuiSpec) -> np.ndarray:
 
 def save_png(path: Path, data: np.ndarray) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    iio.imwrite(path, data, extension=".png")
+    image = Image.fromarray(data)
+    image.save(path, format="PNG")
 
 
 def load_png(path: Path) -> np.ndarray:
-    return iio.imread(path)
+    with Image.open(path) as image:
+        return np.array(image)
 
 
 def max_pixel_delta(reference: np.ndarray, candidate: np.ndarray) -> int:
@@ -388,6 +391,7 @@ def _signal_factory() -> Iterator[Any]:
 def _sleep_factory() -> Iterator[Any]:
     from visbrain.gui.sleep import Sleep
     from visbrain.qt import QtWidgets
+    from visbrain.qt import QtGui
 
     time = np.linspace(0.0, 60.0, 600, dtype=np.float32)
     channel_a = np.sin(2 * np.pi * 1.5 * time)
@@ -410,11 +414,31 @@ def _sleep_factory() -> Iterator[Any]:
 
     QtWidgets.QGridLayout.setColumnStretch = _patched_set_column  # type: ignore[assignment]
 
+    original_shortcut = QtGui.QShortcut
+
+    class _Signal:
+        def connect(self, *_args, **_kwargs) -> None:  # pragma: no cover - GUI stub
+            return None
+
+    class _NoOpShortcut:
+        def __init__(self, *args, **kwargs) -> None:  # pragma: no cover - GUI stub
+            self._enabled = True
+            self.activated = _Signal()
+
+        def setEnabled(self, value: bool) -> None:  # pragma: no cover - GUI stub
+            self._enabled = bool(value)
+
+        def setContext(self, *_args, **_kwargs) -> None:  # pragma: no cover - GUI stub
+            return None
+
+    QtGui.QShortcut = _NoOpShortcut  # type: ignore[assignment]
+
     gui = Sleep(data=data, hypno=hypno, sf=10.0, downsample=2.0, verbose="error")
     try:
         yield gui
     finally:
         QtWidgets.QGridLayout.setColumnStretch = original_set_column  # type: ignore[assignment]
+        QtGui.QShortcut = original_shortcut  # type: ignore[assignment]
         gui.close()
 
 
@@ -506,7 +530,7 @@ def _capture_sleep_subprocess() -> np.ndarray:
 
             from visbrain.config import get_config, qt_app, vispy_app
             from visbrain.gui.sleep import Sleep
-            from visbrain.qt import QtCore, QtWidgets
+            from visbrain.qt import QtCore, QtWidgets, QtGui
             from visbrain.gui.tests import _screenshot as utils
 
             utils._reset_random_seeds()
@@ -537,6 +561,25 @@ def _capture_sleep_subprocess() -> np.ndarray:
 
             setattr(QtWidgets.QGridLayout, "setColumnStretch", _patched_set_column)
 
+            original_shortcut = QtGui.QShortcut
+
+            class _Signal:
+                def connect(self, *args, **kwargs):
+                    return None
+
+            class _NoOpShortcut:
+                def __init__(self, *args, **kwargs):
+                    self._enabled = True
+                    self.activated = _Signal()
+
+                def setEnabled(self, value):
+                    self._enabled = bool(value)
+
+                def setContext(self, *args, **kwargs):
+                    return None
+
+            QtGui.QShortcut = _NoOpShortcut
+
             try:
                 with qt_app(force=True, reset=True) as app, vispy_app(
                     force=True,
@@ -560,6 +603,7 @@ def _capture_sleep_subprocess() -> np.ndarray:
                     gui.close()
             finally:
                 setattr(QtWidgets.QGridLayout, "setColumnStretch", original_set_column)
+                QtGui.QShortcut = original_shortcut
 
             os._exit(0)
             """
@@ -664,6 +708,55 @@ def _figure_factory() -> Iterator[Any]:
             gui.close()
 
 
+@contextlib.contextmanager
+def _brain_visual_canvas() -> Iterator[QtWidgets.QWidget]:
+    """Return a VisbrainCanvas hosting a minimal BrainVisual."""
+
+    from visbrain.objects.scene_obj import VisbrainCanvas
+    from visbrain.visuals.brain_visual import BrainMesh
+    from vispy.scene.cameras import TurntableCamera
+
+    vertices = np.array(
+        [
+            (-0.6, -0.6, -0.4),
+            (0.6, -0.6, -0.4),
+            (-0.6, 0.6, -0.4),
+            (-0.4, -0.4, 0.6),
+            (0.4, 0.4, 0.6),
+        ],
+        dtype=np.float32,
+    )
+    faces = np.array(
+        [
+            (0, 1, 2),
+            (0, 1, 3),
+            (0, 2, 3),
+            (1, 2, 4),
+            (1, 3, 4),
+            (2, 3, 4),
+        ],
+        dtype=np.uint32,
+    )
+    base_normal = np.array([[0.0, 0.0, 1.0]], dtype=np.float32)
+    normals = np.tile(base_normal, (vertices.shape[0], 1))
+
+    camera = TurntableCamera(
+        fov=40.0,
+        elevation=25.0,
+        azimuth=45.0,
+        distance=2.5,
+        center=(0.0, 0.0, 0.0),
+    )
+    canvas = VisbrainCanvas(axis=False, bgcolor="white", camera=camera, show=False)
+    BrainMesh(vertices=vertices, faces=faces, normals=normals, parent=canvas.wc.scene)
+
+    widget = canvas.canvas.native
+    try:
+        yield widget
+    finally:
+        canvas.canvas.close()
+
+
 SCREENSHOT_SPECS: tuple[GuiSpec, ...] = (
     GuiSpec(
         "brain",
@@ -680,6 +773,12 @@ SCREENSHOT_SPECS: tuple[GuiSpec, ...] = (
         factory=_sleep_factory,
         widget_getter=lambda gui: gui.q_widget,
         subprocess_capture=_capture_sleep_subprocess,
+    ),
+    GuiSpec(
+        "brain-visual-canvas",
+        factory=_brain_visual_canvas,
+        size=(720, 480),
+        tolerance=1,
     ),
     GuiSpec(
         "figure",

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Iterable
+from typing import Any, Iterable
 
 import pytest
 
@@ -42,25 +42,52 @@ _GUI_MARKER_PATHS = (
 
 
 def _expression_allows_gui(config: pytest.Config) -> bool:
+    """Return True when GUI-heavy tests should be collected."""
+
     expr = getattr(config.option, "markexpr", "") or ""
     if not expr:
         return True
+
     try:
-        return Expression(expr).evaluate({"gui": True})
+        parsed = Expression(expr)
     except Exception:  # pragma: no cover - fallback for unexpected syntax
         lowered = expr.lower()
+        # Treat plain "not gui" or "not screenshot" toggles as opt-outs.
         if "not gui" in lowered and "gui" not in lowered.replace("not gui", ""):
             return False
+        if "not screenshot" in lowered and "screenshot" not in lowered.replace(
+            "not screenshot", ""
+        ):
+            return False
         return True
+
+    def _evaluate(*, gui: bool, screenshot: bool) -> bool:
+        def matcher(name: str, **_: Any) -> bool:
+            if name == "gui":
+                return gui
+            if name == "screenshot":
+                return screenshot
+            return False
+
+        return parsed.evaluate(matcher)
+
+    # GUI-only tests expose the ``gui`` marker, whereas the screenshot suite
+    # combines ``gui`` and ``screenshot``. Collect the modules whenever either
+    # marker combination survives the expression filter.
+    return _evaluate(gui=True, screenshot=False) or _evaluate(gui=True, screenshot=True)
 
 
 _RUNNING_GUI_TESTS = True
 
 
 def pytest_configure(config: pytest.Config) -> None:
-    """Register the custom GUI marker."""
+    """Register the custom GUI and screenshot markers."""
     config.addinivalue_line(
         "markers", "gui: tests that require a Qt/OpenGL stack"
+    )
+    config.addinivalue_line(
+        "markers",
+        "screenshot: Qt/VisPy screenshot regression tests",
     )
     global _RUNNING_GUI_TESTS
     _RUNNING_GUI_TESTS = _expression_allows_gui(config)

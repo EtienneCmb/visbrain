@@ -58,6 +58,7 @@ exact command lines::
 
    tox -e lint     # Ruff checks
    tox -e tests    # pytest with headless flags
+   tox -e tests-screenshot  # screenshot regression harness
    tox -e package  # python -m build
 
 The packaging environment executes ``python -m build`` under the hood and
