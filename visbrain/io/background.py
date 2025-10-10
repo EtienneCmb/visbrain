@@ -124,15 +124,19 @@ def run_in_loader_thread(
 def call_on_main_thread(func: Callable[..., _T], *args: Any, **kwargs: Any) -> _T:
     """Execute *func* on the Qt GUI thread and return its result."""
 
+    func_name = getattr(func, "__name__", repr(func))
     if QtCore is None or QtWidgets is None:
+        logger.debug("Qt bindings unavailable; executing %s inline", func_name)
         return func(*args, **kwargs)
 
     app = QtWidgets.QApplication.instance()
     if app is None:
+        logger.debug("No QApplication instance; executing %s inline", func_name)
         return func(*args, **kwargs)
 
     gui_thread = app.thread()
     if gui_thread is None or gui_thread is QtCore.QThread.currentThread():
+        logger.debug("Already on GUI thread; executing %s inline", func_name)
         return func(*args, **kwargs)
 
     class _Invoker(QtCore.QObject):  # pragma: no cover - requires Qt GUI thread
