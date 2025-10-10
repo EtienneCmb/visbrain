@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import os
 import warnings
+import importlib
 from pathlib import Path
 from typing import Iterable
 
@@ -34,19 +35,54 @@ except Exception:  # pragma: no cover - defensive in CI without GUI libs
 else:
     CONFIG = configure_headless()
 
-# Paths whose tests should automatically be marked as requiring a GUI stack.
 _REPO_ROOT = Path(__file__).parent.resolve()
-_GUI_MARKER_PATHS = (
-    _REPO_ROOT / "visbrain" / "gui",
-    _REPO_ROOT / "visbrain" / "objects" / "tests",
-    _REPO_ROOT / "visbrain" / "utils" / "gui" / "tests",
-    _REPO_ROOT / "visbrain" / "io" / "tests",
-    _REPO_ROOT / "visbrain" / "utils" / "sleep" / "tests",
-    _REPO_ROOT / "visbrain" / "utils" / "tests",
-    _REPO_ROOT / "visbrain" / "tests" / "test_gui_lifecycle.py",
-    _REPO_ROOT / "visbrain" / "tests" / "test_icons.py",
-    _REPO_ROOT / "visbrain" / "tests" / "test_opengl_diagnostics.py",
-    _REPO_ROOT / "visbrain" / "resources" / "tests",
+_REPO_PACKAGE_ROOT = (_REPO_ROOT / "visbrain").resolve()
+
+_GUI_RELATIVE_PATHS = (
+    Path("gui"),
+    Path("objects") / "tests",
+    Path("utils") / "gui" / "tests",
+    Path("io") / "tests",
+    Path("utils") / "sleep" / "tests",
+    Path("utils") / "tests",
+    Path("tests") / "test_gui_lifecycle.py",
+    Path("tests") / "test_icons.py",
+    Path("tests") / "test_opengl_diagnostics.py",
+    Path("resources") / "tests",
+)
+
+
+def _resolve_installed_package_root() -> Path:
+    """Return the resolved installation path of the :mod:`visbrain` package."""
+
+    try:
+        module = importlib.import_module("visbrain")
+    except Exception:
+        return _REPO_PACKAGE_ROOT
+
+    module_file = getattr(module, "__file__", None)
+    if module_file is None:
+        return _REPO_PACKAGE_ROOT
+    return Path(module_file).resolve().parent
+
+
+def _build_gui_marker_paths(package_roots: Iterable[Path]) -> tuple[Path, ...]:
+    """Return normalized GUI marker paths for the given *package_roots*."""
+
+    markers: list[Path] = []
+    seen: set[Path] = set()
+    for root in package_roots:
+        resolved_root = Path(root).resolve()
+        for relative in _GUI_RELATIVE_PATHS:
+            candidate = (resolved_root / relative).resolve()
+            if candidate not in seen:
+                markers.append(candidate)
+                seen.add(candidate)
+    return tuple(markers)
+
+
+_GUI_MARKER_PATHS = _build_gui_marker_paths(
+    (_REPO_PACKAGE_ROOT, _resolve_installed_package_root())
 )
 
 
@@ -108,9 +144,11 @@ def pytest_configure(config: pytest.Config) -> None:
 
 def _is_under(path: Path, parents: Iterable[Path]) -> bool:
     """Return ``True`` if *path* is located under any of *parents*."""
+    normalized_path = Path(path).resolve()
     for parent in parents:
+        normalized_parent = Path(parent).resolve()
         try:
-            path.relative_to(parent)
+            normalized_path.relative_to(normalized_parent)
         except ValueError:
             continue
         else:
@@ -140,4 +178,5 @@ def pytest_ignore_collect(
         return False
     if config is None and _RUNNING_GUI_TESTS:
         return False
-    return _is_under(collection_path.resolve(), _GUI_MARKER_PATHS)
+    normalized_collection_path = Path(collection_path).resolve()
+    return _is_under(normalized_collection_path, _GUI_MARKER_PATHS)
