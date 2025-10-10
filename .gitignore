@@ -10,6 +10,7 @@ __pycache__/
 .Python
 env/
 build/
+!tools/build_shim/build/
 develop-eggs/
 dist/
 downloads/
