@@ -263,7 +263,7 @@ class TestBrain(_TestVisbrain):
                        run=True, strict=False)
     def test_screenshot(self):
         """Test method screenshot."""
-        # On travis, test failed fo jpg figures only.
+        # Some headless CI services historically failed for jpg figures only.
         canvas = ['main', 'colorbar', 'cross-sections']
         formats = ['.png', '.jpg', '.tiff']
         print_size = [(5, 5), (50, 50), (1000, 1000), (2, 2)]
