@@ -1,0 +1,202 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      run_gui_tests:
+        type: boolean
+        default: false
+        description: "Run the GUI-focused pytest selection (tox -e tests)."
+      run_screenshot_tests:
+        type: boolean
+        default: false
+        description: "Run the screenshot regression suite (tox -e tests-screenshot)."
+      update_screenshots:
+        type: boolean
+        default: false
+        description: "Set VISBRAIN_UPDATE_SCREENSHOTS=1 to refresh stored baselines."
+
+env:
+  VISBRAIN_DATA_DIR: ~/.visbrain-data
+  VISBRAIN_ALLOW_DOWNLOADS: "0"
+  QT_QPA_PLATFORM: offscreen
+  MPLBACKEND: Agg
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+
+jobs:
+  checks:
+    name: tox (${matrix.os}, py${matrix.python})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python: ['3.9', '3.10', '3.11', '3.12']
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+          cache-dependency-path: |
+            requirements/dev.txt
+            pyproject.toml
+            setup.cfg
+
+      - name: Cache datasets
+        uses: actions/cache@v3
+        with:
+          path: ~/.visbrain-data
+          key: datasets-${{ runner.os }}-${{ matrix.python }}-${{ hashFiles('visbrain/gui/tests/baseline/*.png') }}
+          restore-keys: |
+            datasets-${{ runner.os }}-${{ matrix.python }}-
+            datasets-${{ runner.os }}-
+
+      - name: Install tox
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install tox
+
+      - name: Run lint
+        run: tox -e lint
+
+      - name: Run formatting check
+        run: tox -e lint-format
+
+      - name: Run type checks
+        run: tox -e type
+
+      - name: Run tests
+        run: tox -e tests
+
+  tests_gui:
+    name: GUI tests (tox -e tests)
+    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.run_gui_tests == 'true' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: |
+            requirements/dev.txt
+            pyproject.toml
+            setup.cfg
+
+      - name: Cache datasets
+        uses: actions/cache@v3
+        with:
+          path: ~/.visbrain-data
+          key: gui-datasets-${{ runner.os }}-${{ hashFiles('visbrain/gui/tests/baseline/*.png') }}
+          restore-keys: |
+            gui-datasets-${{ runner.os }}-
+
+      - name: Install tox
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install tox
+
+      - name: Run GUI tests
+        env:
+          PYTEST_MARK: gui
+        run: tox -e tests -- --cov-report=xml
+
+      - name: Upload GUI coverage
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-gui
+          path: coverage.xml
+          if-no-files-found: ignore
+
+  tests_screenshot:
+    name: Screenshot regressions (tox -e tests-screenshot)
+    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.run_screenshot_tests == 'true' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: |
+            requirements/dev.txt
+            pyproject.toml
+            setup.cfg
+
+      - name: Cache datasets
+        uses: actions/cache@v3
+        with:
+          path: ~/.visbrain-data
+          key: screenshot-datasets-${{ runner.os }}-${{ hashFiles('visbrain/gui/tests/baseline/*.png') }}
+          restore-keys: |
+            screenshot-datasets-${{ runner.os }}-
+
+      - name: Install tox
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install tox
+
+      - name: Run screenshot tests
+        env:
+          VISBRAIN_UPDATE_SCREENSHOTS: ${{ github.event.inputs.update_screenshots == 'true' && '1' || '' }}
+        run: tox -e tests-screenshot
+
+      - name: Generate screenshot diffs
+        if: always()
+        run: |
+          mkdir -p artifacts/screenshots
+          .tox/tests-screenshot/bin/python - <<'PY'
+from __future__ import annotations
+
+import numpy as np
+from pathlib import Path
+from PIL import Image
+
+from visbrain.gui.tests._screenshot import SCREENSHOT_SPECS, load_png, render_spec
+
+output = Path('artifacts/screenshots')
+output.mkdir(parents=True, exist_ok=True)
+
+for spec in SCREENSHOT_SPECS:
+    actual = render_spec(spec)
+    Image.fromarray(actual).save(output / f"{spec.name}_actual.png", format="PNG")
+    baseline_path = spec.baseline_path
+    if not baseline_path.exists():
+        continue
+    reference = load_png(baseline_path)
+    diff = np.abs(reference.astype(np.int16) - actual.astype(np.int16))
+    if diff.size == 0:
+        continue
+    diff_image = np.clip(diff, 0, 255).astype(np.uint8)
+    Image.fromarray(diff_image).save(output / f"{spec.name}_diff.png", format="PNG")
+PY
+
+      - name: Upload screenshot diffs
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: screenshot-diffs
+          path: artifacts/screenshots
+          if-no-files-found: ignore
