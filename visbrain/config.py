@@ -11,6 +11,8 @@ from dataclasses import dataclass, field
 from types import SimpleNamespace
 from typing import Any, Callable, Iterator, Mapping, MutableMapping, Optional, Sequence
 
+_VISPY_BASE_ERROR: Exception | None
+
 try:
     import vispy
 except Exception as exc:  # pragma: no cover - defensive against broken installs
@@ -18,6 +20,8 @@ except Exception as exc:  # pragma: no cover - defensive against broken installs
     _VISPY_BASE_ERROR = exc
 else:
     _VISPY_BASE_ERROR = None
+
+_VISPY_CONFIG_ERROR: Exception | None
 
 try:
     vispy_config = vispy.config if vispy is not None else None
@@ -33,6 +37,8 @@ def _load_vispy_app() -> Any:
 
     return importlib.import_module("vispy.app")
 
+
+_VISPY_APP_ERROR: Exception | None
 
 try:
     visapp = _load_vispy_app()
