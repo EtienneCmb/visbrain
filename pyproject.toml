@@ -119,6 +119,7 @@ ignore = ["E722", "E741", "F632"]
 "visbrain/utils/memory.py" = ["T201"]
 
 [tool.pytest.ini_options]
+testpaths = ["tests"]
 addopts = "-p no:pytestqt --ignore=.tox"
 norecursedirs = [
     ".tox",
