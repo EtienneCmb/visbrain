@@ -119,6 +119,10 @@ ignore = ["E722", "E741", "F632"]
 "visbrain/utils/memory.py" = ["T201"]
 
 [tool.pytest.ini_options]
+addopts = "-p no:pytestqt --ignore=.tox"
+norecursedirs = [
+    ".tox",
+]
 markers = [
     "gui: tests that require a Qt/OpenGL stack.",
     "screenshot: Qt/VisPy screenshot regression tests.",
