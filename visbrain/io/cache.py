@@ -5,7 +5,16 @@ import threading
 import uuid
 from collections import defaultdict
 from pathlib import Path
-from typing import Callable, Dict, Iterable, Mapping, MutableMapping, Optional, Sequence, Tuple
+from typing import (
+    Callable,
+    Dict,
+    Iterable,
+    Mapping,
+    MutableMapping,
+    Optional,
+    Sequence,
+    Tuple,
+)
 
 import shutil
 
@@ -48,7 +57,9 @@ class CacheManager:
     # ------------------------------------------------------------------
     # Core helpers
     # ------------------------------------------------------------------
-    def _resolve_root(self, *, category: Optional[str] = None, create: bool = False) -> Path:
+    def _resolve_root(
+        self, *, category: Optional[str] = None, create: bool = False
+    ) -> Path:
         name = category or self._default_category
         factory = self._roots.get(name)
         if factory is None:
@@ -67,7 +78,13 @@ class CacheManager:
             entries = self._owners.pop(owner, set())
         return tuple(entries)
 
-    def _cleanup_path(self, path: Path, *, category: str, missing_ok: bool = True) -> None:
+    def _cleanup_path(
+        self,
+        path: Path,
+        *,
+        category: str,
+        missing_ok: bool = True,
+    ) -> None:
         root = self._resolve_root(category=category, create=False)
         try:
             path.resolve().relative_to(root.resolve())
@@ -100,7 +117,10 @@ class CacheManager:
     ) -> Path:
         """Return a path inside the cache, optionally creating it."""
 
-        root = self._resolve_root(category=category, create=create or bool(folder))
+        root = self._resolve_root(
+            category=category,
+            create=create or bool(folder),
+        )
         parts: Sequence[str]
         if folder is None:
             parts = ()
@@ -119,8 +139,11 @@ class CacheManager:
                 target.touch(exist_ok=True)
 
         if owner:
-            registration_target = target if file else target
-            self._register_owner(owner, category or self._default_category, registration_target)
+            self._register_owner(
+                owner,
+                category or self._default_category,
+                target,
+            )
         return target
 
     def new_session(
@@ -140,7 +163,11 @@ class CacheManager:
             except FileExistsError:  # pragma: no cover - extremely unlikely
                 continue
             break
-        self._register_owner(owner, category or self._default_category, candidate)
+        self._register_owner(
+            owner,
+            category or self._default_category,
+            candidate,
+        )
         return candidate
 
     def cleanup_owner(self, owner: str, *, missing_ok: bool = True) -> None:
@@ -158,7 +185,11 @@ class CacheManager:
     ) -> None:
         """Remove *path* inside the cache, bypassing ownership tracking."""
 
-        self._cleanup_path(path, category=category or self._default_category, missing_ok=missing_ok)
+        self._cleanup_path(
+            path,
+            category=category or self._default_category,
+            missing_ok=missing_ok,
+        )
 
     def cleanup_all(self, *, category: Optional[str] = None) -> None:
         """Remove the entire cache tree for *category*."""
@@ -169,11 +200,18 @@ class CacheManager:
             shutil.rmtree(root)
         with self._lock:
             for owner, entries in list(self._owners.items()):
-                self._owners[owner] = {entry for entry in entries if entry[0] != name}
+                self._owners[owner] = {
+                    entry for entry in entries if entry[0] != name
+                }
                 if not self._owners[owner]:
                     del self._owners[owner]
 
-    def root_path(self, *, category: Optional[str] = None, create: bool = False) -> Path:
+    def root_path(
+        self,
+        *,
+        category: Optional[str] = None,
+        create: bool = False,
+    ) -> Path:
         """Return the base directory for *category*."""
 
         return self._resolve_root(category=category, create=create)
