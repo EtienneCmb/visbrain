@@ -138,7 +138,6 @@ _default_cam_config(
     (330, 0., [0, 2], -1),
 )
 
-
 def rotate_turntable(fixed=None, camera_state={}, camera=None,
                      xyz=None, csize=None, margin=1., _scale=1.):
     """Rotate a scene that contains a turntable camera.
