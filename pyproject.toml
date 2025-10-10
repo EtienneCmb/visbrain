@@ -44,7 +44,7 @@ dependencies = [
 [project.optional-dependencies]
 docs = [
     "sphinx>=7",
-    "sphinx-bootstrap-theme",
+    "furo",
     "myst-parser",
     "sphinx-gallery",
     "sphinx-copybutton",
@@ -89,6 +89,7 @@ include = ["visbrain", "visbrain.*"]
 visbrain = [
     "data_url.json",
     "resources/icons/*.svg",
+    "resources/docs/**/*",
     "data/**/*.txt",
     "data/**/*.npy",
     "data/**/*.npz",
