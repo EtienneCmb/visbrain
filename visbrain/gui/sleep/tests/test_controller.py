@@ -247,7 +247,11 @@ def test_async_loader_accepts_bids_directory(
             self.dsf = int(downsample or base_sf)
             self.n_points = self.data.shape[1]
             self.file = str(data_arg) if isinstance(data_arg, str) else None
-            self.annotations = np.array(annotations) if annotations is not None else np.empty((0, 1))
+            self.annotations = (
+                np.array(annotations)
+                if annotations is not None
+                else np.empty((0, 1))
+            )
 
     monkeypatch.setattr("visbrain.gui.sleep.controller.SleepDataset", DummyDataset)
 
@@ -301,7 +305,10 @@ def test_async_loader_error_logging(
         future.result(timeout=1.0)
 
     qtbot.waitUntil(
-        lambda: any("Asynchronous sleep load failed" in record.message for record in caplog.records),
+        lambda: any(
+            "Asynchronous sleep load failed" in record.message
+            for record in caplog.records
+        ),
         timeout=1000,
     )
     assert sleep_controller._model.file is None

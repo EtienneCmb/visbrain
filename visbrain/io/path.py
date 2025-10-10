@@ -204,7 +204,7 @@ def get_files_in_folders(*args, with_ext=False, with_path=False, file=None,
 
 def path_to_tmp(file=None, folder=None):
     """Get the path to the tmp folder."""
-    tmp_path = _path_from_home(folder='tmp', create=True)
+    _path_from_home(folder='tmp', create=True)
     folder = None if not isinstance(folder, str) else folder
     file = None if not isinstance(file, str) else file
     path = cache_manager.get_path(folder=folder, file=file, create=True)
