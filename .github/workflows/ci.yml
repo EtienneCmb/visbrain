@@ -41,6 +41,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install system dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgl1 libglu1-mesa libegl1 libxkbcommon-x11-0
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -87,6 +93,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgl1 libglu1-mesa libegl1 libxkbcommon-x11-0
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -135,6 +146,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgl1 libglu1-mesa libegl1 libxkbcommon-x11-0
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -160,7 +176,7 @@ jobs:
 
       - name: Run screenshot tests
         env:
-          VISBRAIN_UPDATE_SCREENSHOTS: ${{ github.event.inputs.update_screenshots == 'true' && '1' || '' }}
+          VISBRAIN_UPDATE_SCREENSHOTS: ${{ github.event.inputs.update_screenshots == 'true' && '1' || '0' }}
         run: tox -e tests-screenshot
 
       - name: Generate screenshot diffs
@@ -168,30 +184,30 @@ jobs:
         run: |
           mkdir -p artifacts/screenshots
           .tox/tests-screenshot/bin/python - <<'PY'
-from __future__ import annotations
+          from __future__ import annotations
 
-import numpy as np
-from pathlib import Path
-from PIL import Image
+          import numpy as np
+          from pathlib import Path
+          from PIL import Image
 
-from visbrain.gui.tests._screenshot import SCREENSHOT_SPECS, load_png, render_spec
+          from visbrain.gui.tests._screenshot import SCREENSHOT_SPECS, load_png, render_spec
 
-output = Path('artifacts/screenshots')
-output.mkdir(parents=True, exist_ok=True)
+          output = Path('artifacts/screenshots')
+          output.mkdir(parents=True, exist_ok=True)
 
-for spec in SCREENSHOT_SPECS:
-    actual = render_spec(spec)
-    Image.fromarray(actual).save(output / f"{spec.name}_actual.png", format="PNG")
-    baseline_path = spec.baseline_path
-    if not baseline_path.exists():
-        continue
-    reference = load_png(baseline_path)
-    diff = np.abs(reference.astype(np.int16) - actual.astype(np.int16))
-    if diff.size == 0:
-        continue
-    diff_image = np.clip(diff, 0, 255).astype(np.uint8)
-    Image.fromarray(diff_image).save(output / f"{spec.name}_diff.png", format="PNG")
-PY
+          for spec in SCREENSHOT_SPECS:
+              actual = render_spec(spec)
+              Image.fromarray(actual).save(output / f"{spec.name}_actual.png", format="PNG")
+              baseline_path = spec.baseline_path
+              if not baseline_path.exists():
+                  continue
+              reference = load_png(baseline_path)
+              diff = np.abs(reference.astype(np.int16) - actual.astype(np.int16))
+              if diff.size == 0:
+                  continue
+              diff_image = np.clip(diff, 0, 255).astype(np.uint8)
+              Image.fromarray(diff_image).save(output / f"{spec.name}_diff.png", format="PNG")
+          PY
 
       - name: Upload screenshot diffs
         if: always()

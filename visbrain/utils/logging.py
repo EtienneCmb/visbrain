@@ -106,7 +106,7 @@ def profiler_fcn(self, message, *args, **kws):
         self._log(PROFILER_LEVEL_NUM, message, args, **kws)
 
 
-logging.Logger.profiler = profiler_fcn
+logging.Logger.profiler = profiler_fcn  # type: ignore[attr-defined]
 LOGGING_TYPES = dict(DEBUG=logging.DEBUG, INFO=logging.INFO,
                      WARNING=logging.WARNING, ERROR=logging.ERROR,
                      CRITICAL=logging.CRITICAL, PROFILER=PROFILER_LEVEL_NUM)
