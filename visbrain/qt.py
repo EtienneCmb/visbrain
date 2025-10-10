@@ -12,15 +12,15 @@ import importlib
 import logging
 import weakref
 from types import SimpleNamespace
-from typing import Optional
+from typing import Any, Optional
 
 logger = logging.getLogger("visbrain")
 
 # Exposed names; they are populated once a binding is found.
-QtCore = None  # type: ignore[assignment]
-QtGui = None  # type: ignore[assignment]
-QtWidgets = None  # type: ignore[assignment]
-Qt = None  # type: ignore[assignment]
+QtCore: Any = None
+QtGui: Any = None
+QtWidgets: Any = None
+Qt: Any = None
 
 QT_API = None
 
@@ -90,10 +90,10 @@ class _QObjectLifecycle:
     """Track whether a :class:`~QtCore.QObject` is still alive."""
 
     def __init__(self) -> None:
-        self._ref: weakref.ReferenceType[QtCore.QObject] | None = None
+        self._ref: weakref.ReferenceType[Any] | None = None
         self._alive = False
 
-    def watch(self, obj: QtCore.QObject) -> None:
+    def watch(self, obj: Optional[Any]) -> None:
         """Start tracking *obj* and mark it as alive."""
 
         if obj is None:
@@ -113,7 +113,7 @@ class _QObjectLifecycle:
         self._ref = weakref.ref(obj)
         self._alive = True
 
-    def get(self) -> Optional[QtCore.QObject]:
+    def get(self) -> Optional[Any]:
         """Return the tracked object if it is still alive."""
 
         if not self._alive or self._ref is None:

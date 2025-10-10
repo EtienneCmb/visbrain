@@ -121,13 +121,13 @@ class CacheManager:
             category=category,
             create=create or bool(folder),
         )
-        parts: Sequence[str]
+        parts: tuple[str, ...]
         if folder is None:
             parts = ()
-        elif isinstance(folder, (list, tuple)):
-            parts = tuple(folder)
-        else:
+        elif isinstance(folder, str):
             parts = (folder,)
+        else:
+            parts = tuple(folder)
         target = root.joinpath(*parts)
         if file:
             target = target / file

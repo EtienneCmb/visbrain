@@ -174,7 +174,7 @@ def download_file(name, astype=None, filename=None, to_path=None, unzip=False,
 def _infer_type(names: list[str], config: dict[str, dict[str, str]]) -> str:
     """Infer the dataset type from its name(s)."""
 
-    matches = {name: [] for name in names}
+    matches: dict[str, list[str]] = {name: [] for name in names}
     for dtype, entries in config.items():
         for name in names:
             if name in entries:
