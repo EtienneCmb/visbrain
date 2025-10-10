@@ -91,7 +91,10 @@ class ScrollCamera(PanZoomCamera):
             event.handled = False
 
 
-def _default_cam_config(use_for: Iterable[str], values: Tuple[float, float, list[int], int]) -> None:
+def _default_cam_config(
+    use_for: Iterable[str],
+    values: Tuple[float, float, list[int], int],
+) -> None:
     for k in use_for:
         FIXED_CAM[k] = values
 
