@@ -41,6 +41,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install system dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgl1 libglu1-mesa libegl1 libxkbcommon-x11-0
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -88,6 +94,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgl1 libglu1-mesa libegl1 libxkbcommon-x11-0
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -134,6 +145,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgl1 libglu1-mesa libegl1 libxkbcommon-x11-0
 
       - name: Set up Python
         uses: actions/setup-python@v4
