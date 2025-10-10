@@ -20,8 +20,12 @@ pytest_plugins = ["pytest_cov"]
 # Headless Qt configuration
 # -----------------------------------------------------------------------------
 # Force Qt to use an offscreen platform so GUI tests can run in headless
-# environments (such as CI workers).
+# environments (such as CI workers). Matplotlib defaults to a Qt-backed GUI
+# when the bindings are available, which leads to aborts on CI runners without a
+# display. Prefer the non-interactive ``Agg`` backend so simple import tests do
+# not crash the interpreter.
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+os.environ.setdefault("MPLBACKEND", "Agg")
 
 try:
     from visbrain.config import configure_headless
