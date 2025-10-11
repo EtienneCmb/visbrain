@@ -24,5 +24,12 @@ target_path = path_to_visbrain_data(folder='example_data')
 dfile = os.path.join(target_path, 'sub-02.eeg')
 hfile = os.path.join(target_path, 'sub-02.hyp')
 
-# Open the GUI :
-Sleep(data=dfile, hypno=hfile).show()
+
+def _build_example():
+    return Sleep(data=dfile, hypno=hfile)
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

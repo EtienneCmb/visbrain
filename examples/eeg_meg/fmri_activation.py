@@ -25,4 +25,13 @@ b_obj.add_activation(file=file, clim=(5., 20.), hide_under=5, cmap='viridis',
 
 vb = Brain(brain_obj=b_obj)
 vb.rotate('left')
-vb.show()
+
+
+def _build_example():
+    return vb
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

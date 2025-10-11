@@ -29,4 +29,14 @@ data, _ = generate_eeg(sf=sf, n_pts=n_pts, n_trials=n_trials, smooth=200,
 """
 annotations = 'signal_annotations.txt'
 
-Signal(data, sf=sf, axis=-1, line_lw=2., annotations=annotations).show()
+sig = Signal(data, sf=sf, axis=-1, line_lw=2., annotations=annotations)
+
+
+def _build_example():
+    return sig
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

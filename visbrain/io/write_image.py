@@ -23,9 +23,19 @@ __all__ = (
 )
 
 
-def write_fig_hyp(data, sf, file=None, start_s=0, grid=False, ascolor=False,
-                  dpi=300, colors={-1: '#8bbf56', 0: '#56bf8b', 1: '#aabcce',
-                                   2: '#405c79', 3: '#0b1c2c', 4: '#bf5656'}):
+def write_fig_hyp(
+    data,
+    sf,
+    file=None,
+    start_s=0,
+    grid=False,
+    ascolor=False,
+    dpi=300,
+    colors={-1: '#8bbf56', 0: '#56bf8b', 1: '#aabcce', 2: '#405c79',
+            3: '#0b1c2c', 4: '#bf5656'},
+    *,
+    show=True,
+):
     """Export hypnogram to a high-res png figure.
 
     Parameters
@@ -48,6 +58,8 @@ def write_fig_hyp(data, sf, file=None, start_s=0, grid=False, ascolor=False,
     color : dict | {}
         Color for each sleep stage. Default is : {-1: '#8bbf56', 0: '#56bf8b',
         1: '#aabcce', 2: '#405c79', 3: '#0b1c2c', 4: '#bf5656'}
+    show : bool | True
+        Display the figure when ``file`` is ``None``.
     """
     import matplotlib.pyplot as plt
     import datetime
@@ -151,9 +163,10 @@ def write_fig_hyp(data, sf, file=None, start_s=0, grid=False, ascolor=False,
     if isinstance(file, str):
         plt.savefig(file, format='png', dpi=dpi, bbox_inches='tight')
         logger.info('Image successfully saved (%s)' % file)
-        plt.close()
-    else:
+        plt.close(fig)
+    elif show:
         plt.show()
+    return fig
 
 
 def write_fig_spindles(data, sf, hypno=None, file=None, start_s=0.,

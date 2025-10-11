@@ -76,5 +76,11 @@ vb.cbar_select('roi')
 """
 # vb.screenshot('thalamus.png', autocrop=True)
 
-# Show the interface :
-vb.show()
+def _build_example():
+    return vb
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

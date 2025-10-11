@@ -40,4 +40,13 @@ for k in sig:
         sig.set_signal_form('psd')
     # Export image :
     sig.screenshot('tf_' + str(k) + '.png', dpi=600, autocrop=True)
-sig.show()
+
+
+def _build_example():
+    return sig
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

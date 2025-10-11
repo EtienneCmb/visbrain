@@ -25,5 +25,12 @@ dfile = os.path.join(target_path, 'sub-02.vhdr')
 hfile = os.path.join(target_path, 'sub-02.hyp')
 cfile = os.path.join(target_path, 'sub-02_config.txt')
 
-# Open the GUI :
-Sleep(data=dfile, hypno=hfile, config_file=cfile).show()
+
+def _build_example():
+    return Sleep(data=dfile, hypno=hfile, config_file=cfile)
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

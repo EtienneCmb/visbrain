@@ -68,8 +68,15 @@ f.shared_colorbar(cmap='magma', clim=(-17, 17), fz_title=25, vmin=-11, vmax=12,
                   title='Shared horizontal colorbar', fz_ticks=15,
                   pltmargin=.1)
 
-# Save the picture :
-f.save('LayoutExample.png', dpi=600)
+# Save helper for the runner :
+f._example_save = lambda path: f.save(path, dpi=600)
 
-# Finally, display the figure :
-f.show()
+
+def _build_example():
+    return f
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

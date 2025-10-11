@@ -36,5 +36,15 @@ xlabel = 'Time (ms)'
 ylabel = 'Amplitude (uV)'
 title = 'Plot of a 1-d signal'
 
-Signal(data, sf=sf, time=time, xlabel=xlabel, ylabel=ylabel,
-       title=title).show()
+sig = Signal(data, sf=sf, time=time, xlabel=xlabel, ylabel=ylabel,
+             title=title)
+
+
+def _build_example():
+    return sig
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

@@ -124,4 +124,13 @@ c_obj_rb = ConnectObj('C_right_back', s_xyz_rb, connect_rb, color_by='count',
 """
 vb = Brain(source_obj=[s_obj_l, s_obj_rb, s_obj_rf],
            connect_obj=[c_obl_l, c_obj_rb])
-vb.show()
+
+
+def _build_example():
+    return vb
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

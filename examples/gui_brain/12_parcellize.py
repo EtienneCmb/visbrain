@@ -58,4 +58,14 @@ b_obj.parcellize(path_to_file2, hemisphere='right', select=select, data=data,
 
 """Finally, pass the brain object to `Brain` and disply the GUI
 """
-Brain(brain_obj=b_obj).show()
+vb = Brain(brain_obj=b_obj)
+
+
+def _build_example():
+    return vb
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

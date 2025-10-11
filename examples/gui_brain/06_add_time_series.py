@@ -60,4 +60,13 @@ ts = TimeSeries3DObj('Ts1', ts_data, s_xyz, select=ts_select, ts_amp=ts_amp,
                      color=ts_color)
 
 vb = Brain(time_series_obj=ts, source_obj=s_obj)
-vb.show()
+
+
+def _build_example():
+    return vb
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

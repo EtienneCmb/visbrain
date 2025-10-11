@@ -109,3 +109,13 @@ vb.screenshot(save_as_cbar, canvas='colorbar', autocrop=True, factor=2.)
 
 # Alternatively, you can display the GUI at the end, but it's not a necessity
 # vb.show()
+
+
+def _build_example():
+    return vb
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

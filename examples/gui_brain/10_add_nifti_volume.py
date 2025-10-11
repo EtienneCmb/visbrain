@@ -48,4 +48,13 @@ cross_sec_obj.localize_source(s_xyz[2, :])
 object
 """
 vb = Brain(source_obj=s_obj, vol_obj=vol_obj, cross_sec_obj=cross_sec_obj)
-vb.show()
+
+
+def _build_example():
+    return vb
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

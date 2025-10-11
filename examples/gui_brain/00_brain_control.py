@@ -89,4 +89,13 @@ Change background color
 """
 # vb.background_color('#34495e')
 
-vb.show()
+
+
+def _build_example():
+    return vb
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

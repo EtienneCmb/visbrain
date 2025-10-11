@@ -38,8 +38,17 @@ raw = io.read_raw_brainvision(vhdr_fname=dfile, preload=True)
 data, sf, chan = raw._data, raw.info['sfreq'], raw.info['ch_names']
 
 # Now, pass all the arguments to the Sleep module :
-Sleep(data=data, sf=sf, channels=chan, hypno=hfile).show()
+
+
+def _build_example():
+    return Sleep(data=data, sf=sf, channels=chan, hypno=hfile)
 
 # Alternatively, these steps can be done automatically by using the 'use_mne'
 # input argument of sleep
 # Sleep(data=dfile, hypno=hfile, use_mne=True).show()
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

@@ -72,4 +72,12 @@ vb.brain_control(transparent=True)
 vb.rotate('coronal')
 vb.screenshot('roi.jpg', autocrop=True)
 
-vb.show()
+
+def _build_example():
+    return vb
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

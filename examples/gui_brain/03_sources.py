@@ -90,4 +90,13 @@ b_obj.project_sources(s_obj, cmap='viridis', vmin=50., under='orange',
 After the interface is opened, press C to display the colorbar.
 """
 vb = Brain(source_obj=s_obj, brain_obj=b_obj)
-vb.show()
+
+
+def _build_example():
+    return vb
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

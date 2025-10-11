@@ -28,5 +28,15 @@ data = np.sin(2 * np.pi * f_sines * time_2d + phy.reshape(-1, 1))
 data += np.random.rand(*data.shape) / 100.
 data *= np.random.uniform(.7, 1.3, (n_sines, )).reshape(-1, 1)
 
-Signal(data, time=time, form='butterfly', xlabel='Time (ms)',
-       ylabel='Amplitude (uV)', color='darkgray').show()
+sig = Signal(data, time=time, form='butterfly', xlabel='Time (ms)',
+             ylabel='Amplitude (uV)', color='darkgray')
+
+
+def _build_example():
+    return sig
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))
