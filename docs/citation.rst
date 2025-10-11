@@ -3,7 +3,7 @@
 Cite Visbrain
 =============
 
-Please reference Visbrain using its dedicated article in `Frontiers in Neuroinformatics <https://www.frontiersin.org/articles/10.3389/fninf.2019.00014/full>`_.
+Please reference Visbrain using its dedicated article in `Frontiers in Neuroinformatics (Visbrain) <https://www.frontiersin.org/articles/10.3389/fninf.2019.00014/full>`_.
 
 Bibtex entry :
 
@@ -26,7 +26,7 @@ Bibtex entry :
 Cite Sleep
 ----------
 
-Please reference Sleep using its dedicated article in `Frontiers in Neuroinformatics <http://journal.frontiersin.org/article/10.3389/fninf.2017.00060/full>`_.
+Please reference Sleep using its dedicated article in `Frontiers in Neuroinformatics (Sleep) <http://journal.frontiersin.org/article/10.3389/fninf.2017.00060/full>`_.
 Please let us know if you used or plan to use Sleep in any upcoming publications!
 
 Bibtex entry :
