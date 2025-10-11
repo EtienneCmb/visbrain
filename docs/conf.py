@@ -505,11 +505,12 @@ latex_documents = [
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
-    # 'python': ('https://docs.python.org/3/', None),
+    'python': ('https://docs.python.org/3/', None),
     'numpy': ('https://numpy.org/doc/stable/', None),
     'scipy': ('https://docs.scipy.org/doc/scipy/', None),
     'matplotlib': ('https://matplotlib.org/stable/', None),
     'nibabel': ('https://nipy.org/nibabel/', None),
+    'vispy': ('https://vispy.org/', None),
 }
 
 # -- Options for manual page output ---------------------------------------
@@ -573,6 +574,43 @@ nitpicky = True
 nitpick_ignore = [
     ('py:class', 'QWidget'),
     ('py:class', 'QApplication'),
+    ('py:class', 'QtGui.QIcon'),
+    ('py:class', 'QtCore.QObject'),
+    ('py:class', 'Qt.QSvgRenderer'),
+    ('py:func', 'QtGui.QPixmap.loadFromData'),
+    ('py:class', 'QtGui.QPainter'),
+    ('py:class', 'QtCore.QSize'),
+    ('py:mod', 'PySide6'),
+    ('py:class', 'QtWidgets.QWidget'),
+    ('py:class', 'QtWidgets.QApplication'),
+    ('py:class', 'QtWidgets.QMainWindow'),
+    ('py:class', 'QtWidgets.QAction'),
+    ('py:class', 'QtWidgets.QMenu'),
+    ('py:class', 'QtWidgets.QMenuBar'),
+    ('py:class', 'QtWidgets.QFileDialog'),
+    ('py:class', 'QtWidgets.QTableWidget'),
+    ('py:class', 'QtWidgets.QTableWidgetItem'),
+    ('py:class', 'QtWidgets.QComboBox'),
+    ('py:class', 'QtWidgets.QCheckBox'),
+    ('py:class', 'QtWidgets.QLabel'),
+    ('py:class', 'QtWidgets.QPushButton'),
+    ('py:class', 'QtWidgets.QLineEdit'),
+    ('py:class', 'QtWidgets.QDoubleSpinBox'),
+    ('py:class', 'QtWidgets.QSpinBox'),
+    ('py:class', 'QtWidgets.QSizePolicy'),
+    ('py:class', 'QtWidgets.QFrame'),
+    ('py:class', 'QtWidgets.QVBoxLayout'),
+    ('py:class', 'QtWidgets.QHBoxLayout'),
+    ('py:class', 'QtWidgets.QGridLayout'),
+    ('py:class', 'vispy.scene.SceneCanvas'),
+    ('py:class', 'vispy.scene.Node'),
+    ('py:class', 'vispy.scene.cameras.TurntableCamera'),
+    ('py:class', 'vispy.scene.cameras.PanZoomCamera'),
+    ('py:class', 'vispy.scene.cameras.BaseCamera'),
+    ('py:class', 'vispy.scene.visuals.Image'),
+    ('py:class', 'vispy.scene.visuals.XYZAxis'),
+    ('py:class', 'vispy.scene.visuals.Text'),
+    ('py:class', 'vispy.scene.visuals.Arrow'),
 ]
 
 
