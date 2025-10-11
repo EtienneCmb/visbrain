@@ -43,6 +43,10 @@ jobs:
       - name: Build HTML documentation
         run: tox -e docs
 
+      - name: Configure GitHub Pages
+        if: github.event_name == 'push'
+        uses: actions/configure-pages@v4
+
       - name: Upload HTML preview
         if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
