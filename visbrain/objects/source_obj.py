@@ -294,32 +294,42 @@ class SourceObj(VisbrainObject):
 
         Parameters
         ----------
-        b_obj : { :class:`~visbrain.objects.BrainObj`,
-                  :class:`~visbrain.objects.RoiObj` }
+        b_obj : :class:`~visbrain.objects.BrainObj` or :class:`~visbrain.objects.RoiObj`
             The object on which to project sources.
+
         project : {'modulation', 'repartition'}
             Project either the source's data ('modulation') or get the number
             of contributing sources per vertex ('repartition').
+
         radius : float
             The radius under which activity is projected on vertices.
-        contribute: bool | False
+
+        contribute : bool | False
             Specify if sources contribute on both hemisphere.
+
         cmap : string | 'viridis'
             The colormap to use.
+
         clim : tuple | None
             The colorbar limits. If None, (data.min(), data.max()) will be used
             instead.
+
         vmin : float | None
             Minimum threshold.
+
         vmax : float | None
             Maximum threshold.
+
         under : string/tuple/array_like | 'gray'
             The color to use for values under vmin.
+
         over : string/tuple/array_like | 'red'
             The color to use for values over vmax.
+
         mask_color : string/tuple/array_like | 'gray'
             The color to use for the projection of masked sources. If None,
             the color of the masked sources is going to be used.
+
         to_overlay : int | 0
             The overlay number used for the projection.
         """
