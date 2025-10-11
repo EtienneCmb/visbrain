@@ -155,14 +155,37 @@ def _ensure_visbrain_gui() -> None:
         def __init__(self, *args: object, **kwargs: object) -> None:  # pragma: no cover - trivial
             pass
 
-    gui_module = ModuleType("visbrain.gui")
-    sys.modules.setdefault("visbrain.gui", gui_module)
+    gui_module = sys.modules.get("visbrain.gui")
+    if not isinstance(gui_module, ModuleType):
+        gui_module = ModuleType("visbrain.gui")
+        sys.modules["visbrain.gui"] = gui_module
 
-    for name in ("Brain", "Signal", "Sleep"):
-        submodule = ModuleType(f"visbrain.gui.{name}")
-        setattr(submodule, name, _GuiStub)
-        setattr(gui_module, name, _GuiStub)
-        sys.modules[f"visbrain.gui.{name}"] = submodule
+    gui_path = Path(__file__).resolve().parents[1] / "visbrain" / "gui"
+    gui_module.__path__ = [str(gui_path)]  # type: ignore[attr-defined]
+
+    _exports = []
+    for class_name, package_name in (
+        ("Brain", "brain"),
+        ("Signal", "signal"),
+        ("Sleep", "sleep"),
+        ("Figure", "figure"),
+    ):
+        setattr(gui_module, class_name, _GuiStub)
+        _exports.append(class_name)
+
+        capital_module = ModuleType(f"visbrain.gui.{class_name}")
+        capital_module.__all__ = [class_name]
+        setattr(capital_module, class_name, _GuiStub)
+        sys.modules[f"visbrain.gui.{class_name}"] = capital_module
+
+        package_module = ModuleType(f"visbrain.gui.{package_name}")
+        package_module.__path__ = []  # type: ignore[attr-defined]
+        package_module.__all__ = [class_name]
+        setattr(package_module, class_name, _GuiStub)
+        setattr(gui_module, package_name, package_module)
+        sys.modules[f"visbrain.gui.{package_name}"] = package_module
+
+    gui_module.__all__ = _exports
 
 
 _ensure_visbrain_gui()
