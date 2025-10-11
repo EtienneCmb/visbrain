@@ -105,6 +105,11 @@ I/O
    download_file
    available_downloads
    path_to_visbrain_data
+   read_txt
+   read_csv
+   read_json
+   read_pickle
+   read_npz
    read_stc
    write_fig_hyp
    get_sleep_stats
