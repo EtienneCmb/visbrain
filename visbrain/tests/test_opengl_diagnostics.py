@@ -228,6 +228,56 @@ def test_headless_backend_fallback_prefers_egl(monkeypatch, caplog, recwarn):
     assert not recwarn.list
 
 
+def test_missing_gl_info_reports_context_unavailable(monkeypatch, recwarn):
+    """Missing :mod:`vispy.gloo.gl.gl_info` should not crash diagnostics."""
+
+    _clear_vispy_modules()
+    _install_runtime_stubs(monkeypatch)
+
+    class DummyApplication:
+        backend_name = "pyside6"
+
+        def __init__(self, *_args, **_kwargs):
+            return None
+
+    dummy_app = types.ModuleType("vispy.app")
+    dummy_app.application = types.SimpleNamespace(Application=DummyApplication)
+    dummy_app.use_app = lambda backend=None: DummyApplication()
+
+    dummy_vispy = types.ModuleType("vispy")
+    dummy_vispy.config = {}
+
+    dummy_gl = types.SimpleNamespace(
+        GL_MAX_TEXTURE_SIZE="GL_MAX_TEXTURE_SIZE",
+        GL_MAX_3D_TEXTURE_SIZE="GL_MAX_3D_TEXTURE_SIZE",
+        GL_MAX_TEXTURE_IMAGE_UNITS="GL_MAX_TEXTURE_IMAGE_UNITS",
+        glGetIntegerv=lambda *_args, **_kwargs: 0,
+    )
+    dummy_gloo = types.SimpleNamespace(gl=dummy_gl)
+
+    monkeypatch.setitem(sys.modules, "vispy", dummy_vispy)
+    monkeypatch.setitem(sys.modules, "vispy.app", dummy_app)
+    monkeypatch.setitem(sys.modules, "vispy.gloo", dummy_gloo)
+    monkeypatch.setitem(sys.modules, "vispy.gloo.gl", dummy_gl)
+
+    cfg_mod = _reload_config()
+    cfg = cfg_mod.get_config()
+
+    assert cfg.vispy_diagnostics.available is True
+    assert cfg.vispy_diagnostics.context_available is False
+    assert cfg.vispy_diagnostics.error == (
+        "OpenGL capability probe unavailable: vispy.gloo.gl.gl_info missing"
+    )
+    assert cfg.vispy_diagnostics.shader_compiled is None
+    assert cfg.vispy_diagnostics_payload["error"].startswith("OpenGL capability")
+    assert cfg.vispy_diagnostics_payload.get("fallback_reason") is None
+    assert cfg.vispy_diagnostics_payload.get("headless_attempts") in (None, [])
+    assert any(
+        "VisPy backend unavailable" in str(w.message)
+        for w in recwarn.list
+    )
+
+
 def test_headless_backend_failure_reports_attempts(monkeypatch, caplog, recwarn):
     """Structured logging should record failed headless attempts."""
 

@@ -156,10 +156,16 @@ def _query_gl_capabilities(diag: VisPyDiagnostics) -> None:
 
     try:
         gl_mod = gloo.gl
-        info = gl_mod.gl_info
-        has_context = bool(getattr(info, "have_context", False))
-        diag.gl_version = info.get_version()
-        diag.renderer = info.get_renderer()
+        info = getattr(gl_mod, "gl_info", None)
+        if info is None:
+            diag.error = diag.error or (
+                "OpenGL capability probe unavailable: vispy.gloo.gl.gl_info missing"
+            )
+            has_context = False
+        else:
+            has_context = bool(getattr(info, "have_context", False))
+            diag.gl_version = info.get_version()
+            diag.renderer = info.get_renderer()
     except Exception as exc:  # pragma: no cover - best effort query
         diag.error = diag.error or _format_exception(exc)
         has_context = False
