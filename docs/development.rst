@@ -1,8 +1,8 @@
 Development workflow
 ====================
 
-Tooling bootstrap
------------------
+Tooling setup
+-------------
 
 Install the shared development toolchain before running any of the
 automation described below::
@@ -33,11 +33,43 @@ on pull requests to preview the rendered site before merging.  Successful builds
 on ``main`` upload the HTML bundle through ``actions/deploy-pages`` so GitHub
 Pages stays in sync with the latest default-branch state.
 
+See the `Documentation workflow`_ for the full job definition and a direct link
+to the HTML artifacts that GitHub Actions uploads on every run.
+
 The workflow relies on the repository ``GITHUB_TOKEN`` (also available as
 ``GH_TOKEN``) with ``contents: read`` and ``pages: write`` permissions to push
 the published site.  Forks without Pages enabled can either disable the deploy
 job or provide a personal access token with the same scopes via the
 ``GH_TOKEN`` secret.
+
+Documentation troubleshooting
+-----------------------------
+
+Nitpicky references
+~~~~~~~~~~~~~~~~~~~
+
+The Sphinx configuration enables ``nitpicky = True`` so unresolved cross
+references fail the build.  When ``tox -e docs`` reports ``nitpicky`` errors,
+first confirm that the role target is spelled correctly and available in the
+referenced package's inventory.  Use ``python -m sphinx.ext.intersphinx
+<object-inventory>`` to inspect cached inventories under ``docs/_build``.  If
+the reference intentionally points to a name that Sphinx cannot resolve (for
+example, Qt types exposed only at runtime), add an entry to the
+``nitpick_ignore`` list in ``docs/conf.py`` to silence the warning for that
+identifier.
+
+Gallery execution failures
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Gallery examples execute as part of ``tox -e docs``.  Failures usually indicate
+missing optional dependencies or a GUI trying to open in a headless
+environment.  Confirm that ``pip install .[docs]`` completed successfully and
+re-run the builder with ``VISBRAIN_SHOW_GUI=0 QT_QPA_PLATFORM=offscreen tox -e
+docs`` to force headless rendering.  Individual examples can be debugged by
+invoking the generated script from ``docs/auto_examples`` with
+``--visbrain-show=False`` to match the gallery runtime behaviour.
+
+.. _Documentation workflow: https://github.com/EtienneCmb/visbrain/actions/workflows/docs.yml
 
 Pre-commit workflow
 -------------------
@@ -73,8 +105,8 @@ environments are:
 * ``tests-screenshot`` – executes the deterministic screenshot comparisons.
 * ``package`` – builds the source distribution and wheel artefacts.
 
-The ``Makefile`` exposes compatibility shortcuts for a subset of environments:
-``make lint``, ``make test``, ``make test-gui``, and ``make build_dist``.
+``tox`` is the supported entry point for these tasks; legacy Makefile targets
+remain available but are no longer documented.
 
 Qt interface regeneration
 -------------------------
@@ -83,15 +115,15 @@ The Brain, Sleep, Signal, and Figure GUIs rely on Qt Designer assets stored
 under ``visbrain/gui/*/interface``.  After adjusting a ``.ui`` file in any of
 those modules, regenerate the corresponding Python wrappers with::
 
-   make qt-ui
+   python -m tools.generate_qt_ui
 
 The command wraps :mod:`PySide6`'s ``pyside6-uic`` and ``pyside6-rcc`` tools and
 touches every generated module under ``visbrain/gui/*/interface``.  Continuous
-integration now executes ``python tools/generate_qt_ui.py --check`` as part of
-:command:`make flake`, so linting fails whenever committed artifacts are
-stale.  Run ``make qt-ui`` immediately after editing Qt resources and then
-re-run ``make flake`` to verify that everything is up to date before sending a
-pull request.
+integration now executes ``python tools/generate_qt_ui.py --check`` inside
+``tox -e lint``, so linting fails whenever committed artifacts are stale.  Run
+``python -m tools.generate_qt_ui`` immediately after editing Qt resources and
+then re-run ``tox -e lint`` to verify that everything is up to date before
+sending a pull request.
 
 Background loading service
 --------------------------
