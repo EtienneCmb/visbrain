@@ -65,4 +65,13 @@ b_obj, s_obj = mne_plot_source_space(fif_file, active_data=active_data,
 
 s_obj.visible_obj = False
 brain = Brain(brain_obj=b_obj, source_obj=s_obj)
-brain.show()
+
+
+def _build_example():
+    return brain
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

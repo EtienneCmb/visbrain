@@ -49,4 +49,13 @@ v_obj = VectorObj('vector', arrows, data=data, inferred_data=True,
 # Finally, pass the brain and vector object to the Brain module :
 vb = Brain(brain_obj=b_obj, vector_obj=v_obj)
 vb.rotate('left')
-vb.show()
+
+
+def _build_example():
+    return vb
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

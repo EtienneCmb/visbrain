@@ -75,4 +75,13 @@ b_obj.hemisphere = 'both'
 
 vb = Brain(brain_obj=b_obj, vector_obj=[v_obj1, v_obj2, v_obj3],
            source_obj=[s_obj, s_obj2])
-vb.show()
+
+
+def _build_example():
+    return vb
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

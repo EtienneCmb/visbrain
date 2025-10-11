@@ -33,5 +33,13 @@ raw_sf = float(mat['sf'])
 raw_channels = np.concatenate(mat['channels'].flatten()).tolist()
 raw_hypno = mat['hypno'].flatten()
 
-# Open the GUI :
-Sleep(data=raw_data, sf=raw_sf, channels=raw_channels, hypno=raw_hypno).show()
+
+def _build_example():
+    return Sleep(data=raw_data, sf=raw_sf, channels=raw_channels,
+                 hypno=raw_hypno)
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

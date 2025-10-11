@@ -35,4 +35,13 @@ b_obj.add_activation(data=data, vertices=vertices, smoothing_steps=15,
 # Finally, pass the brain object to the Brain module :
 vb = Brain(brain_obj=b_obj)
 vb.rotate('left')
-vb.show()
+
+
+def _build_example():
+    return vb
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

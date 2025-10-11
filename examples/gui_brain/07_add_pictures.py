@@ -64,4 +64,13 @@ kwargs['cblabel'] = '3D Pictures'    # Color over vmax
 pic = Picture3DObj('Pic', data, s_xyz, **kwargs)
 
 vb = Brain(picture_obj=pic, source_obj=s_obj)
-vb.show()
+
+
+def _build_example():
+    return vb
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

@@ -61,6 +61,16 @@ gtitles = ['Trial ' + str(k) for k in range(n_trials)]  # grid titles
 gfz = 8.  # grid titles font-size
 glw = 2.  # grid line width
 
-Signal(data, sf=sf, axis=axis, time=time, xlabel=xlabel, ylabel=ylabel,
-       title=title, grid_titles=gtitles, grid_font_size=gfz,
-       grid_lw=glw).show()
+sig = Signal(data, sf=sf, axis=axis, time=time, xlabel=xlabel, ylabel=ylabel,
+             title=title, grid_titles=gtitles, grid_font_size=gfz,
+             grid_lw=glw)
+
+
+def _build_example():
+    return sig
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

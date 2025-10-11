@@ -13,4 +13,12 @@ Two windows will then appear :
 """
 from visbrain.gui import Sleep
 
-Sleep().show()
+
+def _build_example():
+    return Sleep()
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

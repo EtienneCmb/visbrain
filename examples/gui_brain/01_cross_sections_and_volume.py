@@ -38,4 +38,13 @@ v_obj = VolumeObj(path)
 """Create the GUI and pass the cross-section and the volume object
 """
 vb = Brain(cross_sec_obj=cs_obj, vol_obj=v_obj)
-vb.show()
+
+
+def _build_example():
+    return vb
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

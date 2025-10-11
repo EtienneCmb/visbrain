@@ -50,6 +50,16 @@ gtitles = [st.format(c, t) for c, t in it]  # grid titles
 gfz = 7.  # grid titles font-size
 gc = 'gray'  # grid color
 
-Signal(data, sf=sf, axis=axis, time=time, xlabel=xlabel, ylabel=ylabel,
-       title=title, grid_titles=gtitles, grid_font_size=gfz,
-       grid_color=gc).show()
+sig = Signal(data, sf=sf, axis=axis, time=time, xlabel=xlabel, ylabel=ylabel,
+             title=title, grid_titles=gtitles, grid_font_size=gfz,
+             grid_color=gc)
+
+
+def _build_example():
+    return sig
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

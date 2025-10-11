@@ -104,4 +104,13 @@ sp.replace_detections('spindle', fcn_spindle)
 sp.replace_detections('sw', fcn_slowwave)
 
 # Finally, open the graphical user interface :
-sp.show()
+
+
+def _build_example():
+    return sp
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

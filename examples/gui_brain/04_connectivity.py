@@ -74,4 +74,12 @@ c_obj = ConnectObj('ConnectObj1', xyz, connect, color_by='strength',
 """
 vb = Brain(source_obj=s_obj, connect_obj=c_obj)
 
-vb.show()
+
+def _build_example():
+    return vb
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

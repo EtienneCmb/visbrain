@@ -35,4 +35,13 @@ kwargs = {'xlabel': 'xlabel', 'ylabel': 'ylabel', 'title': 'title',
           'grid_titles_color': 'white'}
 
 sg = Signal(data, sf=sf, axis=-1, **kwargs)
-sg.show()
+
+
+def _build_example():
+    return sg
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))

@@ -43,7 +43,16 @@ b_obj = BrainObj('Custom', vertices=vert, faces=faces, normals=norms)
 """Define the GUI and pass the brain template
 """
 vb = Brain(brain_obj=b_obj)
-vb.show()
+
+
+def _build_example():
+    return vb
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))
 
 # If you want to remove the template :
 # b_obj.remove()

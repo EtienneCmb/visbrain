@@ -24,5 +24,12 @@ dfile = os.path.join(target_path, 'excerpt2.edf')
 hfile = os.path.join(target_path, 'Hypnogram_excerpt2.txt')
 cfile = os.path.join(target_path, 'excerpt2_config.txt')
 
-# Open the GUI :
-Sleep(data=dfile, hypno=hfile, config_file=cfile).show()
+
+def _build_example():
+    return Sleep(data=dfile, hypno=hfile, config_file=cfile)
+
+
+if __name__ == "__main__":
+    from visbrain.examples._runner import run_example
+
+    raise SystemExit(run_example(_build_example))
