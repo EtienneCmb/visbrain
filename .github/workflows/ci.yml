@@ -131,7 +131,7 @@ jobs:
 
       - name: Upload GUI coverage
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-gui
           path: coverage.xml
@@ -213,7 +213,7 @@ jobs:
 
       - name: Upload screenshot diffs
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: screenshot-diffs
           path: artifacts/screenshots
