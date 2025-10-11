@@ -58,7 +58,7 @@ Enabling interactive launches
 
 Local runs that should always display the GUI can either export
 ``VISBRAIN_SHOW_GUI=1`` or pass ``--visbrain-show=True`` to entry points.  Both
-mechanisms update :class:`VisbrainConfig` through the same normalization logic,
+mechanisms update :class:`~visbrain.config.VisbrainConfig` through the same normalization logic,
 so automation that sets the environment variable can still be overridden by a
 CLI flag when necessary.
 

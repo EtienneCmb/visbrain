@@ -1,6 +1,8 @@
 .. _FigureModule:
 
-:py:class:`Figure`
+.. currentmodule:: visbrain.gui
+
+:class:`~Figure`
 ##################
 
 .. figure::  _static/ico/figure_ico.png

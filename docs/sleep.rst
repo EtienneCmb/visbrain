@@ -1,5 +1,7 @@
 .. _SleepModule:
 
+.. currentmodule:: visbrain.gui
+
 Sleep
 =====
 
@@ -11,7 +13,7 @@ Sleep
     <hr class="my-4">
     <p>
 
-Checkout the API of the :class:`visbrain.gui.Sleep` class. If you need help with the :class:`Sleep` module, ask your questions in the dedicated `gitter Sleep chat <https://gitter.im/visbrain-python/Sleep?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
+Checkout the API of the :class:`~Sleep` class. If you need help with the :class:`~Sleep` module, ask your questions in the dedicated `gitter Sleep chat <https://gitter.im/visbrain-python/Sleep?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
 
 .. figure::  _static/sleep/sleep_main.png
    :align:   center
@@ -101,7 +103,7 @@ Main features
 Import and use sleep
 ~~~~~~~~~~~~~~~~~~~~
 
-The :class:`Sleep` module can be imported as follow :
+The :class:`~Sleep` module can be imported as follow :
 
 .. code-block:: python
 
@@ -116,7 +118,7 @@ GUI description
 Components
 ^^^^^^^^^^
 
-The :class:`Sleep` GUI is divided into 4 main parts:
+The :class:`~Sleep` GUI is divided into 4 main parts:
 
 .. figure::  _static/sleep/sleep_main_parts.png
    :align:   center
@@ -348,7 +350,7 @@ CTRL + q                Close the window
 Supported files and format
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-:class:`Sleep` natively supports several file formats for both electrophysiological and hypnogram data.
+:class:`~Sleep` natively supports several file formats for both electrophysiological and hypnogram data.
 
 Data files
 ^^^^^^^^^^
@@ -372,14 +374,14 @@ If MNE-python is installed, this list is extended to (see `also <https://martino
 
 Note that once MNE-python is installed, the loading of these file formats is transparent for users. It means that you can load these file formats directly using Sleep graphical user interface or command-line, without any additional steps. We therefore **strongly recommand** to `install MNE-python <https://martinos.org/mne/stable/index.html>`_.
 
-If you have a file format that is currently not supported, :class:`Sleep` also provide the ability to directly pass raw data (NumPy array). Please click see this example of how to `to load a Matlab file <http://visbrain.org/auto_examples/sleep/load_matlab.html#sphx-glr-auto-examples-sleep-load-matlab-py>`_ and then pass the data directly to Sleep.
+If you have a file format that is currently not supported, :class:`~Sleep` also provide the ability to directly pass raw data (NumPy array). Please click see this example of how to `to load a Matlab file <http://visbrain.org/auto_examples/sleep/load_matlab.html#sphx-glr-auto-examples-sleep-load-matlab-py>`_ and then pass the data directly to Sleep.
 
 .. note::
   If you are having trouble with the loading of .edf files, we recommand installing `MNE-python <https://martinos.org/mne/stable/index.html>`_ and then loading your data using the following command::
 
     Sleep(data='mydata.edf', hypno='myhypno.csv', use_mne=True).show()
 
-  This will force the loading of the .edf files using MNE, which can generally handle more cases and exceptions than the native EDF library implemented in :class:`Sleep`.
+  This will force the loading of the .edf files using MNE, which can generally handle more cases and exceptions than the native EDF library implemented in :class:`~Sleep`.
 
 .. caution::
    By default, data are **automatically downsampled to 100 Hz** upon loading. If the sampling frequency of your recording is a power of two (e.g. 256, 512 Hz), we recommand to change the default downsampling value to 128 Hz using the following command::
@@ -522,7 +524,7 @@ Instead of leaving inputs arguments empty, send the path to the data :
 Load file using MNE-Python
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Finally, it is possible to load several other file formats using `MNE Python package <http://martinos.org/mne/stable/>`_. The code below shows how to load either BDF, EGI or EEGLab files and pass them to :class:`Sleep`.
+Finally, it is possible to load several other file formats using `MNE Python package <http://martinos.org/mne/stable/>`_. The code below shows how to load either BDF, EGI or EEGLab files and pass them to :class:`~Sleep`.
 
 .. code-block:: python
 
@@ -538,7 +540,7 @@ Finally, it is possible to load several other file formats using `MNE Python pac
   Sleep(data=data).show()
 
 .. tip::
-   Sleep understands complete BIDS directories.  When calling :class:`Sleep` or
+   Sleep understands complete BIDS directories.  When calling :class:`~Sleep` or
    :meth:`SleepController.load_dataset_async` you can forward BIDS-specific
    parameters through ``kwargs_mne`` to avoid manually locating files::
 
@@ -551,7 +553,7 @@ Finally, it is possible to load several other file formats using `MNE Python pac
            },
        ).show()
 
-   ``bids_path`` accepts either an :class:`mne_bids.BIDSPath`, a mapping of
+   ``bids_path`` accepts either a ``mne_bids.BIDSPath`` instance, a mapping of
    entities or a relative filename.  When multiple runs are available you can
    set ``bids_resolve`` to ``"first"``, ``"last"`` or an index to select the
    desired dataset explicitly.
@@ -811,7 +813,7 @@ It means that your function will work as long as you are able to return any one 
 Replace Sleep detection
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-Once your function has proper inputs and outputs, simply use the :class:`visbrain.gui.Sleep.replace_detections` method to replace the detection of *Sleep* with your own. Please visit the Examples section to see some concrete examples.
+Once your function has proper inputs and outputs, simply use the :meth:`~Sleep.replace_detections` method to replace the detection of *Sleep* with your own. Please visit the Examples section to see some concrete examples.
 
 
 .. ----------------------------------------------------------------------------
@@ -821,8 +823,8 @@ Once your function has proper inputs and outputs, simply use the :class:`visbrai
 Load and save the GUI configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-From the *Files > Save* contextual menu, you can save the GUI configuration. This will save the state of all buttons and properties inside :class:`Sleep`. Then, you can recharge the GUI configuration using *Files > Load > GUI config*.
-Alternatively, if you want to use a configuration when running :class:`Sleep`, you can use the *config_file* argument to directly pass the path to a configuration file. Note that configuration file are encoded in JSON format, which can be easily read and modified using any text editor.
+From the *Files > Save* contextual menu, you can save the GUI configuration. This will save the state of all buttons and properties inside :class:`~Sleep`. Then, you can recharge the GUI configuration using *Files > Load > GUI config*.
+Alternatively, if you want to use a configuration when running :class:`~Sleep`, you can use the *config_file* argument to directly pass the path to a configuration file. Note that configuration file are encoded in JSON format, which can be easily read and modified using any text editor.
 
 .. code-block:: python
 
@@ -842,7 +844,7 @@ Alternatively, if you want to use a configuration when running :class:`Sleep`, y
 Import, add and save annotations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-:class:`Sleep` provides a table for annotations. In this table, specify where the event start, finish and the associated text. Selecting a row of this table center the window around the selected time-code. This allow to quickly navigate even in large files.
+:class:`~Sleep` provides a table for annotations. In this table, specify where the event start, finish and the associated text. Selecting a row of this table center the window around the selected time-code. This allow to quickly navigate even in large files.
 
 .. figure::  _static/sleep/sleep_annotations.png
    :align:   center
