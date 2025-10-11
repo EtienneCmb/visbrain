@@ -31,6 +31,7 @@ class GridSignalsObj(VisbrainObject):
             * mne.io.Raw
             * mne.io.RawArray
             * mne.Epochs
+
     axis : int | -1
         Location of the time axis.
     plt_as : {'grid', 'row', 'col'}
@@ -41,6 +42,7 @@ class GridSignalsObj(VisbrainObject):
               movements are permitted
             * 'col' : plot data as a single column. Only vertical camera
               movements are permitted
+
     n_signals : int | 10
         Number of signals to display if `plt_as` is `row` or `col`.
     lw : float | 2.
@@ -54,6 +56,7 @@ class GridSignalsObj(VisbrainObject):
             * 1d = (n_times,) : len(title) = 1
             * 2d = (n_rows, n_times) : len(title) = n_rows
             * 3d = (n_rows, n_cols, n_times) : len(title) = n_rows * n_cols
+
         If an MNE-Python object is passed, titles are automatically inferred.
     title_size : float | 10.
         Size of the title text.
@@ -71,6 +74,7 @@ class GridSignalsObj(VisbrainObject):
               factor
             * int : use a specific decimation ratio (e.g 2, 3 etc)
             * False : if you don't want to decimate
+
     transform : VisPy.visuals.transforms | None
         VisPy transformation to set to the parent node.
     parent : VisPy.parent | None
