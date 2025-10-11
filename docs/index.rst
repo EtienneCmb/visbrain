@@ -61,6 +61,7 @@ Contents
    auto_examples/index.rst
    api
    community
+   governance
    release
    citation
    modernization/index
