@@ -660,6 +660,15 @@ nitpick_ignore = [
     ('py:class', 'vispy.scene.visuals.XYZAxis'),
     ('py:class', 'vispy.scene.visuals.Text'),
     ('py:class', 'vispy.scene.visuals.Arrow'),
+    ('py:mod', 'pre_commit'),
+    ('py:mod', 'visbrain.io.background'),
+    ('py:class', 'visbrain.gui.sleep.loader.AsyncSleepLoader'),
+    ('py:func', 'visbrain.gui.threading.invoke_in_gui_thread'),
+    ('py:mod', 'visbrain.io.dialog'),
+    ('py:mod', 'visbrain.io.path'),
+    ('py:class', 'visbrain.io.cache.CacheManager'),
+    ('py:class', 'visbrain.visuals.brain_visual.BrainVisual'),
+    ('py:class', 'visbrain.objects.scene_obj.VisbrainCanvas'),
 ]
 
 
