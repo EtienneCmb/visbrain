@@ -204,8 +204,8 @@ def color2vb(color=None, default=(1., 1., 1.), length=1, alpha=1.0,
         Specify if the returned color have to be compatible with faces index
         (e.g a (n_color, 3, 4) array).
 
-    Return
-    ------
+    Returns
+    -------
     vcolor : array_like
         Array of RGBA colors of shape (length, 4).
     """
