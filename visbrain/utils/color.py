@@ -64,21 +64,21 @@ class Colormap(object):
 
     Attributes
     ----------
-    data : array_like
+    ``data`` : array_like
         Color data of shape (n_data, 4)
-    shape : tuple
+    ``shape`` : tuple
         Shape of the data.
-    r : array_like
+    ``r`` : array_like
         Red levels.
-    g : array_like
+    ``g`` : array_like
         Green levels.
-    b : array_like
+    ``b`` : array_like
         Blue levels.
-    rgb : array_like
+    ``rgb`` : array_like
         RGB levels.
-    alpha : array_like
+    ``alpha`` : array_like
         Transparency level.
-    glsl : vispy.colors.Colormap
+    ``glsl`` : vispy.colors.Colormap
         GL colormap version.
     """
 

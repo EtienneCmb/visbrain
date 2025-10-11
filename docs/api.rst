@@ -138,5 +138,6 @@ Miscellaneous
 
 .. autosummary::
    :toctree: generated/
+   :template: class.rst
 
     Colormap
