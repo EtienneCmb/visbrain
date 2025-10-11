@@ -38,20 +38,20 @@ Main features
 .. grid:: 1 1 2 2
    :gutter: 2
 
-   .. card:: Grid disposition
+   .. grid-item-card:: Grid disposition
       :class-card: sd-bg-primary sd-text-white
 
       * Map 2-D and 3-D datasets onto interactive grids.
       * Zoom, pan and double-click to focus on individual traces.
 
-   .. card:: Signal inspection
+   .. grid-item-card:: Signal inspection
       :class-card: sd-bg-light
 
       * Navigate through channels with keyboard shortcuts.
       * Switch between line, marker, histogram, spectrogram and PSD views.
       * Import and export annotations for collaborative scoring.
 
-   .. card:: Processing toolbox
+   .. grid-item-card:: Processing toolbox
       :class-card: sd-bg-light
 
       * Detrend and demean signals on demand.

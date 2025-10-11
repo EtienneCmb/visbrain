@@ -10,11 +10,10 @@ Sleep
 
    Sleep is a flexible graphical user interface for visualising, analysing and
    scoring polysomnographic data.  The Phase 5 refactor adopts a
-   model/view/controller split where :class:`~visbrain.gui.sleep.model.SleepDataset`
-   encapsulates recordings, :class:`~visbrain.gui.sleep.view.SleepView` renders
-   the Qt widgets and :class:`~visbrain.gui.sleep.controller.SleepController`
-   orchestrates interactions.  Launch the façade via
-   :class:`~visbrain.gui.Sleep` or run curated demos with
+   model/view/controller split where ``SleepDataset`` encapsulates recordings,
+   ``SleepView`` renders the Qt widgets and ``SleepController`` orchestrates
+   interactions.  Launch the façade via :class:`~visbrain.gui.Sleep` or run
+   curated demos with
    ``python -m visbrain.examples run sleep/<example>``.  If you use Sleep in a
    publication, please cite the article in `Frontiers in Neuroinformatics
    <http://journal.frontiersin.org/article/10.3389/fninf.2017.00060/full>`_.
@@ -43,21 +42,21 @@ Main features
 .. grid:: 1 1 2 2
    :gutter: 2
 
-   .. card:: Graphical user interface
+   .. grid-item-card:: Graphical user interface
       :class-card: sd-bg-primary sd-text-white
 
       * Modular Qt panes with responsive layouts.
       * High-DPI screenshots for publications.
       * Persisted channel selection, amplitude ranges and panel visibility.
 
-   .. card:: Loader flexibility
+   .. grid-item-card:: Loader flexibility
       :class-card: sd-bg-light
 
       * Built-in EDF, BrainVision, Micromed and Elan readers.
-      * Optional :mod:`mne` integration for additional formats.
+      * Optional ``mne`` integration for additional formats.
       * Hypnogram importers for ``.txt``, ``.csv``, ``.xlsx`` and ``.hyp``.
 
-   .. card:: Multi-pane displays
+   .. grid-item-card:: Multi-pane displays
       :class-card: sd-bg-light
 
       * Time-series, spectrogram, hypnogram and topographic map panes stay
@@ -65,21 +64,21 @@ Main features
       * Configurable down-sampling and rescaling pipelines.
       * Shared navigation shortcuts across panes.
 
-   .. card:: Hypnogram tooling
+   .. grid-item-card:: Hypnogram tooling
       :class-card: sd-bg-light
 
       * Inline editing with statistics refreshed in real time.
       * Publication-grade exports of scoring timelines.
       * Stage dictionaries resolved from bundled templates.
 
-   .. card:: Signal processing
+   .. grid-item-card:: Signal processing
       :class-card: sd-bg-light
 
       * Demean, detrend and filter recordings interactively.
       * Re-reference to a single channel or common average.
       * Bipolar derivations and envelope tracking.
 
-   .. card:: Event detection
+   .. grid-item-card:: Event detection
       :class-card: sd-bg-light
 
       * Semi-automatic detection of spindles, K-complexes, slow waves and REM

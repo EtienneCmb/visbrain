@@ -37,42 +37,42 @@ Main features
 .. grid:: 1 1 2 2
    :gutter: 2
 
-   .. card:: Graphical user interface
+   .. grid-item-card:: Graphical user interface
       :class-card: sd-bg-primary sd-text-white
 
       * Modular and responsive Qt layout.
       * Capture screenshots with configurable DPI.
       * Persist GUI state (buttons, sliders, checkboxes, camera angles).
 
-   .. card:: Brain templates
+   .. grid-item-card:: Brain templates
       :class-card: sd-bg-light
 
       * Rotate, translate and zoom canonical MNI surfaces.
       * Control shading, transparency and hemisphere visibility.
       * Import custom templates alongside bundled assets.
 
-   .. card:: Sources and connectivity
+   .. grid-item-card:: Sources and connectivity
       :class-card: sd-bg-light
 
       * Visualise EEG, MEG and intracranial sources.
       * Render connectivity edges with per-link colour/width controls.
       * Project activity onto cortical surfaces for quick inspections.
 
-   .. card:: Regions of interest
+   .. grid-item-card:: Regions of interest
       :class-card: sd-bg-light
 
       * Display ROIs within a translucent anatomical context.
       * Leverage bundled atlases or import custom label maps.
       * Quantify source contributions per ROI.
 
-   .. card:: Cross-sections and volumes
+   .. grid-item-card:: Cross-sections and volumes
       :class-card: sd-bg-light
 
       * Slice volumetric data interactively.
       * Localise sources on orthogonal planes.
       * Load NIfTI stacks and apply consistent transfer functions.
 
-   .. card:: Additional layers
+   .. grid-item-card:: Additional layers
       :class-card: sd-bg-light
 
       * Display time-series, static images and vector fields.
