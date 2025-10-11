@@ -15,3 +15,4 @@ deliverables tracked in the repository.
    phase-3-inventory
    phase-4
    phase-5
+   phase-6

@@ -78,7 +78,9 @@ Key pathways
       :class-card: sd-text-center sd-shadow-sm
 
       Track ongoing architectural work, packaging milestones and the plan for
-      future releases across each modernization phase.
+      future releases across each modernization phase, including the
+      :doc:`modernization/phase-6` release automation milestones outlined in
+      :doc:`release`.
 
 Contents
 ********

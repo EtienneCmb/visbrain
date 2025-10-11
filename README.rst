@@ -49,10 +49,13 @@ Modernization roadmap
 ---------------------
 
 Visbrain is currently undergoing a multi-phase modernization effort. Phase 0
-established the supported operating systems, Python versions, and tooling. We
-are executing Phase 1 to stabilise packaging, finish the Qt 6 transition, and
-trim deprecated APIs. Follow the detailed milestones in
-``docs/modernization/`` for an up-to-date view of the active workstreams.
+established the supported operating systems, Python versions, and tooling. The
+roadmap has progressed through infrastructure, API, and quality automation
+workstreams and is now focused on `Phase 6 <docs/modernization/phase-6.rst>`_,
+where release automation and distribution hardening take centre stage. Follow
+the detailed milestones in ``docs/modernization/`` for an up-to-date view of
+the active workstreams and consult the `release automation guide
+<docs/release.rst>`_ for the associated checklists.
 
 For day-to-day development work on this modernization track we recommend
 either opening the repository in the provided development container or

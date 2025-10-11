@@ -18,6 +18,9 @@ release tag activates ``wheels`` (``.github/workflows/wheels.yml``), which
 builds and verifies the installation artifacts before they land on PyPI. Ensure
 both workflows are green before drafting release notes or promoting a build.
 
+These automation milestones originate from :doc:`modernization/phase-6`, the
+current roadmap focus on distribution hardening.
+
 Automated changelog
 -------------------
 
