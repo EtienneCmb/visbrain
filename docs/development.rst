@@ -22,6 +22,23 @@ Build the HTML preview with::
 
    tox -e docs
 
+Continuous documentation publishing
+-----------------------------------
+
+Pull requests and pushes to the ``main`` branch execute the
+``.github/workflows/docs.yml`` automation.  The job provisions Python 3.11,
+installs the project with the ``.[docs]`` extras, and runs ``tox -e docs`` to
+build the Sphinx HTML output.  Reviewers can download a ``docs-html`` artifact
+on pull requests to preview the rendered site before merging.  Successful builds
+on ``main`` upload the HTML bundle through ``actions/deploy-pages`` so GitHub
+Pages stays in sync with the latest default-branch state.
+
+The workflow relies on the repository ``GITHUB_TOKEN`` (also available as
+``GH_TOKEN``) with ``contents: read`` and ``pages: write`` permissions to push
+the published site.  Forks without Pages enabled can either disable the deploy
+job or provide a personal access token with the same scopes via the
+``GH_TOKEN`` secret.
+
 Pre-commit workflow
 -------------------
 
