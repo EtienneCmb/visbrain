@@ -310,6 +310,7 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.linkcode',
     'sphinx_gallery.gen_gallery',
+    'sphinx_design',
     'numpydoc',
 ]
 # , 'sphinx.ext.napoleon'

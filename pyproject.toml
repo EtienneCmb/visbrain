@@ -47,6 +47,7 @@ docs = [
     "furo",
     "myst-parser",
     "sphinx-gallery",
+    "sphinx-design",
     "sphinx-copybutton",
     "sphinx-autodoc-typehints",
     "sphinxcontrib-napoleon",
