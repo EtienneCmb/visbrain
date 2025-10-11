@@ -90,7 +90,7 @@ Improvements
 ~~~~~~~~~~~~
 * Fix colormap update for every recording modality
 * Colormap computed onto the GPU for : spectrogram, phase-amplitude coupling, images, 3D images, brain object, grid signals
-* Sorted brain templates in :class:`visbrain.Brain` + remove sulcus as a brain template
+* Sorted brain templates in :class:`~visbrain.gui.Brain` + remove sulcus as a brain template
 * Fewer visible possibilities when importing from the root of visbrain 
 * Remove all data from the visbrain package
 * Include MIST ROI template to the :class:`visbrain.objects.RoiObj`
@@ -131,7 +131,7 @@ Bug fixes
 * path to brain templates
 * loading hypnogram with spaces instead of tabs
 * Fix :class:`visbrain.mne.mne_plot_source_estimation` with left and right hemispheres
-* Fix activations that disappear using :class:`visbrain.Brain.brain_control`
+* Fix activations that disappear using ``Brain.brain_control``
 * Fix x and y axis update inside :class:`~visbrain.gui.Signal`
 * Reading Nifti files with NaN values
 
