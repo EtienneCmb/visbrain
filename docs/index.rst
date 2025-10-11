@@ -1,32 +1,32 @@
 Visbrain documentation
 ======================
 
-.. badges::
-   :columns: 3
+.. |ci-badge| image:: https://github.com/EtienneCmb/visbrain/actions/workflows/ci.yml/badge.svg?branch=master
+   :alt: GitHub Actions CI status
+   :target: https://github.com/EtienneCmb/visbrain/actions/workflows/ci.yml
 
-   .. badge:: CI
-      :image: https://github.com/EtienneCmb/visbrain/actions/workflows/ci.yml/badge.svg?branch=master
-      :target: https://github.com/EtienneCmb/visbrain/actions/workflows/ci.yml
+.. |wheels-badge| image:: https://github.com/EtienneCmb/visbrain/actions/workflows/wheels.yml/badge.svg?branch=master
+   :alt: Binary wheels build status
+   :target: https://github.com/EtienneCmb/visbrain/actions/workflows/wheels.yml
 
-   .. badge:: Wheels
-      :image: https://github.com/EtienneCmb/visbrain/actions/workflows/wheels.yml/badge.svg?branch=master
-      :target: https://github.com/EtienneCmb/visbrain/actions/workflows/wheels.yml
+.. |coverage-badge| image:: https://codecov.io/gh/EtienneCmb/visbrain/branch/master/graph/badge.svg
+   :alt: Code coverage on Codecov
+   :target: https://codecov.io/gh/EtienneCmb/visbrain
 
-   .. badge:: Coverage
-      :image: https://codecov.io/gh/EtienneCmb/visbrain/branch/master/graph/badge.svg
-      :target: https://codecov.io/gh/EtienneCmb/visbrain
+.. |pypi-badge| image:: https://badge.fury.io/py/visbrain.svg
+   :alt: PyPI package version
+   :target: https://badge.fury.io/py/visbrain
 
-   .. badge:: PyPI
-      :image: https://badge.fury.io/py/visbrain.svg
-      :target: https://badge.fury.io/py/visbrain
+.. |downloads-badge| image:: https://pepy.tech/badge/visbrain
+   :alt: Download statistics on Pepy
+   :target: https://pepy.tech/project/visbrain
 
-   .. badge:: Downloads
-      :image: https://pepy.tech/badge/visbrain
-      :target: https://pepy.tech/project/visbrain
+.. |chat-badge| image:: https://badges.gitter.im/visbrain-python/chatroom.svg
+   :alt: Community chat on Gitter
+   :target: https://gitter.im/visbrain-python/chatroom?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
 
-   .. badge:: Community chat
-      :image: https://badges.gitter.im/visbrain-python/chatroom.svg
-      :target: https://gitter.im/visbrain-python/chatroom?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
+|ci-badge| |wheels-badge| |coverage-badge|
+|pypi-badge| |downloads-badge| |chat-badge|
 
 Visbrain is a GPU-accelerated suite for visualising brain signals, anatomical
 surfaces and advanced electrophysiology. The documentation gathers installation
