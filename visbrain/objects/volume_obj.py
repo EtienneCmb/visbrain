@@ -65,7 +65,8 @@ KNOWN_METHODS = ['mip', 'translucent', 'additive', 'iso']
 class _Volume(VisbrainObject):
     """Manage loaded volumes.
 
-    This class is shared by volume classes (VolumeObj, RoiObj, CrossSecObj).
+    This class is shared by volume classes (:class:`~visbrain.objects.VolumeObj`,
+    :class:`~visbrain.objects.RoiObj`, :class:`~visbrain.objects.CrossSecObj`).
     """
 
     def __init__(self, name, parent, transform, verbose, **kw):
@@ -239,7 +240,7 @@ class VolumeObj(_Volume):
         Volume object parent.
     kw : dict | {}
         Optional arguments are used to control the colorbar
-        (See :class:`ColorbarObj`).
+        (See :class:`~visbrain.objects.ColorbarObj`).
 
     Notes
     -----

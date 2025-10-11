@@ -47,7 +47,7 @@ class TimeSeries3DObj(VisbrainObject):
         In case of (n_sources, 2) use _z to specify the elevation.
     kw : dict | {}
         Optional arguments are used to control the colorbar
-        (See :class:`ColorbarObj`).
+        (See :class:`~visbrain.objects.ColorbarObj`).
 
     Notes
     -----
@@ -245,7 +245,8 @@ class CombineTimeSeries(CombineObjects):
 
     Parameters
     ----------
-    tsobjs : TimeSeries3DObj/list | None
+    tsobjs : :class:`~visbrain.objects.TimeSeries3DObj` or list of
+        :class:`~visbrain.objects.TimeSeries3DObj` | None
         List of time-series objects.
     select : string | None
         The name of the time-series object to select.

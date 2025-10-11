@@ -85,7 +85,7 @@ class RoiObj(_Volume):
         Verbosity level.
     kw : dict | {}
         Optional arguments are used to control the colorbar
-        (See :class:`ColorbarObj`).
+        (See :class:`~visbrain.objects.ColorbarObj`).
 
     Notes
     -----
@@ -759,7 +759,8 @@ class CombineRoi(_CombineVolume):
 
     Parameters
     ----------
-    robjs : RoiObj/list | None
+    robjs : :class:`~visbrain.objects.RoiObj` or list of
+        :class:`~visbrain.objects.RoiObj` | None
         List of Roi objects.
     select : string | None
         The name of the Roi object to select.

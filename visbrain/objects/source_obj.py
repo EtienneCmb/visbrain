@@ -83,7 +83,7 @@ class SourceObj(VisbrainObject):
         In case of (n_sources, 2) use _z to specify the elevation.
     kw : dict | {}
         Optional arguments are used to control the colorbar
-        (See :class:`ColorbarObj`).
+        (See :class:`~visbrain.objects.ColorbarObj`).
 
     Notes
     -----
@@ -294,7 +294,8 @@ class SourceObj(VisbrainObject):
 
         Parameters
         ----------
-        b_obj : {BrainObj, RoiObj}
+        b_obj : { :class:`~visbrain.objects.BrainObj`,
+                  :class:`~visbrain.objects.RoiObj` }
             The object on which to project sources.
         project : {'modulation', 'repartition'}
             Project either the source's data ('modulation') or get the number
@@ -346,8 +347,9 @@ class SourceObj(VisbrainObject):
         ----------
         roi_obj : string/list | 'talairach'
             The ROI object to use. Use either 'talairach', 'brodmann' or 'aal'
-            to use a predefined ROI template. Otherwise, use a RoiObj object or
-            a list of RoiObj.
+            to use a predefined ROI template. Otherwise, use a
+            :class:`~visbrain.objects.RoiObj` instance or a list of
+            :class:`~visbrain.objects.RoiObj`.
         replace_bad : bool | True
             Replace bad values (True) or not (False).
         bad_patterns : list | [-1, 'undefined', 'None']
@@ -822,7 +824,8 @@ class CombineSources(CombineObjects):
 
     Parameters
     ----------
-    sobjs : SourceObj/list | None
+    sobjs : :class:`~visbrain.objects.SourceObj` or list of
+        :class:`~visbrain.objects.SourceObj` | None
         List of source objects.
     select : string | None
         The name of the source object to select.

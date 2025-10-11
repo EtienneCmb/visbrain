@@ -79,7 +79,7 @@ class TopoObj(VisbrainObject):
         Verbosity level.
     kw : dict | {}
         Optional arguments are used to control the colorbar
-        (See :class:`ColorbarObj`).
+        (See :class:`~visbrain.objects.ColorbarObj`).
 
     Notes
     -----
@@ -362,8 +362,8 @@ class TopoObj(VisbrainObject):
         connect : array_like
             A 2D array of connectivity links of shape (n_channels, n_channels).
         kwargs : dict | {}
-            Optional arguments are passed to the `visbrain.objects.ConnectObj`
-            object.
+            Optional arguments are passed to the
+            :class:`~visbrain.objects.ConnectObj` object.
         """
         logger.info("    Connect channels")
         self._connect = ConnectObj('ChanConnect', self._xyz, connect,
