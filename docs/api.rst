@@ -114,6 +114,13 @@ I/O
    write_fig_hyp
    get_sleep_stats
 
+.. envvar:: VISBRAIN_ALLOW_DOWNLOADS
+
+   Opt-in flag that allows Visbrain to fetch remote datasets. Set this
+   variable to a truthy value (for example ``1`` or ``true``) to permit
+   :mod:`visbrain.io` utilities to download files; otherwise attempts to
+   access network resources raise a :class:`PermissionError`.
+
 Miscellaneous
 -------------
 
