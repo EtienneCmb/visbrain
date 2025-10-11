@@ -57,12 +57,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=(
-            Path(__file__).resolve().parents[1]
-            / "docs"
-            / "_static"
-            / "examples"
-        ),
+        default=(Path(__file__).resolve().parents[1] / "docs" / "_static" / "examples"),
         help="Directory where PNG renders should be stored.",
     )
     parser.add_argument(
