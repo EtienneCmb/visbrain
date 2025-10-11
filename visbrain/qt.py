@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import atexit
 import importlib
+import os
 import logging
 import weakref
 from types import SimpleNamespace
@@ -45,9 +46,88 @@ def _build_qt_namespace(modules: dict[str, object]) -> SimpleNamespace:
     return namespace
 
 
+def _install_stub_binding() -> None:
+    """Populate module globals with inert Qt stand-ins."""
+
+    global QtCore, QtGui, QtWidgets, Qt, QT_API
+
+    class _StubBase:
+        def __init__(self, *args: Any, **kwargs: Any) -> None:  # pragma: no cover
+            pass
+
+        def __getattr__(self, _name: str) -> "_StubBase":  # pragma: no cover
+            return self.__class__()
+
+        def __call__(
+            self, *args: Any, **kwargs: Any
+        ) -> "_StubBase":  # pragma: no cover
+            return self.__class__()
+
+    class _StubApplication(_StubBase):
+        @staticmethod
+        def instance() -> None:  # pragma: no cover
+            return None
+
+        def quit(self) -> None:  # pragma: no cover
+            pass
+
+        @staticmethod
+        def setQuitOnLastWindowClosed(_value: bool) -> None:  # pragma: no cover
+            pass
+
+    class _StubWidget(_StubBase):
+        Window = 0
+        WindowTitleHint = 0
+
+    class _StubDialog(_StubBase):
+        pass
+
+    class _StubAction(_StubBase):
+        pass
+
+    class _StubSignal(_StubBase):
+        pass
+
+    def _create_signal(*_args: Any, **_kwargs: Any) -> _StubSignal:  # pragma: no cover
+        return _StubSignal()
+
+    def _slot(*_args: Any, **_kwargs: Any):  # pragma: no cover
+        return lambda func: func
+
+    class _StubEnum:
+        def __getattr__(self, _name: str) -> int:  # pragma: no cover
+            return 0
+
+    QtCore = SimpleNamespace(
+        QObject=_StubBase,
+        QCoreApplication=SimpleNamespace(closingDown=lambda: False),
+        pyqtSignal=_create_signal,
+        Signal=_create_signal,
+        Slot=_slot,
+        Qt=_StubEnum(),
+    )
+    QtGui = SimpleNamespace(QAction=_StubAction, QPalette=_StubBase)
+    QtWidgets = SimpleNamespace(
+        QApplication=_StubApplication,
+        QWidget=_StubWidget,
+        QDialog=_StubDialog,
+    )
+    Qt = _build_qt_namespace({"QtCore": QtCore, "QtGui": QtGui, "QtWidgets": QtWidgets})
+    QT_API = "stub"
+
+
 def _import_binding() -> None:
     """Import the preferred Qt binding and populate module globals."""
     global QtCore, QtGui, QtWidgets, Qt, QT_API
+
+    stub_pref = os.environ.get("VISBRAIN_USE_QT_STUBS", "").strip().lower()
+    if stub_pref in {"1", "true", "yes", "on"}:
+        logger.debug(
+            "Using stub Qt binding due to VISBRAIN_USE_QT_STUBS=%s",
+            stub_pref,
+        )
+        _install_stub_binding()
+        return
 
     for binding in _BINDINGS:
         modules: dict[str, object] = {}
@@ -69,6 +149,14 @@ def _import_binding() -> None:
         Qt = _build_qt_namespace(modules)
         QT_API = binding
         logger.debug("Using %s Qt binding", binding)
+        return
+
+    if stub_pref not in {"0", "false", "no", "off"}:
+        logger.warning(
+            "Falling back to stub Qt binding because no supported binding could be "
+            "imported.",
+        )
+        _install_stub_binding()
         return
 
     raise ImportError(
