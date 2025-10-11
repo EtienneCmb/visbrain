@@ -331,7 +331,9 @@ The :class:`visbrain.objects.BrainObj` comes with several brain templates (i.e B
   # After being saved, your template can be reloaded using :
   b_obj = BrainObj('Custom')
 
-For further details, checkout this example : :ref:`sphx_glr_auto_examples_brain_02_brain_using_vertices.py`
+.. note::
+   For further details, see the ``auto_examples/brain/02_brain_using_vertices.py``
+   example in the gallery when it is available.
 
 
 .. raw:: html
