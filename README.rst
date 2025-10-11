@@ -2,23 +2,61 @@
 Visbrain
 ========
 
-**Visbrain** was an open-source python 3 package dedicated to brain signals visualization. It was based on top of `VisPy <http://vispy.org/>`_ and the Qt 6 stack exposed through PySide6 and was distributed under the 3-Clause BSD license. With an on line `documentation <http://visbrain.org>`_, `examples and datasets <http://visbrain.org/auto_examples/>`_ and can also be downloaded from `PyPi <https://pypi.python.org/pypi/visbrain/>`_.
+.. image:: https://github.com/EtienneCmb/visbrain/actions/workflows/ci.yml/badge.svg?branch=main
+   :target: https://github.com/EtienneCmb/visbrain/actions/workflows/ci.yml
+   :alt: GitHub Actions CI status
 
-This is not so true nowdays, as time goes by, eons come and go, links phades into history, and into stories an mythology.
+.. image:: https://github.com/EtienneCmb/visbrain/actions/workflows/docs.yml/badge.svg?branch=main
+   :target: https://github.com/EtienneCmb/visbrain/actions/workflows/docs.yml
+   :alt: Documentation build status
 
-This is a heaviliy AI-based attempt at re-awake this project (as in - first we'll let the ai loose in the system, and then try to fix what it did, if needed), it will take time, and maybe, or even probably, fail. But should it succede, it could be nice.
+.. image:: https://img.shields.io/pypi/v/visbrain.svg
+   :target: https://pypi.org/project/visbrain/
+   :alt: Latest release on PyPI
+
+.. image:: https://img.shields.io/conda/vn/conda-forge/visbrain.svg
+   :target: https://anaconda.org/conda-forge/visbrain
+   :alt: Latest release on conda-forge
+
+**Visbrain** is an open-source neuroinformatics toolkit for interactive brain
+signal visualisation. The modernization effort targets Python 3.9–3.12,
+leverages Qt 6 through PySide6, and builds 3D rendering pipelines on top of
+`VisPy <http://vispy.org/>`_. We are incrementally refreshing the legacy code
+base, updating documentation, and aligning packaging so researchers can deploy
+the stack on current desktop platforms.
+
+* `Modernization roadmap <https://github.com/EtienneCmb/visbrain/blob/main/docs/modernization/index.rst>`_
+* `Project governance <https://github.com/EtienneCmb/visbrain/blob/main/docs/governance.rst>`_
+
+Visbrain distributes online `documentation <http://visbrain.org>`_ alongside
+example-driven tutorials and datasets. Stable builds ship through PyPI and the
+``conda-forge`` channel, while daily development takes place on GitHub where
+the automation badges above track CI and docs health.
+
+Quick start
+-----------
+
+Check the runtime environment and OpenGL support with::
+
+   python -m visbrain info
+
+Launch the Sleep GUI from a Python shell to explore bundled sample datasets::
+
+   from visbrain.gui import Sleep
+   Sleep().show()
 
 Modernization roadmap
 ---------------------
 
 Visbrain is currently undergoing a multi-phase modernization effort. Phase 0
-has established the target execution environments and the development workflow
-used by contributors while the code base is updated. The detailed plan lives in
-``docs/modernization/phase-0.rst`` within the repository.
+established the supported operating systems, Python versions, and tooling. We
+are executing Phase 1 to stabilise packaging, finish the Qt 6 transition, and
+trim deprecated APIs. Follow the detailed milestones in
+``docs/modernization/`` for an up-to-date view of the active workstreams.
 
 For day-to-day development work on this modernization track we recommend
 either opening the repository in the provided development container or
-creating a virtual environment that matches the Phase 0 baseline:
+creating a virtual environment that matches the baseline environment matrix:
 
 * **Dev Container** — Open the folder in VS Code (or another
   devcontainer-aware editor) and reopen in the container. The image installs
@@ -37,7 +75,7 @@ creating a virtual environment that matches the Phase 0 baseline:
      pip install -r requirements/dev.txt
 
 These pins align with Python 3.9–3.12 on Windows, macOS, and Linux and will be
-revisited during the packaging overhaul in Phase 1.
+revisited as the modernization roadmap advances.
 
 With the toolchain installed, ``tox`` orchestrates the main contributor
 workflows:
@@ -66,7 +104,8 @@ Important links
 
 * Official source code repository : https://github.com/EtienneCmb/visbrain
 * Online documentation : http://visbrain.org
-* Visbrain `chat room <https://gitter.im/visbrain-python/chatroom?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
+* Modernization roadmap : https://github.com/EtienneCmb/visbrain/blob/main/docs/modernization/index.rst
+* Governance overview : https://github.com/EtienneCmb/visbrain/blob/main/docs/governance.rst
 
 
 Installation
@@ -85,17 +124,32 @@ Visbrain requires :
 * Pillow >= 10.3.0
 * PyOpenGL >= 3.1.7
 
-User installation
-+++++++++++++++++
+Pip (PyPI)
+++++++++++
 
-Install Visbrain :
+Install the latest release from PyPI with:
 
 .. code-block:: console
 
-    pip install -U visbrain
+   python -m pip install --upgrade visbrain
+
+To install optional documentation and development dependencies, append
+``.[docs]`` or ``.[dev]`` to the ``pip`` invocation.
+
+Conda-forge
++++++++++++
+
+Visbrain is available through the community-maintained ``conda-forge`` channel:
+
+.. code-block:: console
+
+   conda install -c conda-forge visbrain
+
+The same package can be installed with ``mamba`` or ``micromamba`` if you prefer
+faster ``conda``-compatible solvers.
 
 Sample data and optional downloads
-+++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++
 
 The Visbrain wheel bundles small reference datasets so common workflows run
 offline: core brain templates, ROI atlases, an EEG montage and a short
@@ -108,7 +162,7 @@ surface meshes, etc.) stay optional and are fetched explicitly with the
     python -m visbrain.io.download sleep_rec.zip --type example_data
 
 Downloads land in a platform-specific cache managed by
-:class:`visbrain.io.cache.CacheManager`. Durable resources use the ``data``
+``visbrain.io.cache.CacheManager``. Durable resources use the ``data``
 category under ``VISBRAIN_DATA_DIR`` (falling back to ``%APPDATA%/Visbrain`` on
 Windows, ``~/Library/Application Support/Visbrain`` on macOS and
 ``~/.local/share/visbrain`` on Linux). Scratch artefacts (temporary exports,
@@ -118,7 +172,7 @@ and ``--use-pwd`` switches to override the target directory when integrating
 with project-specific storage.
 
 Sample data downloads
-++++++++++++++++++++
+++++++++++++++++++++++
 
 .. note::
 
@@ -130,8 +184,8 @@ Sample data downloads
 BIDS-aware sleep loading
 ------------------------
 
-The :class:`visbrain.gui.Sleep` controller understands complete BIDS datasets
-through the :mod:`visbrain.io.read_sleep` helpers. Forward a dataset root while
+The ``visbrain.gui.Sleep`` controller understands complete BIDS datasets
+through the ``visbrain.io.read_sleep`` helpers. Forward a dataset root while
 opting into MNE-based loading and provide entity filters to resolve a specific
 recording::
 
@@ -146,7 +200,7 @@ recording::
        },
    ).show()
 
-The loader accepts explicit :class:`mne_bids.BIDSPath` instances, dictionaries
+The loader accepts explicit ``mne_bids.BIDSPath`` instances, dictionaries
 of entities or relative filenames. When multiple recordings match the filters
 you can choose ``bids_resolve="first"``, ``"last"`` or a numeric index to pick
 the desired run.
@@ -155,7 +209,7 @@ Diagnosing GPU availability
 ---------------------------
 
 Run ``python -m visbrain info`` to collect the VisPy/OpenGL diagnostics tracked
-by :mod:`visbrain.config`. The command prints the resolved backend, GL limits
+by ``visbrain.config``. The command prints the resolved backend, GL limits
 and shader compilation results alongside actionable guidance, or ``--json`` can
 emit the raw payload for automated health checks.
 
