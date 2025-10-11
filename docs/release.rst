@@ -112,7 +112,7 @@ Bug fixes
 New features
 ~~~~~~~~~~~~
 
-* You can now :ref:`replace_detection` using the :class:`visbrain.Sleep.replace_detections` method.
+* You can now :ref:`replace_detection` using the :meth:`~visbrain.gui.Sleep.replace_detections` method.
 * Add activations (:class:`visbrain.objects.CrossSecObj.set_activation`) and highlight multiple sources (:class:`visbrain.objects.CrossSecObj.highlight_sources`) inside the :class:`visbrain.objects.CrossSecObj`
 * Plot MNE sources :class:`visbrain.mne.mne_plot_source_space`
 
@@ -132,7 +132,7 @@ Bug fixes
 * loading hypnogram with spaces instead of tabs
 * Fix :class:`visbrain.mne.mne_plot_source_estimation` with left and right hemispheres
 * Fix activations that disappear using :class:`visbrain.Brain.brain_control`
-* Fix x and y axis update inside :class:`visbrain.Signal`
+* Fix x and y axis update inside :class:`~visbrain.gui.Signal`
 * Reading Nifti files with NaN values
 
 0.4.0

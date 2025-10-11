@@ -13,7 +13,7 @@ Signal
     <hr class="my-4">
     <p>
 
-Checkout the API of the :class:`~Signal` class.
+Checkout the API of the :class:`~visbrain.gui.Signal` class.
 
 .. raw:: html
 
@@ -75,7 +75,7 @@ Main features
 Import and use Signal
 ~~~~~~~~~~~~~~~~~~~~~
 
-The :class:`~Signal` module can be imported as follow :
+The :class:`~visbrain.gui.Signal` module can be imported as follow :
 
 .. code-block:: python
 
