@@ -15,7 +15,7 @@ Key changes
 -----------
 
 ``pyproject.toml`` now drives builds with ``setuptools`` >= 68. The
-configuration pulls the version from :mod:`visbrain`, exposes extras that mirror
+configuration pulls the version from ``visbrain``, exposes extras that mirror
 past ``setup.py`` options, and declares a modern Python range. ``setup.py`` is
 retained as a thin shim so existing workflows that call ``python setup.py``
 continue to function.

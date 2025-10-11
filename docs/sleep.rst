@@ -541,7 +541,7 @@ Finally, it is possible to load several other file formats using `MNE Python pac
 
 .. tip::
    Sleep understands complete BIDS directories.  When calling :class:`~visbrain.gui.Sleep` or
-   :meth:`~visbrain.gui.sleep.controller.SleepController.load_dataset_async` you can forward BIDS-specific
+   ``SleepController.load_dataset_async`` you can forward BIDS-specific
    parameters through ``kwargs_mne`` to avoid manually locating files::
 
        Sleep(
