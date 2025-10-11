@@ -165,7 +165,7 @@ Legacy UI and layout sources
 * ``visbrain/gui/figure/figure.py`` — hosts the Matplotlib-backed APIs and the
   ``FigureGUI`` shell that instantiates ``Ui_FigureMainWindow``, wires Qt
   actions to layout slots and drives the live image preview while sharing state
-  with the :class:`Figure` helper.【F:visbrain/gui/figure/figure.py†L582-L750】
+  with the :class:`~visbrain.gui.Figure` helper.【F:visbrain/gui/figure/figure.py†L582-L750】
 
 VisPy entry points
 ^^^^^^^^^^^^^^^^^^
