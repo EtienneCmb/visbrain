@@ -18,6 +18,10 @@ or::
 
    python -m pip install -r requirements/docs.txt
 
+Build the HTML preview with::
+
+   tox -e docs
+
 Pre-commit workflow
 -------------------
 
@@ -46,6 +50,7 @@ environments are:
 * ``lint-format`` – enforces the Ruff/Black formatting profile.
 * ``type`` – executes MyPy with the repository configuration.
 * ``tests`` – launches the headless pytest suite.
+* ``docs`` – builds the Sphinx documentation with warnings treated as errors.
 * ``tests-gui`` – runs the GUI-focused pytest markers that require an X server
   (the CI container provisions Xvfb automatically).
 * ``tests-screenshot`` – executes the deterministic screenshot comparisons.
