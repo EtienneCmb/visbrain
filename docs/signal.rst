@@ -107,7 +107,7 @@ CTRL + q                Close Sleep graphical interface
 Examples
 ~~~~~~~~
 
-.. include:: generated/visbrain.gui.Signal.examples
+.. include:: generated/visbrain.gui.Signal.examples.rst
 
 .. raw:: html
 

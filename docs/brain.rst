@@ -328,7 +328,7 @@ The colorbar can be controlled for individual objects including :
 Examples
 ~~~~~~~~
 
-.. include:: generated/visbrain.gui.Brain.examples
+.. include:: generated/visbrain.gui.Brain.examples.rst
 
 .. raw:: html
 

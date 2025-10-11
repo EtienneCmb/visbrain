@@ -79,7 +79,7 @@ Example
    Code above : four exported figures from the Brain module are aranged in a (2, 2) grid. Then, some have a colorbar, xlabel, ylabel. Finally, there is two shared colorbars.
 
 
-.. include:: generated/visbrain.gui.Figure.examples
+.. include:: generated/visbrain.gui.Figure.examples.rst
 
 .. raw:: html
 
