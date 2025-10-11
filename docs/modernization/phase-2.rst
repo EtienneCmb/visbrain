@@ -48,19 +48,19 @@ CLI integration
 Entry points should no longer rely on :data:`sys.argv` being consumed during
 module import.  Instead they should call
 ``configure_from_argv(sys.argv[1:], config=get_config())`` before bootstrapping
-their UI.  The parser now respects all existing flags and
-reports invalid ``--visbrain-show`` values without mutating the stored state.
-``configure_from_environ`` can be called ahead of CLI parsing so deployment
-scripts can respect ``VISBRAIN_SHOW_GUI`` alongside command line overrides.
+their UI.  The parser now validates GUI-visibility options without mutating the
+stored state.  ``configure_from_environ`` can be called ahead of CLI parsing so
+deployment scripts can respect ``VISBRAIN_SHOW_GUI`` alongside command line
+overrides.
 
 Enabling interactive launches
 -----------------------------
 
-Local runs that should always display the GUI can either export
-``VISBRAIN_SHOW_GUI=1`` or pass ``--visbrain-show=True`` to entry points.  Both
-mechanisms update :class:`~visbrain.config.VisbrainConfig` through the same normalization logic,
-so automation that sets the environment variable can still be overridden by a
-CLI flag when necessary.
+Local runs that should always display the GUI can export
+``VISBRAIN_SHOW_GUI=1`` before invoking the façade.  The environment variable
+continues to update :class:`~visbrain.config.VisbrainConfig` so automated jobs
+can default to headless execution while local contributors opt into
+interactive windows.
 
 Practical examples
 ------------------

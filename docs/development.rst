@@ -65,9 +65,10 @@ Gallery examples execute as part of ``tox -e docs``.  Failures usually indicate
 missing optional dependencies or a GUI trying to open in a headless
 environment.  Confirm that ``pip install .[docs]`` completed successfully and
 re-run the builder with ``VISBRAIN_SHOW_GUI=0 QT_QPA_PLATFORM=offscreen tox -e
-docs`` to force headless rendering.  Individual examples can be debugged by
-invoking the generated script from ``docs/auto_examples`` with
-``--visbrain-show=False`` to match the gallery runtime behaviour.
+docs`` to force headless rendering.  Individual demos can be debugged with the
+example runner: ``python -m visbrain.examples run <example-name> --headless``
+recreates the Sphinx-gallery runtime locally while respecting the
+``VISBRAIN_SHOW_GUI`` toggle.
 
 .. _Documentation workflow: https://github.com/EtienneCmb/visbrain/actions/workflows/docs.yml
 

@@ -3,145 +3,63 @@
 Documentation
 =============
 
-.. ------------------ INTRODUCTION TO VISBRAIN ------------------
-.. raw:: html
+.. admonition:: Command-line helpers
+   :class: seealso
 
-    <div class="panel-group">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h4 class="panel-title">
-            <a data-toggle="collapse" href="#collapse_intro">Introduction to Visbrain</a>
-          </h4>
-        </div>
-        <div id="collapse_intro" class="panel-collapse collapse in">
-          <div class="panel-body">
+   Phase 5 adds two convenience entry points that complement the guides
+   below:
 
-.. toctree::
-    :maxdepth: 2
-    :numbered:
+   * ``python -m visbrain info`` reports the OpenGL and VisPy diagnostics used
+     throughout :doc:`development` for health checks and CI triage.
+   * ``python -m visbrain.examples`` lists and executes gallery scripts.  Use
+     ``--list`` to discover available demos and ``run <name>`` to reproduce a
+     specific example locally.
 
-    introduction
+.. dropdown:: Introduction to Visbrain
+   :open:
 
+   .. toctree::
+      :maxdepth: 2
+      :numbered:
 
-.. ------------------ VISBRAIN OBJECT ------------------
-.. raw:: html
+      introduction
 
-          </div>
-        </div>
-      </div>
+.. dropdown:: Visbrain objects
 
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title">
-          <a data-toggle="collapse" href="#collapse_objects">Visbrain's objects</a>
-        </h4>
-      </div>
-      <div id="collapse_objects" class="panel-collapse collapse">
-        <div class="panel-body">
+   .. toctree::
+      :maxdepth: 3
+      :numbered:
 
+      objects
 
-.. toctree::
-    :maxdepth: 3
-    :numbered:
+.. dropdown:: Brain module
 
-    objects
+   .. toctree::
+      :maxdepth: 3
+      :numbered:
 
+      brain
 
-.. ------------------ BRAIN MODULE ------------------
-.. raw:: html
+.. dropdown:: Sleep module
 
-          </div>
-        </div>
-      </div>
+   .. toctree::
+      :maxdepth: 3
+      :numbered:
 
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title">
-          <a data-toggle="collapse" href="#collapse_brain">[Brain] visualize EEG/MEG/Intracranial data, connectivity in a standard MNI 3D brain</a>
-          <img alt="_static/ico/brain_ico.png" src="_static/ico/brain_ico.png" width="30" height="30" align="right">
-        </h4>
-      </div>
-      <div id="collapse_brain" class="panel-collapse collapse">
-        <div class="panel-body">
+      sleep
 
-.. toctree::
-    :maxdepth: 3
-    :numbered:
+.. dropdown:: Signal module
 
-    brain
+   .. toctree::
+      :maxdepth: 3
+      :numbered:
 
-.. ------------------ SLEEP MODULE ------------------
-.. raw:: html
+      signal
 
-          </div>
-        </div>
-      </div>
+.. dropdown:: Figure module
 
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title">
-          <a data-toggle="collapse" href="#collapse_sleep">[Sleep] visualize polysomnographic data and hypnogram edition</a>
-          <img alt="_static/ico/sleep_ico.png" src="_static/ico/sleep_ico.png" width="30" height="30" align="right">
-        </h4>
-      </div>
-      <div id="collapse_sleep" class="panel-collapse collapse">
-        <div class="panel-body">
+   .. toctree::
+      :maxdepth: 3
+      :numbered:
 
-.. toctree::
-    :maxdepth: 3
-    :numbered:
-
-    sleep
-
-.. ------------------ SIGNAL MODULE ------------------
-.. raw:: html
-
-          </div>
-        </div>
-      </div>
-
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title">
-          <a data-toggle="collapse" href="#collapse_signal">[SIGNAL] data-mining module for time-series inspection</a>
-          <img alt="_static/ico/signal_ico.png" src="_static/ico/signal_ico.png" width="30" height="30" align="right">
-        </h4>
-      </div>
-      <div id="collapse_signal" class="panel-collapse collapse">
-        <div class="panel-body">
-
-.. toctree::
-    :maxdepth: 3
-    :numbered:
-
-    signal
-
-.. ------------------ FIGURE MODULE ------------------
-.. raw:: html
-
-          </div>
-        </div>
-      </div>
-
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title">
-          <a data-toggle="collapse" href="#collapse_figure">[FIGURE] figure-layout for high-quality publication-like figures</a>
-          <img alt="_static/ico/figure_ico.png" src="_static/ico/figure_ico.png" width="30" height="30" align="right">
-        </h4>
-      </div>
-      <div id="collapse_figure" class="panel-collapse collapse">
-        <div class="panel-body">
-
-.. toctree::
-    :maxdepth: 3
-    :numbered:
-
-    figure
-
-.. raw:: html
-
-          </div>
-        </div>
-      </div>
-    </div>
+      figure

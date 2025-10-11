@@ -5,20 +5,20 @@
 Signal
 ######
 
-.. raw:: html
+.. admonition:: Overview
+   :class: sd-bg-light
 
-  <div class="jumbotron">
-    <h1 class="display-3">Quick description <img alt="_static/ico/signal_ico.png" src="_static/ico/signal_ico.png" width="150" height="150" align="right"></h1>
-    <p class="lead">Signal is a data-mining module for 1-D, 2-D and 3-D datasets. It tries to offer a convenient way to inspect datasets, locate bad trials and reveal time-frequency properties.</p>
-    <hr class="my-4">
-    <p>
+   Signal is a data-mining module for one-, two- and three-dimensional
+   recordings.  It exposes grid and single-trace layouts for rapid inspection,
+   couples them with spectral analyses and supports annotation workflows.  Use
+   :class:`~visbrain.gui.Signal` from Python or run curated demos with
+   ``python -m visbrain.examples run signal/<example>``.
 
 Checkout the API of the :class:`~visbrain.gui.Signal` class.
 
-.. raw:: html
-
-    <img alt="_static/signal/signal_presentation.png" src="_static/signal/signal_presentation.png" align="center"></p>
-  </div>
+.. figure:: _static/signal/signal_presentation.png
+   :align: center
+   :alt: Signal module overview
 
 .. contents:: Contents
    :local:
@@ -35,41 +35,30 @@ The GUI of the Signal module is subdivided into to two distinct components :
 Main features
 ~~~~~~~~~~~~~
 
-.. raw:: html
+.. grid:: 1 1 2 2
+   :gutter: 2
 
-    <div class="grid-container">
-        <div class="grid-item">
-            <div class="alert alert-dismissible alert-primary">
-              <b>Grid disposition</b>
-              <ul>
-                <li>2-D and 3-D datasets are disposed into a grid for an overview of an entire dataset</li>
-                <li>Zoom, translate and double click on a signal to enlarge it</li>
-              </ul>
-            </div>
-        </div>
-        <div class="grid-item">
-            <div class="alert alert-dismissible alert-primary">
-              <b>Signal inspection</b>
-              <ul>
-                <li>Plot one time-series at a time</li>
-                <li>Navigate across all of the time-series present in the dataset</li>
-                <li>Change the plotting form (continuous line, markers, histogram, time-frequency map, power spectrum density (PSD))</li>
-                <li>Load and export annotated trials</li>
-              </ul>
-            </div>
-        </div>
-        <div class="grid-item">
-            <div class="alert alert-dismissible alert-primary">
-              <b>Tools</b>
-              <ul>
-                <li>De-trending and de-meaning</li>
-                <li>Filtering (lowpass, highpass, bandpass, bandstop)</li>
-                <li>Extract the amplitude, phase or power in specific frequency bands</li>
-                <li>Take a screenshot (of the entire window, or the grid canvas only or of the signal canvas only)</li>
-              </ul>
-            </div>
-        </div>
-    </div>
+   .. card:: Grid disposition
+      :class-card: sd-bg-primary sd-text-white
+
+      * Map 2-D and 3-D datasets onto interactive grids.
+      * Zoom, pan and double-click to focus on individual traces.
+
+   .. card:: Signal inspection
+      :class-card: sd-bg-light
+
+      * Navigate through channels with keyboard shortcuts.
+      * Switch between line, marker, histogram, spectrogram and PSD views.
+      * Import and export annotations for collaborative scoring.
+
+   .. card:: Processing toolbox
+      :class-card: sd-bg-light
+
+      * Detrend and demean signals on demand.
+      * Apply low-pass, high-pass, band-pass or band-stop filters.
+      * Compute amplitude, phase and power across frequency bands.
+      * Capture screenshots of the full GUI, the grid or the single-signal
+        canvas.
 
 
 Import and use Signal
@@ -108,7 +97,3 @@ Examples
 ~~~~~~~~
 
 .. include:: generated/visbrain.gui.Signal.examples.rst
-
-.. raw:: html
-
-    <div style='clear:both'></div>
