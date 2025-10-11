@@ -149,11 +149,24 @@ def _ensure_visbrain_gui() -> None:
     except Exception:  # pragma: no cover - depends on runtime environment
         pass
 
-    class _GuiStub:
-        __doc__ = "GUI functionality is unavailable during documentation builds."
+    def _create_gui_stub_class(module_name: str, class_name: str) -> type:
+        """Return a lightweight stub class matching the public GUI API."""
 
         def __init__(self, *args: object, **kwargs: object) -> None:  # pragma: no cover - trivial
             pass
+
+        __init__.__qualname__ = f"{class_name}.__init__"
+        __init__.__module__ = module_name
+
+        return type(
+            class_name,
+            (),
+            {
+                "__doc__": "GUI functionality is unavailable during documentation builds.",
+                "__module__": module_name,
+                "__init__": __init__,
+            },
+        )
 
     gui_module = sys.modules.get("visbrain.gui")
     if not isinstance(gui_module, ModuleType):
@@ -170,20 +183,27 @@ def _ensure_visbrain_gui() -> None:
         ("Sleep", "sleep"),
         ("Figure", "figure"),
     ):
-        setattr(gui_module, class_name, _GuiStub)
+        capital_module_name = f"visbrain.gui.{class_name}"
+        stub_class = _create_gui_stub_class(capital_module_name, class_name)
+
+        setattr(gui_module, class_name, stub_class)
         _exports.append(class_name)
 
-        capital_module = ModuleType(f"visbrain.gui.{class_name}")
+        existing_capital = sys.modules.get(capital_module_name)
+        capital_module = existing_capital if isinstance(existing_capital, ModuleType) else ModuleType(capital_module_name)
         capital_module.__all__ = [class_name]
-        setattr(capital_module, class_name, _GuiStub)
-        sys.modules[f"visbrain.gui.{class_name}"] = capital_module
+        setattr(capital_module, class_name, stub_class)
+        sys.modules[capital_module_name] = capital_module
 
-        package_module = ModuleType(f"visbrain.gui.{package_name}")
+        package_module_name = f"visbrain.gui.{package_name}"
+        existing_package = sys.modules.get(package_module_name)
+        package_module = existing_package if isinstance(existing_package, ModuleType) else ModuleType(package_module_name)
         package_module.__path__ = []  # type: ignore[attr-defined]
         package_module.__all__ = [class_name]
-        setattr(package_module, class_name, _GuiStub)
+        package_stub = _create_gui_stub_class(package_module_name, class_name)
+        setattr(package_module, class_name, package_stub)
         setattr(gui_module, package_name, package_module)
-        sys.modules[f"visbrain.gui.{package_name}"] = package_module
+        sys.modules[package_module_name] = package_module
 
     gui_module.__all__ = _exports
 
