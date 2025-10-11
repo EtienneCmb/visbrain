@@ -5,6 +5,14 @@
 :class:`~visbrain.gui.Figure`
 #############################
 
+.. admonition:: Overview
+   :class: sd-bg-light
+
+   :class:`~visbrain.gui.Figure` arranges exported images into publication-ready
+   grids with per-axis labelling and shared colour-bars.  Launch it directly
+   from Python or reproduce gallery demonstrations with
+   ``python -m visbrain.examples run figure/<example>``.
+
 .. figure::  _static/ico/figure_ico.png
    :align:   center
 
@@ -80,8 +88,4 @@ Example
 
 
 .. include:: generated/visbrain.gui.Figure.examples.rst
-
-.. raw:: html
-
-    <div style='clear:both'></div>
 

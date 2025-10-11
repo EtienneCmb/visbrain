@@ -5,15 +5,23 @@
 Sleep
 =====
 
-.. raw:: html
+.. admonition:: Overview
+   :class: sd-bg-light
 
-  <div class="jumbotron">
-    <h1 class="display-3">Quick description <img alt="_static/ico/sleep_ico.png" src="_static/ico/sleep_ico.png" width="150" height="150" align="right"></h1>
-    <p class="lead">Sleep is a flexible graphical user interface for visualization, analysis and scoring of polysomnographic sleep data and is developed in collaboration with <a href="https://raphaelvallat.github.io/">Raphael Vallat</a> and <a href="http://bluebrain.epfl.ch/page-143249-en.html">Christian O Reilly</a>. If you use Sleep, please cite the article in <a href="http://journal.frontiersin.org/article/10.3389/fninf.2017.00060/full">Frontiers in Neuroinformatics</a>.</p>
-    <hr class="my-4">
-    <p>
+   Sleep is a flexible graphical user interface for visualising, analysing and
+   scoring polysomnographic data.  The Phase 5 refactor adopts a
+   model/view/controller split where ``SleepDataset`` encapsulates recordings,
+   ``SleepView`` renders the Qt widgets and ``SleepController`` orchestrates
+   interactions.  Launch the façade via :class:`~visbrain.gui.Sleep` or run
+   curated demos with
+   ``python -m visbrain.examples run sleep/<example>``.  If you use Sleep in a
+   publication, please cite the article in `Frontiers in Neuroinformatics
+   <http://journal.frontiersin.org/article/10.3389/fninf.2017.00060/full>`_.
 
-Checkout the API of the :class:`~visbrain.gui.Sleep` class. If you need help with the :class:`~visbrain.gui.Sleep` module, ask your questions in the dedicated `gitter Sleep chat <https://gitter.im/visbrain-python/Sleep?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
+Checkout the API of the :class:`~visbrain.gui.Sleep` class. If you need help
+with the :class:`~visbrain.gui.Sleep` module, ask your questions in the
+dedicated `gitter Sleep chat
+<https://gitter.im/visbrain-python/Sleep?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_.
 
 .. figure::  _static/sleep/sleep_main.png
    :align:   center
@@ -31,73 +39,52 @@ Checkout the API of the :class:`~visbrain.gui.Sleep` class. If you need help wit
 Main features
 ~~~~~~~~~~~~~
 
+.. grid:: 1 1 2 2
+   :gutter: 2
 
-.. raw:: html
+   .. grid-item-card:: Graphical user interface
+      :class-card: sd-bg-primary sd-text-white
 
-    <div class="grid-container">
-        <div class="grid-item">
-            <div class="alert alert-dismissible alert-primary">
-              <b>Graphical User Interface (GUI)</b>
-              <ul>
-                <li>Modular and responsive GUI</li>
-                <li>Take screenshot with controllable dpi</li>
-                <li>Save the GUI state (channels, amplitude, panels, checkbox...)</li>
-              </ul>
-            </div>
-        </div>
-        <div class="grid-item">
-            <div class="alert alert-dismissible alert-primary">
-              <b>Load standard electro-physiological files</b>
-              <ul>
-                <li>Default supported files : European Data Format, BrainVision, Micromed, Elan</li>
-                <li>Pass raw data or use MNE-python to load other <a href="https://martinos.org/mne/dev/manual/io.html#importing-eeg-data">file formats</a></li>
-                <li>Supported extensions for hypnogram files : .txt, .csv, .xlsx, .hyp.</li>
-              </ul>
-            </div>
-        </div>
-        <div class="grid-item">
-            <div class="alert alert-dismissible alert-primary">
-              <b>Display</b>
-              <ul>
-                <li>Polysomnographic data (e.g. EEG, EOG, EMG)</li>
-                <li>Time-frequency (=spectrogram)</li>
-                <li>Hypnogram</li>
-                <li>Topographic map</li>
-              </ul>
-            </div>
-        </div>
-        <div class="grid-item">
-            <div class="alert alert-dismissible alert-primary">
-              <b>Hypnogram</b>
-              <ul>
-                <li>Load, edit and save</li>
-                <li>Real-time computation of sleep statistics</li>
-                <li>Export high-quality hypnogram figure</li>
-              </ul>
-            </div>
-        </div>
-        <div class="grid-item">
-            <div class="alert alert-dismissible alert-primary">
-              <b>Signal processing</b>
-              <ul>
-                <li>De-meaning / de-trending</li>
-                <li>Filtering</li>
-                <li>Re-referencing to a reference channel or common average</li>
-                <li>Bipolarization</li>
-              </ul>
-            </div>
-        </div>
-        <div class="grid-item">
-            <div class="alert alert-dismissible alert-primary">
-              <b>Semi-automatic events detections</b>
-              <ul>
-                <li>Spindles, K-complexes, slow waves, rapid eye movements, muscle twitches and peaks (each detection comes with additional and controllable parameters)</li>
-                <li>Can be performed either on single or multiple channels</li>
-                <li>Detections are reported on the hypnogram and inside a table</li>
-              </ul>
-            </div>
-        </div>
-    </div>
+      * Modular Qt panes with responsive layouts.
+      * High-DPI screenshots for publications.
+      * Persisted channel selection, amplitude ranges and panel visibility.
+
+   .. grid-item-card:: Loader flexibility
+      :class-card: sd-bg-light
+
+      * Built-in EDF, BrainVision, Micromed and Elan readers.
+      * Optional ``mne`` integration for additional formats.
+      * Hypnogram importers for ``.txt``, ``.csv``, ``.xlsx`` and ``.hyp``.
+
+   .. grid-item-card:: Multi-pane displays
+      :class-card: sd-bg-light
+
+      * Time-series, spectrogram, hypnogram and topographic map panes stay
+        synchronised.
+      * Configurable down-sampling and rescaling pipelines.
+      * Shared navigation shortcuts across panes.
+
+   .. grid-item-card:: Hypnogram tooling
+      :class-card: sd-bg-light
+
+      * Inline editing with statistics refreshed in real time.
+      * Publication-grade exports of scoring timelines.
+      * Stage dictionaries resolved from bundled templates.
+
+   .. grid-item-card:: Signal processing
+      :class-card: sd-bg-light
+
+      * Demean, detrend and filter recordings interactively.
+      * Re-reference to a single channel or common average.
+      * Bipolar derivations and envelope tracking.
+
+   .. grid-item-card:: Event detection
+      :class-card: sd-bg-light
+
+      * Semi-automatic detection of spindles, K-complexes, slow waves and REM
+        events.
+      * Operate on one or multiple channels simultaneously.
+      * Review detections in tables linked to the hypnogram timeline.
 
 
 Import and use sleep
@@ -936,7 +923,3 @@ Examples
 ~~~~~~~~
 
 .. include:: generated/visbrain.gui.Sleep.examples.rst
-
-.. raw:: html
-
-    <div style='clear:both'></div>

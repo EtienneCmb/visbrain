@@ -3,20 +3,25 @@
 Brain
 =====
 
-.. raw:: html
+.. admonition:: Overview
+   :class: sd-bg-light
 
-  <div class="jumbotron">
-    <h1 class="display-3">Quick description <img alt="_static/ico/brain_ico.png" src="_static/ico/brain_ico.png" width="150" height="150" align="right"></h1>
-    <p class="lead">Brain is a flexible graphical user interface for 3D visualizations on an MNI brain. It can be use to display deep sources, connectivity, region of interest etc.</p>
-    <hr class="my-4">
-    <p>
+   Brain is a flexible graphical user interface for 3D visualisations on an
+   MNI template.  It renders sources, connectivity graphs, ROIs and auxiliary
+   overlays in a single canvas so exploratory analysis and publication-grade
+   screenshots share the same workflow.  Explore the public API via
+   :class:`visbrain.gui.Brain` or run curated demos with
+   ``python -m visbrain.examples run brain/<example>``.
 
-Checkout the API of the :class:`visbrain.gui.Brain` class. If you need help with the *Brain* module, ask your questions in the dedicated `gitter Brain chat <https://gitter.im/visbrain-python/Brain?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
+.. figure:: _static/brain/brain_description.png
+   :align: center
+   :alt: Brain GUI overview
 
-.. raw:: html
+   The Brain GUI assembles multiple object types in a single scene.
 
-    <img alt="_static/brain/brain_description.png" src="_static/brain/brain_description.png" align="center"></p>
-  </div>
+Checkout the API of the :class:`visbrain.gui.Brain` class. If you need help with
+the *Brain* module, ask your questions in the dedicated `gitter Brain chat
+<https://gitter.im/visbrain-python/Brain?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_.
 
 .. contents:: Contents
    :local:
@@ -29,71 +34,49 @@ Checkout the API of the :class:`visbrain.gui.Brain` class. If you need help with
 Main features
 ~~~~~~~~~~~~~
 
-.. raw:: html
+.. grid:: 1 1 2 2
+   :gutter: 2
 
-    <div class="grid-container">
-        <div class="grid-item">
-            <div class="alert alert-dismissible alert-primary">
-              <b>Graphical User Interface</b>
-              <ul>
-                <li>Modular and responsive GUI</li>
-                <li>Take screenshot with controllable dpi</li>
-                <li>Save the GUI state (buttons, sliders, checkbox...)</li>
-              </ul>
-            </div>
-        </div>
-        <div class="grid-item">
-            <div class="alert alert-dismissible alert-primary">
-              <b>Main brain templates</b>
-              <ul>
-                <li>Zoom, translate and rotate the brain</li>
-                <li>Control the brain appearance, transparency, hemisphere...</li>
-                <li>Import custom templates</li>
-              </ul>
-            </div>
-        </div>
-        <div class="grid-item">
-            <div class="alert alert-dismissible alert-primary">
-              <b>Sources</b>
-              <ul>
-                <li>Add sources to the scene (EEG, MEG, intra-cranial...)</li>
-                <li>Connect those sources (Connectivity with several color properties)</li>
-                <li>Project source's activity onto the surface</li>
-                <li>Localize source's location using either the Brodmann atlas, the Automated Anatomical Labeling (AAL) or any custom atlas.</li>
-              </ul>
-            </div>
-        </div>
-        <div class="grid-item">
-            <div class="alert alert-dismissible alert-primary">
-              <b>Region Of Interest</b>
-              <ul>
-                <li>Display ROI inside translucent MNI brain</li>
-                <li>Define and use custom ROI</li>
-                <li>Project source's activity onto ROI</li>
-              </ul>
-            </div>
-        </div>
-        <div class="grid-item">
-            <div class="alert alert-dismissible alert-primary">
-              <b>Cross-sections</b>
-              <ul>
-                <li>Display brain sections</li>
-                <li>Localize sources in the cross section</li>
-                <li>Use a nifti file</li>
-              </ul>
-            </div>
-        </div>
-        <div class="grid-item">
-            <div class="alert alert-dismissible alert-primary">
-              <b>Others</b>
-              <ul>
-                <li>Display volumes</li>
-                <li>Display time-series, pictures etc.</li>
-                <li>Display vectors</li>
-              </ul>
-            </div>
-        </div>
-    </div>
+   .. grid-item-card:: Graphical user interface
+      :class-card: sd-bg-primary sd-text-white
+
+      * Modular and responsive Qt layout.
+      * Capture screenshots with configurable DPI.
+      * Persist GUI state (buttons, sliders, checkboxes, camera angles).
+
+   .. grid-item-card:: Brain templates
+      :class-card: sd-bg-light
+
+      * Rotate, translate and zoom canonical MNI surfaces.
+      * Control shading, transparency and hemisphere visibility.
+      * Import custom templates alongside bundled assets.
+
+   .. grid-item-card:: Sources and connectivity
+      :class-card: sd-bg-light
+
+      * Visualise EEG, MEG and intracranial sources.
+      * Render connectivity edges with per-link colour/width controls.
+      * Project activity onto cortical surfaces for quick inspections.
+
+   .. grid-item-card:: Regions of interest
+      :class-card: sd-bg-light
+
+      * Display ROIs within a translucent anatomical context.
+      * Leverage bundled atlases or import custom label maps.
+      * Quantify source contributions per ROI.
+
+   .. grid-item-card:: Cross-sections and volumes
+      :class-card: sd-bg-light
+
+      * Slice volumetric data interactively.
+      * Localise sources on orthogonal planes.
+      * Load NIfTI stacks and apply consistent transfer functions.
+
+   .. grid-item-card:: Additional layers
+      :class-card: sd-bg-light
+
+      * Display time-series, static images and vector fields.
+      * Compose publication-ready layouts with the colour-bar canvas.
 
 Import and use Brain
 ~~~~~~~~~~~~~~~~~~~~
@@ -329,7 +312,3 @@ Examples
 ~~~~~~~~
 
 .. include:: generated/visbrain.gui.Brain.examples.rst
-
-.. raw:: html
-
-    <div style='clear:both'></div>
