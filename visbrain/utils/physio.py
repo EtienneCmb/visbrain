@@ -100,10 +100,12 @@ def bipolarization(data, chans, to_ignore=None):
 
     Channel labels are cleaned and for each channel a "name" and "number" are
     extracted using the following steps:
-        1- Remove spaces and remove everything after "-" or "." in channel name
-        2- Set as channel "number" the last series of digits in the label
-        3- Set as channel "name" everything in the cleaned label preceding the
-            channel number
+
+    1. Remove spaces and remove everything after "-" or "." in channel name
+    2. Set as channel "number" the last series of digits in the label
+    3. Set as channel "name" everything in the cleaned label preceding the
+       channel number
+
     For example the name and number of channel "EEG1,2-A1" are "EEG1," and "2".
     Bipolarization is done by substracting channels with the same name for
     successive numbers.
