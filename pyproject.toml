@@ -31,14 +31,14 @@ keywords = [
     "data-mining",
 ]
 dependencies = [
-    "numpy>=1.26.4",
-    "scipy>=1.11.4",
-    "vispy>=0.13.0",
-    "matplotlib>=3.8.4",
-    "PySide6>=6.7.1",
-    "shiboken6>=6.7.1",
-    "pillow>=10.3.0",
-    "PyOpenGL>=3.1.7",
+    "numpy>=1.26.4,<1.27",
+    "scipy>=1.11.4,<1.12",
+    "vispy>=0.13.0,<0.14",
+    "matplotlib>=3.8.4,<3.9",
+    "PySide6>=6.7.1,<6.8",
+    "shiboken6>=6.7.1,<6.8",
+    "pillow>=10.3.0,<10.4",
+    "PyOpenGL>=3.1.7,<3.2",
 ]
 
 [project.optional-dependencies]
@@ -53,24 +53,24 @@ docs = [
     "numpydoc",
 ]
 full = [
-    "mne>=1.6.1",
-    "tensorpac>=0.6.5",
-    "pandas>=2.2.2",
-    "xlrd>=2.0.1",
-    "scikit-image>=0.22.0",
-    "nibabel>=5.2.1",
-    "imageio>=2.34.1",
+    "mne>=1.6.1,<1.7",
+    "tensorpac>=0.6.5,<0.7",
+    "pandas>=2.2.2,<2.3",
+    "xlrd>=2.0.1,<2.1",
+    "scikit-image>=0.22.0,<0.23",
+    "nibabel>=5.2.1,<5.3",
+    "imageio>=2.34.1,<2.35",
 ]
 sleep = [
-    "mne>=1.6.1",
-    "tensorpac>=0.6.5",
+    "mne>=1.6.1,<1.7",
+    "tensorpac>=0.6.5,<0.7",
 ]
 roi = [
-    "pandas>=2.2.2",
-    "xlrd>=2.0.1",
+    "pandas>=2.2.2,<2.3",
+    "xlrd>=2.0.1,<2.1",
 ]
 topo = [
-    "scikit-image>=0.22.0",
+    "scikit-image>=0.22.0,<0.23",
 ]
 
 [project.urls]
