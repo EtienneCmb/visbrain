@@ -617,7 +617,7 @@ class SceneObj(object):
                          widget=self.canvas.central_widget, **kwargs)
 
     def record_animation(self, name, n_pic=10):
-        """Record an animated scene and save as a *.gif file.
+        """Record an animated scene and save as a ``*.gif`` file.
 
         Note that this method :
 

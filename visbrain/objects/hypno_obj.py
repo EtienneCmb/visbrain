@@ -15,7 +15,7 @@ class HypnogramObj(VisbrainObject):
     Parameters
     ----------
     name : string
-        Name of the hypnogram object or path to a *.txt or *.csv file.
+        Name of the hypnogram object or path to a ``*.txt`` or ``*.csv`` file.
     data : array_like
         Array of data of shape (n_pts,).
     time : array_like | None

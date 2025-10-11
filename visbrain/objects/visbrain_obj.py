@@ -287,7 +287,7 @@ class VisbrainObject(_VisbrainObj):
         self._app_timer.start()
 
     def record_animation(self, name, n_pic=10, bgcolor=None):
-        """Record an animated object and save as a *.gif file.
+        """Record an animated object and save as a ``*.gif`` file.
 
         Note that this method :
 
