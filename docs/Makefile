@@ -3,7 +3,7 @@
 SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-build
 SOURCEDIR     := $(CURDIR)
-BUILDDIR      := $(abspath $(CURDIR)/../_build/docs)
+BUILDDIR      := $(abspath $(CURDIR)/_build)
 DOCTREES      := $(BUILDDIR)/doctrees
 HTMLDIR       := $(BUILDDIR)/html
 

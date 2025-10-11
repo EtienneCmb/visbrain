@@ -25,7 +25,7 @@ logger.info("generating thumbnails using example images...")
 
 DOCS_DIR = Path(__file__).resolve().parent
 EXAMPLES_DIR = DOCS_DIR.parent / "examples"
-THUMB_DIR = DOCS_DIR.parent / "_build" / "docs" / "html" / "_images"
+THUMB_DIR = DOCS_DIR / "_build" / "html" / "_images"
 THUMB_DIR.mkdir(parents=True, exist_ok=True)
 
 to_thmb = str(THUMB_DIR / "sphx_glr_{}_thumb.png")
