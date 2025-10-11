@@ -29,6 +29,21 @@ from unittest.mock import MagicMock
 
 from sphinx_gallery.sorting import FileNameSortKey, ExplicitOrder
 from numpydoc import numpydoc, docscrape
+from docutils.parsers.rst import directives
+from sphinx.ext.autodoc import ClassDocumenter
+
+if 'canonical' not in ClassDocumenter.option_spec:
+    _original_get_canonical = ClassDocumenter.get_canonical_fullname
+    ClassDocumenter.option_spec['canonical'] = directives.unchanged
+
+    def _get_canonical_with_override(self):
+        canonical = self.options.get('canonical')
+        if canonical:
+            return canonical
+        return _original_get_canonical(self)
+
+    ClassDocumenter.get_canonical_fullname = _get_canonical_with_override  # type: ignore[assignment]
+
 
 
 def _ensure_qt_binding() -> None:
@@ -149,7 +164,9 @@ def _ensure_visbrain_gui() -> None:
     except Exception:  # pragma: no cover - depends on runtime environment
         pass
 
-    def _create_gui_stub_class(module_name: str, class_name: str) -> type:
+    def _create_gui_stub_class(
+        module_name: str, class_name: str, methods: tuple[str, ...] = ()
+    ) -> type:
         """Return a lightweight stub class matching the public GUI API."""
 
         def __init__(self, *args: object, **kwargs: object) -> None:  # pragma: no cover - trivial
@@ -158,15 +175,24 @@ def _ensure_visbrain_gui() -> None:
         __init__.__qualname__ = f"{class_name}.__init__"
         __init__.__module__ = module_name
 
-        return type(
-            class_name,
-            (),
-            {
-                "__doc__": "GUI functionality is unavailable during documentation builds.",
-                "__module__": module_name,
-                "__init__": __init__,
-            },
-        )
+        def _make_stub(name: str):
+            def _stub(self, *args: object, **kwargs: object) -> None:  # pragma: no cover - trivial
+                return None
+
+            _stub.__name__ = name
+            _stub.__qualname__ = f"{class_name}.{name}"
+            _stub.__module__ = module_name
+            return _stub
+
+        attributes = {
+            "__doc__": "GUI functionality is unavailable during documentation builds.",
+            "__module__": module_name,
+            "__init__": __init__,
+        }
+        for method in methods:
+            attributes[method] = _make_stub(method)
+
+        return type(class_name, (), attributes)
 
     gui_module = sys.modules.get("visbrain.gui")
     if not isinstance(gui_module, ModuleType):
@@ -177,6 +203,9 @@ def _ensure_visbrain_gui() -> None:
     gui_module.__path__ = [str(gui_path)]  # type: ignore[attr-defined]
 
     _exports = []
+    _method_map = {
+        "Sleep": ("replace_detections",),
+    }
     for class_name, package_name in (
         ("Brain", "brain"),
         ("Signal", "signal"),
@@ -184,7 +213,8 @@ def _ensure_visbrain_gui() -> None:
         ("Figure", "figure"),
     ):
         capital_module_name = f"visbrain.gui.{class_name}"
-        stub_class = _create_gui_stub_class(capital_module_name, class_name)
+        methods = _method_map.get(class_name, ())
+        stub_class = _create_gui_stub_class(capital_module_name, class_name, methods)
 
         setattr(gui_module, class_name, stub_class)
         _exports.append(class_name)
@@ -200,10 +230,29 @@ def _ensure_visbrain_gui() -> None:
         package_module = existing_package if isinstance(existing_package, ModuleType) else ModuleType(package_module_name)
         package_module.__path__ = []  # type: ignore[attr-defined]
         package_module.__all__ = [class_name]
-        package_stub = _create_gui_stub_class(package_module_name, class_name)
+        package_stub = _create_gui_stub_class(package_module_name, class_name, methods)
         setattr(package_module, class_name, package_stub)
         setattr(gui_module, package_name, package_module)
         sys.modules[package_module_name] = package_module
+
+    controller_module_name = "visbrain.gui.sleep.controller"
+    controller_module = sys.modules.get(controller_module_name)
+    if not isinstance(controller_module, ModuleType):
+        controller_module = ModuleType(controller_module_name)
+    controller_stub = _create_gui_stub_class(
+        controller_module_name, "SleepController", ("load_dataset_async",)
+    )
+    controller_module.__all__ = ["SleepController"]
+    setattr(controller_module, "SleepController", controller_stub)
+    sys.modules[controller_module_name] = controller_module
+
+    sleep_module = getattr(gui_module, "sleep", None)
+    if isinstance(sleep_module, ModuleType):
+        setattr(sleep_module, "controller", controller_module)
+        existing = list(getattr(sleep_module, "__all__", []))
+        if "SleepController" not in existing:
+            existing.append("SleepController")
+            sleep_module.__all__ = existing
 
     gui_module.__all__ = _exports
 

@@ -29,6 +29,7 @@ Graphical user interface
    Sleep
    Signal
    Figure
+   sleep.controller.SleepController
 
 
 Objects
@@ -141,3 +142,5 @@ Miscellaneous
    :template: class.rst
 
     Colormap
+
+.. include:: api_gui_stubs.rst

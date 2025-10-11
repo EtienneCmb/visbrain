@@ -2,7 +2,7 @@
 
 .. currentmodule:: visbrain.gui
 
-:class:`~Figure`
+:class:`~visbrain.gui.Figure`
 ##################
 
 .. figure::  _static/ico/figure_ico.png
