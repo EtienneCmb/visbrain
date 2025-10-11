@@ -16,14 +16,156 @@
 import inspect
 import os
 import sys
+import importlib
+import importlib.abc
+import importlib.machinery
 from datetime import date
 from contextlib import ExitStack
 from importlib import resources
 from os.path import relpath, dirname
 from pathlib import Path
+from types import ModuleType
+from unittest.mock import MagicMock
 
 from sphinx_gallery.sorting import FileNameSortKey, ExplicitOrder
 from numpydoc import numpydoc, docscrape
+
+
+def _ensure_qt_binding() -> None:
+    """Guarantee that a Qt binding is importable during documentation builds."""
+
+    try:
+        importlib.import_module("PySide6.QtCore")
+        return
+    except Exception:  # pragma: no cover - depends on runtime environment
+        pass
+
+    class _QtModule(ModuleType):
+        """Module stub that fabricates attributes on demand."""
+
+        def __getattr__(self, name: str) -> MagicMock:
+            mock = MagicMock(name=f"{self.__name__}.{name}")
+            setattr(self, name, mock)
+            return mock
+
+    qt_package = ModuleType("PySide6")
+    for submodule in ("QtCore", "QtGui", "QtWidgets", "QtPrintSupport", "QtSvg"):
+        module = _QtModule(f"PySide6.{submodule}")
+        setattr(qt_package, submodule, module)
+        sys.modules[f"PySide6.{submodule}"] = module
+    sys.modules["PySide6"] = qt_package
+
+
+_ensure_qt_binding()
+os.environ.setdefault("VISBRAIN_USE_QT_STUBS", "1")
+
+
+def _ensure_vispy() -> None:
+    """Provide a stub vispy package when native libraries are unavailable."""
+
+    try:
+        importlib.import_module("vispy.scene.cameras")
+        return
+    except Exception:  # pragma: no cover - depends on runtime environment
+        pass
+
+    class _StubModule(ModuleType):
+        """Module that fabricates attributes and propagates nested modules."""
+
+        def __getattr__(self, name: str) -> MagicMock:
+            mock = MagicMock(name=f"{self.__name__}.{name}")
+            setattr(self, name, mock)
+            return mock
+
+    class _StubLoader(importlib.abc.Loader):
+        def create_module(self, spec: importlib.machinery.ModuleSpec) -> ModuleType | None:
+            module = _StubModule(spec.name)
+            module.__path__ = []  # type: ignore[attr-defined]
+            sys.modules[spec.name] = module
+            return module
+
+        def exec_module(self, module: ModuleType) -> None:  # pragma: no cover - nothing to do
+            return
+
+    class _StubFinder(importlib.abc.MetaPathFinder):
+        def find_spec(
+            self,
+            fullname: str,
+            path: object | None,
+            target: ModuleType | None = None,
+        ) -> importlib.machinery.ModuleSpec | None:
+            if not fullname.startswith("vispy"):
+                return None
+            if fullname in sys.modules:
+                return None
+            return importlib.machinery.ModuleSpec(fullname, _StubLoader(), is_package=True)
+
+    def _install(fullname: str) -> ModuleType:
+        if fullname in sys.modules and isinstance(sys.modules[fullname], ModuleType):
+            return sys.modules[fullname]
+
+        module = _StubModule(fullname)
+        module.__path__ = []  # type: ignore[attr-defined]
+        sys.modules[fullname] = module
+
+        parent_name, _, attr = fullname.rpartition(".")
+        if parent_name:
+            parent = _install(parent_name)
+            setattr(parent, attr, module)
+        return module
+
+    for module_name in [
+        "vispy",
+        "vispy.scene",
+        "vispy.scene.cameras",
+        "vispy.scene.visuals",
+        "vispy.visuals",
+        "vispy.visuals.axis",
+        "vispy.visuals.visual",
+        "vispy.visuals.transforms",
+        "vispy.app",
+        "vispy.color",
+        "vispy.color.colormap",
+        "vispy.gloo",
+        "vispy.gloo.gl",
+    ]:
+        _install(module_name)
+
+    if not any(isinstance(finder, _StubFinder) for finder in sys.meta_path):
+        sys.meta_path.insert(0, _StubFinder())
+
+
+_ensure_vispy()
+
+
+def _ensure_visbrain_gui() -> None:
+    """Provide lightweight GUI stubs for autodoc when Qt is unavailable."""
+
+    try:
+        importlib.import_module("visbrain.gui.Brain")
+        importlib.import_module("visbrain.gui.Signal")
+        importlib.import_module("visbrain.gui.Sleep")
+        return
+    except Exception:  # pragma: no cover - depends on runtime environment
+        pass
+
+    class _GuiStub:
+        __doc__ = "GUI functionality is unavailable during documentation builds."
+
+        def __init__(self, *args: object, **kwargs: object) -> None:  # pragma: no cover - trivial
+            pass
+
+    gui_module = ModuleType("visbrain.gui")
+    sys.modules.setdefault("visbrain.gui", gui_module)
+
+    for name in ("Brain", "Signal", "Sleep"):
+        submodule = ModuleType(f"visbrain.gui.{name}")
+        setattr(submodule, name, _GuiStub)
+        setattr(gui_module, name, _GuiStub)
+        sys.modules[f"visbrain.gui.{name}"] = submodule
+
+
+_ensure_visbrain_gui()
 
 import visbrain
 from visbrain.config import get_config
@@ -45,6 +187,13 @@ def _resource_dir(*parts: str) -> str:
 
 _STATIC_ROOT = Path(_resource_dir('static'))
 _ICO_ROOT = _STATIC_ROOT / 'ico'
+_GALLERY_SECTIONS = ['objects', 'gui_brain', 'gui_sleep', 'gui_signal', 'eeg_meg', 'figure']
+_EXISTING_GALLERY_SECTIONS = [
+    section for section in _GALLERY_SECTIONS if (_EXAMPLES_ROOT / section).exists()
+]
+_PLOT_GALLERY = os.environ.get("VISBRAIN_BUILD_GALLERY", "").lower() in {"1", "true"}
+if not _EXISTING_GALLERY_SECTIONS:
+    _PLOT_GALLERY = False
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -83,7 +232,7 @@ autodoc_default_flags = ['members', 'inherited-members', 'no-undoc-members']
 sphinx_gallery_conf = {
     # path to your examples scripts
     'examples_dirs': str(_EXAMPLES_ROOT),
-    'plot_gallery': True,
+    'plot_gallery': _PLOT_GALLERY,
     'reference_url': {
         'visbrain': None,
         'matplotlib': 'http://matplotlib.org',
@@ -92,18 +241,28 @@ sphinx_gallery_conf = {
     },
     'gallery_dirs': str(_DOCS_ROOT / 'auto_examples'),
     'backreferences_dir': str(_DOCS_ROOT / 'generated'),
-    'subsection_order': ExplicitOrder([
-        str(_EXAMPLES_ROOT / 'objects'),
-        str(_EXAMPLES_ROOT / 'gui_brain'),
-        str(_EXAMPLES_ROOT / 'gui_sleep'),
-        str(_EXAMPLES_ROOT / 'gui_signal'),
-        str(_EXAMPLES_ROOT / 'eeg_meg'),
-        str(_EXAMPLES_ROOT / 'figure'),
-    ]),
     'within_subsection_order': FileNameSortKey,
     'doc_module': ('visbrain',),
     # 'thumbnail_size': (100, 100),
 }
+
+if _PLOT_GALLERY and _EXISTING_GALLERY_SECTIONS:
+    sphinx_gallery_conf['subsection_order'] = ExplicitOrder(_EXISTING_GALLERY_SECTIONS)
+
+if not _PLOT_GALLERY and 'sphinx_gallery.gen_gallery' in extensions:
+    extensions.remove('sphinx_gallery.gen_gallery')
+
+if not _PLOT_GALLERY:
+    placeholder_dir = _DOCS_ROOT / 'auto_examples'
+    placeholder_dir.mkdir(exist_ok=True)
+    placeholder = placeholder_dir / 'index.rst'
+    if not placeholder.exists():
+        placeholder.write_text(
+            "Examples\n========\n\n"
+            "The interactive example gallery is disabled for this documentation build."
+        )
+
+autosummary_context = {'gallery_enabled': _PLOT_GALLERY}
 
 numpydoc_show_class_members = False
 numpydoc_class_members_toctree = False

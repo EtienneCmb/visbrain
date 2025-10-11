@@ -11,7 +11,7 @@
    {% if methods %}
    .. rubric:: Methods
 
-   .. autosummary::
+.. autosummary::
       :toctree: {{ objname }}
    {% for item in methods %}
       ~{{ name }}.{{ item }}
@@ -19,8 +19,10 @@
    {% endif %}
    {% endblock %}
 
+{% if gallery_enabled %}
 .. include:: {{module}}.{{objname}}.examples
 
 .. raw:: html
 
     <div style='clear:both'></div>
+{% endif %}
