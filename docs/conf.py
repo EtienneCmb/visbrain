@@ -718,6 +718,12 @@ nitpick_ignore = [
     ('py:class', 'visbrain.io.cache.CacheManager'),
     ('py:class', 'visbrain.visuals.brain_visual.BrainVisual'),
     ('py:class', 'visbrain.objects.scene_obj.VisbrainCanvas'),
+    ('py:mod', 'visbrain.config'),
+    ('py:func', 'visbrain.config.configure_headless'),
+    ('py:class', 'visbrain.config.VisbrainConfig'),
+    ('py:mod', 'conftest'),
+    ('py:meth', 'visbrain.gui.Sleep.replace_detections'),
+    ('py:meth', 'visbrain.Sleep.replace_detections'),
 ]
 
 
