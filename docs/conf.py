@@ -256,11 +256,25 @@ if not _PLOT_GALLERY:
     placeholder_dir = _DOCS_ROOT / 'auto_examples'
     placeholder_dir.mkdir(exist_ok=True)
     placeholder = placeholder_dir / 'index.rst'
-    if not placeholder.exists():
-        placeholder.write_text(
-            "Examples\n========\n\n"
-            "The interactive example gallery is disabled for this documentation build."
-        )
+    placeholder.write_text(
+        "Examples\n========\n\n"
+        "The interactive example gallery is disabled for this documentation build."
+    )
+
+    generated_dir = _DOCS_ROOT / 'generated'
+    generated_dir.mkdir(exist_ok=True)
+    placeholder_text = (
+        ".. note::\n\n"
+        "   The interactive example gallery is disabled for this documentation build."
+    )
+    for include_name in (
+        'visbrain.gui.Brain.examples',
+        'visbrain.gui.Signal.examples',
+        'visbrain.gui.Figure.examples',
+        'visbrain.gui.Sleep.examples',
+    ):
+        target = generated_dir / f"{include_name}.rst"
+        target.write_text(placeholder_text)
 
 autosummary_context = {'gallery_enabled': _PLOT_GALLERY}
 
