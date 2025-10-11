@@ -935,7 +935,7 @@ The list of annotations can be exported (either in .txt or .csv) or loaded from 
 Examples
 ~~~~~~~~
 
-.. include:: generated/visbrain.gui.Sleep.examples
+.. include:: generated/visbrain.gui.Sleep.examples.rst
 
 .. raw:: html
 

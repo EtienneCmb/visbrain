@@ -20,7 +20,7 @@
    {% endblock %}
 
 {% if gallery_enabled %}
-.. include:: {{module}}.{{objname}}.examples
+.. include:: {{module}}.{{objname}}.examples.rst
 .. raw:: html
 
     <div style='clear:both'></div>
