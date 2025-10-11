@@ -84,7 +84,7 @@ class ConnectObj(VisbrainObject):
         In case of (n_sources, 2) use _z to specify the elevation.
     kw : dict | {}
         Optional arguments are used to control the colorbar
-        (See :class:`ColorbarObj`).
+        (See :class:`~visbrain.objects.ColorbarObj`).
 
     Notes
     -----
@@ -263,8 +263,9 @@ class ConnectObj(VisbrainObject):
         ----------
         roi_obj : string/list | 'talairach'
             The ROI object to use. Use either 'talairach', 'brodmann' or 'aal'
-            to use a predefined ROI template. Otherwise, use a RoiObj object or
-            a list of RoiObj.
+            to use a predefined ROI template. Otherwise, use a
+            :class:`~visbrain.objects.RoiObj` instance or a list of
+            :class:`~visbrain.objects.RoiObj`.
         group_by : str | None
             Name of the column inside the dataframe for gouping connectivity
             results.
@@ -443,7 +444,8 @@ class CombineConnect(CombineObjects):
 
     Parameters
     ----------
-    cobjs : ConnectObj/list | None
+    cobjs : :class:`~visbrain.objects.ConnectObj` or list of
+        :class:`~visbrain.objects.ConnectObj` | None
         List of source objects.
     select : string | None
         The name of the connectivity object to select.

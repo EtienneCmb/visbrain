@@ -51,7 +51,7 @@ class Picture3DObj(VisbrainObject):
         In case of (n_sources, 2) use _z to specify the elevation.
     kw : dict | {}
         Optional arguments are used to control the colorbar
-        (See :class:`ColorbarObj`).
+        (See :class:`~visbrain.objects.ColorbarObj`).
 
     Notes
     -----
@@ -200,7 +200,8 @@ class CombinePictures(CombineObjects):
 
     Parameters
     ----------
-    pobjs : Picture3DObj/list | None
+    pobjs : :class:`~visbrain.objects.Picture3DObj` or list of
+        :class:`~visbrain.objects.Picture3DObj` | None
         List of picture objects.
     select : string | None
         The name of the picture object to select.

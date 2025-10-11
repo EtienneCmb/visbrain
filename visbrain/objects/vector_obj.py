@@ -97,7 +97,7 @@ class VectorObj(VisbrainObject):
         In case of (n_sources, 2) use _z to specify the elevation.
     kw : dict | {}
         Optional arguments are used to control the colorbar
-        (See :class:`ColorbarObj`).
+        (See :class:`~visbrain.objects.ColorbarObj`).
 
     Notes
     -----
@@ -265,7 +265,8 @@ class CombineVectors(CombineObjects):
 
     Parameters
     ----------
-    vobjs : VectorObj/list | None
+    vobjs : :class:`~visbrain.objects.VectorObj` or list of
+        :class:`~visbrain.objects.VectorObj` | None
         List of vector objects.
     select : string | None
         The name of the vector object to select.

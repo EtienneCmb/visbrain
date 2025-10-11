@@ -60,7 +60,7 @@ class PacmapObj(ImageObj):
         Verbosity level.
     kw : dict | {}
         Optional arguments are used to control the colorbar
-        (See :class:`ColorbarObj`).
+        (See :class:`~visbrain.objects.ColorbarObj`).
 
     Notes
     -----
