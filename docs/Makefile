@@ -20,8 +20,11 @@ clean:
 	rm -rf $(BUILDDIR)
 
 html:
-	$(SPHINXBUILD) -b html -W --keep-going $(SPHINXOPTS) -d $(DOCTREES) $(SOURCEDIR) $(HTMLDIR)
-	@python example_to_thumbnails.py
+        $(SPHINXBUILD) -b html -W --keep-going $(SPHINXOPTS) -d $(DOCTREES) $(SOURCEDIR) $(HTMLDIR)
+        @python example_to_thumbnails.py \
+                --examples-dir "$(abspath $(SOURCEDIR)/../examples)" \
+                --static-dir "$(abspath $(SOURCEDIR)/_static/examples)" \
+                --thumb-root "$(HTMLDIR)/_images"
 	@echo
 	@echo "Build finished. The HTML pages are in $(HTMLDIR)."
 
