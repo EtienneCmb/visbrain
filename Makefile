@@ -1,5 +1,8 @@
 # simple makefile to simplify repetetive build env management tasks under posix
 CTAGS ?= ctags
+PYTHON ?= python
+EXAMPLES_DIR ?= $(CURDIR)/examples
+EXAMPLES_PNG_DIR ?= $(CURDIR)/docs/_static/examples
 
 all: clean test
 
@@ -53,16 +56,11 @@ qt-ui-check:
 	@python tools/generate_qt_ui.py --check
 
 examples: clean
-	@for i in examples/brain/*.py examples/objects/*.py;do \
-		echo "-----------------------------------------------"; \
-		echo $$i; \
-		echo "-----------------------------------------------"; \
-		python $$i --visbrain-show=False; \
-		echo "\n"; \
-	done
+	@$(PYTHON) tools/generate_example_gallery.py \
+		--examples-dir "$(EXAMPLES_DIR)" \
+		--output-dir "$(EXAMPLES_PNG_DIR)"
 
-examples-full: clean
-	@for i in examples/*/*.py; do echo "-----------------------------------------------"; echo $$i; echo "-----------------------------------------------"; python $$i --visbrain-show=False; echo "\n"; done
+examples-full: examples
 
 pypi: build_dist
 	@twine upload --verbose dist/*
