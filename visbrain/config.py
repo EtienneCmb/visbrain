@@ -261,7 +261,8 @@ def _query_gl_capabilities(diag: VisPyDiagnostics) -> None:
         except Exception:
             canvas = None
 
-        # If no valid canvas/context/capabilities, create a tiny probe canvas to force context
+        # If no valid canvas/context/capabilities, create a tiny probe canvas
+        # to force context creation
         need_probe = (
             canvas is None or
             getattr(canvas, "context", None) is None or
@@ -278,7 +279,9 @@ def _query_gl_capabilities(diag: VisPyDiagnostics) -> None:
                 canvas = probe_canvas
 
         if canvas is None:
-            diag.error = "OpenGL capability probe unavailable: no active GL canvas"
+            diag.error = (
+                "OpenGL capability probe unavailable: no active GL canvas"
+            )
             diag.context_available = False
             return
 
@@ -292,7 +295,9 @@ def _query_gl_capabilities(diag: VisPyDiagnostics) -> None:
                 except Exception:
                     pass
         if ctx is None or getattr(ctx, "capabilities", None) is None:
-            diag.error = "OpenGL capability probe unavailable: no capabilities on context"
+            diag.error = (
+                "OpenGL capability probe unavailable: no capabilities on context"
+            )
             diag.context_available = False
             return
 
@@ -324,7 +329,11 @@ def _query_gl_capabilities(diag: VisPyDiagnostics) -> None:
             if diag.renderer is None and hasattr(_gl, "GL_RENDERER"):
                 # Prefer renderer; fall back to vendor if needed
                 renderer = _get_gl_str("GL_RENDERER", _gl.GL_RENDERER)
-                vendor = _get_gl_str("GL_VENDOR", getattr(_gl, "GL_VENDOR", None)) if hasattr(_gl, "GL_VENDOR") else None
+                vendor = (
+                    _get_gl_str("GL_VENDOR", getattr(_gl, "GL_VENDOR", None))
+                    if hasattr(_gl, "GL_VENDOR")
+                    else None
+                )
                 diag.renderer = renderer or vendor or diag.renderer
 
             # Integers: sizes / units
@@ -344,14 +353,21 @@ def _query_gl_capabilities(diag: VisPyDiagnostics) -> None:
                 diag.max_texture_size = _get_gl_int(_gl.GL_MAX_TEXTURE_SIZE)
             # 3D texture size constant may differ across backends; try a few
             if diag.max_texture_3d_size is None:
-                for enum_name in ("GL_MAX_3D_TEXTURE_SIZE", "GL_MAX_TEXTURE_SIZE_3D", "GL_MAX_3D_TEXTURE_SIZE_EXT"):
+                for enum_name in (
+                    "GL_MAX_3D_TEXTURE_SIZE",
+                    "GL_MAX_TEXTURE_SIZE_3D",
+                    "GL_MAX_3D_TEXTURE_SIZE_EXT",
+                ):
                     if hasattr(_gl, enum_name):
                         val = _get_gl_int(getattr(_gl, enum_name))
                         if val is not None:
                             diag.max_texture_3d_size = val
                             break
             if diag.max_texture_units is None:
-                for enum_name in ("GL_MAX_TEXTURE_IMAGE_UNITS", "GL_MAX_TEXTURE_UNITS"):
+                for enum_name in (
+                    "GL_MAX_TEXTURE_IMAGE_UNITS",
+                    "GL_MAX_TEXTURE_UNITS",
+                ):
                     if hasattr(_gl, enum_name):
                         val = _get_gl_int(getattr(_gl, enum_name))
                         if val is not None:
@@ -361,7 +377,11 @@ def _query_gl_capabilities(diag: VisPyDiagnostics) -> None:
             pass
 
         # --- Last resort: parse vispy.sys_info() for version/limits ---
-        if diag.gl_version is None or diag.max_texture_size is None or diag.renderer is None:
+        if (
+            diag.gl_version is None
+            or diag.max_texture_size is None
+            or diag.renderer is None
+        ):
             try:
                 import re
                 import vispy as _v
