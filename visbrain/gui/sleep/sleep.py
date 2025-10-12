@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Optional
 
 from visbrain._pyqt_module import _PyQtModule
-from visbrain.config import PROFILER
+from visbrain.config import PROFILER, ensure_qt_app
 from visbrain.gui._accessibility import install_action_shortcuts
 
 from .controller import SleepController
@@ -42,6 +42,7 @@ class Sleep(_PyQtModule):
             kwargs_mne = {}
 
         super().__init__(verbose=verbose, icon='sleep_icon.svg')
+        ensure_qt_app(force=True)
 
         PROFILER("Import file", as_type='title')
         if model is None:
