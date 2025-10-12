@@ -404,14 +404,20 @@ def _query_gl_capabilities(diag: VisPyDiagnostics) -> None:
             frag = "void main() { gl_FragColor = vec4(1.0); }"
             program_cls = getattr(gloo, "Program", None)
             if program_cls:
-                program = program_cls(vert, frag)
-                builder = getattr(program, "_build", None)
-                activator = getattr(program, "activate", None)
-                if callable(builder):
-                    builder()
-                elif callable(activator):
-                    activator()
-                diag.shader_compiled = True
+                program = None
+                try:
+                    program = program_cls(vert, frag)
+                    diag.shader_compiled = True
+                finally:
+                    if program is not None:
+                        for method_name in ("delete", "detach", "deactivate"):
+                            method = getattr(program, method_name, None)
+                            if callable(method):
+                                try:
+                                    method()
+                                except Exception:
+                                    continue
+                                break
         except Exception as shader_exc:
             diag.shader_compiled = False
             diag.shader_error = _format_exception(shader_exc)
