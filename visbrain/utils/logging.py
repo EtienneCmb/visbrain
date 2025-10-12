@@ -77,6 +77,7 @@ class _StreamHandler(logging.StreamHandler):
         test = self._match_pattern(record, msg)
         if test:
             record.msg = test
+            record.args = ()
             return logging.StreamHandler.emit(self, record)
         else:
             return
