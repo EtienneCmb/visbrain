@@ -502,6 +502,145 @@ def test_probe_canvas_populates_gl_info(monkeypatch, recwarn):
     assert not recwarn.list
 
 
+def test_gl_probe_disabled_by_default_on_darwin(monkeypatch, recwarn):
+    """macOS should skip probe canvas creation unless explicitly enabled."""
+
+    _clear_vispy_modules()
+    _install_runtime_stubs(monkeypatch)
+    monkeypatch.setattr(sys, "platform", "darwin", raising=False)
+
+    class DummyApplication:
+        backend_name = "pyside6"
+
+        def __init__(self, *_args, **_kwargs):
+            return None
+
+    dummy_context_module = types.ModuleType("vispy.gloo.context")
+    dummy_context_module._current_canvas = None
+    dummy_context_module.get_current_canvas = lambda: None
+
+    dummy_gl_module = types.ModuleType("vispy.gloo.gl")
+
+    dummy_gloo = types.ModuleType("vispy.gloo")
+    dummy_gloo.context = dummy_context_module
+    dummy_gloo.gl = dummy_gl_module
+    dummy_gloo.Program = None
+
+    dummy_app = types.ModuleType("vispy.app")
+    dummy_app.application = types.SimpleNamespace(Application=DummyApplication)
+    dummy_app.use_app = lambda backend=None: DummyApplication()
+    dummy_app.process_events = lambda: None
+
+    dummy_vispy = types.ModuleType("vispy")
+    dummy_vispy.config = {}
+
+    monkeypatch.setitem(sys.modules, "vispy", dummy_vispy)
+    monkeypatch.setitem(sys.modules, "vispy.app", dummy_app)
+    monkeypatch.setitem(sys.modules, "vispy.gloo", dummy_gloo)
+    monkeypatch.setitem(sys.modules, "vispy.gloo.gl", dummy_gl_module)
+    monkeypatch.setitem(sys.modules, "vispy.gloo.context", dummy_context_module)
+
+    cfg_mod = _reload_config()
+
+    def _fail_probe(diag):
+        pytest.fail("Probe canvas should not be created on macOS by default")
+
+    monkeypatch.setattr(cfg_mod, "_create_probe_canvas", _fail_probe)
+
+    cfg = cfg_mod.get_config()
+
+    assert cfg.vispy_diagnostics.available is True
+    assert cfg.vispy_diagnostics.context_available is False
+    assert "macOS" in (cfg.vispy_diagnostics.error or "")
+    assert cfg.vispy_diagnostics_payload["context_available"] is False
+    assert any(
+        "VisPy backend unavailable" in str(w.message)
+        for w in recwarn.list
+    )
+
+
+def test_gl_probe_can_be_forced_on_darwin(monkeypatch):
+    """macOS users can opt into probe canvas creation via an env flag."""
+
+    _clear_vispy_modules()
+    _install_runtime_stubs(monkeypatch)
+    monkeypatch.setattr(sys, "platform", "darwin", raising=False)
+    monkeypatch.setenv("VISBRAIN_GL_CONTEXT_PROBE", "1")
+
+    class DummyCapabilities:
+        gl_version = "4.6 Dummy"
+        vendor = None
+        renderer = "DummyGPU"
+        max_texture_size = 512
+        max_3d_texture_size = 256
+        max_texture_units = 4
+
+    class DummyContext:
+        def __init__(self, canvas):
+            self._canvas = canvas
+            self.capabilities = DummyCapabilities()
+
+        def set_current(self):
+            return None
+
+    class DummyCanvas:
+        def __init__(self, *_args, **_kwargs):
+            self.context = DummyContext(self)
+
+        def close(self):
+            return None
+
+    dummy_context_module = types.ModuleType("vispy.gloo.context")
+    dummy_context_module._current_canvas = None
+    dummy_context_module.get_current_canvas = lambda: None
+
+    dummy_gl_module = types.ModuleType("vispy.gloo.gl")
+
+    dummy_gloo = types.ModuleType("vispy.gloo")
+    dummy_gloo.context = dummy_context_module
+    dummy_gloo.gl = dummy_gl_module
+    dummy_gloo.Program = None
+
+    class DummyApplication:
+        backend_name = "pyside6"
+
+        def __init__(self, *_args, **_kwargs):
+            return None
+
+    dummy_app = types.ModuleType("vispy.app")
+    dummy_app.application = types.SimpleNamespace(Application=DummyApplication)
+    dummy_app.use_app = lambda backend=None: DummyApplication()
+    dummy_app.process_events = lambda: None
+
+    dummy_vispy = types.ModuleType("vispy")
+    dummy_vispy.config = {}
+
+    monkeypatch.setitem(sys.modules, "vispy", dummy_vispy)
+    monkeypatch.setitem(sys.modules, "vispy.app", dummy_app)
+    monkeypatch.setitem(sys.modules, "vispy.gloo", dummy_gloo)
+    monkeypatch.setitem(sys.modules, "vispy.gloo.gl", dummy_gl_module)
+    monkeypatch.setitem(sys.modules, "vispy.gloo.context", dummy_context_module)
+
+    cfg_mod = _reload_config()
+
+    created: list[DummyCanvas] = []
+
+    def _make_probe_canvas(diag):
+        canvas = DummyCanvas()
+        created.append(canvas)
+        return canvas
+
+    monkeypatch.setattr(cfg_mod, "_create_probe_canvas", _make_probe_canvas)
+
+    cfg = cfg_mod.get_config()
+
+    assert created
+    assert cfg.vispy_diagnostics.available is True
+    assert cfg.vispy_diagnostics.context_available is True
+    assert cfg.vispy_diagnostics.gl_version == "4.6 Dummy"
+    assert cfg.vispy_diagnostics.renderer == "DummyGPU"
+    assert cfg.vispy_diagnostics_payload["context_available"] is True
+
 def test_headless_backend_failure_reports_attempts(monkeypatch, caplog, recwarn):
     """Structured logging should record failed headless attempts."""
 

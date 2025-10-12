@@ -5,6 +5,7 @@ import importlib
 import getopt
 import logging
 import os
+import sys
 import warnings
 from contextlib import contextmanager
 from dataclasses import dataclass, field
@@ -114,6 +115,7 @@ class VisPyDiagnostics:
 _VISPY_WARNING_MESSAGES: set[str] = set()
 _HEADLESS_BACKENDS: Sequence[str] = ("egl", "osmesa")
 _SHADER_PROBE_ENVVAR = "VISBRAIN_SHADER_PROBE"
+_GL_CONTEXT_PROBE_ENVVAR = "VISBRAIN_GL_CONTEXT_PROBE"
 
 
 def _format_exception(exc: BaseException) -> str:
@@ -269,6 +271,34 @@ def _query_gl_capabilities(diag: VisPyDiagnostics) -> None:
             getattr(canvas, "context", None) is None or
             getattr(getattr(canvas, "context", None), "capabilities", None) is None
         )
+        allow_probe = True
+        raw_context_probe = os.environ.get(_GL_CONTEXT_PROBE_ENVVAR)
+        if sys.platform == "darwin":
+            allow_probe = False
+        if raw_context_probe is not None:
+            try:
+                allow_probe = _parse_bool_flag(raw_context_probe)
+            except ValueError:
+                diag.error = diag.error or (
+                    f"Invalid {_GL_CONTEXT_PROBE_ENVVAR} value: {raw_context_probe!r}"
+                )
+                allow_probe = False
+
+        if need_probe and not allow_probe:
+            diag.context_available = False
+            if diag.error is None:
+                if sys.platform == "darwin" and raw_context_probe is None:
+                    diag.error = (
+                        "OpenGL capability probe disabled by default on macOS "
+                        f"(set {_GL_CONTEXT_PROBE_ENVVAR}=1 to force)"
+                    )
+                else:
+                    diag.error = (
+                        "OpenGL capability probe disabled "
+                        f"(set {_GL_CONTEXT_PROBE_ENVVAR}=1 to force)"
+                    )
+            return
+
         if need_probe:
             probe_canvas = _create_probe_canvas(diag)
             try:
