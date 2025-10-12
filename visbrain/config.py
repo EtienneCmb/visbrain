@@ -5,6 +5,7 @@ import importlib
 import getopt
 import logging
 import os
+import sys
 import warnings
 from contextlib import contextmanager
 from dataclasses import dataclass, field
@@ -113,6 +114,8 @@ class VisPyDiagnostics:
 
 _VISPY_WARNING_MESSAGES: set[str] = set()
 _HEADLESS_BACKENDS: Sequence[str] = ("egl", "osmesa")
+_SHADER_PROBE_ENVVAR = "VISBRAIN_SHADER_PROBE"
+_GL_CONTEXT_PROBE_ENVVAR = "VISBRAIN_GL_CONTEXT_PROBE"
 
 
 def _format_exception(exc: BaseException) -> str:
@@ -261,12 +264,41 @@ def _query_gl_capabilities(diag: VisPyDiagnostics) -> None:
         except Exception:
             canvas = None
 
-        # If no valid canvas/context/capabilities, create a tiny probe canvas to force context
+        # If no valid canvas/context/capabilities, create a tiny probe canvas
+        # to force context creation
         need_probe = (
             canvas is None or
             getattr(canvas, "context", None) is None or
             getattr(getattr(canvas, "context", None), "capabilities", None) is None
         )
+        allow_probe = True
+        raw_context_probe = os.environ.get(_GL_CONTEXT_PROBE_ENVVAR)
+        if sys.platform == "darwin":
+            allow_probe = False
+        if raw_context_probe is not None:
+            try:
+                allow_probe = _parse_bool_flag(raw_context_probe)
+            except ValueError:
+                diag.error = diag.error or (
+                    f"Invalid {_GL_CONTEXT_PROBE_ENVVAR} value: {raw_context_probe!r}"
+                )
+                allow_probe = False
+
+        if need_probe and not allow_probe:
+            diag.context_available = False
+            if diag.error is None:
+                if sys.platform == "darwin" and raw_context_probe is None:
+                    diag.error = (
+                        "OpenGL capability probe disabled by default on macOS "
+                        f"(set {_GL_CONTEXT_PROBE_ENVVAR}=1 to force)"
+                    )
+                else:
+                    diag.error = (
+                        "OpenGL capability probe disabled "
+                        f"(set {_GL_CONTEXT_PROBE_ENVVAR}=1 to force)"
+                    )
+            return
+
         if need_probe:
             probe_canvas = _create_probe_canvas(diag)
             try:
@@ -278,7 +310,9 @@ def _query_gl_capabilities(diag: VisPyDiagnostics) -> None:
                 canvas = probe_canvas
 
         if canvas is None:
-            diag.error = "OpenGL capability probe unavailable: no active GL canvas"
+            diag.error = (
+                "OpenGL capability probe unavailable: no active GL canvas"
+            )
             diag.context_available = False
             return
 
@@ -292,7 +326,9 @@ def _query_gl_capabilities(diag: VisPyDiagnostics) -> None:
                 except Exception:
                     pass
         if ctx is None or getattr(ctx, "capabilities", None) is None:
-            diag.error = "OpenGL capability probe unavailable: no capabilities on context"
+            diag.error = (
+                "OpenGL capability probe unavailable: no capabilities on context"
+            )
             diag.context_available = False
             return
 
@@ -324,7 +360,11 @@ def _query_gl_capabilities(diag: VisPyDiagnostics) -> None:
             if diag.renderer is None and hasattr(_gl, "GL_RENDERER"):
                 # Prefer renderer; fall back to vendor if needed
                 renderer = _get_gl_str("GL_RENDERER", _gl.GL_RENDERER)
-                vendor = _get_gl_str("GL_VENDOR", getattr(_gl, "GL_VENDOR", None)) if hasattr(_gl, "GL_VENDOR") else None
+                vendor = (
+                    _get_gl_str("GL_VENDOR", getattr(_gl, "GL_VENDOR", None))
+                    if hasattr(_gl, "GL_VENDOR")
+                    else None
+                )
                 diag.renderer = renderer or vendor or diag.renderer
 
             # Integers: sizes / units
@@ -344,14 +384,21 @@ def _query_gl_capabilities(diag: VisPyDiagnostics) -> None:
                 diag.max_texture_size = _get_gl_int(_gl.GL_MAX_TEXTURE_SIZE)
             # 3D texture size constant may differ across backends; try a few
             if diag.max_texture_3d_size is None:
-                for enum_name in ("GL_MAX_3D_TEXTURE_SIZE", "GL_MAX_TEXTURE_SIZE_3D", "GL_MAX_3D_TEXTURE_SIZE_EXT"):
+                for enum_name in (
+                    "GL_MAX_3D_TEXTURE_SIZE",
+                    "GL_MAX_TEXTURE_SIZE_3D",
+                    "GL_MAX_3D_TEXTURE_SIZE_EXT",
+                ):
                     if hasattr(_gl, enum_name):
                         val = _get_gl_int(getattr(_gl, enum_name))
                         if val is not None:
                             diag.max_texture_3d_size = val
                             break
             if diag.max_texture_units is None:
-                for enum_name in ("GL_MAX_TEXTURE_IMAGE_UNITS", "GL_MAX_TEXTURE_UNITS"):
+                for enum_name in (
+                    "GL_MAX_TEXTURE_IMAGE_UNITS",
+                    "GL_MAX_TEXTURE_UNITS",
+                ):
                     if hasattr(_gl, enum_name):
                         val = _get_gl_int(getattr(_gl, enum_name))
                         if val is not None:
@@ -361,7 +408,11 @@ def _query_gl_capabilities(diag: VisPyDiagnostics) -> None:
             pass
 
         # --- Last resort: parse vispy.sys_info() for version/limits ---
-        if diag.gl_version is None or diag.max_texture_size is None or diag.renderer is None:
+        if (
+            diag.gl_version is None
+            or diag.max_texture_size is None
+            or diag.renderer is None
+        ):
             try:
                 import re
                 import vispy as _v
@@ -378,23 +429,48 @@ def _query_gl_capabilities(diag: VisPyDiagnostics) -> None:
             except Exception:
                 pass
 
-        # Optional: try basic shader compilation to verify pipeline health
-        try:
+        # Optional: try basic shader compilation to verify pipeline health.
+        raw_probe_flag = os.environ.get(_SHADER_PROBE_ENVVAR)
+        enable_probe = False
+        if raw_probe_flag is None:
+            diag.shader_error = diag.shader_error or (
+                f"Skipped shader probe (set {_SHADER_PROBE_ENVVAR}=1 to enable)"
+            )
+        else:
+            try:
+                enable_probe = _parse_bool_flag(raw_probe_flag)
+            except ValueError:
+                diag.shader_error = diag.shader_error or (
+                    f"Invalid {_SHADER_PROBE_ENVVAR} value: {raw_probe_flag!r}"
+                )
+        if enable_probe:
             vert = "void main() { gl_Position = vec4(0.0); }"
             frag = "void main() { gl_FragColor = vec4(1.0); }"
             program_cls = getattr(gloo, "Program", None)
-            if program_cls:
-                program = program_cls(vert, frag)
-                builder = getattr(program, "_build", None)
-                activator = getattr(program, "activate", None)
-                if callable(builder):
-                    builder()
-                elif callable(activator):
-                    activator()
-                diag.shader_compiled = True
-        except Exception as shader_exc:
-            diag.shader_compiled = False
-            diag.shader_error = _format_exception(shader_exc)
+            if program_cls is None:
+                diag.shader_compiled = False
+                diag.shader_error = diag.shader_error or (
+                    "vispy.gloo.Program is unavailable"
+                )
+            else:
+                program = None
+                try:
+                    program = program_cls(vert, frag)
+                    diag.shader_compiled = True
+                    diag.shader_error = None
+                except Exception as shader_exc:  # pragma: no cover - defensive
+                    diag.shader_compiled = False
+                    diag.shader_error = _format_exception(shader_exc)
+                finally:
+                    if program is not None:
+                        for method_name in ("delete", "detach", "deactivate"):
+                            method = getattr(program, method_name, None)
+                            if callable(method):
+                                try:
+                                    method()
+                                except Exception:  # pragma: no cover - defensive
+                                    continue
+                                break
 
     except Exception as exc:
         diag.error = _format_exception(exc)
