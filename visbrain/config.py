@@ -144,6 +144,51 @@ def _log_vispy_diagnostics(diag: VisPyDiagnostics) -> None:
         _warn_once(message)
 
 
+def _create_probe_canvas(diag: VisPyDiagnostics) -> Any | None:
+    """Attempt to create a tiny hidden canvas to seed ``vispy.gloo.gl``."""
+
+    try:
+        from vispy import app as vispy_app
+    except Exception:  # pragma: no cover - import error handled elsewhere
+        return None
+
+    canvas_cls = getattr(vispy_app, "Canvas", None)
+    if canvas_cls is None:
+        return None
+
+    try:
+        canvas = canvas_cls(show=False, size=(1, 1))
+    except Exception as exc:  # pragma: no cover - best effort creation
+        diag.error = diag.error or _format_exception(exc)
+        return None
+
+    context = getattr(canvas, "context", None)
+    setter = getattr(context, "set_current", None)
+    if callable(setter):
+        try:
+            setter()
+        except Exception:  # pragma: no cover - defensive
+            pass
+
+    return canvas
+
+
+def _destroy_probe_canvas(canvas: Any | None) -> None:
+    """Tear down a probe canvas created by :func:`_create_probe_canvas`."""
+
+    if canvas is None:
+        return
+
+    for method_name in ("close", "delete", "destroy"):
+        method = getattr(canvas, method_name, None)
+        if callable(method):
+            try:
+                method()
+            except Exception:  # pragma: no cover - defensive
+                continue
+            break
+
+
 def _query_gl_capabilities(diag: VisPyDiagnostics) -> None:
     """Populate OpenGL information in-place on *diag*."""
 
@@ -154,9 +199,20 @@ def _query_gl_capabilities(diag: VisPyDiagnostics) -> None:
         diag.context_available = False
         return
 
+    gl_mod = getattr(gloo, "gl", None)
+    if gl_mod is None:
+        diag.error = diag.error or "vispy.gloo.gl module unavailable"
+        diag.context_available = False
+        return
+
+    probe_canvas = None
     try:
-        gl_mod = gloo.gl
         info = getattr(gl_mod, "gl_info", None)
+        if info is None:
+            probe_canvas = _create_probe_canvas(diag)
+            gl_mod = getattr(gloo, "gl", gl_mod)
+            info = getattr(gl_mod, "gl_info", None)
+
         if info is None:
             diag.error = diag.error or (
                 "OpenGL capability probe unavailable: vispy.gloo.gl.gl_info missing"
@@ -218,6 +274,8 @@ def _query_gl_capabilities(diag: VisPyDiagnostics) -> None:
                             delete()
                         except Exception:  # pragma: no cover - defensive
                             pass
+    finally:
+        _destroy_probe_canvas(probe_canvas)
 
     diag.context_available = diag.context_available and has_context
 

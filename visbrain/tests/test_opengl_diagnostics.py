@@ -278,6 +278,82 @@ def test_missing_gl_info_reports_context_unavailable(monkeypatch, recwarn):
     )
 
 
+def test_probe_canvas_populates_gl_info(monkeypatch, recwarn):
+    """Creating a probe canvas should seed :mod:`vispy.gloo.gl.gl_info`."""
+
+    _clear_vispy_modules()
+    _install_runtime_stubs(monkeypatch)
+
+    class DummyGLInfo:
+        have_context = True
+
+        def get_version(self) -> str:
+            return "4.5 Dummy"
+
+        def get_renderer(self) -> str:
+            return "DummyGPU"
+
+    class DummyCanvas:
+        def __init__(self, *_args, **_kwargs):
+            dummy_gl.gl_info = DummyGLInfo()
+            self.context = types.SimpleNamespace(set_current=lambda: None)
+
+        def close(self) -> None:
+            return None
+
+    class DummyApplication:
+        backend_name = "pyside6"
+
+        def __init__(self, *_args, **_kwargs):
+            return None
+
+    dummy_app = types.ModuleType("vispy.app")
+    dummy_app.application = types.SimpleNamespace(Application=DummyApplication)
+    dummy_app.Canvas = DummyCanvas
+    dummy_app.use_app = lambda backend=None: DummyApplication()
+
+    class DummyProgram:
+        def __init__(self, *_args, **_kwargs):
+            return None
+
+        def _build(self) -> None:
+            return None
+
+        def delete(self) -> None:
+            return None
+
+    dummy_gl = types.SimpleNamespace(
+        GL_MAX_TEXTURE_SIZE="GL_MAX_TEXTURE_SIZE",
+        GL_MAX_3D_TEXTURE_SIZE="GL_MAX_3D_TEXTURE_SIZE",
+        GL_MAX_TEXTURE_IMAGE_UNITS="GL_MAX_TEXTURE_IMAGE_UNITS",
+        glGetIntegerv=lambda constant: 2048,
+        gl_info=None,
+    )
+    dummy_gloo = types.SimpleNamespace(gl=dummy_gl, Program=DummyProgram)
+
+    dummy_vispy = types.ModuleType("vispy")
+    dummy_vispy.config = {}
+
+    monkeypatch.setitem(sys.modules, "vispy", dummy_vispy)
+    monkeypatch.setitem(sys.modules, "vispy.app", dummy_app)
+    monkeypatch.setitem(sys.modules, "vispy.gloo", dummy_gloo)
+    monkeypatch.setitem(sys.modules, "vispy.gloo.gl", dummy_gl)
+
+    cfg_mod = _reload_config()
+    cfg = cfg_mod.get_config()
+
+    assert cfg.vispy_diagnostics.available is True
+    assert cfg.vispy_diagnostics.context_available is True
+    assert cfg.vispy_diagnostics.gl_version == "4.5 Dummy"
+    assert cfg.vispy_diagnostics.renderer == "DummyGPU"
+    assert cfg.vispy_diagnostics.max_texture_size == 2048
+    assert cfg.vispy_diagnostics.max_texture_3d_size == 2048
+    assert cfg.vispy_diagnostics.max_texture_units == 2048
+    assert cfg.vispy_diagnostics.shader_compiled is True
+    assert cfg.vispy_diagnostics_payload["context_available"] is True
+    assert not recwarn.list
+
+
 def test_headless_backend_failure_reports_attempts(monkeypatch, caplog, recwarn):
     """Structured logging should record failed headless attempts."""
 
