@@ -851,18 +851,28 @@ def read_edf(path, downsample):
     _, start_time, sf, chan, n_samples, _ = edf.return_hdr()
     start_time = start_time.time()
 
-    # Keep only data channels (e.g excludes marker chan)
-    freqs = np.unique(edf.hdr['n_samples_per_record']) / edf.hdr[
-        'record_length']
-    sf = freqs.max()
+    samples_per_record = np.asarray(edf.hdr['n_samples_per_record'], dtype=float)
+    record_length = float(edf.hdr['record_length'])
+    chan = list(chan)
 
-    if len(freqs) != 1:
-        bad_chans = np.where(edf.hdr['n_samples_per_record'] < sf)
-        chan = np.delete(chan, bad_chans)
+    per_channel_sf = samples_per_record / record_length
+    sf = float(per_channel_sf.max())
+    good_idx = np.flatnonzero(np.isclose(per_channel_sf, sf))
+    bad_idx = np.flatnonzero(~np.isclose(per_channel_sf, sf))
+
+    if bad_idx.size:
+        bad_chans = [chan[i] for i in bad_idx]
+        logger.debug(
+            "Ignoring %d low-rate EDF channels: %s", len(bad_chans), bad_chans
+        )
+
+    chan = [chan[i] for i in good_idx]
+    samples_per_record = samples_per_record[good_idx]
+    n_samples = int(samples_per_record.max() * edf.hdr['n_records'])
 
     # Load all samples of selected channels
     np.seterr(divide='ignore', invalid='ignore')
-    data = edf.return_dat(chan, 0, n_samples)
+    data = edf.return_dat(good_idx, 0, n_samples)
 
     # Get original signal length :
     n = data.shape[1]
