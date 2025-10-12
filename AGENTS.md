@@ -6,11 +6,13 @@ These guidelines apply to the entire repository unless a subdirectory adds its o
 ## Environment Setup
 - Use Python 3.9+.
 - Install tooling with `python -m pip install -r requirements/dev.txt` before running tests or linters.
+- Ensure system OpenGL libraries are available: `apt-get update` followed by `apt-get install -y libgl1 libglu1-mesa libgl1-mesa-dri mesa-utils libxcb-xinerama0`. These packages avoid the `libGL.so.1` import failures during PySide6/VisPy initialization.
+- When using the provided Makefile targets, the repository expects `tox` and `twine` to be invokable via `python -m ...` so there is no need to modify your shell `PATH`.
 
 ## Required Checks
 When you modify any files:
-1. Run `make flake` for linting.
-2. Run `pytest` (or `make test`) for automated tests.
+1. Run `make flake` for linting (this internally calls `python -m tox -e lint`).
+2. Run `pytest` (or `make test`) for automated tests. If you need to exercise the tox environment directly, prefer `python -m tox -e tests` so that the pinned interpreter is used even when console scripts are not on the `PATH`.
 3. Run additional commands mentioned in the relevant documentation if your changes affect packaging (e.g., `python -m build`).
 Document all executed commands and their outcomes in the final response.
 

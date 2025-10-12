@@ -36,16 +36,16 @@ clean-test: clean-build clean-pyc clean-ctags clean-cache
 test: test-nongui
 
 test-nongui: clean-test
-	@tox -e tests
+	@$(PYTHON) -m tox -e tests
 
 test-gui:
-	@PYTEST_MARK=gui tox -e tests -- --cov-append
+	@PYTEST_MARK=gui $(PYTHON) -m tox -e tests -- --cov-append
 
 test-html: clean-test
 	@python -m pytest --cov=visbrain --cov-report=html --showlocals --durations=10 --html=report.html --self-contained-html
 
 lint:
-	@tox -e lint
+	@$(PYTHON) -m tox -e lint
 
 flake: lint
 
@@ -63,7 +63,7 @@ examples: clean
 examples-full: examples
 
 pypi: build_dist
-	@twine upload --verbose dist/*
+	@$(PYTHON) -m twine upload --verbose dist/*
 
 
 # clean dist
@@ -75,13 +75,13 @@ clean_dist:
 
 # build dist
 build_dist: clean_dist
-	@tox -e package
+	@$(PYTHON) -m tox -e package
 	@echo "Dist built"
 
 # check distribution
 check_dist:
-	twine check dist/*
+	$(PYTHON) -m twine check dist/*
 
 # upload distribution
 upload_dist: build_dist
-	twine upload --verbose dist/*
+	$(PYTHON) -m twine upload --verbose dist/*

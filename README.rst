@@ -77,21 +77,30 @@ creating a virtual environment that matches the baseline environment matrix:
      python -m pip install --upgrade pip
      pip install -r requirements/dev.txt
 
+  .. note::
+
+     Linux contributors need the Mesa/OpenGL runtime for PySide6/VisPy to
+     initialize correctly in headless CI containers. Install the packages with::
+
+        sudo apt-get update
+        sudo apt-get install -y libgl1 libglu1-mesa libgl1-mesa-dri mesa-utils libxcb-xinerama0
+
 These pins align with Python 3.9–3.12 on Windows, macOS, and Linux and will be
 revisited as the modernization roadmap advances.
 
-With the toolchain installed, ``tox`` orchestrates the main contributor
-workflows:
+With the toolchain installed, invoking ``python -m tox`` orchestrates the main
+contributor workflows. The module form keeps the commands working even when the
+``tox`` console script is not on your ``PATH``:
 
 .. code-block:: console
 
-   tox -e lint           # run Ruff
-   tox -e lint-format    # confirm Black and Ruff formatting
-   tox -e type           # run the MyPy type checks
-   tox -e tests          # run the pytest suite headlessly
-   tox -e tests-gui      # run the GUI tests that need a display server
-   tox -e tests-screenshot  # compare the Qt/VisPy screenshot baselines
-   tox -e package        # build sdist/wheel artifacts
+   python -m tox -e lint           # run Ruff
+   python -m tox -e lint-format    # confirm Black and Ruff formatting
+   python -m tox -e type           # run the MyPy type checks
+   python -m tox -e tests          # run the pytest suite headlessly
+   python -m tox -e tests-gui      # run the GUI tests that need a display server
+   python -m tox -e tests-screenshot  # compare the Qt/VisPy screenshot baselines
+   python -m tox -e package        # build sdist/wheel artifacts
 
 Screenshot baselines live under ``visbrain/gui/tests/baseline``. When a GUI
 change legitimately alters the visuals, refresh them locally and include the
