@@ -146,31 +146,84 @@ def _log_vispy_diagnostics(diag: VisPyDiagnostics) -> None:
 
 def _create_probe_canvas(diag: VisPyDiagnostics) -> Any | None:
     """Attempt to create a tiny hidden canvas to seed ``vispy.gloo.gl``."""
-
     try:
-        from vispy import app as vispy_app
-    except Exception:  # pragma: no cover - import error handled elsewhere
-        return None
-
-    canvas_cls = getattr(vispy_app, "Canvas", None)
-    if canvas_cls is None:
-        return None
-
-    try:
-        canvas = canvas_cls(show=False, size=(1, 1))
-    except Exception as exc:  # pragma: no cover - best effort creation
-        diag.error = diag.error or _format_exception(exc)
-        return None
-
-    context = getattr(canvas, "context", None)
-    setter = getattr(context, "set_current", None)
-    if callable(setter):
+        # Ensure a Qt application exists for Qt-based backends (PySide/PyQt).
+        # In some environments the vispy Canvas creation silently fails to
+        # create a GL context if there is no QApplication, which leaves
+        # vispy.gloo.gl.gl_info unset.
+        cfg = get_config()
         try:
-            setter()
-        except Exception:  # pragma: no cover - defensive
+            cfg.get_qt_app(create=True, force=True)
+        except Exception:
+            # Best-effort: probing should never hard-fail here.
             pass
 
-    return canvas
+        # Prefer SceneCanvas when available (more robust context creation
+        # across backends), otherwise fall back to the plain app.Canvas.
+        try:
+            from vispy import scene as _scene
+        except Exception:
+            _scene = None
+
+        if _scene is not None and getattr(_scene, "SceneCanvas", None) is not None:
+            try:
+                canvas = _scene.SceneCanvas(show=False, size=(1, 1))
+                # Make the canvas current: show briefly and pump events.
+                try:
+                    from vispy import app as _vapp
+                    canvas.show()
+                    _vapp.process_events()
+                    _vapp.process_events()
+                    # Enter/exit context once so backends mark it current.
+                    try:
+                        with canvas:
+                            pass
+                    except Exception:
+                        pass
+                except Exception:
+                    pass
+                return canvas
+            except Exception as exc:
+                # Fall through to try app.Canvas
+                diag.error = diag.error or _format_exception(exc)
+
+        from vispy import app as vispy_app
+        canvas_cls = getattr(vispy_app, "Canvas", None)
+        if canvas_cls is None:
+            return None
+
+        try:
+            canvas = canvas_cls(show=False, size=(1, 1))
+        except Exception as exc:  # pragma: no cover - best effort creation
+            diag.error = diag.error or _format_exception(exc)
+            return None
+
+        # Make the canvas current: show briefly and pump events.
+        try:
+            from vispy import app as _vapp
+            canvas.show()
+            _vapp.process_events()
+            _vapp.process_events()
+            try:
+                with canvas:
+                    pass
+            except Exception:
+                pass
+        except Exception:
+            pass
+
+        context = getattr(canvas, "context", None)
+        setter = getattr(context, "set_current", None)
+        if callable(setter):
+            try:
+                setter()
+            except Exception:  # pragma: no cover - defensive
+                pass
+
+        return canvas
+    except Exception as _unhandled_exc:  # pragma: no cover - belt and braces
+        diag.error = diag.error or _format_exception(_unhandled_exc)
+        return None
 
 
 def _destroy_probe_canvas(canvas: Any | None) -> None:
@@ -190,94 +243,164 @@ def _destroy_probe_canvas(canvas: Any | None) -> None:
 
 
 def _query_gl_capabilities(diag: VisPyDiagnostics) -> None:
-    """Populate OpenGL information in-place on *diag*."""
-
+    """Populate OpenGL information in-place on *diag*, using GLContext.capabilities."""
     try:
+        from vispy.gloo.context import get_current_canvas
         from vispy import gloo
-    except Exception as exc:  # pragma: no cover - exercised in failure tests
-        diag.error = diag.error or _format_exception(exc)
-        diag.context_available = False
-        return
-
-    gl_mod = getattr(gloo, "gl", None)
-    if gl_mod is None:
-        diag.error = diag.error or "vispy.gloo.gl module unavailable"
+    except Exception as exc:
+        diag.error = _format_exception(exc)
         diag.context_available = False
         return
 
     probe_canvas = None
     try:
-        info = getattr(gl_mod, "gl_info", None)
-        if info is None:
+        # Try to fetch the current canvas first
+        canvas = None
+        try:
+            canvas = get_current_canvas()
+        except Exception:
+            canvas = None
+
+        # If no valid canvas/context/capabilities, create a tiny probe canvas to force context
+        need_probe = (
+            canvas is None or
+            getattr(canvas, "context", None) is None or
+            getattr(getattr(canvas, "context", None), "capabilities", None) is None
+        )
+        if need_probe:
             probe_canvas = _create_probe_canvas(diag)
-            gl_mod = getattr(gloo, "gl", gl_mod)
-            info = getattr(gl_mod, "gl_info", None)
+            try:
+                canvas = get_current_canvas()
+            except Exception:
+                canvas = None
+            # Fallback to the probe_canvas itself if VisPy did not mark it current
+            if canvas is None and probe_canvas is not None:
+                canvas = probe_canvas
 
-        if info is None:
-            diag.error = diag.error or (
-                "OpenGL capability probe unavailable: vispy.gloo.gl.gl_info missing"
-            )
-            has_context = False
-        else:
-            has_context = bool(getattr(info, "have_context", False))
-            diag.gl_version = info.get_version()
-            diag.renderer = info.get_renderer()
-    except Exception as exc:  # pragma: no cover - best effort query
-        diag.error = diag.error or _format_exception(exc)
-        has_context = False
-    else:
-        if has_context:
-            getter = getattr(gl_mod, "glGetIntegerv", None)
+        if canvas is None:
+            diag.error = "OpenGL capability probe unavailable: no active GL canvas"
+            diag.context_available = False
+            return
 
-            def _query_limit(name: str) -> int | None:
-                if getter is None:
-                    return None
-                constant = getattr(gl_mod, name, None)
-                if constant is None:
-                    return None
+        ctx = getattr(canvas, "context", None)
+        # Ensure the context is marked current if possible
+        if ctx is not None:
+            setter = getattr(ctx, "set_current", None)
+            if callable(setter):
                 try:
-                    value = getter(constant)
-                except Exception:  # pragma: no cover - defensive
-                    return None
-                if isinstance(value, (list, tuple)):
-                    value = value[0]
+                    setter()
+                except Exception:
+                    pass
+        if ctx is None or getattr(ctx, "capabilities", None) is None:
+            diag.error = "OpenGL capability probe unavailable: no capabilities on context"
+            diag.context_available = False
+            return
+
+        caps = ctx.capabilities
+        # We have a valid GL context + capabilities
+        diag.context_available = True
+        diag.gl_version = getattr(caps, "gl_version", None)
+        diag.renderer = getattr(caps, "vendor", None) or getattr(caps, "renderer", None)
+        diag.max_texture_size = getattr(caps, "max_texture_size", None)
+        diag.max_texture_3d_size = getattr(caps, "max_3d_texture_size", None)
+        diag.max_texture_units = getattr(caps, "max_texture_units", None)
+
+        # --- Fallbacks: query GL directly if any fields are still None ---
+        try:
+            from vispy.gloo import gl as _gl
+            # Strings: GL_VERSION, GL_RENDERER, GL_VENDOR
+            def _get_gl_str(name, enum):
                 try:
-                    return int(value)
-                except Exception:  # pragma: no cover - defensive
+                    val = _gl.glGetString(enum)
+                    if val is None:
+                        return None
+                    # VisPy may return bytes; normalize to str
+                    return val.decode("utf-8") if hasattr(val, "decode") else str(val)
+                except Exception:
                     return None
 
-            diag.max_texture_size = _query_limit("GL_MAX_TEXTURE_SIZE")
-            diag.max_texture_3d_size = _query_limit("GL_MAX_3D_TEXTURE_SIZE")
-            diag.max_texture_units = _query_limit("GL_MAX_TEXTURE_IMAGE_UNITS")
+            if diag.gl_version is None and hasattr(_gl, "GL_VERSION"):
+                diag.gl_version = _get_gl_str("GL_VERSION", _gl.GL_VERSION)
+            if diag.renderer is None and hasattr(_gl, "GL_RENDERER"):
+                # Prefer renderer; fall back to vendor if needed
+                renderer = _get_gl_str("GL_RENDERER", _gl.GL_RENDERER)
+                vendor = _get_gl_str("GL_VENDOR", getattr(_gl, "GL_VENDOR", None)) if hasattr(_gl, "GL_VENDOR") else None
+                diag.renderer = renderer or vendor or diag.renderer
 
+            # Integers: sizes / units
+            def _get_gl_int(enum):
+                try:
+                    out = _gl.GLint()
+                    _gl.glGetIntegerv(enum, out)
+                    return int(out.value)
+                except Exception:
+                    try:
+                        # Alternative return style in some backends
+                        return int(_gl.glGetIntegerv(enum))
+                    except Exception:
+                        return None
+
+            if diag.max_texture_size is None and hasattr(_gl, "GL_MAX_TEXTURE_SIZE"):
+                diag.max_texture_size = _get_gl_int(_gl.GL_MAX_TEXTURE_SIZE)
+            # 3D texture size constant may differ across backends; try a few
+            if diag.max_texture_3d_size is None:
+                for enum_name in ("GL_MAX_3D_TEXTURE_SIZE", "GL_MAX_TEXTURE_SIZE_3D", "GL_MAX_3D_TEXTURE_SIZE_EXT"):
+                    if hasattr(_gl, enum_name):
+                        val = _get_gl_int(getattr(_gl, enum_name))
+                        if val is not None:
+                            diag.max_texture_3d_size = val
+                            break
+            if diag.max_texture_units is None:
+                for enum_name in ("GL_MAX_TEXTURE_IMAGE_UNITS", "GL_MAX_TEXTURE_UNITS"):
+                    if hasattr(_gl, enum_name):
+                        val = _get_gl_int(getattr(_gl, enum_name))
+                        if val is not None:
+                            diag.max_texture_units = val
+                            break
+        except Exception:
+            pass
+
+        # --- Last resort: parse vispy.sys_info() for version/limits ---
+        if diag.gl_version is None or diag.max_texture_size is None or diag.renderer is None:
+            try:
+                import re
+                import vispy as _v
+                info_txt = _v.sys_info()
+                if isinstance(info_txt, str):
+                    if diag.gl_version is None:
+                        m = re.search(r"GL version:\s*([^\n]+)", info_txt)
+                        if m:
+                            diag.gl_version = m.group(1).strip()
+                    if diag.max_texture_size is None:
+                        m = re.search(r"MAX_TEXTURE_SIZE:\s*(\d+)", info_txt)
+                        if m:
+                            diag.max_texture_size = int(m.group(1))
+            except Exception:
+                pass
+
+        # Optional: try basic shader compilation to verify pipeline health
+        try:
+            vert = "void main() { gl_Position = vec4(0.0); }"
+            frag = "void main() { gl_FragColor = vec4(1.0); }"
             program_cls = getattr(gloo, "Program", None)
-            if program_cls is not None:
-                vert = "void main() { gl_Position = vec4(0.0); }"
-                frag = "void main() { gl_FragColor = vec4(1.0); }"
-                program = None
-                try:
-                    program = program_cls(vert, frag)
-                    builder = getattr(program, "_build", None)
-                    activator = getattr(program, "activate", None)
-                    if callable(builder):
-                        builder()
-                    elif callable(activator):
-                        activator()
-                    diag.shader_compiled = True
-                except Exception as shader_exc:
-                    diag.shader_compiled = False
-                    diag.shader_error = _format_exception(shader_exc)
-                finally:
-                    delete = getattr(program, "delete", None)
-                    if callable(delete):
-                        try:
-                            delete()
-                        except Exception:  # pragma: no cover - defensive
-                            pass
+            if program_cls:
+                program = program_cls(vert, frag)
+                builder = getattr(program, "_build", None)
+                activator = getattr(program, "activate", None)
+                if callable(builder):
+                    builder()
+                elif callable(activator):
+                    activator()
+                diag.shader_compiled = True
+        except Exception as shader_exc:
+            diag.shader_compiled = False
+            diag.shader_error = _format_exception(shader_exc)
+
+    except Exception as exc:
+        diag.error = _format_exception(exc)
+        diag.context_available = False
     finally:
         _destroy_probe_canvas(probe_canvas)
-
-    diag.context_available = diag.context_available and has_context
 
 
 def probe_vispy_environment(config: "VisbrainConfig") -> VisPyDiagnostics:
