@@ -10,7 +10,7 @@ class UiMenu(HelpMenu):
 
     def __init__(self):
         """Init."""
-        base = 'http://visbrain.org/brain.html'
+        base = 'https://github.com/visbrain-dev/visbrain/blob/main/docs/brain.rst'
         sections = {'Brain': base}
         HelpMenu.__init__(self, sections)
         # =============================================================

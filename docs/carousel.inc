@@ -21,8 +21,8 @@
        <div class="item active">
          <img src="_static/carousel/pip_install.png" alt="Installation">
          <div class="carousel-caption">
-           <h3><a href="introduction.html#install-visbrain">Install visbrain</a></h3>
-           <p>Run <a href="introduction.html#installation">pip install visbrain</a> in a terminal</p>
+           <h3><a href="introduction.html#install-from-source-recommended">Install visbrain</a></h3>
+           <p>Clone the repository and follow the <a href="introduction.html#install-from-source-recommended">uv setup guide</a></p>
          </div>
        </div>
 

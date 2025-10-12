@@ -39,7 +39,12 @@ Once pip is installed, you should be able to install Visbrain. In the terminal, 
 
 .. code-block:: bash
 
-    pip install visbrain
+    git clone https://github.com/visbrain-dev/visbrain.git
+    cd visbrain
+    uv venv --python 3.11
+    source .venv/bin/activate  # Use .venv\Scripts\activate on Windows
+    uv pip install -r requirements/dev.txt
+    uv pip install -e .
 
 And you should be ready to write your first python script. In your file explorer, create a new file, for example *py_script.py*. Open your file in a notepad like application (or an editor like `Atom <https://atom.io/>`_ or `Sublime Text <https://www.sublimetext.com/>`_). Then, paste the following python code :
 
@@ -389,7 +394,7 @@ Two strategies :
 
   Sleep(data=data, hypno=hypno, channels=channels).show()
 
-* Submit a pull request to the `Visbrain Github <https://github.com/EtienneCmb/visbrain>`_
+* Submit a pull request to the `Visbrain Github <https://github.com/visbrain-dev/visbrain>`_
 
 .. ----------------------------- AUTO SCORING -----------------------------
 .. raw:: html

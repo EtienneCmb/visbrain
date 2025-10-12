@@ -8,8 +8,8 @@ First, ou can take screenshot from the graphical interface using the menu
 File/save/screenshot. The aim of this script is more to illustrate how to
 take screenshots without opening the interface.
 
-Further explanations about screenshot and transparency can be foud here :
-http://visbrain.org/vbexport.html
+Further explanations about screenshot and transparency can be found in the
+``docs/figure.rst`` guide shipped with this repository.
 
 Download source's coordinates (xyz_sample.npz) :
 https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1

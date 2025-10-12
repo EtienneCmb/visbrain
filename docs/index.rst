@@ -1,17 +1,17 @@
 Visbrain documentation
 ======================
 
-.. |ci-badge| image:: https://github.com/EtienneCmb/visbrain/actions/workflows/ci.yml/badge.svg?branch=master
+.. |ci-badge| image:: https://github.com/visbrain-dev/visbrain/actions/workflows/ci.yml/badge.svg?branch=main
    :alt: GitHub Actions CI status
-   :target: https://github.com/EtienneCmb/visbrain/actions/workflows/ci.yml
+   :target: https://github.com/visbrain-dev/visbrain/actions/workflows/ci.yml
 
-.. |wheels-badge| image:: https://github.com/EtienneCmb/visbrain/actions/workflows/wheels.yml/badge.svg?branch=master
+.. |wheels-badge| image:: https://github.com/visbrain-dev/visbrain/actions/workflows/wheels.yml/badge.svg?branch=main
    :alt: Binary wheels build status
-   :target: https://github.com/EtienneCmb/visbrain/actions/workflows/wheels.yml
+   :target: https://github.com/visbrain-dev/visbrain/actions/workflows/wheels.yml
 
-.. |coverage-badge| image:: https://codecov.io/gh/EtienneCmb/visbrain/branch/master/graph/badge.svg
+.. |coverage-badge| image:: https://codecov.io/gh/visbrain-dev/visbrain/branch/main/graph/badge.svg
    :alt: Code coverage on Codecov
-   :target: https://codecov.io/gh/EtienneCmb/visbrain
+   :target: https://codecov.io/gh/visbrain-dev/visbrain
 
 .. |pypi-badge| image:: https://badge.fury.io/py/visbrain.svg
    :alt: PyPI package version
@@ -32,6 +32,12 @@ Visbrain is a GPU-accelerated suite for visualising brain signals, anatomical
 surfaces and advanced electrophysiology. The documentation gathers installation
 guides, tutorials, runnable examples and contributor roadmaps so you can explore
 the project from multiple entry points.
+
+.. note::
+
+   The historical visbrain.org website is no longer available. This repository
+   hosts the authoritative documentation while we rebuild the project on modern
+   dependencies.
 
 Key pathways
 ------------

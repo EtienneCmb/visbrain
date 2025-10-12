@@ -102,4 +102,4 @@ This is a non-exhaustive example. You definitively should take a look at the :cl
 Complete object tutorial
 ------------------------
 
-For each object, we provide a `complete tutorial <http://visbrain.org/auto_examples/index.html#objects-examples>`_ with illustration of all functionalities.
+For each object, we provide a :doc:`complete tutorial <auto_examples/index>` with illustration of all functionalities when building the documentation locally.

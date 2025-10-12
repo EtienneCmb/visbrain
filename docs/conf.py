@@ -780,7 +780,7 @@ def linkcode_resolve(domain, info):
 
     fn = relpath(fn, start=dirname(visbrain.__file__))
 
-    return "https://github.com/EtienneCmb/visbrain/tree/master/visbrain/%s%s" % (  # noqa
+    return "https://github.com/visbrain-dev/visbrain/tree/main/visbrain/%s%s" % (  # noqa
        fn, linespec)
 
 # Render using Matplotlib :

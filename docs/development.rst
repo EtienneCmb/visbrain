@@ -70,7 +70,7 @@ example runner: ``python -m visbrain.examples run <example-name> --headless``
 recreates the Sphinx-gallery runtime locally while respecting the
 ``VISBRAIN_SHOW_GUI`` toggle.
 
-.. _Documentation workflow: https://github.com/EtienneCmb/visbrain/actions/workflows/docs.yml
+.. _Documentation workflow: https://github.com/visbrain-dev/visbrain/actions/workflows/docs.yml
 
 Pre-commit workflow
 -------------------

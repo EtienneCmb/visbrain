@@ -17,7 +17,7 @@ class UiMenu(HelpMenu):
 
     def __init__(self):
         """Init."""
-        base = 'http://visbrain.org/sleep.html'
+        base = 'https://github.com/visbrain-dev/visbrain/blob/main/docs/sleep.rst'
         sections = {'Sleep': base,
                     'Time-frequency': base + '#time-frequency',
                     'Hypnogram scoring': base + '#hypnogram-scoring',
@@ -112,8 +112,8 @@ class UiMenu(HelpMenu):
                    "avoids potential errors caused by downsampling and "
                    "confusion in the values assigned to each sleep stage. \n\n"
                    "Click 'Yes' to use the new format and 'No' to use the old "
-                   "format. For more information, visit the doc at "
-                   "visbrain.org/sleep")
+                   "format. For more information, visit the documentation in "
+                   "the repository (docs/sleep.rst).")
             reply = QtWidgets.QMessageBox.question(self, 'Message', msg,
                                                    QtWidgets.QMessageBox.Yes,
                                                    QtWidgets.QMessageBox.No)
