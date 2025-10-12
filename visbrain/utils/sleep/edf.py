@@ -205,8 +205,8 @@ class Edf:
 
         Parameters
         ----------
-        chan : list of str
-            index (indices) of the channels to read
+        chan : sequence of str or int
+            Channels to read, provided either as names or integer indices.
         begsam : int
             index of the first sample
         endsam : int
@@ -219,20 +219,36 @@ class Edf:
             second dimension are the samples.
         """
         hdr = self.hdr
-        dig_min = hdr['digital_min']
-        phys_min = hdr['physical_min']
-        phys_range = hdr['physical_max'] - hdr['physical_min']
-        dig_range = hdr['digital_max'] - hdr['digital_min']
+        labels = hdr['label']
 
-        # assert all(phys_range > 0)
-        # assert all(dig_range > 0)
+        if isinstance(chan, (str, bytes)):
+            requested = [chan]
+        else:
+            requested = list(chan)
+
+        label_to_index = {label: idx for idx, label in enumerate(labels)}
+        indices = []
+        for entry in requested:
+            if isinstance(entry, (str, bytes)):
+                try:
+                    indices.append(label_to_index[entry])
+                except KeyError as exc:
+                    message = f"Channel {entry!r} not found in EDF header"
+                    raise ValueError(message) from exc
+            else:
+                indices.append(int(entry))
+
+        dig_min = hdr['digital_min'][indices]
+        phys_min = hdr['physical_min'][indices]
+        phys_range = hdr['physical_max'][indices] - hdr['physical_min'][indices]
+        dig_range = hdr['digital_max'][indices] - hdr['digital_min'][indices]
 
         gain = phys_range / dig_range
 
-        dat = empty(shape=(len(chan), endsam - begsam), dtype='float64')
+        dat = empty(shape=(len(indices), endsam - begsam), dtype='float64')
 
-        for i, i_chan in enumerate(chan):
-            d = self._read_dat(i, begsam, endsam).astype('float64')
+        for i, i_chan in enumerate(indices):
+            d = self._read_dat(i_chan, begsam, endsam).astype('float64')
             dat[i, :] = (d - dig_min[i]) * gain[i] + phys_min[i]
 
         return dat
