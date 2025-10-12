@@ -108,7 +108,9 @@ def test_vispy_import_failure_emits_warning(monkeypatch, caplog, recwarn):
     assert "GL implementation missing" in (cfg.vispy_diagnostics.error or "")
     assert cfg.vispy_diagnostics.shader_compiled is None
     assert cfg.vispy_diagnostics_payload["error"].startswith("OSError")
-    assert cfg.vispy_diagnostics_payload.get("headless_attempts") in (None, [])
+    attempts = cfg.vispy_diagnostics_payload.get("headless_attempts")
+    assert attempts and attempts[0]["backend"] is None
+    assert attempts[0]["success"] is False
     assert any("vispy.probe" in record.message for record in caplog.records)
     assert any(
         "VisPy backend unavailable" in str(w.message) for w in recwarn.list
@@ -143,22 +145,28 @@ def test_headless_backend_fallback_prefers_egl(monkeypatch, caplog, recwarn):
         def backend_name(self):
             return self._backend
 
-    class DummyGLInfo:
-        have_context = True
+    class DummyCapabilities:
+        gl_version = "4.5 Dummy"
+        renderer = "DummyGPU"
+        vendor = None
+        max_texture_size = 8192
+        max_3d_texture_size = 4096
+        max_texture_units = 16
 
-        def get_version(self):
-            return "4.5 Dummy"
+    class DummyContext:
+        def __init__(self, canvas):
+            self._canvas = canvas
+            self.capabilities = DummyCapabilities()
 
-        def get_renderer(self):
-            return "DummyGPU"
+        def set_current(self):
+            dummy_context_module._current_canvas = self._canvas
 
-    def _get_int(constant):
-        limits = {
-            "GL_MAX_TEXTURE_SIZE": 8192,
-            "GL_MAX_3D_TEXTURE_SIZE": 4096,
-            "GL_MAX_TEXTURE_IMAGE_UNITS": 16,
-        }
-        return limits.get(constant, 0)
+    class DummyCanvas:
+        def __init__(self):
+            self.context = DummyContext(self)
+
+        def close(self):  # pragma: no cover - compatibility
+            return None
 
     class DummyProgram:
         def __init__(self, *args, **kwargs):
@@ -170,6 +178,45 @@ def test_headless_backend_fallback_prefers_egl(monkeypatch, caplog, recwarn):
         def delete(self):
             return None
 
+    class DummyGLint:
+        def __init__(self):
+            self.value = 0
+
+    def _gl_get_integer(_enum, out=None):
+        if out is not None:
+            out.value = 0
+        return 0
+
+    dummy_canvas = DummyCanvas()
+
+    dummy_context_module = types.ModuleType("vispy.gloo.context")
+    dummy_context_module._current_canvas = dummy_canvas
+
+    def _get_current_canvas():
+        return dummy_context_module._current_canvas
+
+    dummy_context_module.get_current_canvas = _get_current_canvas
+
+    dummy_gl_module = types.ModuleType("vispy.gloo.gl")
+    dummy_gl_module.GL_MAX_TEXTURE_SIZE = "GL_MAX_TEXTURE_SIZE"
+    dummy_gl_module.GL_MAX_3D_TEXTURE_SIZE = "GL_MAX_3D_TEXTURE_SIZE"
+    dummy_gl_module.GL_MAX_TEXTURE_IMAGE_UNITS = "GL_MAX_TEXTURE_IMAGE_UNITS"
+    dummy_gl_module.GL_VERSION = "GL_VERSION"
+    dummy_gl_module.GL_RENDERER = "GL_RENDERER"
+    dummy_gl_module.GL_VENDOR = "GL_VENDOR"
+    dummy_gl_module.GLint = DummyGLint
+
+    def _gl_get_string(_enum):
+        return None
+
+    dummy_gl_module.glGetIntegerv = _gl_get_integer
+    dummy_gl_module.glGetString = _gl_get_string
+
+    dummy_gloo = types.ModuleType("vispy.gloo")
+    dummy_gloo.Program = DummyProgram
+    dummy_gloo.gl = dummy_gl_module
+    dummy_gloo.context = dummy_context_module
+
     dummy_config = DummyConfig()
     dummy_app = types.ModuleType("vispy.app")
     dummy_app.application = types.SimpleNamespace(Application=DummyApplication)
@@ -178,19 +225,11 @@ def test_headless_backend_fallback_prefers_egl(monkeypatch, caplog, recwarn):
     dummy_vispy = types.ModuleType("vispy")
     dummy_vispy.config = dummy_config
 
-    dummy_gl = types.SimpleNamespace(
-        gl_info=DummyGLInfo(),
-        GL_MAX_TEXTURE_SIZE="GL_MAX_TEXTURE_SIZE",
-        GL_MAX_3D_TEXTURE_SIZE="GL_MAX_3D_TEXTURE_SIZE",
-        GL_MAX_TEXTURE_IMAGE_UNITS="GL_MAX_TEXTURE_IMAGE_UNITS",
-        glGetIntegerv=_get_int,
-    )
-    dummy_gloo = types.SimpleNamespace(gl=dummy_gl, Program=DummyProgram)
-
     monkeypatch.setitem(sys.modules, "vispy", dummy_vispy)
     monkeypatch.setitem(sys.modules, "vispy.app", dummy_app)
     monkeypatch.setitem(sys.modules, "vispy.gloo", dummy_gloo)
-    monkeypatch.setitem(sys.modules, "vispy.gloo.gl", dummy_gl)
+    monkeypatch.setitem(sys.modules, "vispy.gloo.gl", dummy_gl_module)
+    monkeypatch.setitem(sys.modules, "vispy.gloo.context", dummy_context_module)
 
     caplog.set_level(logging.INFO, logger="visbrain")
 
@@ -229,7 +268,7 @@ def test_headless_backend_fallback_prefers_egl(monkeypatch, caplog, recwarn):
 
 
 def test_missing_gl_info_reports_context_unavailable(monkeypatch, recwarn):
-    """Missing :mod:`vispy.gloo.gl.gl_info` should not crash diagnostics."""
+    """Missing GL context capabilities should not crash diagnostics."""
 
     _clear_vispy_modules()
     _install_runtime_stubs(monkeypatch)
@@ -240,25 +279,84 @@ def test_missing_gl_info_reports_context_unavailable(monkeypatch, recwarn):
         def __init__(self, *_args, **_kwargs):
             return None
 
+    class DummyContext:
+        def __init__(self, canvas):
+            self._canvas = canvas
+            self.capabilities = None
+
+        def set_current(self):
+            dummy_context_module._current_canvas = self._canvas
+
+    class DummyCanvas:
+        def __init__(self, *_args, **_kwargs):
+            self.context = DummyContext(self)
+
+        def show(self):
+            return None
+
+        def close(self):
+            return None
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
+            return None
+
+    class DummyProgram:
+        def __init__(self, *args, **kwargs):
+            return None
+
+        def _build(self):
+            return None
+
+        def delete(self):
+            return None
+
+    class DummyGLint:
+        def __init__(self):
+            self.value = 0
+
+    def _gl_get_integer(_enum, out=None):
+        if out is not None:
+            out.value = 0
+        return 0
+
+    dummy_context_module = types.ModuleType("vispy.gloo.context")
+    dummy_context_module._current_canvas = DummyCanvas()
+
+    def _get_current_canvas():
+        return dummy_context_module._current_canvas
+
+    dummy_context_module.get_current_canvas = _get_current_canvas
+
+    dummy_gl_module = types.ModuleType("vispy.gloo.gl")
+    dummy_gl_module.GL_MAX_TEXTURE_SIZE = "GL_MAX_TEXTURE_SIZE"
+    dummy_gl_module.GL_MAX_3D_TEXTURE_SIZE = "GL_MAX_3D_TEXTURE_SIZE"
+    dummy_gl_module.GL_MAX_TEXTURE_IMAGE_UNITS = "GL_MAX_TEXTURE_IMAGE_UNITS"
+    dummy_gl_module.GLint = DummyGLint
+    dummy_gl_module.glGetIntegerv = _gl_get_integer
+    dummy_gl_module.glGetString = lambda *_args, **_kwargs: None
+
+    dummy_gloo = types.ModuleType("vispy.gloo")
+    dummy_gloo.gl = dummy_gl_module
+    dummy_gloo.Program = DummyProgram
+    dummy_gloo.context = dummy_context_module
+
     dummy_app = types.ModuleType("vispy.app")
     dummy_app.application = types.SimpleNamespace(Application=DummyApplication)
     dummy_app.use_app = lambda backend=None: DummyApplication()
+    dummy_app.process_events = lambda: None
+    dummy_app.Canvas = DummyCanvas
 
     dummy_vispy = types.ModuleType("vispy")
     dummy_vispy.config = {}
 
-    dummy_gl = types.SimpleNamespace(
-        GL_MAX_TEXTURE_SIZE="GL_MAX_TEXTURE_SIZE",
-        GL_MAX_3D_TEXTURE_SIZE="GL_MAX_3D_TEXTURE_SIZE",
-        GL_MAX_TEXTURE_IMAGE_UNITS="GL_MAX_TEXTURE_IMAGE_UNITS",
-        glGetIntegerv=lambda *_args, **_kwargs: 0,
-    )
-    dummy_gloo = types.SimpleNamespace(gl=dummy_gl)
-
     monkeypatch.setitem(sys.modules, "vispy", dummy_vispy)
     monkeypatch.setitem(sys.modules, "vispy.app", dummy_app)
     monkeypatch.setitem(sys.modules, "vispy.gloo", dummy_gloo)
-    monkeypatch.setitem(sys.modules, "vispy.gloo.gl", dummy_gl)
+    monkeypatch.setitem(sys.modules, "vispy.gloo.gl", dummy_gl_module)
+    monkeypatch.setitem(sys.modules, "vispy.gloo.context", dummy_context_module)
 
     cfg_mod = _reload_config()
     cfg = cfg_mod.get_config()
@@ -266,12 +364,16 @@ def test_missing_gl_info_reports_context_unavailable(monkeypatch, recwarn):
     assert cfg.vispy_diagnostics.available is True
     assert cfg.vispy_diagnostics.context_available is False
     assert cfg.vispy_diagnostics.error == (
-        "OpenGL capability probe unavailable: vispy.gloo.gl.gl_info missing"
+        "OpenGL capability probe unavailable: no capabilities on context"
     )
     assert cfg.vispy_diagnostics.shader_compiled is None
     assert cfg.vispy_diagnostics_payload["error"].startswith("OpenGL capability")
-    assert cfg.vispy_diagnostics_payload.get("fallback_reason") is None
-    assert cfg.vispy_diagnostics_payload.get("headless_attempts") in (None, [])
+    assert cfg.vispy_diagnostics_payload.get("fallback_reason", "").startswith(
+        "Configured headless backend"
+    )
+    attempts = cfg.vispy_diagnostics_payload.get("headless_attempts")
+    assert attempts and attempts[0]["backend"] == "egl"
+    assert attempts[0]["success"] is True
     assert any(
         "VisPy backend unavailable" in str(w.message)
         for w in recwarn.list
@@ -279,26 +381,41 @@ def test_missing_gl_info_reports_context_unavailable(monkeypatch, recwarn):
 
 
 def test_probe_canvas_populates_gl_info(monkeypatch, recwarn):
-    """Creating a probe canvas should seed :mod:`vispy.gloo.gl.gl_info`."""
+    """Creating a probe canvas should populate context capabilities."""
 
     _clear_vispy_modules()
     _install_runtime_stubs(monkeypatch)
 
-    class DummyGLInfo:
-        have_context = True
+    class DummyCapabilities:
+        gl_version = "4.5 Dummy"
+        vendor = None
+        renderer = "DummyGPU"
+        max_texture_size = 2048
+        max_3d_texture_size = 1024
+        max_texture_units = 8
 
-        def get_version(self) -> str:
-            return "4.5 Dummy"
+    class DummyContext:
+        def __init__(self, canvas):
+            self._canvas = canvas
+            self.capabilities = DummyCapabilities()
 
-        def get_renderer(self) -> str:
-            return "DummyGPU"
+        def set_current(self):
+            dummy_context_module._current_canvas = self._canvas
 
     class DummyCanvas:
         def __init__(self, *_args, **_kwargs):
-            dummy_gl.gl_info = DummyGLInfo()
-            self.context = types.SimpleNamespace(set_current=lambda: None)
+            self.context = DummyContext(self)
+
+        def show(self):
+            return None
 
         def close(self) -> None:
+            return None
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
             return None
 
     class DummyApplication:
@@ -307,29 +424,54 @@ def test_probe_canvas_populates_gl_info(monkeypatch, recwarn):
         def __init__(self, *_args, **_kwargs):
             return None
 
+    class DummyProgram:
+        def __init__(self, *args, **kwargs):
+            self._built = False
+
+        def _build(self):
+            self._built = True
+
+        def delete(self):
+            return None
+
+    class DummyGLint:
+        def __init__(self):
+            self.value = 0
+
+    def _gl_get_integer(_enum, out=None):
+        if out is not None:
+            out.value = 2048
+        return 2048
+
+    dummy_context_module = types.ModuleType("vispy.gloo.context")
+    dummy_context_module._current_canvas = None
+
+    dummy_canvas = DummyCanvas()
+    dummy_context_module._current_canvas = dummy_canvas
+
+    def _get_current_canvas():
+        return dummy_context_module._current_canvas
+
+    dummy_context_module.get_current_canvas = _get_current_canvas
+
+    dummy_gl_module = types.ModuleType("vispy.gloo.gl")
+    dummy_gl_module.GL_MAX_TEXTURE_SIZE = "GL_MAX_TEXTURE_SIZE"
+    dummy_gl_module.GL_MAX_3D_TEXTURE_SIZE = "GL_MAX_3D_TEXTURE_SIZE"
+    dummy_gl_module.GL_MAX_TEXTURE_IMAGE_UNITS = "GL_MAX_TEXTURE_IMAGE_UNITS"
+    dummy_gl_module.GLint = DummyGLint
+    dummy_gl_module.glGetIntegerv = _gl_get_integer
+    dummy_gl_module.glGetString = lambda *_args, **_kwargs: None
+
+    dummy_gloo = types.ModuleType("vispy.gloo")
+    dummy_gloo.gl = dummy_gl_module
+    dummy_gloo.Program = DummyProgram
+    dummy_gloo.context = dummy_context_module
+
     dummy_app = types.ModuleType("vispy.app")
     dummy_app.application = types.SimpleNamespace(Application=DummyApplication)
     dummy_app.Canvas = DummyCanvas
     dummy_app.use_app = lambda backend=None: DummyApplication()
-
-    class DummyProgram:
-        def __init__(self, *_args, **_kwargs):
-            return None
-
-        def _build(self) -> None:
-            return None
-
-        def delete(self) -> None:
-            return None
-
-    dummy_gl = types.SimpleNamespace(
-        GL_MAX_TEXTURE_SIZE="GL_MAX_TEXTURE_SIZE",
-        GL_MAX_3D_TEXTURE_SIZE="GL_MAX_3D_TEXTURE_SIZE",
-        GL_MAX_TEXTURE_IMAGE_UNITS="GL_MAX_TEXTURE_IMAGE_UNITS",
-        glGetIntegerv=lambda constant: 2048,
-        gl_info=None,
-    )
-    dummy_gloo = types.SimpleNamespace(gl=dummy_gl, Program=DummyProgram)
+    dummy_app.process_events = lambda: None
 
     dummy_vispy = types.ModuleType("vispy")
     dummy_vispy.config = {}
@@ -337,7 +479,8 @@ def test_probe_canvas_populates_gl_info(monkeypatch, recwarn):
     monkeypatch.setitem(sys.modules, "vispy", dummy_vispy)
     monkeypatch.setitem(sys.modules, "vispy.app", dummy_app)
     monkeypatch.setitem(sys.modules, "vispy.gloo", dummy_gloo)
-    monkeypatch.setitem(sys.modules, "vispy.gloo.gl", dummy_gl)
+    monkeypatch.setitem(sys.modules, "vispy.gloo.gl", dummy_gl_module)
+    monkeypatch.setitem(sys.modules, "vispy.gloo.context", dummy_context_module)
 
     cfg_mod = _reload_config()
     cfg = cfg_mod.get_config()
@@ -347,8 +490,8 @@ def test_probe_canvas_populates_gl_info(monkeypatch, recwarn):
     assert cfg.vispy_diagnostics.gl_version == "4.5 Dummy"
     assert cfg.vispy_diagnostics.renderer == "DummyGPU"
     assert cfg.vispy_diagnostics.max_texture_size == 2048
-    assert cfg.vispy_diagnostics.max_texture_3d_size == 2048
-    assert cfg.vispy_diagnostics.max_texture_units == 2048
+    assert cfg.vispy_diagnostics.max_texture_3d_size == 1024
+    assert cfg.vispy_diagnostics.max_texture_units == 8
     assert cfg.vispy_diagnostics.shader_compiled is True
     assert cfg.vispy_diagnostics_payload["context_available"] is True
     assert not recwarn.list
