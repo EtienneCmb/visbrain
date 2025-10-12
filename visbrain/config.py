@@ -113,6 +113,7 @@ class VisPyDiagnostics:
 
 _VISPY_WARNING_MESSAGES: set[str] = set()
 _HEADLESS_BACKENDS: Sequence[str] = ("egl", "osmesa")
+_SHADER_PROBE_ENVVAR = "VISBRAIN_SHADER_PROBE"
 
 
 def _format_exception(exc: BaseException) -> str:
@@ -398,16 +399,38 @@ def _query_gl_capabilities(diag: VisPyDiagnostics) -> None:
             except Exception:
                 pass
 
-        # Optional: try basic shader compilation to verify pipeline health
-        try:
+        # Optional: try basic shader compilation to verify pipeline health.
+        raw_probe_flag = os.environ.get(_SHADER_PROBE_ENVVAR)
+        enable_probe = False
+        if raw_probe_flag is None:
+            diag.shader_error = diag.shader_error or (
+                f"Skipped shader probe (set {_SHADER_PROBE_ENVVAR}=1 to enable)"
+            )
+        else:
+            try:
+                enable_probe = _parse_bool_flag(raw_probe_flag)
+            except ValueError:
+                diag.shader_error = diag.shader_error or (
+                    f"Invalid {_SHADER_PROBE_ENVVAR} value: {raw_probe_flag!r}"
+                )
+        if enable_probe:
             vert = "void main() { gl_Position = vec4(0.0); }"
             frag = "void main() { gl_FragColor = vec4(1.0); }"
             program_cls = getattr(gloo, "Program", None)
-            if program_cls:
+            if program_cls is None:
+                diag.shader_compiled = False
+                diag.shader_error = diag.shader_error or (
+                    "vispy.gloo.Program is unavailable"
+                )
+            else:
                 program = None
                 try:
                     program = program_cls(vert, frag)
                     diag.shader_compiled = True
+                    diag.shader_error = None
+                except Exception as shader_exc:  # pragma: no cover - defensive
+                    diag.shader_compiled = False
+                    diag.shader_error = _format_exception(shader_exc)
                 finally:
                     if program is not None:
                         for method_name in ("delete", "detach", "deactivate"):
@@ -415,12 +438,9 @@ def _query_gl_capabilities(diag: VisPyDiagnostics) -> None:
                             if callable(method):
                                 try:
                                     method()
-                                except Exception:
+                                except Exception:  # pragma: no cover - defensive
                                     continue
                                 break
-        except Exception as shader_exc:
-            diag.shader_compiled = False
-            diag.shader_error = _format_exception(shader_exc)
 
     except Exception as exc:
         diag.error = _format_exception(exc)

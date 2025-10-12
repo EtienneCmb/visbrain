@@ -123,6 +123,7 @@ def test_headless_backend_fallback_prefers_egl(monkeypatch, caplog, recwarn):
     _clear_vispy_modules()
     _install_runtime_stubs(monkeypatch)
     monkeypatch.setenv("VISBRAIN_SHOW_GUI", "0")
+    monkeypatch.setenv("VISBRAIN_SHADER_PROBE", "1")
 
     class DummyConfig(dict):
         def __getitem__(self, key):
@@ -367,6 +368,9 @@ def test_missing_gl_info_reports_context_unavailable(monkeypatch, recwarn):
         "OpenGL capability probe unavailable: no capabilities on context"
     )
     assert cfg.vispy_diagnostics.shader_compiled is None
+    assert "Skipped shader probe" in (
+        cfg.vispy_diagnostics.shader_error or ""
+    )
     assert cfg.vispy_diagnostics_payload["error"].startswith("OpenGL capability")
     assert cfg.vispy_diagnostics_payload.get("fallback_reason", "").startswith(
         "Configured headless backend"
@@ -385,6 +389,7 @@ def test_probe_canvas_populates_gl_info(monkeypatch, recwarn):
 
     _clear_vispy_modules()
     _install_runtime_stubs(monkeypatch)
+    monkeypatch.setenv("VISBRAIN_SHADER_PROBE", "1")
 
     class DummyCapabilities:
         gl_version = "4.5 Dummy"
