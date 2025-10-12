@@ -6,7 +6,7 @@ Community
 Report an issue
 ---------------
 
-If you found a bug to report, a patch or a request feature you can `submit an issue <https://github.com/EtienneCmb/visbrain/issues>`_
+If you found a bug to report, a patch or a request feature you can `submit an issue <https://github.com/visbrain-dev/visbrain/issues>`_
 
 Chat
 ----

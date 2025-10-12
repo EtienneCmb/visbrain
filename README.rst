@@ -2,12 +2,12 @@
 Visbrain
 ========
 
-.. image:: https://github.com/EtienneCmb/visbrain/actions/workflows/ci.yml/badge.svg?branch=main
-   :target: https://github.com/EtienneCmb/visbrain/actions/workflows/ci.yml
+.. image:: https://github.com/visbrain-dev/visbrain/actions/workflows/ci.yml/badge.svg?branch=main
+   :target: https://github.com/visbrain-dev/visbrain/actions/workflows/ci.yml
    :alt: GitHub Actions CI status
 
-.. image:: https://github.com/EtienneCmb/visbrain/actions/workflows/docs.yml/badge.svg?branch=main
-   :target: https://github.com/EtienneCmb/visbrain/actions/workflows/docs.yml
+.. image:: https://github.com/visbrain-dev/visbrain/actions/workflows/docs.yml/badge.svg?branch=main
+   :target: https://github.com/visbrain-dev/visbrain/actions/workflows/docs.yml
    :alt: Documentation build status
 
 .. image:: https://img.shields.io/pypi/v/visbrain.svg
@@ -25,13 +25,23 @@ leverages Qt 6 through PySide6, and builds 3D rendering pipelines on top of
 base, updating documentation, and aligning packaging so researchers can deploy
 the stack on current desktop platforms.
 
-* `Modernization roadmap <https://github.com/EtienneCmb/visbrain/blob/main/docs/modernization/index.rst>`_
-* `Project governance <https://github.com/EtienneCmb/visbrain/blob/main/docs/governance.rst>`_
+Project status
+--------------
 
-Visbrain distributes online `documentation <http://visbrain.org>`_ alongside
-example-driven tutorials and datasets. Stable builds ship through PyPI and the
-``conda-forge`` channel, while daily development takes place on GitHub where
-the automation badges above track CI and docs health.
+Visbrain is in the middle of a major rewrite that has relied heavily on AI
+assistance to port large sections of the legacy code base to modern
+dependencies. Much of the graphical stack compiles, but end-to-end workflows
+remain unstable and key GUIs are still being rebuilt. Expect missing features,
+rough edges, and incomplete documentation while we bring the reimplementation
+into shape. Community feedback is invaluable—please report breakage and help us
+prioritise the next milestones.
+
+* `Modernization roadmap <docs/modernization/index.rst>`_
+* `Project governance <docs/governance.rst>`_
+
+The original visbrain.org website has gone offline; this repository now serves
+as the canonical source of documentation and examples. Development happens in
+the open on GitHub where the automation badges above track CI and docs health.
 
 Quick start
 -----------
@@ -114,51 +124,49 @@ The ``Makefile`` exposes matching shortcuts (``make lint``, ``make test`` and
 Important links
 ---------------
 
-* Official source code repository : https://github.com/EtienneCmb/visbrain
-* Online documentation : http://visbrain.org
-* Modernization roadmap : https://github.com/EtienneCmb/visbrain/blob/main/docs/modernization/index.rst
-* Governance overview : https://github.com/EtienneCmb/visbrain/blob/main/docs/governance.rst
+* Source code repository : https://github.com/visbrain-dev/visbrain
+* Development documentation : https://github.com/visbrain-dev/visbrain/tree/main/docs
+* Modernization roadmap : https://github.com/visbrain-dev/visbrain/blob/main/docs/modernization/index.rst
+* Governance overview : https://github.com/visbrain-dev/visbrain/blob/main/docs/governance.rst
 
 
 Installation
 ------------
 
-Dependencies
-++++++++++++
+Install from source (recommended)
+++++++++++++++++++++++++++++++++
 
-Visbrain requires :
-
-* NumPy >= 1.26.4
-* SciPy >= 1.11.4
-* VisPy >= 0.13.0
-* Matplotlib >= 3.8.4
-* PySide6 >= 6.7.1 (preferred Qt binding; installs ``shiboken6`` automatically)
-* Pillow >= 10.3.0
-* PyOpenGL >= 3.1.7
-
-Pip (PyPI)
-++++++++++
-
-Install the latest release from PyPI with:
+The published wheels on PyPI/conda-forge predate the modernization work and no
+longer reflect the rapidly changing code base. For the best experience, clone
+the repository and run Visbrain directly from the current sources. We recommend
+`uv <https://github.com/astral-sh/uv>`_ for repeatable virtual environments and
+fast dependency installs:
 
 .. code-block:: console
 
-   python -m pip install --upgrade visbrain
+   git clone https://github.com/visbrain-dev/visbrain.git
+   cd visbrain
+   uv venv --python 3.11
+   source .venv/bin/activate  # On Windows use .venv\Scripts\activate
+   uv pip install --upgrade pip
+   uv pip install -r requirements/dev.txt
+   uv pip install -e .
 
-To install optional documentation and development dependencies, append
-``.[docs]`` or ``.[dev]`` to the ``pip`` invocation.
+.. note::
 
-Conda-forge
-+++++++++++
+   Linux contributors still need the Mesa/OpenGL runtime for PySide6/VisPy to
+   initialise correctly. Install the packages with::
 
-Visbrain is available through the community-maintained ``conda-forge`` channel:
+      sudo apt-get update
+      sudo apt-get install -y libgl1 libglu1-mesa libgl1-mesa-dri mesa-utils libxcb-xinerama0
 
-.. code-block:: console
+Legacy packages
++++++++++++++++
 
-   conda install -c conda-forge visbrain
-
-The same package can be installed with ``mamba`` or ``micromamba`` if you prefer
-faster ``conda``-compatible solvers.
+``pip install visbrain`` and the conda-forge builds remain available but are no
+longer maintained. They track the pre-modernization code base and miss critical
+fixes for Python 3.9+ and Qt 6. Prefer the source workflow above unless you are
+debugging historical behaviour.
 
 Sample data and optional downloads
 +++++++++++++++++++++++++++++++++++++

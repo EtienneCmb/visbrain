@@ -14,7 +14,8 @@ Right now, visbrain contains five modules :
 * Figure : figure-layout for high-quality publication-like figures.
 * Topo : topographic representations
 
-See http://visbrain.org/ for a complete and step-by step documentation
+See the ``docs/`` directory in the repository for the complete, up-to-date
+documentation while the historical website remains offline.
 """
 import sys as _sys
 

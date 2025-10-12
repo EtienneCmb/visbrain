@@ -6,7 +6,7 @@ Presentation
 Quick description
 -----------------
 
-Visbrain is an open-source `Python 3 <https://www.python.org/>`_ package, distributed under the 3-Clause BSD license and is dedicated to brain signals visualization. It is under heavy development and many functionalities are frequently added to the package, such as bug fixing, documentation improvements etc.
+Visbrain is an open-source `Python 3 <https://www.python.org/>`_ package, distributed under the 3-Clause BSD license and is dedicated to brain signals visualization. The current code base stems from an AI-assisted modernization effort that is still in flux—expect incomplete GUIs and missing functionality while we stabilise the rewritten modules.
 
 Visbrain use VisPy to render graphics. Taken from their website :
 
@@ -128,43 +128,38 @@ therefore return familiar Python objects:
 These helpers integrate naturally with ``path_to_visbrain_data``; simply build
 the path and pass it to the appropriate reader.
 
-Regular installation
---------------------
+Install from source (recommended)
+---------------------------------
 
-In order to install Visbrain, or to update it, run the following command in a terminal :
+The canonical way to run the modernization branch is to install the repository
+in editable mode. The legacy wheels on PyPI and conda-forge target the Qt 5
+code base and are no longer maintained. We recommend `uv
+<https://github.com/astral-sh/uv>`_ for consistent virtual environment
+management and fast dependency resolution:
 
-.. code-block:: shell
+.. code-block:: console
 
-    pip install -U visbrain
+   git clone https://github.com/visbrain-dev/visbrain.git
+   cd visbrain
+   uv venv --python 3.11
+   source .venv/bin/activate  # On Windows use .venv\Scripts\activate
+   uv pip install --upgrade pip
+   uv pip install -r requirements/dev.txt
+   uv pip install -e .
 
-Develop mode
-------------
+.. note::
 
-If you want to install visbrain in develop mode :
+   Linux contributors still need the Mesa/OpenGL runtime for PySide6/VisPy to
+   initialise correctly. Install the packages with::
 
-.. code-block:: shell
+      sudo apt-get update
+      sudo apt-get install -y libgl1 libglu1-mesa libgl1-mesa-dri mesa-utils libxcb-xinerama0
 
-    git clone https://github.com/EtienneCmb/visbrain.git visbrain/
-    cd visbrain/
-    python -m pip install -e .
-
-From here you can switch to the latest features using :
-
-.. code-block:: shell
-
-    git checkout develop
-
-If you don't want to clone the full package, run :
-
-.. code-block:: shell
-
-    pip install git+https://github.com/EtienneCmb/visbrain.git
-
-
-Update visbrain
+Legacy packages
 ---------------
-You can update visbrain using :
 
-.. code-block:: shell
-
-    pip install --upgrade visbrain
+``pip install visbrain`` continues to publish the unmaintained Qt 5 release and
+is kept online for archival purposes only. Prefer the source workflow above for
+any new development or evaluation. Updating an existing legacy environment is
+limited to bug fixes in that historical branch and will not receive the ongoing
+modernization work.

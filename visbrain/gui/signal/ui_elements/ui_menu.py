@@ -20,7 +20,7 @@ class UiMenu(HelpMenu):
     def __init__(self):
         """Init."""
         # Help menu :
-        base = 'http://visbrain.org/signal.html'
+        base = 'https://github.com/visbrain-dev/visbrain/blob/main/docs/signal.rst'
         sections = {'Signal': base}
         HelpMenu.__init__(self, sections, True)
         # Save :

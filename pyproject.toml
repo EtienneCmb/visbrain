@@ -75,10 +75,10 @@ topo = [
 ]
 
 [project.urls]
-Homepage = "https://visbrain.org"
-Documentation = "https://visbrain.org"
-Repository = "https://github.com/EtienneCmb/visbrain"
-"Issue Tracker" = "https://github.com/EtienneCmb/visbrain/issues"
+Homepage = "https://github.com/visbrain-dev/visbrain"
+Documentation = "https://github.com/visbrain-dev/visbrain/tree/main/docs"
+Repository = "https://github.com/visbrain-dev/visbrain"
+"Issue Tracker" = "https://github.com/visbrain-dev/visbrain/issues"
 
 [tool.setuptools]
 include-package-data = true

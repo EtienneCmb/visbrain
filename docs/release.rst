@@ -39,7 +39,7 @@ Release checklist
 -----------------
 
 #. Confirm the ``ci`` workflow succeeds on the release branch or tag by
-   checking the `GitHub Actions dashboard <https://github.com/EtienneCmb/visbrain/actions/workflows/ci.yml>`_.
+   checking the `GitHub Actions dashboard <https://github.com/visbrain-dev/visbrain/actions/workflows/ci.yml>`_.
    Rerun failed jobs and address regressions before continuing.
 #. Review the automated changelog above and decide on the semantic version
    bump. Follow the `Semantic Versioning specification <https://semver.org/>`_:
@@ -47,7 +47,7 @@ Release checklist
    fixes only a patch version.
 #. Create a signed git tag that matches the chosen version number and push it
    to ``origin``.
-#. Monitor the ``wheels`` workflow (`workflow definition <https://github.com/EtienneCmb/visbrain/actions/workflows/wheels.yml>`_)
+#. Monitor the ``wheels`` workflow (`workflow definition <https://github.com/visbrain-dev/visbrain/actions/workflows/wheels.yml>`_)
    to ensure artifacts build successfully for all supported platforms.
 #. Download the generated wheels and source distribution from the workflow run,
    verify their SHA256 checksums, and perform a local install test in a clean
