@@ -65,6 +65,29 @@ def test_dialog_load_runs_on_gui_thread(monkeypatch, qtbot):
     assert all(thread is app.thread() for thread in threads)
 
 
+def test_dialogs_accept_non_widget_parent(monkeypatch):
+    """Dialogs can be invoked with non-Qt parents (e.g., PySide6)."""
+
+    sentinel = object()
+    parents = []
+
+    def fake_get_save_file(parent, *args, **kwargs):
+        parents.append(("save", parent))
+        return "", ""
+
+    def fake_get_open_file(parent, *args, **kwargs):
+        parents.append(("open", parent))
+        return "", ""
+
+    monkeypatch.setattr(QtWidgets.QFileDialog, "getSaveFileName", fake_get_save_file)
+    monkeypatch.setattr(QtWidgets.QFileDialog, "getOpenFileName", fake_get_open_file)
+
+    dialog_save(sentinel, "Save", "file", ["*.*"])
+    dialog_load(sentinel, "Open", "file", ["*.*"])
+
+    assert parents == [("save", None), ("open", None)]
+
+
 def test_dialog_color_runs_on_gui_thread(monkeypatch, qtbot):
     """Color dialogs execute on the GUI thread even from workers."""
 

@@ -51,10 +51,17 @@ def dialog_save(self, name='Save file', default='file',
     # Build all extensions :
     if isinstance(allext, (list, tuple)):
         allext = ';;'.join(allext)
+
+    parent = None
+    if QtWidgets is not None:
+        widget_cls = getattr(QtWidgets, 'QWidget', None)
+        if widget_cls is not None and isinstance(self, widget_cls):
+            parent = self
+
     # Open the window :
     file, ext = _invoke_dialog(
         QtWidgets.QFileDialog.getSaveFileName,
-        self,
+        parent,
         name,
         default,
         allext,
@@ -86,10 +93,16 @@ def dialog_load(self, name='Open file', default='file',
     filename : string
         Filename for opening.
     """
+    parent = None
+    if QtWidgets is not None:
+        widget_cls = getattr(QtWidgets, 'QWidget', None)
+        if widget_cls is not None and isinstance(self, widget_cls):
+            parent = self
+
     # Open the window :
     file, _ = _invoke_dialog(
         QtWidgets.QFileDialog.getOpenFileName,
-        self,
+        parent,
         name,
         default,
         allext,
