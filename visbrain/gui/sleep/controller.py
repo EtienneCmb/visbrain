@@ -88,12 +88,8 @@ class SleepController(UiElements, Visuals, MouseEventControl):
             setattr(self._view, attr, getattr(self, attr))
 
         view.create_cameras(len(self))
-
-        PROFILER("Initialize visual elements", as_type='title')
-        Visuals.__init__(self)
-
-        self._fcns_on_creation()
-        PROFILER("Functions on creation")
+        self._visuals_initialized = False
+        self._initializing_visuals = False
 
     # ------------------------------------------------------------------
     # Delegation helpers
@@ -308,6 +304,26 @@ class SleepController(UiElements, Visuals, MouseEventControl):
     # ------------------------------------------------------------------
     def _get_data_info(self):
         return self._model.refresh_data_info()
+
+    def initialize_visuals_if_needed(self) -> None:
+        """Create the VisPy visuals once the Qt window is ready."""
+
+        if self._visuals_initialized or self._initializing_visuals:
+            return
+
+        self._initializing_visuals = True
+        try:
+            PROFILER("Initialize visual elements", as_type='title')
+            Visuals.__init__(self)
+        except Exception:
+            self._visuals_initialized = False
+            raise
+        else:
+            self._visuals_initialized = True
+            self._fcns_on_creation()
+            PROFILER("Functions on creation")
+        finally:
+            self._initializing_visuals = False
 
     def _fcns_on_creation(self):
         self._fcn_grid_toggle()
